@@ -1,5 +1,58 @@
 <template>
   <div>
+    <d-filter-block
+      v-model="eciDetailedOverviewFilter"
+      :loading="loading"
+      @apply="updateData"
+    >
+      <v-col cols="2">
+        <v-select
+          v-model="eciDetailedOverviewFilter.discipline"
+          label="Disciplines"
+          outlined
+          :items="[{label: 'All', external_id: ''}, ...disciplinesList]"
+          item-text="label"
+          item-value="external_id"
+        />
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="eciDetailedOverviewFilter.contribution"
+          class="my-0 py-0"
+          :items="contributions"
+          label="Contribution Type"
+          outlined
+        />
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="eciDetailedOverviewFilter.criteria"
+          class="my-0 py-0"
+          :items="criterias"
+          label="Assessment criteria"
+          outlined
+        />
+      </v-col>
+
+      <v-col cols="2">
+        <d-input-date
+          v-model="eciDetailedOverviewFilter.date"
+          label="Period"
+          :picker-props="{
+            min: moment('2020-01-01').format('YYYY-MM-DD'),
+            range: true
+          }"
+          :field-props="{
+            clearable: true,
+          }"
+        />
+      </v-col>
+    </d-filter-block>
+
+    <eci-history-overview v-if="!overviewData.hideOverview" :overview-data="overviewData" />
+
+    <slot name="eciHeader" />
+
     <d-chart-line :data="chartData" :options="_chartOptions" />
 
     <v-data-table
@@ -37,19 +90,23 @@
       <template v-slot:item.eci="{ item }">{{ item.eci }}</template>
     </v-data-table>
   </div>
-
 </template>
 
 <script>
+  import EciHistoryOverview from '@/components/EciHistory/EciHistoryOverview';
   import DChartLine from '@/components/Deipify/DChart/DChartLine';
+  import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
   import deepmerge from 'deepmerge';
+  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
+  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
+  import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
+  import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import { chartGradient, switchColor } from '@/plugins/charts';
-  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
   import moment from 'moment';
 
   export default {
     name: 'EciHistory',
-    components: { DChartLine },
+    components: { DChartLine, EciHistoryOverview, DFilterBlock, DInputDate },
     props: {
       chartOptions: {
         type: Object,
@@ -58,12 +115,43 @@
       data: {
         type: Array,
         default: () => ([])
+      },
+      overviewData: {
+        type: Object,
+        default: () => ({ hideOverview: true })
+      },
+      loading: {
+        type: Boolean,
+        default: false
+      },
+      disciplines: {
+        type: Array,
+        default: () => getTopLevelNodes()
       }
     },
     data() {
       const colors = chartGradient(4);
 
       return {
+        eciDetailedOverviewFilter: {
+          discipline: '',
+          date: [],
+          contribution: '',
+          criteria: ''
+        },
+
+        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: 'All'
+        }),
+
+        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: 'All'
+        }),
+
         tableHeaders: [
           {
             text: 'Type',
@@ -122,6 +210,14 @@
     },
 
     computed: {
+      disciplinesList() {
+        return this.disciplines
+          .map((d) => ({
+            external_id: d.external_id || d.id,
+            label: d.label || d.name
+          }));
+      },
+
       _chartOptions() {
         const defaultOptions = {
           legend: 'none',
@@ -158,6 +254,33 @@
         return [...this.data.map((r, i) => {
           return { ...r, id: `${i}-${r.discipline_external_id}` };
         })].reverse();
+      }
+    },
+
+    methods: {
+      updateData() {
+        const { discipline, contribution, criteria } = this.eciDetailedOverviewFilter;
+        const fromDate = this.eciDetailedOverviewFilter.date[0]
+          ? this.moment(this.eciDetailedOverviewFilter.date[0])
+            .startOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
+        const toDate = this.eciDetailedOverviewFilter.date[1]
+          ? this.moment(this.eciDetailedOverviewFilter.date[1])
+            .endOf('day')
+            .toISOString(true)
+            .split('.')[0]
+          : '';
+
+        const filter = {
+          discipline,
+          from: fromDate,
+          to: toDate,
+          contribution,
+          criteria
+        };
+        this.$emit('updateData', filter);
       }
     }
   };

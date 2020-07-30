@@ -1,8 +1,6 @@
 <template>
   <app-layout v-if="$ready">
     <layout-section>
-
-
       <v-row>
         <v-col cols="4">
           <d-block
@@ -76,57 +74,10 @@
       </d-block>
 
       <d-block title="Expertise Contribution Index detailed overview">
-        <d-filter-block
-          v-model="eciDetailedOverviewFilter"
-          :loading="eciDetailedOverviewLoading"
-          @apply="updateDetailedChart()"
-        >
-          <v-col cols="2">
-            <v-select
-              v-model="eciDetailedOverviewFilter.discipline"
-              label="Disciplines"
-              outlined
-              :items="[{label: 'All', external_id: ''}, ...disciplines]"
-              item-text="label"
-              item-value="external_id"
-            />
-          </v-col>
-          <v-col cols="2">
-            <v-select
-              v-model="eciDetailedOverviewFilter.contribution"
-              class="my-0 py-0"
-              :items="contributions"
-              label="Contribution Type"
-              outlined
-            />
-          </v-col>
-          <v-col cols="2">
-            <v-select
-              v-model="eciDetailedOverviewFilter.criteria"
-              class="my-0 py-0"
-              :items="criterias"
-              label="Assessment criteria"
-              outlined
-            />
-          </v-col>
-
-          <v-col cols="2">
-            <d-input-date
-              v-model="eciDetailedOverviewFilter.date"
-              label="Period"
-              :picker-props="{
-                min: moment('2020-01-01').format('YYYY-MM-DD'),
-                range: true
-              }"
-              :field-props="{
-                clearable: true,
-              }"
-            />
-          </v-col>
-        </d-filter-block>
-
         <eci-history
           :data="eciHistoryByDiscipline"
+          :loading="eciDetailedOverviewLoading"
+          @updateData="updateDetailedChart"
         />
       </d-block>
     </layout-section>
@@ -139,10 +90,9 @@
   import { chartGradient } from '@/plugins/charts';
   import { mapGetters } from 'vuex';
 
-  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
+  import { ASSESSMENT_CRITERIA_TYPE } from '@/variables';
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DChartArea from '@/components/Deipify/DChart/DChartArea';
 
@@ -152,40 +102,25 @@
   import moment from 'moment';
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
-  import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
   export default {
     name: 'Overview',
     components: {
-      DFilterBlock,
       DisciplinesGrowthRate,
       EciHistory,
       DBlock,
       DChartArea,
       DChartPie,
-      DInputDate,
       LayoutSection,
       AppLayout
     },
     data() {
       return {
-        eciDetailedOverviewFilter: {
-          discipline: '',
-          date: [],
-          contribution: '',
-          criteria: ''
-        },
         eciDetailedOverviewLoading: true,
 
         distributionDiscipline: 'all',
 
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
-          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
-          allowBlank: true,
-          blankLabel: 'All'
-        }),
-
-        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, {
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
           allowBlank: true,
           blankLabel: 'All'
@@ -325,7 +260,7 @@
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', this.eciDetailedOverviewFilter)
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', {})
       ])
         .then(() => {
           this.eciDetailedOverviewLoading = false;
@@ -344,34 +279,10 @@
         });
       },
 
-      updateDetailedChart() {
+      updateDetailedChart(updatedFilter = {}) {
         this.eciDetailedOverviewLoading = true;
 
-        const { discipline } = this.eciDetailedOverviewFilter;
-        const fromDate = this.eciDetailedOverviewFilter.date[0]
-          ? this.moment(this.eciDetailedOverviewFilter.date[0])
-            .startOf('day')
-            .toISOString(true)
-            .split('.')[0]
-          : '';
-        const toDate = this.eciDetailedOverviewFilter.date[1]
-          ? this.moment(this.eciDetailedOverviewFilter.date[1])
-            .endOf('day')
-            .toISOString(true)
-            .split('.')[0]
-          : '';
-        const { contribution } = this.eciDetailedOverviewFilter;
-        const { criteria } = this.eciDetailedOverviewFilter;
-
-        const filter = {
-          discipline,
-          from: fromDate,
-          to: toDate,
-          contribution,
-          criteria
-        };
-
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', filter)
+        this.$store.dispatch('overview/getEciHistoryByDiscipline', updatedFilter)
           .then(() => {
             this.eciDetailedOverviewLoading = false;
           });
