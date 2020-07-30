@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ width: width + 'px', height: height + 'px', border: '1px solid black' }">
+  <div class="references" :style="{ width: width + 'px', height: height + 'px', border: '1px solid black' }">
     <svg
       width="100%"
       height="100%"
@@ -734,234 +734,243 @@
   };
 </script>
 
-<style lang="less" scoped>
-  .faded {
-    opacity: 0.1;
-    transition: 0.3s opacity;
-  }
-  .highlight {
-    opacity: 1;
-  }
-  path.link {
-    fill: none;
-    stroke: #666;
-    stroke-width: 1.5px;
-  }
-  path.link.depends {
-    stroke: #005900;
-    stroke-dasharray: 5, 2;
-  }
-  path.link.needs {
-    stroke: #7f3f00;
-  }
-  .ref-node circle {
-    cursor: pointer;
-    fill: #ffff99;
-    stroke: #191900;
-    stroke-width: 1.5px;
-  }
-  .ref-node circle.in {
-    fill: #cce5ff;
-    stroke: #003366;
-  }
-  .ref-node circle.out {
-    fill: #ffe5e5;
-    stroke: #660000;
-  }
-  .ref-node circle.init {
-    fill: #b2e8b2;
-    stroke: #001900;
-  }
-  .ref-node circle.selected {
-    stroke: #ff6666FF !important;
-    stroke-width: 3px;
-    animation: selected 2s infinite alternate ease-in-out;
-  }
+<style lang="scss" scoped>
+  .references {
+    border: 1px solid red;
 
-  .ref-type {
-    fill: #ffff99;
-    stroke: #191900;
-    stroke-width: 1.5px;
-  }
-  .ref-type.in {
-    fill: #cce5ff;
-    stroke: #003366;
-  }
-  .ref-type.out {
-    fill: #ffe5e5;
-    stroke: #660000;
-  }
+    ::v-deep {
+      .faded {
+        opacity: 0.1;
+        transition: 0.3s opacity;
+      }
+      .highlight {
+        opacity: 1;
+      }
+      path.link {
+        fill: none;
+        stroke: #666;
+        stroke-width: 1.5px;
+      }
+      path.link.depends {
+        stroke: #005900;
+        stroke-dasharray: 5, 2;
+      }
+      path.link.needs {
+        stroke: #7f3f00;
+      }
+      .ref-node circle {
+        cursor: pointer;
+        fill: #ffff99;
+        stroke: #191900;
+        stroke-width: 1.5px;
+      }
+      .ref-node circle.in {
+        fill: #cce5ff;
+        stroke: #003366;
+      }
+      .ref-node circle.out {
+        fill: #ffe5e5;
+        stroke: #660000;
+      }
+      .ref-node circle.init {
+        fill: #b2e8b2;
+        stroke: #001900;
+      }
+      .ref-node circle.selected {
+        stroke: #ff6666FF !important;
+        stroke-width: 3px;
+        animation: selected 2s infinite alternate ease-in-out;
+      }
 
-  @keyframes selected {
-    from {
-      stroke-width: 5px;
-      r: 26;
+      .ref-type {
+        fill: #ffff99;
+        stroke: #191900;
+        stroke-width: 1.5px;
+      }
+      .ref-type.in {
+        fill: #cce5ff;
+        stroke: #003366;
+      }
+      .ref-type.out {
+        fill: #ffe5e5;
+        stroke: #660000;
+      }
+
+      @keyframes selected {
+        from {
+          stroke-width: 5px;
+          r: 26;
+        }
+        to {
+          stroke-width: 1px;
+          r: 30;
+        }
+      }
+      text {
+        font: 10px sans-serif;
+        /* pointer-events: all; */
+        /* pointer-events: auto; */
+        /* pointer-events: fill; */
+
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+      }
+      rect.caption {
+        fill: #efefef;
+        // stroke: #666;
+        // stroke-width: 1px;
+      }
+      text.caption {
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      .ref-info {
+
+      }
+
+      .ref-org-logo {
+        cursor: pointer;
+      }
+
+      .ref-info-box {
+        background-color: #ffffff;
+        border: 1.2px solid black;
+        padding: 0px 0px 10px 0px;
+      }
+
+
+      .ref-info-hash-box {
+        background-color: #f5f2f2;
+        border-bottom: 1.2px solid black;
+        padding: 5px 10px 5px 10px;
+      }
+      .ref-info-hash-algo {
+        color: grey;
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .ref-info-hash-value {
+        font-size: 12px;
+        padding-left: 7px;
+        font-weight: 400;
+        // word-break: break-all;
+      }
+
+
+      .ref-info-title-box {
+        padding: 15px 10px 5px 10px;
+      }
+      .ref-info-title-link {
+
+      }
+
+
+      .ref-info-authors-label {
+
+      }
+      .ref-info-authors-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ref-info-authors-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px 5px 10px;
+      }
+
+      .ref-info-author {
+        display: flex;
+        align-items: center;
+      }
+      .ref-info-author-img {
+        height: 30px;
+        width: 30px;
+      }
+      .ref-info-author-name {
+        padding: 0px 10px 0px 10px;
+      }
+
+
+      .ref-info-org-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px 5px 10px;
+      }
+      .ref-info-org-label {
+
+      }
+      .ref-info-org-content {
+
+      }
+      .ref-info-org {
+        display: flex;
+        align-items: center;
+      }
+      .ref-info-org-logo {
+        width: 30px;
+        height: 30px;
+      }
+      .ref-info-org-name {
+        padding: 0px 10px 0px 10px;
+      }
+
+
+      .ref-info-access-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px 5px 10px;
+      }
+      .ref-info-access-label {
+
+      }
+      .ref-info-access-content {
+
+      }
+      .ref-info-access {
+        display: flex;
+        align-items: center;
+      }
+      .ref-info-access-icon {
+        height: 30px;
+        width: 30px;
+      }
+      .ref-info-access-text {
+        padding: 0px 10px 0px 10px;
+      }
+
+
+      .ref-info-datetime-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px 5px 10px;
+      }
+      .ref-info-datetime-label {
+
+      }
+      .ref-info-datetime-content {
+
+      }
+      .ref-info-datetime {
+        display: flex;
+        align-items: center;
+      }
+      .ref-info-datetime-text {
+        padding: 0px 10px 0px 10px;
+      }
+
+      .ref-title {
+        font-size: 9px
+      }
     }
-    to {
-      stroke-width: 1px;
-      r: 30;
-    }
-  }
-  text {
-    font: 10px sans-serif;
-    /* pointer-events: all; */
-    /* pointer-events: auto; */
-    /* pointer-events: fill; */
-
-    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-  }
-  rect.caption {
-    fill: #efefef;
-    // stroke: #666;
-    // stroke-width: 1px;
-  }
-  text.caption {
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .ref-info {
-
-  }
-
-  .ref-org-logo {
-    cursor: pointer;
-  }
-
-  .ref-info-box {
-    background-color: #ffffff;
-    border: 1.2px solid black;
-    padding: 0px 0px 10px 0px;
-  }
-
-
-  .ref-info-hash-box {
-    background-color: #f5f2f2;
-    border-bottom: 1.2px solid black;
-    padding: 5px 10px 5px 10px;
-  }
-  .ref-info-hash-algo {
-    color: grey;
-    font-weight: 500;
-    font-size: 14px;
-  }
-  .ref-info-hash-value {
-    font-size: 12px;
-    padding-left: 7px;
-    font-weight: 400;
-    // word-break: break-all;
-  }
-
-
-  .ref-info-title-box {
-    padding: 15px 10px 5px 10px;
-  }
-  .ref-info-title-link {
 
   }
 
 
-  .ref-info-authors-label {
-
-  }
-  .ref-info-authors-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .ref-info-authors-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px 5px 10px;
-  }
-
-  .ref-info-author {
-    display: flex;
-    align-items: center;
-  }
-  .ref-info-author-img {
-    height: 30px;
-    width: 30px;
-  }
-  .ref-info-author-name {
-    padding: 0px 10px 0px 10px;
-  }
-
-
-  .ref-info-org-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px 5px 10px;
-  }
-  .ref-info-org-label {
-
-  }
-  .ref-info-org-content {
-
-  }
-  .ref-info-org {
-    display: flex;
-    align-items: center;
-  }
-  .ref-info-org-logo {
-    width: 30px;
-    height: 30px;
-  }
-  .ref-info-org-name {
-    padding: 0px 10px 0px 10px;
-  }
-
-
-  .ref-info-access-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px 5px 10px;
-  }
-  .ref-info-access-label {
-
-  }
-  .ref-info-access-content {
-
-  }
-  .ref-info-access {
-    display: flex;
-    align-items: center;
-  }
-  .ref-info-access-icon {
-    height: 30px;
-    width: 30px;
-  }
-  .ref-info-access-text {
-    padding: 0px 10px 0px 10px;
-  }
-
-
-  .ref-info-datetime-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px 5px 10px;
-  }
-  .ref-info-datetime-label {
-
-  }
-  .ref-info-datetime-content {
-
-  }
-  .ref-info-datetime {
-    display: flex;
-    align-items: center;
-  }
-  .ref-info-datetime-text {
-    padding: 0px 10px 0px 10px;
-  }
-
-  .ref-title {
-    font-size: 9px
-  }
 
 </style>
