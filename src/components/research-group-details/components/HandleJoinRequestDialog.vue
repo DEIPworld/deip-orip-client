@@ -37,7 +37,7 @@
           label="Research Group Tokens"
           outlined
           suffix="%"
-          mask="##"
+          v-mask="'##'"
         />
       </v-card-text>
 

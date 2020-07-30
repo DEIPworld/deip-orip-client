@@ -13,7 +13,7 @@ export const CreateTokenSaleMixin = {
       research: {},
       group_permlink: '',
       formData: {
-        amountToSell: 1000,
+        amountToSell: null,
         startDate: null,
         endDate: null,
         softCap: '',

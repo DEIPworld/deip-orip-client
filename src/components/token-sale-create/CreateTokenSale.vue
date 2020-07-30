@@ -36,7 +36,7 @@
           researchExternalId: this.research.external_id,
           startTime: this.formData.startDate.toISOString().split('.')[0],
           endTime: this.formData.endDate.toISOString().split('.')[0],
-          share: `${(this.formData.amountToSell / this.DEIP_100_PERCENT) * 100}.00 %`,
+          share: `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`,
           softCap: this.toAssetUnits(this.formData.softCap),
           hardCap: this.toAssetUnits(this.formData.hardCap),
           extensions: []

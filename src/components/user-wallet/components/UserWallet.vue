@@ -412,7 +412,7 @@
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
               suffix="%"
-              mask="##"
+              v-mask="'##'"
             />
           </v-form>
         </v-card-text>
@@ -757,6 +757,7 @@
           };
         }
       },
+
       sharePriceChart() {
         if (this.expandedInvestmentIdx != -1) {
           const investment = this.investments[this.expandedInvestmentIdx];

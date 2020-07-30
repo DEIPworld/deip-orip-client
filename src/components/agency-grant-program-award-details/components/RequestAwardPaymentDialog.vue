@@ -62,7 +62,7 @@
               rules.withinAwardAvailableAmount
             ]"
             persistent-hint
-            mask="##############"
+            v-mask="'##############'"
             append-icon="local_atm"
             :disabled="!awardee"
           />

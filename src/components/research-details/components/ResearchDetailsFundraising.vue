@@ -64,31 +64,31 @@
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Tokens On sale:
+            Percentage On sale:
           </v-col>
           <v-col
             cols="12"
             lg="9"
             class="pl-2"
           >
-            {{ tokenSale.balance_tokens }} ({{ convertToPercent(tokenSale.balance_tokens) }}%)
+            {{ convertToPercent(tokenSale.balance_tokens) }}%
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Remaining Tokens:
+            Remaining Percentage:
           </v-col>
           <v-col
             cols="12"
             lg="9"
             class="pl-2"
           >
-            {{ research.owned_tokens }} ({{ convertToPercent(research.owned_tokens) }}%)
+            {{ convertToPercent(research.owned_tokens) }}%
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Min:
+            Min Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             ${{ fromAssetsToFloat(tokenSale.soft_cap) }}
@@ -96,7 +96,7 @@
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Max:
+            Max Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             ${{ fromAssetsToFloat(tokenSale.hard_cap) }}

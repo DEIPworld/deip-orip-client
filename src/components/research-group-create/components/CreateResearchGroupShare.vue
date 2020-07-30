@@ -30,7 +30,7 @@
                 class="width-4 pa-0 rtl"
                 suffix="%"
                 hide-details
-                mask="###"
+                v-mask="'###'"
               />
             </div>
           </div>

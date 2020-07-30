@@ -19,9 +19,10 @@ const assetsService = AssetsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 
 const state = {
+  loaded: false,
   user: {
-    profile: null,
-    account: null,
+    profile: undefined,
+    account: undefined,
     expertTokens: [],
     groupTokens: [],
     groups: [],
@@ -31,11 +32,13 @@ const state = {
     researchBookmarks: [],
     balances: []
   },
-  tenant: null,
+  tenant: undefined,
 };
 
 // getters
 const getters = {
+  loaded: (state) => state.loaded,
+
   user: (state, getters) => {
     const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
     return {
@@ -119,28 +122,17 @@ const getters = {
 // actions
 const actions = {
 
-  loadUser({ state, dispatch }) {
-    const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadProfile', { notify: resolve });
+  loadUser({ commit, dispatch }) {
+    return Promise.all([
+      dispatch('loadProfile'),
+      dispatch('loadAccount'),
+      dispatch('loadExpertTokens'),
+      dispatch('loadJoinRequests'),
+      dispatch('loadResearchBookmarks'),
+      dispatch('loadBalances')
+    ]).then(() => {
+      commit('SET_USER_LOADED', true);
     });
-    const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadAccount', { notify: resolve });
-    });
-    const groupsLoad = dispatch('loadGroups');
-    const expLoad = new Promise((resolve, reject) => {
-      dispatch('loadExpertTokens', { notify: resolve });
-    });
-    const joinRequestLoad = new Promise((resolve, reject) => {
-      dispatch('loadJoinRequests', { notify: resolve });
-    });
-    const researchBookmarksLoad = new Promise((resolve, reject) => {
-      dispatch('loadResearchBookmarks', { notify: resolve });
-    });
-    const balancesLoad = new Promise((resolve, reject) => {
-      dispatch('loadBalances', { notify: resolve });
-    });
-
-    return Promise.all([profileLoad, accountLoad, groupsLoad, expLoad, joinRequestLoad, researchBookmarksLoad, balancesLoad]);
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
@@ -357,6 +349,10 @@ const mutations = {
 
   SET_BALANCES(state, balances) {
     state.user.balances = balances;
+  },
+
+  SET_USER_LOADED(state, payload) {
+    state.loaded = payload;
   }
 };
 

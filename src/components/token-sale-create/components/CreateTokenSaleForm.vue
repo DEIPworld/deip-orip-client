@@ -1,12 +1,13 @@
 <template>
   <v-form ref="form" @submit="onSubmit">
-    <d-form-block title="Determine the amount of research tokens for sale">
+    <d-form-block title="Determine the % of project for share">
       <v-col cols="12">
         <v-text-field
-          v-model="formData.amountToSell"
+          v-model="amount"
+          v-mask="'##.##'"
           outlined
-          :hint="ownedAmount - getAmountNumber(formData.amountToSell) + ' left'"
-          mask="#####"
+          suffix="%"
+          :hint="(ownedAmount / 100) - getAmountNumber(amount || 0) + '% left'"
           :rules="[rules.amountToSellRules]"
         />
       </v-col>
@@ -148,6 +149,15 @@
         return this.research && this.userPersonalGroup
           ? this.research.research_group_id === this.userPersonalGroup.id
           : false;
+      },
+
+      amount: {
+        get() {
+          return this.formData.amountToSell ? this.formData.amountToSell / 100 : this.formData.amountToSell;
+        },
+        set(val) {
+          this.formData.amountToSell = val * 100;
+        }
       }
     },
 
@@ -161,7 +171,8 @@
         rules: {
           amountToSellRules: (v) =>
             this.verifyAmountRange(v) ||
-            `Amount should be from 1 to ${this.ownedAmount}`,
+            `Amount should be from 0% to ${this.ownedAmount / 100}%`,
+
           required: (value) => !!value || 'This field is required',
           greaterThanNow: (val) =>
             Date.parse(val) > Date.now() || 'Date should be in the future',
@@ -209,6 +220,7 @@
         }
       };
     },
+
     mounted() {
       const startDate = moment()
         .add(10, 'minutes')
@@ -217,11 +229,11 @@
     },
     methods: {
       verifyAmountRange(value) {
-        const amountNumber = this.getAmountNumber(value);
+        const amountNumber = this.getAmountNumber(value) * 100;
         return amountNumber > 0 && amountNumber <= this.ownedAmount;
       },
       getAmountNumber(value) {
-        return value === '' ? 0 : parseInt(value);
+        return value === '' ? 0 : parseFloat(value);
       },
       setStartDate(value) {
         this.startDate = value;

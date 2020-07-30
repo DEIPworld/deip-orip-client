@@ -103,8 +103,7 @@ const getYoutubeEmbedUrlFromVideoUrl = (url) => {
   return null;
 };
 
-Vue.prototype.getEmbedVideoUrl = (url) => // not used
-  getVimeoEmbedUrlFromVideoUrl(url)
+Vue.prototype.getEmbedVideoUrl = (url) => getVimeoEmbedUrlFromVideoUrl(url)
     || getYoutubeEmbedUrlFromVideoUrl(url)
     || url;
 Vue.prototype.MASTER_PASSWORD_MIN_LENGTH = 10;

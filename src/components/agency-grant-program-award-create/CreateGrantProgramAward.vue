@@ -160,7 +160,7 @@
                     :rules=" fundingIdx == 0 ? [rules.required, rules.totalAwardValidator, rules.balanceIsSufficient ] : [ rules.required, rules.totalAwardValidator ]"
                     class="right-input"
                     outlined
-                    mask="##############"
+                    v-mask="'##############'"
                     suffix="$"
                   />
                 </v-col>
@@ -205,7 +205,7 @@
                       :rules="[rules.allowedOverhead]"
                       outlined
                       suffix="%"
-                      mask="##"
+                      v-mask="'##'"
                     />
                   </div>
                 </v-col>

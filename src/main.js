@@ -13,6 +13,7 @@ import { router } from './router';
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
 import VClamp from 'vue-clamp';
+import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
@@ -35,9 +36,11 @@ import Gravatar from 'vue-gravatar';
 // ////////////////////////
 
 Vue.config.productionTip = false;
+
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
 Vue.use(PortalVue);
+Vue.use(VueTheMask);
 
 Vue.use(VueCurrencyFilter, {
   symbol: '$',
@@ -52,6 +55,10 @@ Vue.use(lsWatcher, {
   prefix: 'orip__'
 });
 
+Vue.component('v-clamp', VClamp);
+
+// ////////////////////////
+
 Vue.use(DSnackbarPlugin);
 Vue.use(ifEnabled);
 
@@ -59,8 +66,6 @@ Vue.mixin(dataReadyMixin);
 Vue.mixin(contextHelpersMixin);
 
 Vue.directive('custom', CustomDirective);
-
-Vue.component('v-clamp', VClamp);
 
 Vue.config.optionMergeStrategies.props = (parentVal, childVal) => {
   if (childVal) {

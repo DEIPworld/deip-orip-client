@@ -19,7 +19,7 @@
             v-model="totalQuorum"
             :disabled="isAdvanced"
             suffix="%"
-            mask="###"
+            v-mask="'###'"
             hide-details
             @keyup="onChangeTotalQuorum()"
           />
@@ -35,7 +35,7 @@
                   v-model="group.quorum.startResearch"
                   class="width-6 pa-0 display-inline-block"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -48,7 +48,7 @@
                   v-model="group.quorum.createMaterial"
                   class="width-6 pa-0 display-inline-block"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -61,7 +61,7 @@
                   v-model="group.quorum.changeReviewSharePercent"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -74,7 +74,7 @@
                   v-model="group.quorum.inviteMembers"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -87,7 +87,7 @@
                   v-model="group.quorum.dropoutMembers"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -100,7 +100,7 @@
                   v-model="group.quorum.startResearchTokenSale"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -113,7 +113,7 @@
                   v-model="group.quorum.offerResearchTokens"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -126,7 +126,7 @@
                   v-model="group.quorum.sendFunds"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -139,7 +139,7 @@
                   v-model="group.quorum.changeQuorum"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -152,7 +152,7 @@
                   v-model="group.quorum.rebalanceGroupTokens"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  mask="###"
+                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">

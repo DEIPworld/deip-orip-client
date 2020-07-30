@@ -14,7 +14,7 @@
           v-model="reviewShare"
           suffix="%"
           outlined
-          mask="##"
+          v-mask="'##'"
           hide-details
           @keyup="setReviewShare"
         />
