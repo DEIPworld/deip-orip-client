@@ -83,19 +83,20 @@
     </div>
 
     <v-divider />
+    <div class="text-h6 font-weight-medium my-6">
+      Research Criterials
+    </div>
 
-    <div class="my-6" v-for="(item, i) in tenant.profile.settings.researchComponents" :key="`${i}-stepper`">
-      <div v-if="item.isVisible">
-        <div class="text-h6 font-weight-medium pb-4">
-          {{ item.component.readinessLevelTitle }}
-        </div>
+    <template v-for="(item, i) in tenant.profile.settings.researchComponents">
+      <div v-if="item.isVisible" :key="`${i}-stepper`" class="my-6">
         <leveller-selector
           v-model.number="tenantCriterias[i].value.index"
           :items="stepperSelector(item.component.readinessLevels)"
-          :label="tenantCriterias[i].value.index != null ? item.component.readinessLevelTitle : 'Unselected'"
+          :label="item.component.readinessLevelTitle"
         />
       </div>
-    </div>
+    </template>
+
 
     <v-divider class="mt-9" />
 
@@ -128,7 +129,6 @@
       </div>
       <milestone-stepper :is-read-only="false" :steps="milestones" />
     </div>
-
     <div class="py-2 text-end">
       <v-btn
         class="my-0 ml-2"

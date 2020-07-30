@@ -21,16 +21,15 @@
           v-model="filter.date"
           label="Period"
           :picker-props="{
-              min: moment('2020-01-01').format('YYYY-MM-DD'),
-              range: true
-            }"
+            min: moment('2020-01-01').format('YYYY-MM-DD'),
+            range: true
+          }"
           :field-props="{
-              clearable: true,
-            }"
+            clearable: true,
+          }"
         />
       </v-col>
     </d-filter-block>
-
 
     <v-skeleton-loader
       class="mt-6"

@@ -1,22 +1,23 @@
 <template>
   <v-select
+    v-model="internalValue"
     :items="items"
     :label="label"
-    hide-details
-    :value="value"
     v-bind="_xProps"
-    @change="onInput"
   >
+    <template #selection="{ item }">
+      <div class="d-flex align-center">
+        <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
+          {{ item.num }}
+        </v-avatar>
+        <span class="text-body-2">{{ item.text }}</span>
+      </div>
 
-    <template v-if="typeof value !== 'undefined' && currentStep" #prepend-inner>
-      <leveller-num
-        style="margin-top: -17px; margin-right: -4px; margin-left: -12px;"
-        :height="56"
-        :num="currentStep.num" />
     </template>
 
     <template #item="{ item, on, attrs }">
       <leveller-item
+        class="px-0"
         :dot-num="item.num"
         v-bind="attrs"
         :ctrl-height="48"
@@ -31,13 +32,11 @@
 
 <script>
   import LevellerItem from '@/components/Leveller/LevellerItem';
-  import LevellerNum from '@/components/Leveller/LevellerNum';
   import { AbstractField } from '@/components/Deipify/DInput/AbstractField';
 
   export default {
     name: 'LevellerSelector',
     components: {
-      LevellerNum,
       LevellerItem
     },
     mixins: [AbstractField],
