@@ -62,7 +62,7 @@
 
     data() {
       return {
-        disciplines: [...disciplinesService.getTopLevelNodes().sort((a, b) => a.label.localeCompare(b.label))]
+        disciplines: [{ label: 'All', id: '' }, ...disciplinesService.getTopLevelNodes().sort((a, b) => a.label.localeCompare(b.label))]
       };
     }
   };

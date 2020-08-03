@@ -45,7 +45,7 @@
         :data="chartData"
         :options="{
           vAxis: {format: '##%'},
-          hAxis: {showTextEvery: 2},
+          hAxis: {showTextEvery: parseInt(chartData.length / 6)},
           legend: {position: chartData[0].length > 2 ? 'right' : 'none'}
         }"
       />

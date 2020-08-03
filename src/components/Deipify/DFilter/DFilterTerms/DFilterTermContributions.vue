@@ -62,12 +62,15 @@
 
     data() {
       return {
-        contributions: Object.keys(EXPERTISE_CONTRIBUTION_TYPE)
-          .filter((x) => isNaN(x) && x !== 'UNKNOWN')
-          .map((key) => ({
-            label: sentenceCase(key),
-            value: EXPERTISE_CONTRIBUTION_TYPE[key]
-          }))
+        contributions: [
+          { label: 'All', value: '' },
+          ...Object.keys(EXPERTISE_CONTRIBUTION_TYPE)
+            .filter((x) => isNaN(x) && x !== 'UNKNOWN')
+            .map((key) => ({
+              label: sentenceCase(key),
+              value: EXPERTISE_CONTRIBUTION_TYPE[key]
+            }))
+        ]
       };
     }
   };

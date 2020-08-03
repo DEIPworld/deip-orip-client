@@ -61,12 +61,15 @@
 
     data() {
       return {
-        assessmentCriterias: Object.keys(ASSESSMENT_CRITERIA_TYPE)
-          .filter((x) => isNaN(x) && x !== 'UNKNOWN')
-          .map((key) => ({
-            label: sentenceCase(key),
-            value: ASSESSMENT_CRITERIA_TYPE[key]
-          }))
+        assessmentCriterias: [
+          { label: 'All', value: '' },
+          ...Object.keys(ASSESSMENT_CRITERIA_TYPE)
+            .filter((x) => isNaN(x) && x !== 'UNKNOWN')
+            .map((key) => ({
+              label: sentenceCase(key),
+              value: ASSESSMENT_CRITERIA_TYPE[key]
+            }))
+        ]
       };
     }
   };
