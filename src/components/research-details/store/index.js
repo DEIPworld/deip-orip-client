@@ -36,7 +36,6 @@ const state = {
   applicationsRefsList: [],
   userContributionsList: [],
   expertsList: [],
-  eciHistoryByDiscipline: [],
 
   isLoadingResearchDetails: undefined,
   isLoadingResearchContent: undefined,
@@ -155,98 +154,6 @@ const getters = {
 
   userContributionsList: (state, getters) => state.userContributionsList,
 
-  eciHistoryByDiscipline: (state, getters) => {
-    const records = state.eciHistoryByDiscipline;
-
-    return records.map((record) => {
-      if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-
-        const parser = new DOMParser();
-        const html = parser.parseFromString(record.review.content, 'text/html');
-        const allElements = Array.from(html.all);
-        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-        const headerEl = allElements[bodyIdx + 1];
-        const title = headerEl.innerHTML;
-
-        const link = {
-          name: 'ResearchContentReview',
-          params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
-          }
-        };
-
-        return {
-          ...record,
-          actionText: `${typeInfo ? typeInfo.text : 'Publication'} Reviewed`,
-          meta: {
-            title,
-            review: record.review,
-            link
-          }
-        };
-      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
-        const parser = new DOMParser();
-        const html = parser.parseFromString(record.review.content, 'text/html');
-        const allElements = Array.from(html.all);
-        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-        const headerEl = allElements[bodyIdx + 1];
-        const title = headerEl.innerHTML;
-
-        const link = {
-          name: 'ResearchContentReview',
-          params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
-          }
-        };
-
-        return {
-          ...record,
-          actionText: 'Review supported',
-          meta: {
-            title,
-            review: record.review,
-            reviewVote: record.review_vote,
-            link
-          }
-        };
-      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-        const link = {
-          name: 'ResearchContentDetails',
-          params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink)
-          }
-        };
-
-        return {
-          ...record,
-          actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
-          meta: {
-            title: record.research_content.title,
-            researchContent: record.research_content,
-            link
-          }
-        };
-      } else {
-        return {
-          ...record,
-          actionText: 'Contribution',
-          meta: {
-            title: 'Contribution'
-          }
-        };
-      }
-    });
-  }
 };
 
 // actions
@@ -560,14 +467,6 @@ const actions = {
       if (notify) notify();
     });
   },
-
-  loadResearchEciHistoryRecords({ state, dispatch, commit }, payload) {
-    return expertiseContributionsService.getResearchExpertiseHistory(payload.researchExternalId, payload)
-      .then((records) => {
-        commit('SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE', records);
-        return records;
-      }, (err) => { console.error(err); });
-  }
 };
 
 // mutations
@@ -677,12 +576,8 @@ const mutations = {
     state.group = value;
   },
 
-  SET_RESEARCH_ECI_HISTORY_BY_DISCIPLINE(state, records) {
-    Vue.set(state, 'eciHistoryByDiscipline', records);
-  },
-
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', []);
+
   }
 };
 
