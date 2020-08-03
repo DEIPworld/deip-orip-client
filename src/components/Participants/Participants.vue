@@ -8,7 +8,6 @@
             @apply="applyFilter"
             @reset="resetFilter"
           >
-            {{filterModel}}
             <v-text-field
               v-model="filterModel.searchTerm"
               outlined
