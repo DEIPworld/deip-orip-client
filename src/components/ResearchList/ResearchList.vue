@@ -36,7 +36,7 @@
   import ResearchListGrid from '@/components/ResearchList/ResearchListGrid';
   import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
-  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter/ResearchListFilter';
+  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
 
   export default {
     name: 'ResearchList',

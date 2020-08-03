@@ -23,7 +23,7 @@
           >
             <d-chart-area
               :data="eciOverviewDataTable"
-              :options="{legend: 'none', vAxis: { format: '##%' }, hAxis: { showTextEvery: 2} }"
+              :options="{legend: 'none', vAxis: { format: '##%' }, hAxis: { showTextEvery: parseInt(eciOverviewDataTable.length / 6)} }"
             />
           </d-block>
         </v-col>

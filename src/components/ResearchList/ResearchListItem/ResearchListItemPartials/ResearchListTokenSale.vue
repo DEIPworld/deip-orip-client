@@ -8,11 +8,9 @@
         ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
       </div>
     </div>
-<!--    {{tokenSale}}-->
-<!--    {{fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap) * 100}}-->
     <v-progress-linear
       class="rounded"
-      :value="fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap)"
+      :value="fromAssetsToFloat(tokenSale.total_amount) / fromAssetsToFloat(tokenSale.hard_cap) * 100"
     />
     <div v-if="hasActiveTokenSale" class="text-caption mt-1">
       {{ tokenSaleLeft(tokenSale.end_time) }} left
