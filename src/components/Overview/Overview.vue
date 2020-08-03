@@ -58,7 +58,7 @@
               label="Disciplines"
             />
           </v-col>
-          <v-col cols="10">
+          <v-col cols="10" class="pb-12">
             <d-chart-pie
               :data="distributionChartData"
               :options="{
