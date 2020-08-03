@@ -33,6 +33,7 @@ import { adminPanelStore } from '../components/AdminPanel/store';
 import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
 import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
+import { eciStore } from '@/components/EciMetrics/store';
 
 Vue.use(Vuex);
 
@@ -71,7 +72,8 @@ export const store = new Vuex.Store({
     adminPanel: adminPanelStore,
     overview: overviewStore,
 
-    disciplinesGrowthRate: disciplinesGrowthRateStore
+    disciplinesGrowthRate: disciplinesGrowthRateStore,
+    eci: eciStore
   },
   strict: process.env.NODE_ENV !== 'production'
 });

@@ -1,32 +1,20 @@
 <template>
-  <div>
-    <eci-history
-      :data="eciHistoryRecords"
-      :disciplines="research.disciplines"
-      :loading="eciHistoryLoading"
-      @updateData="loadDisciplineEciHistory"
-    >
-      <template #eciHeader>
-        <div class="d-flex">
-          <v-icon class="mr-5" large color="grey lighten-2">
-            mdi-poll-box
-          </v-icon>
-          <div class="text-h6 my-auto">
-            Expertise Contribution Index
-          </div>
-        </div>
-      </template>
-    </eci-history>
-  </div>
+  <eci-metrics
+    :disciplines="research.disciplines"
+    :research-id="research.external_id"
+    :contributions="false"
+  />
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import EciHistory from '@/components/EciHistory/EciHistory';
+  import EciMetrics from '@/components/EciMetrics/EciMetrics';
 
   export default {
     name: 'ResearchDetailsEci',
-    components: { EciHistory },
+    components: {
+      EciMetrics
+    },
     data() {
       return {
         eciHistoryRecords: [],
@@ -37,27 +25,6 @@
       ...mapGetters({
         research: 'rd/research'
       })
-    },
-    created() {
-      this.loadDisciplineEciHistory();
-    },
-    methods: {
-      loadDisciplineEciHistory(updatedFilter = {}) {
-        this.eciHistoryLoading = true;
-
-        return this.$store.dispatch('rd/loadResearchEciHistoryRecords', {
-          researchExternalId: this.research.external_id,
-          ...updatedFilter
-        })
-          .then(() => {
-            const records = this.$store.getters['rd/eciHistoryByDiscipline'];
-            this.eciHistoryRecords = records;
-            this.eciHistoryLoading = false;
-          });
-      },
-      reloadDisciplineEciHistory() {
-        return this.loadDisciplineEciHistory();
-      }
     }
   };
 </script>

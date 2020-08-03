@@ -44,6 +44,7 @@
     "@xkeshi/vue-qrcode": "^1.0.0",
     "axios": "^0.18.0",
     "change-case": "^4.1.1",
+    "cheerio": "^1.0.0-rc.3",
     "chroma-js": "^2.1.0",
     "chunk": "0.0.2",
     "core-js": "^3.4.4",

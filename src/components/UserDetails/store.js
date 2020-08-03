@@ -26,7 +26,6 @@ const state = {
   reviewRequests: [],
   researchesRef: [],
   eciStatsByDiscipline: undefined,
-  eciHistoryByDiscipline: [],
 
   filter: {
     criteria: null,
@@ -60,134 +59,6 @@ const getters = {
 
   filter: (state) => state.filter,
   eciStatsByDiscipline: (state, getters) => state.eciStatsByDiscipline,
-  eciHistoryByDiscipline: (state, getters) => {
-
-    return state.eciHistoryByDiscipline
-      .map((item) => {
-
-        const getEciRecordLabel = (record) => {
-          let actionText = "";
-          const isSideEvent = !(record.contribution_type == record.event_contribution_type && record.contribution_id == record.event_contribution_id);
-
-          switch (record.contribution_type) {
-            case EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION:
-              let materialTypeInfo = researchService.getResearchContentType(record.research_content.content_type);
-              if (isSideEvent) {
-                actionText = `${materialTypeInfo ? materialTypeInfo.text : 'Material'} rewarded`;
-              } else {
-                actionText = `${materialTypeInfo ? materialTypeInfo.text : 'Material'} uploaded`;
-              }
-              break;
-            case EXPERTISE_CONTRIBUTION_TYPE.REVIEW:
-              let reviewedMaterialTypeInfo = researchService.getResearchContentType(record.research_content.content_type);
-              if (isSideEvent) {
-                actionText = `Review rewarded`;
-              } else {
-                actionText = `${reviewedMaterialTypeInfo ? reviewedMaterialTypeInfo.text : 'Material'} reviewed`;
-              }
-              break;
-            case EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT:
-              if (isSideEvent) {
-                actionText = `Support rewarded`;
-              } else {
-                actionText = `Review supported`;
-              }
-              break;
-            default:
-              actionText = `Reward`;
-              break;
-          }
-
-          return actionText;
-        };
-
-        const record = { ...item };
-
-        if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-          const parser = new DOMParser();
-          const html = parser.parseFromString(record.review.content, 'text/html');
-          const allElements = Array.from(html.all);
-          const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-          const headerEl = allElements[bodyIdx + 1];
-          const title = headerEl.innerHTML;
-
-          const link = {
-            name: 'ResearchContentReview',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink),
-              review_id: record.review.id
-            }
-          };
-
-          return {
-            ...record,
-            actionText: getEciRecordLabel(record),
-            meta: {
-              title,
-              review: record.review,
-              link
-            }
-          };
-        } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
-          const parser = new DOMParser();
-          const html = parser.parseFromString(record.review.content, 'text/html');
-          const allElements = Array.from(html.all);
-          const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-          const headerEl = allElements[bodyIdx + 1];
-          const title = headerEl.innerHTML;
-
-          const link = {
-            name: 'ResearchContentReview',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink),
-              review_id: record.review.id
-            }
-          };
-
-          return {
-            ...record,
-            actionText: getEciRecordLabel(record),
-            meta: {
-              title,
-              review: record.review,
-              reviewVote: record.review_vote,
-              link
-            }
-          };
-        } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-          const link = {
-            name: 'ResearchContentDetails',
-            params: {
-              research_group_permlink: decodeURIComponent(record.research_group.permlink),
-              research_permlink: decodeURIComponent(record.research.permlink),
-              content_permlink: decodeURIComponent(record.research_content.permlink)
-            }
-          };
-
-          return {
-            ...record,
-            actionText: getEciRecordLabel(record),
-            meta: {
-              title: record.research_content.title,
-              researchContent: record.research_content,
-              link
-            }
-          };
-        } else {
-          return {
-            ...record,
-            actionText: 'Graduation',
-            meta: {
-              title: 'Certified expert'
-            }
-          };
-        }
-      });
-  },
 
   isLoadingUserGroups: (state) => state.isLoadingUserGroups,
   isLoadingUserExpertise: (state) => state.isLoadingUserExpertise,
@@ -480,20 +351,16 @@ const mutations = {
     state.isLoadingResearchesRefDetails = value;
   },
 
-  SET_ACCOUNT_ECI_HISTORY_BY_DISCIPLINE(state, history) {
-    Vue.set(state, 'eciHistoryByDiscipline', history);
-  },
-
   UPDATE_ECI_HISTORY_FILTER(state, { key, value }) {
     state.filter[key] = value;
   },
 
-  SET_ACCOUNT_ECI_STATS(state, stats) {
+  SET_ACCOUNT_ECI_STATS(state, stats) { // overview
     Vue.set(state, 'eciStatsByDiscipline', stats);
   },
 
   RESET_STATE(state) {
-    Vue.set(state, 'eciHistoryByDiscipline', []);
+    // Vue.set(state, 'eciHistoryByDiscipline', []);
   }
 
 };

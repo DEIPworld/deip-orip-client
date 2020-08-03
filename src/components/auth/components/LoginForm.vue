@@ -28,6 +28,7 @@
             :disable="disable"
             :rules="[validation.required]"
             prepend-inner-icon="lock"
+            hide-details="auto"
           />
         </v-col>
 
@@ -35,7 +36,6 @@
           <v-btn
             type="submit"
             block
-            x-large
             color="primary"
             :loading="disable"
             :disabled="disable"

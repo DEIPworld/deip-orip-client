@@ -30,7 +30,6 @@ const state = {
   expertsList: [],
   researchContentReferencesGraph: [],
   contentProposal: undefined,
-  eciHistoryByDiscipline: [],
   contentRef: null,
 
   isLoadingResearchContentVotes: undefined,
@@ -140,91 +139,6 @@ const getters = {
 
     return { nodes, links };
   },
-
-  eciHistoryByDiscipline: (state, getters) => {
-    const records = state.eciHistoryByDiscipline;
-
-    return records.map((record) => {
-      if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-
-        const parser = new DOMParser();
-        const html = parser.parseFromString(record.review.content, 'text/html');
-        const allElements = Array.from(html.all);
-        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-        const headerEl = allElements[bodyIdx + 1];
-        const title = headerEl.innerHTML;
-
-        const link = {
-          name: 'ResearchContentReview',
-          params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
-          }
-        };
-
-        return {
-          ...record,
-          actionText: `${typeInfo ? typeInfo.text : 'Publication'} reviewed`,
-          meta: {
-            title,
-            review: record.review,
-            link
-          }
-        };
-      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
-        const parser = new DOMParser();
-        const html = parser.parseFromString(record.review.content, 'text/html');
-        const allElements = Array.from(html.all);
-        const bodyIdx = allElements.findIndex((el) => el.tagName == 'BODY');
-        const headerEl = allElements[bodyIdx + 1];
-        const title = headerEl.innerHTML;
-
-        const link = {
-          name: 'ResearchContentReview',
-          params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
-          }
-        };
-
-        return {
-          ...record,
-          actionText: 'Review supported',
-          meta: {
-            title,
-            review: record.review,
-            reviewVote: record.review_vote,
-            link
-          }
-        };
-      } else if (record.contribution_type == EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-        const typeInfo = researchService.getResearchContentType(record.research_content.content_type);
-
-        return {
-          ...record,
-          actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
-          meta: {
-            title: record.research_content.title,
-            researchContent: record.research_content,
-            link: null
-          }
-        };
-      } else {
-        return {
-          ...record,
-          actionText: 'Contribution',
-          meta: {
-            title: 'Contribution'
-          }
-        };
-      }
-    });
-  }
 };
 
 // actions
@@ -464,15 +378,6 @@ const actions = {
     const graph = await researchService.getResearchContentReferencesGraph(researchContentId);
     commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
     if (notify) notify();
-  },
-
-  loadResearchContentEciHistoryRecords({ state, dispatch, commit }, payload) {
-    return expertiseContributionsService.getResearchContentExpertiseHistory(payload.researchContentExternalId, payload)
-      .then((records) => {
-        commit('SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE', records);
-      }, (err) => {
-        console.error(err);
-      });
   },
 
   setDraftAuthors({ state, commit, dispatch }, authors) {
@@ -739,12 +644,7 @@ const mutations = {
     state.researchContentReferencesGraph = graph;
   },
 
-  SET_RESEARCH_CONTENT_ECI_HISTORY_BY_DISCIPLINE(state, records) {
-    Vue.set(state, 'eciHistoryByDiscipline', records);
-  },
-
   RESET_STATE(state) {
-    state.eciHistoryByDiscipline = [];
     state.contentMetadata = null;
   }
 };

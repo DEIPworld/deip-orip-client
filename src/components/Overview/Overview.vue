@@ -73,13 +73,10 @@
         </v-row>
       </d-block>
 
-      <d-block title="Expertise Contribution Index detailed overview">
-        <eci-history
-          :data="eciHistoryByDiscipline"
-          :loading="eciDetailedOverviewLoading"
-          @updateData="updateDetailedChart"
-        />
-      </d-block>
+      <eci-metrics>
+        <template #historyTitle>Expertise Contribution Index detailed overview</template>
+      </eci-metrics>
+
     </layout-section>
   </app-layout>
 </template>
@@ -96,18 +93,18 @@
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DChartArea from '@/components/Deipify/DChart/DChartArea';
 
-  import EciHistory from '@/components/EciHistory/EciHistory';
   import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   import moment from 'moment';
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
+  import EciMetrics from '@/components/EciMetrics/EciMetrics';
 
   export default {
     name: 'Overview',
     components: {
+      EciMetrics,
       DisciplinesGrowthRate,
-      EciHistory,
       DBlock,
       DChartArea,
       DChartPie,
@@ -116,8 +113,6 @@
     },
     data() {
       return {
-        eciDetailedOverviewLoading: true,
-
         distributionDiscipline: 'all',
 
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
@@ -132,7 +127,7 @@
       ...mapGetters({
         disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
         disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
-        eciHistoryByDiscipline: 'overview/eciHistoryByDiscipline',
+        eciHistoryByDiscipline: 'eci/disciplineExpertiseHistory',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
@@ -260,10 +255,8 @@
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
         this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', {})
       ])
         .then(() => {
-          this.eciDetailedOverviewLoading = false;
           this.$setReady();
         });
     },
@@ -277,15 +270,6 @@
               .discipline_external_id
           }
         });
-      },
-
-      updateDetailedChart(updatedFilter = {}) {
-        this.eciDetailedOverviewLoading = true;
-
-        this.$store.dispatch('overview/getEciHistoryByDiscipline', updatedFilter)
-          .then(() => {
-            this.eciDetailedOverviewLoading = false;
-          });
       }
     }
   };
