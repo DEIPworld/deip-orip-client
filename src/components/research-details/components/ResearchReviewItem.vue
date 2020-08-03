@@ -86,10 +86,10 @@
       <div class="pt-2">
         <v-tooltip v-if="review.supporters.length" tag="div" bottom>
           <template v-slot:activator="{ on }">
-            <v-row justify="end" align="center" v-on="on">
+            <div class="d-flex justify-end" v-on="on">
               <span class="half-bold align-self-center pr-2">{{ review.supporters.length }}</span>
               <v-icon>group_add</v-icon>
-            </v-row>
+            </div>
           </template>
 
           <div

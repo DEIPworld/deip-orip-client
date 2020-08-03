@@ -150,12 +150,10 @@
                       <span class="text-body-2">Verified by:</span>
                     </v-col>
                     <v-col cols="8">
-                      <v-row
+                      <div
                         v-for="(review, i) in contentReviewsList"
-
                         :key="`file-verifier-${i}`"
-                        align="center"
-                        justify="space-between"
+                        class="d-flex justify-space-between"
                         :class="{'py-2': i != 0}"
                       >
                         <platform-avatar
@@ -173,7 +171,7 @@
                           </template>
                           <span>Digital Signature: {{ mockSignature(review.id) }}</span>
                         </v-tooltip>
-                      </v-row>
+                      </div>
                     </v-col>
                   </v-row>
                   <!-- </v-row> -->
@@ -509,7 +507,7 @@
 
   .tabs-container {
     height: 500px;
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
 
 </style>
