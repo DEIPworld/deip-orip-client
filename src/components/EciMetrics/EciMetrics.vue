@@ -15,6 +15,7 @@
     <portal-target :name="`${$vnode.tag}-filterPlaceholderTop`" slim />
 
     <eci-metrics-stats
+      v-if="enableStats"
       :data="{expertiseStats, expertiseHistory}"
       :portal-key="$vnode.tag"
     >

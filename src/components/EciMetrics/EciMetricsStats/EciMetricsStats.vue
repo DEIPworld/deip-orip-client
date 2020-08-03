@@ -38,6 +38,10 @@
       data: {
         type: Object,
         default: () => ({})
+      },
+      portalKey: {
+        type: String,
+        default: undefined
       }
     }
   };
