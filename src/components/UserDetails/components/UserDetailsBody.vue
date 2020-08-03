@@ -4,7 +4,12 @@
     <user-details-profile-info />
     <!-- ### END User Profile Details Section ### -->
 
-    <v-divider class="my-4" />
+    <v-divider class="my-2" />
+
+    <!-- ### START User Profile Education\Employment Section ### -->
+    <user-details-education />
+    <user-details-employment />
+    <!-- ### END User Profile Education\Employment Section ### -->
 
     <!-- ### START User Profile Research Section ### -->
     <div v-if="!$route.name.includes('account')" class="user-research-groups-container spinner-container mb-4">
@@ -35,55 +40,40 @@
             <!-- <span class="pl-2">Add group</span> -->
           </div>
         </div>
-        <v-card outlined class="mt-2">
-          <template v-for="(group, i) in commonGroups" :class="[{'personal-group': group.is_personal}]">
-            <div :key="'group-' + i" class="pa-6">
-              <div v-if="group.is_personal">
-                <router-link
-                  class="research-group-title"
-                  :to="{
-                    name: 'ResearchGroupDetails',
-                    params: {
-                      research_group_permlink: encodeURIComponent(group.permlink) }
-                  }"
+        <v-row class="mt-2">
+          <v-col v-for="(group, i) in commonGroups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
+            <v-card
+              outlined
+              class="full-height d-flex"
+              :to="{
+                name: 'ResearchGroupDetails',
+                params: {
+                  research_group_permlink: encodeURIComponent(group.permlink) }
+              }"
+            >
+              <div class="py-4 px-6 ma-auto text-body-2 flex-grow-1 d-flex justify-space-between">
+                <d-avatared
+                  :src="group.external_id | researchGroupLogoSrc(32, 32)"
+                  :size="32"
                 >
-                  {{ userInfo | fullname }}
-                </router-link>
-                <span class="grey--text caption">(personal group)</span>
-              </div>
-              <div v-else>
-                <router-link
-                  class="research-group-title"
-                  :to="{
-                    name: 'ResearchGroupDetails',
-                    params: {
-                      research_group_permlink: encodeURIComponent(group.permlink) }
-                  }"
-                >
-                  {{ group.name }}
-                </router-link>
-                <div class="text-caption grey--text pt-2">
-                  <template v-for="share in group.shares">
-                    <span :key="'share-' + share.id">
-                      <span>{{ share.owner }}</span>
-                      <span> · </span>
-                    </span>
-                  </template>
+                  <div class="text-body-2">
+                    {{ group.name }}
+                  </div>
+                </d-avatared>
+                <div class="flex-shrink-0 align-self-center">
+                  <v-icon>
+                    group
+                  </v-icon>
+                  {{ group.shares.length }}
                 </div>
               </div>
-            </div>
-            <v-divider v-if="i !== commonGroups.length - 1" :key="'divider-' + i" />
-          </template>
-        </v-card>
+            </v-card>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <!-- ### END User Profile Research Section ### -->
-
-    <!-- ### START User Profile Education\Employment Section ### -->
-    <user-details-education />
-    <user-details-employment />
   </div>
-  <!-- ### END User Profile Education\Employment Section ### -->
 </template>
 
 <script>
@@ -93,6 +83,7 @@
   import UserDetailsEducation from '@/components/UserDetails/components/UserDetailsEducation';
   import UserDetailsEmployment from '@/components/UserDetails/components/UserDetailsEmployment';
   import UserDetailsProfileInfo from '@/components/UserDetails/components/UserDetailsProfileInfo';
+  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
 
   export default {
     name: 'UserDetailsBody',
@@ -101,7 +92,8 @@
       ResearchList,
       UserDetailsEducation,
       UserDetailsEmployment,
-      UserDetailsProfileInfo
+      UserDetailsProfileInfo,
+      DAvatared
     },
     computed: {
       ...mapGetters({

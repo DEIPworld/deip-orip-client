@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="pb-2">
+  <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="py-2">
     <div class="d-flex mb-1">
       <div class="text-h6 text-left align-self-center">
         Education

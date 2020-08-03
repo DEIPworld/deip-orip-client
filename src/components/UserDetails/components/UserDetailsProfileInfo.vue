@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="display-flex ">
+    <div class="display-flex pb-2">
       <v-avatar
         size="160px"
         class="user-avatar mr-4"
@@ -82,8 +82,8 @@
       </div>
     </div>
 
-    <v-divider class="my-4" />
-    <div class="">
+    <v-divider class="my-2" />
+    <div class="py-2">
       <div v-if="isProfileAvailable">
         <div v-if="isOwner && !userInfo.profile.bio" class="font-weight-medium owner-hint">
           <v-icon small>
