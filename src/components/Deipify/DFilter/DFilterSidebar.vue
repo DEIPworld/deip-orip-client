@@ -55,14 +55,17 @@
                 text
                 color="primary"
                 small
-                @click="resetFilter()"
+                :disabled="loading"
+                @click="onReset()"
               >
                 Clear
               </v-btn>
               <v-btn
                 color="primary"
                 small
-                @click="applyFilter"
+                :disabled="loading || !filterChanged"
+                :loading="loading"
+                @click="onApply()"
               >
                 Show result
               </v-btn>
@@ -75,19 +78,13 @@
 </template>
 
 <script>
-  import Toggleable from 'vuetify/lib/mixins/toggleable';
+  import { factory as toggleable } from 'vuetify/lib/mixins/toggleable';
+  import { Filterable } from './filterable';
 
   export default {
     name: 'DFilterSidebar',
 
-    mixins: [Toggleable],
-
-    props: {
-      filterCount: {
-        type: [String, Number],
-        default: undefined
-      }
-    },
+    mixins: [toggleable('active'), Filterable],
 
     data() {
       return {
@@ -106,14 +103,6 @@
         this.isActive = !this.isActive;
       },
 
-      resetFilter() {
-        this.$emit('reset');
-      },
-
-      applyFilter() {
-        this.$emit('apply');
-      },
-
       onMutate() {
         const sidebarHeight = this.$refs.sidebar.$el.clientHeight;
         const headerHeight = this.$refs.header.$el.clientHeight;
@@ -125,7 +114,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

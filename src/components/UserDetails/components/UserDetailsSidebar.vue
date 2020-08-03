@@ -185,17 +185,17 @@
         </div>
       </div>
 
-      <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
-        <v-btn
-          block
-          outlined
-          color="primary"
-          class="ma-0"
-          @click="openClaimExpertiseDialog()"
-        >
-          Claim new Discipline
-        </v-btn>
-      </div>
+<!--      <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">-->
+<!--        <v-btn-->
+<!--          block-->
+<!--          outlined-->
+<!--          color="primary"-->
+<!--          class="ma-0"-->
+<!--          @click="openClaimExpertiseDialog()"-->
+<!--        >-->
+<!--          Claim new Discipline-->
+<!--        </v-btn>-->
+<!--      </div>-->
 
     </div>
     <!-- ### END User Profile Expertise Section ### -->

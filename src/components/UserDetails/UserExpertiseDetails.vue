@@ -30,7 +30,18 @@
       :account-name="userInfo.account.name"
       filter-position="top"
       enable-stats
-    />
+    >
+      <template #historyTitleAddon>
+        <router-link
+          class="a mx-0 mr-12 pr-4"
+          color="primary"
+          outlined
+          :to="{ name: 'ReviewSetup' }"
+        >
+          Alternative review model
+        </router-link>
+      </template>
+    </eci-metrics>
   </layout-section>
 </template>
 

@@ -51,7 +51,6 @@
                 item-text="name"
                 item-value="name"
                 chips
-                outlined
                 append-icon="mode_edit"
                 multiple
                 class="pa-0 no-underline"

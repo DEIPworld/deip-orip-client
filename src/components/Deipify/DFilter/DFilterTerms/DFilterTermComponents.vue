@@ -46,7 +46,7 @@
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
-    name: 'ResearchListFilterComponents',
+    name: 'DFilterTermComponents',
 
     components: {
       DBlock,

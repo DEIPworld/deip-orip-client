@@ -1,118 +1,33 @@
 <template>
   <app-layout v-if="$ready">
-    <v-navigation-drawer v-model="isShowFilter" app clipped right>
-      <v-row no-gutters class="pa-4 grey lighten-3 v-list-iten">
-        <v-col cols="auto" align-self="center" class="text-subtitle-1 font-weight-medium">
-          Filters
-        </v-col>
-        <v-spacer />
-        <v-col cols="auto">
-          <v-btn
-            text
-            small
-            icon
-            color="black"
-            @click="isShowFilter = !isShowFilter"
+    <layout-section>
+      <d-block title="Participants">
+        <template #titleAddon>
+          <d-filter-sidebar
+            v-model="filterModel"
+            @apply="applyFilter"
+            @reset="resetFilter"
           >
-            <v-icon>clear</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-content>
+            {{filterModel}}
             <v-text-field
-              v-model="filter.searchTerm"
+              v-model="filterModel.searchTerm"
               outlined
+              class="mb-4"
               prepend-inner-icon="search"
               hide-details
               label="Search by names"
             />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-select
-              v-model="filter.discipline"
-              :items="disciplines"
-              outlined
-              hide-details
-              label="Disciplines"
-            />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-select
-              v-model="filter.contribution"
-              :items="contributions"
-              outlined
-              hide-details
-              label="Contribution type"
-            />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-select
-              v-model="filter.criteria"
-              :items="criterias"
-              outlined
-              hide-details
-              label="Assessment criteria"
-            />
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item class="justify-space-between mt-2">
-          <v-btn
-            height="32"
-            small
-            text
-            color="primary"
-            @click="clearFilter"
-          >
-            Clear
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            height="32"
-            small
-            color="primary"
-            @click="filterData"
-          >
-            Show results
-          </v-btn>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <layout-section>
-      <v-row no-gutters class="py-2">
-        <v-col cols="auto" class="text-h6">
-          Participants
-        </v-col>
-        <v-spacer />
-        <v-col cols="auto">
-          <v-btn height="32" outlined color="primary" @click="isShowFilter = !isShowFilter">
-            <v-badge
-              v-if="isShowBadge"
-              color="amber lighten-1"
-              overlap
-              dot
-              offset-y="5"
-              offset-x="10"
-            >
-              <v-icon left>
-                filter_list
-              </v-icon>
-            </v-badge>
-            <v-icon v-else left>
-              filter_list
-            </v-icon>
-            Filter
-          </v-btn>
-        </v-col>
-      </v-row>
+
+            <d-filter-term-disciplines v-model="filterModel.discipline" single-choice />
+            <d-filter-term-contributions v-model="filterModel.contribution" single-choice />
+            <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
+
+          </d-filter-sidebar>
+        </template>
+      </d-block>
+
       <v-divider class="my-4" />
+
       <content-block>
         <v-data-table
           v-custom="'hover-row'"
@@ -165,41 +80,41 @@
 </template>
 
 <script>
-  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-  import { EXPERTISE_CONTRIBUTION_TYPE, ASSESSMENT_CRITERIA_TYPE } from '@/variables';
   import { mapGetters } from 'vuex';
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import AppLayout from '@/components/layout/components/Layout';
-  import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
+  import DFilterTermDisciplines from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
+  import DFilterTermContributions from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermContributions';
+  import DFilterTermAssessmentCriterias from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermAssessmentCriterias';
+
+  const defaultFilter = () => ({
+    searchTerm: '',
+    discipline: '',
+    contribution: '',
+    criteria: ''
+  });
 
   export default {
     name: 'Participants',
-    components: { LayoutSection, ContentBlock, AppLayout },
+    components: {
+      DFilterTermAssessmentCriterias,
+      DFilterTermContributions,
+      DFilterTermDisciplines,
+      DFilterSidebar,
+      DBlock,
+      LayoutSection,
+      ContentBlock,
+      AppLayout
+    },
     data() {
       return {
-        isShowFilter: true,
-        isShowBadge: false,
-        disciplines: [
-          { text: 'All', value: ""},
-          ...disciplinesService
-            .getTopLevelNodes()
-            .map((d) => ({ text: d.label, value: d.id }))
-        ],
-        contributions: mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, { blackList: [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
-        criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, { blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN], allowBlank: true, blankLabel: "All" }),
-        defaultFilter: {
-          searchTerm: "",
-          discipline: "",
-          contribution: "",
-          criteria: ""
-        },
-        filter: {
-          searchTerm: "",
-          discipline: "",
-          contribution: "",
-          criteria: ""
-        },
+        storageFilterModelKey: 'participants__filter',
+
+        filterModel: defaultFilter(),
+
         participantsHeader: [
           {
             text: 'Name',
@@ -245,42 +160,44 @@
         participantsList: 'participants/participants'
       })
     },
+
     created() {
-      if (this.$route.query.discipline) {
-        this.filter.discipline = this.$route.query.discipline;
-      }
-      if (this.$route.query.contribution) {
-        this.filter.contribution = +this.$route.query.contribution;
-      }
-      if (this.$route.query.criteria) {
-        this.filter.criteria = +this.$route.query.criteria;
-      }
-      if (this.$route.query.name) {
-        this.filter.searchTerm = this.$route.query.name;
+      for (const key of ['discipline', 'contribution', 'criteria', 'searchTerm']) {
+        if (this.$route.query[key]) {
+          this.filterModel[key] = this.$route.query[key];
+        }
       }
 
-      this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter);
+      if (this.$ls.get(this.storageFilterModelKey)) {
+        this.filterModel = this.$ls.get(this.storageFilterModelKey);
+      }
 
-      this.$store
-        .dispatch('participants/loadAllParticipants', { filter: this.filter })
-        .then(() => {
+      this.$ls.on(this.storageFilterModelKey, this.updateData, true);
+    },
+
+    beforeDestroy() {
+      this.$ls.off(this.storageFilterModelKey, this.applyFilter);
+    },
+
+    methods: {
+      applyFilter() {
+        this.$ls.set(this.storageFilterModelKey, this.filterModel);
+      },
+
+      resetFilter() {
+        this.filterModel = { ...defaultFilter() };
+
+        this.applyFilter();
+      },
+
+      updateData() {
+        return this.$store.dispatch('participants/loadFilterParticipants', {
+          filter: this.$ls.get(this.storageFilterModelKey)
+        }).then(() => {
           this.$setReady();
         });
-    },
-    methods: {
-      filterData() {
-        this.$store.dispatch('participants/loadFilterParticipants', {
-          filter: this.filter
-        })
-          .then(() => { this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter); });
       },
-      clearFilter() {
-        this.filter = _.cloneDeep(this.defaultFilter);
-        this.$store.dispatch('participants/loadFilterParticipants', {
-          filter: this.filter
-        })
-          .then(() => { this.isShowBadge = !_.isEqual(this.filter, this.defaultFilter); });
-      },
+
       growthRateIsUp(rate) {
         return parseFloat(rate) >= 0;
       }
