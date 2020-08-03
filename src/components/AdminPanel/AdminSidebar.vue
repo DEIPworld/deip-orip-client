@@ -53,6 +53,11 @@
             to: { name: 'admin.categories' }
           },
           {
+            title: 'Alternative review model',
+            icon: 'rate_review',
+            to: { name: 'admin.reviewModel' }
+          },
+          {
             title: 'FAQ',
             icon: 'forum',
             to: { name: 'admin.faq' }

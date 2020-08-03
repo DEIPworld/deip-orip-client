@@ -31,7 +31,7 @@
       filter-position="top"
       enable-stats
     >
-      <template #historyTitleAddon>
+      <!-- <template #historyTitleAddon>
         <router-link
           class="a mx-0 mr-12 pr-4"
           color="primary"
@@ -40,7 +40,7 @@
         >
           Alternative review model
         </router-link>
-      </template>
+      </template> -->
     </eci-metrics>
   </layout-section>
 </template>

@@ -12,9 +12,7 @@
           In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process
         </v-col>
         <v-col
-          cols="12"
-          md="10"
-          lg="8"
+          cols="auto"
           class="my-12"
         >
           <v-row no-gutters class="mb-4">
@@ -80,7 +78,7 @@
           cols="12"
           sm="10"
           md="7"
-          lg="5"
+          lg="6"
           class="mt-12"
         >
           <div class="text-h6 mb-6">
@@ -109,19 +107,14 @@
                 :class="`criteriaLabel-${getClassName(item.name)}`"
               >{{ item.name }}</span>
             </v-col>
-            <v-col cols="4" class="align-self-center">
-              <v-row no-gutters>
-                <v-col cols="1">
-                  {{ item.value }}
-                </v-col>
-                <v-col cols="11" class="align-self-center">
-                  <review-assessment-squared-rating
-                    v-model="item.value"
-                    :readonly="false"
-                    :value="item.value"
-                  />
-                </v-col>
-              </v-row>
+            <v-col cols="4" class="align-self-center d-flex">
+              <div class="align-self-center">
+                <review-assessment-squared-rating
+                  v-model="item.value"
+                  :readonly="false"
+                  :value="item.value"
+                />
+              </div>
             </v-col>
             <v-col cols="3">
               <v-text-field
