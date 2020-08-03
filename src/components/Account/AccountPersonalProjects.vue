@@ -1,6 +1,6 @@
 <template>
   <layout-section v-if="$ready">
-    <research-list :items="teamsProjects" namespace="account" />
+    <research-list :items="personalResearchers" namespace="account" />
   </layout-section>
 </template>
 
@@ -10,14 +10,14 @@
   import ResearchList from '@/components/ResearchList/ResearchList';
 
   export default {
-    name: 'AccountProjects',
+    name: 'AccountPersonalProjects',
     components: { ResearchList, LayoutSection },
     computed: {
       ...mapGetters({
         researchList: 'userDetails/researchList'
       }),
-      teamsProjects() {
-        return this.researchList.filter(({ research_group: { is_personal } }) => !is_personal);
+      personalResearchers() {
+        return this.researchList.filter(({ research_group: { is_personal } }) => is_personal);
       }
     },
     created() {

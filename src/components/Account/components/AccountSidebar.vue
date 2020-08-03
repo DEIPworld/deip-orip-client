@@ -72,9 +72,14 @@
             subheader: 'Projects',
             items: [
               {
+                icon: 'next_week',
+                title: 'Team\'s projects',
+                route: { name: 'account.projects' }
+              },
+              {
                 icon: 'business_center',
                 title: 'My projects',
-                route: { name: 'account.projects' }
+                route: { name: 'account.personalProjects' }
               },
               {
                 icon: 'bookmarks',
