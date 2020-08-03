@@ -8,7 +8,8 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 
 const STATE = {
   expertiseHistory: [],
-  expertiseStats: []
+  expertiseStats: [],
+  expertiseWidget: [],
 };
 
 const GETTERS = {

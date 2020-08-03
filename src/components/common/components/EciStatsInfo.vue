@@ -1,21 +1,19 @@
 <template>
-  <div class="text-caption pa-4">
-    <div class="text-h6 bold mb-3">
-      Expertise Contribution Index
-    </div>
+
+  <d-block sm title="Expertise Contribution Index">
 
     <template v-if="eciStatsByDiscipline">
-      <div class="d-flex mb-2">
+      <div class="d-flex mb-2  text-caption">
         <div class="flex-basis-0 flex-grow-1">Total ECI</div>
         <div class="flex-basis-0 flex-grow-1 font-weight-medium">{{ `${eciStatsByDiscipline.eci}` | commaNumber }}</div>
       </div>
 
-      <div class="d-flex mb-2">
+      <div class="d-flex mb-2  text-caption">
         <div class="flex-basis-0 flex-grow-1">Percentile rank</div>
         <div class="flex-basis-0 flex-grow-1 font-weight-medium">{{ eciStatsByDiscipline.percentile_rank }}</div>
       </div>
 
-      <div v-if="eciStatsByDiscipline.growth_rate" class="d-flex mb-2">
+      <div v-if="eciStatsByDiscipline.growth_rate" class="d-flex mb-6  text-caption">
         <div class="flex-basis-0 flex-grow-1">Growth rate</div>
         <div
           class="flex-basis-0 flex-grow-1 font-weight-medium"
@@ -31,12 +29,12 @@
         <template v-for="(item, i) in expertise">
           <v-list-item :key="`eci-${i}`" class="text-caption">
             <v-list-item-content class="font-weight-medium">
-              <div class="d-flex justify-space-between mb-2">
+              <div class="d-flex justify-space-between text-caption">
                 <div>
                   {{ item.discipline_name || item.disciplineName }}
                 </div>
                 <div>
-                  ECI {{ `${eci(item.eci) || eci(item.value )}` | commaNumber }}
+                  ECI {{ `${eci(item.eci || item.value )}` | commaNumber }}
                 </div>
               </div>
 
@@ -71,17 +69,20 @@
       block
       color="primary"
       class="mt-3"
+      v-if="accountName"
       :to="goToExpertiseDetails()"
     >
       More details
     </v-btn>
-  </div>
+
+  </d-block>
 </template>
 
 <script>
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
   export default {
     name: 'EciStatsInfo',
-
+    components: { DBlock },
     props: {
       expertise: {
         type: Array,

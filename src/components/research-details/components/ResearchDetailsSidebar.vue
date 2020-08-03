@@ -1,28 +1,27 @@
 <template>
   <div>
-    <v-sheet class="mb-6">
-      <div class="text-h6">
+    <d-block sm>
+      <template #title>
         <router-link
           class="research-group-link"
           :to="routerLink"
         >
           {{ group.name }}
         </router-link>
-      </div>
+      </template>
+
       <div
         v-for="(member, i) in researchMembersList"
         :key="member.account.id"
-        class="mt-4"
+        class="mb-4"
       >
-        <div>
-          <platform-avatar
-            :key="'member-' + i"
-            :size="40"
-            :user="member"
-            link-to-profile
-            link-to-profile-class="pl-4"
-          />
-        </div>
+        <platform-avatar
+          :key="'member-' + i"
+          :size="40"
+          :user="member"
+          link-to-profile
+          link-to-profile-class="pl-4"
+        />
       </div>
 
       <div v-if="isJoinRequestSectionAvailable">
@@ -118,11 +117,12 @@
           to join the research group
         </div>
       </div>
-    </v-sheet>
+
+    </d-block>
 
     <v-divider class="my-6" />
 
-    <eci-stats-info :expertise="eciList" :eciStatsByDiscipline="researchEciStatsRecords" />
+    <eci-stats-info :expertise="eciList" :eci-stats-by-discipline="researchEciStatsRecords" />
 
     <!-- <div class="my-6 mx-6">
           <div class="rd-sidebar-block-title pb-2">Score</div>
@@ -295,6 +295,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import EciStatsInfo from '@/components/common/components/EciStatsInfo';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -304,6 +305,7 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
+      DBlock,
       EciStatsInfo
     },
 

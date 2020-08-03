@@ -41,7 +41,7 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <eci-stats-info :expertise="eciList" :eciStatsByDiscipline="researchContentEciStatsRecords" />
+    <eci-stats-info class="mt-6" :expertise="eciList" :eciStatsByDiscipline="researchContentEciStatsRecords" />
     <!-- ### END Research Content ECI Section ### -->
 
     <v-divider class="my-6" />

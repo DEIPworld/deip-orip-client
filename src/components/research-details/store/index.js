@@ -475,6 +475,7 @@ const actions = {
   loadResearchEciStatsRecords({ commit }, filter) {
     return expertiseContributionsService.getResearchExpertiseStats(filter.research_external_id, filter)
       .then((stats) => {
+        console.log('!!!!!!!')
         commit('SET_RESEARCH_ECI_STATS', stats);
       });
   }

@@ -5,7 +5,7 @@
         Teams
       </template>
       <v-row>
-        <v-col v-for="(group, i) in groups" :key="`${i}-group`" cols="4">
+        <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
           <v-card
             outlined
             class="full-height d-flex"
