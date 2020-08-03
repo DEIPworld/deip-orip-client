@@ -16,6 +16,7 @@
   import { ResearchService } from '@deip/research-service';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import CreateTokenSaleForm from './components/CreateTokenSaleForm';
+  import { mapGetters } from 'vuex';
 
 
   const researchService = ResearchService.getInstance();
@@ -25,20 +26,28 @@
     components: { FullScreenView, CreateTokenSaleForm },
     mixins: [CreateTokenSaleMixin],
 
+    computed: {
+      ...mapGetters({
+        assets: 'auth/assets',
+      }),
+    },
+
     methods: {
       finish(success) {
         if (!success) return;
         this.formProcessing = true;
 
         const isProposal = !this.research.research_group.is_personal;
+        const asset = this.assets.find((a) => a.id === this.formData.asset)
+
         researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
           researchGroup: this.research.research_group.external_id,
           researchExternalId: this.research.external_id,
           startTime: this.formData.startDate.toISOString().split('.')[0],
           endTime: this.formData.endDate.toISOString().split('.')[0],
           share: `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`,
-          softCap: this.toAssetUnits(this.formData.softCap),
-          hardCap: this.toAssetUnits(this.formData.hardCap),
+          softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
+          hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
           extensions: []
         })
           .then(() => {

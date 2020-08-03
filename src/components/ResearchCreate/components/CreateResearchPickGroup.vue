@@ -103,9 +103,9 @@
           .map((c) => this.$options.filters.fullname(c));
       }
     },
-    created() {
-      this.$store.dispatch('auth/loadGroups');
-    }
+    // created() {
+    //   this.$store.dispatch('auth/loadGroups');
+    // }
   };
 </script>
 

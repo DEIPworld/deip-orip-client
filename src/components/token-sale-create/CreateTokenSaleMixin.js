@@ -17,7 +17,8 @@ export const CreateTokenSaleMixin = {
         startDate: null,
         endDate: null,
         softCap: '',
-        hardCap: ''
+        hardCap: '',
+        asset: undefined
       },
 
       formValid: false,

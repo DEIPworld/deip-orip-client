@@ -18,6 +18,8 @@ const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 
+
+
 const state = {
   loaded: false,
   user: {
@@ -33,11 +35,13 @@ const state = {
     balances: []
   },
   tenant: undefined,
+  assets: [], // TODO: temp
 };
 
 // getters
 const getters = {
   loaded: (state) => state.loaded,
+  assets: (state) => state.assets, //TODO: temp
 
   user: (state, getters) => {
     const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
@@ -129,9 +133,21 @@ const actions = {
       dispatch('loadExpertTokens'),
       dispatch('loadJoinRequests'),
       dispatch('loadResearchBookmarks'),
-      dispatch('loadBalances')
+      dispatch('loadBalances'),
+      dispatch('loadGroups'),
+      dispatch('loadAssets'), // TODO: temp
     ]).then(() => {
       commit('SET_USER_LOADED', true);
+    });
+  },
+
+  loadAssets({ commit }) { // TODO: temp
+    return Promise.all([
+      assetsService.getAssetBySymbol('USD'),
+      assetsService.getAssetBySymbol('EUR'),
+      assetsService.getAssetBySymbol('TESTS')
+    ]).then((res) => {
+      commit('storeAssets', res);
     });
   },
 
@@ -353,6 +369,10 @@ const mutations = {
 
   SET_USER_LOADED(state, payload) {
     state.loaded = payload;
+  },
+
+  storeAssets(state, payload) { // TODO: temp
+    state.assets = payload;
   }
 };
 

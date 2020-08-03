@@ -2,10 +2,10 @@
   <div class="text--secondary">
     <div class="d-flex justify-space-between">
       <div class="text-overline">
-        ${{ fromAssetsToFloat(tokenSale.soft_cap) }}
+        {{ tokenSale.soft_cap }}
       </div>
       <div class="text-overline">
-        ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
+        {{ tokenSale.hard_cap }}
       </div>
     </div>
     <v-progress-linear

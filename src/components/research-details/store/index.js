@@ -163,7 +163,7 @@ const getters = {
 const actions = {
 
   loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink }) {
-    commit('RESET_STATE');
+    // commit('RESET_STATE');
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
     // TODO: replace permliks with external_id in routes

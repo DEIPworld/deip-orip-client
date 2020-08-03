@@ -91,7 +91,8 @@
             Min Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
-            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}
+<!--            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}-->
+            {{tokenSale.soft_cap}}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
@@ -99,7 +100,8 @@
             Max Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
-            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}
+<!--            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}-->
+            {{tokenSale.hard_cap}}
           </v-col>
         </v-row>
       </div>
@@ -107,7 +109,7 @@
 
     <v-col v-if="isActiveTokenSale" cols="12" lg="5">
       <v-row no-gutters justify="end" class="rd-cap-value">
-        ${{ currentCap }}
+        {{ currentCap }} {{ tokenSale.soft_cap.split(' ')[1] }}
       </v-row>
       <v-row
         no-gutters
@@ -122,7 +124,8 @@
           Min goal reached!
         </div>
         <div class="pl-6">
-          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal
+<!--          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal-->
+          Raised of {{ tokenSale.hard_cap }} Goal
         </div>
       </v-row>
       <v-row no-gutters align="center" class="py-2">
@@ -146,7 +149,7 @@
               v-model="amountToContribute"
               placeholder="Amount"
               outlined
-              suffix="USD"
+              :suffix="tokenSale.soft_cap.split(' ')[1]"
               :rules="[rules.required, deipTokenValidator]"
               :disabled="areTokensBuying"
             />
@@ -239,6 +242,7 @@
         research: 'rd/research',
         userBalances: 'auth/userBalances',
         user: 'auth/user',
+        assets: 'auth/assets',
         contributionsList: 'rd/contributionsList'
       }),
       isActiveTokenSale() {

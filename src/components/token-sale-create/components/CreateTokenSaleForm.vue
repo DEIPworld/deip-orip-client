@@ -45,24 +45,53 @@
         </div>
       </v-col>
     </d-form-block>
-
     <d-form-block title="Select min and max amounts">
       <v-col cols="12">
-        <v-text-field
-          v-model="formData.softCap"
-          outlined
-          label="Min"
-          :rules="[rules.required, deipTokenValidator, rules.softCapSmaller]"
-          suffix="USD"
-        />
 
-        <v-text-field
-          v-model="formData.hardCap"
-          outlined
-          label="Max"
-          :rules="[rules.required, deipTokenValidator, rules.hardCapGreater]"
-          suffix="USD"
-        />
+        <v-row no-gutters>
+          <v-col style="margin-right: -1px;">
+            <v-text-field
+              v-model="formData.softCap"
+              class="rounded-br-0 rounded-tr-0"
+              outlined
+              label="Min"
+              :rules="[rules.required, deipTokenValidator, rules.softCapSmaller]"
+            />
+          </v-col>
+          <v-col cols="2">
+            <v-select
+              v-model="formData.asset"
+              class="rounded-bl-0 rounded-tl-0"
+              outlined
+              :items="assets"
+              item-text="string_symbol"
+              item-value="id"
+            />
+          </v-col>
+        </v-row>
+
+        <v-row no-gutters>
+          <v-col style="margin-right: -1px;">
+            <v-text-field
+              v-model="formData.hardCap"
+              class="rounded-br-0 rounded-tr-0"
+              outlined
+              label="Min"
+              :rules="[rules.required, deipTokenValidator, rules.hardCapGreater]"
+            />
+          </v-col>
+          <v-col cols="2">
+            <v-select
+              v-model="formData.asset"
+              disabled
+              class="rounded-bl-0 rounded-tl-0"
+              outlined
+              :items="assets"
+              item-text="string_symbol"
+              item-value="id"
+            />
+          </v-col>
+        </v-row>
       </v-col>
     </d-form-block>
 
@@ -142,7 +171,8 @@
 
     computed: {
       ...mapGetters({
-        userPersonalGroup: 'auth/userPersonalGroup'
+        userPersonalGroup: 'auth/userPersonalGroup',
+        assets: 'auth/assets',
       }),
 
       isPersonalGroup() {
@@ -226,6 +256,7 @@
         .add(10, 'minutes')
         .format('YYYY-MM-DD HH:mm');
       this.setStartDate(startDate);
+      this.formData.asset = this.assets[0].id
     },
     methods: {
       verifyAmountRange(value) {
