@@ -31,6 +31,7 @@ const state = {
   researchContentReferencesGraph: [],
   contentProposal: undefined,
   contentRef: null,
+  researchContentEciStatsRecords: null,
 
   isLoadingResearchContentVotes: undefined,
   isLoadingResearchDetails: undefined,
@@ -61,6 +62,8 @@ const getters = {
   expertsList: (state, getters) => state.expertsList,
 
   contentRef: (state, getters) => state.contentRef,
+
+  researchContentEciStatsRecords: (state) => state.researchContentEciStatsRecords,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
     return state.contentRef && (state.contentRef.type === 'package' || state.contentRef.type === 'file' /* legacy */);
@@ -202,7 +205,14 @@ const actions = {
               dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve });
             });
 
-            return Promise.all([contentRefLoad, contentReviewsLoad, contentVotesLoad, researchGroupDetailsLoad, referencesLoad]);
+            return Promise.all([
+              contentRefLoad,
+              contentReviewsLoad,
+              contentVotesLoad,
+              researchGroupDetailsLoad,
+              referencesLoad,
+              dispatch('loadResearchContentEciStatsRecords', {research_content_external_id: contentObj.external_id })
+            ]);
           }, (err) => {
             console.error(err);
           })
@@ -562,6 +572,13 @@ const actions = {
     } catch (err) {
       console.error(err);
     }
+  },
+
+  loadResearchContentEciStatsRecords({ commit }, filter) {
+    return expertiseContributionsService.getResearchContentExpertiseStats(filter.research_content_external_id, filter)
+      .then((stats) => {
+        commit('SET_RESEARCH_CONTENT_ECI_STATS', stats);
+      });
   }
 };
 
@@ -642,6 +659,10 @@ const mutations = {
 
   SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA(state, graph) {
     state.researchContentReferencesGraph = graph;
+  },
+
+  SET_RESEARCH_CONTENT_ECI_STATS(state, value) {
+    state.researchContentEciStatsRecords = value;
   },
 
   RESET_STATE(state) {

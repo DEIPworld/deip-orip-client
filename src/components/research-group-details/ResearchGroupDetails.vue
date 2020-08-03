@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <layout-section v-if="$ready">
     <research-group-details-body />
 
     <template #sidebar>
@@ -24,6 +24,13 @@
     computed: {},
 
     created() {
+      Promise.all([
+        this.$store.dispatch('auth/loadGroups'),
+        this.$store.dispatch('researchGroup/loadResearchGroup', {
+          permlink: decodeURIComponent(this.$route.params.research_group_permlink)
+        })
+      ])
+        .then(() => this.$setReady());
     }
   };
 </script>

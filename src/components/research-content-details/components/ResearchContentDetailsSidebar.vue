@@ -41,36 +41,10 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <v-sheet v-if="isPublished" class="my-4">
-      <v-divider class="my-6" />
-      <div class="text-h6">
-        Expertise Contribution Index
-      </div>
-
-      <div
-        v-for="eci of eciList"
-        :key="eci.disciplineName"
-        class="expertise px-1 my-1 text-caption"
-      >
-        <v-row no-gutters justify="space-between">
-          <v-col cols="auto" class="pa-1 primary--text font-weight-bold">
-<!--            TOP {{ getResearchContentEciPercentile(eci) }}%-->
-            {{ eci.disciplineName }}
-          </v-col>
-          <v-col cols="auto" class="pa-1 grey--text">
-            ECI {{ eci.value | commaNumber }}
-          </v-col>
-        </v-row>
-
-<!--        <v-divider />-->
-
-<!--        <div class="pa-1">-->
-<!--          {{ eci.disciplineName }}-->
-<!--        </div>-->
-      </div>
-
-    </v-sheet>
+    <eci-stats-info :expertise="eciList" :eciStatsByDiscipline="researchContentEciStatsRecords" />
     <!-- ### END Research Content ECI Section ### -->
+
+    <v-divider class="my-6" />
 
 
     <!-- <v-divider class="my-6" />
@@ -299,12 +273,17 @@
   import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
   import { ResearchContentService } from '@deip/research-content-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import EciStatsInfo from '@/components/common/components/EciStatsInfo';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentDetailsSidebar',
+
+    components: {
+      EciStatsInfo
+    },
 
     data() {
       return {
@@ -337,7 +316,8 @@
         isProposed: 'rcd/isProposed',
         isPublished: 'rcd/isPublished',
         isCentralizedGroup: 'rcd/isCentralizedGroup',
-        userHasResearchExpertise: 'rcd/userHasResearchExpertise'
+        userHasResearchExpertise: 'rcd/userHasResearchExpertise',
+        researchContentEciStatsRecords: 'rcd/researchContentEciStatsRecords'
       }),
 
       isUnlockActionAvailable() {

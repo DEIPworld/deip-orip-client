@@ -29,7 +29,7 @@
       slim
     />
 
-    <v-sheet min-height="100vh" class="d-flex flex-column">
+    <v-sheet v-if="$ready" min-height="100vh" class="d-flex flex-column">
       <v-main :key="$route.fullPath + '-main'" class="flex-grow-1 flex-shrink-1">
         <router-view :key="$route.fullPath" />
       </v-main>

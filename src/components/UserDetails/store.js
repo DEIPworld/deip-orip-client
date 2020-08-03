@@ -176,10 +176,29 @@ const actions = {
 
   loadExpertise({ commit }, { username, notify } = {}) {
     commit('SET_USER_EXPERTISE_LOADING_STATE', true);
+    const disciplinesName = [];
     return deipRpc.api.getExpertTokensByAccountNameAsync(username)
       .then((data) => {
-        commit('SET_EXPERTISE', data);
-      }).finally(() => {
+        disciplinesName.push(...data.map(({ discipline_name }) => discipline_name));
+        return Promise.all(
+          data.map((item) => expertiseContributionsService.getAccountExpertiseStats(
+            username,
+            { discipline: item.discipline_external_id }
+          ))
+        );
+        // commit('SET_EXPERTISE', data);
+      })
+      .then((data) => {
+        const fullData = data.map((item, i) => {
+          return {
+            ...item,
+            discipline_name: disciplinesName[i]
+          }
+        });
+        // console.log(fullData)
+        commit('SET_EXPERTISE', fullData);
+      })
+      .finally(() => {
         commit('SET_USER_EXPERTISE_LOADING_STATE', false);
         if (notify) notify();
       });
