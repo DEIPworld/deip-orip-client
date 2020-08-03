@@ -5,7 +5,6 @@
       <div class="text-h5 text-center mb-3">
         Select research group
       </div>
-
       <v-card outlined class="py-2">
         <v-list nav>
           <v-list-item
@@ -103,6 +102,9 @@
           .filter((c) => c.rgt.research_group_id == group.id)
           .map((c) => this.$options.filters.fullname(c));
       }
+    },
+    created() {
+      this.$store.dispatch('auth/loadGroups');
     }
   };
 </script>
