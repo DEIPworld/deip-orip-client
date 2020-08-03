@@ -61,7 +61,7 @@ import NoAccessPage from '@/components/NoAccessPage';
 import VotingForBlockProducers
   from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
-import ReviewSetup from '@/components/review-setup/ReviewSetup';
+// import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
 import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
@@ -355,11 +355,13 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
-      path: '/eci-model-setup',
-      name: 'ReviewSetup',
-      component: ReviewSetup
-    }, {
+    },
+    // {
+    //   path: '/eci-model-setup',
+    //   name: 'ReviewSetup',
+    //   component: ReviewSetup
+    // },
+    {
       path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
       name: 'ResearchContentReferences',
       component: preliminaryDataLoader(ResearchContentReferences, {

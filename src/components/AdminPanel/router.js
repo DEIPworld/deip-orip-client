@@ -13,6 +13,7 @@ import AdminCategories from '@/components/AdminPanel/AdminCategories';
 import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
+import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 export const adminRouting = [
   {
@@ -83,6 +84,11 @@ export const adminRouting = [
             }
           }
         ]
+      },
+      {
+        path: 'review-model',
+        name: 'admin.reviewModel',
+        component: ReviewSetup
       },
       {
         path: 'faq',
