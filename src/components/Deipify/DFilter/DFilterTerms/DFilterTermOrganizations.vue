@@ -1,7 +1,7 @@
 <template>
   <d-block
     v-if="organizations.length"
-    title="Organizations"
+    title="Teams"
     sm
   >
     <d-list-expand :active="organizations.length > 4">

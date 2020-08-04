@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Edit research">
+  <full-screen-view title="Edit project">
     <research-edit-body />
   </full-screen-view>
 </template>

@@ -186,7 +186,7 @@
       <v-divider class="my-6" />
 
       <div class="text-h6 mb-6">
-        Research table of content
+        Project table of content
       </div>
 
       <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">

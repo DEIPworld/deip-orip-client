@@ -55,7 +55,7 @@
               :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
               item-text="label"
               item-value="external_id"
-              label="Disciplines"
+              label="Domain"
             />
           </v-col>
           <v-col cols="10" class="pb-12">

@@ -23,7 +23,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h5">
-            Upload material for research
+            Upload material for project
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="close()">

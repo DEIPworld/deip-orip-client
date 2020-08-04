@@ -188,7 +188,7 @@
         large
         @click="cancel()"
       >
-        Back to research
+        Back to project
       </v-btn>
     </div>
   </content-block>

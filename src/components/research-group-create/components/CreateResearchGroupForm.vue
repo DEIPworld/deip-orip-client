@@ -1,6 +1,6 @@
 <template>
   <v-form ref="form" @submit="onSubmit">
-    <d-form-block title="Group name">
+    <d-form-block title="Team name">
       <v-col cols="12">
         <v-text-field
           v-model="formData.name"
@@ -8,13 +8,13 @@
           name="title"
           label="Title"
           :rules="[rules.required, rules.titleLength]"
-          hint="Name of your group"
+          hint="Name of your team"
           :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
         />
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Group description">
+    <d-form-block title="About the team">
       <v-col cols="12">
         <v-textarea
           v-model="formData.description"
@@ -90,7 +90,7 @@
           @click="$router.back()"
         >Cancel</v-btn>
 
-        <v-btn type="submit" color="primary" class="ml-2" :loading="loading">Create group</v-btn>
+        <v-btn type="submit" color="primary" class="ml-2" :loading="loading">Create team</v-btn>
       </slot>
     </div>
   </v-form>

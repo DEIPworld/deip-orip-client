@@ -3,7 +3,7 @@
     <v-col cols="6">
 
       <div class="text-h5 text-center mb-3">
-        Select research group
+        Select team
       </div>
       <v-card outlined class="py-2">
         <v-list nav>
@@ -14,7 +14,7 @@
             @click="setGroup(group)"
           >
             <div v-if="group.is_personal" class="group-nameplate pr-2">
-              {{ user | fullname }} 's personal group
+              {{ user | fullname }} 's personal
             </div>
             <div v-else class="group-nameplate pr-2">
               {{ group.name }}
@@ -30,7 +30,7 @@
                      query: { 'back-token': getReturningToken }
               }"
             >
-              + Add new group
+              + Add new team
             </v-btn>
           </v-list-item>
         </v-list>

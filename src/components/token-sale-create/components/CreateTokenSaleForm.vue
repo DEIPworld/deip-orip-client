@@ -13,7 +13,7 @@
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Select start and end dates of research fundraise">
+    <d-form-block title="Select start and end dates of project fundraise">
       <v-col cols="12">
         <div>
           <datetime-picker
