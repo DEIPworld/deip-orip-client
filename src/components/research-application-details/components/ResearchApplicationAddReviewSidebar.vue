@@ -76,10 +76,8 @@
         research: 'rad/research',
         program: 'rad/program'
       }),
-      relatedExpertise() {
-        return this.userExperise != null && this.research != null
-          ? this.userExperise.filter((exp) => this.research.disciplines.find((d) => d.id == exp.discipline_id))
-          : false;
+      userRelatedExpertise() {
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
       }
     },
 

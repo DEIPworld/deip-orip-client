@@ -124,13 +124,13 @@
         };
       },
       userHasResearchExpertise() {
-        return this.userExperise.some((exp) => this.review.disciplines.some((d) => d.id == exp.discipline_id && exp.amount > 0));
+        return this.userExperise.some((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id == exp.discipline_id));
       },
       userHasVoted() {
         return this.review.votes.some((vote) => vote.voter === this.user.username);
       },
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => this.review.disciplines.some((d) => d.id == exp.discipline_id));
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id == exp.discipline_id));
       },
       isGroupMember() {
         return this.groupMembers.some((item) => item.rgt.owner === this.user.username);

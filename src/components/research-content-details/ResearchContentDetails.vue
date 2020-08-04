@@ -311,7 +311,7 @@
       },
 
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => this.research.disciplines.some((d) => d.id == exp.discipline_id));
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
       }
     },
 

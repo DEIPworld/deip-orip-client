@@ -35,7 +35,7 @@
       </v-btn>
       <div class="pt-4">
         <div>
-          You will get <span class="font-weight-bold">approximately 3000 ECI reward in {{ relatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
+          You will get <span class="font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
           for your contribution to this project
         </div>
       </div>
@@ -68,8 +68,8 @@
         content: 'rcd/content',
         research: 'rcd/research'
       }),
-      relatedExpertise() {
-        return this.userExperise.filter((exp) => this.research.disciplines.find((d) => d.id == exp.discipline_id));
+      userRelatedExpertise() {
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
       },
 
       isReviewPublishingDisabled() {
@@ -91,7 +91,7 @@
             return [...scores, [parseInt(key), parseInt(val)]];
           }, []);
 
-          const disciplines = this.relatedExpertise.map(exp => exp.discipline_external_id);
+          const disciplines = this.userRelatedExpertise.map(exp => exp.discipline_external_id);
 
           const assessment = [
             'multicriteria_scoring_assessment_model',

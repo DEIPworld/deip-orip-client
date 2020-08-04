@@ -53,9 +53,7 @@
         return this.applicationReviewsList.find((r) => r.id == this.$route.params.review_id);
       },
       userHasResearchExpertise() {
-        return this.userExperise != null && this.research != null
-          ? this.userExperise.some((exp) => this.research.disciplines.some((d) => d.id == exp.discipline_id && exp.amount > 0))
-          : false;
+        return this.userExperise.some((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
       },
       userHasVoted() {
         return this.review != null

@@ -107,7 +107,7 @@ const getters = {
 
   userHasResearchExpertise(state, getters, rootState, rootGetters) {
     const userExperiseList = rootGetters['auth/userExperise'];
-    return userExperiseList.some((exp) => state.research.disciplines.some((d) => d.id == exp.discipline_id && exp.amount > 0));
+    return userExperiseList.some((exp) => exp.amount > 0 && state.research.disciplines.some((d) => d.id == exp.discipline_id));
   },
 
   isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
