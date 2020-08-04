@@ -49,7 +49,7 @@
 
     <full-screen-modal
       v-model="researchEditModal.isOpen"
-      title="Edit research"
+      title="Edit project"
     >
       <research-request-form-edit
         :key="researchEditModal.data._id"

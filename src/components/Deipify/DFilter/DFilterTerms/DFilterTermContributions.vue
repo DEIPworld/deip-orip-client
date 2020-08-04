@@ -3,7 +3,7 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="contributions"
+      :items="[{ label: 'All', value: '' }, ...contributions]"
       outlined
       label="Contribution type"
       item-text="label"
@@ -62,15 +62,12 @@
 
     data() {
       return {
-        contributions: [
-          { label: 'All', value: '' },
-          ...Object.keys(EXPERTISE_CONTRIBUTION_TYPE)
-            .filter((x) => isNaN(x) && x !== 'UNKNOWN')
-            .map((key) => ({
-              label: sentenceCase(key),
-              value: EXPERTISE_CONTRIBUTION_TYPE[key]
-            }))
-        ]
+        contributions: Object.keys(EXPERTISE_CONTRIBUTION_TYPE)
+          .filter((x) => isNaN(x) && x !== 'UNKNOWN')
+          .map((key) => ({
+            label: sentenceCase(key),
+            value: EXPERTISE_CONTRIBUTION_TYPE[key]
+          }))
       };
     }
   };

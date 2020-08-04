@@ -7,7 +7,7 @@
     <v-col v-if="disciplines && disciplines.length" cols="2">
       <v-select
         v-model="internalValue.discipline"
-        label="Disciplines"
+        label="Domain"
         outlined
         :items="[{label: 'All', external_id: ''}, ...disciplines]"
         item-text="label"

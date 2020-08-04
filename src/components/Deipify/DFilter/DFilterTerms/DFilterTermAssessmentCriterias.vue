@@ -3,7 +3,7 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="assessmentCriterias"
+      :items="[{ label: 'All', value: '' }, ...assessmentCriterias]"
       outlined
       label="Assessment criteria"
       item-text="label"
@@ -61,15 +61,12 @@
 
     data() {
       return {
-        assessmentCriterias: [
-          { label: 'All', value: '' },
-          ...Object.keys(ASSESSMENT_CRITERIA_TYPE)
-            .filter((x) => isNaN(x) && x !== 'UNKNOWN')
-            .map((key) => ({
-              label: sentenceCase(key),
-              value: ASSESSMENT_CRITERIA_TYPE[key]
-            }))
-        ]
+        assessmentCriterias: Object.keys(ASSESSMENT_CRITERIA_TYPE)
+          .filter((x) => isNaN(x) && x !== 'UNKNOWN')
+          .map((key) => ({
+            label: sentenceCase(key),
+            value: ASSESSMENT_CRITERIA_TYPE[key]
+          }))
       };
     }
   };

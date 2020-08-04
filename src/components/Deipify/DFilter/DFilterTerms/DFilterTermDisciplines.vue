@@ -3,16 +3,16 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="disciplines"
+      :items="[{ label: 'All', id: '' }, ...disciplines]"
       outlined
-      label="Disciplines"
+      label="Domain"
       item-text="label"
       item-value="id"
     />
 
     <d-block
       v-if="!singleChoice"
-      title="Disciplines"
+      title="Domain"
       sm
     >
       <d-list-expand :active="disciplines.length > 4">
@@ -62,7 +62,7 @@
 
     data() {
       return {
-        disciplines: [{ label: 'All', id: '' }, ...disciplinesService.getTopLevelNodes().sort((a, b) => a.label.localeCompare(b.label))]
+        disciplines: [...disciplinesService.getTopLevelNodes().sort((a, b) => a.label.localeCompare(b.label))]
       };
     }
   };

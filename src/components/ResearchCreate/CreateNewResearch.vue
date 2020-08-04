@@ -8,7 +8,7 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete="currentStep > 1">
           <div class="text-uppercase">
-            Discipline
+            Domain
           </div>
         </v-stepper-step>
 
@@ -16,7 +16,7 @@
 
         <v-stepper-step step="2" :complete="currentStep > 2">
           <div class="text-uppercase text-center">
-            Research group
+            Team
           </div>
         </v-stepper-step>
 

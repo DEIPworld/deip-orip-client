@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Create research group">
+  <full-screen-view title="Create team">
     <create-research-group-form
       v-model="formData"
       :disabled="formProcessing"
