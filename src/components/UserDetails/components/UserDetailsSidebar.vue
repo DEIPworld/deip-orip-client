@@ -8,7 +8,6 @@
       right
       class="pa-4"
     >
-      <!-- <v-card> -->
       <div v-if="isOwner && hasInvites">
         <div id="invites" class="text-h6 font-weight-bold pa-4">
           Invites: {{ invites.length }}
@@ -155,210 +154,12 @@
 
       <!-- ### START User Profile Expertise Section ### -->
 
-      <eci-stats-info :expertise="expertise" :eciStatsByDiscipline="eciStatsByDiscipline" :accountName="userInfo.account.name" />
-
-      <!-- <div v-if="!expertise.length" class="text-body-1">
-        <div v-if="isOwner">
-          You have no Expertise Tokens yet. Use <span class="a" @click="openClaimExpertiseDialog()">Claim</span>
-          process to apply for Expertise Tokens
-        </div>
-        <div v-if="!isOwner">
-          <span class="text-body-2">{{ userInfo | fullname }}</span> has no Expertise Tokens yet
-        </div>
-      </div> -->
-
-      <!-- <div v-if="expertise.length && isOwner" class="text-body-1 full-width c-mt-4">
-          <v-btn
-            block
-            outlined
-            color="primary"
-            class="ma-0"
-            @click="openClaimExpertiseDialog()"
-          >
-            Claim new Discipline
-          </v-btn>
-        </div> -->
-      <!-- ### END User Profile Expertise Section ### -->
-
-      <!-- ### START User Profile Contacts Section ### -->
-      <!-- <div v-if="isProfileAvailable && (isContactsInfoSpecified || isOwner)" class="mt-4">
-        <div class="sidebar-fullwidth">
-          <v-divider />
-        </div>
-        <div class="text-subtitle-1 font-weight-bold mt-4">
-          <div class="mt-1">
-            Contacts info
-          </div>
-        </div>
-        <div class="pt-2 pb-6">
-          <div v-if="userInfo.profile">
-            <div>
-              <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
-                <v-icon size="18" class="mr-2">mail</v-icon>
-                Add your email here
-              </span>
-              <span v-else>
-                <v-icon v-if="userInfo.profile.email" size="18" class="mr-2">mail</v-icon>
-                {{ userInfo.profile.email || '-' }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- ### END User Profile Contacts Section ### -->
-
-
-      <!-- ### START User Profile Info Section ### -->
-      <!-- <div v-if="isProfileAvailable && (isPersonalInfoSpecified || isOwner)" class="mt-4">
-        <div class="sidebar-fullwidth">
-          <v-divider />
-        </div>
-        <div class="text-subtitle-1 font-weight-bold mt-4">
-          <div class="mt-1">
-            Personal information
-          </div>
-        </div>
-
-        <div class="pt-4 pb-6">
-          <div v-if="userInfo.profile">
-            <div>
-              <v-row v-if="isOwner && !userInfo.profile.firstName" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  First Name
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add first name
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  First Name
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ userInfo.profile.firstName || '-' }}
-                </v-col>
-              </v-row>
-
-              <v-row v-if="isOwner && !userInfo.profile.lastName" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Last Name
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add last name
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Last Name
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ userInfo.profile.lastName || '-' }}
-                </v-col>
-              </v-row> -->
-
-      <!-- <v-row v-if="isOwner && !userInfo.profile.birthdate" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Birthdate
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add birthdate
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Birthdate
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ userInfo.profile.birthdate ? new
-                  Date(userInfo.profile.birthdate).toDateString() : '-' }}
-                </v-col>
-              </v-row> -->
-
-      <!-- <v-row v-if="userInfo.profile.created_at" class="mt-4" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Registered
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ new Date(userInfo.profile.created_at).toDateString() }}
-                </v-col>
-              </v-row>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- ### END User Profile Info Section ### -->
-
-      <!-- ### START User Profile Additional Info Section ### -->
-      <!-- <div v-if="isProfileAvailable && (isAdditionalInfoSpecified || isOwner)" class="mt-4">
-        <div class="sidebar-fullwidth">
-          <v-divider />
-        </div>
-        <div class="text-subtitle-1 font-weight-bold mt-4">
-          <div class="mt-1">
-            Additional information
-          </div>
-        </div>
-
-        <div class="pt-4 pb-6">
-          <div v-if="userInfo.profile">
-            <div>
-              <v-row v-if="isOwner && !userInfo.profile.category" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Category
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add category
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Category
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ userInfo.profile.category || '-' }}
-                </v-col>
-              </v-row>
-
-              <v-row v-if="isOwner && !userInfo.profile.occupation" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Occupation
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add occupation
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Occupation
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  {{ userInfo.profile.occupation || '-' }}
-                </v-col>
-              </v-row>
-
-              <v-row v-if="isOwner && !userInfo.profile.webPages.length" no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Web site
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left owner-hint">
-                  add web site
-                </v-col>
-              </v-row>
-              <v-row v-else no-gutters>
-                <v-col cols="4" class="font-weight-medium">
-                  Web site
-                </v-col>
-                <v-col cols="7" offset="1" class="text-align-left">
-                  <div v-for="(item, i) in userInfo.profile.webPages" :key="`${i}-webPage`">
-                    {{ item.link || '-' }}
-                  </div>
-                </v-col>
-              </v-row>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- ### END User Profile Additional Info Section ### -->
+      <eci-metrics-widget
+        :account-name="userInfo.account.name"
+        :expertise-data="expertise"
+        enable-stats
+        :enable-history="false"
+      />
 
       <user-claim-expertise-dialog
         :is-shown="isClaimExpertiseDialogShown"
@@ -379,10 +180,10 @@
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-  import EciStatsInfo from '@/components/common/components/EciStatsInfo';
 
   import * as bankCardsService from '../../../utils/bankCard';
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
+  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -392,7 +193,7 @@
   export default {
     name: 'UserDetailsSidebar',
 
-    components: { UserClaimExpertiseDialog, EciStatsInfo },
+    components: { EciMetricsWidget, UserClaimExpertiseDialog },
 
     data() {
       return {

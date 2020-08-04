@@ -1,5 +1,5 @@
 <template>
-  <d-chart-line :data="internalData" :options="internalOptions" />
+  <d-chart-line :data="internalData" :options="chartOptions" />
 </template>
 
 <script>
@@ -11,19 +11,15 @@
     name: 'EciMetricsHistoryChart',
     components: { DChartLine },
     props: {
-      options: {
-        type: Object,
-        default: () => ({})
-      },
-
       data: {
         type: Array,
         default: () => ([])
       },
     },
-    computed: {
-      internalOptions() {
-        const defaultOptions = {
+
+    data() {
+      return {
+        chartOptions: {
           legend: 'none',
           explorer: {
             actions: ['dragToZoom', 'rightClickToReset'],
@@ -31,11 +27,11 @@
             keepInBounds: true,
             maxZoomIn: 4.0
           }
-        };
+        }
+      };
+    },
 
-        return deepmerge(defaultOptions, this.options);
-      },
-
+    computed: {
       internalData() {
         const chartData = this.data.map((item) => [
           new Date(item.timestamp),

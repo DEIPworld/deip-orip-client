@@ -85,3 +85,22 @@ Vue.filter('where', (value, f = {}) => {
   if (!value) return '';
   return value.filter(where(f));
 });
+
+Vue.filter('numDir', (value) => {
+  if (!value) return '';
+  return parseFloat(value) >= 0 ? `+${value}` : value;
+});
+
+Vue.filter('numDirClass', (value, type = 'foreground') => {
+  if (!value || parseFloat(value) === 0) return '';
+
+  if (type === 'background') {
+    return parseFloat(value) > 0
+      ? 'success lighten-3'
+      : 'error lighten-3';
+  }
+
+  return parseFloat(value) > 0
+    ? 'success--text'
+    : 'error--text';
+});

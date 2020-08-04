@@ -1,33 +1,137 @@
 <template>
+  <d-block title="Expertise Contribution Index" sm>
+    <template v-if="enableStats">
+      <v-row
+        v-for="(item, index) of stats"
+        :key="`ls-${index}`"
+        :class="{'mb-2': index + 1 < stats.length}"
+        no-gutters
+      >
+        <v-col class="text-caption">
+          {{ item.label }}
+        </v-col>
+        <v-col
+          class="text-caption font-weight-medium"
+          :class="item.classList"
+        >
+          {{ item.value }}
+        </v-col>
+      </v-row>
+    </template>
 
+    <template v-if="Object.keys(expertiseData).length">
+      <v-card outlined class="mt-4">
+        <v-list class="py-0">
+          <template v-for="(item, i) in expertiseData">
+            <v-list-item :key="`edi-${i}`">
+              <v-list-item-content class="text-caption font-weight-medium">
+                <v-row no-gutters class="mb-1">
+                  <v-col>
+                    {{ item.discipline_name || item.disciplineName }}
+                  </v-col>
+                  <v-col cols="auto">
+                    ECI {{ `${(item.eci || item.value || '-' )}` | commaNumber }}
+                  </v-col>
+                </v-row>
+                <v-row no-gutters>
+                  <v-col>
+                    <d-simple-tooltip tooltip="Percentile rank">
+                      {{ item.percentile_rank }}
+                    </d-simple-tooltip>
+                  </v-col>
+                  <v-col cols="auto" :class="item.percentile_rank | numDirClass">
+                    <d-simple-tooltip tooltip="Growth rate">
+                      {{ item.percentile_rank | numDir }}
+                    </d-simple-tooltip>
+                  </v-col>
+                </v-row>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider v-if="i + 1 < expertiseData.length" :key="`edd-${i}`" />
+          </template>
+        </v-list>
+      </v-card>
+    </template>
+
+    <!-- TODO: temp solution-->
+    <v-btn
+      v-if="accountName"
+      block
+      color="primary"
+      class="mt-3"
+      :to="expertiseDetailsRoute"
+    >
+      More details
+    </v-btn>
+
+  </d-block>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import { EciMetricsMixin } from '@/components/EciMetrics/EciMetricsMixin';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   export default {
     name: 'EciMetricsWidget',
+
+    components: { DSimpleTooltip, DBlock },
+
+    mixins: [
+      EciMetricsMixin
+    ],
+
     props: {
-      contentId: {
-        type: String,
-        default: undefined
-      },
-
-      researchId: {
-        type: String,
-        default: undefined
-      },
-
-      accountName: {
-        type: String,
-        default: undefined
+      expertiseData: {
+        type: Array,
+        default: () => ({})
       }
     },
+
     computed: {
-      ...mapGetters({
-        expertiseHistory: 'eci/expertiseHistory',
-        expertiseStats: 'eci/expertiseStats'
-      })
+      stats() {
+        return [
+          {
+            label: 'Total ECI',
+            value: this.$options.filters.commaNumber(this.expertiseStats.eci)
+          },
+          {
+            label: 'Percentile rank',
+            value: this.expertiseStats.percentile_rank
+          },
+          {
+            label: 'Growth rate',
+            value: this.$options.filters.numDir(this.expertiseStats.growth_rate),
+            classList: this.$options.filters.numDirClass(this.expertiseStats.growth_rate)
+          }
+        ];
+      },
+
+      expertiseDetailsRoute() {
+        if (this.$route.path.includes('/account')) {
+          return {
+            name: 'account.expertiseDetails'
+          };
+        }
+        if (this.$route.path.includes('/user-details')) {
+          return {
+            name: 'UserExpertiseDetails',
+            params: {
+              account_name: this.accountName
+            }
+          };
+        }
+        if (this.$route.path.includes('/research')) {
+          return {
+
+          };
+        }
+        if (this.$route.path.includes('/group-details')) {
+          return {};
+        }
+
+        return {};
+      }
     }
   };
 </script>

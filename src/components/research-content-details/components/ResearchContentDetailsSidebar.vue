@@ -41,7 +41,13 @@
     <!-- ### END Draft Actions Section ### -->
 
     <!-- ### START Research Content ECI Section ### -->
-    <eci-stats-info class="mt-6" :expertise="eciList" :eciStatsByDiscipline="researchContentEciStatsRecords" />
+    <eci-metrics-widget
+      :content-id="content.external_id"
+      :expertise-data="eciList"
+      enable-stats
+      :enable-history="false"
+    />
+
     <!-- ### END Research Content ECI Section ### -->
 
     <v-divider class="my-6" />
@@ -273,7 +279,7 @@
   import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
   import { ResearchContentService } from '@deip/research-content-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import EciStatsInfo from '@/components/common/components/EciStatsInfo';
+  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
@@ -282,7 +288,7 @@
     name: 'ResearchContentDetailsSidebar',
 
     components: {
-      EciStatsInfo
+      EciMetricsWidget
     },
 
     data() {

@@ -122,25 +122,12 @@
 
     <v-divider class="my-6" />
 
-    <eci-stats-info :expertise="eciList" :eci-stats-by-discipline="researchEciStatsRecords" />
-
-    <!-- <div class="my-6 mx-6">
-          <div class="rd-sidebar-block-title pb-2">Score</div>
-          <v-tooltip top>
-            <div class="mt-2" slot="activator">{{researchScorePercent}}%</div>
-            <span class="bold">
-              This score is calculated of Expertise<br/>
-              contribution index and development stage<br/>
-              of the project
-            </span>
-          </v-tooltip>
-          <top-research-label
-            v-if="research.isTop"
-            :number="100"
-            color-class="green--text"
-            class="mt-4"
-          />
-    </div>-->
+    <eci-metrics-widget
+      :research-id="research.external_id"
+      :expertise-data="eciList"
+      enable-stats
+      :enable-history="false"
+    />
 
     <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" class="my-6" />
 
@@ -294,8 +281,8 @@
   import { ReviewService } from '@deip/review-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import EciStatsInfo from '@/components/common/components/EciStatsInfo';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -305,8 +292,8 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
+      EciMetricsWidget,
       DBlock,
-      EciStatsInfo
     },
 
     data() {

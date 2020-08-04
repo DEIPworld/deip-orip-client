@@ -1,9 +1,8 @@
 <template>
   <div v-if="$ready">
-
     <portal :to="filterPos">
       <eci-metrics-filter
-        v-model="filter"
+        v-model="filterModel"
         :disciplines="internalDisciplines"
         :contributions="internalContributions"
         :criterias="internalCriterias"
@@ -13,7 +12,6 @@
     </portal>
 
     <portal-target :name="`${$vnode.tag}-filterPlaceholderTop`" slim />
-
     <eci-metrics-stats
       v-if="enableStats"
       :data="{expertiseStats, expertiseHistory}"
@@ -32,7 +30,6 @@
 
     <eci-metrics-history
       :data="expertiseHistory"
-      :chart-options="chartOptions"
       :portal-key="$vnode.tag"
     >
       <template #title>
@@ -54,47 +51,38 @@
   import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
   import { ASSESSMENT_CRITERIA_TYPE, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
-  import { mapGetters } from 'vuex';
   import { upperFirst } from 'vuetify/lib/util/helpers';
   import EciMetricsHistory from '@/components/EciMetrics/EciMetricsHistory/EciMetricsHistory';
   import EciMetricsStats from '@/components/EciMetrics/EciMetricsStats/EciMetricsStats';
+  import { EciMetricsMixin } from './EciMetricsMixin';
 
   export default {
     name: 'EciMetrics',
+
     components: {
       EciMetricsStats,
       EciMetricsHistory,
       EciMetricsFilter
     },
+
+    mixins: [
+      EciMetricsMixin
+    ],
+
     props: {
 
-      // settings
       filterPosition: {
         type: [String, Boolean],
         default: 'history'
       },
+
       enableFilter: {
         type: Boolean,
         default: true
       },
-      enableStats: {
-        type: Boolean,
-        default: false
-      },
-      enableChart: {
-        type: Boolean,
-        default: true
-      },
-      enableTable: {
-        type: Boolean,
-        default: true
-      },
-      chartOptions: {
-        type: Object,
-        default: () => ({})
-      },
 
       // filterprops
+
       disciplines: {
         type: [Array, Boolean],
         default: () => getTopLevelNodes()
@@ -114,44 +102,10 @@
           allowBlank: true,
           blankLabel: 'All'
         })
-      },
-
-      //
-
-      contentId: {
-        type: String,
-        default: undefined
-      },
-
-      researchId: {
-        type: String,
-        default: undefined
-      },
-
-      accountName: {
-        type: String,
-        default: undefined
       }
     },
 
-    data() {
-      return {
-        filter: {
-          discipline: '',
-          date: [],
-          contribution: '',
-          criteria: ''
-        },
-
-        loading: true
-      };
-    },
-
     computed: {
-      ...mapGetters({
-        expertiseHistory: 'eci/expertiseHistory',
-        expertiseStats: 'eci/expertiseStats'
-      }),
 
       filterPos() {
         return `${this.$vnode.tag}-filterPlaceholder${upperFirst(this.filterPosition)}`;
@@ -171,86 +125,6 @@
 
       internalContributions() {
         return this.contributions;
-      }
-    },
-
-    created() {
-      Promise.all([
-        this.updateData()
-      ])
-        .then(() => {
-          this.$setReady();
-        });
-    },
-
-    methods: {
-      setLoading(state = true) {
-        this.loading = state;
-      },
-
-      updateContentEci(filter) {
-        return this.$store.dispatch('eci/getResearchContentExpertiseHistory', {
-          external_id: this.contentId,
-          filter
-        })
-          .then(() => {
-            this.setLoading(false);
-          });
-      },
-
-      updateResearchEci(filter) {
-        return this.$store.dispatch('eci/getResearchExpertiseHistory', {
-          external_id: this.researchId,
-          filter
-        })
-          .then(() => {
-            this.setLoading(false);
-          });
-      },
-
-      updateAccountEci(filter) {
-        return Promise.all([
-          this.$store.dispatch('eci/getAccountExpertiseHistory', {
-            external_id: this.accountName,
-            filter
-          }),
-          ...(
-            this.enableStats
-              ? [this.$store.dispatch('eci/getAccountExpertiseStats', {
-                username: this.accountName,
-                filter
-              })]
-              : []
-          )
-        ])
-          .then(() => {
-            this.setLoading(false);
-          });
-      },
-
-      updateDisciplineEci(filter) {
-        return this.$store.dispatch('eci/getDisciplineExpertiseHistory', filter)
-          .then(() => {
-            this.setLoading(false);
-          });
-      },
-
-      updateData(filter = {}) {
-        this.setLoading(true);
-
-        if (this.contentId) {
-          return this.updateContentEci(filter);
-        }
-
-        if (this.researchId) {
-          return this.updateResearchEci(filter);
-        }
-
-        if (this.accountName) {
-          return this.updateAccountEci(filter);
-        }
-
-        return this.updateDisciplineEci(filter);
       }
     }
   };

@@ -8,8 +8,7 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 
 const STATE = {
   expertiseHistory: [],
-  expertiseStats: [],
-  expertiseWidget: [],
+  expertiseStats: []
 };
 
 const GETTERS = {
@@ -106,51 +105,57 @@ const GETTERS = {
 };
 
 const ACTIONS = {
-  getDisciplineExpertiseHistory({ commit }, payload) {
-    return expertiseContributionsService
-      .getDisciplineExpertiseHistory(payload)
-      .then((res) => {
-        commit('storeExpertiseHistory', res);
-      }, (err) => {
-        console.error(err);
-      });
+
+  getExpertiseHistory({ commit }, payload) {
+    let serviceMethod;
+
+    if (payload.researchId) {
+      serviceMethod = expertiseContributionsService
+        .getResearchExpertiseHistory(payload.researchId, payload.filter);
+    } else if (payload.contentId) {
+      serviceMethod = expertiseContributionsService
+        .getResearchContentExpertiseHistory(payload.contentId, payload.filter);
+    } else if (payload.accountName) {
+      serviceMethod = expertiseContributionsService
+        .getAccountExpertiseHistory(payload.accountName, payload.filter);
+    } else {
+      serviceMethod = expertiseContributionsService
+        .getDisciplineExpertiseHistory(payload.filter);
+    }
+
+    return serviceMethod.then((res) => {
+      // console.info('getExpertiseHistory');
+      commit('storeExpertiseHistory', res);
+    }, (err) => {
+      console.error(err);
+    });
   },
 
-  getResearchContentExpertiseHistory({ commit }, payload) {
-    return expertiseContributionsService
-      .getResearchContentExpertiseHistory(payload.external_id, payload.filter)
-      .then((res) => {
-        commit('storeExpertiseHistory', res);
-      }, (err) => {
-        console.error(err);
-      });
+  getExpertiseStats({ commit }, payload) {
+    let serviceMethod;
+
+    if (payload.researchId) {
+      serviceMethod = expertiseContributionsService
+        .getResearchExpertiseStats(payload.researchId, payload.filter);
+    } else if (payload.contentId) {
+      serviceMethod = expertiseContributionsService
+        .getResearchContentExpertiseStats(payload.contentId, payload.filter);
+    } else if (payload.accountName) {
+      serviceMethod = expertiseContributionsService
+        .getAccountExpertiseStats(payload.accountName, payload.filter);
+    } else {
+      // serviceMethod = expertiseContributionsService
+      //   .getDisciplineExpertiseStats(payload.filter);
+    }
+
+    return serviceMethod.then((res) => {
+      // console.info('getExpertiseStats');
+      commit('storeExpertiseStats', res);
+    }, (err) => {
+      console.error(err);
+    });
   },
 
-  getResearchExpertiseHistory({ commit }, payload) {
-    return expertiseContributionsService
-      .getResearchExpertiseHistory(payload.external_id, payload.filter)
-      .then((res) => {
-        commit('storeExpertiseHistory', res);
-      }, (err) => {
-        console.error(err);
-      });
-  },
-
-  getAccountExpertiseHistory({ commit }, payload) {
-    return expertiseContributionsService
-      .getAccountExpertiseHistory(payload.external_id, payload.filter)
-      .then((res) => {
-        commit('storeExpertiseHistory', res);
-      }, (err) => {
-        console.error(err);
-      });
-  },
-  getAccountExpertiseStats({ commit }, payload) {
-    return expertiseContributionsService.getAccountExpertiseStats(payload.username, payload.filter)
-      .then((res) => {
-        commit('storeExpertiseStats', res);
-      });
-  }
 };
 
 const MUTATIONS = {

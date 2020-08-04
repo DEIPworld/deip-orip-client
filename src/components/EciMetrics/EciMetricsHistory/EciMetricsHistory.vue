@@ -14,7 +14,7 @@
 
     <portal-target :name="`${portalKey}-filterPlaceholderHistory`" slim />
 
-    <eci-metrics-history-chart :data="data" :options="chartOptions" />
+    <eci-metrics-history-chart :data="data" />
     <eci-metrics-history-table :data="data" />
 
   </d-block>
@@ -35,10 +35,6 @@
       portalKey: {
         type: String,
         default: undefined
-      },
-      chartOptions: {
-        type: Object,
-        default: () => ({})
       }
     }
   };
