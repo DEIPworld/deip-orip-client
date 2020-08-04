@@ -26,7 +26,7 @@
           block
           color="primary"
           :loading="isReviewVoting"
-          :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember || !userHasExpertise"
+          :disabled="isReviewVoting || userHasVoted || votingDisabled || isGroupMember || !userHasResearchExpertise"
           @click="voteReview()"
         >
           Support Review
@@ -37,7 +37,7 @@
           Review can be supported only by members of other groups
         </div>
       </div>
-      <div v-else-if="!userHasExpertise">
+      <div v-else-if="!userHasResearchExpertise">
         Users with expertise in <span class="text-body-2">{{ review.disciplines.map(d => d.name).join(", ") }}</span>
         can support this review only
       </div>
@@ -123,8 +123,8 @@
           }, {})
         };
       },
-      userHasExpertise() {
-        return this.userExperise.some((exp) => this.review.disciplines.some((d) => d.id == exp.discipline_id));
+      userHasResearchExpertise() {
+        return this.userExperise.some((exp) => this.review.disciplines.some((d) => d.id == exp.discipline_id && exp.amount > 0));
       },
       userHasVoted() {
         return this.review.votes.some((vote) => vote.voter === this.user.username);

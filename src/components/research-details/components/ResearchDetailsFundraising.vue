@@ -151,14 +151,15 @@
               outlined
               :suffix="tokenSale.soft_cap.split(' ')[1]"
               :rules="[rules.required, deipTokenValidator]"
-              :disabled="areTokensBuying"
+              :disabled="isInvesting"
             />
           </v-row>
           <v-row no-gutters justify="end" class="pt-2">
             <v-btn
-              :loading="areTokensBuying"
+              :loading="isInvesting"
               color="primary"
               block
+              :disabled="isContributionToTokenSaleDisabled"
               @click="onContributeToTokenSaleClick()"
             >
               Invest
@@ -229,7 +230,7 @@
           required: (value) => !!value || 'This field is required'
         },
         amountToContribute: '',
-        areTokensBuying: false,
+        isInvesting: false,
         investmentConfirmDialog: {
           isShown: false,
           isConfirming: false
@@ -241,6 +242,7 @@
         tokenSale: 'rd/tokenSale',
         research: 'rd/research',
         userBalances: 'auth/userBalances',
+        userAssets: 'auth/userAssets',
         user: 'auth/user',
         assets: 'auth/assets',
         contributionsList: 'rd/contributionsList'
@@ -321,11 +323,11 @@
           : 0;
       },
       isContributionToTokenSaleDisabled() {
-        const balance = this.fromAssetsToFloat(
-          this.userBalances[window.env.ASSET_UNIT]
-        );
-        const notEnoughFunds = (this.amountToContribute || 0) > balance;
-        return notEnoughFunds || !this.amountToContribute || this.areTokensBuying;
+        if (!this.userBalances[window.env.ASSET_UNIT]) return true;
+        const balance = this.fromAssetsToFloat(this.userBalances[window.env.ASSET_UNIT]);
+        const isBalanceNotEnough = (this.amountToContribute || 0) > balance;
+        const isInvestmentNotSpecified = (this.amountToContribute || 0) <= 0;
+        return isBalanceNotEnough || isInvestmentNotSpecified || this.isInvesting;;
       },
       isFinishedResearch() {
         return this.research && this.research.is_finished;
@@ -346,12 +348,14 @@
         this.investmentConfirmDialog.isShown = true;
       },
       contributeToTokenSale() {
-        this.areTokensBuying = true;
+        this.isInvesting = true;
+        let symbol = this.tokenSale.soft_cap.split(' ')[1];
+        let asset = this.userAssets.find(a => a.string_symbol == symbol);
 
         researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
           researchExternalId: this.research.external_id,
           contributor: this.user.username,
-          amount: this.toAssetUnits(this.amountToContribute),
+          amount: this.toAssetUnits(this.amountToContribute, asset.precision, asset.string_symbol),
           extensions: []
         })
           .then((data) => {
@@ -370,7 +374,7 @@
             this.$store.dispatch('auth/loadAccount');
             this.$store.dispatch('auth/loadBalances');
 
-            this.areTokensBuying = false;
+            this.isInvesting = false;
             this.$refs.amountToContribute.reset();
             this.amountToContribute = '';
 
@@ -378,7 +382,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.areTokensBuying = false;
+            this.isInvesting = false;
             this.$notifier.showError(`An error occurred while contributing to fundraise, please try again later`)
           });
       },

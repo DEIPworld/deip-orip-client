@@ -32,7 +32,8 @@ const state = {
     joinRequests: [],
     notifications: [],
     researchBookmarks: [],
-    balances: []
+    balances: [],
+    assets: []
   },
   tenant: undefined,
   assets: [], // TODO: temp
@@ -98,12 +99,17 @@ const getters = {
 
   userBalances: (state) => {
     const userBalances = {};
-    state.user.balances.forEach(({ amount }) => {
+    state.user.balances.forEach((item) => {
+      let { amount} = item;
       userBalances[amount.split(' ')[1]] = amount;
     });
     return userBalances;
   },
 
+  userAssets: (state) => {
+    return state.user.assets;
+  },
+  
   tenant: (state) => state.tenant,
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
@@ -207,10 +213,13 @@ const actions = {
     const { user } = getters;
     return assetsService.getAccountBalancesByOwner(user.username)
       .then((balances) => {
-        commit('SET_BALANCES', balances);
-      }, (err) => {
-        console.error(err);
+        commit('SET_USER_BALANCES', balances); 
+        return Promise.all(balances.map(b => assetsService.getAssetById(b.asset_id)));
       })
+      .then((assets) => {
+        commit('SET_USER_ASSETS', assets); 
+      })
+      .catch((err) => { console.error(err) })
       .finally(() => {
         if (notify) notify();
       });
@@ -363,8 +372,12 @@ const mutations = {
     state.tenant = tenant;
   },
 
-  SET_BALANCES(state, balances) {
+  SET_USER_BALANCES(state, balances) {
     state.user.balances = balances;
+  },
+
+  SET_USER_ASSETS(state, assets) {
+    state.user.assets = assets;
   },
 
   SET_USER_LOADED(state, payload) {

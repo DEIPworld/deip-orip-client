@@ -404,7 +404,7 @@
       },
 
       userHasExpertiseInDiscipline(discipline) {
-        return this.userHasResearchExpertise.some((exp) => exp.discipline_id === discipline.id);
+        return this.userExperise.some((exp) => exp.discipline_id === discipline.id && exp.amount > 0);
       },
 
       unlockDraft() {

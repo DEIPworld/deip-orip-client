@@ -76,7 +76,7 @@
               v-model="formData.hardCap"
               class="rounded-br-0 rounded-tr-0"
               outlined
-              label="Min"
+              label="Max"
               :rules="[rules.required, deipTokenValidator, rules.hardCapGreater]"
             />
           </v-col>

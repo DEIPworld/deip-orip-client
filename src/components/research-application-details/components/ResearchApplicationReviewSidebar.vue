@@ -10,7 +10,7 @@
         {{ agency.name }}
       </div>
     </div>
-    <!--  <div v-if="review.author.account.name !== user.username && userHasExpertise">
+    <!--  <div v-if="review.author.account.name !== user.username && userHasResearchExpertise">
               <div class="support-review-button">
                   <v-btn block color="primary"
                       :loading="isReviewVoting"
@@ -52,9 +52,9 @@
       review() {
         return this.applicationReviewsList.find((r) => r.id == this.$route.params.review_id);
       },
-      userHasExpertise() {
+      userHasResearchExpertise() {
         return this.userExperise != null && this.research != null
-          ? this.userExperise.some((exp) => this.research.disciplines.some((d) => d.id == exp.discipline_id))
+          ? this.userExperise.some((exp) => this.research.disciplines.some((d) => d.id == exp.discipline_id && exp.amount > 0))
           : false;
       },
       userHasVoted() {
