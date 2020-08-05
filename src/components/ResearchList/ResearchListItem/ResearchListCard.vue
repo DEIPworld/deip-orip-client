@@ -11,7 +11,7 @@
       </div>
     </v-card-text>
     <v-img
-      :src="research.external_id | researchBackgroundSrc(400, 200)"
+      :src="research.external_id | researchBackgroundSrc(400 * 2, 200 * 2)"
       :aspect-ratio="2"
       class="flex-grow-0"
     />

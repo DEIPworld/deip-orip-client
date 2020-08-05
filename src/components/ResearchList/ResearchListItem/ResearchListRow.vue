@@ -6,7 +6,7 @@
 
     <td width="33%">
       <d-avatared
-        :src="research.external_id | researchBackgroundSrc(40,40)"
+        :src="research.external_id | researchBackgroundSrc(40 * 2,40 * 2)"
         :size="40"
         :tooltip="research.title"
       >

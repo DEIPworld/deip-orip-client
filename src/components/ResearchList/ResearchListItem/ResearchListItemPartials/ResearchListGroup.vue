@@ -1,6 +1,6 @@
 <template>
   <d-avatared
-    :src="group.external_id | researchGroupLogoSrc(32, 32)"
+    :src="group.external_id | researchGroupLogoSrc(32 * 2, 32 * 2)"
     :size="32"
     :tooltip="group.name"
   >
