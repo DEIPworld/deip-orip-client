@@ -27,7 +27,7 @@
               <v-list-item-content class="text-caption font-weight-medium">
                 <v-row no-gutters class="mb-1">
                   <v-col>
-                    {{ item.discipline_name || item.disciplineName }}
+                    {{ item.discipline_name }}
                   </v-col>
                   <v-col cols="auto">
                     ECI {{ `${(item.eci || item.value || '-' )}` | commaNumber }}
@@ -55,7 +55,7 @@
 
     <!-- TODO: temp solution-->
     <v-btn
-      v-if="accountName"
+      v-if="expertiseDetailsRoute"
       block
       color="primary"
       class="mt-3"
@@ -113,7 +113,8 @@
             name: 'account.expertiseDetails'
           };
         }
-        if (this.$route.path.includes('/user-details')) {
+
+        if (this.$route.name === 'UserDetails') {
           return {
             name: 'UserExpertiseDetails',
             params: {
@@ -121,16 +122,30 @@
             }
           };
         }
-        if (this.$route.path.includes('/research')) {
-          return {
 
+        if (this.$route.name === 'ResearchDetails') {
+          return {
+            name: 'ResearchExpertise',
+            params: {
+              group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+              research_permlink: decodeURIComponent(this.$route.params.research_permlink)
+            }
           };
         }
-        if (this.$route.path.includes('/group-details')) {
-          return {};
+
+        if (this.$route.name === 'ResearchContentDetails') {
+          return {
+            name: 'ResearchContentExpertise',
+            params: {
+              group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
+              research_permlink: decodeURIComponent(this.$route.params.research_permlink),
+              content_permlink: decodeURIComponent(this.$route.params.content_permlink),
+              ref: this.$route.query.ref
+            }
+          };
         }
 
-        return {};
+        return false;
       }
     }
   };

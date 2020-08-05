@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <div class="text-h5 text-center">
-              {{ checkVal($options.filters.commaNumber(data.eci)) }}
+              {{ data.eci | checkVal | commaNumber }}
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
@@ -15,7 +15,7 @@
 
           <v-col>
             <div class="text-h5 text-center">
-              {{ checkVal(data.percentile_rank) }}
+              {{ data.percentile_rank | checkVal }}
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
@@ -26,9 +26,9 @@
           <v-col>
             <div
               class="text-h5 text-center"
-              :class="data.growth_rate ? numUp(data.growth_rate) ? 'green--text' : 'red--text' : ''"
+              :class="data.growth_rate | numDirClass"
             >
-              {{ checkVal(numUp(data.growth_rate) ? `+${data.growth_rate}` : data.growth_rate) }}
+              {{ data.growth_rate | numDir }}
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
@@ -69,18 +69,30 @@
     computed: {
       lowStats() {
         return [
-          {
-            label: 'Contributions',
-            value: this.data.contributions.length
-          },
-          {
-            label: 'Citations',
-            value: this.data.researches.length
-          },
-          {
-            label: 'H-index',
-            value: this.data.researches.length
-          }
+          ...(
+            this.data.contributions && this.data.contributions.length
+              ? [{
+                label: 'Contributions',
+                value: this.data.contributions.length
+              }]
+              : []
+          ),
+          ...(
+            this.data.researches && this.data.researches.length
+              ? [{
+                label: 'Citations',
+                value: this.data.researches.length
+              }]
+              : []
+          ),
+          ...(
+            this.data.researches && this.data.researches.length
+              ? [{
+                label: 'H-index',
+                value: this.data.researches.length
+              }]
+              : []
+          )
         ];
       }
     },

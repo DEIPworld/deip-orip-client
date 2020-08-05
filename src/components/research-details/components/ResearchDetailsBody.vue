@@ -22,12 +22,6 @@
       </v-btn>
     </div>
 
-    <v-divider v-if="contentList.length || (isResearchGroupMember && !research.is_finished)" class="my-12" />
-
-    <research-details-eci ref="eci" />
-
-    <v-divider class="my-12" />
-
     <research-details-reviews />
   </v-sheet>
 </template>
@@ -42,7 +36,6 @@
   import ResearchDetailsDraftList from '@/components/research-details/components/ResearchDetailsDraftList';
   import UploadResearchContentFileDialog
     from '@/components/research-details/components/UploadResearchContentFileDialog';
-  import ResearchDetailsEci from '@/components/research-details/components/ResearchDetailsECI';
   import ResearchDetailsReviews from '@/components/research-details/components/ResearchDetailsReviews';
   import ResearchTimeline from './ResearchTimeline.vue';
 
@@ -53,7 +46,6 @@
 
     components: {
       ResearchDetailsReviews,
-      ResearchDetailsEci,
       UploadResearchContentFileDialog,
       ResearchDetailsDraftList,
       ResearchDetailsMaterials,

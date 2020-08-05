@@ -381,7 +381,7 @@
           );
 
           return {
-            disciplineName: discipline.name,
+            discipline_name: discipline.name,
             value: eciObj ? eciObj[1] : 0
           };
         });

@@ -337,20 +337,4 @@
   .invite-item {
     border-bottom: 1px solid rgb(224, 224, 224)
   }
-
-  .expertise {
-    background: #EBF5FE;
-    border: 1px solid #8FC3F7;
-    box-sizing: border-box;
-    border-radius: 2px;
-    font-family: Muli;
-
-    &__disc-name {
-      font-weight: 600;
-    }
-
-    &__divider {
-      border-color: #8FC3F7;
-    }
-  }
 </style>
