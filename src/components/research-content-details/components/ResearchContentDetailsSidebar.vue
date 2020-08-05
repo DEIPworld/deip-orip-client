@@ -42,6 +42,7 @@
 
     <!-- ### START Research Content ECI Section ### -->
     <eci-metrics-widget
+      v-if="$route.params.content_permlink !== '!draft'"
       :content-id="content.external_id"
       :expertise-data="eciList"
       enable-stats
@@ -50,7 +51,7 @@
 
     <!-- ### END Research Content ECI Section ### -->
 
-    <v-divider class="my-6" />
+    <v-divider v-if="$route.params.content_permlink !== '!draft'" class="my-6" />
 
 
     <!-- <v-divider class="my-6" />
