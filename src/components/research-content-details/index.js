@@ -10,7 +10,6 @@ import ResearchContentAddReviewBody from './components/ResearchContentAddReviewB
 import ResearchContentAddReviewSidebar from './components/ResearchContentAddReviewSidebar';
 import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
 import ReferencesDependencyGraph from './components/ReferencesDependencyGraph';
-import ResearchContentDetailsECI from './components/ResearchContentDetailsECI';
 
 
 Vue.component('research-content-details', ResearchContentDetails);
@@ -22,4 +21,3 @@ Vue.component('research-content-review-sidebar', ResearchContentReviewSidebar);
 Vue.component('research-content-add-review-body', ResearchContentAddReviewBody);
 Vue.component('research-content-add-review-sidebar', ResearchContentAddReviewSidebar);
 Vue.component('references-dependency-graph', ReferencesDependencyGraph);
-Vue.component('research-content-details-eci', ResearchContentDetailsECI);

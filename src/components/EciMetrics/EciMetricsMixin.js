@@ -53,6 +53,12 @@ export const EciMetricsMixin = {
   },
 
   created() {
+    for (const key of Object.keys(this.filterModel)) {
+      if (this.$route.query[key]) {
+        this.filterModel[key] = this.$route.query[key];
+      }
+    }
+
     this.updateData()
       .then(() => {
         this.$setReady();

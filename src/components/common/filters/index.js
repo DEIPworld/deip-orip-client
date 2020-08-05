@@ -91,6 +91,10 @@ Vue.filter('numDir', (value) => {
   return parseFloat(value) >= 0 ? `+${value}` : value;
 });
 
+Vue.filter('checkVal', (value) => {
+  return value || '—';
+});
+
 Vue.filter('numDirClass', (value, type = 'foreground') => {
   if (!value || parseFloat(value) === 0) return '';
 

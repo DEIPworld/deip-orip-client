@@ -29,9 +29,11 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
+import ResearchExpertise from '@/components/ResearchExpertise/ResearchExpertise';
 import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
 import ResearchEdit from '@/components/research-edit/ResearchEdit';
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
+import ResearchContentExpertise from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchApplicationDetails
   from '@/components/research-application-details/ResearchApplicationDetails';
 import ResearchApplicationReview
@@ -237,7 +239,9 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
+    },
+
+    {
       path: '/:research_group_permlink/research/:research_permlink',
       name: 'ResearchDetails',
       component: preliminaryDataLoader(ResearchDetails, {
@@ -249,7 +253,15 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
+    },
+
+    {
+      path: '/:research_group_permlink/research/:research_permlink/expertise',
+      name: 'ResearchExpertise',
+      component: ResearchExpertise
+    },
+
+    {
       path: '/:research_group_permlink/research-public/:research_permlink',
       name: 'ResearchDetailsPublic',
       component: preliminaryDataLoader(ResearchDetailsPublic, {
@@ -286,7 +298,9 @@ const router = new Router({
       meta: {
         withoutHeader: true
       }
-    }, {
+    },
+
+    {
       path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
       name: 'ResearchContentDetails',
       component: preliminaryDataLoader(ResearchContentDetails, {
@@ -300,7 +314,15 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
+    },
+
+    {
+      path: '/:research_group_permlink/research/:research_permlink/:content_permlink/expertise',
+      name: 'ResearchContentExpertise',
+      component: ResearchContentExpertise
+    },
+
+    {
       path: '/:research_group_permlink/research/:research_permlink/application/:application_id',
       name: 'ResearchApplicationDetails',
       component: preliminaryDataLoader(ResearchApplicationDetails, {

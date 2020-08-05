@@ -49,8 +49,6 @@
           :content-ref="contentRef"
           :research-members="researchMembersList"
         />
-        <research-content-details-eci v-if="isPublished" />
-        <v-divider />
 
         <!-- START Research Content Reviews section -->
         <div v-if="isPublished && contentReviewsList.length" class="py-6">
