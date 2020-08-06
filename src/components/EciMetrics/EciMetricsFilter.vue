@@ -4,48 +4,39 @@
     :loading="loading"
     @apply="$emit('apply', internalValue)"
   >
-    <v-col v-if="disciplines && disciplines.length" cols="2">
-      <v-select
-        v-model="internalValue.discipline"
-        label="Domain"
-        outlined
-        :items="[{label: 'All', external_id: ''}, ...disciplines]"
-        item-text="label"
-        item-value="external_id"
-      />
-    </v-col>
-    <v-col v-if="contributions && contributions.length" cols="2">
-      <v-select
-        v-model="internalValue.contribution"
-        class="my-0 py-0"
-        :items="contributions"
-        label="Contribution Type"
-        outlined
-      />
-    </v-col>
-    <v-col v-if="criterias && criterias.length" cols="2">
-      <v-select
-        v-model="internalValue.criteria"
-        class="my-0 py-0"
-        :items="criterias"
-        label="Assessment criteria"
-        outlined
-      />
-    </v-col>
-
-    <v-col cols="2">
-      <d-input-date
-        v-model="internalValue.date"
-        label="Period"
-        :picker-props="{
-          min: moment('2020-01-01').format('YYYY-MM-DD'),
-          range: true
-        }"
-        :field-props="{
-          clearable: true,
-        }"
-      />
-    </v-col>
+    <v-select
+      v-model="internalValue.discipline"
+      label="Domain"
+      outlined
+      :items="[{label: 'All', external_id: ''}, ...disciplines]"
+      item-text="label"
+      item-value="external_id"
+    />
+    <v-select
+      v-model="internalValue.contribution"
+      class="my-0 py-0"
+      :items="contributions"
+      label="Contribution Type"
+      outlined
+    />
+    <v-select
+      v-model="internalValue.criteria"
+      class="my-0 py-0"
+      :items="criterias"
+      label="Assessment criteria"
+      outlined
+    />
+    <d-input-date
+      v-model="internalValue.date"
+      label="Period"
+      :picker-props="{
+        min: moment('2020-01-01').format('YYYY-MM-DD'),
+        range: true
+      }"
+      :field-props="{
+        clearable: true,
+      }"
+    />
   </d-filter-block>
 </template>
 
@@ -56,7 +47,10 @@
 
   export default {
     name: 'EciMetricsFilter',
-    components: { DFilterBlock, DInputDate },
+    components: {
+      DFilterBlock,
+      DInputDate
+    },
     mixins: [Proxyable],
     props: {
       loading: {

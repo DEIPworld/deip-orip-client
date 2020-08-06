@@ -5,30 +5,27 @@
       :loading="loading"
       @apply="updateChartData()"
     >
-      <v-col cols="2">
-        <v-select
-          v-model="filter.discipline"
-          outlined
-          hide-details
-          :items="[{label: 'All', external_id: ''}, ...disciplines]"
-          item-text="label"
-          item-value="external_id"
-          label="Domain"
-        />
-      </v-col>
-      <v-col cols="2">
-        <d-input-date
-          v-model="filter.date"
-          label="Period"
-          :picker-props="{
-            min: moment('2020-01-01').format('YYYY-MM-DD'),
-            range: true
-          }"
-          :field-props="{
-            clearable: true,
-          }"
-        />
-      </v-col>
+      <v-select
+        v-model="filter.discipline"
+        outlined
+        hide-details
+        :items="[{label: 'All', external_id: ''}, ...disciplines]"
+        item-text="label"
+        item-value="external_id"
+        label="Domain"
+      />
+
+      <d-input-date
+        v-model="filter.date"
+        label="Period"
+        :picker-props="{
+          min: moment('2020-01-01').format('YYYY-MM-DD'),
+          range: true
+        }"
+        :field-props="{
+          clearable: true,
+        }"
+      />
     </d-filter-block>
 
     <v-skeleton-loader

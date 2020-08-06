@@ -23,7 +23,15 @@
           >
             <d-chart-area
               :data="eciOverviewDataTable"
-              :options="{legend: 'none', vAxis: { format: '##%' }, hAxis: { showTextEvery: parseInt(eciOverviewDataTable.length / 6)} }"
+              :options="{
+                legend: 'none',
+                vAxis: {
+                  format: '##%'
+                },
+                hAxis: {
+                  showTextEvery: parseInt(eciOverviewDataTable.length / 6)
+                }
+              }"
             />
           </d-block>
         </v-col>
@@ -47,30 +55,34 @@
         title="Distribution impact"
         subtitle="Updated today"
       >
-        <v-row>
-          <v-col cols="3">
-            <v-select
-              v-model="distributionDiscipline"
-              outlined
-              :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
-              item-text="label"
-              item-value="external_id"
-              label="Domain"
-            />
-          </v-col>
-          <v-col cols="10" class="pb-12">
-            <d-chart-pie
-              :data="distributionChartData"
-              :options="{
-                legend: {position: 'bottom'},
-                chartArea: {
-                  top: 0
-                }
-              }"
-              style="max-width: 600px;"
-            />
-          </v-col>
-        </v-row>
+        <d-filter-block
+          v-model="distributionDiscipline"
+          @apply="updateDistributionChartData()"
+        >
+          <v-select
+            v-model="distributionDiscipline"
+            outlined
+            :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
+            item-text="label"
+            item-value="external_id"
+            label="Domain"
+          />
+        </d-filter-block>
+
+        <d-chart-pie
+          :data="distributionChartData"
+          :options="{
+            legend: {
+              position: 'right',
+              alignment:'center'
+            },
+            chartArea: {
+              top: 0
+            }
+          }"
+          style="max-width: 400px;"
+        />
+
       </d-block>
 
       <eci-metrics>
@@ -99,10 +111,12 @@
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
   import EciMetrics from '@/components/EciMetrics/EciMetrics';
+  import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
   export default {
     name: 'Overview',
     components: {
+      DFilterBlock,
       EciMetrics,
       DisciplinesGrowthRate,
       DBlock,
@@ -119,7 +133,9 @@
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
           allowBlank: true,
           blankLabel: 'All'
-        })
+        }),
+
+        distributionChartData: []
       };
     },
 
@@ -136,32 +152,6 @@
             external_id: d.id,
             label: d.label
           }));
-      },
-
-      distributionChartData() {
-        let dataTable = [];
-        if (this.distributionDiscipline === 'all') {
-          this.disciplinesExpertiseStats.forEach((item) => {
-            item.assessment_criterias.forEach((val, i) => {
-              dataTable[i] = [
-                this.criteriaTypes[val[0]],
-                dataTable[i] ? dataTable[i][1] + val[1] : val[1]
-              ];
-            });
-          });
-        } else {
-          dataTable = this.disciplinesExpertiseStats
-            .find(
-              (item) => item.discipline_external_id === this.distributionDiscipline
-            )
-            .assessment_criterias
-            .map((item) => [
-              this.criteriaTypes[item[0]],
-              item[1]
-            ]);
-        }
-
-        return [['Criteria', 'Value'], ...dataTable];
       },
 
       //= ====================
@@ -257,6 +247,7 @@
       ])
         .then(() => {
           this.$setReady();
+          this.updateDistributionChartData();
         });
     },
 
@@ -269,6 +260,31 @@
               .discipline_external_id
           }
         });
+      },
+      updateDistributionChartData() {
+        let dataTable = [];
+        if (this.distributionDiscipline === 'all') {
+          this.disciplinesExpertiseStats.forEach((item) => {
+            item.assessment_criterias.forEach((val, i) => {
+              dataTable[i] = [
+                this.criteriaTypes[val[0]],
+                dataTable[i] ? dataTable[i][1] + val[1] : val[1]
+              ];
+            });
+          });
+        } else {
+          dataTable = this.disciplinesExpertiseStats
+            .find(
+              (item) => item.discipline_external_id === this.distributionDiscipline
+            )
+            .assessment_criterias
+            .map((item) => [
+              this.criteriaTypes[item[0]],
+              item[1]
+            ]);
+        }
+
+        this.distributionChartData = [['Criteria', 'Value'], ...dataTable];
       }
     }
   };
