@@ -1,37 +1,33 @@
 <template>
-  <v-sheet :class="wrapperClassList">
+  <v-sheet>
+    <div :class="contentClassList">
+      <div v-if="hasHeader" :class="headerClassList">
 
-    <div v-if="hasHeader" :class="headerClassList">
+        <slot name="titleLeft" />
 
-      <slot name="titleLeft" />
+        <div class="spacer">
+          <div
+            v-if="hasTitle"
+            :class="titleClassList"
+          >
+            {{ title }}
+            <slot name="title" />
+          </div>
 
-      <div class="spacer">
-        <div
-          v-if="hasTitle"
-          :class="titleClassList"
-        >
-          {{ title }}
-          <slot name="title" />
+          <div
+            v-if="hasSubtitle"
+            :class="subtitleClassList"
+          >
+            {{ subtitle }}
+            <slot name="subtitle" />
+          </div>
         </div>
 
-        <div
-          v-if="hasSubtitle"
-          :class="subtitleClassList"
-        >
-          {{ subtitle }}
-          <slot name="subtitle" />
-        </div>
+        <slot name="titleAddon" />
       </div>
 
-      <slot name="titleAddon" />
-    </div>
-
-    <div :class="contentClassList">
       <slot />
     </div>
-
-    <v-divider v-if="divided" />
-
   </v-sheet>
 </template>
 
@@ -39,19 +35,16 @@
   export default {
     name: 'DBlock',
     props: {
-      last: {
+
+      small: {
         type: Boolean,
         default: false
       },
-      sm: {
+      widget: {
         type: Boolean,
         default: false
       },
 
-      icon: {
-        type: String,
-        default: null
-      },
       title: {
         type: String,
         default: null
@@ -59,10 +52,6 @@
       subtitle: {
         type: String,
         default: null
-      },
-      divided: {
-        type: Boolean,
-        default: false,
       }
     },
     computed: {
@@ -70,24 +59,17 @@
       hasSubtitle() { return !!this.subtitle || this.$hasSlot('subtitle'); },
       hasHeader() { return this.hasTitle || this.hasSubtitle; },
 
-      wrapperClassList() {
-        return {
-          [this.$style.host]: true,
-          [this.$style['host-sm']]: !!this.sm
-        };
-      },
       titleClassList() {
         return {
-          'text-h6': this.sm,
-          'text-h5': !this.sm
+          'text-h6': this.small || this.widget,
+          'text-h5': !(this.small || this.widget)
         };
       },
       headerClassList() {
         return {
           'd-flex': true,
-          'mb-6': true,
-          // 'mb-4': this.sm,
-          // 'mb-6': !this.sm
+          'mb-4': this.small || this.widget,
+          'mb-6': !(this.small || this.widget)
         };
       },
       subtitleClassList() {
@@ -97,27 +79,10 @@
         };
       },
       contentClassList() {
-        return {};
+        return {
+          'pa-4': this.widget
+        };
       }
     }
   };
 </script>
-
-<style module lang="scss">
-  .host {
-    --vb-gap: 48px;
-
-    & + & {
-      margin-top: var(--vb-gap);
-    }
-
-    &-sm {
-      --vb-gap: 24px;
-    }
-
-    & > [role="separator"] {
-      margin-top: var(--vb-gap);
-    }
-  }
-
-</style>

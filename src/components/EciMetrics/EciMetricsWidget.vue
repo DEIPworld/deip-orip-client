@@ -1,5 +1,6 @@
 <template>
-  <d-block title="Expertise Contribution Index" sm>
+  <d-block title="Expertise Contribution Index" widget>
+
     <template v-if="enableStats">
       <v-row
         v-for="(item, index) of stats"
@@ -7,12 +8,15 @@
         :class="{'mb-2': index + 1 < stats.length}"
         no-gutters
       >
-        <v-col class="text-caption">
+        <v-col class="text-caption" cols="auto">
           {{ item.label }}
         </v-col>
+        <v-divider class="dotted align-self-end mx-1" style="margin-bottom: 2px;" />
+<!--        <v-spacer style="border-bottom: 1px dotted currentColor;margin-bottom: 2px;" class="grey&#45;&#45;text text&#45;&#45;lighten-1 mx-1"></v-spacer>-->
         <v-col
           class="text-caption font-weight-medium"
           :class="item.classList"
+          cols="auto"
         >
           {{ item.value }}
         </v-col>
@@ -21,29 +25,32 @@
 
     <template v-if="Object.keys(expertiseData).length">
       <v-card outlined class="mt-4">
-        <v-list class="py-0">
+        <v-list class="py-0" dense>
           <template v-for="(item, i) in expertiseData">
             <v-list-item :key="`edi-${i}`">
-              <v-list-item-content class="text-caption font-weight-medium">
+              <v-list-item-content class="text-caption font-weight-medium py-3">
                 <v-row no-gutters class="mb-1">
                   <v-col>
                     {{ item.discipline_name }}
                   </v-col>
                   <v-col cols="auto">
-                    ECI {{ `${(item.eci || item.value || '-' )}` | commaNumber }}
+                    ECI {{ (item.eci || item.value ) | checkVal | commaNumber }}
                   </v-col>
                 </v-row>
                 <v-row no-gutters>
+
                   <v-col>
-                    <d-simple-tooltip tooltip="Percentile rank">
+                    <d-simple-tooltip v-if="item.percentile_rank" tooltip="Percentile rank">
                       {{ item.percentile_rank }}
                     </d-simple-tooltip>
                   </v-col>
-                  <v-col cols="auto" :class="item.percentile_rank | numDirClass">
-                    <d-simple-tooltip tooltip="Growth rate">
-                      {{ item.percentile_rank | numDir }}
+
+                  <v-col cols="auto" :class="item.growth_rate | numDirClass">
+                    <d-simple-tooltip v-if="item.growth_rate" tooltip="Growth rate">
+                      {{ item.growth_rate | numDir | checkVal }}
                     </d-simple-tooltip>
                   </v-col>
+
                 </v-row>
               </v-list-item-content>
             </v-list-item>

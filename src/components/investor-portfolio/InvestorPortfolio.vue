@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <d-layout-section>
     <portal to="sidebar">
       <investor-portfolio-inbox-left-sidebar />
     </portal>
@@ -10,28 +10,27 @@
       <investor-portfolio-inbox-right-sidebar />
     </template>
 
-  </layout-section>
+  </d-layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
-  import AppLayout from '@/components/layout/components/Layout';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
   import InvestorPortfolioInboxLeftSidebar
     from '@/components/investor-portfolio/components/InvestorPortfolioInboxLeftSidebar';
   import InvestorPortfolioInboxRightSidebar
     from '@/components/investor-portfolio/components/InvestorPortfolioInboxRightSidebar';
   import InvestorPortfolioInbox from '@/components/investor-portfolio/components/InvestorPortfolioInbox';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'InvestorPortfolio',
     components: {
+      DLayoutSection,
       InvestorPortfolioInbox,
       InvestorPortfolioInboxRightSidebar,
       InvestorPortfolioInboxLeftSidebar,
-      LayoutSection
     },
     computed: {
       ...mapGetters({

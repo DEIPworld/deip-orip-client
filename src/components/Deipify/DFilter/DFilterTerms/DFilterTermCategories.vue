@@ -2,7 +2,7 @@
   <d-block
     v-if="categories.length"
     title="Categories"
-    sm
+    widget
   >
     <d-list-expand :active="categories.length > 4">
       <template #default="{expanded}">

@@ -8,13 +8,13 @@
 
     <slot name="addons" />
 
-    <layout-section>
+    <d-layout-section>
       <template #sidebar>
         <slot name="sidebar" />
       </template>
 
       <slot name="default" />
-    </layout-section>
+    </d-layout-section>
 
     <!-- TODO: REFACTORING   -->
     <v-sheet v-if="hasLeftSidebar">
@@ -30,12 +30,12 @@
 </template>
 
 <script>
-  import LayoutSection from '@/components/layout/components/LayoutSection';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'BasePageLayout',
-    components: { LayoutToolbar, LayoutSection },
+    components: { DLayoutSection, LayoutToolbar },
     computed: {
       adjustedContentClass() {
         if (this.contentClass) return this.contentClass;

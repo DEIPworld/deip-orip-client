@@ -1,173 +1,152 @@
 <template>
-  <portal to="sidebarRight">
 
-    <v-navigation-drawer
-      permanent
-      clipped
-      app
-      right
-      class="pa-4"
-    >
-      <div v-if="isOwner && hasInvites">
-        <div id="invites" class="text-h6 font-weight-bold pa-4">
-          Invites: {{ invites.length }}
-        </div>
-        <v-divider />
-        <div
-          v-for="(invite, index) of invites"
-          :key="'invite-' + index"
-          class="pa-4"
-        >
-          <router-link
-            class="a full-width break-word font-weight-medium"
-            :to="{ name: 'ResearchGroupDetails', params: {
+  <div>
+    <d-block v-if="isOwner && hasInvites" widget>
+      <div id="invites" class="text-h6 font-weight-bold">
+        Invites: {{ invites.length }}
+      </div>
+      <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
+      <div
+        v-for="(invite, index) of invites"
+        :key="'invite-' + index"
+      >
+        <router-link
+          class="a full-width break-word font-weight-medium"
+          :to="{ name: 'ResearchGroupDetails', params: {
             research_group_permlink: encodeURIComponent(invite.group.permlink),
           }}"
+        >
+          {{ invite.group.name }}
+        </router-link>
+        <div class="py-2 caption font-weight-medium">
+          invited you to join them with
+        </div>
+        <div class="text-right full-width">
+          <v-btn
+            small
+            color="primary"
+            dark
+            text
+            @click="openInviteDetailsDialog(invite, index)"
           >
-            {{ invite.group.name }}
-          </router-link>
-          <div class="py-2 caption font-weight-medium">
-            invited you to join them with
-          </div>
-          <div class="text-right full-width">
-            <v-btn
-              small
-              class="mx-0 py-0 my-2"
-              color="primary"
-              dark
-              text
-              @click="openInviteDetailsDialog(invite, index)"
-            >
-              View
-            </v-btn>
-          </div>
+            View
+          </v-btn>
         </div>
-
-        <v-dialog
-          v-if="inviteDetailsDialog.item"
-          v-model="inviteDetailsDialog.isShown"
-          persistent
-          max-width="600px"
-        >
-          <v-card class="pa-6">
-            <v-card-title>
-              <div class="text-h5">
-                {{ inviteDetailsDialog.item.group.name }}
-              </div>
-              <div class="right-top-angle">
-                <v-btn icon class="pa-0 ma-0" @click="closeInviteDetailsDialog()">
-                  <v-icon color="black">
-                    close
-                  </v-icon>
-                </v-btn>
-              </div>
-            </v-card-title>
-            <v-card-text>
-              <div class="text-subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
-            </v-card-text>
-            <v-card-actions class="flex-wrap px-6">
-              <div class="w-100 py-2">
-                <v-btn
-                  color="primary"
-                  block
-                  :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                  :loading="inviteDetailsDialog.isApprovingInvite"
-                  @click="approveInvite()"
-                >
-                  Accept
-                </v-btn>
-              </div>
-              <div class="w-100 py-2">
-                <v-btn
-                  color="primary"
-                  block
-                  text
-                  :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                  :loading="inviteDetailsDialog.isRejectingInvite"
-                  @click="rejectInvite()"
-                >
-                  Reject
-                </v-btn>
-              </div>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-divider class="mb-6" />
       </div>
-      <!-- ### END User Profile Invites Section ### -->
 
-      <div v-if="isOwner && hasReviewRequests">
-        <div id="review-requests" class="text-h6 font-weight-bold pa-4">
-          Review Requests: {{ reviewRequests.length }}
+      <v-dialog
+        v-if="inviteDetailsDialog.item"
+        v-model="inviteDetailsDialog.isShown"
+        persistent
+        max-width="600px"
+      >
+        <v-card class="pa-6">
+          <v-card-title>
+            <div class="text-h5">
+              {{ inviteDetailsDialog.item.group.name }}
+            </div>
+            <div class="right-top-angle">
+              <v-btn icon class="pa-0 ma-0" @click="closeInviteDetailsDialog()">
+                <v-icon color="black">
+                  close
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
+          </v-card-text>
+          <v-card-actions class="flex-wrap px-6">
+            <div class="w-100 py-2">
+              <v-btn
+                color="primary"
+                block
+                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
+                :loading="inviteDetailsDialog.isApprovingInvite"
+                @click="approveInvite()"
+              >
+                Accept
+              </v-btn>
+            </div>
+            <div class="w-100 py-2">
+              <v-btn
+                color="primary"
+                block
+                text
+                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
+                :loading="inviteDetailsDialog.isRejectingInvite"
+                @click="rejectInvite()"
+              >
+                Reject
+              </v-btn>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </d-block>
+
+    <v-divider v-if="isOwner && hasInvites" />
+
+    <d-block v-if="isOwner && hasReviewRequests" widget>
+      <div id="review-requests" class="text-h6 font-weight-bold pa-4">
+        Review Requests: {{ reviewRequests.length }}
+      </div>
+      <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
+      <div
+        v-for="(reviewRequest, index) of reviewRequests"
+        :key="reviewRequest._id"
+        class="pa-4"
+      >
+        <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
+        <div class="py-2 caption font-weight-medium">
+          requests your review for "{{ reviewRequest.research.title }}"
+          research
         </div>
-        <v-divider />
-        <div
-          v-for="(reviewRequest, index) of reviewRequests"
-          :key="reviewRequest._id"
-          class="pa-4"
-        >
-          <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
-          <div class="py-2 caption font-weight-medium">
-            requests your review for "{{ reviewRequest.research.title }}"
-            research
-          </div>
-          <!-- <router-link tag="div" class="a full-width break-word font-weight-medium caption"
-              :to="{ name: 'ResearchContentDetails', params: {
-                  research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
-                  research_permlink: encodeURIComponent(reviewRequest.research.permlink),
-                  content_permlink: encodeURIComponent(reviewRequest.content.permlink)
-              }}"
-              >{{reviewRequest.content.title}}
-          </router-link> -->
 
-          <div class="pt-2 full-width display-flex justify-space-between">
-            <v-btn
-              color="green"
-              text
-              small
-              class="ma-0 py-0 px-2"
-              :to="{ name: 'ResearchContentDetails', params: {
+        <div class="pt-2 full-width display-flex justify-space-between">
+          <v-btn
+            color="green"
+            text
+            small
+            class="ma-0 py-0 px-2"
+            :to="{ name: 'ResearchContentDetails', params: {
               research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
               research_permlink: encodeURIComponent(reviewRequest.research.permlink),
               content_permlink: encodeURIComponent(reviewRequest.content.permlink)
             }}"
-            >
-              Proceed
-            </v-btn>
-
-            <v-btn
-              color="red"
-              text
-              small
-              class="ma-0 py-0 px-2"
-              :loading="reviewRequest.isDenying"
-              @click="denyReviewRequest(reviewRequest._id)"
-            >
-              Reject
-            </v-btn>
-          </div>
-          <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
+          >
+            Proceed
+          </v-btn>
+          <v-btn
+            color="red"
+            text
+            small
+            class="ma-0 py-0 px-2"
+            :loading="reviewRequest.isDenying"
+            @click="denyReviewRequest(reviewRequest._id)"
+          >
+            Reject
+          </v-btn>
         </div>
-        <v-divider class="mb-6" />
+        <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
       </div>
+    </d-block>
 
+    <v-divider v-if="isOwner && hasReviewRequests" />
 
-      <!-- ### START User Profile Expertise Section ### -->
+    <eci-metrics-widget
+      :account-name="userInfo.account.name"
+      :expertise-data="expertise"
+      enable-stats
+      :enable-history="false"
+    />
 
-      <eci-metrics-widget
-        :account-name="userInfo.account.name"
-        :expertise-data="expertise"
-        enable-stats
-        :enable-history="false"
-      />
+    <user-claim-expertise-dialog
+      :is-shown="isClaimExpertiseDialogShown"
+      @close="closeClaimExpertiseDialog"
+    />
 
-      <user-claim-expertise-dialog
-        :is-shown="isClaimExpertiseDialogShown"
-        @close="closeClaimExpertiseDialog"
-      />
-      <!-- </v-card> -->
-    </v-navigation-drawer>
-  </portal>
+  </div>
 
 </template>
 
@@ -184,6 +163,7 @@
   import * as bankCardsService from '../../../utils/bankCard';
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -193,7 +173,11 @@
   export default {
     name: 'UserDetailsSidebar',
 
-    components: { EciMetricsWidget, UserClaimExpertiseDialog },
+    components: {
+      DBlock,
+      EciMetricsWidget,
+      UserClaimExpertiseDialog
+    },
 
     data() {
       return {

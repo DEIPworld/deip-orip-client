@@ -12,7 +12,7 @@
     <d-block
       v-if="!singleChoice"
       title="Assessment criteria"
-      sm
+      widget
     >
       <d-list-expand :active="assessmentCriterias.length > 4">
         <template #default="{expanded}">

@@ -1,5 +1,5 @@
 <template>
-  <layout-section>
+  <d-layout-section>
     <v-row class="full-height">
       <v-col cols="auto" v-if="isInProgress">
         <v-card class="full-height elevation-0">
@@ -239,7 +239,7 @@
       </v-card>
     </v-dialog>
     <!-- END Proposal dialog section -->
-  </layout-section>
+  </d-layout-section>
 </template>
 
 <script>
@@ -252,7 +252,7 @@
   import { SearchService } from '@deip/search-service';
 
   import { researchContentTypes, maxTitleLength } from '@/variables';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -261,7 +261,7 @@
 
   export default {
     name: 'ResearchContentDetails',
-    components: { LayoutSection },
+    components: { DLayoutSection },
     data() {
       return {
         isSavingDraft: false,

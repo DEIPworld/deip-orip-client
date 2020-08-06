@@ -1,18 +1,23 @@
 <template>
-  <layout-section v-if="$ready" :sidebar-cols="$route.fullPath.includes('account') ? {md: 4} : {}">
+  <d-layout-section v-if="$ready">
     <user-details-body />
-    <user-details-sidebar />
-  </layout-section>
+
+    <template #sidebar>
+      <user-details-sidebar />
+    </template>
+  </d-layout-section>
 </template>
 
 <script>
   import UserDetailsSidebar from '@/components/UserDetails/components/UserDetailsSidebar';
   import UserDetailsBody from '@/components/UserDetails/components/UserDetailsBody';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'UserDetails',
     components: {
+      DLayoutSection,
       LayoutSection,
       UserDetailsBody,
       UserDetailsSidebar

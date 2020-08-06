@@ -3,7 +3,6 @@
     app
     clipped
     permanent
-    width="280"
   >
     <!-- <template>
       <v-list nav dense>

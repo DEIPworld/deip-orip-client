@@ -1,21 +1,21 @@
 <template>
-  <layout-section>
+  <d-layout-section>
     <claim-user-expertise-list-body />
 
     <template #sidebar>
       <claim-user-expertise-list-sidebar />
     </template>
-  </layout-section>
+  </d-layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'ClaimUserExpertiseList',
-    components: { LayoutSection },
+    components: { DLayoutSection },
     created() {},
 
     methods: {}

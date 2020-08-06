@@ -1,10 +1,10 @@
 <template>
-  <div v-if="researchComponents.length" class="mt-6 mb-6">
+  <div v-if="researchComponents.length">
     <d-block
       v-for="(item, index) in researchComponents"
       :key="'research-component-' + index"
       :title="item.component.readinessLevelShortTitle"
-      sm
+      widget
     >
       <v-chip-group
         v-model="internalValue"

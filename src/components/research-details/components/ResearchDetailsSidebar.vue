@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-block sm>
+    <d-block widget>
       <template #title>
         <router-link
           class="research-group-link"
@@ -120,8 +120,7 @@
 
     </d-block>
 
-    <v-divider class="my-6" />
-
+    <v-divider />
     <eci-metrics-widget
       :research-id="research.external_id"
       :expertise-data="eciList"
@@ -129,9 +128,8 @@
       :enable-history="false"
     />
 
-    <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" class="my-6" />
-
-    <v-sheet v-if="researchRef.tenantCategory && researchRef.tenantCategory.text">
+    <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" />
+    <d-block v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" widget>
       <div class="display-flex">
         <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
           <span class="white--text font-weight-medium">C</span>
@@ -140,14 +138,12 @@
           {{ researchRef.tenantCategory.text }}
         </div>
       </div>
-    </v-sheet>
+    </d-block>
 
-    <v-divider class="my-6" />
-
-
-    <v-sheet>
+    <v-divider />
+    <d-block widget>
       <div v-for="(item, i) in researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`">
-        <div v-if="item.type == 'stepper'" class="mb-2">
+        <div v-if="item.type === 'stepper'" :class="{'mb-2': i + 1 < researchRef.tenantCriteriasReadingList.length}">
           <div class="display-flex">
             <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
               <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
@@ -161,10 +157,10 @@
           </div>
         </div>
       </div>
-    </v-sheet>
+    </d-block>
 
-    <v-sheet v-if="isResearchGroupMember">
-      <v-divider class="my-6" />
+    <v-divider v-if="isResearchGroupMember" />
+    <d-block v-if="isResearchGroupMember" widget>
 
       <div v-if="research.is_private" class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
@@ -178,21 +174,15 @@
         </v-icon>
         Public project
       </div>
-    </v-sheet>
+    </d-block>
 
-    <v-sheet v-if="researchRef.partners.length">
-      <v-divider class="my-6" />
-
+    <v-divider v-if="researchRef.partners.length" />
+    <d-block v-if="researchRef.partners.length" widget >
       <research-partners is-read-only :partners="researchRef.partners" />
-    </v-sheet>
+    </d-block>
 
-    <v-divider class="my-6" />
-
-    <v-sheet v-if="contentList.length">
-      <div class="text-h6">
-        Expert Review
-      </div>
-
+    <v-divider v-if="contentList.length" />
+    <d-block v-if="contentList.length" widget title="Expert Review">
       <v-dialog
         v-model="requestExpertReviewDialog.isShown"
         persistent
@@ -270,7 +260,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-sheet>
+    </d-block>
   </div>
 </template>
 

@@ -1,13 +1,16 @@
 <template>
   <d-block>
+
     <template #title>
       <slot name="title">
         Expertise Contribution Index
       </slot>
     </template>
+
     <template #subtitle>
       <slot name="subtitle" />
     </template>
+
     <template #titleAddon>
       <slot name="titleAddon" />
     </template>
@@ -16,7 +19,6 @@
 
     <eci-metrics-history-chart :data="data" />
     <eci-metrics-history-table :data="data" />
-
   </d-block>
 </template>
 

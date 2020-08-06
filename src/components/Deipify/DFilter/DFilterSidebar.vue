@@ -30,7 +30,7 @@
         :value="isActive"
       >
         <template #prepend>
-          <v-sheet ref="header" class="pa-4" color="grey lighten-4">
+          <v-sheet ref="header" class="pa-4">
             <v-row class="justify-space-between" no-gutters>
               <div class="text-h6">
                 Filter
@@ -40,10 +40,11 @@
               </v-btn>
             </v-row>
           </v-sheet>
+          <v-divider />
         </template>
 
         <v-sheet max-height="100%" class="d-flex flex-column">
-          <div data-x ref="content" class="pa-4 spacer" style="overflow: auto">
+          <div data-x ref="content" class="spacer" style="overflow: auto">
             <slot />
           </div>
 

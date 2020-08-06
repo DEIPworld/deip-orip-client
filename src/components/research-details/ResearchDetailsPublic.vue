@@ -1,7 +1,7 @@
 <template>
   <div>
     <research-details-header />
-    <layout-section>
+    <d-layout-section>
       <research-timeline :timeline="timeline" />
       <research-details-materials :is-details-available="false" />
 
@@ -82,7 +82,7 @@
           </div>
         </div>
       </template>
-    </layout-section>
+    </d-layout-section>
   </div>
 </template>
 
@@ -95,7 +95,7 @@
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
   import ResearchTimeline from './components/ResearchTimeline';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   const researchService = ResearchService.getInstance();
 
@@ -103,7 +103,7 @@
     name: 'ResearchDetailsPublic',
 
     components: {
-      LayoutSection,
+      DLayoutSection,
       ResearchDetailsMaterials,
       ResearchDetailsHeader,
       ResearchTimeline

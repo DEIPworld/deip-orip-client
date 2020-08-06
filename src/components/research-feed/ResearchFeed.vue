@@ -28,10 +28,9 @@
       </div>
     </layout-header>
 
-    <layout-section>
+    <d-layout-section>
       <research-list :items="researchFeed" namespace="feed" with-filter />
-    </layout-section>
-
+    </d-layout-section>
   </app-layout>
 </template>
 
@@ -40,14 +39,14 @@
 
   import LayoutHeader from '@/components/layout/components/LayoutHeader';
   import AppLayout from '@/components/layout/components/Layout';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
   import ResearchList from '@/components/ResearchList/ResearchList';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'ResearchFeed',
     components: {
+      DLayoutSection,
       ResearchList,
-      LayoutSection,
       AppLayout,
       LayoutHeader
     },

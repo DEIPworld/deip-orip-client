@@ -88,3 +88,14 @@
     }
   }
 }
+
+.v-divider {
+  &.dotted {
+    border: 0;
+    height: 1px;
+    max-height: 1px;
+    background-image: linear-gradient(to right, rgba(#1a1b22, .6) 33%, transparent 0%);
+    background-size: 3px 1px;
+    background-repeat: repeat-x;
+  }
+}

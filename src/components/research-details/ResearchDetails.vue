@@ -6,13 +6,13 @@
       <research-details-actions v-if="!isResearchGroupMember" />
     </layout-toolbar>
 
-    <layout-section>
+    <d-layout-section>
       <research-details-body />
 
       <template #sidebar>
         <research-details-sidebar />
       </template>
-    </layout-section>
+    </d-layout-section>
 
 
   </div>
@@ -26,12 +26,12 @@
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsSidebar from '@/components/research-details/components/ResearchDetailsSidebar';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'ResearchDetails',
     components: {
-      LayoutSection,
+      DLayoutSection,
       LayoutToolbar,
       ResearchDetailsSidebar,
       ResearchDetailsHeader,

@@ -1,20 +1,20 @@
 <template>
-  <layout-section>
+  <d-layout-section>
     <research-content-add-review-body />
 
     <template #sidebar>
       <research-content-add-review-sidebar />
     </template>
 
-  </layout-section>
+  </d-layout-section>
 </template>
 
 <script>
-  import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'ResearchContentAddReview',
-    components: { LayoutSection },
+    components: { DLayoutSection },
     data() {
       return {};
     },
