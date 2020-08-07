@@ -1,12 +1,14 @@
 <template>
   <d-block v-if="$ready" title="Growth rate overview">
     <d-filter-block
-      v-model="filter"
+      v-model="filterModel"
+      :reset-model="resetFilterModel"
       :loading="loading"
       @apply="updateChartData()"
+      @reset="updateChartData()"
     >
       <v-select
-        v-model="filter.discipline"
+        v-model="filterModel.discipline"
         outlined
         hide-details
         :items="[{label: 'All', external_id: ''}, ...disciplines]"
@@ -16,7 +18,7 @@
       />
 
       <d-input-date
-        v-model="filter.date"
+        v-model="filterModel.date"
         label="Period"
         :picker-props="{
           min: moment('2020-01-01').format('YYYY-MM-DD'),
@@ -58,6 +60,12 @@
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
+  const defaultFilterModel = () => ({
+    date: [],
+    step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
+    discipline: ''
+  });
+
   export default {
     name: 'DisciplinesGrowthRate',
     components: {
@@ -70,11 +78,8 @@
       return {
         chartData: [],
 
-        filter: {
-          date: [],
-          step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
-          discipline: ''
-        },
+        resetFilterModel: defaultFilterModel(),
+        filterModel: defaultFilterModel(),
 
         loading: true
       };
@@ -110,10 +115,10 @@
       updateChartData() {
         this.loading = true;
 
-        const fromDate = this.dateISO(this.filter.date[0]);
-        const toDate = this.dateISO(this.filter.date[1]);
+        const fromDate = this.dateISO(this.filterModel.date[0]);
+        const toDate = this.dateISO(this.filterModel.date[1]);
 
-        const { step, discipline } = this.filter;
+        const { step, discipline } = this.filterModel;
 
         return this.$store.dispatch('disciplinesGrowthRate/get', {
           from: fromDate,
@@ -125,8 +130,8 @@
             const dataTable = [];
 
             this.$store.getters['disciplinesGrowthRate/list']
-              .filter((it) => (this.filter.discipline
-                ? it.external_id === this.filter.discipline
+              .filter((it) => (this.filterModel.discipline
+                ? it.external_id === this.filterModel.discipline
                 : true))
               .forEach((item, i) => {
                 item.history.forEach((h, j) => {
@@ -148,8 +153,8 @@
                 [
                   'Date',
                   ...this.disciplines
-                    .filter((item) => (this.filter.discipline
-                      ? item.external_id === this.filter.discipline
+                    .filter((item) => (this.filterModel.discipline
+                      ? item.external_id === this.filterModel.discipline
                       : true))
                     .map((item) => item.label)
                 ],

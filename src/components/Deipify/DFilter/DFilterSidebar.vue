@@ -53,6 +53,7 @@
           <div ref="actions" class="pa-4 text-right">
             <slot name="actions">
               <v-btn
+                v-if="resetVisible"
                 text
                 color="primary"
                 small
@@ -92,8 +93,6 @@
         bottomDivider: false
       };
     },
-
-    computed: {},
 
     created() {
       this.$emit('apply');

@@ -2,6 +2,13 @@ import { componentStoreFactory } from '@/mixins/registerStore';
 import { eciStore } from '@/components/EciMetrics/store';
 import { mapState } from 'vuex';
 
+export const defaultFilterModel = () => ({
+  discipline: '',
+  date: [],
+  contribution: '',
+  criteria: ''
+});
+
 export const EciMetricsMixin = {
   mixins: [componentStoreFactory(eciStore)],
 
@@ -34,12 +41,8 @@ export const EciMetricsMixin = {
 
   data() {
     return {
-      filterModel: {
-        discipline: '',
-        date: [],
-        contribution: '',
-        criteria: ''
-      },
+      resetFilterModel: defaultFilterModel(),
+      filterModel: defaultFilterModel(),
 
       loading: true
     };

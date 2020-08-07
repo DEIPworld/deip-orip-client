@@ -18,54 +18,34 @@
         >
           Apply
         </v-btn>
+        <v-btn
+          v-if="resetVisible"
+          text
+          color="primary"
+          :disabled="loading"
+          @click="onReset()"
+        >
+          Clear
+        </v-btn>
       </slot>
     </div>
   </v-sheet>
 </template>
 
 <script>
-  import Proxyable from 'vuetify/lib/mixins/proxyable';
   import kindOf from 'kind-of';
+  import { Filterable } from '@/components/Deipify/DFilter/filterable';
 
   export default {
     name: 'DFilterBlock',
 
-    mixins: [Proxyable],
-
-    props: {
-      loading: {
-        type: Boolean,
-        default: false
-      }
-    },
-
-    data() {
-      return {
-        updatedValue: undefined
-      };
-    },
-
-    computed: {
-      filterChanged() {
-        return JSON.stringify(this.updatedValue) !== JSON.stringify(this.internalValue);
-      },
-
-      fieldContainerStyle() {
-        return {};
-      }
-    },
+    mixins: [Filterable],
 
     created() {
       this.equaliseModels();
     },
 
     methods: {
-      onApply() {
-        this.$emit('apply');
-
-        this.equaliseModels();
-      },
-
       recalc() {
         const $host = this.$refs.host.$el;
         const $fields = $host.querySelectorAll('.v-input');

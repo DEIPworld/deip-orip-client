@@ -52,17 +52,20 @@
       <disciplines-growth-rate class="mt-12" />
 
       <d-block
+        class="mt-12"
         title="Distribution impact"
         subtitle="Updated today"
       >
         <d-filter-block
           v-model="distributionDiscipline"
+          :reset-model="resetDistributionDiscipline"
           @apply="updateDistributionChartData()"
+          @reset="updateDistributionChartData()"
         >
           <v-select
             v-model="distributionDiscipline"
             outlined
-            :items="[{label: 'All', external_id: 'all'}, ...disciplines]"
+            :items="[{label: 'All', external_id: ''}, ...disciplines]"
             item-text="label"
             item-value="external_id"
             label="Domain"
@@ -85,7 +88,7 @@
 
       </d-block>
 
-      <eci-metrics>
+      <eci-metrics class="mt-12">
         <template #historyTitle>Expertise Contribution Index detailed overview</template>
       </eci-metrics>
 
@@ -127,7 +130,8 @@
     },
     data() {
       return {
-        distributionDiscipline: 'all',
+        resetDistributionDiscipline: false,
+        distributionDiscipline: false,
 
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
@@ -263,7 +267,7 @@
       },
       updateDistributionChartData() {
         let dataTable = [];
-        if (this.distributionDiscipline === 'all') {
+        if (!this.distributionDiscipline) {
           this.disciplinesExpertiseStats.forEach((item) => {
             item.assessment_criterias.forEach((val, i) => {
               dataTable[i] = [

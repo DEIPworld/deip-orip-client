@@ -1,8 +1,10 @@
 <template>
   <d-filter-block
     v-model="internalValue"
+    :reset-model="resetModel"
     :loading="loading"
     @apply="$emit('apply', internalValue)"
+    @reset="$emit('apply', internalValue)"
   >
     <v-select
       v-model="internalValue.discipline"
@@ -44,6 +46,7 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
+  import { defaultFilterModel } from './EciMetricsMixin';
 
   export default {
     name: 'EciMetricsFilter',
@@ -70,6 +73,11 @@
         type: [Array, Boolean],
         default: () => ([])
       }
+    },
+    data() {
+      return {
+        resetModel: defaultFilterModel()
+      };
     }
   };
 </script>

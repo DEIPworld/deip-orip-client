@@ -8,12 +8,17 @@ export const Filterable = {
     loading: {
       type: Boolean,
       default: false
+    },
+    resetModel: {
+      type: [Object, Array, String, Number, Boolean],
+      default: () => ({})
     }
   },
 
   data() {
     return {
       updatedValue: undefined,
+      resetVisible: false,
       filterCount: 0
     };
   },
@@ -25,25 +30,24 @@ export const Filterable = {
   },
 
   created() {
-    this.equaliseModels();
-    this.setCount()
+    this.process();
   },
 
   methods: {
     onApply() {
       this.$emit('apply');
 
-      this.equaliseModels();
-      this.setCount();
+      this.process();
     },
 
     onReset() {
+      this.internalValue = this.resetModel;
+
       this.$emit('reset');
 
       this.$nextTick(() => {
-        this.equaliseModels();
-        this.setCount();
-      })
+        this.process();
+      });
     },
 
     setCount() {
@@ -53,15 +57,15 @@ export const Filterable = {
         const type = kindOf(this.internalValue[key]);
 
         if ((type === 'string' || type === 'number') && this.internalValue[key]) {
-          count++;
+          count += 1;
         }
 
         if (type === 'array' && this.internalValue[key].length) {
-          count++;
+          count += 1;
         }
 
         if (type === 'object' && this.internalValue[key]) {
-          count++;
+          count += 1;
         }
       }
 
@@ -76,6 +80,16 @@ export const Filterable = {
       } else {
         this.updatedValue = this.internalValue;
       }
+    },
+
+    setReset() {
+      this.resetVisible = JSON.stringify(this.resetModel) !== JSON.stringify(this.internalValue);
+    },
+
+    process() {
+      this.equaliseModels();
+      this.setCount();
+      this.setReset();
     }
   }
 };

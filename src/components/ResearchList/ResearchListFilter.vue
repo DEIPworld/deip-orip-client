@@ -1,6 +1,7 @@
 <template>
   <d-filter-sidebar
     v-model="filterModel"
+    :reset-model="resetFilterModel"
     @apply="applyFilter"
     @reset="resetFilter"
   >
@@ -49,6 +50,7 @@
 
     data() {
       return {
+        resetFilterModel: defaultFilter(),
         filterModel: defaultFilter()
       };
     },
