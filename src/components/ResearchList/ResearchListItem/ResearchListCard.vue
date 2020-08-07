@@ -55,11 +55,11 @@
 
 <script>
   import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
-  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   export default {
     name: 'ResearchListCard',
-    components: { DAvatared },
+    components: { DBoxItem },
     mixins: [abstractResearchItem]
   };
 </script>

@@ -1,19 +1,20 @@
 <template>
-  <div :class="$style.host">
+  <d-grid>
     <research-list-card
       v-for="item in items"
       :key="'list-item-' + item.external_id"
       :research="item"
     />
-  </div>
+  </d-grid>
 </template>
 
 <script>
   import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
+  import DGrid from '@/components/Deipify/DGrid/DGrid';
 
   export default {
     name: 'ResearchListGrid',
-    components: { ResearchListCard },
+    components: { DGrid, ResearchListCard },
     props: {
       items: {
         type: Array,
@@ -22,11 +23,3 @@
     }
   };
 </script>
-
-<style module lang="scss">
-  .host {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    grid-gap: 1.5rem;
-  }
-</style>

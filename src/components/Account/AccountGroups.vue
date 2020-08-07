@@ -8,28 +8,30 @@
         <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
           <v-card
             outlined
-            class="full-height d-flex"
             :to="{
               name: 'ResearchGroupDetails',
               params: {
                 research_group_permlink: encodeURIComponent(group.permlink) }
             }"
           >
-            <div class="py-4 px-6 ma-auto text-body-2 flex-grow-1 d-flex justify-space-between">
-              <d-avatared
-                :src="group.external_id | researchGroupLogoSrc(32, 32)"
+            <div class="pa-4">
+              <d-box-item
+                :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
                 :size="32"
+                :title="group.name"
               >
-                <div class="text-body-2">
-                  {{ group.name }}
-                </div>
-              </d-avatared>
-              <div class="flex-shrink-0 align-self-center">
-                <v-icon>
-                  group
-                </v-icon>
-                {{ group.shares.length }}
-              </div>
+                <template #action>
+                  <v-icon>
+                    group
+                  </v-icon>
+                </template>
+                <template #actionText>
+                  <div class="text-body-2">
+                    {{ group.shares.length }}
+                  </div>
+                </template>
+
+              </d-box-item>
             </div>
           </v-card>
         </v-col>
@@ -42,12 +44,12 @@
   import { mapGetters } from 'vuex';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
 
   export default {
     name: 'AccountGroups',
-    components: { LayoutSection, DBlock, DAvatared },
+    components: { LayoutSection, DBlock, DBoxItem },
     computed: {
       ...mapGetters({
         groups: 'userDetails/groups'

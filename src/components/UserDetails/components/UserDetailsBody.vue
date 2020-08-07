@@ -52,14 +52,14 @@
               }"
             >
               <div class="py-4 px-6 ma-auto text-body-2 flex-grow-1 d-flex justify-space-between">
-                <d-avatared
-                  :src="group.external_id | researchGroupLogoSrc(32, 32)"
+                <d-box-item
+                  :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
                   :size="32"
                 >
                   <div class="text-body-2">
                     {{ group.name }}
                   </div>
-                </d-avatared>
+                </d-box-item>
                 <div class="flex-shrink-0 align-self-center">
                   <v-icon>
                     group
@@ -83,7 +83,7 @@
   import UserDetailsEducation from '@/components/UserDetails/components/UserDetailsEducation';
   import UserDetailsEmployment from '@/components/UserDetails/components/UserDetailsEmployment';
   import UserDetailsProfileInfo from '@/components/UserDetails/components/UserDetailsProfileInfo';
-  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   export default {
     name: 'UserDetailsBody',
@@ -93,7 +93,7 @@
       UserDetailsEducation,
       UserDetailsEmployment,
       UserDetailsProfileInfo,
-      DAvatared
+      DBoxItem
     },
     computed: {
       ...mapGetters({

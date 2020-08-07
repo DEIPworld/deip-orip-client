@@ -5,13 +5,14 @@
   >
 
     <td width="33%">
-      <d-avatared
-        :src="research.external_id | researchBackgroundSrc(40 * 2,40 * 2)"
-        :size="40"
-        :tooltip="research.title"
-      >
-        <div class="text-body-2 font-weight-medium">{{ research.title }}</div>
-      </d-avatared>
+      <d-simple-tooltip :tooltip="research.title">
+        <d-box-item
+          :avatar="research.external_id | researchBackgroundSrc(40 * 2,40 * 2)"
+          :size="40"
+        >
+          <div class="text-body-2 font-weight-medium">{{ research.title }}</div>
+        </d-box-item>
+      </d-simple-tooltip>
     </td>
 
     <td>
@@ -53,11 +54,12 @@
 <script>
   import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import DAvatared from '@/components/Deipify/DAvatared/DAvatared';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   export default {
     name: 'ResearchListRow',
-    components: { DAvatared, DMetaItem },
+    components: { DSimpleTooltip, DBoxItem, DMetaItem },
     mixins: [abstractResearchItem]
   };
 </script>
