@@ -9,7 +9,7 @@
     <div class="spacer">
       <h6 v-if="title" class="text-h6" v-text="title" />
       <div v-if="subTitle" class="text-body-2" v-text="subTitle" />
-      <div v-if="caption" class="text-body-2" v-text="caption" />
+      <div v-if="caption" class="text-caption" v-text="caption" />
       <slot name="default" />
     </div>
 

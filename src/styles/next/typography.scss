@@ -3,6 +3,10 @@
 
 .link {
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .text-decoration-underline-dotted {

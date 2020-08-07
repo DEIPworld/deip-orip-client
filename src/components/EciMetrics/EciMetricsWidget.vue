@@ -12,7 +12,7 @@
           {{ item.label }}
         </v-col>
         <v-divider class="dotted align-self-end mx-1" style="margin-bottom: 2px;" />
-<!--        <v-spacer style="border-bottom: 1px dotted currentColor;margin-bottom: 2px;" class="grey&#45;&#45;text text&#45;&#45;lighten-1 mx-1"></v-spacer>-->
+        <!--        <v-spacer style="border-bottom: 1px dotted currentColor;margin-bottom: 2px;" class="grey&#45;&#45;text text&#45;&#45;lighten-1 mx-1"></v-spacer>-->
         <v-col
           class="text-caption font-weight-medium"
           :class="item.classList"
@@ -24,40 +24,43 @@
     </template>
 
     <template v-if="Object.keys(expertiseData).length">
-      <v-card outlined class="mt-4">
-        <v-list class="py-0" dense>
-          <template v-for="(item, i) in expertiseData">
-            <v-list-item :key="`edi-${i}`">
-              <v-list-item-content class="text-caption font-weight-medium py-3">
-                <v-row no-gutters class="mb-1">
-                  <v-col>
-                    {{ item.discipline_name }}
-                  </v-col>
-                  <v-col cols="auto">
-                    ECI {{ (item.eci || item.value ) | checkVal | commaNumber }}
-                  </v-col>
-                </v-row>
-                <v-row no-gutters>
+      <v-list
+        class="pa-0 mt-4"
+        dense
+        outlined
+        rounded
+      >
+        <template v-for="(item, i) in expertiseData">
+          <v-list-item :key="`edi-${i}`" style="min-height: 0">
+            <v-list-item-content class="text-caption font-weight-medium py-3">
+              <v-row no-gutters :class="{'mb-1': !!(item.percentile_rank || item.growth_rate)}">
+                <v-col>
+                  {{ item.discipline_name }}
+                </v-col>
+                <v-col cols="auto">
+                  ECI {{ (item.eci || item.value ) | checkVal | commaNumber }}
+                </v-col>
+              </v-row>
+              <v-row no-gutters>
 
-                  <v-col>
-                    <d-simple-tooltip v-if="item.percentile_rank" tooltip="Percentile rank">
-                      {{ item.percentile_rank }}
-                    </d-simple-tooltip>
-                  </v-col>
+                <v-col>
+                  <d-simple-tooltip v-if="item.percentile_rank" tooltip="Percentile rank">
+                    {{ item.percentile_rank }}
+                  </d-simple-tooltip>
+                </v-col>
 
-                  <v-col cols="auto" :class="item.growth_rate | numDirClass">
-                    <d-simple-tooltip v-if="item.growth_rate" tooltip="Growth rate">
-                      {{ item.growth_rate | numDir | checkVal }}
-                    </d-simple-tooltip>
-                  </v-col>
+                <v-col cols="auto" :class="item.growth_rate | numDirClass">
+                  <d-simple-tooltip v-if="item.growth_rate" tooltip="Growth rate">
+                    {{ item.growth_rate | numDir | checkVal }}
+                  </d-simple-tooltip>
+                </v-col>
 
-                </v-row>
-              </v-list-item-content>
-            </v-list-item>
-            <v-divider v-if="i + 1 < expertiseData.length" :key="`edd-${i}`" />
-          </template>
-        </v-list>
-      </v-card>
+              </v-row>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider v-if="i + 1 < expertiseData.length" :key="`edd-${i}`" />
+        </template>
+      </v-list>
     </template>
 
     <!-- TODO: temp solution-->
@@ -82,7 +85,10 @@
   export default {
     name: 'EciMetricsWidget',
 
-    components: { DSimpleTooltip, DBlock },
+    components: {
+      DSimpleTooltip,
+      DBlock
+    },
 
     mixins: [
       EciMetricsMixin

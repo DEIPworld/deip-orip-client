@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+    :width="280"
     app
     clipped
     permanent

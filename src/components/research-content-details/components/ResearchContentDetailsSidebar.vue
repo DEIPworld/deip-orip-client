@@ -1,27 +1,31 @@
 <template>
   <div>
-    <router-link
-      class="a title"
-      :to="{ name: 'ResearchDetails', params: {
-        research_group_permlink: encodeURIComponent(research.research_group.permlink),
-        research_permlink: encodeURIComponent(research.permlink)
-      }}"
-    >
-      {{ research.title }}
-    </router-link>
+    <d-block widget>
+      <router-link
+        class="title link"
+        :to="{
+          name: 'ResearchDetails',
+          params: {
+            research_group_permlink: encodeURIComponent(research.research_group.permlink),
+            research_permlink: encodeURIComponent(research.permlink)
+          }
+        }"
+      >
+        {{ research.title }}
+      </router-link>
+    </d-block>
 
-    <!-- ### START Draft Actions Section ### -->
-    <v-sheet v-if="!isPublished && isResearchGroupMember">
-      <div v-if="isProposed || isUnlockActionAvailable" class="sidebar-fullwidth">
-        <v-divider class="my-6" />
-      </div>
+    <v-divider v-if="!isPublished && isResearchGroupMember" />
+    <d-block v-if="!isPublished && isResearchGroupMember" widget>
       <div v-if="isProposed" class="text-body-1">
         Draft is
         <router-link
-          class="a orange--text"
+          class="link orange--text"
           :to="{
             name: 'ResearchGroupDetails',
-            params: { research_group_permlink: encodeURIComponent(research.research_group.permlink) },
+            params: {
+              research_group_permlink: encodeURIComponent(research.research_group.permlink)
+            },
             hash: '#proposals'
           }"
         >
@@ -29,6 +33,7 @@
         </router-link>
         as research content and locked for editing
       </div>
+
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="text-body-1 pb-4">
           The proposal is expired. Unlock the material for a new proposal or removal
@@ -37,10 +42,9 @@
           Unlock Draft
         </v-btn>
       </div>
-    </v-sheet>
-    <!-- ### END Draft Actions Section ### -->
+    </d-block>
 
-    <!-- ### START Research Content ECI Section ### -->
+    <v-divider />
     <eci-metrics-widget
       v-if="$route.params.content_permlink !== '!draft'"
       :content-id="content.external_id"
@@ -49,155 +53,138 @@
       :enable-history="false"
     />
 
-    <!-- ### END Research Content ECI Section ### -->
-
-    <v-divider v-if="$route.params.content_permlink !== '!draft'" class="my-6" />
-
-
-    <!-- <v-divider class="my-6" />
-    <div class="text-h6 display-inline-block">
-      Expert Review:
-    </div>
-    <div class="text-subtitle-1 bold mb-6 display-inline-block ml-2">
-      <span class="green--text text--darken-2">{{ positiveReviewsCount }}</span>
-      <span> / </span>
-      <span class="red--text text--darken-2">{{ negativeReviewsCount }}</span>
-    </div> -->
-
-    <v-dialog
-      v-if="isPublished"
-      v-model="requestExpertReviewDialog.isShown"
-      persistent
-      max-width="600px"
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          block
-          color="primary"
-          dark
-          v-on="on"
-        >
-          Request Review
-        </v-btn>
-      </template>
-      <v-card class="pa-6">
-        <v-card-title>
-          <div class="text-h5">
-            Request review from an Expert
-          </div>
-          <div class="right-top-angle">
-            <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
-              <v-icon color="black">
-                close
-              </v-icon>
-            </v-btn>
-          </div>
-        </v-card-title>
-        <v-card-text>
-          <user-autocomplete-picker
-            label="Find an expert to request a review"
-            :users="experts"
-            :is-disabled="requestExpertReviewDialog.isRequestingReview"
-            :display-limit="8"
-            @onSelectUser="selectExpertForReview"
-          />
-        </v-card-text>
-        <v-card-actions class="px-6">
-          <v-row>
-            <v-col cols="12" class="py-2">
-              <v-btn
-                :loading="requestExpertReviewDialog.isRequestingReview"
-                :disabled="isRequestingReviewDisabled"
-                block
-                color="primary"
-                @click="requestReview()"
-              >
-                Request
-              </v-btn>
-            </v-col>
-            <v-col cols="12" class="py-2">
-              <v-btn
-                color="primary"
-                text
-                block
-                @click="requestExpertReviewDialog.isShown = false"
-              >
-                Cancel
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- ### START Research Content Authors Section ### -->
-    <v-divider class="my-6" />
-
-    <div class="text-h6 mb-6">
-      Authors
-    </div>
-
-    <div v-if="isPublished">
-      <div
-        v-for="(author, index) in contentAuthorsList"
-        :key="`author-${index}`"
-        :class="{'pb-1' : index == 0, 'py-1': index != 0}"
+<!--    <v-divider v-if="!isPublished && isResearchGroupMember" />-->
+    <v-divider />
+    <d-block widget>
+      <v-dialog
+        v-if="isPublished"
+        v-model="requestExpertReviewDialog.isShown"
+        persistent
+        max-width="600px"
       >
-        <platform-avatar
-          :user="author"
-          :size="40"
-          link-to-profile
-          link-to-profile-class="pl-2"
-        />
-      </div>
-    </div>
-
-    <div v-else>
-      <div
-        v-for="(member, index) in draftAuthorsList"
-        :key="`author-${index}`"
-        align-baseline
-        :class="{'pb-1' : index == 0, 'py-1': index != 0}"
-      >
-        <platform-avatar
-          :user="member"
-          :size="40"
-          link-to-profile
-          link-to-profile-class="pl-2"
-          class="display-inline-block mr-2"
-        />
-
-        <div v-if="isInProgress" class="author-checkbox display-inline-block">
-          <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
-              TODO: create a custom checkbox with the same styles as v-checkbox has -->
-          <input
-            id="checkbox"
-            type="checkbox"
-            :disabled="draftAuthorGuard(member)"
-            :checked="isDraftAuthor(member)"
-            @input="setDraftAuthor($event, member)"
+        <template v-slot:activator="{ on }">
+          <v-btn
+            block
+            color="primary"
+            dark
+            v-on="on"
           >
+            Request Review
+          </v-btn>
+        </template>
+        <v-card class="pa-6">
+          <v-card-title>
+            <div class="text-h5">
+              Request review from an Expert
+            </div>
+            <div class="right-top-angle">
+              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
+                <v-icon color="black">
+                  close
+                </v-icon>
+              </v-btn>
+            </div>
+          </v-card-title>
+          <v-card-text>
+            <user-autocomplete-picker
+              label="Find an expert to request a review"
+              :users="experts"
+              :is-disabled="requestExpertReviewDialog.isRequestingReview"
+              :display-limit="8"
+              @onSelectUser="selectExpertForReview"
+            />
+          </v-card-text>
+          <v-card-actions class="px-6">
+            <v-row>
+              <v-col cols="12" class="py-2">
+                <v-btn
+                  :loading="requestExpertReviewDialog.isRequestingReview"
+                  :disabled="isRequestingReviewDisabled"
+                  block
+                  color="primary"
+                  @click="requestReview()"
+                >
+                  Request
+                </v-btn>
+              </v-col>
+              <v-col cols="12" class="py-2">
+                <v-btn
+                  color="primary"
+                  text
+                  block
+                  @click="requestExpertReviewDialog.isShown = false"
+                >
+                  Cancel
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </d-block>
+
+
+    <v-divider />
+    <d-block widget title="Authors">
+      <template v-if="isPublished">
+        <div
+          v-for="(author, index) in contentAuthorsList"
+          :key="`author-${index}`"
+          :class="{'pb-1' : index == 0, 'py-1': index != 0}"
+        >
+          <platform-avatar
+            :user="author"
+            :size="40"
+            link-to-profile
+            link-to-profile-class="pl-2"
+          />
         </div>
-      </div>
-    </div>
-    <!-- ### END Research Content Authors Section ### -->
+      </template>
+      <template v-else>
+        <div
+          v-for="(member, index) in draftAuthorsList"
+          :key="`author-${index}`"
+          align-baseline
+          :class="{'pb-1' : index == 0, 'py-1': index != 0}"
+        >
+          <platform-avatar
+            :user="member"
+            :size="40"
+            link-to-profile
+            link-to-profile-class="pl-2"
+            class="display-inline-block mr-2"
+          />
 
-    <!-- ### START Research TOC Section ### -->
-    <div v-if="researchTableOfContent.length">
-      <v-divider class="my-6" />
-
-      <div class="text-h6 mb-6">
-        Project table of content
-      </div>
-
-      <div v-for="(item, index) in researchTableOfContent" :key="index" :class="index === 0 ? '' : 'c-mt-1'">
-        <div class="text-body-2 font-weight-bold">
-          {{ index + 1 }}. {{ item.type }}
+          <div v-if="isInProgress" class="author-checkbox display-inline-block">
+            <!-- v-checkbox depends on v-model binding which doesn't play well with Vuex.
+                TODO: create a custom checkbox with the same styles as v-checkbox has -->
+            <input
+              id="checkbox"
+              type="checkbox"
+              :disabled="draftAuthorGuard(member)"
+              :checked="isDraftAuthor(member)"
+              @input="setDraftAuthor($event, member)"
+            >
+          </div>
         </div>
-        <div class="pl-2">
+      </template>
+
+    </d-block>
+
+    <v-divider v-if="researchTableOfContent.length" />
+    <d-block v-if="researchTableOfContent.length" widget title="Project table of content">
+      <ol class="text-body-2">
+        <li
+          v-for="(item, index) in researchTableOfContent"
+          :key="index"
+          :class="{'pb-2': index + 1 < researchTableOfContent.length}"
+        >
+          <div class="font-weight-bold">
+            {{ item.type }}
+          </div>
           <router-link
             target="_blank"
-            class="a text-body-1"
+            class="a text-body-2"
             :to="{
               name: 'ResearchContentDetails',
               params: {
@@ -209,10 +196,10 @@
           >
             {{ item.title }}
           </router-link>
-        </div>
-      </div>
+        </li>
+      </ol>
 
-      <div v-if="isPublished" class="pt-2">
+      <div v-if="isPublished" class="pt-3 text-body-2">
         <router-link
           class="a font-weight-regular display-flex"
           :to="{
@@ -229,12 +216,10 @@
           References
         </router-link>
       </div>
-    </div>
-    <!-- ### END Research TOC Section ### -->
+    </d-block>
 
-    <!-- ### START Research Content Blockchain Data Section ### -->
-    <div v-if="isPublished" class="py-2">
-      <v-divider class="my-6" />
+    <v-divider v-if="isPublished" />
+    <d-block v-if="isPublished" widget>
       <v-btn
         block
         color="primary"
@@ -249,15 +234,10 @@
       >
         Blockchain Metadata
       </v-btn>
-    </div>
-    <!-- ### END Research Content Blockchain Data Section ### -->
+    </d-block>
 
-
-    <!-- ### START Reward Info Section ### -->
-    <div v-if="!isPublished" class="py-2">
-      <div class="text-subtitle-1 font-weight-bold">
-        Reviews
-      </div>
+    <v-divider v-if="!isPublished" />
+    <d-block v-if="!isPublished" widget title="Reviews">
       <div class="text-body-2 c-mt-2">
         <v-row no-gutters justify="space-between" class="text-body-2 py-1">
           <div>
@@ -269,8 +249,9 @@
           <div>{{ research.review_share }}</div>
         </v-row>
       </div>
-    </div>
-    <!-- ### END Reward Info Section ### -->
+    </d-block>
+
+
   </div>
 </template>
 
@@ -281,6 +262,7 @@
   import { ResearchContentService } from '@deip/research-content-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
@@ -289,6 +271,7 @@
     name: 'ResearchContentDetailsSidebar',
 
     components: {
+      DBlock,
       EciMetricsWidget
     },
 

@@ -80,7 +80,7 @@
       },
       contentClassList() {
         return {
-          'pa-4': this.widget
+          'px-6 py-4': this.widget
         };
       }
     }

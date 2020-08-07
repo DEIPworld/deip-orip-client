@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer app clipped :key="$route.fullPath + '-sidebar'">
+  <v-navigation-drawer
+    :key="$route.fullPath + '-sidebar'"
+    :width="280"
+    app
+    clipped
+  >
     <div class="pa-6">
       <div class="text-h6">
         My Lists

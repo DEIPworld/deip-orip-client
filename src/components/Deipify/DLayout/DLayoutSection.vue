@@ -4,13 +4,16 @@
       <slot />
     </div>
     <v-navigation-drawer
-      v-if="$hasSlot('sidebar')"
+      v-if="$hasSlot('sidebar').children"
       class="flex-shrink-0"
+      :width="280"
       height="auto"
       permanent
       right
     >
-      <slot name="sidebar" />
+      <div class="py-2">
+        <slot name="sidebar" />
+      </div>
     </v-navigation-drawer>
   </div>
 </template>
@@ -20,7 +23,3 @@
     name: 'DLayoutSection'
   };
 </script>
-
-<style scoped>
-
-</style>

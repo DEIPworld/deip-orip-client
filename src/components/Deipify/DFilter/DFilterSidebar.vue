@@ -24,13 +24,14 @@
       <v-navigation-drawer
         ref="sidebar"
         v-mutate="onMutate"
+        :width="280"
         right
         app
         clipped
         :value="isActive"
       >
         <template #prepend>
-          <v-sheet ref="header" class="pa-4">
+          <v-sheet ref="header" class="px-6 py-4">
             <v-row class="justify-space-between" no-gutters>
               <div class="text-h6">
                 Filter
@@ -44,13 +45,18 @@
         </template>
 
         <v-sheet max-height="100%" class="d-flex flex-column">
-          <div data-x ref="content" class="spacer" style="overflow: auto">
+          <div
+            ref="content"
+            data-x
+            class="spacer py-2"
+            style="overflow: auto"
+          >
             <slot />
           </div>
 
           <v-divider v-if="bottomDivider" />
 
-          <div ref="actions" class="pa-4 text-right">
+          <div ref="actions" class="px-6 py-4 text-right">
             <slot name="actions">
               <v-btn
                 v-if="resetVisible"
