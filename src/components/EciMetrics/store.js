@@ -2,13 +2,37 @@ import $ from 'cheerio';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import deepmerge from 'deepmerge';
 
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const STATE = {
   expertiseHistory: [],
-  expertiseStats: []
+  expertiseHistoryByDisciplines: [],
+
+  expertiseStats: {},
+  expertiseStatsByDisciplines: []
+};
+
+const statsMethod = (payload) => {
+  let serviceMethod;
+
+  if (payload.researchId) {
+    serviceMethod = expertiseContributionsService
+      .getResearchExpertiseStats(payload.researchId, payload.filter);
+  } else if (payload.contentId) {
+    serviceMethod = expertiseContributionsService
+      .getResearchContentExpertiseStats(payload.contentId, payload.filter);
+  } else if (payload.accountName) {
+    serviceMethod = expertiseContributionsService
+      .getAccountExpertiseStats(payload.accountName, payload.filter);
+  } else {
+    // serviceMethod = expertiseContributionsService
+    //   .getDisciplineExpertiseStats(payload.filter);
+  }
+
+  return serviceMethod;
 };
 
 const GETTERS = {
@@ -101,7 +125,9 @@ const GETTERS = {
       };
     });
   },
-  expertiseStats: (state) => state.expertiseStats
+
+  expertiseStats: (state) => state.expertiseStats,
+  expertiseStatsByDisciplines: (state) => state.expertiseStatsByDisciplines
 };
 
 const ACTIONS = {
@@ -124,7 +150,6 @@ const ACTIONS = {
     }
 
     return serviceMethod.then((res) => {
-      // console.info('getExpertiseHistory');
       commit('storeExpertiseHistory', res);
     }, (err) => {
       console.error(err);
@@ -132,29 +157,38 @@ const ACTIONS = {
   },
 
   getExpertiseStats({ commit }, payload) {
-    let serviceMethod;
-
-    if (payload.researchId) {
-      serviceMethod = expertiseContributionsService
-        .getResearchExpertiseStats(payload.researchId, payload.filter);
-    } else if (payload.contentId) {
-      serviceMethod = expertiseContributionsService
-        .getResearchContentExpertiseStats(payload.contentId, payload.filter);
-    } else if (payload.accountName) {
-      serviceMethod = expertiseContributionsService
-        .getAccountExpertiseStats(payload.accountName, payload.filter);
-    } else {
-      // serviceMethod = expertiseContributionsService
-      //   .getDisciplineExpertiseStats(payload.filter);
-    }
-
-    return serviceMethod.then((res) => {
-      // console.info('getExpertiseStats');
-      commit('storeExpertiseStats', res);
-    }, (err) => {
-      console.error(err);
-    });
+    return statsMethod(payload)
+      .then((res) => {
+        commit('storeExpertiseStats', res);
+      }, (err) => {
+        console.error(err);
+      });
   },
+
+  getExpertiseStatsByDisciplines({ commit }, payload) {
+    const promises = payload.disciplines.map((d) => {
+      const newPayload = deepmerge(
+        payload,
+        {
+          filter: { discipline: d.external_id }
+        }
+      );
+
+      return statsMethod(newPayload);
+    });
+
+    return Promise.all(promises)
+      .then((res) => {
+        const result = res.map((item, index) => ({
+          discipline: payload.disciplines[index],
+          ...item
+        }));
+
+        commit('storeExpertiseStatsByDisciplines', result);
+      }, (err) => {
+        console.error(err);
+      });
+  }
 
 };
 
@@ -165,6 +199,10 @@ const MUTATIONS = {
 
   storeExpertiseStats(state, payload) {
     state.expertiseStats = payload;
+  },
+
+  storeExpertiseStatsByDisciplines(state, payload) {
+    state.expertiseStatsByDisciplines = payload;
   }
 };
 

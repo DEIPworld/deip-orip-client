@@ -4,7 +4,7 @@
       <slot />
     </div>
     <v-navigation-drawer
-      v-if="$hasSlot('sidebar').children"
+      v-if="$hasSlot('sidebar')"
       class="flex-shrink-0"
       :width="280"
       height="auto"

@@ -48,7 +48,7 @@
     <eci-metrics-widget
       v-if="$route.params.content_permlink !== '!draft'"
       :content-id="content.external_id"
-      :expertise-data="eciList"
+      :disciplines="disciplinesList"
       enable-stats
       :enable-history="false"
     />
@@ -362,15 +362,15 @@
         });
       },
 
-      eciList() {
-        return this.disciplinesList.map((discipline) => {
-          const eciObj = this.content.eci_per_discipline.find((item) => item[0] === discipline.id);
-          return {
-            discipline_name: discipline.name,
-            value: eciObj ? eciObj[1] : 0
-          };
-        });
-      },
+      // eciList() {
+      //   return this.disciplinesList.map((discipline) => {
+      //     const eciObj = this.content.eci_per_discipline.find((item) => item[0] === discipline.id);
+      //     return {
+      //       discipline_name: discipline.name,
+      //       value: eciObj ? eciObj[1] : 0
+      //     };
+      //   });
+      // },
 
       experts() {
         const blackList = [

@@ -123,7 +123,7 @@
     <v-divider />
     <eci-metrics-widget
       :research-id="research.external_id"
-      :expertise-data="eciList"
+      :disciplines="research.disciplines"
       enable-stats
       :enable-history="false"
     />
@@ -365,11 +365,11 @@
           : undefined;
       },
       eciList() {
+
         return this.disciplinesList.map((discipline) => {
           const eciObj = this.research.eci_per_discipline.find(
             (item) => item[0] === discipline.id
           );
-
           return {
             discipline_name: discipline.name,
             value: eciObj ? eciObj[1] : 0

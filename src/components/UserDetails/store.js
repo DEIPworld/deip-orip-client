@@ -179,7 +179,6 @@ const actions = {
     const disciplinesName = [];
     return deipRpc.api.getExpertTokensByAccountNameAsync(username)
       .then((data) => {
-        console.log(data)
         disciplinesName.push(...data.map(({ discipline_name }) => discipline_name));
         return Promise.all(
           data.map((item) => expertiseContributionsService.getAccountExpertiseStats(

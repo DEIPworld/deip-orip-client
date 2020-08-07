@@ -23,6 +23,11 @@ export const EciMetricsMixin = {
       default: true
     },
 
+    disciplines: {
+      type: Array,
+      default: () => ([])
+    },
+
     contentId: {
       type: String,
       default: undefined
@@ -51,7 +56,9 @@ export const EciMetricsMixin = {
   computed: {
     ...mapState({
       expertiseHistory(state, getters) { return getters[`${this.storeNS}/expertiseHistory`]; },
+      expertiseHistoryByDisciplines(state, getters) { return getters[`${this.storeNS}/expertiseHistoryByDisciplines`]; },
       expertiseStats(state, getters) { return getters[`${this.storeNS}/expertiseStats`]; },
+      expertiseStatsByDisciplines(state, getters) { return getters[`${this.storeNS}/expertiseStatsByDisciplines`]; }
     })
   },
 
@@ -76,12 +83,15 @@ export const EciMetricsMixin = {
         filter: this.filterModel,
         ...(this.contentId ? { contentId: this.contentId } : {}),
         ...(this.researchId ? { researchId: this.researchId } : {}),
-        ...(this.accountName ? { accountName: this.accountName } : {})
+        ...(this.accountName ? { accountName: this.accountName } : {}),
+        ...(this.disciplines ? { disciplines: this.disciplines } : {})
       };
 
       return Promise.all([
         ...(this.enableHistory ? [this.$store.dispatch(`${this.storeNS}/getExpertiseHistory`, payload)] : []),
-        ...(this.enableStats ? [this.$store.dispatch(`${this.storeNS}/getExpertiseStats`, payload)] : [])
+
+        ...(this.enableStats ? [this.$store.dispatch(`${this.storeNS}/getExpertiseStats`, payload)] : []),
+        ...(this.enableStats && this.disciplines ? [this.$store.dispatch(`${this.storeNS}/getExpertiseStatsByDisciplines`, payload)] : [])
       ])
         .then(() => {
           this.loading = false;

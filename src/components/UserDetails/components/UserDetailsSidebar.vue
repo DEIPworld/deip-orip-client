@@ -133,10 +133,10 @@
     </d-block>
 
     <v-divider v-if="isOwner && hasReviewRequests" />
-
+    <!--  TODO: need user disciplines  -->
     <eci-metrics-widget
       :account-name="userInfo.account.name"
-      :expertise-data="expertise"
+      :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
       enable-stats
       :enable-history="false"
     />
