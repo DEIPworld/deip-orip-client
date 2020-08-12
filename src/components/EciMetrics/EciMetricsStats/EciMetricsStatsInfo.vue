@@ -28,7 +28,7 @@
               class="text-h5 text-center"
               :class="data.growth_rate | numDirClass"
             >
-              {{ data.growth_rate | numDir }}
+              {{ data.growth_rate | checkVal | numDir }}
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
