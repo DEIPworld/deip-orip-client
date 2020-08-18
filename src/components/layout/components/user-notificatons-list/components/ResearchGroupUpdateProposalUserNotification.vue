@@ -1,39 +1,44 @@
 <template>
-  <v-sheet @click="clickNotification(notification)">
-    <div>
-      <span v-if="isAutoAccepted">
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> updated "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" team data
-      </span>
-      <span v-else-if="isAcceptedByQuorum">
-        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" updated team data
-      </span>
-      <span v-else>
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to update "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" team data
-      </span>
-    </div>
-    <v-row justify="space-between" align="end">
-      <v-col class="grey--text caption">
-        <v-icon size="16" color="grey">
-          event
-        </v-icon> {{ new Date(notification.created_at).toDateString() }}
-      </v-col>
-      <v-col cols="auto">
-        <a class="a orange--text caption" @click="markAsRead($event)">Mark as read</a>
-      </v-col>
-    </v-row>
-  </v-sheet>
+  <user-notifications-list-item
+    :date="notification.created_at"
+    @mark-as-read="markAsRead($event)"
+    @click="clickNotification(notification)"
+  >
+    <template v-if="isAutoAccepted">
+      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      updated
+      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      team data
+    </template>
+    <template v-else-if="isAcceptedByQuorum">
+      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      updated team data
+    </template>
+    <template v-else>
+      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      proposed to update
+      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      team data
+    </template>
+  </user-notifications-list-item>
 </template>
 
 <script>
 
+  import UserNotificationsListItem
+    from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
+
   export default {
     name: 'ResearchGroupUpdateProposalUserNotification',
+    components: { UserNotificationsListItem },
     props: {
-      notification: { type: Object, required: true }
+      notification: {
+        type: Object,
+        required: true
+      }
     },
     data() {
-      return {
-      };
+      return {};
     },
     computed: {
       isAcceptedByQuorum() {

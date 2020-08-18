@@ -1,42 +1,39 @@
 <template>
-  <v-sheet @click="clickNotification(notification)">
-    <div>
-      <span v-if="isAutoAccepted">
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> scheduled fundraising campaign for "<span
-          class="primary--text half-bold"
-        >{{ notification.metadata.research.title }}</span>" research
-      </span>
-      <span v-else-if="isAcceptedByQuorum">
-        "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" scheduled fundraising campaign for "<span
-          class="primary--text half-bold"
-        >{{ notification.metadata.research.title }}</span>" research
-      </span>
-      <span v-else>
-        <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span> proposed to schedule fundraising campaign for "<span
-          class="primary--text half-bold"
-        >{{ notification.metadata.research.title }}</span>" research in "<span
-          class="primary--text half-bold"
-        >{{ notification.metadata.researchGroup.name }}</span>"
-      </span>
-    </div>
-    <v-row justify="space-between" align="end">
-      <v-col class="grey--text caption">
-        <v-icon size="16" color="grey">
-          event
-        </v-icon>
-        {{ new Date(notification.created_at).toDateString() }}
-      </v-col>
-      <v-col cols="auto">
-        <a class="a orange--text caption" @click="markAsRead($event)">Mark as read</a>
-      </v-col>
-    </v-row>
-  </v-sheet>
+  <user-notifications-list-item
+    :date="notification.created_at"
+    @mark-as-read="markAsRead($event)"
+    @click="clickNotification(notification)"
+  >
+    <template v-if="isAutoAccepted">
+      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      scheduled fundraising campaign for
+      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      research
+    </template>
+    <template v-else-if="isAcceptedByQuorum">
+      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      scheduled fundraising campaign for
+      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      research
+    </template>
+    <template v-else>
+      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      proposed to schedule fundraising campaign for
+      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      research in
+      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+    </template>
+  </user-notifications-list-item>
 </template>
 
 <script>
 
+  import UserNotificationsListItem
+    from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
+
   export default {
     name: 'TokenSaleProposalUserNotification',
+    components: { UserNotificationsListItem },
     props: {
       notification: {
         type: Object,

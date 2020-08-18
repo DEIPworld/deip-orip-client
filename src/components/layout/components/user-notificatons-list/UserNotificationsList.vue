@@ -23,102 +23,100 @@
       </v-btn>
     </template>
 
-    <v-list v-show="notifications.length" class="user-notifications-list">
+    <v-list class="py-0" v-show="notifications.length">
       <template v-for="(notification, i) in notifications">
-        <v-list-item :key="'user-notification-' + i" link class="nlfx">
-          <v-list-item-content>
-            <research-proposal-user-notification
-              v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-content-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <token-sale-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <invite-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.INVITE_MEMBER"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <exclusion-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-update-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-group-update-proposal-user-notification
-              v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <invitation-user-notification
-              v-else-if="notification.type === INVITATION"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <invitation-approved-user-notification
-              v-else-if="notification.type === INVITATION_APPROVED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <invitation-rejected-user-notification
-              v-else-if="notification.type === INVITATION_REJECTED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <expert-review-user-notification
-              v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <expert-review-request-user-notification
-              v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <exclusion-user-notification
-              v-else-if="notification.type === EXCLUSION_APPROVED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-application-user-notification
-              v-else-if="notification.type === RESEARCH_APPLICATION_CREATED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-application-approved-user-notification
-              v-else-if="notification.type === RESEARCH_APPLICATION_APPROVED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-application-rejected-user-notification
-              v-else-if="notification.type === RESEARCH_APPLICATION_REJECTED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-application-edited-user-notification
-              v-else-if="notification.type === RESEARCH_APPLICATION_EDITED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-            <research-application-deleted-user-notification
-              v-else-if="notification.type === RESEARCH_APPLICATION_DELETED"
-              :notification="notification"
-              @markAsRead="markNotificationAsRead"
-            />
-          </v-list-item-content>
-        </v-list-item>
+        <div :key="'user-notification-' + i">
+          <research-proposal-user-notification
+            v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-content-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <token-sale-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <invite-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.INVITE_MEMBER"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <exclusion-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-update-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-group-update-proposal-user-notification
+            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <invitation-user-notification
+            v-else-if="notification.type === INVITATION"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <invitation-approved-user-notification
+            v-else-if="notification.type === INVITATION_APPROVED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <invitation-rejected-user-notification
+            v-else-if="notification.type === INVITATION_REJECTED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <expert-review-user-notification
+            v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <expert-review-request-user-notification
+            v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <exclusion-user-notification
+            v-else-if="notification.type === EXCLUSION_APPROVED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-application-user-notification
+            v-else-if="notification.type === RESEARCH_APPLICATION_CREATED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-application-approved-user-notification
+            v-else-if="notification.type === RESEARCH_APPLICATION_APPROVED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-application-rejected-user-notification
+            v-else-if="notification.type === RESEARCH_APPLICATION_REJECTED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-application-edited-user-notification
+            v-else-if="notification.type === RESEARCH_APPLICATION_EDITED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-application-deleted-user-notification
+            v-else-if="notification.type === RESEARCH_APPLICATION_DELETED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+        </div>
         <v-divider
           v-if="i + 1 < notifications.length"
           :key="`${i}-notification-divider`"

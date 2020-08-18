@@ -1,31 +1,31 @@
 <template>
-  <v-sheet @click="clickNotification(notification)">
-    <div>
-      <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span> declined invitation to "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-    </div>
-    <v-row justify="space-between" align="end">
-      <v-col class="grey--text caption">
-        <v-icon size="16" color="grey">
-          event
-        </v-icon> {{ new Date(notification.created_at).toDateString() }}
-      </v-col>
-      <v-col cols="auto">
-        <a class="a orange--text caption" @click="markAsRead($event)">Mark as read</a>
-      </v-col>
-    </v-row>
-  </v-sheet>
+  <user-notifications-list-item
+    :date="notification.created_at"
+    @mark-as-read="markAsRead($event)"
+    @click="clickNotification(notification)"
+  >
+    <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
+    declined invitation to
+    "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+  </user-notifications-list-item>
 </template>
 
 <script>
 
+  import UserNotificationsListItem
+    from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
+
   export default {
     name: 'InvitationRejectedUserNotification',
+    components: { UserNotificationsListItem },
     props: {
-      notification: { type: Object, required: true }
+      notification: {
+        type: Object,
+        required: true
+      }
     },
     data() {
-      return {
-      };
+      return {};
     },
     computed: {
       inviteeProfile() {
