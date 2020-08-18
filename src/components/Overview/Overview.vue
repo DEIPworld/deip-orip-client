@@ -88,9 +88,7 @@
 
       </d-block>
 
-      <eci-metrics class="mt-12">
-        <template #historyTitle>Expertise Contribution Index detailed overview</template>
-      </eci-metrics>
+      <eci-history />
 
     </layout-section>
   </app-layout>
@@ -113,14 +111,14 @@
   import moment from 'moment';
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
-  import EciMetrics from '@/components/EciMetrics/EciMetrics';
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
+  import EciHistory from '@/components/EciMetrics/EciHistory/EciHistory';
 
   export default {
     name: 'Overview',
     components: {
+      EciHistory,
       DFilterBlock,
-      EciMetrics,
       DisciplinesGrowthRate,
       DBlock,
       DChartArea,

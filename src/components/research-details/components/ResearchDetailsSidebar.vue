@@ -121,11 +121,9 @@
     </d-block>
 
     <v-divider />
-    <eci-metrics-widget
+    <eci-stats
       :research-id="research.external_id"
       :disciplines="research.disciplines"
-      enable-stats
-      :enable-history="false"
     />
 
     <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" />
@@ -272,7 +270,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
+  import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -282,7 +280,7 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
-      EciMetricsWidget,
+      EciStats,
       DBlock,
     },
 

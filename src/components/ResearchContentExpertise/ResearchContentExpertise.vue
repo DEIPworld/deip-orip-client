@@ -16,7 +16,9 @@
     </layout-section>
     <v-divider />
     <layout-section>
-      <eci-metrics :content-id="content.external_id" enable-stats filter-position="top" />
+      <eci-history-and-stats
+        :content-id="content.external_id"
+      />
     </layout-section>
   </div>
 </template>
@@ -24,11 +26,12 @@
 <script>
 
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import EciMetrics from '@/components/EciMetrics/EciMetrics';
   import { mapGetters } from 'vuex';
+  import EciHistoryAndStats from '@/components/EciMetrics/EciHistoryAndStats';
+
   export default {
     name: 'ResearchContentExpertise',
-    components: { EciMetrics, LayoutSection },
+    components: { EciHistoryAndStats, LayoutSection },
     computed: {
       ...mapGetters({
         content: 'rcd/content',

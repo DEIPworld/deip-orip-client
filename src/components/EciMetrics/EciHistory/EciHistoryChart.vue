@@ -1,21 +1,23 @@
 <template>
-  <d-chart-line :data="internalData" :options="chartOptions" />
+  <v-skeleton-loader
+    class="mt-6"
+    :loading="loading"
+    min-height="232px"
+    type="image"
+  >
+    <d-chart-line :data="internalData" :options="chartOptions" />
+  </v-skeleton-loader>
 </template>
 
 <script>
-  import deepmerge from 'deepmerge';
   import DChartLine from '@/components/Deipify/DChart/DChartLine';
+  import { DataLoadable } from '@/mixins/dataLoadable';
   import moment from 'moment';
 
   export default {
-    name: 'EciMetricsHistoryChart',
+    name: 'EciHistoryChart',
     components: { DChartLine },
-    props: {
-      data: {
-        type: Array,
-        default: () => ([])
-      },
-    },
+    mixins: [DataLoadable],
 
     data() {
       return {
@@ -33,13 +35,15 @@
 
     computed: {
       internalData() {
+
         const chartData = this.data.map((item) => [
           new Date(item.timestamp),
           item.eci
         ]);
 
         const lastPoint = [
-          moment().toDate(),
+          moment()
+            .toDate(),
           this.data.length ? this.data[this.data.length - 1].eci : 0
         ];
 

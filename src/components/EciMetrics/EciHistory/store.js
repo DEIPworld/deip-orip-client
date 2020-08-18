@@ -1,38 +1,43 @@
-import $ from 'cheerio';
-import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
-import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import deepmerge from 'deepmerge';
+import { ResearchService } from '@deip/research-service';
+import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+import $ from 'cheerio';
 
-const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const researchService = ResearchService.getInstance();
 
-const STATE = {
-  expertiseHistory: [],
-  expertiseHistoryByDisciplines: [],
-
-  expertiseStats: {},
-  expertiseStatsByDisciplines: []
-};
-
-const statsMethod = (payload) => {
+const historyMethod = (payload) => {
   let serviceMethod;
 
   if (payload.researchId) {
     serviceMethod = expertiseContributionsService
-      .getResearchExpertiseStats(payload.researchId, payload.filter);
+      .getResearchExpertiseHistory(payload.researchId, payload.filter);
   } else if (payload.contentId) {
     serviceMethod = expertiseContributionsService
-      .getResearchContentExpertiseStats(payload.contentId, payload.filter);
+      .getResearchContentExpertiseHistory(payload.contentId, payload.filter);
   } else if (payload.accountName) {
     serviceMethod = expertiseContributionsService
-      .getAccountExpertiseStats(payload.accountName, payload.filter);
+      .getAccountExpertiseHistory(payload.accountName, payload.filter);
   } else {
-    // serviceMethod = expertiseContributionsService
-    //   .getDisciplineExpertiseStats(payload.filter);
+    serviceMethod = expertiseContributionsService
+      .getDisciplineExpertiseHistory(payload.filter);
   }
 
   return serviceMethod;
+};
+
+const STATE = {
+  expertiseHistory: []
+};
+
+const ACTIONS = {
+  getExpertiseHistory({ commit }, payload) {
+    return historyMethod(payload).then((res) => {
+      commit('storeExpertiseHistory', res);
+    }, (err) => {
+      console.error(err);
+    });
+  }
 };
 
 const GETTERS = {
@@ -124,89 +129,16 @@ const GETTERS = {
         }
       };
     });
-  },
-
-  expertiseStats: (state) => state.expertiseStats,
-  expertiseStatsByDisciplines: (state) => state.expertiseStatsByDisciplines
-};
-
-const ACTIONS = {
-
-  getExpertiseHistory({ commit }, payload) {
-    let serviceMethod;
-
-    if (payload.researchId) {
-      serviceMethod = expertiseContributionsService
-        .getResearchExpertiseHistory(payload.researchId, payload.filter);
-    } else if (payload.contentId) {
-      serviceMethod = expertiseContributionsService
-        .getResearchContentExpertiseHistory(payload.contentId, payload.filter);
-    } else if (payload.accountName) {
-      serviceMethod = expertiseContributionsService
-        .getAccountExpertiseHistory(payload.accountName, payload.filter);
-    } else {
-      serviceMethod = expertiseContributionsService
-        .getDisciplineExpertiseHistory(payload.filter);
-    }
-
-    return serviceMethod.then((res) => {
-      commit('storeExpertiseHistory', res);
-    }, (err) => {
-      console.error(err);
-    });
-  },
-
-  getExpertiseStats({ commit }, payload) {
-    return statsMethod(payload)
-      .then((res) => {
-        commit('storeExpertiseStats', res);
-      }, (err) => {
-        console.error(err);
-      });
-  },
-
-  getExpertiseStatsByDisciplines({ commit }, payload) {
-    const promises = payload.disciplines.map((d) => {
-      const newPayload = deepmerge(
-        payload,
-        {
-          filter: { discipline: d.external_id }
-        }
-      );
-
-      return statsMethod(newPayload);
-    });
-
-    return Promise.all(promises)
-      .then((res) => {
-        const result = res.map((item, index) => ({
-          discipline: payload.disciplines[index],
-          ...item
-        }));
-
-        commit('storeExpertiseStatsByDisciplines', result);
-      }, (err) => {
-        console.error(err);
-      });
   }
-
 };
 
 const MUTATIONS = {
   storeExpertiseHistory(state, payload) {
     state.expertiseHistory = payload;
-  },
-
-  storeExpertiseStats(state, payload) {
-    state.expertiseStats = payload;
-  },
-
-  storeExpertiseStatsByDisciplines(state, payload) {
-    state.expertiseStatsByDisciplines = payload;
   }
 };
 
-export const eciStore = {
+export const eciHistoryStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

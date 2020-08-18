@@ -58,14 +58,11 @@
 </template>
 
 <script>
+  import { dataLoadableFactory } from '@/mixins/dataLoadable';
+
   export default {
-    name: 'EciMetricsStatsInfo',
-    props: {
-      data: {
-        type: Object,
-        default: () => ({})
-      }
-    },
+    name: 'EciStatsInfo',
+    mixins: [dataLoadableFactory({})],
     computed: {
       lowStats() {
         return [
@@ -95,15 +92,6 @@
           )
         ];
       }
-    },
-
-    methods: {
-      checkVal(val) {
-        return val || '—';
-      },
-      numUp(val) {
-        return parseFloat(val) >= 0;
-      },
     }
   };
 </script>

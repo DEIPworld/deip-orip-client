@@ -16,20 +16,22 @@
     </layout-section>
     <v-divider />
     <layout-section>
-      <eci-metrics :research-id="research.external_id" enable-stats filter-position="top" />
+      <eci-history-and-stats
+        :research-id="research.external_id"
+      />
     </layout-section>
   </div>
 
 </template>
 
 <script>
-  import EciMetrics from '@/components/EciMetrics/EciMetrics';
   import { mapGetters } from 'vuex';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import EciHistoryAndStats from '@/components/EciMetrics/EciHistoryAndStats';
 
   export default {
     name: 'ResearchExpertise',
-    components: { LayoutSection, EciMetrics },
+    components: { EciHistoryAndStats, LayoutSection },
     computed: {
       ...mapGetters({
         research: 'rd/research',

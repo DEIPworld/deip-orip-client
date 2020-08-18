@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <v-skeleton-loader
+    :loading="loading"
+    min-height="232px"
+    type="pie-chart"
+    :types="{
+      'pie-chart': 'avatar',
+    }"
+  >
     <d-chart-pie
       donut
       :data="internalData"
@@ -7,23 +14,19 @@
         legend: {alignment: 'center'}
       }"
     />
-  </div>
+  </v-skeleton-loader>
 
 </template>
 
 <script>
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+  import { DataLoadable } from '@/mixins/dataLoadable';
 
   export default {
-    name: 'EciMetricsStatsChart',
+    name: 'EciHistoryContributionsChart',
     components: { DChartPie },
-    props: {
-      data: {
-        type: Array,
-        default: () => ([])
-      }
-    },
+    mixins: [DataLoadable],
 
     data() {
       return {
@@ -60,3 +63,17 @@
     }
   };
 </script>
+
+<style lang="scss">
+  .v-skeleton-loader {
+    $host: &;
+
+    &__pie-chart {
+      #{$host}__avatar {
+        height: 200px;
+        width: 200px;
+        margin: 16px;
+      }
+    }
+  }
+</style>

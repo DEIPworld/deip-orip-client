@@ -134,11 +134,9 @@
 
     <v-divider v-if="isOwner && hasReviewRequests" />
     <!--  TODO: need user disciplines  -->
-    <eci-metrics-widget
+    <eci-stats
       :account-name="userInfo.account.name"
       :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
-      enable-stats
-      :enable-history="false"
     />
 
     <user-claim-expertise-dialog
@@ -162,8 +160,8 @@
 
   import * as bankCardsService from '../../../utils/bankCard';
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
-  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -174,8 +172,8 @@
     name: 'UserDetailsSidebar',
 
     components: {
+      EciStats,
       DBlock,
-      EciMetricsWidget,
       UserClaimExpertiseDialog
     },
 

@@ -8,7 +8,7 @@
       <slot />
     </div>
 
-    <div ref="actions" class="ml-6">
+    <div ref="actions" class="ml-6 text-no-wrap">
       <slot name="actions">
         <v-btn
           color="primary"
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-  import kindOf from 'kind-of';
   import { Filterable } from '@/components/Deipify/DFilter/filterable';
 
   export default {
@@ -50,7 +49,7 @@
         const $host = this.$refs.host.$el;
         const $fields = $host.querySelectorAll('.v-input');
         const width = $host.clientWidth - this.$refs.actions.clientWidth;
-        const delta = 3 * 24;
+        const delta = 4 * 24;
         const fieldWidth = ((width <= 1280 ? width : 1280) - delta) / 4;
 
         $fields.forEach((node, i) => {
@@ -59,17 +58,11 @@
             node.style.marginRight = '24px';
           }
         });
-      },
-
-      equaliseModels() {
-        if (kindOf(this.internalValue) === 'object') {
-          this.updatedValue = { ...this.internalValue };
-        } else if (kindOf(this.internalValue) === 'array') {
-          this.updatedValue = [...this.internalValue];
-        } else {
-          this.updatedValue = this.internalValue;
-        }
       }
+    },
+
+    updated() {
+      this.recalc();
     }
   };
 </script>

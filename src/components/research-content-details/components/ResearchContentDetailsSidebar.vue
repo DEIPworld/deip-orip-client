@@ -45,12 +45,10 @@
     </d-block>
 
     <v-divider />
-    <eci-metrics-widget
+    <eci-stats
       v-if="$route.params.content_permlink !== '!draft'"
       :content-id="content.external_id"
       :disciplines="disciplinesList"
-      enable-stats
-      :enable-history="false"
     />
 
 <!--    <v-divider v-if="!isPublished && isResearchGroupMember" />-->
@@ -261,8 +259,8 @@
   import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
   import { ResearchContentService } from '@deip/research-content-service';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import EciMetricsWidget from '@/components/EciMetrics/EciMetricsWidget';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
@@ -271,8 +269,8 @@
     name: 'ResearchContentDetailsSidebar',
 
     components: {
+      EciStats,
       DBlock,
-      EciMetricsWidget
     },
 
     data() {

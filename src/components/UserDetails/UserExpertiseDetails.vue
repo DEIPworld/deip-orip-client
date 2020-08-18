@@ -25,35 +25,22 @@
 
     <v-divider class="mt-4 mb-8" />
 
-    <eci-metrics
-      :disciplines="disciplines"
+    <eci-history-and-stats
       :account-name="userInfo.account.name"
-      filter-position="top"
-      enable-stats
-    >
-      <!-- <template #historyTitleAddon>
-        <router-link
-          class="a mx-0 mr-12 pr-4"
-          color="primary"
-          outlined
-          :to="{ name: 'ReviewSetup' }"
-        >
-          Alternative review model
-        </router-link>
-      </template> -->
-    </eci-metrics>
+      :filter-disciplines="disciplines"
+    />
   </layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
 
-  import EciMetrics from '@/components/EciMetrics/EciMetrics';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import EciHistoryAndStats from '@/components/EciMetrics/EciHistoryAndStats';
 
   export default {
     name: 'UserExpertiseDetails',
-    components: { LayoutSection, EciMetrics },
+    components: { EciHistoryAndStats, LayoutSection },
     props: {
       username: {
         type: String,
