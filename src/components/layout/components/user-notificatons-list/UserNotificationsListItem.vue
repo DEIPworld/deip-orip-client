@@ -1,5 +1,5 @@
 <template>
-  <v-list-item @click="clickNotification(notification)">
+  <v-list-item @click="$emit('click')">
     <v-list-item-content>
       <div class="mb-2 text-body-2">
         <slot />

@@ -23,7 +23,7 @@
       </v-btn>
     </template>
 
-    <v-list class="py-0" v-show="notifications.length">
+    <v-list v-show="notifications.length" class="py-0">
       <template v-for="(notification, i) in notifications">
         <div :key="'user-notification-' + i">
           <research-proposal-user-notification
@@ -217,7 +217,11 @@
       };
     },
     computed: {
-      notifications() { return this.$store.getters['auth/user'].notifications; }
+      notifications() { return this.$store.getters['auth/user'].notifications; },
+
+      notificationType(notification) {
+       return 'a';
+      }
     },
 
     watch: {},
