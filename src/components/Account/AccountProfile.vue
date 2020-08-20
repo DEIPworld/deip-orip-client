@@ -232,11 +232,12 @@
           timeout: 0,
           maxFiles: 1,
           uploadMultiple: false,
-          createImageThumbnails: true,
+          previewsContainer: false,
           // previewsContainer: '.dropzone-previews',
           autoProcessQueue: false,
-          addRemoveLinks: true,
-          dictDefaultMessage: '',
+          addRemoveLinks: false,
+          dictDefaultMessage:
+            "<i class='v-icon material-icons theme--dark mb-n10' style='font-size:40px'>camera_alt</i>",
           acceptedFiles: ['image/png', 'image/jpeg'].join(',')
         } : null;
       },
@@ -384,20 +385,13 @@
     background-color: rgba(29, 32, 34, .7);
     display: inline-block;
     position: absolute;
-    height: 80px;
-    width: 160px;
     border-bottom-left-radius: 90px;
     border-bottom-right-radius: 90px;
     border: 0.5px solid rgba(29, 32, 34, 0.7);
-    bottom: -15px;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
     min-height: 0 !important;
-  }
-
-  #avatar-dropzone:before {
-    content: "⇪";
-    font-size: 30px;
-    position: absolute;
-    top: 15px;
-    right: 68px;
   }
 </style>

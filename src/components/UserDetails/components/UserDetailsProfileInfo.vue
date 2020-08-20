@@ -47,8 +47,8 @@
                 {{ locationString }}
               </span>
             </div>
-            <div>
-              <v-icon v-if="getEmploymentOrEducation(userInfo)" size="18" class="pr-1">
+            <div v-if="getEmploymentOrEducation(userInfo)">
+              <v-icon size="18" class="pr-1">
                 school
               </v-icon>
               <!-- {{ userInfo | employmentOrEducation }} -->
@@ -126,7 +126,7 @@
       locationString() {
         const profile = this.userInfo ? this.userInfo.profile : null;
         let location = '';
-        if (profile) {
+        if (profile && profile.location) {
           location += profile.location.city ? profile.location.city : '';
           location += profile.location.city && profile.location.country ? ', ' : '';
           location += profile.location.country ? profile.location.country : '';

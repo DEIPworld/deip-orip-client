@@ -1,22 +1,16 @@
 <template>
   <d-layout-section v-if="$ready">
     <research-group-details-body />
-
-    <template #sidebar>
-      <research-group-details-sidebar />
-    </template>
   </d-layout-section>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import ResearchGroupDetailsSidebar from '@/components/research-group-details/components/ResearchGroupDetailsSidebar';
   import ResearchGroupDetailsBody from '@/components/research-group-details/components/ResearchGroupDetailsBody';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 
   export default {
     name: 'ResearchGroupDetails',
-    components: { DLayoutSection, ResearchGroupDetailsBody, ResearchGroupDetailsSidebar },
+    components: { DLayoutSection, ResearchGroupDetailsBody },
 
     data() {
       return {};
