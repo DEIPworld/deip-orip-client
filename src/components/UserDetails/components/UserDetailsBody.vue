@@ -21,7 +21,7 @@
       <div v-if="commonGroups.length" class="py-6">
         <div class="d-flex mb-6">
           <div class="text-h6">
-            Research groups: {{ commonGroups.length }}
+            Teams: {{ commonGroups.length }}
           </div>
           <v-spacer v-if="isOwner" />
           <div v-if="isOwner">

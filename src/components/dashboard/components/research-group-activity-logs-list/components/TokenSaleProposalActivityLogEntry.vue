@@ -26,7 +26,7 @@
                 research_permlink: encodeURIComponent(log.metadata.research.permlink)
               }
             }"
-          >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+          >{{ log.metadata.research.title }}</router-link>" project was accepted by quorum
         </span>
         <span v-else>
           <platform-avatar
@@ -45,7 +45,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.research.title }}</router-link>" project
           </span>
           <span v-else>
             proposed to schedule fundraising campaign for the "<router-link
@@ -57,7 +57,7 @@
                   research_permlink: encodeURIComponent(log.metadata.research.permlink)
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.research.title }}</router-link>" project
           </span>
         </span>
       </div>

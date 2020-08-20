@@ -8,19 +8,19 @@
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
       scheduled fundraising campaign for
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      research
+      project
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
       scheduled fundraising campaign for
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      research
+      project
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
       proposed to schedule fundraising campaign for
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      research in
+      project in
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
   </user-notifications-list-item>
