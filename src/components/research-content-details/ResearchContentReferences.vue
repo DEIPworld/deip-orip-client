@@ -277,7 +277,7 @@
       >
         <v-row column class="outer-references-by-discipline px-4">
           <div class="text-h6">
-            Usage by discipline
+            Usage by domain
           </div>
           <div class="py-12">
             <GChart

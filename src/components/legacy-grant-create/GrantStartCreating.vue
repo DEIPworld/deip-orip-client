@@ -22,7 +22,7 @@
                 Indirect Grant is
               </div>
               DEIP Token holders can allocate grants to a particular discipline. In this case funds are distributed among
-              research groups working in this domain in accordance with their Expertise Contribution Index
+              Teams working in this domain in accordance with their Expertise Contribution Index
             </div>
           </div>
 
