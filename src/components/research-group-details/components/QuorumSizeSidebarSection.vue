@@ -1,29 +1,21 @@
 <template>
-  <div>
-    <div class="text-subtitle-1 bold">
-      Quorum threshold
-    </div>
-
-    <div class="pt-4">
-      <div v-if="!isResearchGroupMember || !isEditMode">
-        <div
-          v-for="(proposalBlock, i) in proposalOrderMap"
-          :key="`proposalBlock-${i}`"
-        >
-          <div v-for="proposalData in proposalBlock" :key="proposalLabels[proposalData.key]">
-            <div class="d-flex justify-space-between align-center">
-              <div class="font-weight-medium">
-                {{ proposalLabels[proposalData.key] }}
-              </div>
-              <div class="width-3 text-align-right">
-                {{ proposalData.value }}%
-              </div>
-            </div>
+  <d-block v-if="!isResearchGroupMember || !isEditMode" widget title="Quorum threshold">
+    <div
+      v-for="(proposalBlock, i) in proposalOrderMap"
+      :key="`proposalBlock-${i}`"
+    >
+      <div v-for="proposalData in proposalBlock" :key="proposalLabels[proposalData.key]">
+        <div class="d-flex justify-space-between align-center">
+          <div class="font-weight-medium">
+            {{ proposalLabels[proposalData.key] }}
+          </div>
+          <div class="width-3 text-align-right">
+            {{ proposalData.value }}%
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </d-block>
 </template>
 
 <script>
@@ -32,10 +24,11 @@
   import deipRpc from '@deip/rpc-client';
 
   import { PROPOSAL_TYPES, proposalTypesLabels } from '@/variables';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'QuorumSizeSidebarSection',
-
+    components: { DBlock },
     data() {
       return {
         isEditMode: false,
@@ -43,20 +36,44 @@
 
         proposalOrderMap: [
           [
-            { key: PROPOSAL_TYPES.CREATE_RESEARCH, value: undefined },
-            { key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL, value: undefined }
+            {
+              key: PROPOSAL_TYPES.CREATE_RESEARCH,
+              value: undefined
+            },
+            {
+              key: PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL,
+              value: undefined
+            }
           ],
           [
-            { key: PROPOSAL_TYPES.INVITE_MEMBER, value: undefined },
-            { key: PROPOSAL_TYPES.EXCLUDE_MEMBER, value: undefined }
+            {
+              key: PROPOSAL_TYPES.INVITE_MEMBER,
+              value: undefined
+            },
+            {
+              key: PROPOSAL_TYPES.EXCLUDE_MEMBER,
+              value: undefined
+            }
           ],
           [
-            { key: PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE, value: undefined },
-            { key: PROPOSAL_TYPES.TRANSFER, value: undefined }
+            {
+              key: PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE,
+              value: undefined
+            },
+            {
+              key: PROPOSAL_TYPES.TRANSFER,
+              value: undefined
+            }
           ],
           [
-            { key: PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP, value: undefined },
-            { key: PROPOSAL_TYPES.UPDATE_RESEARCH, value: undefined }
+            {
+              key: PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP,
+              value: undefined
+            },
+            {
+              key: PROPOSAL_TYPES.UPDATE_RESEARCH,
+              value: undefined
+            }
           ]
         ]
       };
@@ -92,12 +109,12 @@
 </script>
 
 <style lang="less">
-.percent-input.v-text-field {
-  max-width: 45px;
-  padding-top: 0px;
-}
+  .percent-input.v-text-field {
+    max-width: 45px;
+    padding-top: 0px;
+  }
 
-.mode-btn-wrapper {
-  margin-top: -4px;
-}
+  .mode-btn-wrapper {
+    margin-top: -4px;
+  }
 </style>

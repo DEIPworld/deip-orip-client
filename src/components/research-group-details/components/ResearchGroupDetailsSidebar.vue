@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="isJoinRequestsSectionAvailable" class="">
-      <div id="invites" class="text-h6 font-weight-bold pb-2">
+    <d-block v-if="isJoinRequestsSectionAvailable" widget>
+      <template #title>
         Join requests: {{ pendingJoinRequests.length }}
-      </div>
+      </template>
 
       <v-row
         v-for="(join, index) in pendingJoinRequests"
@@ -31,7 +31,7 @@
         </v-row>
         <v-divider v-if="index !== pendingJoinRequests.length - 1" class="ma-2" />
       </v-row>
-    </div>
+    </d-block>
 
     <handle-join-request-dialog
       v-if="selectedJoinRequest"
@@ -42,48 +42,38 @@
     />
 
     <!-- ### START Research Group Details Section ### -->
-    <div class="py-6">
-      <div class="text-h6 font-weight-bold">
-        Group expertise tokens
+    <d-block widget title="Group expertise tokens">
+      <div v-for="(item, i) in groupExpertise" :key="i">
+        <span class="font-weight-medium">{{ item.disciplineName }}</span>
+        <span class="float-right">{{ item.value }}</span>
       </div>
-
-      <div class="pt-4">
-        <div v-for="(item, i) in groupExpertise" :key="i">
-          <span class="font-weight-medium">{{ item.disciplineName }}</span>
-          <span class="float-right">{{ item.value }}</span>
-        </div>
-      </div>
-    </div>
+    </d-block>
     <!-- ### END Research Group Details Section ### -->
+    <v-divider v-if="isResearchGroupMember" />
+    <d-block v-if="isResearchGroupMember" widget>
+      <template #title>
+        <router-link
+          class="a"
+          :to="{
+            name: 'ResearchGroupWallet',
+            params: { research_group_permlink: group.permlink }
+          }"
+        >
+          Group Wallet
+        </router-link>
+      </template>
 
-    <div v-if="isResearchGroupMember">
-      <div class="py-6">
-        <div class="text-h6 font-weight-bold">
-          <router-link
-            class="a"
-            :to="{
-              name: 'ResearchGroupWallet',
-              params: { research_group_permlink: group.permlink }
-            }"
-          >
-            Group Wallet
-          </router-link>
-        </div>
-
-        <div class="py-6">
-          <v-btn
-            class="ma-0"
-            :disabled="!defaultAssetBalance"
-            color="primary"
-            block
-            @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
-          >
-            Transfer
-          </v-btn>
-        </div>
-      </div>
-    </div>
-
+      <v-btn
+        class="ma-0"
+        :disabled="!defaultAssetBalance"
+        color="primary"
+        block
+        @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
+      >
+        Transfer
+      </v-btn>
+    </d-block>
+    <v-divider />
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
     <transfer-group-deip-tokens-dialog
@@ -96,9 +86,11 @@
 <script>
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
+    components: { DBlock },
     data() {
       return {
         isApprovingJoinRequest: false,
