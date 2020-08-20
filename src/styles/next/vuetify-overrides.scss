@@ -52,9 +52,18 @@
 // new way customise
 
 .v-data-table {
+  $this: &;
   &--hover-row {
     tbody tr:hover {
       cursor: pointer;
+    }
+  }
+  
+  &--expand-elevation {
+    &-0 {
+      tbody tr#{ $this }__expanded__content {
+        box-shadow: 0 0 0 0 rgba(0,0,0,.2),0 0 0 0 rgba(0,0,0,.14),0 0 0 0 rgba(0,0,0,.12)!important;
+      }
     }
   }
 }

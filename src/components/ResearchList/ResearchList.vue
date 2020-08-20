@@ -6,8 +6,12 @@
     </template>
 
     <template #titleAddon>
-      <d-toggle-view :storage-key="storageViewModelKey" />
+      <d-toggle-view :storage-key="storageViewModelKey" class="align-self-end" />
       <research-list-filter v-if="withFilter" :storage-key="storageFilterModelKey" />
+    </template>
+
+    <template #subtitle>
+      <slot name="subtitle" />
     </template>
 
     <v-data-iterator

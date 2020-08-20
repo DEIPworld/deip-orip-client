@@ -6,6 +6,7 @@
       </component>
     </template>
     <span>{{ tooltip }}</span>
+    <slot name="tooltip" />
   </v-tooltip>
 </template>
 

@@ -1,6 +1,30 @@
 <template>
   <div>
     <v-form ref="form-data" class="mb-4">
+      <d-form-block title="Update group logo:">
+        <v-col>
+          <v-avatar
+            size="160px"
+            class="group-image mb-6"
+            @mouseover="onAvatarMouseOver"
+            @mouseout="onAvatarMouseOut"
+          >
+            <img
+              :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
+            >
+            <div v-if="logoDropzoneOptions">
+              <vue-dropzone
+                v-show="avatarUploadIsShown"
+                id="image-dropzone"
+                ref="researchGroupLogo"
+                :options="logoDropzoneOptions"
+                @vdropzone-success="logoUploadSuccess"
+                @vdropzone-error="logoUploadError"
+              />
+            </div>
+          </v-avatar>
+        </v-col>
+      </d-form-block>
       <d-form-block title="Group name">
         <v-col cols="12">
           <v-text-field
@@ -28,13 +52,22 @@
         <slot name="buttons">
           <v-btn
             class="ma-0"
-            large
-            :loading="isChangingMetaLoading"
-            :disabled="!isDisabledBtnNameDescription || isChangingMetaLoading"
             color="primary"
-            @click="updateResearchGroup()"
+            text
+            large
+            @click="cancel()"
           >
-            Update Name and Description
+            Cancel
+          </v-btn>
+          <v-btn
+            class="ml-2"
+            large
+            :loading="isLoading"
+            :disabled="isLoading"
+            color="primary"
+            @click="save()"
+          >
+            Save changes
           </v-btn>
         </slot>
       </div>
@@ -90,54 +123,6 @@
         </slot>
       </div>
     </v-form> -->
-    <v-form v-if="isResearchGroupMember" ref="form-image">
-      <d-form-block title="Update group logo:">
-        <v-col cols="3">
-          <img
-            width="150px"
-            height="150px"
-            :src="$options.filters.researchGroupLogoSrc(group.external_id, 300, 300, true)"
-          >
-        </v-col>
-        <v-col cols="9">
-          <div v-if="logoDropzoneOptions">
-            <vue-dropzone
-              id="research-group-logo"
-              ref="researchGroupLogo"
-              :options="logoDropzoneOptions"
-              @vdropzone-success="logoUploadSuccess"
-              @vdropzone-error="logoUploadError"
-            />
-          </div>
-        </v-col>
-      </d-form-block>
-      <div class="text-right">
-        <slot name="buttons">
-          <v-btn
-            :disabled="isUploadingLogo"
-            :loading="isUploadingLogo"
-            large
-            class="ma-0"
-            color="primary"
-            @click="updateLogoImage()"
-          >
-            Update logo
-          </v-btn>
-        </slot>
-      </div>
-    </v-form>
-
-    <div>
-      <v-btn
-        class="ma-0"
-        color="primary"
-        outlined
-        large
-        @click="cancel()"
-      >
-        Back to group
-      </v-btn>
-    </div>
   </div>
 </template>
 
@@ -145,7 +130,6 @@
   import { mapGetters } from 'vuex';
   import vueDropzone from 'vue2-dropzone';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import deipRpc from '@deip/rpc-client';
   import { maxTitleLength, maxDescriptionLength } from '@/variables';
 
   import { AccessService } from '@deip/access-service';
@@ -165,8 +149,9 @@
     },
     data() {
       return {
+        avatarUploadIsShown: false,
         isPermlinkVerifyed: true,
-        isChangingMetaLoading: false,
+        isLoading: false,
         isChangingQuorumLoading: false,
         groupName: '',
         groupDescription: '',
@@ -200,7 +185,6 @@
         newResearchGroupName: '',
         newResearchGroupDescription: '',
         shadowProposalOrderMap: undefined,
-        isUploadingLogo: false,
         rules: {
           required: (value) => !!value || 'This field is required',
           titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
@@ -225,11 +209,11 @@
             timeout: 0,
             maxFiles: 1,
             uploadMultiple: false,
-            createImageThumbnails: true,
             autoProcessQueue: false,
+            previewsContainer: false,
             dictDefaultMessage:
-              "<i class='v-icon material-icons' style='font-size:40px'>backup</i><p>Research group logo (.png)</p>",
-            addRemoveLinks: true,
+              "<i class='v-icon material-icons theme--dark mb-n10' style='font-size:40px'>camera_alt</i>",
+            addRemoveLinks: false,
             acceptedFiles: ['image/png'].join(',')
           }
           : null;
@@ -252,7 +236,7 @@
         );
       },
 
-      isDisabledBtnNameDescription() {
+      isSaveAvailable() {
         return (
           (this.newResearchGroupName !== this.groupName
           || this.newResearchGroupDescription !== this.groupDescription)
@@ -267,6 +251,12 @@
       this.fillValues();
     },
     methods: {
+      onAvatarMouseOver() {
+        this.avatarUploadIsShown = true;
+      },
+      onAvatarMouseOut() {
+        this.avatarUploadIsShown = false;
+      },
       cancel(proposal = false) {
         this.$refs.researchGroupLogo.removeAllFiles();
         this.$router.push({
@@ -278,21 +268,20 @@
         });
       },
       logoUploadSuccess(file, response) {
-        this.$refs.researchGroupLogo.removeAllFiles();
-        this.isUploadingLogo = false;
-        this.$notifier.showSuccess(`Logo has been updated successfully ! Refresh the page please`)
+        if (this.isSaveAvailable) {
+          this.updateResearchGroup();
+        } else {
+          this.$refs.researchGroupLogo.removeAllFiles();
+          this.isLoading = false;
+          this.$notifier.showSuccess(`Logo has been updated successfully ! Refresh the page please`)
+          this.cancel();
+        }
       },
       logoUploadError(file, message, xhr) {
         // console.log(message);
         this.$refs.researchGroupLogo.removeAllFiles();
-        this.isUploadingLogo = false;
+        this.isLoading = false;
         this.$notifier.showError(`Sorry, an error occurred while uploading logo image, please try again later`)
-      },
-      updateLogoImage() {
-        if (this.$refs.researchGroupLogo.getQueuedFiles().length) {
-          this.isUploadingLogo = true;
-          this.$refs.researchGroupLogo.processQueue();
-        }
       },
       fillValues() {
         this.groupName = this.group.name;
@@ -349,18 +338,26 @@
       //     });
       // },
 
-
+      save() {
+        if (this.$refs.researchGroupLogo.getQueuedFiles().length) {
+          this.isLoading = true;
+          this.$refs.researchGroupLogo.processQueue();
+        } else if (this.isSaveAvailable) {
+          this.updateResearchGroup();
+        }
+      },
       updateResearchGroup() {
         researchGroupService
           .checkResearchGroupExistenceByPermlink(this.newResearchGroupName)
           .then((exists) => {
             if (this.newResearchGroupName !== this.groupName) {
+              this.isLoading = false;
               this.isPermlinkVerifyed = !exists;
             } else {
               this.isPermlinkVerifyed = true;
             }
             if (this.isPermlinkVerifyed) {
-              this.isChangingMetaLoading = true;
+              this.isLoading = true;
 
               const isProposal = !this.group.is_personal;
               researchGroupService.updateResearchGroupAccountViaOffchain(this.user.privKey, isProposal, {
@@ -385,11 +382,13 @@
                   this.$notifier.showError('An error occurred during proposal sending')
                 })
                 .finally(() => {
-                  this.isChangingMetaLoading = false;
+                  this.isLoading = false;
+                  this.cancel();
                 });
             }
           })
           .catch((error) => {
+            this.isLoading = false;
             this.isPermlinkVerifyed = false;
           });
       }
@@ -398,8 +397,24 @@
 </script>
 
 <style lang="less" scoped>
-#research-group-logo {
-  background: #ebf5fe;
-  color: #3067ff;
-}
+  .group-image {
+      position: relative
+  }
+
+  #image-dropzone {
+    background: #9e978e;
+    background-color: rgba(29, 32, 34, .7);
+    display: inline-block;
+    position: absolute;
+    // height: 80px;
+    // width: 160px;
+    border-bottom-left-radius: 90px;
+    border-bottom-right-radius: 90px;
+    border: 0.5px solid rgba(29, 32, 34, 0.7);
+    bottom: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    min-height: 0 !important;
+  }
 </style>
