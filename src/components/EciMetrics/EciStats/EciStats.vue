@@ -9,8 +9,8 @@
   import { metricsMixin } from '@/components/EciMetrics/mixins';
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { mapState } from 'vuex';
-  import { eciStatsStore } from './store';
   import EciStatsWidget from '@/components/EciMetrics/EciStats/EciStatsWidget';
+  import { eciStatsStore } from './store';
 
   export default {
     name: 'EciStats',

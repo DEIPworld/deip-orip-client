@@ -130,12 +130,12 @@
   import { mapGetters } from 'vuex';
   import vueDropzone from 'vue2-dropzone';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import { maxTitleLength, maxDescriptionLength } from '@/variables';
+  import {
+    maxTitleLength, maxDescriptionLength, PROPOSAL_TYPES, proposalTypesLabels
+  } from '@/variables';
 
   import { AccessService } from '@deip/access-service';
   import { ResearchGroupService } from '@deip/research-group-service';
-
-  import { PROPOSAL_TYPES, proposalTypesLabels } from '@/variables';
 
   const accessService = AccessService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -204,7 +204,7 @@
             paramName: 'research-background',
             headers: {
               'Research-Group-External-Id': this.group.external_id,
-              'Authorization': `Bearer ${accessService.getAccessToken()}`
+              Authorization: `Bearer ${accessService.getAccessToken()}`
             },
             timeout: 0,
             maxFiles: 1,
@@ -239,7 +239,7 @@
       isSaveAvailable() {
         return (
           (this.newResearchGroupName !== this.groupName
-          || this.newResearchGroupDescription !== this.groupDescription)
+            || this.newResearchGroupDescription !== this.groupDescription)
           && this.newResearchGroupName !== ''
           && this.newResearchGroupDescription !== ''
           && this.newResearchGroupName.length < maxTitleLength
@@ -273,7 +273,7 @@
         } else {
           this.$refs.researchGroupLogo.removeAllFiles();
           this.isLoading = false;
-          this.$notifier.showSuccess(`Logo has been updated successfully ! Refresh the page please`)
+          this.$notifier.showSuccess('Logo has been updated successfully ! Refresh the page please');
           this.cancel();
         }
       },
@@ -281,7 +281,7 @@
         // console.log(message);
         this.$refs.researchGroupLogo.removeAllFiles();
         this.isLoading = false;
-        this.$notifier.showError(`Sorry, an error occurred while uploading logo image, please try again later`)
+        this.$notifier.showError('Sorry, an error occurred while uploading logo image, please try again later');
       },
       fillValues() {
         this.groupName = this.group.name;
@@ -373,13 +373,13 @@
                 researchGroupDescription: this.newResearchGroupDescription
               })
                 .then(() => {
-                  this.$notifier.showSuccess('Proposal has been sent successfully!')
+                  this.$notifier.showSuccess('Proposal has been sent successfully!');
                   this.cancel(true);
                 })
                 .catch((err) => {
                   console.log(err);
 
-                  this.$notifier.showError('An error occurred during proposal sending')
+                  this.$notifier.showError('An error occurred during proposal sending');
                 })
                 .finally(() => {
                   this.isLoading = false;

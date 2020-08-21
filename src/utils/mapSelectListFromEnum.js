@@ -10,8 +10,7 @@ export const mapSelectListFromEnum = (enumObj, { blackList, allowBlank, blankLab
 
   return Object.keys(enumObj)
     .reduce((acc, key) => {
-
-      if (blackList.some(k => k == key) || typeof enumObj[key] !== 'string') {
+      if (blackList.some((k) => k == key) || typeof enumObj[key] !== 'string') {
         return acc;
       }
 

@@ -56,7 +56,6 @@
   };
 </script>
 
-
 <style lang="scss">
   .app-layout {
     display: flex;

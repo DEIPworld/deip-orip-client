@@ -94,8 +94,8 @@
 
   import ResearchDetailsHeader from '@/components/research-details/components/ResearchDetailsHeader';
   import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
-  import ResearchTimeline from './components/ResearchTimeline';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import ResearchTimeline from './components/ResearchTimeline';
 
   const researchService = ResearchService.getInstance();
 

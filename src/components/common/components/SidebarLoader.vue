@@ -1,4 +1,3 @@
-
 <template>
   <div style="margin-left: 15%; margin-right: 15%">
     <div style="width: 100%">

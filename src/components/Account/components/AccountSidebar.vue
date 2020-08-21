@@ -42,7 +42,7 @@
     </template> -->
 
     <template v-for="(menuBlock, menuIndex) of menu">
-      <v-list nav dense :key="'menu-item-' + menuIndex">
+      <v-list :key="'menu-item-' + menuIndex" nav dense>
         <v-subheader>{{ menuBlock.subheader }}</v-subheader>
         <v-list-item
           v-for="(item, index) of menuBlock.items"
@@ -100,7 +100,7 @@
                 icon: 'reduce_capacity',
                 title: 'Teams',
                 route: { name: 'account.groups' }
-              },
+              }
             ]
           },
           {

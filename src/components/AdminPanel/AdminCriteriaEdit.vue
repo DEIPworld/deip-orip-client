@@ -49,8 +49,6 @@
               <v-icon>delete</v-icon>
             </v-btn>
           </template>
-
-
         </leveller-item>
 
         <leveller-list-button
@@ -62,7 +60,12 @@
       <v-divider class="my-6" />
       <v-row no-gutters class="align-center">
         <v-col cols="auto">
-          <v-checkbox class="ma-0 pa-0" hide-details v-model="formData.isVisible" label="Publish Criterion" />
+          <v-checkbox
+            v-model="formData.isVisible"
+            class="ma-0 pa-0"
+            hide-details
+            label="Publish Criterion"
+          />
         </v-col>
         <v-spacer />
         <v-col cols="auto">

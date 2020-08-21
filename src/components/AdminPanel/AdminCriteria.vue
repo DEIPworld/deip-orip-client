@@ -42,7 +42,6 @@
     >
       {{ actionDialog.description }}
     </d-dialog>
-
   </admin-view>
 </template>
 
@@ -109,7 +108,7 @@
               - explore page.
               `,
             actionLabel: 'publish',
-            action: () => { this.publishCriteria(researchComponentsId) }
+            action: () => { this.publishCriteria(researchComponentsId); }
 
           },
           unpublish: {
@@ -120,7 +119,7 @@
               - explore page.
               `,
             actionLabel: 'unpublish',
-            action: () => { this.unpublishCriteria(researchComponentsId) }
+            action: () => { this.unpublishCriteria(researchComponentsId); }
 
           },
           delete: {
@@ -131,7 +130,7 @@
               - explore page.
               `,
             actionLabel: 'delete',
-            action: () => { this.deleteCriteria(researchComponentsId) }
+            action: () => { this.deleteCriteria(researchComponentsId); }
 
           }
         };
@@ -140,7 +139,6 @@
           ...types[type],
           isOpen: true
         };
-
       },
       closeActionDialog() {
         this.actionDialog.isOpen = false;
@@ -155,9 +153,8 @@
               ...step,
               isVisible: true
             };
-          } else {
-            return step;
           }
+          return step;
         });
         this.updateResearchComponents(updateResearchComponents);
       },
@@ -168,9 +165,8 @@
               ...step,
               isVisible: false
             };
-          } else {
-            return step;
           }
+          return step;
         });
         this.updateResearchComponents(updateResearchComponents);
       },

@@ -155,12 +155,12 @@
         this.isApproveBtnLoading = true;
         disciplinesService.voteForExpertiseClaim(proposal.id, this.user.username, this.DEIP_100_PERCENT)
           .then(() => {
-            this.$notifier.showSuccess('You have voted for the claim successfully')
+            this.$notifier.showSuccess('You have voted for the claim successfully');
 
             this.wasApproved = true;
             this.reloadProposal();
           }).catch((err) => {
-            this.$notifier.showError('Error occured')
+            this.$notifier.showError('Error occured');
 
             console.error(err);
           }).finally(() => {

@@ -1,5 +1,4 @@
 <template>
-
   <d-block title="Expertise Contribution Index" widget>
     <v-skeleton-loader
       :loading="loading"
@@ -48,7 +47,6 @@
                   </v-col>
                 </v-row>
                 <v-row no-gutters class="text-overline">
-
                   <v-col>
                     <d-simple-tooltip tooltip="Percentile rank">
                       {{ item.percentile_rank | checkVal }}
@@ -60,7 +58,6 @@
                       {{ item.growth_rate | numDir | checkVal }}
                     </d-simple-tooltip>
                   </v-col>
-
                 </v-row>
               </v-list-item-content>
             </v-list-item>
@@ -79,10 +76,7 @@
     >
       More details
     </v-btn>
-
   </d-block>
-
-
 </template>
 
 <script>

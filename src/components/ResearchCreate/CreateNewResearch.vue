@@ -72,7 +72,7 @@
               @decStep="decStep"
               @setGroup="setGroup"
             />
-         </v-card>
+          </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="3">
@@ -258,14 +258,12 @@
               isActive: i === 0
             })),
             partners: this.research.partners,
-            tenantCriterias: this.research.tenantCriterias.map(criteria => {
-              return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
-            })
+            tenantCriterias: this.research.tenantCriterias.map((criteria) => (criteria.value.index != null ? { ...criteria } : { ...criteria, value: null }))
           }
         )
           .then(({ rm }) => {
             this.isLoading = false;
-            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`)
+            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`);
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -284,8 +282,8 @@
           .catch((err) => {
             console.error(err);
             this.isLoading = false;
-            this.$notifier.showError('An error occurred while creating project, please try again later')
-          })
+            this.$notifier.showError('An error occurred while creating project, please try again later');
+          });
       }
     }
   };

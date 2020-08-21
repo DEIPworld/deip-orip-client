@@ -10,6 +10,6 @@ export const abstractResearchGroupDetailsProposalsItem = {
   data() {
     return {
       PROPOSAL_TYPES
-    }
+    };
   }
 };

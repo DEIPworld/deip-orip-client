@@ -22,7 +22,6 @@ const promptModules = globModules.reduce((a, pth) => {
   return a;
 }, []);
 
-
 prompt([{
   type: 'list',
   name: 'select',

@@ -39,7 +39,6 @@
         const researcherPubKey = this.user.account.memo_key;
         const tenantAccount = this.tenant.account.external_id;
 
-
         formData.append('researcher', researcher); // the current user
         formData.append('researcherPubKey', researcherPubKey); // the current user's pubKey
         formData.append('tenant', tenantAccount); // tenant account
@@ -48,15 +47,14 @@
 
         formData.append('researchAbstract', '');
         formData.append('researchIsPrivate', false);
-        
+
         formData.append('researchGroupFee', this.toAssetUnits(0));
         formData.append('researchGroupName', `${this.formData.researchTitle} team`);
         formData.append('researchGroupDescription', '');
 
-
         researchService.createResearchApplicationViaOffchain(researcherPrivKey, formData)
           .then(({ rm }) => {
-            this.$notifier.showSuccess('Project request has been applied successfully. We will notify you as soon as your project form will be approved.')
+            this.$notifier.showSuccess('Project request has been applied successfully. We will notify you as soon as your project form will be approved.');
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -75,7 +73,7 @@
           .catch((err) => {
             this.formProcessing = false;
             console.error(err);
-            this.$notifier.showError('An error occurred while creating project, please try again later')
+            this.$notifier.showError('An error occurred while creating project, please try again later');
           });
       }
     }

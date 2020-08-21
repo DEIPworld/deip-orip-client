@@ -393,7 +393,7 @@
 
     methods: {
       ...mapActions({
-        changeProposal: 'researchGroup/changeProposal',
+        changeProposal: 'researchGroup/changeProposal'
       }),
 
       approve(proposal) {
@@ -410,7 +410,6 @@
                 researchGroupExternalId: this.group.external_id
               });
             });
-
         } else {
           promise = proposalsService.updateProposal(this.currentUser.privKey, {
             externalId: proposal.external_id,
@@ -443,7 +442,7 @@
           } else {
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
           }
-          this.$notifier.showSuccess('You have voted for the proposal successfully!')
+          this.$notifier.showSuccess('You have voted for the proposal successfully!');
         })
           .catch((err) => {
             alert(err.message);

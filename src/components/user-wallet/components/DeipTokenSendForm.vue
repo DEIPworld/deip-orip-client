@@ -148,11 +148,11 @@
             this.$emit('deipTokensTransfered');
             this.clearForm();
 
-            this.$notifier.showSuccess('Amount of DEIP tokens was sent')
+            this.$notifier.showSuccess('Amount of DEIP tokens was sent');
 
             return data;
           }).catch((err) => {
-            this.$notifier.showError('Transaction was failed')
+            this.$notifier.showError('Transaction was failed');
           }).finally(() => {
             this.isSending = false;
           });

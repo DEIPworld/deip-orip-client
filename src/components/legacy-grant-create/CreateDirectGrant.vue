@@ -65,7 +65,6 @@
   </v-container>
 </template>
 
-
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';

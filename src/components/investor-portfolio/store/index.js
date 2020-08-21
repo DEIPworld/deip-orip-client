@@ -92,7 +92,6 @@ const getters = {
   overdueNotifications: (state, getters) => [], /* if (state.selectedListId == defaultListId) return overdueNotifications;
     return []; */
 
-
   noResult: (state, getters) => getters.investments.length + getters.overdueNotifications.length === 0
 };
 
@@ -130,10 +129,9 @@ const actions = {
   },
 
   loadInvestmentPortfolioResearches({ state, dispatch, commit }, { researchExternalIds, notify }) {
-
     return Promise.all(researchExternalIds.map((externalId) => researchService.getResearch(externalId)))
       .then((items) => {
-        const researches = items.filter(r => !!r);
+        const researches = items.filter((r) => !!r);
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
         return Promise.all(state.researches
           .reduce((unique, research) => {
@@ -338,7 +336,6 @@ const mutations = {
 };
 
 const namespaced = true;
-
 
 export const investorPortfolioStore = {
   namespaced,

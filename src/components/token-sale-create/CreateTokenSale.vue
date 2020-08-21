@@ -10,14 +10,12 @@
   </full-screen-view>
 </template>
 
-
 <script>
   import { CreateTokenSaleMixin } from '@/components/token-sale-create/CreateTokenSaleMixin';
   import { ResearchService } from '@deip/research-service';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
-  import CreateTokenSaleForm from './components/CreateTokenSaleForm';
   import { mapGetters } from 'vuex';
-
+  import CreateTokenSaleForm from './components/CreateTokenSaleForm';
 
   const researchService = ResearchService.getInstance();
 
@@ -28,8 +26,8 @@
 
     computed: {
       ...mapGetters({
-        assets: 'auth/assets',
-      }),
+        assets: 'auth/assets'
+      })
     },
 
     methods: {
@@ -38,9 +36,9 @@
         this.formProcessing = true;
 
         const isProposal = !this.research.research_group.is_personal;
-        const asset = this.assets.find((a) => a.id === this.formData.asset)
+        const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        console.log('share:', `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`)
+        console.log('share:', `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`);
 
         researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
           researchGroup: this.research.research_group.external_id,
@@ -54,11 +52,11 @@
         })
           .then(() => {
             this.isLoading = false;
-            this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!')
+            this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!');
           })
           .catch((err) => {
             this.isLoading = false;
-            this.$notifier.showError('An error occurred while creating proposal, please try again later')
+            this.$notifier.showError('An error occurred while creating proposal, please try again later');
             console.error(err);
           })
           .finally(() => {

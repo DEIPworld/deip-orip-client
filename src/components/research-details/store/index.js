@@ -60,16 +60,12 @@ const getters = {
 
   group: () => state.group,
 
-  contentList: (state, getters) => {
-    return state.allContentsList
-      .filter((researchContent) => !researchContent.isDraft)
-  },
+  contentList: (state, getters) => state.allContentsList
+    .filter((researchContent) => !researchContent.isDraft),
 
-  draftsList: (state, getters) => {
-    return state.allContentsList
-      .filter((researchContent) => researchContent.isDraft)
-      .map((researchContent) => { return { ...researchContent.researchContentRef } });
-  },
+  draftsList: (state, getters) => state.allContentsList
+    .filter((researchContent) => researchContent.isDraft)
+    .map((researchContent) => ({ ...researchContent.researchContentRef })),
 
   applicationsList: (state, getters) => state.applicationsList,
 
@@ -155,7 +151,7 @@ const getters = {
     return [];
   },
 
-  userContributionsList: (state, getters) => state.userContributionsList,
+  userContributionsList: (state, getters) => state.userContributionsList
 
 };
 
@@ -593,7 +589,6 @@ const mutations = {
 };
 
 const namespaced = true;
-
 
 export const rdStore = {
   namespaced,

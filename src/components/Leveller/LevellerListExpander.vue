@@ -1,6 +1,5 @@
 <template>
   <leveller-list dense class="pt-0 rl">
-
     <template v-for="(item, index) of rlData">
       <leveller-item
         v-if="index < 3 || isExpanded"
@@ -18,7 +17,6 @@
       :icon="isExpanded ? 'expand_less' : 'expand_more'"
       @click="isExpanded = !isExpanded"
     />
-
   </leveller-list>
 </template>
 
@@ -46,5 +44,3 @@
     }
   };
 </script>
-
-

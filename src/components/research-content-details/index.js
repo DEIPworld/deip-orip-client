@@ -11,7 +11,6 @@ import ResearchContentAddReviewSidebar from './components/ResearchContentAddRevi
 import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
 import ReferencesDependencyGraph from './components/ReferencesDependencyGraph';
 
-
 Vue.component('research-content-details', ResearchContentDetails);
 Vue.component('research-content-details-dar', ResearchContentDetailsDar);
 Vue.component('research-content-details-package', ResearchContentDetailsPackage);

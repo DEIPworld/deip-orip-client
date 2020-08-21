@@ -4,7 +4,7 @@
       <v-col cols="5">
         <div class="text-center">
           <div v-if="tenant">
-            <span class="text-h5">{{tenant.account.name}}</span>
+            <span class="text-h5">{{ tenant.account.name }}</span>
             <!-- <img width="100px" height="100px" :src="tenant.account | tenantLogoSrc(160, 160, false)"> -->
           </div>
           <!-- <div class="text-h6 c-pb-4 bold">Welcome to</div>
@@ -143,7 +143,7 @@
             } catch (err) {
               accessService.clearAccessToken();
               this.isChecking = false;
-              this.$notifier.showError('Invalid private key format')
+              this.$notifier.showError('Invalid private key format');
               return;
             }
 
@@ -158,7 +158,7 @@
             if (!response.success) {
               accessService.clearAccessToken();
               this.isChecking = false;
-              this.$notifier.showError(response.error)
+              this.$notifier.showError(response.error);
               return;
             }
 
@@ -174,7 +174,7 @@
           }).catch((err) => {
             accessService.clearAccessToken();
             this.isChecking = false;
-            this.$notifier.showError(err.message)
+            this.$notifier.showError(err.message);
           });
       }
     }

@@ -30,7 +30,6 @@
             @input="dateMenu = false; apply();"
           />
         </v-menu>
-
       </v-col>
       <v-col offset="1">
         <v-menu

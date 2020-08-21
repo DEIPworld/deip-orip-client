@@ -407,12 +407,12 @@
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.amount"
+              v-mask="'##'"
               label="Share"
               outlined
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
               suffix="%"
-              v-mask="'##'"
             />
           </v-form>
         </v-card-text>
@@ -527,8 +527,8 @@
   import moment from 'moment';
   import deipRpc from '@deip/rpc-client';
   import ContentBlock from '@/components/layout/components/ContentBlock';
-  import * as bankCardsStorage from '../../../utils/bankCard';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import * as bankCardsStorage from '../../../utils/bankCard';
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
@@ -614,10 +614,10 @@
               amount: [
                 (value) => {
                   const number = parseFloat(value);
-                  if (isNaN(number)) return "Should be valid float number";
-                  if (!number || number < 0) return "Should be valid positive float number";
+                  if (isNaN(number)) return 'Should be valid float number';
+                  if (!number || number < 0) return 'Should be valid positive float number';
 
-                  const ownShare = this.convertToPercent(this.sendResearchTokensDialog.maxAmount)
+                  const ownShare = this.convertToPercent(this.sendResearchTokensDialog.maxAmount);
                   if (number > ownShare) {
                     return `Your share owned share (${ownShare}%) is not enough for transfer`;
                   }
@@ -968,12 +968,12 @@
           []
         )
           .then((data) => {
-            this.$notifier.showSuccess('Transfer was successfull')
+            this.$notifier.showSuccess('Transfer was successfull');
             this.closeSendTokensDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction was failed')
+            this.$notifier.showError('Transaction was failed');
           })
           .finally(() => {
             this.sendTokensDialog.isSending = false;
@@ -996,11 +996,11 @@
           extensions
         )
           .then((data) => {
-            this.$notifier.showSuccess('Research tokens successfully sent')
+            this.$notifier.showSuccess('Research tokens successfully sent');
             this.closeSendResearchTokensDialog();
           })
           .catch((err) => {
-            this.$notifier.showError('Transaction was failed')
+            this.$notifier.showError('Transaction was failed');
             console.error(err);
           })
           .finally(() => {
@@ -1020,12 +1020,12 @@
           []
         )
           .then(() => {
-            this.$notifier.showError('Funds have been deposited successfully!')
+            this.$notifier.showError('Funds have been deposited successfully!');
             this.closeDepositDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction was failed')
+            this.$notifier.showError('Transaction was failed');
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;
@@ -1044,12 +1044,12 @@
           []
         )
           .then(() => {
-            this.$notifier.showError('Funds have been withdrawn successfully!')
+            this.$notifier.showError('Funds have been withdrawn successfully!');
             this.closeWithdrawDialog();
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction was failed')
+            this.$notifier.showError('Transaction was failed');
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;

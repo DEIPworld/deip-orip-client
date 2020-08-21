@@ -49,7 +49,6 @@ const getters = {
       return [...acc, ...withdrawals];
     }, []);
 
-
     const piAmount = blockchainService.fromAssetsToFloat(awardee.total_amount);
 
     const requestedPiAmount = withdrawals
@@ -69,7 +68,6 @@ const getters = {
       .reduce((sum, amount) => sum + amount, 0);
 
     const remainingPiAmount = blockchainService.fromAssetsToFloat(awardee.total_amount) - blockchainService.fromAssetsToFloat(awardee.total_expenses);
-
 
     const subawardeesAmount = subawardees
       .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
@@ -158,7 +156,6 @@ const getters = {
         return [...acc, ...withdrawals];
       }, []);
 
-
       const subawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount);
 
       const requestedSubawardeeAmount = subawardeeWithdrawals
@@ -178,7 +175,6 @@ const getters = {
         .reduce((sum, amount) => sum + amount, 0);
 
       const remainingSubawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount) - blockchainService.fromAssetsToFloat(subawardee.total_expenses);
-
 
       const nextSubawardeesAmount = nextSubawardees
         .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
@@ -204,13 +200,11 @@ const getters = {
         .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
         .reduce((sum, amount) => sum + amount, 0);
 
-
       const totalSubawardeeAmount = subawardeeAmount + nextSubawardeesAmount;
       const totalSubawardeeRequestedAmount = requestedSubawardeeAmount + requestedNextSubawardeesAmount;
       const totalSubawardeePendingAmount = pendingSubawardeeAmount + pendingNextSubawardeesAmount;
       const totalSubawardeeWithdrawnAmount = withdrawnSubawardeeAmount + withdrawnNextSubawardeesAmount;
       const totalSubawardeeRemainingAmount = remainingSubawardeeAmount + remainingNextSubawardeesAmount;
-
 
       const research = state.awardeeResearchList.find((r) => r.id == subawardee.research_id);
       const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
@@ -344,7 +338,6 @@ const actions = {
         if (notify) notify();
       });
   }
-
 
 };
 

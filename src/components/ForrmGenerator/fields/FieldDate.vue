@@ -31,12 +31,12 @@
 
   export default {
     name: 'FieldDate',
+    mixins: [abstractField],
     data() {
       return {
         open: false
       };
-    },
-    mixins: [abstractField]
+    }
   };
 </script>
 

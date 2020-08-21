@@ -25,8 +25,8 @@
     mixins: [abstractField],
     data() {
       return {
-        isHidden: true,
-      }
+        isHidden: true
+      };
     }
   };
 </script>

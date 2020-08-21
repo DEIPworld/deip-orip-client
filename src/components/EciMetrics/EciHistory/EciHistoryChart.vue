@@ -35,7 +35,6 @@
 
     computed: {
       internalData() {
-
         const chartData = this.data.map((item) => [
           new Date(item.timestamp),
           item.eci

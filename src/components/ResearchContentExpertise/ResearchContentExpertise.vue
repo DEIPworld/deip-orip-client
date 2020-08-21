@@ -12,7 +12,6 @@
           Created {{ content.created_at | dateFormat('D MMM YYYY', true) }}
         </div>
       </v-sheet>
-
     </layout-section>
     <v-divider />
     <layout-section>

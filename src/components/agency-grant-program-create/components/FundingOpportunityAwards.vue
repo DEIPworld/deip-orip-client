@@ -1,7 +1,6 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="6">
-
       <div class="text-h5 text-center mb-3">
         Funding amount
       </div>
@@ -9,34 +8,34 @@
       <v-form v-model="isFormValid">
         <v-text-field
           v-model="foa.totalProgramFunding"
+          v-mask="'##############'"
           label="Estimated total program funding"
           outlined
-          v-mask="'##############'"
           suffix="NGT"
           :rules="[ rules.required, rules.totalProgrammingFundingValidator ]"
         />
 
         <v-text-field
           v-model.number="foa.numberOfAwards"
+          v-mask="'##############'"
           label="Expected number of awards"
           outlined
-          v-mask="'##############'"
           :rules="[ rules.required ]"
         />
 
         <v-text-field
           v-model="foa.awardCeiling"
+          v-mask="'##############'"
           label="Award ceiling"
           outlined
-          v-mask="'##############'"
           suffix="NGT"
           :rules="[ rules.required, rules.awardCeilingValidator ]"
         />
 
         <v-text-field
           v-model="foa.awardFloor"
-          label="Award floor"
           v-mask="'##############'"
+          label="Award floor"
           outlined
           suffix="NGT"
           :rules="[ rules.required, rules.awardFloorValidator ]"
@@ -53,7 +52,6 @@
           Next
         </v-btn>
       </div>
-
     </v-col>
   </v-row>
 </template>

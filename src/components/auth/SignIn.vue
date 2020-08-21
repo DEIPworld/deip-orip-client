@@ -7,10 +7,11 @@
     no-gutters
     toolbar-color="transparent"
   >
-
     <template #toolbarButton>
       <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
-        <v-icon left>arrow_back</v-icon>
+        <v-icon left>
+          arrow_back
+        </v-icon>
         Explorer
       </v-btn>
     </template>
@@ -65,9 +66,7 @@
           </div>
         </v-sheet>
       </v-col>
-
     </v-row>
-
   </full-screen-view>
 </template>
 

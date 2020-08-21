@@ -65,7 +65,6 @@
   </v-container>
 </template>
 
-
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
@@ -134,7 +133,7 @@
               isExtendable,
               contentHash
             ).then(() => {
-              this.$notifier.showSuccess('Grant has been created successfully!')
+              this.$notifier.showSuccess('Grant has been created successfully!');
 
               setTimeout(() => {
                 self.$router.push({
@@ -142,7 +141,7 @@
                 });
               }, 1500);
             }).catch((err) => {
-              this.$notifier.showError('An error occurred while creating grant, please try again later')
+              this.$notifier.showError('An error occurred while creating grant, please try again later');
             }).finally(() => {
               this.isLoading = false;
             });

@@ -38,7 +38,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROFILE', organizationProfile);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
         const usersLoad = dispatch('loadUsers');
-        const universityLoad = dispatch('loadUniversity', { universityExternalId: "c8a87b12c23f53866acd397f43b591fd4e631419" });
+        const universityLoad = dispatch('loadUniversity', { universityExternalId: 'c8a87b12c23f53866acd397f43b591fd4e631419' });
         return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad]);
       })
       .catch((err) => { console.error(err); })
@@ -67,12 +67,12 @@ const actions = {
   loadUsers({ state, dispatch, commit }) {
     const blackList = ['regacc', 'hermes', 'initdelegate'];
     // TODO: request server for tenant users
-    return deipRpc.api.lookupAccountsAsync("0", 10000)
-      .then((accounts) => usersService.getEnrichedProfiles(accounts.filter(a => !a.is_research_group && !blackList.some(username => username == a.name)).map((a) => a.name)))
+    return deipRpc.api.lookupAccountsAsync('0', 10000)
+      .then((accounts) => usersService.getEnrichedProfiles(accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username == a.name)).map((a) => a.name)))
       .then((users) => {
         commit('SET_ALL_USERS', users);
       })
-      .catch((err) => { console.error(err); })
+      .catch((err) => { console.error(err); });
   },
 
   loadUniversity({ state, dispatch, commit }, { universityExternalId }) {

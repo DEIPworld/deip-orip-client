@@ -13,7 +13,6 @@ const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
-
 const state = {
   isLoadingDashboardPage: false,
 
@@ -206,7 +205,6 @@ const actions = {
           return [research.external_id, ...unique];
         }, []);
 
-
         [
           ...state.investedResearches,
           ...state.investingResearches,
@@ -249,7 +247,7 @@ const actions = {
         return Promise.all(shares.map((s) => researchService.getResearch(s.research_external_id)));
       })
       .then((items) => {
-        const researches = items.filter(r => !!r);
+        const researches = items.filter((r) => !!r);
         commit('SET_INVESTED_RESEARCHES', researches);
       })
       .finally(() => {
@@ -268,7 +266,7 @@ const actions = {
         return Promise.all(sales.map((s) => researchService.getResearch(s.research_external_id)));
       })
       .then((items) => {
-        const researches = items.filter(r => !!r);
+        const researches = items.filter((r) => !!r);
         commit('SET_INVESTING_RESEARCHES_TOKEN_SALES', researches);
       })
       .finally(() => {
@@ -299,11 +297,11 @@ const actions = {
 
   loadBookmarkedResearches({ commit, rootGetters }, { excludeIds, notify } = { excludeIds: [] }) {
     const user = rootGetters['auth/user'];
-    
+
     const externalIds = user.researchBookmarks.map((b) => b.researchId).filter((id) => !excludeIds.some((rId) => rId == id));
     return Promise.all(externalIds.map((externalId) => researchService.getResearch(externalId)))
       .then((items) => {
-        const researches = items.filter(r => !!r);
+        const researches = items.filter((r) => !!r);
         commit('SET_BOOKMARKED_RESEARCHES', researches);
         return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearchId(research.id)));
       })
@@ -323,7 +321,7 @@ const actions = {
 
   loadExperts({ commit }, { username, notify } = {}) {
     // TODO: request server for tenant users
-    deipRpc.api.lookupAccountsAsync("0", 10000)
+    deipRpc.api.lookupAccountsAsync('0', 10000)
       .then((accounts) => {
         const blackList = ['regacc', 'hermes', 'initdelegate', username];
         const experts = accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name)).map((a) => a.name);

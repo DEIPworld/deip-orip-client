@@ -85,13 +85,13 @@
           const reviewData = html;
           const researchContentCriterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
           const researchContentExternalId = this.content.external_id;
-          const weight = `100.00 %`;
+          const weight = '100.00 %';
           const scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {
             const val = this.assessmentCriteria[key];
             return [...scores, [parseInt(key), parseInt(val)]];
           }, []);
 
-          const disciplines = this.userRelatedExpertise.map(exp => exp.discipline_external_id);
+          const disciplines = this.userRelatedExpertise.map((exp) => exp.discipline_external_id);
 
           const assessment = [
             'multicriteria_scoring_assessment_model',
@@ -103,7 +103,7 @@
 
           const extensions = [];
 
-          return researchContentReviewsService.createReviewViaOffchain(this.user.privKey,{
+          return researchContentReviewsService.createReviewViaOffchain(this.user.privKey, {
             author: this.user.username,
             researchContentExternalId,
             content: reviewData,
@@ -113,7 +113,7 @@
             extensions
           })
             .then((data) => {
-              this.$notifier.showSuccess('Your review has been published successfully !')
+              this.$notifier.showSuccess('Your review has been published successfully !');
               this.$router.push({
                 name: 'ResearchContentDetails',
                 params: {
@@ -126,7 +126,7 @@
             })
             .catch((err) => {
               console.error(err);
-              this.$notifier.showError('An error occurred while adding review, please try again later')
+              this.$notifier.showError('An error occurred while adding review, please try again later');
             })
             .finally(() => {
               this.isLoading = false;

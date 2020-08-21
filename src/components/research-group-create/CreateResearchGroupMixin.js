@@ -45,5 +45,5 @@ export const CreateResearchGroupMixin = {
         console.error('Invalid back router token');
       }
     }
-  },
-}
+  }
+};

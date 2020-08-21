@@ -1,7 +1,6 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="6">
-
       <div class="text-h5 text-center mb-3">
         Add title and description
       </div>

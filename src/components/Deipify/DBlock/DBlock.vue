@@ -2,7 +2,6 @@
   <v-sheet>
     <div :class="contentClassList">
       <div v-if="hasHeader" :class="headerClassList">
-
         <slot name="titleLeft" />
 
         <div class="spacer">

@@ -6,7 +6,6 @@ import { UsersService } from '@deip/users-service';
 import { getNodeById } from '../../common/disciplines/DisciplineTreeService';
 import SortFieldsSvc from '../services/SortFieldsSvc';
 
-
 const disciplinesService = DisciplinesService.getInstance();
 const usersService = UsersService.getInstance();
 

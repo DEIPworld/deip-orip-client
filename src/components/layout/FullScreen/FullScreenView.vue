@@ -13,7 +13,6 @@
             </v-btn>
           </slot>
         </template>
-
       </full-screen-bar>
     </portal>
 

@@ -197,11 +197,11 @@
           []
         )
           .then(() => {
-            this.$notifier.showSuccess('Application has been approved successfully')
+            this.$notifier.showSuccess('Application has been approved successfully');
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_approved' });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occured while approving application, please try again later')
+            this.$notifier.showError('An error occured while approving application, please try again later');
             console.error(err);
           }).finally(() => {
             this.isApproveBtnLoading = false;
@@ -217,11 +217,11 @@
           []
         )
           .then(() => {
-            this.$notifier.showSuccess('Application has been rejected successfully')
+            this.$notifier.showSuccess('Application has been rejected successfully');
             this.$store.dispatch('rad/setApplicationStatus', { status: 'application_rejected' });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occured while rejecting application, please try again later')
+            this.$notifier.showError('An error occured while rejecting application, please try again later');
             console.error(err);
           }).finally(() => {
             this.isRejectBtnLoading = false;

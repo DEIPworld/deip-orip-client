@@ -27,7 +27,6 @@
       </div>
     </div>
 
-
     <div class="c-pt-5 c-pb-4 reviewed-content-container">
       <div>
         <span>

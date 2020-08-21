@@ -125,13 +125,13 @@
           this.description,
           []
         ).then(() => {
-          this.$notifier.showSuccess(`Proposal was successfully created`)
+          this.$notifier.showSuccess('Proposal was successfully created');
 
           this.$emit('onCreate');
 
           setTimeout(() => this.$emit('close'), 1000);
         }).catch((err) => {
-          this.$notifier.showError(`Error occured`)
+          this.$notifier.showError('Error occured');
 
           console.error(err);
         }).finally(() => {

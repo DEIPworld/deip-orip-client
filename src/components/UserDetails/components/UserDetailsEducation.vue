@@ -136,9 +136,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`)
+            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`);
           }, (err) => {
-            this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`)
+            this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`);
             console.error(err);
           })
           .finally(() => {

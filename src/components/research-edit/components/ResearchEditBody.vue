@@ -97,7 +97,6 @@
       </div>
     </template>
 
-
     <v-divider class="mt-9" />
 
     <div class="my-6">
@@ -321,9 +320,8 @@
 
           if (componentSchema.readinessLevels[enabledCriteria.value.index]) { // check if a step is removed from the component after editing
             return enabledCriteria;
-          } else {
-            return { ...enabledCriteria, value: { index: null } };
           }
+          return { ...enabledCriteria, value: { index: null } };
         });
 
       const milestones = this.milestones.map((m) => ({
@@ -369,7 +367,7 @@
                 extensions: []
               })
                 .then(() => {
-                  this.$notifier.showSuccess('Proposal has been sent successfully!')
+                  this.$notifier.showSuccess('Proposal has been sent successfully!');
                   if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
                     this.$router.push({
                       name: 'ResearchDetails',
@@ -391,7 +389,7 @@
                 .catch((err) => {
                   console.log(err);
 
-                  this.$notifier.showError('An error occurred during proposal sending')
+                  this.$notifier.showError('An error occurred during proposal sending');
                 })
                 .finally(() => {
                   this.isMetaSaving = false;
@@ -418,9 +416,7 @@
               : false
           }));
 
-          const tenantCriterias = this.tenantCriterias.map(criteria => {
-            return criteria.value.index != null ? { ...criteria } : { ...criteria, value: null };
-          });
+          const tenantCriterias = this.tenantCriterias.map((criteria) => (criteria.value.index != null ? { ...criteria } : { ...criteria, value: null }));
           researchService.updateResearchOffchainMeta(this.research.external_id, {
             milestones,
             videoSrc: this.videoSrc,
@@ -429,7 +425,7 @@
             tenantCategory: this.tenantCategory
           })
             .then(() => {
-              this.$notifier.showSuccess('Info has been change successfully!')
+              this.$notifier.showSuccess('Info has been change successfully!');
               this.$router.push({
                 name: 'ResearchDetails',
                 params: {
@@ -441,7 +437,7 @@
             .catch((err) => {
               console.error(err);
 
-              this.$notifier.showError('An error occurred during change info')
+              this.$notifier.showError('An error occurred during change info');
             })
             .finally(() => {
               this.isRefSaving = false;
@@ -522,7 +518,7 @@
       backgroundUploadSuccess(file, response) {
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.showSuccess(`Background image has been updated successfully ! Refresh the page please`)
+        this.$notifier.showSuccess('Background image has been updated successfully ! Refresh the page please');
       },
 
       backgroundUploadError(file, message, xhr) {
@@ -530,7 +526,7 @@
 
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.showError(`Sorry, an error occurred while uploading background image, please try again later`)
+        this.$notifier.showError('Sorry, an error occurred while uploading background image, please try again later');
       }
     }
   };

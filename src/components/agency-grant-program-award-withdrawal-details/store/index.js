@@ -14,7 +14,6 @@ const usersService = UsersService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const researchService = ResearchService.getInstance();
 
-
 const state = {
   isLoadingAwardDetailsPage: false,
   withdrawal: undefined,

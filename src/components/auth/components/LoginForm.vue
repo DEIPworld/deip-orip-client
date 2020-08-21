@@ -89,7 +89,7 @@
       DInputText,
       DInputPassword,
       DFormBlock,
-      DForm,
+      DForm
     },
     props: {
       logo: {
@@ -172,7 +172,7 @@
             } catch (err) {
               accessService.clearAccessToken();
               this.disable = false;
-              this.$notifier.showError('Invalid private key format')
+              this.$notifier.showError('Invalid private key format');
               return;
             }
 
@@ -186,7 +186,7 @@
             if (!response.success) {
               accessService.clearAccessToken();
               this.disable = false;
-              this.$notifier.showError(response.error)
+              this.$notifier.showError(response.error);
               return;
             }
 
@@ -202,7 +202,7 @@
           }).catch((err) => {
             accessService.clearAccessToken();
             this.disable = false;
-          this.$notifier.showError(err.message)
+            this.$notifier.showError(err.message);
           });
       }
     }

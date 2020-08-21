@@ -43,7 +43,6 @@
   };
 </script>
 
-
 <style lang="less" scoped>
 	#file-iframe {
 			min-height: 800px;

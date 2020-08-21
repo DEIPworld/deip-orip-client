@@ -110,7 +110,6 @@
         </v-row>
       </v-col>
 
-
       <v-col cols="6" class="pa-6 grey-background">
         <v-row>
           <v-col cols="12">

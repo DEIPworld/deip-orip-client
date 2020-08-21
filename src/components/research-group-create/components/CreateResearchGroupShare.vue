@@ -27,10 +27,10 @@
             <div>
               <v-text-field
                 v-model="member.stake"
+                v-mask="'###'"
                 class="width-4 pa-0 rtl"
                 suffix="%"
                 hide-details
-                v-mask="'###'"
               />
             </div>
           </div>

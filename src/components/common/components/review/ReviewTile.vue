@@ -23,7 +23,12 @@
           <v-col cols="12">
             <span class="grey--text pl-6">{{ reviewModel.created_at | dateFormat('D MMM YYYY', true) }}</span>
           </v-col>
-          <v-col cols="7" lg="8" xl="9" class="pr-3">
+          <v-col
+            cols="7"
+            lg="8"
+            xl="9"
+            class="pr-3"
+          >
             <div class="pl-6">
               <div class="pb-2">
                 <span v-html="extractPreview(reviewModel)" />
@@ -34,7 +39,12 @@
               </div>
             </div>
           </v-col>
-          <v-col cols="5" lg="4" xl="3" class="pl-3">
+          <v-col
+            cols="5"
+            lg="4"
+            xl="3"
+            class="pl-3"
+          >
             <div>
               <review-assessment v-model="reviewModel.scores" :research-content-type="researchContentType" />
               <div v-if="reviewModel.votes.length" class="pt-2">

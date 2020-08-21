@@ -215,7 +215,7 @@
     //   }
     },
     watch: {
-      ['formData.isActive']() {
+      'formData.isActive': function () {
         if (this.formData.isActive) {
           this.formData.period.to = undefined;
         }
@@ -267,16 +267,16 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('auth/loadProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${this.formData.company}" employment has been saved successfully!"`)
+            this.$notifier.showSuccess(`"${this.formData.company}" employment has been saved successfully!"`);
           }, (err) => {
-            this.$notifier.showError(`An error occurred while saving "${this.formData.company}" details, please try again later`)
+            this.$notifier.showError(`An error occurred while saving "${this.formData.company}" details, please try again later`);
             console.error(err);
           })
           .finally(() => {
             this.isProcessing = false;
             this.$router.back();
           });
-      },
+      }
     }
   };
 </script>

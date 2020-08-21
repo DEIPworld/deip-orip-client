@@ -36,4 +36,4 @@ export const CreateTokenSaleMixin = {
         this.research = research;
       });
   }
-}
+};

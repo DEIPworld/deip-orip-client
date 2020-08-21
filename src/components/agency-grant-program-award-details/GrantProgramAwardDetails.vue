@@ -431,12 +431,12 @@
                 <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
                   <v-simple-checkbox
                     v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
-                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                          (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
-                          primary
-                          :value="isSelected"
-                          @input="select($event)">
-                  </v-simple-checkbox>
+                      (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
+                      (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
+                    primary
+                    :value="isSelected"
+                    @input="select($event)"
+                  />
                 </td>
                 <td>
                   <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber } }">
@@ -491,7 +491,7 @@
   import { mapGetters } from 'vuex';
   import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
   import { GrantsService } from '@deip/grants-service';
-  import { Ripple } from 'vuetify/lib/directives'
+  import { Ripple } from 'vuetify/lib/directives';
 
   const grantsService = GrantsService.getInstance();
 
@@ -748,7 +748,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -786,7 +786,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -824,7 +824,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -862,7 +862,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -893,7 +893,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.isAwardApproving = false;
@@ -922,7 +922,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.isAwardRejecting = false;
@@ -959,6 +959,5 @@
     text-align: center;
     text-transform: uppercase;
   }
-
 
 </style>

@@ -229,9 +229,9 @@
 
     created() {
       this.$store.dispatch('adminPanel/loadAllMembers')
-      .then(() => {
-        this.$setReady()
-      })
+        .then(() => {
+          this.$setReady();
+        });
     },
 
     methods: {
@@ -301,12 +301,12 @@
         this.isDisabled = true;
         return tenantService.rejectSignUpRequest(name)
           .then(() => {
-            this.$notifier.showSuccess()
+            this.$notifier.showSuccess();
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.isDisabled = false;

@@ -53,13 +53,13 @@
                       <router-link
                         class="a"
                         :to="{
-                            name: 'ResearchContentDetails',
-                            params: {
-                              research_group_permlink: encodeURIComponent(researchGroup.permlink),
-                              research_permlink: encodeURIComponent(research.permlink),
-                              content_permlink: encodeURIComponent(researchContent.permlink)
-                            }
-                          }"
+                          name: 'ResearchContentDetails',
+                          params: {
+                            research_group_permlink: encodeURIComponent(researchGroup.permlink),
+                            research_permlink: encodeURIComponent(research.permlink),
+                            content_permlink: encodeURIComponent(researchContent.permlink)
+                          }
+                        }"
                       >
                         {{ researchContent.title }}
                       </router-link>
@@ -191,13 +191,13 @@
                       <router-link
                         class="a"
                         :to="{
-                            name: 'ResearchContentDetails',
-                            params: {
-                              research_group_permlink: encodeURIComponent(ref.researchGroup.permlink),
-                              research_permlink: encodeURIComponent(ref.research.permlink),
-                              content_permlink: encodeURIComponent(ref.researchContent.permlink)
-                            }
-                          }"
+                          name: 'ResearchContentDetails',
+                          params: {
+                            research_group_permlink: encodeURIComponent(ref.researchGroup.permlink),
+                            research_permlink: encodeURIComponent(ref.research.permlink),
+                            content_permlink: encodeURIComponent(ref.researchContent.permlink)
+                          }
+                        }"
                       >
                         {{ ref.researchContent.title }}
                       </router-link>
@@ -219,7 +219,6 @@
         </div>
       </v-col>
     </v-row>
-
 
     <v-row class="pt-12">
       <v-col

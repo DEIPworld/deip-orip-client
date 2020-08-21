@@ -95,7 +95,7 @@
             []
           ))
           .then((data) => {
-            this.$notifier.showSuccess('Your review has been published successfully !')
+            this.$notifier.showSuccess('Your review has been published successfully !');
             this.$router.push({
               name: 'ResearchApplicationDetails',
               params: {
@@ -107,7 +107,7 @@
             });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occurred while adding review, please try again later')
+            this.$notifier.showError('An error occurred while adding review, please try again later');
             console.error(err);
           })
           .finally(() => {

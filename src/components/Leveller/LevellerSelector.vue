@@ -12,7 +12,6 @@
         </v-avatar>
         <span class="text-body-2">{{ item.text }}</span>
       </div>
-
     </template>
 
     <template #item="{ item, on, attrs }">
@@ -27,7 +26,6 @@
       </leveller-item>
     </template>
   </v-select>
-
 </template>
 
 <script>
@@ -48,7 +46,7 @@
     },
     computed: {
       currentStep() {
-        return this.items.find(x => x.value === this.value);
+        return this.items.find((x) => x.value === this.value);
       }
     }
   };

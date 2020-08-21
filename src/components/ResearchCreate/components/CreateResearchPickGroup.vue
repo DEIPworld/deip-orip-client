@@ -1,7 +1,6 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="6">
-
       <div class="text-h5 text-center mb-3">
         Select team
       </div>
@@ -102,7 +101,7 @@
           .filter((c) => c.rgt.research_group_id == group.id)
           .map((c) => this.$options.filters.fullname(c));
       }
-    },
+    }
     // created() {
     //   this.$store.dispatch('auth/loadGroups');
     // }

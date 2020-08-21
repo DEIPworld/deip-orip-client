@@ -90,7 +90,7 @@ const actions = {
   getAllProjects(context) {
     return Promise.all([
       context.dispatch('getPendingProjects'),
-      context.dispatch('getPublicProjects'),
+      context.dispatch('getPublicProjects')
     ]);
   }
 };
@@ -101,7 +101,7 @@ const mutations = {
     state.registeredMembers = list;
   },
   SET_WAITING_MEMBERS(state, list) {
-    state.waitingMembers = list
+    state.waitingMembers = list;
   },
 
   //= ==============

@@ -10,7 +10,8 @@ module.exports = {
       // }
     }
   },
-  chainWebpack: config => {
+
+  chainWebpack: (config) => {
     // ['vue-modules', 'vue', 'normal-modules', 'normal'].forEach(match => {
     //   config.module
     //     .rule('sass')
@@ -30,6 +31,7 @@ module.exports = {
     //     });
     // });
   },
+
   devServer: {
     setup(app) {
       app.get('/env', (req, res) => {
@@ -37,12 +39,24 @@ module.exports = {
       });
     }
   },
+
   productionSourceMap: false,
   lintOnSave: false,
   assetsDir: 'assets',
+
   transpileDependencies: [
     '@deip/*',
     'vuetify'
   ],
-  runtimeCompiler: true
+
+  runtimeCompiler: true,
+
+  pluginOptions: {
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: true
+    }
+  }
 };

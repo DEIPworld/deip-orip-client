@@ -42,7 +42,12 @@
           class="pt-4 display-flex justify-space-between"
         >
           <div>
-            <platform-avatar :user="user" :size="30" link-to-profile link-to-profile-class="px-1" />
+            <platform-avatar
+              :user="user"
+              :size="30"
+              link-to-profile
+              link-to-profile-class="px-1"
+            />
           </div>
           <v-btn
             v-if="user.account.name != creatorUsername"
@@ -50,7 +55,9 @@
             color="grey"
             class="ma-0"
             @click="cancelMember(i)"
-          >Cancel</v-btn>
+          >
+            Cancel
+          </v-btn>
         </div>
 
         <v-divider v-show="formData.members.length > 0" class="mt-4" />
@@ -61,9 +68,21 @@
           class="pt-4 display-flex justify-space-between"
         >
           <div>
-            <platform-avatar :user="user" :size="30" link-to-profile link-to-profile-class="px-1" />
+            <platform-avatar
+              :user="user"
+              :size="30"
+              link-to-profile
+              link-to-profile-class="px-1"
+            />
           </div>
-          <v-btn text color="primary" class="ma-0" @click="inviteMember(user)">+ Invite</v-btn>
+          <v-btn
+            text
+            color="primary"
+            class="ma-0"
+            @click="inviteMember(user)"
+          >
+            + Invite
+          </v-btn>
         </div>
       </v-col>
     </d-form-block>
@@ -88,9 +107,18 @@
           color="primary"
           :disabled="disabled"
           @click="$router.back()"
-        >Cancel</v-btn>
+        >
+          Cancel
+        </v-btn>
 
-        <v-btn type="submit" color="primary" class="ml-2" :loading="loading">Create team</v-btn>
+        <v-btn
+          type="submit"
+          color="primary"
+          class="ml-2"
+          :loading="loading"
+        >
+          Create team
+        </v-btn>
       </slot>
     </div>
   </v-form>
@@ -113,9 +141,7 @@
     let handler = _(allUsers);
 
     if (q !== '') {
-      handler = handler.filter((user) =>
-        _.startsWith(user.account.name.toLowerCase(), q.toLowerCase())
-      );
+      handler = handler.filter((user) => _.startsWith(user.account.name.toLowerCase(), q.toLowerCase()));
     }
 
     return handler
@@ -201,16 +227,15 @@
       this.creatorUsername = this.$store.getters['auth/user'].username;
       // TODO: request server for tenant users
       deipRpc.api
-        .lookupAccountsAsync("0", 10000)
+        .lookupAccountsAsync('0', 10000)
         .then((accounts) => {
           const blackList = ['regacc', 'hermes', 'initdelegate'];
           const usernames = [];
           usernames.push(
             ...accounts
               .filter(
-                (a) =>
-                  !a.is_research_group &&
-                  !blackList.some((username) => username == a.name)
+                (a) => !a.is_research_group
+                  && !blackList.some((username) => username == a.name)
               )
               .map((a) => a.name)
           );
@@ -234,7 +259,7 @@
         });
     },
     methods: {
-      debounceSearchUsers: _.debounce(function() {
+      debounceSearchUsers: _.debounce(function () {
         this.selectableUsers = prepareSelectableUsers(
           this.allUsers,
           this.formData.members,

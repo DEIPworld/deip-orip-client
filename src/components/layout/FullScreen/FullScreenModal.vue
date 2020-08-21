@@ -20,21 +20,20 @@
             </v-btn>
           </slot>
         </template>
-
       </full-screen-bar>
 
-<!--      <v-app-bar-->
-<!--        v-if="!hideToolbar"-->
-<!--        flat-->
-<!--        absolute-->
-<!--        color="#fff"-->
-<!--      >-->
-<!--        <v-btn @click="open = false" icon>-->
-<!--          <v-icon>arrow_back</v-icon>-->
-<!--        </v-btn>-->
+      <!--      <v-app-bar-->
+      <!--        v-if="!hideToolbar"-->
+      <!--        flat-->
+      <!--        absolute-->
+      <!--        color="#fff"-->
+      <!--      >-->
+      <!--        <v-btn @click="open = false" icon>-->
+      <!--          <v-icon>arrow_back</v-icon>-->
+      <!--        </v-btn>-->
 
-<!--        <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>-->
-<!--      </v-app-bar>-->
+      <!--        <v-toolbar-title v-if="title">{{ title }}</v-toolbar-title>-->
+      <!--      </v-app-bar>-->
 
       <v-card-text
         class="pb-0 px-0 full-height"

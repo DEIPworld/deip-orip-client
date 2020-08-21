@@ -7,14 +7,14 @@
       dense
       @change="change"
     >
-      <v-item :value="VIEW_TYPES.GRID" #default="{ active, toggle }">
+      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.GRID">
         <v-btn icon class="my-n3" @click="toggle">
           <v-icon :color="active ? 'primary' : 'grey'">
             view_module
           </v-icon>
         </v-btn>
       </v-item>
-      <v-item :value="VIEW_TYPES.LIST" #default="{ active, toggle }">
+      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.LIST">
         <v-btn icon class="my-n3" @click="toggle">
           <v-icon :color="active ? 'primary' : 'grey'">
             view_list

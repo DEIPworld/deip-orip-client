@@ -34,10 +34,10 @@
 
         <v-text-field
           v-model="tokensAmount"
+          v-mask="'##'"
           label="Research Group Tokens"
           outlined
           suffix="%"
-          v-mask="'##'"
         />
       </v-card-text>
 
@@ -165,15 +165,15 @@
 
         researchGroupService.updateJoinRequest({ request: update })
           .then((updatedRequest) => {
-              self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-              this.$notifier.showSuccess(`You have denied join request from  "${self.joinRequest.username}" successfully !`);
+                  self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
+                  this.$notifier.showSuccess(`You have denied join request from  "${self.joinRequest.username}" successfully !`);
 
-              setTimeout(() => self.close(), 500);
-            },
-            (err) => {
-              this.$notifier.showError();
-              console.error(err);
-            })
+                  setTimeout(() => self.close(), 500);
+                },
+                (err) => {
+                  this.$notifier.showError();
+                  console.error(err);
+                })
           .finally(() => {
             self.isDenyingLoading = false;
           });

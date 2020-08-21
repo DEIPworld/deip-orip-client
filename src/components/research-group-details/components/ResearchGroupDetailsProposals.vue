@@ -21,7 +21,6 @@
         <research-group-details-proposals-item-proposal :item="item" />
       </template>
 
-
       <template #item.fail_reason="{ item }">
         <d-simple-tooltip v-if="item.fail_reason">
           <v-chip outlined color="error">
@@ -76,7 +75,7 @@
       </template>
 
       <template #expanded-item="{ item }">
-        <td></td>
+        <td />
         <td :colspan="proposalsHeader.length - 1">
           <research-group-details-proposals-item-expand :item="item" />
         </td>
@@ -96,7 +95,6 @@
   import ResearchGroupDetailsProposalsItemProposal from '@/components/research-group-details/components/ResearchGroupDetailsProposalsItemPartials/ResearchGroupDetailsProposalsItemProposal';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
-
 
   const researchGroupService = ResearchGroupService.getInstance();
   const proposalsService = ProposalsService.getInstance();
@@ -168,10 +166,9 @@
       filteredProposals() {
         return this.proposals.filter((proposal) => {
           if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
-            return !this.pendingInvites.some(invite => invite._id === proposal.external_id);
-          } else {
-            return true;
+            return !this.pendingInvites.some((invite) => invite._id === proposal.external_id);
           }
+          return true;
         });
       }
     },
@@ -200,7 +197,6 @@
                 researchGroupExternalId: this.group.external_id
               });
             });
-
         } else {
           promise = proposalsService.updateProposal(this.currentUser.privKey, {
             externalId: proposal.external_id,
@@ -233,7 +229,7 @@
           } else {
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
           }
-          this.$notifier.showSuccess('You have voted for the proposal successfully!')
+          this.$notifier.showSuccess('You have voted for the proposal successfully!');
         })
           .catch((err) => {
             alert(err.message);

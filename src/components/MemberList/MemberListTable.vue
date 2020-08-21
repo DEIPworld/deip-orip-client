@@ -26,7 +26,7 @@
         </span>
       </template>
       <template #item.expertise="{item}">
-        <span v-for="(discipline, i) in item.expertise" :key="i" class="text-caption text--secondary">{{ discipline.discipline_name }}{{ i + 1 < item.expertise.length ? ' · ' : ''}}</span>
+        <span v-for="(discipline, i) in item.expertise" :key="i" class="text-caption text--secondary">{{ discipline.discipline_name }}{{ i + 1 < item.expertise.length ? ' · ' : '' }}</span>
       </template>
       <template #item.created="{item}">
         <span class="text-body-2">
@@ -39,7 +39,12 @@
         </span>
       </template>
       <template v-if="isGroupMembersActionsColumnAvailable" #item.actions="{item}">
-        <v-btn v-if="isExcludingMemberAvailable(item.account.name)" icon small @click="showConfirmAction(item)">
+        <v-btn
+          v-if="isExcludingMemberAvailable(item.account.name)"
+          icon
+          small
+          @click="showConfirmAction(item)"
+        >
           <v-icon>clear</v-icon>
         </v-btn>
       </template>
@@ -64,7 +69,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
 
   const researchGroupService = ResearchGroupService.getInstance();
-  
+
   export default {
     name: 'MemberListTable',
     components: { MemberListTitle, DDialog },
@@ -182,7 +187,7 @@
           actionLabel: 'Confirm',
           loading: false,
           action: () => this.dropoutMember(member)
-        }
+        };
       }
     }
   };

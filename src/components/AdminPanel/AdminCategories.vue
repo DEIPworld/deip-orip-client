@@ -119,7 +119,7 @@
         updatedProfile.settings.researchCategories = updatedCategories;
         tenantService.updateTenantProfile(updatedProfile)
           .then(() => {
-            this.$notifier.showSuccess()
+            this.$notifier.showSuccess();
             const tenant = window.env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
           })

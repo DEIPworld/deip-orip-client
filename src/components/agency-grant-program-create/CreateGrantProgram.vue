@@ -1,6 +1,6 @@
 <template>
-   <v-container class="fill-height pa-0 full-height" fluid>
-   <v-stepper
+  <v-container class="fill-height pa-0 full-height" fluid>
+    <v-stepper
       v-if="!isFinished && organization"
       v-model="currentStep"
       alt-labels
@@ -155,7 +155,12 @@
       </v-stepper-items>
     </v-stepper>
 
-    <v-row v-if="isFinished" justify="center" align="center" class="fill-height">
+    <v-row
+      v-if="isFinished"
+      justify="center"
+      align="center"
+      class="fill-height"
+    >
       <v-col class="fill-height text-center py-5">
         <div class="text-h4">
           New Funding Opportunity has been created <br> successfully
@@ -179,7 +184,6 @@
     </v-row>
   </v-container>
 </template>
-
 
 <script>
   import { mapGetters } from 'vuex';
@@ -231,6 +235,31 @@
         isFinished: false,
         isSending: false
       };
+    },
+
+    created() {
+      const grantingAgencyOrg = '58e3bfd753fcb860a66b82635e43524b285ab708';
+      const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
+
+      deipRpc.api.getResearchGroupAsync(grantingAgencyOrg)
+        .then((organization) => {
+          const members = [];
+
+          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
+            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
+            .then((members) => {
+              this.organization = {
+                ...organization,
+                members
+              };
+              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
+            });
+        });
+
+      deipRpc.api.getResearchGroupAsync(treasuryOrg)
+        .then((organization) => {
+          this.treasury = organization;
+        });
     },
 
     methods: {
@@ -295,32 +324,7 @@
             this.isSending = false;
           });
       }
-    },
-
-    created() {
-      const grantingAgencyOrg = '58e3bfd753fcb860a66b82635e43524b285ab708';
-      const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
-
-      deipRpc.api.getResearchGroupAsync(grantingAgencyOrg)
-        .then((organization) => {
-          const members = [];
-
-          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
-            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
-            .then((members) => {
-              this.organization = {
-                ...organization,
-                members
-              };
-              this.foa.officers.push(this.organization.members.find(({ account: { name } }) => name == this.user.account.name).account.name);
-            });
-        });
-
-      deipRpc.api.getResearchGroupAsync(treasuryOrg)
-        .then((organization) => {
-          this.treasury = organization;
-        });
-    },
+    }
   };
 </script>
 

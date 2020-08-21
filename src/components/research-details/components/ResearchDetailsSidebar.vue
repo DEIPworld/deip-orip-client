@@ -117,7 +117,6 @@
           to join the research group
         </div>
       </div>
-
     </d-block>
 
     <v-divider />
@@ -159,7 +158,6 @@
 
     <v-divider v-if="isResearchGroupMember" />
     <d-block v-if="isResearchGroupMember" widget>
-
       <div v-if="research.is_private" class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           lock
@@ -175,7 +173,7 @@
     </d-block>
 
     <v-divider v-if="researchRef.partners.length" />
-    <d-block v-if="researchRef.partners.length" widget >
+    <d-block v-if="researchRef.partners.length" widget>
       <research-partners is-read-only :partners="researchRef.partners" />
     </d-block>
 
@@ -275,13 +273,12 @@
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
-
   export default {
     name: 'ResearchDetailsSidebar',
 
     components: {
       EciStats,
-      DBlock,
+      DBlock
     },
 
     data() {
@@ -363,7 +360,6 @@
           : undefined;
       },
       eciList() {
-
         return this.disciplinesList.map((discipline) => {
           const eciObj = this.research.eci_per_discipline.find(
             (item) => item[0] === discipline.id
@@ -467,7 +463,7 @@
           expert: this.selectedExpert.account.name
         })
           .then(() => {
-            this.$notifier.showSuccess('Request for the review has been sent successfully')
+            this.$notifier.showSuccess('Request for the review has been sent successfully');
             this.selectedExpert = null;
             this.selectedContentId = null;
           })
@@ -476,7 +472,7 @@
             if (err.response && err.response.data) {
               errMsg = err.response.data;
             }
-            this.$notifier.showError(errMsg)
+            this.$notifier.showError(errMsg);
           })
           .finally(() => {
             this.isRequestingReview = false;
@@ -494,10 +490,10 @@
           })
           .then(() => {
             this.$store.dispatch('auth/loadJoinRequests');
-            this.$notifier.showSuccess('Join request has been sent successfully!')
+            this.$notifier.showSuccess('Join request has been sent successfully!');
           })
           .catch((err) => {
-            this.$notifier.showError(`An error occurred while sending join request, please try again later!`)
+            this.$notifier.showError('An error occurred while sending join request, please try again later!');
             console.error(err);
           })
           .finally(() => {

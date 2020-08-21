@@ -26,7 +26,6 @@
           </v-avatar>
         </div>
       </div>
-
     </div>
   </div>
 </template>

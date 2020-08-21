@@ -26,7 +26,6 @@
         <component :is="listComponent" :items="items" />
       </template>
     </v-data-iterator>
-
   </d-block>
 </template>
 

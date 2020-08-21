@@ -9,9 +9,9 @@
       <router-link
         class="text-subtitle-1 half-bold investment-title"
         :to="{ name: 'ResearchDetails', params: {
-              research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
-              research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
-            }}"
+          research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
+          research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
+        }}"
       >
         {{ selectedInvestment.research.title }}
       </router-link>
@@ -20,19 +20,18 @@
     <div class="py-2 full-width">
       <v-divider />
       <div class="display-flex justify-space-between pa-2 align-middle">
-            <span>
-              <v-icon small>event</v-icon>
-              <span class="text-caption grey--text px-1">Created {{ moment(selectedInvestment.research.created_at).format('DD MMM YYYY') }} by {{ selectedInvestment.research.owner | fullname }}</span>
-            </span>
         <span>
-              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>attachment</v-icon></span>
-              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>compare</v-icon></span>
-              <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>delete</v-icon></span>
-            </span>
+          <v-icon small>event</v-icon>
+          <span class="text-caption grey--text px-1">Created {{ moment(selectedInvestment.research.created_at).format('DD MMM YYYY') }} by {{ selectedInvestment.research.owner | fullname }}</span>
+        </span>
+        <span>
+          <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>attachment</v-icon></span>
+          <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>compare</v-icon></span>
+          <span class="icon-btn" @click="showUnderDevelopmentAlert()"><v-icon>delete</v-icon></span>
+        </span>
       </div>
       <v-divider />
     </div>
-
 
     <div v-if="currentPhase" class="px-6 py-2 full-width">
       <div class="text-subtitle-1 half-bold">

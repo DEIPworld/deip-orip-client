@@ -64,7 +64,7 @@
     },
     data() {
       return {
-        isValid: false,
+        isValid: false
       };
     },
     methods: {
@@ -92,20 +92,19 @@
         // console.info("focus")
       },
       onInput(value, target) {
-
-        const localModel = dotWild.expand({ [target]: value })
+        const localModel = dotWild.expand({ [target]: value });
         const localModelKey = Object.keys(localModel)[0];
         const localModelValue = localModel[localModelKey];
 
         let outputValue = localModelValue;
 
-        if(this.model[localModelKey]) {
+        if (this.model[localModelKey]) {
           if (kindOf(localModelValue) === 'object') {
             outputValue = deepmerge(this.model[localModelKey], localModelValue);
           }
           if (kindOf(localModelValue) === 'array') {
-            const index = localModelValue.indexOf(localModelValue.filter(() => true)[0])
-            const clone = [...this.model[localModelKey]]
+            const index = localModelValue.indexOf(localModelValue.filter(() => true)[0]);
+            const clone = [...this.model[localModelKey]];
             clone[index] = localModelValue[index];
             outputValue = clone;
           }

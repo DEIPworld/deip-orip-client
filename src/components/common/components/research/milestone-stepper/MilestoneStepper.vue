@@ -70,7 +70,6 @@
     };
   }
 
-
   export default {
     name: 'MilestoneStepper',
     props: {

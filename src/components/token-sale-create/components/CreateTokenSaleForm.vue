@@ -47,7 +47,6 @@
     </d-form-block>
     <d-form-block title="Select min and max amounts">
       <v-col cols="12">
-
         <v-row no-gutters>
           <v-col style="margin-right: -1px;">
             <v-text-field
@@ -103,14 +102,18 @@
           color="primary"
           :disabled="disabled"
           @click="$router.back()"
-        >Cancel</v-btn>
+        >
+          Cancel
+        </v-btn>
 
         <v-btn
           type="submit"
           color="primary"
           class="ml-2"
           :loading="loading"
-        >{{ !isPersonalGroup ? 'Create Proposal' : 'Finish' }}</v-btn>
+        >
+          {{ !isPersonalGroup ? 'Create Proposal' : 'Finish' }}
+        </v-btn>
       </slot>
     </div>
   </v-form>
@@ -172,7 +175,7 @@
     computed: {
       ...mapGetters({
         userPersonalGroup: 'auth/userPersonalGroup',
-        assets: 'auth/assets',
+        assets: 'auth/assets'
       }),
 
       isPersonalGroup() {
@@ -199,52 +202,44 @@
         isFormValid: false,
 
         rules: {
-          amountToSellRules: (v) =>
-            this.verifyAmountRange(v) ||
-            `Amount should be from 0% to ${this.ownedAmount / 100}%`,
+          amountToSellRules: (v) => this.verifyAmountRange(v)
+            || `Amount should be from 0% to ${this.ownedAmount / 100}%`,
 
           required: (value) => !!value || 'This field is required',
-          greaterThanNow: (val) =>
-            Date.parse(val) > Date.now() || 'Date should be in the future',
+          greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
 
-          startDateShouldBeSmaller: (val) =>
-            !this.formData.endDate ||
-            Date.parse(val) < Date.parse(this.formData.endDate) ||
-            'Start date should be smaller than end date',
+          startDateShouldBeSmaller: (val) => !this.formData.endDate
+            || Date.parse(val) < Date.parse(this.formData.endDate)
+            || 'Start date should be smaller than end date',
 
-          endDateShouldBeGreater: (val) =>
-            !this.formData.startDate ||
-            Date.parse(val) > Date.parse(this.formData.startDate) ||
-            'End date should be greater than start date',
+          endDateShouldBeGreater: (val) => !this.formData.startDate
+            || Date.parse(val) > Date.parse(this.formData.startDate)
+            || 'End date should be greater than start date',
           softCapSmaller: () => {
-            const isHardCapValid =
-              this.deipTokenValidator(this.formData.hardCap) === true;
-            const isSoftCapValid =
-              this.deipTokenValidator(this.formData.softCap) === true;
+            const isHardCapValid = this.deipTokenValidator(this.formData.hardCap) === true;
+            const isSoftCapValid = this.deipTokenValidator(this.formData.softCap) === true;
 
             return (
-              !isHardCapValid ||
-              (isSoftCapValid &&
-                isHardCapValid &&
-                parseFloat(this.formData.hardCap) >
-                  parseFloat(this.formData.softCap)) ||
-              'Min amount should be smaller than max amount'
+              !isHardCapValid
+              || (isSoftCapValid
+                && isHardCapValid
+                && parseFloat(this.formData.hardCap)
+                  > parseFloat(this.formData.softCap))
+              || 'Min amount should be smaller than max amount'
             );
           },
 
           hardCapGreater: () => {
-            const isSoftCapValid =
-              this.deipTokenValidator(this.formData.softCap) === true;
-            const isHardCapValid =
-              this.deipTokenValidator(this.formData.hardCap) === true;
+            const isSoftCapValid = this.deipTokenValidator(this.formData.softCap) === true;
+            const isHardCapValid = this.deipTokenValidator(this.formData.hardCap) === true;
 
             return (
-              !isSoftCapValid ||
-              (isSoftCapValid &&
-                isHardCapValid &&
-                parseFloat(this.formData.hardCap) >
-                  parseFloat(this.formData.softCap)) ||
-              'Max amount should be greater than min amount'
+              !isSoftCapValid
+              || (isSoftCapValid
+                && isHardCapValid
+                && parseFloat(this.formData.hardCap)
+                  > parseFloat(this.formData.softCap))
+              || 'Max amount should be greater than min amount'
             );
           }
         }
@@ -256,7 +251,7 @@
         .add(10, 'minutes')
         .format('YYYY-MM-DD HH:mm');
       this.setStartDate(startDate);
-      this.formData.asset = this.assets[0].id
+      this.formData.asset = this.assets[0].id;
     },
     methods: {
       verifyAmountRange(value) {

@@ -37,7 +37,13 @@
             <v-icon @click="prevSlide('joinRequestsSlider', pendingJoinRequests)">
               navigate_before
             </v-icon>
-            <v-carousel hide-delimiters :show-arrows="false" light height="auto" v-model="joinRequestsSlider">
+            <v-carousel
+              v-model="joinRequestsSlider"
+              hide-delimiters
+              :show-arrows="false"
+              light
+              height="auto"
+            >
               <v-carousel-item
                 v-for="(join, index) in pendingJoinRequests"
                 :key="'join-request-' + index"
@@ -62,7 +68,13 @@
             <v-icon @click="nextSlide('joinRequestsSlider', pendingJoinRequests)">
               navigate_next
             </v-icon>
-            <v-btn text small class="ml-1 align-self-start" color="primary" @click="openJoinRequestDetails(pendingJoinRequests[joinRequestsSlider])">
+            <v-btn
+              text
+              small
+              class="ml-1 align-self-start"
+              color="primary"
+              @click="openJoinRequestDetails(pendingJoinRequests[joinRequestsSlider])"
+            >
               View
             </v-btn>
           </div>
@@ -74,8 +86,15 @@
                 navigate_before
               </v-icon>
             </v-btn>
-            
-            <v-carousel hide-delimiters :show-arrows="false" light height="auto" v-model="invitesSlider" class="mx-2">
+
+            <v-carousel
+              v-model="invitesSlider"
+              hide-delimiters
+              :show-arrows="false"
+              light
+              height="auto"
+              class="mx-2"
+            >
               <v-carousel-item
                 v-for="(invite, index) in invites"
                 :key="'invite-request-' + index"
@@ -107,7 +126,13 @@
                 navigate_next
               </v-icon>
             </v-btn>
-            <v-btn text small class="ml-1 align-self-start" color="primary" :to="{ name: 'UserDetails', params: { account_name: invites[invitesSlider].user.account.name } }">
+            <v-btn
+              text
+              small
+              class="ml-1 align-self-start"
+              color="primary"
+              :to="{ name: 'UserDetails', params: { account_name: invites[invitesSlider].user.account.name } }"
+            >
               View
             </v-btn>
           </div>

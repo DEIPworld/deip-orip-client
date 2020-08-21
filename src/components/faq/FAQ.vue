@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <layout-section>
       <div class="text-h4 font-weight-bold mb-4">
@@ -24,10 +23,10 @@
     <v-divider />
     <layout-section>
       <content-block
-        :max-width="800"
         v-for="(item, i) in faqs"
         :id="`question${i+1}`"
         :key="`${i}-allfaq`"
+        :max-width="800"
         no-gutters
         class="mb-12"
       >

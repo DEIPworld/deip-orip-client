@@ -220,7 +220,7 @@
       notifications() { return this.$store.getters['auth/user'].notifications; },
 
       notificationType(notification) {
-       return 'a';
+        return 'a';
       }
     },
 

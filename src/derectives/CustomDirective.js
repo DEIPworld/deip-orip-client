@@ -13,4 +13,4 @@ export const CustomDirective = {
 
     el.classList.add(`${prefix}--${binding.value || 'custom'}`);
   }
-}
+};

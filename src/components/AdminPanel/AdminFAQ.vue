@@ -2,7 +2,9 @@
   <admin-view title="FAQ">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
-        <v-icon left>add_comment</v-icon>
+        <v-icon left>
+          add_comment
+        </v-icon>
         Add question
       </v-btn>
     </template>
@@ -35,7 +37,6 @@
       </template>
     </side-actions-card>
 
-
     <d-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
@@ -44,7 +45,6 @@
     >
       {{ actionDialog.description }}
     </d-dialog>
-
   </admin-view>
 </template>
 
@@ -139,9 +139,8 @@
               ...q,
               isVisible: true
             };
-          } else {
-            return q;
           }
+          return q;
         });
         this.updateFAQ(updatedFAQ);
       },
@@ -152,9 +151,8 @@
               ...q,
               isVisible: false
             };
-          } else {
-            return q;
           }
+          return q;
         });
         this.updateFAQ(updatedFAQ);
       },

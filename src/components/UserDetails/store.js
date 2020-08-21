@@ -44,13 +44,11 @@ const state = {
 // getters
 const getters = {
   userInfo: (state, getters) => ({ account: state.account, profile: state.profile }),
-  researchList: (state, getters, rootState, rootGetters) => {
-    return state.researchList.map((research) => {
-      const group = state.groups.find(({ id }) => id === research.research_group_id);
-      // return { research: { ...research }, group };
-      return { ...research };
-    });
-  },
+  researchList: (state, getters, rootState, rootGetters) => state.researchList.map((research) => {
+    const group = state.groups.find(({ id }) => id === research.research_group_id);
+    // return { research: { ...research }, group };
+    return { ...research };
+  }),
 
   groups: (state) => state.groups,
   expertise: (state) => state.expertise,
@@ -163,7 +161,6 @@ const actions = {
       });
   },
 
-
   loadResearchList({ commit, state }, { username, notify } = {}) {
     return researchService.getUserResearchListing(username)
       .then((researches) => {
@@ -189,12 +186,10 @@ const actions = {
         // commit('SET_EXPERTISE', data);
       })
       .then((data) => {
-        const fullData = data.map((item, i) => {
-          return {
-            ...item,
-            discipline_name: disciplinesName[i]
-          }
-        });
+        const fullData = data.map((item, i) => ({
+          ...item,
+          discipline_name: disciplinesName[i]
+        }));
         // console.log(fullData)
         commit('SET_EXPERTISE', fullData);
       })

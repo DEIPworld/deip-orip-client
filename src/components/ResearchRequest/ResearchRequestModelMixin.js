@@ -14,7 +14,7 @@ export const ResearchRequestModelMixin = {
     getFrom: {
       type: String,
       default: null
-    },
+    }
   },
 
   computed: {
@@ -72,7 +72,7 @@ export const ResearchRequestModelMixin = {
             formData.append(key, JSON.stringify(model[key]));
           }
 
-          if (type === 'string' && !fileFields.includes(key))  {
+          if (type === 'string' && !fileFields.includes(key)) {
             formData.append(key, model[key]);
           }
 
@@ -107,4 +107,4 @@ export const ResearchRequestModelMixin = {
       }
     });
   }
-}
+};

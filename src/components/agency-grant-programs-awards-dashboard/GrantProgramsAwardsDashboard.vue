@@ -319,12 +319,12 @@
                   <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
                     <v-simple-checkbox
                       v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
-                            (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                            (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
+                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
+                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
                       primary
                       :value="isSelected"
-                      @input="select($event)">
-                    </v-simple-checkbox>
+                      @input="select($event)"
+                    />
                   </td>
                   <td>
                     <router-link class="a text-body-2" :to="{ name: 'GrantProgramAwardWithdrawalDetails', params: { award_number: item.awardee.award_number, subaward_number: item.awardee.subaward_number, payment_number: item.paymentNumber }}">
@@ -779,11 +779,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.showSuccess('Payment requests have been certified successfully!')
+            this.$notifier.showSuccess('Payment requests have been certified successfully!');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -816,11 +816,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.showSuccess('Payment requests have been approved successfully!')
+            this.$notifier.showSuccess('Payment requests have been approved successfully!');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -853,11 +853,11 @@
             return Promise.all([reload]);
           })
           .then(() => {
-            this.$notifier.showSuccess('Payment requests have been rejected successfully!')
+            this.$notifier.showSuccess('Payment requests have been rejected successfully!');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];
@@ -898,11 +898,11 @@
             return Promise.all([reloadAwards, reloadTokenStats]);
           })
           .then(() => {
-            this.$notifier.showSuccess('Payments have been sent successfully!')
+            this.$notifier.showSuccess('Payments have been sent successfully!');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError()
+            this.$notifier.showError();
           })
           .finally(() => {
             this.selectedPayments = [];

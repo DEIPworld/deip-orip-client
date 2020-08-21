@@ -125,8 +125,6 @@ const getters = {
 
   contentMetadata: (state, getters) => state.contentMetadata,
 
-
-
   researchContentReferencesGraph: (state, getters) => {
     const nodes = [];
     for (let i = 0; i < state.researchContentReferencesGraph.nodes.length; i++) {
@@ -141,7 +139,7 @@ const getters = {
     }
 
     return { nodes, links };
-  },
+  }
 };
 
 // actions
@@ -211,7 +209,7 @@ const actions = {
               contentVotesLoad,
               researchGroupDetailsLoad,
               referencesLoad,
-              dispatch('loadResearchContentEciStatsRecords', {research_content_external_id: contentObj.external_id })
+              dispatch('loadResearchContentEciStatsRecords', { research_content_external_id: contentObj.external_id })
             ]);
           }, (err) => {
             console.error(err);
@@ -415,7 +413,7 @@ const actions = {
       const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
       const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
 
-      if ( false /*!isGenesisContent */) { // TODO: recover this
+      if (false /*! isGenesisContent */) { // TODO: recover this
         const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id);
 
         const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL && p.is_completed).find((p) => {

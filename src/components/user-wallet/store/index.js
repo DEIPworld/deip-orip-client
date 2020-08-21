@@ -86,12 +86,11 @@ const actions = {
   },
 
   loadAssetsInfo({ commit }, user) {
-    console.log(user)
+    console.log(user);
     return Promise.all(user.balances.map(({ asset_id }) => assetsService.getAssetById(asset_id)))
       .then((data) => {
         const assetsInfo = data.reduce((result, item) => { result[item.id] = item; return result; }, {});
         commit('SET_ASSETS_INFO', assetsInfo);
-
       })
       .catch((err) => console.error(err));
   }

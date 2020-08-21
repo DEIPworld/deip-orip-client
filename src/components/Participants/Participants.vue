@@ -20,7 +20,6 @@
             <d-filter-term-disciplines v-model="filterModel.discipline" single-choice />
             <d-filter-term-contributions v-model="filterModel.contribution" single-choice />
             <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
-
           </d-filter-sidebar>
         </template>
       </d-block>

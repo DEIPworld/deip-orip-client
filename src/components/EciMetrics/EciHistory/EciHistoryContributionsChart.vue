@@ -15,7 +15,6 @@
       }"
     />
   </v-skeleton-loader>
-
 </template>
 
 <script>

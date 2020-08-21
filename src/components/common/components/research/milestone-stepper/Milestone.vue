@@ -1,4 +1,3 @@
-
 <template>
   <div :class="{ 'main-step': isMain }" class="research-step">
     <div class="research-step-head">
@@ -105,7 +104,6 @@
               />
             </v-col>
 
-
             <v-col
               xl="7"
               lg="7"
@@ -122,7 +120,6 @@
                 @click.native="clearValidation()"
               />
             </v-col>
-
 
             <v-col
               xl="12"
@@ -175,7 +172,6 @@
     <resize-observer @notify="handleResize" />
   </div>
 </template>
-
 
 <script>
 
@@ -238,9 +234,7 @@
     }
   }
 
-
 </script>
-
 
 <style>
 

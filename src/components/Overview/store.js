@@ -1,4 +1,3 @@
-
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -15,13 +14,13 @@ const criteriaTypes = {
 const state = {
   criteriaTypes,
   disciplinesExpertiseStats: [],
-  disciplinesExpertiseStatsHistory: [],
+  disciplinesExpertiseStatsHistory: []
 };
 
 const getters = {
   criteriaTypes: () => state.criteriaTypes,
   disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
-  disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory,
+  disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory
 
 };
 
@@ -38,8 +37,7 @@ const actions = {
       .then((res) => {
         context.commit('getDisciplinesExpertiseStatsHistory', res);
       });
-  },
-
+  }
 
 };
 
@@ -52,7 +50,7 @@ const mutations = {
       external_id: a[0],
       history: a[1]
     }));
-  },
+  }
 };
 
 export const overviewStore = {

@@ -20,7 +20,7 @@ const state = {
   feedResearchGroupsMembers: [],
   feedDisciplinesStatistics: [],
   feedResearchTokenSales: [],
-  feedResearchTokenSalesContributions: [],
+  feedResearchTokenSalesContributions: []
 
 };
 
@@ -62,13 +62,15 @@ const getters = {
     return ordered;
   },
 
-  organizations: (state) => state.feedResearchGroups.filter((g) => !g.is_personal),
+  organizations: (state) => state.feedResearchGroups.filter((g) => !g.is_personal)
 };
 
 // actions
 const actions = {
 
-  loadResearchFeed({state, dispatch, commit, rootGetters}) {
+  loadResearchFeed({
+    state, dispatch, commit, rootGetters
+  }) {
     const { username } = rootGetters['auth/user'];
 
     let fullResearchListing = [];
@@ -120,7 +122,7 @@ const actions = {
       .then((tokenSalesContributions) => {
         commit('SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST', [].concat.apply([], [].concat.apply([], tokenSalesContributions)));
       });
-  },
+  }
 };
 
 // mutations
@@ -148,7 +150,7 @@ const mutations = {
 
   SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST(state, list) {
     state.feedResearchTokenSalesContributions = list;
-  },
+  }
 };
 
 const namespaced = true;

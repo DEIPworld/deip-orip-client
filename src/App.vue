@@ -1,15 +1,15 @@
 <template>
   <v-app>
-<!--    <v-overlay v-if="!$ready" color="#fff">-->
-<!--      <v-sheet min-width="320px">-->
-<!--        <v-progress-linear-->
-<!--          indeterminate-->
-<!--          rounded-->
-<!--          absolute-->
-<!--          color="primary"-->
-<!--        />-->
-<!--      </v-sheet>-->
-<!--    </v-overlay>-->
+    <!--    <v-overlay v-if="!$ready" color="#fff">-->
+    <!--      <v-sheet min-width="320px">-->
+    <!--        <v-progress-linear-->
+    <!--          indeterminate-->
+    <!--          rounded-->
+    <!--          absolute-->
+    <!--          color="primary"-->
+    <!--        />-->
+    <!--      </v-sheet>-->
+    <!--    </v-overlay>-->
 
     <portal-target
       v-if="$ready"

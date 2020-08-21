@@ -1,6 +1,5 @@
 <template>
   <component :is="modal ? 'full-screen-modal' : 'full-screen-view'" :title="title">
-
     <v-form v-show="!isServerValidated" ref="form" v-model="isFormValid">
       <div class="text-h6 mb-6">
         Personal information
@@ -193,7 +192,12 @@
           />
         </v-col>
         <v-col v-if="$route.name === 'SignUp'">
-          <v-checkbox class="mt-0 pt-0" hide-details v-model="formData.agree" :rules="[rules.required]">
+          <v-checkbox
+            v-model="formData.agree"
+            class="mt-0 pt-0"
+            hide-details
+            :rules="[rules.required]"
+          >
             <template #label>
               Agree to Terms and Conditions
             </template>
@@ -390,7 +394,7 @@
           .then(() => {
             this.isSaving = false;
             this.isServerValidated = true;
-            this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`)
+            this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`);
             this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
           })
           .catch((err) => {
@@ -398,7 +402,7 @@
             const message = (err.response && err.response.data)
               || 'Sorry, the service is temporarily unavailable, please try again later';
 
-            this.$notifier.showError(message)
+            this.$notifier.showError(message);
             console.error(err);
           });
       },

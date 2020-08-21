@@ -97,7 +97,9 @@
 
   export default {
     name: 'Dashboard',
-    components: { ResearchList, LayoutSection, LayoutToolbar, AppLayout },
+    components: {
+      ResearchList, LayoutSection, LayoutToolbar, AppLayout
+    },
     data() {
       return {
         activeTab: null

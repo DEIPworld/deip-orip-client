@@ -71,8 +71,6 @@
           </v-list>
         </v-menu>
       </v-sheet>
-
-
     </v-app-bar>
   </v-sheet>
 </template>

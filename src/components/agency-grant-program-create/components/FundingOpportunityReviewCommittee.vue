@@ -44,7 +44,6 @@
           Next
         </v-btn>
       </div>
-
     </v-col>
   </v-row>
 </template>
@@ -74,7 +73,7 @@
       })
     },
     created() {
-      this.getReviewCommittes(["c8657fa6cbaee3917ac4e2ed6ada9d0a55a15ac5"]);
+      this.getReviewCommittes(['c8657fa6cbaee3917ac4e2ed6ada9d0a55a15ac5']);
     },
     methods: {
       nextStep() {

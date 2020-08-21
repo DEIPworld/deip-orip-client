@@ -58,7 +58,6 @@
   };
 </script>
 
-
 <style lang="less" scoped>
     .program-divider {
         padding-left: 3%;

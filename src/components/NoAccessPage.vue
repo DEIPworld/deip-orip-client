@@ -24,7 +24,6 @@
   };
 </script>
 
-
 <style lang="less" scoped>
     .right-polygon {
         transform: rotate(-65deg);

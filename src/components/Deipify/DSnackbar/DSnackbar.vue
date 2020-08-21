@@ -45,7 +45,6 @@
         if (mutation.type === 'snackbar/hideMessage') {
           this.isActive = false;
         }
-
       });
     },
 

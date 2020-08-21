@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <d-block v-if="isOwner && hasInvites" widget>
       <div id="invites" class="text-h6 font-weight-bold">
@@ -54,7 +53,9 @@
             </div>
           </v-card-title>
           <v-card-text>
-            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">{{ inviteDetailsDialog.item.notes }}</div>
+            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">
+              {{ inviteDetailsDialog.item.notes }}
+            </div>
           </v-card-text>
           <v-card-actions class="flex-wrap px-6">
             <div class="w-100 py-2">
@@ -143,9 +144,7 @@
       :is-shown="isClaimExpertiseDialogShown"
       @close="closeClaimExpertiseDialog"
     />
-
   </div>
-
 </template>
 
 <script>
@@ -158,10 +157,10 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
-  import * as bankCardsService from '../../../utils/bankCard';
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+  import * as bankCardsService from '../../../utils/bankCard';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -251,9 +250,9 @@
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
             this.$store.dispatch('auth/loadGroups');
             this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"Invite has been approved successfully !"`);
+            this.$notifier.showSuccess('"Invite has been approved successfully !"');
           }, (err) => {
-            this.$notifier.showError(`An error occurred while accepting invite, please try again later`);
+            this.$notifier.showError('An error occurred while accepting invite, please try again later');
             console.error(err);
           })
           .finally(() => {
@@ -272,9 +271,9 @@
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"Invite has been rejected successfully !"`);
+            this.$notifier.showSuccess('"Invite has been rejected successfully !"');
           }, (err) => {
-            this.$notifier.showError(`An error occurred while rejecting invite, please try again later`);
+            this.$notifier.showError('An error occurred while rejecting invite, please try again later');
             console.error(err);
           })
           .finally(() => {

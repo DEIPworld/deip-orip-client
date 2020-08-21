@@ -18,8 +18,6 @@ const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 
-
-
 const state = {
   loaded: false,
   user: {
@@ -36,13 +34,13 @@ const state = {
     assets: []
   },
   tenant: undefined,
-  assets: [], // TODO: temp
+  assets: [] // TODO: temp
 };
 
 // getters
 const getters = {
   loaded: (state) => state.loaded,
-  assets: (state) => state.assets, //TODO: temp
+  assets: (state) => state.assets, // TODO: temp
 
   user: (state, getters) => {
     const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
@@ -100,16 +98,14 @@ const getters = {
   userBalances: (state) => {
     const userBalances = {};
     state.user.balances.forEach((item) => {
-      let { amount} = item;
+      const { amount } = item;
       userBalances[amount.split(' ')[1]] = amount;
     });
     return userBalances;
   },
 
-  userAssets: (state) => {
-    return state.user.assets;
-  },
-  
+  userAssets: (state) => state.user.assets,
+
   tenant: (state) => state.tenant,
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
@@ -141,7 +137,7 @@ const actions = {
       dispatch('loadResearchBookmarks'),
       dispatch('loadBalances'),
       dispatch('loadGroups'),
-      dispatch('loadAssets'), // TODO: temp
+      dispatch('loadAssets') // TODO: temp
     ]).then(() => {
       commit('SET_USER_LOADED', true);
     });
@@ -213,13 +209,13 @@ const actions = {
     const { user } = getters;
     return assetsService.getAccountBalancesByOwner(user.username)
       .then((balances) => {
-        commit('SET_USER_BALANCES', balances); 
-        return Promise.all(balances.map(b => assetsService.getAssetById(b.asset_id)));
+        commit('SET_USER_BALANCES', balances);
+        return Promise.all(balances.map((b) => assetsService.getAssetById(b.asset_id)));
       })
       .then((assets) => {
-        commit('SET_USER_ASSETS', assets); 
+        commit('SET_USER_ASSETS', assets);
       })
-      .catch((err) => { console.error(err) })
+      .catch((err) => { console.error(err); })
       .finally(() => {
         if (notify) notify();
       });
@@ -317,7 +313,7 @@ const actions = {
       tenantService.getTenantProfile(tenant),
       researchGroupService.getResearchGroup(tenant)
     ])
-      .then(([ profile, account ]) => {
+      .then(([profile, account]) => {
         commit('SET_TENANT', { profile, account });
       })
       .catch((err) => {

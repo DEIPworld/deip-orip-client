@@ -30,7 +30,6 @@
             research_group_permlink: this.$route.params.research_group_permlink
           }
         });
-        
       }
     },
 

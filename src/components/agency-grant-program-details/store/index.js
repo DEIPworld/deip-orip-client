@@ -116,7 +116,6 @@ const actions = {
         ]);
       })
       .then(([researches, reviews, otherResearchApplications]) => {
-
         applications.forEach((application, index) => {
           application.research = researches[index];
           application.reviews = reviews[index];

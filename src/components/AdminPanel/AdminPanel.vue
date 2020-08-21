@@ -1,6 +1,5 @@
 <template>
   <app-layout>
-
     <portal to="toolbar">
       <toolbar-admin
         v-if="!$route.meta.withoutHeader"

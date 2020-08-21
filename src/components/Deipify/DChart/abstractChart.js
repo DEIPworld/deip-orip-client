@@ -17,7 +17,7 @@ export const AbstractChart = {
       commonChartOptions: {
         fontSize: 12,
         fontName: 'Roboto',
-        tooltip: { isHtml: true },
+        tooltip: { isHtml: true }
       }
     };
   },
@@ -37,4 +37,4 @@ export const AbstractChart = {
   },
 
   methods: { }
-}
+};

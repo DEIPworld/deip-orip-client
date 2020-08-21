@@ -17,7 +17,6 @@
     <v-toolbar-title v-if="title">
       {{ title }}
     </v-toolbar-title>
-
   </v-app-bar>
 </template>
 

@@ -157,10 +157,10 @@
                   <v-text-field
                     :ref="'funding-awardAmount-' + fundingIdx"
                     v-model.number="funding.purpose.awardAmount"
+                    v-mask="'##############'"
                     :rules=" fundingIdx == 0 ? [rules.required, rules.totalAwardValidator, rules.balanceIsSufficient ] : [ rules.required, rules.totalAwardValidator ]"
                     class="right-input"
                     outlined
-                    v-mask="'##############'"
                     suffix="$"
                   />
                 </v-col>
@@ -202,10 +202,10 @@
                     </div>
                     <v-text-field
                       v-model="funding.overhead"
+                      v-mask="'##'"
                       :rules="[rules.allowedOverhead]"
                       outlined
                       suffix="%"
-                      v-mask="'##'"
                     />
                   </div>
                 </v-col>
@@ -366,7 +366,6 @@
   const grantsService = GrantsService.getInstance();
   const blockchainService = BlockchainService.getInstance();
 
-
   export default {
     name: 'CreateFoaAgencyAward',
 
@@ -407,7 +406,7 @@
             } if (v.length > this.MAX_FOA_NUMBER_LENGTH) {
               return `Award number length should be less/equal than ${this.MAX_FOA_NUMBER_LENGTH}`;
             }
-            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';;
+            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';
           },
 
           totalAwardValidator: () => {

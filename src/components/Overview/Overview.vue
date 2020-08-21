@@ -85,11 +85,9 @@
           }"
           style="max-width: 400px;"
         />
-
       </d-block>
 
       <eci-history />
-
     </layout-section>
   </app-layout>
 </template>
@@ -245,7 +243,7 @@
     created() {
       Promise.all([
         this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
-        this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory'),
+        this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory')
       ])
         .then(() => {
           this.$setReady();

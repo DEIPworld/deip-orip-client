@@ -14,7 +14,6 @@ const grantsService = GrantsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const researchService = ResearchService.getInstance();
 
-
 const state = {
   currentOrganization: null,
   tokenInfo: null,
@@ -69,7 +68,6 @@ const getters = {
       .reduce((sum, amount) => sum + amount, 0);
 
     const remainingPiAmount = blockchainService.fromAssetsToFloat(awardee.total_amount) - blockchainService.fromAssetsToFloat(awardee.total_expenses);
-
 
     const subawardeesAmount = subawardees
       .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
@@ -138,7 +136,6 @@ const getters = {
       reciever
     };
   }),
-
 
   payments: (state) => state.awardsPaymentRequestsList.map((withdrawal, idx) => {
     const award = state.awardsList.find((a) => a.award_number == withdrawal.award_number);

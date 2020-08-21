@@ -12,9 +12,9 @@
         </div>
         <v-text-field
           v-model="reviewShare"
+          v-mask="'##'"
           suffix="%"
           outlined
-          v-mask="'##'"
           hide-details
           @keyup="setReviewShare"
         />

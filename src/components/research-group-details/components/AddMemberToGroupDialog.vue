@@ -106,18 +106,18 @@
         researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
           researchGroup: this.groupExternalId,
           member: this.selectedUser.name,
-          rewardShare: `0.00 %`,
+          rewardShare: '0.00 %',
           researches: undefined, // all researches
-          extensions: [],
+          extensions: []
         }, {
           notes: this.coverLetter,
           approver: null
         })
           .then(() => {
-            this.$notifier.showSuccess(`Invitation Proposal has been created successfully!`)
+            this.$notifier.showSuccess('Invitation Proposal has been created successfully!');
             this.$emit('onSuccess');
           }).catch((err) => {
-            this.$notifier.showError(`An error occurred while creating proposal, please try again later`)
+            this.$notifier.showError('An error occurred while creating proposal, please try again later');
             console.error(err);
           }).finally(() => {
             this.isLoading = false;

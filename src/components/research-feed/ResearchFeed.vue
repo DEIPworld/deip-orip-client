@@ -1,6 +1,5 @@
 <template>
   <app-layout>
-
     <layout-header :background="$options.filters.tenantBackgroundSrc(tenant.account)">
       <div class="text-h3 uppercase">
         Projects
@@ -29,6 +28,7 @@
     </layout-header>
 
     <d-layout-section>
+      <!--{{ $t('test.foo') }}-->
       <research-list :items="researchFeed" namespace="feed" with-filter />
     </d-layout-section>
   </app-layout>
@@ -56,6 +56,6 @@
         tenant: 'auth/tenant',
         researchFeed: 'feed/researchFeed'
       })
-    },
+    }
   };
 </script>

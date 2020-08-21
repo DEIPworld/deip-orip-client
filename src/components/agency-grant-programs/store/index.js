@@ -66,7 +66,6 @@ const actions = {
       });
   },
 
-
   loadOrganizationPrograms({ state, dispatch, commit }, { organization, notify }) {
     commit('SET_ORGANIZATION_PROGRAMS_LOADING_STATE', true);
     grantsService.getFundingOpportunityAnnouncementsByOrganization(organization.id)

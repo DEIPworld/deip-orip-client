@@ -2,8 +2,6 @@ import deipRpc from '@deip/rpc-client';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { UsersService } from '@deip/users-service';
 
-
-
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
@@ -42,7 +40,7 @@ const ACTIONS = {
             ...member,
             account: user.account,
             profile: user.profile
-          }
+          };
         });
 
         return Promise.all(promises);

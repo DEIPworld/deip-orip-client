@@ -40,7 +40,7 @@ const state = {
   isLoadingResearchGroupDetails: undefined,
   isLoadingResearchGroupMembers: undefined,
   isLoadingResearchGroupProposals: undefined,
-  isLoadingResearchGroupJoinRequests: undefined,
+  isLoadingResearchGroupJoinRequests: undefined
 };
 
 // getters
@@ -300,7 +300,6 @@ const mutations = {
 };
 
 const namespaced = true;
-
 
 export const researchGroupStore = {
   namespaced,

@@ -9,7 +9,6 @@
     <template #sidebar>
       <investor-portfolio-inbox-right-sidebar />
     </template>
-
   </d-layout-section>
 </template>
 
@@ -30,7 +29,7 @@
       DLayoutSection,
       InvestorPortfolioInbox,
       InvestorPortfolioInboxRightSidebar,
-      InvestorPortfolioInboxLeftSidebar,
+      InvestorPortfolioInboxLeftSidebar
     },
     computed: {
       ...mapGetters({

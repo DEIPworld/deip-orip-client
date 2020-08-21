@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-dialog
@@ -54,6 +53,7 @@
           <v-text-field
             ref="paymentAmount"
             v-model="paymentAmount"
+            v-mask="'##############'"
             label="Amount"
             outlined
             :rules="[
@@ -62,7 +62,6 @@
               rules.withinAwardAvailableAmount
             ]"
             persistent-hint
-            v-mask="'##############'"
             append-icon="local_atm"
             :disabled="!awardee"
           />
@@ -135,7 +134,6 @@
   </div>
 </template>
 
-
 <script>
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
@@ -185,14 +183,14 @@
           isDigit: (val) => (val && val.match(/^\d+$/) === null ? 'Incorrect amount format' : !!val),
           required: (val) => !!val || 'This field is required',
           payentNumber: (v) => {
-            if (!v) return "Required";
+            if (!v) return 'Required';
             if (v.length < PAYMENT_NUMBER_MIN_LENGTH) {
               return `Payment number length should be greater/equal than ${PAYMENT_NUMBER_MIN_LENGTH}`;
             } if (v.length > PAYMENT_NUMBER_MAX_LENGTH) {
               return `Payment number length should be less/equal than ${PAYMENT_NUMBER_MAX_LENGTH}`;
             }
-            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';;
-          },
+            return /^[0-9]*$/.test(v) || 'Numbers are only allowed';
+          }
         },
 
         dropzoneOptions: {

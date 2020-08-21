@@ -134,7 +134,7 @@
         function filter() {
           return this.allReferencesList
             .filter((content) => content.title != null)
-            .filter((content) => content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearch.id)
+            .filter((content) => content.title.toLowerCase().startsWith(term) && content.research_id != this.currentResearch.id);
         }
 
         this.searchable = filter.call(this, term);

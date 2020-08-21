@@ -2,7 +2,6 @@ import Vue from 'vue';
 
 // components
 
-
 import ConfirmActionDialog from './components/ConfirmActionDialog';
 
 import DatetimePicker from './components/DatetimePicker';
@@ -26,7 +25,6 @@ import ToggleText from './components/ToggleText';
 
 import MilestoneStepper from './components/research/milestone-stepper/MilestoneStepper';
 import Milestone from './components/research/milestone-stepper/Milestone';
-
 
 import TopResearchLabel from './components/research/TopResearchLabel';
 

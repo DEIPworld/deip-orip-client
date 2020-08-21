@@ -49,5 +49,5 @@
           this.$setReady();
         });
     }
-  }
+  };
 </script>

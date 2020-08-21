@@ -131,7 +131,6 @@
         const innerReferencesTreeNodes = d3.hierarchy(innerReferencesTreeData);
         const innerReferencesTreeRoot = innerReferencesTreemap(innerReferencesTreeNodes);
 
-
         const outerReferencesTreeModels = [root, ...this.data.nodes.filter((ref) => ref.isOuter)].map((ref) => ({
           id: ref.researchContent.id,
           parent: ref.to,
@@ -379,7 +378,6 @@
           // .on('mouseout', d => { this.nodeMouseOut(d) })
           .on('click', (d) => { this.nodeClick(d); });
 
-
         graph.selectAll('.ref-info').remove();
         const refInfo = graph.selectAll('.ref-info')
           .data(this.nodes)
@@ -403,7 +401,6 @@
           .attr('class', 'ref-info-box')
           .style('height', `${this.refInfoHeight}px`)
           .style('overflow-y', 'scroll');
-
 
         const refInfoBox = refInfo
           .append('xhtml:div')
@@ -433,7 +430,6 @@
           .attr('class', 'a ref-info-title-link')
           .text((d) => d.researchContent.title);
 
-
         const organizationBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-org-box');
 
@@ -455,7 +451,6 @@
           .attr('src', (d) => filters.researchGroupLogoSrc(d.researchGroup.external_id, 50, 50, true))
           .attr('target', '_blank')
           .attr('class', 'ref-info-org-logo');
-
 
         const authorsBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-authors-box');
@@ -484,7 +479,6 @@
               .attr('class', 'ref-info-author-img');
           });
 
-
         const contentAccessBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-access-box');
 
@@ -506,7 +500,6 @@
           .attr('src', (d) => (true ? '/assets/img/unlocked.png' : '/assets/img/locked.png'))
           .attr('class', 'ref-info-access-icon');
 
-
         const datetimeBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-datetime-box');
 
@@ -523,7 +516,6 @@
         const datetimeText = datetimeItem.append('xhtml:span')
           .attr('class', 'ref-info-datetime-text')
           .text((d) => moment(d.researchContent.created_at).format('D MMM YYYY'));
-
 
         refInfoBox.on('wheel', (e) => {
           d3.event.stopPropagation();
@@ -838,7 +830,6 @@
         padding: 0px 0px 10px 0px;
       }
 
-
       .ref-info-hash-box {
         background-color: #f5f2f2;
         border-bottom: 1.2px solid black;
@@ -856,14 +847,12 @@
         // word-break: break-all;
       }
 
-
       .ref-info-title-box {
         padding: 15px 10px 5px 10px;
       }
       .ref-info-title-link {
 
       }
-
 
       .ref-info-authors-label {
 
@@ -893,7 +882,6 @@
         padding: 0px 10px 0px 10px;
       }
 
-
       .ref-info-org-box {
         display: flex;
         align-items: center;
@@ -918,7 +906,6 @@
         padding: 0px 10px 0px 10px;
       }
 
-
       .ref-info-access-box {
         display: flex;
         align-items: center;
@@ -942,7 +929,6 @@
       .ref-info-access-text {
         padding: 0px 10px 0px 10px;
       }
-
 
       .ref-info-datetime-box {
         display: flex;
@@ -970,7 +956,5 @@
     }
 
   }
-
-
 
 </style>

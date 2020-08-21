@@ -9,7 +9,9 @@
   >
     <template #toolbarButton>
       <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
-        <v-icon left>arrow_back</v-icon>
+        <v-icon left>
+          arrow_back
+        </v-icon>
         Explorer
       </v-btn>
     </template>
@@ -273,14 +275,14 @@
         }).then(() => {
           this.isSaving = false;
           this.isServerValidated = true;
-          this.$notifier.showSuccess(`Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`)
+          this.$notifier.showSuccess(`Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`);
           this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
           this.isSaving = false;
           const message = err.response && err.response.data
             || 'Sorry, the service is temporarily unavailable, please try again later';
 
-          this.$notifier.showError(message)
+          this.$notifier.showError(message);
           console.error(err);
         });
       },

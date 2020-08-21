@@ -12,7 +12,6 @@
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
         </div>
       </v-sheet>
-
     </layout-section>
     <v-divider />
     <layout-section>
@@ -21,7 +20,6 @@
       />
     </layout-section>
   </div>
-
 </template>
 
 <script>
@@ -34,7 +32,7 @@
     components: { EciHistoryAndStats, LayoutSection },
     computed: {
       ...mapGetters({
-        research: 'rd/research',
+        research: 'rd/research'
       })
     },
     created() {
@@ -43,7 +41,7 @@
         research_permlink: decodeURIComponent(this.$route.params.research_permlink)
       }).then(() => {
         this.$setReady();
-      })
+      });
     }
   };
 </script>

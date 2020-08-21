@@ -7,13 +7,11 @@
       prepend-icon=""
 
       v-bind="_xProps"
-    >
-    </v-file-input>
+    />
     <div v-if="!!exist" class="pl-4 pt-2">
       <a class="link" :href="exist" target="_blank">View file</a>
     </div>
   </div>
-
 </template>
 
 <script>

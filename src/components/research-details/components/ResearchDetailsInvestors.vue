@@ -12,19 +12,24 @@
     </v-row>
 
     <div class="mb-12">
-      <v-row v-if="tokenSale" justify="start" class="mt-2" no-gutters>
+      <v-row
+        v-if="tokenSale"
+        justify="start"
+        class="mt-2"
+        no-gutters
+      >
         <v-col cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ investmentsAmount }} {{tokenSale.soft_cap.split(' ')[1]}}</span>
+          <span class="rd-investment-info__value">{{ investmentsAmount }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
           <br>
           <span class="rd-investment-info__value-text">Total investments</span>
         </v-col>
         <v-col cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ averageInvestmentAmount }} {{tokenSale.soft_cap.split(' ')[1]}}</span>
+          <span class="rd-investment-info__value">{{ averageInvestmentAmount }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
           <br>
           <span class="rd-investment-info__value-text">Average investment</span>
         </v-col>
         <v-col v-if="!isResearchGroupMember" cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ userInvestment }} {{tokenSale.soft_cap.split(' ')[1]}}</span>
+          <span class="rd-investment-info__value">{{ userInvestment }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
           <br>
           <span class="rd-investment-info__value-text">Your investment</span>
         </v-col>

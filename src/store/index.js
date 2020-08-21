@@ -5,6 +5,9 @@ import { authStore } from '@/components/auth/store';
 import { accountStore } from '@/components/Account/store';
 import { userDetailsStore } from '@/components/UserDetails/store';
 
+import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
+import { overviewStore } from '@/components/Overview/store';
+import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 import { feedStore } from '../components/research-feed/store';
 import { researchGroupStore } from '../components/research-group-details/store';
 import { rgWalletStore } from '../components/research-group-wallet/store';
@@ -30,9 +33,6 @@ import { agencyGrantProgramAwardWithdrawalDetailsStore } from '../components/age
 import { agencyGrantProgramAwardCreateStore } from '../components/agency-grant-program-award-create/store/index';
 
 import { adminPanelStore } from '../components/AdminPanel/store';
-import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
-import { overviewStore } from '@/components/Overview/store';
-import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 
 Vue.use(Vuex);
 
@@ -71,7 +71,7 @@ export const store = new Vuex.Store({
     adminPanel: adminPanelStore,
     overview: overviewStore,
 
-    disciplinesGrowthRate: disciplinesGrowthRateStore,
+    disciplinesGrowthRate: disciplinesGrowthRateStore
   },
   strict: process.env.NODE_ENV !== 'production'
 });

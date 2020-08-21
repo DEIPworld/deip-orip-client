@@ -51,7 +51,7 @@
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import { AccessService } from '@deip/access-service';
   import vueDropzone from 'vue2-dropzone';
-  
+
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
 
@@ -153,7 +153,7 @@
                 }
               }
             ]
-          },
+          }
           // {
           //   title: 'Additional information:',
           //   fields: [
@@ -287,21 +287,20 @@
           this.isLoading = true;
           this.$store.dispatch('auth/loadUser')
             .then(() => {
-              this.$notifier.showSuccess(`Avatar has been changed successfully !`);
+              this.$notifier.showSuccess('Avatar has been changed successfully !');
             })
             .then(() => {
               this.$router.push('/account');
             })
             .finally(() => {
               this.isLoading = false;
-            })
+            });
         }
-
       },
 
       avatarUploadError(file, message, xhr) {
         console.error(message);
-        return this.$notifier.showError(`Sorry, an error occurred while uploading avatar, please try again later`)
+        return this.$notifier.showError('Sorry, an error occurred while uploading avatar, please try again later');
       },
       cancel() {
         this.$router.push({
@@ -331,7 +330,7 @@
         const { occupation } = this.formModel;
         const { webPage } = this.formModel;
         const birthdate = this.formModel.editedBirthdayDate;
-  
+
         const update = {
           ...this.currentUser.profile,
           ...{
@@ -359,12 +358,11 @@
 
             this.$store.dispatch('auth/loadUser');
 
-
-            this.$notifier.showSuccess('Personal info has been saved successfully!')
+            this.$notifier.showSuccess('Personal info has been saved successfully!');
           })
           .then(() => this.$router.push('/account'))
           .catch((err) => {
-            this.$notifier.showError('An error occurred while saving, please try again later')
+            this.$notifier.showError('An error occurred while saving, please try again later');
             console.error(err);
           })
           .finally(() => {

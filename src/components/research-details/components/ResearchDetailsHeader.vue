@@ -49,7 +49,6 @@
   import { mapGetters } from 'vuex';
   import LayoutHeader from '@/components/layout/components/LayoutHeader';
 
-
   export default {
     name: 'ResearchDetailsHeader',
     components: { LayoutHeader },

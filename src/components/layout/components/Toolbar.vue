@@ -32,7 +32,6 @@
         </v-tab>
       </v-tabs>
 
-
       <user-notifications-list v-if="$isLoggedIn" />
 
       <v-menu

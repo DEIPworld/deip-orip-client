@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import ResearchGroupActivityLogList from './ResearchGroupActivityLogList';
 import ResearchProposalActivityLogEntry from './components/ResearchProposalActivityLogEntry';
@@ -10,7 +9,6 @@ import InvitationApprovedActivityLogEntry from './components/InvitationApprovedA
 import InvitationRejectedActivityLogEntry from './components/InvitationRejectedActivityLogEntry';
 import ResearchContentExpertReviewActivityLogEntry from './components/ResearchContentExpertReviewActivityLogEntry';
 import ResearchContentExpertReviewRequestActivityLogEntry from './components/ResearchContentExpertReviewRequestActivityLogEntry';
-
 
 Vue.component('research-group-activity-log-list', ResearchGroupActivityLogList);
 Vue.component('research-proposal-activity-log-entry', ResearchProposalActivityLogEntry);

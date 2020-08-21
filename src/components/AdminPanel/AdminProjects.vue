@@ -79,7 +79,6 @@
       </v-tab-item>
     </v-tabs-items>
 
-
     <d-dialog
       v-model="researchDialog.isOpen"
       max-width="800"

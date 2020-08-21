@@ -1,7 +1,6 @@
 <template>
   <v-row no-gutters justify="center">
     <v-col cols="6">
-
       <div class="text-h5 text-center mb-3">
         Select domain
       </div>
@@ -12,7 +11,8 @@
 
       <div class="pt-2">
         <div class="overflow-y-auto discipline-picker">
-          <advanced-discipline-picker style="max-height: 400px"
+          <advanced-discipline-picker
+            style="max-height: 400px"
             :preselected="research.disciplines"
             @select="setDisciplines"
           />

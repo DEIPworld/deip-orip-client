@@ -28,7 +28,6 @@
       </v-col>
     </v-row>
 
-
     <v-row no-gutters class="mb-1">
       <v-col class="text-caption" cols="auto">
         Growth rate
@@ -51,5 +50,5 @@
   export default {
     name: 'MemberListItemStatInfo',
     mixins: [abstractMemberItem]
-  }
+  };
 </script>

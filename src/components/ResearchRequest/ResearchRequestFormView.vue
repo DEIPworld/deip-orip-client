@@ -144,7 +144,6 @@
       </v-col>
     </d-form-block>
 
-
     <div v-if="!hideButtons" class="text-right">
       <slot name="buttons">
         <v-btn
@@ -229,10 +228,8 @@
           titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
           descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
         },
-        domains: [...disciplinesService.getTopLevelNodes().map((d => {
-          return { text: d.label, value: d.id }
-        }))],
-      }
+        domains: [...disciplinesService.getTopLevelNodes().map(((d) => ({ text: d.label, value: d.id })))]
+      };
     },
     computed: {
       ...mapGetters({

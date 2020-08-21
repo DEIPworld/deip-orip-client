@@ -137,7 +137,6 @@
   import { mapGetters } from 'vuex';
   import RGDeipTokenSendForm from './components/RGDeipTokenSendForm.vue';
 
-
   export default {
     name: 'ResearchGroupWallet',
     components: {

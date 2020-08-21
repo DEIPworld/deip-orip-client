@@ -17,9 +17,9 @@
 
           <v-text-field
             v-model="totalQuorum"
+            v-mask="'###'"
             :disabled="isAdvanced"
             suffix="%"
-            v-mask="'###'"
             hide-details
             @keyup="onChangeTotalQuorum()"
           />
@@ -33,9 +33,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.startResearch"
+                  v-mask="'###'"
                   class="width-6 pa-0 display-inline-block"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -46,9 +46,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.createMaterial"
+                  v-mask="'###'"
                   class="width-6 pa-0 display-inline-block"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -59,9 +59,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.changeReviewSharePercent"
+                  v-mask="'###'"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -72,9 +72,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.inviteMembers"
+                  v-mask="'###'"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -85,9 +85,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.dropoutMembers"
+                  v-mask="'###'"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -98,9 +98,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.startResearchTokenSale"
+                  v-mask="'###'"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -111,9 +111,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.offerResearchTokens"
+                  v-mask="'###'"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -124,9 +124,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.sendFunds"
+                  v-mask="'###'"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -137,9 +137,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.changeQuorum"
+                  v-mask="'###'"
                   class="width-6 display-inline-block"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">
@@ -150,9 +150,9 @@
               <div>
                 <v-text-field
                   v-model="group.quorum.rebalanceGroupTokens"
+                  v-mask="'###'"
                   class="width-6 display-inline-block pa-0"
                   suffix="%"
-                  v-mask="'###'"
                   hide-details
                 />
                 <div class="display-inline-block ml-6 vertical-bottom">

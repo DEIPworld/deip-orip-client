@@ -13,8 +13,6 @@
         <research-details-sidebar />
       </template>
     </d-layout-section>
-
-
   </div>
 </template>
 

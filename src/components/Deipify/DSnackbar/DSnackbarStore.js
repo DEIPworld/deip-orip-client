@@ -16,7 +16,7 @@ const moduleActions = {
   hideMessage(context) {
     context.commit('hideMessage');
   }
-}
+};
 
 const moduleMutations = {
   showMessage(state, payload) {

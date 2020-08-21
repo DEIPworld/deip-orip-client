@@ -44,9 +44,7 @@
         oldResearchId: null,
         research: null,
         fieldKeys: Object.keys(NAMING_MAP),
-        domains: [...disciplinesService.getTopLevelNodes().map((d => {
-          return { text: d.label, value: d.id }
-        }))],
+        domains: [...disciplinesService.getTopLevelNodes().map(((d) => ({ text: d.label, value: d.id })))]
       };
     },
 
@@ -66,7 +64,6 @@
             title: 'researchTitle',
             disciplines: 'researchDisciplines'
           });
-
 
           this.research = this.fieldKeys.map((key) => {
             let data = research[key];
@@ -96,7 +93,7 @@
             }
 
             if (key.includes('Attachment')) {
-              const link = `${window.env.DEIP_SERVER_URL}/api/research/application/${research._id}/attachment?filename=${research[key]}&download=false&authorization=${accessService.getAccessToken()}`
+              const link = `${window.env.DEIP_SERVER_URL}/api/research/application/${research._id}/attachment?filename=${research[key]}&download=false&authorization=${accessService.getAccessToken()}`;
               data = `${research[key] ? `<a href="${link}" target="_blank">${research[key]}</a>` : '-'}`;
             }
 

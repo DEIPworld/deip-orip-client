@@ -17,7 +17,6 @@
       :data="expertiseHistory"
       :loading="!$ready"
     />
-
   </d-block>
 </template>
 

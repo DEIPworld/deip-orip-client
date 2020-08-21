@@ -30,7 +30,6 @@
                     {{ group.shares.length }}
                   </div>
                 </template>
-
               </d-box-item>
             </div>
           </v-card>
@@ -45,7 +44,6 @@
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-
 
   export default {
     name: 'AccountGroups',

@@ -6,10 +6,6 @@ import VueGoogleCharts from 'vue-google-charts';
 import PortalVue from 'portal-vue';
 import lsWatcher from 'vue-storage-watcher';
 
-import App from './App';
-import { store } from './store';
-import { router } from './router';
-
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
 import VClamp from 'vue-clamp';
@@ -32,6 +28,10 @@ import { dataReadyMixin } from '@/mixins/dataReadyMixin';
 import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
 import { CustomDirective } from '@/derectives/CustomDirective';
 import Gravatar from 'vue-gravatar';
+import { i18n } from './plugins/i18n';
+import { router } from './router';
+import { store } from './store';
+import App from './App';
 
 // ////////////////////////
 
@@ -79,7 +79,7 @@ Vue.config.optionMergeStrategies.props = (parentVal, childVal) => {
     }
   }
   return { ...(parentVal || {}), ...(childVal || {}) };
-}
+};
 
 getEnvConfig().then((plugin) => {
   Vue.use(plugin);
@@ -88,6 +88,7 @@ getEnvConfig().then((plugin) => {
     store,
     router,
     vuetify,
+    i18n,
     render: (h) => h(App)
   }).$mount('#app');
 });

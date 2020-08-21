@@ -16,6 +16,7 @@
 
 <script>
   import ResearchListRow from '@/components/ResearchList/ResearchListItem/ResearchListRow';
+
   export default {
     name: 'ResearchListTable',
     components: { ResearchListRow },

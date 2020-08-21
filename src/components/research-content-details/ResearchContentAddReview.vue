@@ -5,7 +5,6 @@
     <template #sidebar>
       <research-content-add-review-sidebar />
     </template>
-
   </d-layout-section>
 </template>
 

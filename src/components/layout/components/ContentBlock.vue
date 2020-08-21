@@ -16,7 +16,6 @@
         </v-col>
 
         <v-col v-if="hasTitleText" :class="{'ml-4': hasTitleIcon}">
-
           <div v-if="title || $hasSlot('title')" class="text-h5">
             {{ title }}
             <slot name="title" />
@@ -26,7 +25,6 @@
             {{ description }}
             <slot name="description" />
           </div>
-
         </v-col>
 
         <v-col v-if="$hasSlot('titleActions')" cols="auto">

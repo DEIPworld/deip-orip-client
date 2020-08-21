@@ -1,6 +1,5 @@
 <template>
   <d-layout-section v-if="isPageLoaded">
-
     <research-application-details-package />
 
     <template #sidebar>

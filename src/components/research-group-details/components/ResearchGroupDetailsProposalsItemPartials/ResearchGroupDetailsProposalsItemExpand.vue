@@ -185,5 +185,5 @@
     name: 'ResearchGroupDetailsProposalsItemExpand',
 
     mixins: [abstractResearchGroupDetailsProposalsItem]
-  }
+  };
 </script>

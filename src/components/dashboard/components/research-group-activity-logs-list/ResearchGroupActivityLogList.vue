@@ -61,7 +61,6 @@
   import { mapGetters } from 'vuex';
   import { PROPOSAL_TYPES } from '@/variables';
 
-
   export default {
     name: 'ResearchGroupActivityLogList',
     props: {

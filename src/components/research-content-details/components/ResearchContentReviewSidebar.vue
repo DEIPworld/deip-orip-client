@@ -89,8 +89,8 @@
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
-  import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
@@ -152,29 +152,27 @@
         const disciplinesExternalIds = this.userRelatedExpertise
           .map((exp) => exp.discipline_external_id);
 
-        const votesPromises = disciplinesExternalIds.map(disciplineExternalId => {
-          return researchContentReviewsService.voteForReview(this.user.privKey, {
-            voter: this.user.username,
-            reviewExternalId: review.external_id,
-            disciplineExternalId: disciplineExternalId,
-            weight: `100.00 %`,
-            extensions: []
-          });
-        });
+        const votesPromises = disciplinesExternalIds.map((disciplineExternalId) => researchContentReviewsService.voteForReview(this.user.privKey, {
+          voter: this.user.username,
+          reviewExternalId: review.external_id,
+          disciplineExternalId,
+          weight: '100.00 %',
+          extensions: []
+        }));
 
         Promise.all(votesPromises)
           .then(() => {
-            this.$notifier.showSuccess("Review supported");
+            this.$notifier.showSuccess('Review supported');
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError("An error occured, please try again later");
+            this.$notifier.showError('An error occured, please try again later');
           })
           .finally(() => {
             self.$store.dispatch('rcd/loadContentReviews', { researchContentExternalId: this.content.external_id });
             this.isReviewVoting = false;
             this.votingDisabled = true;
-          })
+          });
       }
     }
   };

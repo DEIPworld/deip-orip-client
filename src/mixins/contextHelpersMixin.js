@@ -4,7 +4,7 @@ const accessService = AccessService.getInstance();
 
 export const contextHelpersMixin = {
   computed: {
-    $isLoggedIn() { return accessService.isLoggedIn(); },
+    $isLoggedIn() { return accessService.isLoggedIn(); }
   },
   methods: {
     $hasSlot(name) {

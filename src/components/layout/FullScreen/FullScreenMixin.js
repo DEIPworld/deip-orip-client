@@ -33,6 +33,6 @@ export const FullScreenMixin = {
     maxWidth: [Number, String],
     minHeight: [Number, String],
     minWidth: [Number, String],
-    width: [Number, String],
+    width: [Number, String]
   }
 };

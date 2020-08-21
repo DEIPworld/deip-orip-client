@@ -1,4 +1,3 @@
-
 import {
   ProseEditor, ProseEditorConfigurator,
   EditorSession, ProseEditorPackage, ImagePackage, PersistencePackage, HTMLImporter, HTMLExporter
@@ -65,7 +64,6 @@ class SaveHandler {
       });
   }
 }
-
 
 class BaseHTMLImporter extends HTMLImporter {
   convertDocument(htmlEl) {

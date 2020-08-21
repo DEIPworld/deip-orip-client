@@ -1,5 +1,5 @@
 <template>
-<!--  <div>{{field}}</div>-->
+  <!--  <div>{{field}}</div>-->
   <leveller-selector
     :id="field.name"
     v-model.trim="localValue"
@@ -21,7 +21,7 @@
   export default {
     name: 'FieldLevel',
     components: { LevellerSelector },
-    mixins: [abstractField],
+    mixins: [abstractField]
   };
 </script>
 

@@ -3,14 +3,15 @@
     :class="$style.host"
     @click="$router.push(itemRoute)"
   >
-
     <td width="33%">
       <d-simple-tooltip :tooltip="research.title">
         <d-box-item
           :avatar="research.external_id | researchBackgroundSrc(40 * 2,40 * 2)"
           :size="40"
         >
-          <div class="text-body-2 font-weight-medium">{{ research.title }}</div>
+          <div class="text-body-2 font-weight-medium">
+            {{ research.title }}
+          </div>
         </d-box-item>
       </d-simple-tooltip>
     </td>

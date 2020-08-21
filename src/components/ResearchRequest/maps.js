@@ -13,4 +13,4 @@ export const NAMING_MAP = {
   cvAttachment: 'Resume/CV',
   businessPlanAttachment: 'Business plan',
   budgetAttachment: 'Budget information'
-}
+};

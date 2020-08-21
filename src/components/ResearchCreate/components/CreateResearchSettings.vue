@@ -53,7 +53,6 @@
         <research-partners :partners="research.partners" />
       </div>
 
-
       <div class="py-4 text-center">
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
@@ -77,7 +76,6 @@
   import Vue from 'vue';
   import { mapGetters } from 'vuex';
   import LevellerSelector from '@/components/Leveller/LevellerSelector';
-
 
   export default {
     name: 'CreateResearchSettings',
@@ -104,10 +102,10 @@
     },
     created() {
       const enabledCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents.reduce((acc, item) => {
-         if (item.isVisible) {
-           return [...acc, { component: item._id, value: { index: 0 } }]; // set the first entry
-         }
-         return [...acc, { component: item._id, value: { index: null } }]; // set empty entry
+        if (item.isVisible) {
+          return [...acc, { component: item._id, value: { index: 0 } }]; // set the first entry
+        }
+        return [...acc, { component: item._id, value: { index: null } }]; // set empty entry
       }, []);
 
       this.research.tenantCriterias.push(...enabledCriterias);

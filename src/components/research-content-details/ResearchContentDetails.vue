@@ -1,7 +1,7 @@
 <template>
   <d-layout-section>
     <v-row class="full-height">
-      <v-col cols="auto" v-if="isInProgress">
+      <v-col v-if="isInProgress" cols="auto">
         <v-card class="full-height elevation-0">
           <div>
             <v-tooltip right>
@@ -369,13 +369,13 @@
                     extensions: []
                   })
                     .then(() => {
-                      this.$notifier.showSuccess('New material has been uploaded successfully')
+                      this.$notifier.showSuccess('New material has been uploaded successfully');
                     }, (err) => {
                       console.log(err);
                       if (err.response && err.response.status === 409) {
                         alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
                       } else {
-                        this.$notifier.showError('An error occurred while creating proposal, please try again later')
+                        this.$notifier.showError('An error occurred while creating proposal, please try again later');
                       }
                     })
                     .finally(() => {
@@ -406,11 +406,11 @@
             if (draft.status == 'in-progress') {
               bus.$emit('texture:saveDocument', () => {
                 this.isSavingDraft = false;
-                this.$notifier.showSuccess('Document draft has been saved !')
+                this.$notifier.showSuccess('Document draft has been saved !');
               });
             } else {
               this.isSavingDraft = false;
-              this.$notifier.showError('Document draft is locked for editing !')
+              this.$notifier.showError('Document draft is locked for editing !');
             }
           });
       },

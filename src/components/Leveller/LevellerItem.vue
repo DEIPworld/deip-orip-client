@@ -22,7 +22,7 @@
 
 <script>
   import LevellerNum from '@/components/Leveller/LevellerNum';
-  
+
   export default {
     name: 'LevellerItem',
     components: { LevellerNum },

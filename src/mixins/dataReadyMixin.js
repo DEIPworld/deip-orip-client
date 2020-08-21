@@ -5,7 +5,7 @@ export const dataReadyMixin = {
     };
   },
   computed: {
-    $ready() { return this.$data.$_dataReady; },
+    $ready() { return this.$data.$_dataReady; }
   },
   methods: {
     $setReady(state = true) {

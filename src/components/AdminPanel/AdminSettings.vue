@@ -48,7 +48,6 @@
 
   const accessService = AccessService.getInstance();
 
-
   export default {
     name: 'AdminSettings',
     components: { AdminView, VueDropzone },
@@ -69,9 +68,8 @@
           addRemoveLinks: true,
           acceptedFiles: ['image/png', 'image/jpeg', 'image/jpg'].join(',')
         }
-      }
+      };
     },
-
 
     computed: {
       ...mapGetters({

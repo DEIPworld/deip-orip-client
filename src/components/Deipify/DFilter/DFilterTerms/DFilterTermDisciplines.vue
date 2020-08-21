@@ -34,7 +34,6 @@
       </d-list-expand>
     </d-block>
   </div>
-
 </template>
 
 <script>

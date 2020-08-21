@@ -91,8 +91,8 @@
             Min Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
-<!--            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}-->
-            {{tokenSale.soft_cap}}
+            <!--            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}-->
+            {{ tokenSale.soft_cap }}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
@@ -100,8 +100,8 @@
             Max Goal:
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
-<!--            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}-->
-            {{tokenSale.hard_cap}}
+            <!--            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}-->
+            {{ tokenSale.hard_cap }}
           </v-col>
         </v-row>
       </div>
@@ -124,7 +124,7 @@
           Min goal reached!
         </div>
         <div class="pl-6">
-<!--          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal-->
+          <!--          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal-->
           Raised of {{ tokenSale.hard_cap }} Goal
         </div>
       </v-row>
@@ -327,7 +327,7 @@
         const balance = this.fromAssetsToFloat(this.userBalances[window.env.ASSET_UNIT]);
         const isBalanceNotEnough = (this.amountToContribute || 0) > balance;
         const isInvestmentNotSpecified = (this.amountToContribute || 0) <= 0;
-        return isBalanceNotEnough || isInvestmentNotSpecified || this.isInvesting;;
+        return isBalanceNotEnough || isInvestmentNotSpecified || this.isInvesting;
       },
       isFinishedResearch() {
         return this.research && this.research.is_finished;
@@ -335,8 +335,8 @@
       isTokenSaleSectionAvailable() {
         return (
           (this.isMissingTokenSale
-          && this.isResearchGroupMember
-          && !this.isFinishedResearch)
+            && this.isResearchGroupMember
+            && !this.isFinishedResearch)
           || this.isActiveTokenSale
           || this.isInactiveTokenSale
         );
@@ -349,8 +349,8 @@
       },
       contributeToTokenSale() {
         this.isInvesting = true;
-        let symbol = this.tokenSale.soft_cap.split(' ')[1];
-        let asset = this.userAssets.find(a => a.string_symbol == symbol);
+        const symbol = this.tokenSale.soft_cap.split(' ')[1];
+        const asset = this.userAssets.find((a) => a.string_symbol == symbol);
 
         researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
           researchExternalId: this.research.external_id,
@@ -378,12 +378,12 @@
             this.$refs.amountToContribute.reset();
             this.amountToContribute = '';
 
-            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`)
+            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`);
           })
           .catch((err) => {
             console.error(err);
             this.isInvesting = false;
-            this.$notifier.showError(`An error occurred while contributing to fundraise, please try again later`)
+            this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
           });
       },
       agreeSaft() {

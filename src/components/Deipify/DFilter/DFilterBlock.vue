@@ -44,6 +44,10 @@
       this.equaliseModels();
     },
 
+    updated() {
+      this.recalc();
+    },
+
     methods: {
       recalc() {
         const $host = this.$refs.host.$el;
@@ -59,10 +63,6 @@
           }
         });
       }
-    },
-
-    updated() {
-      this.recalc();
     }
   };
 </script>

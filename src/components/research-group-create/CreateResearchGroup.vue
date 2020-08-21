@@ -72,24 +72,22 @@
                 .then((res) => {
                   this.formProcessing = false;
                   this.$store.dispatch('auth/loadGroups'); // reload user groups
-                  this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`)
+                  this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`);
 
-                  const invitesPromises = invitees.map((invitee) =>
-                    researchGroupService.createResearchGroupInviteViaOffchain(
-                      this.user.privKey,
-                      {
-                        researchGroup: res.rm._id,
-                        member: invitee.account,
-                        rewardShare: `0.00 %`,
-                        researches: undefined, // all researches
-                        extensions: []
-                      },
-                      {
-                        notes: `${this.formData.name} invites you to join them`,
-                        approver: this.user.username
-                      }
-                    )
-                  );
+                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
+                    this.user.privKey,
+                    {
+                      researchGroup: res.rm._id,
+                      member: invitee.account,
+                      rewardShare: '0.00 %',
+                      researches: undefined, // all researches
+                      extensions: []
+                    },
+                    {
+                      notes: `${this.formData.name} invites you to join them`,
+                      approver: this.user.username
+                    }
+                  ));
 
                   return Promise.all([
                     Promise.all(invitesPromises),
@@ -117,8 +115,8 @@
                 .catch((err) => {
                   console.log(err);
                   this.isLoading = false;
-                  this.$notifier.showError('An error occurred while creating Research Group, please try again later')
-                })
+                  this.$notifier.showError('An error occurred while creating Research Group, please try again later');
+                });
             }
           })
           .catch((error) => {

@@ -1,4 +1,3 @@
-
 const getInvestorBankCardKey = (username) => `deip_${username}_investor_bank_card`;
 
 export function getInvestorBankCard(username) {
