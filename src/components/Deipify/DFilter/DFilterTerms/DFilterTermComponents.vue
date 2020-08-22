@@ -1,9 +1,9 @@
 <template>
-  <div v-if="researchComponents.length">
+  <div v-if="researchAttributes.length">
     <d-block
-      v-for="(item, index) in researchComponents"
-      :key="'research-component-' + index"
-      :title="item.component.readinessLevelShortTitle"
+      v-for="(item, index) in researchAttributes"
+      :key="'research-attribute-' + index"
+      :title="item.shortTitle"
       widget="compact"
     >
       <v-chip-group
@@ -13,15 +13,15 @@
         active-class="primary--text"
         class="mt-n4"
       >
-        <d-list-expand :active="item.component.readinessLevels.length > 4">
+        <d-list-expand :active="item.valueOptions.length > 4">
           <template #default="{expanded}">
-            <template v-for="(step, i) in item.component.readinessLevels">
+            <template v-for="(step, i) in item.valueOptions">
               <v-chip
                 v-if="expanded || i < 4"
-                :key="`readinessLevels-filter-${i}`"
-                :value="`${item._id}:${i}`"
+                :key="`research-attribute-filter-${i}`"
+                :value="`${item._id}:${step.value}`"
                 class="d-block mt-2 mx-0 mb-0"
-                :class="internalValue.includes(`${item._id}:${i}`) ? 'transparent' : 'grey lighten-4'"
+                :class="internalValue.includes(`${item._id}:${step.value}`) ? 'transparent' : 'grey lighten-4'"
                 style="width:100%"
               >
                 <v-avatar left color="primary" class="white--text">
@@ -57,7 +57,7 @@
 
     data() {
       return {
-        researchComponents: []
+        researchAttributes: []
       };
     },
 
@@ -68,8 +68,8 @@
     },
 
     created() {
-      this.researchComponents = this.$options.filters.where(
-        this.tenant.profile.settings.researchComponents,
+      this.researchAttributes = this.$options.filters.where(
+        this.tenant.profile.settings.researchAttributes,
         {
           isVisible: true,
           type: 'stepper'

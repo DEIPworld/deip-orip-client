@@ -29,19 +29,19 @@
       <v-divider />
 
       <v-row
-        v-for="(item, i) in tenant.profile.settings.researchComponents"
+        v-for="(item, i) in tenant.profile.settings.researchAttributes"
         :key="`${i}-stepper`"
         no-gutters
         class="my-6"
       >
         <v-col v-if="item.isVisible" cols="12">
           <div class="text-h6 font-weight-medium mb-6">
-            {{ item.component.readinessLevelTitle }}
+            {{ item.title }}
           </div>
           <leveller-selector
-            v-model.number="research.tenantCriterias[i].value.index"
-            :items="stepperSelector(item.component.readinessLevels)"
-            :label="item.component.readinessLevelTitle"
+            v-model="research.attributes[i].value"
+            :items="stepperSelector(item.valueOptions)"
+            :label="item.title"
           />
         </v-col>
       </v-row>
@@ -89,7 +89,7 @@
     data() {
       return {
         isPublic: !this.research.isPrivate,
-        tenantCriterias: []
+        attributes: []
       };
     },
     computed: {
@@ -101,20 +101,20 @@
       }
     },
     created() {
-      const enabledCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents.reduce((acc, item) => {
+      const enabledAttributes = this.$store.getters['auth/tenant'].profile.settings.researchAttributes.reduce((acc, item) => {
         if (item.isVisible) {
-          return [...acc, { component: item._id, value: { index: 0 } }]; // set the first entry
+          return [...acc, { researchAttributeId: item._id, value: null }]; // set the first entry
         }
-        return [...acc, { component: item._id, value: { index: null } }]; // set empty entry
+        return [...acc, { researchAttributeId: item._id, value: null }]; // set empty entry
       }, []);
 
-      this.research.tenantCriterias.push(...enabledCriterias);
+      this.research.attributes.push(...enabledAttributes);
     },
     methods: {
-      stepperSelector(readinessLevels) {
-        return readinessLevels.map((item, index) => ({
+      stepperSelector(options) {
+        return options.map((item, index) => ({
           text: item.title,
-          value: index,
+          value: item.value,
           num: index + 1
         }));
       },

@@ -26,9 +26,9 @@
       />
 
       <research-list-criterias
-        v-if="research.researchRef && research.researchRef.tenantCriteriasReadingList"
+        v-if="research.researchRef && research.researchRef.extendedAttributes"
         class="mt-4"
-        :criterias="research.researchRef.tenantCriteriasReadingList"
+        :criterias="research.researchRef.extendedAttributes"
       />
 
       <div

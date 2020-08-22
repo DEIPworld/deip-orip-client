@@ -2,13 +2,13 @@
   <full-screen-modal :title="title">
     <v-form ref="form">
       <v-text-field
-        v-model="formData.component.readinessLevelTitle"
+        v-model="formData.title"
         label="Criterion name"
         outlined
         :rules="[rules.required]"
       />
       <v-text-field
-        v-model="formData.component.readinessLevelShortTitle"
+        v-model="formData.shortTitle"
         label="Criterion short name"
         outlined
         :rules="[rules.required]"
@@ -20,14 +20,14 @@
 
       <leveller-list class="py-0">
         <leveller-item
-          v-for="(field,index) of formData.component.readinessLevels"
+          v-for="(field,index) of formData.valueOptions"
           :key="'level-' + index"
           :dot-num="index + 1"
           class="px-0"
           :ctrl-height="72"
         >
           <v-text-field
-            v-model="formData.component.readinessLevels[index].title"
+            v-model="formData.valueOptions[index].title"
             label="Step name"
             outlined
             hide-details
@@ -35,7 +35,7 @@
             :rules="[rules.required]"
           />
           <v-textarea
-            v-model="formData.component.readinessLevels[index].description"
+            v-model="formData.valueOptions[index].description"
             label="Step description"
             outlined
             hide-details
@@ -73,7 +73,6 @@
             color="primary"
             class="mr-4"
             text
-            :loading="isSaving"
             :disabled="isSaving"
             @click="$router.back()"
           >
@@ -125,25 +124,22 @@
         formData: {
           isVisible: true,
           type: 'stepper',
-          component: {
-            readinessLevelTitle: '',
-            readinessLevelShortTitle: '',
-            readinessLevels: []
-          }
+          title: '',
+          shortTitle: '',
+          description: '',
+          valueOptions: []
         }
       };
     },
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant',
-        researchComponents: 'adminPanel/researchComponents'
+        researchAttributes: 'adminPanel/researchAttributes'
       })
     },
     created() {
       if (this.$route.query.id) {
-        const editStepper = this.researchComponents.find(
-          ({ _id }) => _id === this.$route.query.id
-        );
+        const editStepper = this.researchAttributes.find(({ _id }) => _id === this.$route.query.id);
         if (editStepper) {
           this.formData = _.cloneDeep(editStepper);
         }
@@ -153,25 +149,20 @@
     },
     methods: {
       addField() {
-        this.formData.component.readinessLevels.push({ title: '', description: '' });
+        this.formData.valueOptions.push({ title: '', shortTitle: '', description: '' });
       },
       removeField(index) {
-        this.$delete(this.formData.component.readinessLevels, index);
+        this.$delete(this.formData.valueOptions, index);
       },
       save() {
         if (!this.$refs.form.validate()) return;
 
         this.isSaving = true;
 
-        const { _id } = this.formData;
+        const isNewAttribute = this.formData._id == null;
 
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
-        if (_id) {
-          updatedProfile.settings.researchComponents = updatedProfile.settings.researchComponents.map((item) => (item._id === _id ? this.formData : item));
-        } else {
-          updatedProfile.settings.researchComponents.push(this.formData);
-        }
-        tenantService.updateTenantProfile(updatedProfile)
+        let promise = isNewAttribute ? tenantService.createTenantResearchAttribute(this.formData) : tenantService.updateTenantResearchAttribute(this.formData)
+        promise
           .then(() => {
             this.$notifier.showSuccess();
             const tenant = window.env.TENANT;

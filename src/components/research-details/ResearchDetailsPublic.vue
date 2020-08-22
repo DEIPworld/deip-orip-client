@@ -47,16 +47,16 @@
         </d-block>
 
         <d-block widget separated>
-          <div v-for="(item, i) in researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`">
-            <div v-if="item.type === 'stepper'" :class="{'mb-2': i + 1 < researchRef.tenantCriteriasReadingList.length}">
+          <div v-for="(item, i) in researchRef.extendedAttributes" :key="`${i}-tenantCriteria`">
+            <div v-if="item.attribute.type == 'stepper'" :class="{'mb-2': i + 1 < researchRef.extendedAttributes.length}">
               <div class="display-flex">
                 <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
-                  <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
+                  <span class="white--text font-weight-medium">{{ item.value.number }}</span>
                 </v-avatar>
                 <div class="text-h6 align-self-start font-weight-medium">
-                  {{ item.readinessLevelShortTitle }}
+                  {{ item.attribute.shortTitle }}
                   <div class="text-caption font-weight-bold">
-                    {{ item.step.description }}
+                    {{ item.value.description }}
                   </div>
                 </div>
               </div>

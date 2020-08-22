@@ -36,7 +36,7 @@ export const ResearchRequestModelMixin = {
         },
         problem: null,
         solution: null,
-        tenantCriterias: [],
+        attributes: [],
         funding: null,
         eta: null,
 
@@ -87,22 +87,18 @@ export const ResearchRequestModelMixin = {
   },
 
   created() {
-    this.$store.getters['auth/tenant'].profile.settings.researchComponents.forEach((item) => {
+    this.$store.getters['auth/tenant'].profile.settings.researchAttributes.forEach((item) => {
       if (item.isVisible) {
-        this.formData.tenantCriterias.push({
-          component: item._id,
+        this.formData.attributes.push({
+          researchAttributeId: item._id,
           type: 'stepper',
-          value: {
-            index: 0
-          }
+          value: null
         });
       } else {
-        this.formData.tenantCriterias.push({
-          component: item._id,
+        this.formData.attributes.push({
+          researchAttributeId: item._id,
           type: 'stepper',
-          value: {
-            index: null
-          }
+          value: null
         });
       }
     });

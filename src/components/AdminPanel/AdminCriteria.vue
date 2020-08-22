@@ -9,12 +9,12 @@
       </v-btn>
     </template>
 
-    <side-actions-card v-for="(item, i) in researchComponents" :key="`${i}-stepper`" class="mb-6">
+    <side-actions-card v-for="(item, i) in researchAttributes" :key="`${i}-stepper`" class="mb-6">
       <div class="text-subtitle-1 font-weight-medium mb-4">
-        {{ item.component.readinessLevelTitle }}
+        {{ item.title }}
       </div>
 
-      <leveller-list-expander :data="item.component.readinessLevels" />
+      <leveller-list-expander :data="item.valueOptions" />
 
       <template #actions>
         <v-btn
@@ -78,27 +78,12 @@
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant',
-        researchComponents: 'adminPanel/researchComponents'
+        researchAttributes: 'adminPanel/researchAttributes'
       })
     },
     methods: {
-      updateResearchComponents(updatedResearchComponents) {
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
-        updatedProfile.settings.researchComponents = updatedResearchComponents;
-        tenantService.updateTenantProfile(updatedProfile)
-          .then(() => {
-            this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
-          })
-          .catch((err) => {
-            console.error(err);
-            this.$notifier.showError();
-          })
-          .finally(() => this.closeActionDialog());
-      },
 
-      openActionDialog(type, researchComponentsId) {
+      openActionDialog(type, researchAttributeId) {
         const types = {
           publish: {
             title: 'Publish criterion?',
@@ -108,7 +93,7 @@
               - explore page.
               `,
             actionLabel: 'publish',
-            action: () => { this.publishCriteria(researchComponentsId); }
+            action: () => { this.publishCriteria(researchAttributeId); }
 
           },
           unpublish: {
@@ -119,7 +104,7 @@
               - explore page.
               `,
             actionLabel: 'unpublish',
-            action: () => { this.unpublishCriteria(researchComponentsId); }
+            action: () => { this.unpublishCriteria(researchAttributeId); }
 
           },
           delete: {
@@ -130,7 +115,7 @@
               - explore page.
               `,
             actionLabel: 'delete',
-            action: () => { this.deleteCriteria(researchComponentsId); }
+            action: () => { this.deleteCriteria(researchAttributeId); }
 
           }
         };
@@ -147,32 +132,45 @@
         }, 300);
       },
       publishCriteria(id) {
-        const updateResearchComponents = this.researchComponents.map((step) => {
-          if (step._id === id) {
-            return {
-              ...step,
-              isVisible: true
-            };
-          }
-          return step;
-        });
-        this.updateResearchComponents(updateResearchComponents);
+        const researchAttribute = this.researchAttributes.find((step) => step._id === id);
+        tenantService.updateTenantResearchAttribute({ ...researchAttribute, isVisible: true })
+          .then(() => {
+            this.$notifier.showSuccess();
+            const tenant = window.env.TENANT;
+            this.$store.dispatch('auth/loadTenant', { tenant });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError();
+          })
+          .finally(() => this.closeActionDialog());
       },
       unpublishCriteria(id) {
-        const updateResearchComponents = this.researchComponents.map((step) => {
-          if (step._id === id) {
-            return {
-              ...step,
-              isVisible: false
-            };
-          }
-          return step;
-        });
-        this.updateResearchComponents(updateResearchComponents);
+        const researchAttribute = this.researchAttributes.find((step) => step._id === id);
+        tenantService.updateTenantResearchAttribute({ ...researchAttribute, isVisible: false })
+          .then(() => {
+            this.$notifier.showSuccess();
+            const tenant = window.env.TENANT;
+            this.$store.dispatch('auth/loadTenant', { tenant });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError();
+          })
+          .finally(() => this.closeActionDialog());
       },
       deleteCriteria(id) {
-        const updateResearchComponents = this.researchComponents.filter(({ _id }) => _id !== id);
-        this.updateResearchComponents(updateResearchComponents);
+        tenantService.deleteTenantResearchAttribute(id)
+          .then(() => {
+            this.$notifier.showSuccess();
+            const tenant = window.env.TENANT;
+            this.$store.dispatch('auth/loadTenant', { tenant });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError();
+          })
+          .finally(() => this.closeActionDialog());
       }
     }
   };

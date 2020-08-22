@@ -11,7 +11,7 @@
             class="align-self-center"
             style="height: auto"
             :height="24"
-            :num="level.value.index"
+            :num="level.value.number"
           />
           <div class="ml-2">
             <div class="text-caption">

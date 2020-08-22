@@ -103,6 +103,7 @@
 
       if (this.withFilter) {
         this.storageFilterModelKey = `${this.namespace}__filter`;
+
         this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
       }
 
@@ -145,9 +146,9 @@
             }
           } : {}),
 
-          ...(filter.researchComponents.length ? {
+          ...(filter.researchAttributes.length ? {
             researchRef: {
-              tenantCriteriasReadingList: (criteria) => filter.researchComponents.some((i) => criteria.map((c) => `${c.component}:${c.value.index}`).includes(i))
+              extendedAttributes: (researchAttribute) => filter.researchAttributes.some((i) => researchAttribute.map((ra) => `${ra.attribute._id}:${ra.value.value}`).includes(i))
             }
           } : {}),
 

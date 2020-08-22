@@ -158,7 +158,7 @@
           milestones: [],
           isPrivate: false,
           partners: [],
-          tenantCriterias: []
+          attributes: []
         }
       };
     },
@@ -258,7 +258,7 @@
               isActive: i === 0
             })),
             partners: this.research.partners,
-            tenantCriterias: this.research.tenantCriterias.map((criteria) => (criteria.value.index != null ? { ...criteria } : { ...criteria, value: null }))
+            attributes: this.research.attributes.map((criteria) => (criteria.value != null ? { ...criteria } : { ...criteria, value: null }))
           }
         )
           .then(({ rm }) => {

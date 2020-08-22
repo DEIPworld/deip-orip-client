@@ -70,17 +70,17 @@
     </d-form-block>
 
     <d-form-block title="Project readines level">
-      <template v-for="(item, i) in tenant.profile.settings.researchComponents">
+      <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
         <v-col
           v-if="item.isVisible"
           :key="`${i}-stepper`"
           cols="12"
         >
           <leveller-selector
-            v-model="formData.tenantCriterias[i].value.index"
+            v-model="formData.attributes[i].value"
             :x-props="fieldState"
-            :items="stepperSelector(item.component.readinessLevels)"
-            :label="item.component.readinessLevelTitle"
+            :items="stepperSelector(item.valueOptions)"
+            :label="item.title"
           />
         </v-col>
       </template>
@@ -246,10 +246,10 @@
       }
     },
     methods: {
-      stepperSelector(readinessLevels) {
-        return readinessLevels.map((item, index) => ({
+      stepperSelector(options) {
+        return options.map((item, index) => ({
           text: item.title,
-          value: index,
+          value: item.value,
           num: index + 1
         }));
       },
