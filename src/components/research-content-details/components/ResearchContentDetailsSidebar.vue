@@ -228,20 +228,6 @@
         Blockchain Metadata
       </v-btn>
     </d-block>
-
-    <d-block v-if="!isPublished" widget separated title="Reviews">
-      <div class="text-body-2 c-mt-2">
-        <v-row no-gutters justify="space-between" class="text-body-2 py-1">
-          <div>
-            <v-icon small class="c-pr-2">
-              rate_review
-            </v-icon>
-            Reward for review:
-          </div>
-          <div>{{ research.review_share }}</div>
-        </v-row>
-      </div>
-    </d-block>
   </div>
 </template>
 
@@ -342,14 +328,14 @@
       },
 
       researchTableOfContent() {
-        return this.contentList.map((content) => {
+        return this.contentList.reduce((arr, content) => {
           const typeObj = researchContentTypes.find((c) => c.type === content.content_type);
-          return {
+          return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
             permlink: content.permlink
-          };
-        });
+          }] : arr;
+        }, []);
       },
 
       // eciList() {

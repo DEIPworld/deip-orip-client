@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="$ready" ref="projectsView">
+  <d-block v-if="$ready" ref="membersView">
     <template #title>
       Members
       <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
@@ -16,7 +16,7 @@
 
     <v-data-iterator
       :items="members"
-      no-data-text="No Projects found for specified criteria"
+      no-data-text="No Members found"
       :hide-default-footer="iteratorProps.hideDefaultFooter"
       :footer-props="iteratorProps.footerProps"
       :items-per-page="iteratorProps.itemsPerPage"
@@ -111,7 +111,7 @@
     methods: {
       onPaginationUpdated() {
         setTimeout(() => window.scrollTo({
-          top: this.$refs.projectsView.offsetTop - 10,
+          top: this.$refs.membersView.offsetTop - 10,
           behavior: 'smooth'
         }), 0);
       },

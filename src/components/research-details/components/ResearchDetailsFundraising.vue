@@ -323,8 +323,8 @@
           : 0;
       },
       isContributionToTokenSaleDisabled() {
-        if (!this.userBalances[window.env.ASSET_UNIT]) return true;
-        const balance = this.fromAssetsToFloat(this.userBalances[window.env.ASSET_UNIT]);
+        if (!this.userBalances[this.tokenSale.soft_cap.split(' ')[1]]) return true;
+        const balance = this.fromAssetsToFloat(this.userBalances[this.tokenSale.soft_cap.split(' ')[1]]);
         const isBalanceNotEnough = (this.amountToContribute || 0) > balance;
         const isInvestmentNotSpecified = (this.amountToContribute || 0) <= 0;
         return isBalanceNotEnough || isInvestmentNotSpecified || this.isInvesting;
