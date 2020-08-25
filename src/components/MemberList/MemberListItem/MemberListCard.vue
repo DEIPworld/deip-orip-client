@@ -30,13 +30,13 @@
     <v-card-text class="py-4 text-caption">
       <div class="mb-2">
         <v-icon size="18">
-          location_on
+          today
         </v-icon>
         {{ member.created | dateFormat('D MMM YYYY') }}
       </div>
       <div>
         <v-icon size="18">
-          today
+          location_on
         </v-icon>
         {{ member | userLocation }}
       </div>
