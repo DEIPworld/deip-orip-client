@@ -1,9 +1,9 @@
 <template>
-  <div class="d-flex text-caption">
+  <div class="d-flex text-caption align-center">
     <v-icon v-if="meta.icon" class="mr-1" size="18">
       {{ meta.icon }}
     </v-icon>
-    {{ meta.label }}
+    <div>{{ meta.label }}</div>
   </div>
 </template>
 
@@ -18,7 +18,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>
