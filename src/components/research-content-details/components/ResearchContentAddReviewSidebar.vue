@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="research" class="pb-6">
+    <d-block v-if="research" widget>
       <router-link
         class="a title"
         :to="{
@@ -14,16 +14,17 @@
       >
         {{ content.title }}
       </router-link>
-    </div>
-    <div>
+    </d-block>
+
+    <d-block widget :separated="!!research">
       <review-assessment
         v-model="assessmentCriteria"
         :research-content-type="content.content_type"
         :readonly="false"
       />
-    </div>
+    </d-block>
 
-    <div class="py-6">
+    <d-block widget separated>
       <v-btn
         color="primary"
         block
@@ -33,13 +34,13 @@
       >
         Publish
       </v-btn>
-      <div class="pt-4">
+      <div class="pt-4 text-caption">
         <div>
           You will get <span class="font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
           for your contribution to this project
         </div>
       </div>
-    </div>
+    </d-block>
   </div>
 </template>
 
@@ -48,13 +49,14 @@
   import { bus } from '@/main';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { AccessService } from '@deip/access-service';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
-
+    components: { DBlock },
     data() {
       return {
         isLoading: false,

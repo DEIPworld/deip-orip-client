@@ -47,7 +47,7 @@
           <div
             ref="content"
             data-x
-            class="spacer py-2"
+            class="spacer"
             style="overflow: auto"
           >
             <slot />

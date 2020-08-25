@@ -8,6 +8,7 @@
       label="Assessment criteria"
       item-text="label"
       item-value="value"
+      hide-details
     />
     <d-block
       v-if="!singleChoice"

@@ -8,18 +8,20 @@
             @apply="applyFilter"
             @reset="resetFilter"
           >
-            <v-text-field
-              v-model="filterModel.searchTerm"
-              outlined
-              class="mb-4"
-              prepend-inner-icon="search"
-              hide-details
-              label="Search by names"
-            />
+            <div class="px-6 pt-6">
+              <v-text-field
+                v-model="filterModel.searchTerm"
+                outlined
+                class="mb-6"
+                prepend-inner-icon="search"
+                hide-details
+                label="Search by names"
+              />
 
-            <d-filter-term-disciplines v-model="filterModel.discipline" single-choice />
-            <d-filter-term-contributions v-model="filterModel.contribution" single-choice />
-            <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
+              <d-filter-term-disciplines class="mb-6" v-model="filterModel.discipline" single-choice />
+              <d-filter-term-contributions class="mb-6" v-model="filterModel.contribution" single-choice />
+              <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
+            </div>
           </d-filter-sidebar>
         </template>
       </d-block>

@@ -5,6 +5,7 @@
       v-model="internalValue"
       :items="[{ label: 'All', id: '' }, ...disciplines]"
       outlined
+      hide-details
       label="Domain"
       item-text="label"
       item-value="id"

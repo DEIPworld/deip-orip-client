@@ -8,6 +8,7 @@
       label="Contribution type"
       item-text="label"
       item-value="value"
+      hide-details
     />
 
     <d-block
