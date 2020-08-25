@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="!isResearchGroupMember || !isEditMode" widget title="Quorum threshold">
+  <d-block v-if="!isResearchGroupMember || !isEditMode" widget title="Quorum threshold" separated>
     <div
       v-for="(proposalBlock, i) in proposalOrderMap"
       :key="`proposalBlock-${i}`"

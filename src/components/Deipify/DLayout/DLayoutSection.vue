@@ -11,7 +11,7 @@
       permanent
       right
     >
-      <div class="py-2">
+      <div>
         <slot name="sidebar" />
       </div>
     </v-navigation-drawer>

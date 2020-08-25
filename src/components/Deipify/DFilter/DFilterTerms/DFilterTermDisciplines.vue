@@ -13,7 +13,7 @@
     <d-block
       v-if="!singleChoice"
       title="Domain"
-      widget
+      widget="compact"
     >
       <d-list-expand :active="disciplines.length > 4">
         <template #default="{expanded}">

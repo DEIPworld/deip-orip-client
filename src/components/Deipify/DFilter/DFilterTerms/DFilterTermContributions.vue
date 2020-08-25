@@ -13,7 +13,7 @@
     <d-block
       v-if="!singleChoice"
       title="Contribution type"
-      widget
+      widget="compact"
     >
       <d-list-expand :active="contributions.length > 4">
         <template #default="{expanded}">

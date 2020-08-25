@@ -1,5 +1,6 @@
 <template>
   <v-sheet>
+    <v-divider v-if="separated" />
     <div :class="contentClassList">
       <div v-if="hasHeader" :class="headerClassList">
         <slot name="titleLeft" />
@@ -40,7 +41,7 @@
         default: false
       },
       widget: {
-        type: Boolean,
+        type: [Boolean, String],
         default: false
       },
 
@@ -51,6 +52,11 @@
       subtitle: {
         type: String,
         default: null
+      },
+
+      separated: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -79,7 +85,8 @@
       },
       contentClassList() {
         return {
-          'px-6 py-4': this.widget
+          'px-6 py-4': this.widget && this.widget === 'compact',
+          'pa-6': this.widget && this.widget !== 'compact'
         };
       }
     }

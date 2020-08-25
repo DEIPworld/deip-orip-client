@@ -1,26 +1,28 @@
 <template>
   <div>
-    <div class="pb-2">
-      <router-link
-        class="a title"
-        :to="{
-          name: 'ResearchContentDetails',
-          params: {
-            research_group_permlink: encodeURIComponent(research.research_group.permlink),
-            research_permlink: encodeURIComponent(research.permlink),
-            content_permlink: encodeURIComponent(content.permlink)
-          }
-        }"
-      >
-        {{ content.title }}
-      </router-link>
-    </div>
+    <d-block widget>
+      <div class="text-h6">
+        <router-link
+          class="link"
+          :to="{
+            name: 'ResearchContentDetails',
+            params: {
+              research_group_permlink: encodeURIComponent(research.research_group.permlink),
+              research_permlink: encodeURIComponent(research.permlink),
+              content_permlink: encodeURIComponent(content.permlink)
+            }
+          }"
+        >
+          {{ content.title }}
+        </router-link>
+      </div>
+    </d-block>
 
-    <div class="pb-2">
+    <d-block widget separated>
       <review-assessment v-model="review.scores" :research-content-type="content.content_type" />
-    </div>
+    </d-block>
 
-    <div v-if="review.author.account.name !== user.username">
+    <d-block v-if="review.author.account.name !== user.username" widget separated>
       <div>
         <v-btn
           block
@@ -49,12 +51,14 @@
           Review can be supported once
         </div>
       </div>
-    </div>
+    </d-block>
 
-    <div v-if="reviewSupporters.length">
-      <div class="text-subtitle-1 bold py-6">
-        Supporters: {{ reviewSupporters.length }}
-      </div>
+    <d-block
+      v-if="reviewSupporters.length"
+      :title="` Supporters: ${reviewSupporters.length }`"
+      widget
+      separated
+    >
       <div
         v-for="(vote, i) in reviewSupporters"
         :key="`curator-${i}`"
@@ -70,19 +74,18 @@
           />
         </div>
       </div>
-    </div>
+    </d-block>
 
-    <div class="pt-2 display-flex justify-space-between">
-      <div class="half-bold align-self-center">
-        Date Added:
-      </div>
-      <div class="py-2">
-        <v-icon color="grey" small>
-          event
-        </v-icon>
-        <span>{{ moment(review.created_at).format("D MMM YYYY") }}</span>
-      </div>
-    </div>
+    <d-block widget separated>
+      <v-row>
+        <v-col>
+          <div class="text-body-2 font-weight-medium">Date Added:</div>
+        </v-col>
+        <v-col cols="auto">
+          <d-meta-item :meta="{icon: 'event', label: moment(review.created_at).format('D MMM YYYY')}" />
+        </v-col>
+      </v-row>
+    </d-block>
   </div>
 </template>
 
@@ -91,11 +94,14 @@
   import deipRpc from '@deip/rpc-client';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentReviewSidebar',
+    components: { DMetaItem, DBlock },
     data() {
       return {
         isReviewVoting: false,

@@ -15,8 +15,7 @@
       </router-link>
     </d-block>
 
-    <v-divider v-if="!isPublished && isResearchGroupMember" />
-    <d-block v-if="!isPublished && isResearchGroupMember" widget>
+    <d-block v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)" widget separated>
       <div v-if="isProposed" class="text-body-1">
         Draft is
         <router-link
@@ -33,7 +32,6 @@
         </router-link>
         as research content and locked for editing
       </div>
-
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="text-body-1 pb-4">
           The proposal is expired. Unlock the material for a new proposal or removal
@@ -44,18 +42,20 @@
       </div>
     </d-block>
 
-    <v-divider />
-    <eci-stats
-      v-if="$route.params.content_permlink !== '!draft'"
-      :content-id="content.external_id"
-      :disciplines="disciplinesList"
-    />
+    <d-block
+      widget
+      separated
+      title="Expertise Contribution Index"
+    >
+      <eci-stats
+        v-if="$route.params.content_permlink !== '!draft'"
+        :content-id="content.external_id"
+        :disciplines="disciplinesList"
+      />
+    </d-block>
 
-    <!--    <v-divider v-if="!isPublished && isResearchGroupMember" />-->
-    <v-divider />
-    <d-block widget>
+    <d-block v-if="isPublished" widget separated>
       <v-dialog
-        v-if="isPublished"
         v-model="requestExpertReviewDialog.isShown"
         persistent
         max-width="600px"
@@ -121,8 +121,7 @@
       </v-dialog>
     </d-block>
 
-    <v-divider />
-    <d-block widget title="Authors">
+    <d-block widget separated title="Authors">
       <template v-if="isPublished">
         <div
           v-for="(author, index) in contentAuthorsList"
@@ -167,8 +166,7 @@
       </template>
     </d-block>
 
-    <v-divider v-if="researchTableOfContent.length" />
-    <d-block v-if="researchTableOfContent.length" widget title="Project table of content">
+    <d-block v-if="researchTableOfContent.length" widget separated title="Project table of content">
       <ol class="text-body-2">
         <li
           v-for="(item, index) in researchTableOfContent"
@@ -214,8 +212,7 @@
       </div>
     </d-block>
 
-    <v-divider v-if="isPublished" />
-    <d-block v-if="isPublished" widget>
+    <d-block v-if="isPublished" widget separated>
       <v-btn
         block
         color="primary"
@@ -232,8 +229,7 @@
       </v-btn>
     </d-block>
 
-    <v-divider v-if="!isPublished" />
-    <d-block v-if="!isPublished" widget title="Reviews">
+    <d-block v-if="!isPublished" widget separated title="Reviews">
       <div class="text-body-2 c-mt-2">
         <v-row no-gutters justify="space-between" class="text-body-2 py-1">
           <div>

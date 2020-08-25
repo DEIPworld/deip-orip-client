@@ -119,14 +119,18 @@
       </div>
     </d-block>
 
-    <v-divider />
-    <eci-stats
-      :research-id="research.external_id"
-      :disciplines="research.disciplines"
-    />
+    <d-block
+      widget
+      separated
+      title="Expertise Contribution Index"
+    >
+      <eci-stats
+        :research-id="research.external_id"
+        :disciplines="research.disciplines"
+      />
+    </d-block>
 
-    <v-divider v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" />
-    <d-block v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" widget>
+    <d-block v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" widget separated>
       <div class="display-flex">
         <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
           <span class="white--text font-weight-medium">C</span>
@@ -137,8 +141,7 @@
       </div>
     </d-block>
 
-    <v-divider />
-    <d-block widget>
+    <d-block widget separated>
       <div v-for="(item, i) in researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`">
         <div v-if="item.type === 'stepper'" :class="{'mb-2': i + 1 < researchRef.tenantCriteriasReadingList.length}">
           <div class="display-flex">
@@ -156,8 +159,7 @@
       </div>
     </d-block>
 
-    <v-divider v-if="isResearchGroupMember" />
-    <d-block v-if="isResearchGroupMember" widget>
+    <d-block v-if="isResearchGroupMember" widget separated>
       <div v-if="research.is_private" class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           lock
@@ -172,13 +174,11 @@
       </div>
     </d-block>
 
-    <v-divider v-if="researchRef.partners.length" />
-    <d-block v-if="researchRef.partners.length" widget>
+    <d-block v-if="researchRef.partners.length" widget separated>
       <research-partners is-read-only :partners="researchRef.partners" />
     </d-block>
 
-    <v-divider v-if="contentList.length" />
-    <d-block v-if="contentList.length" widget title="Expert Review">
+    <d-block v-if="contentList.length" widget separated title="Expert Review">
       <v-dialog
         v-model="requestExpertReviewDialog.isShown"
         persistent

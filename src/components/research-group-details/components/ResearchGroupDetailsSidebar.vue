@@ -42,15 +42,15 @@
     />
 
     <!-- ### START Research Group Details Section ### -->
-    <d-block widget title="Group expertise tokens">
+    <d-block widget separated title="Group expertise tokens">
       <div v-for="(item, i) in groupExpertise" :key="i">
         <span class="font-weight-medium">{{ item.disciplineName }}</span>
         <span class="float-right">{{ item.value }}</span>
       </div>
     </d-block>
     <!-- ### END Research Group Details Section ### -->
-    <v-divider v-if="isResearchGroupMember" />
-    <d-block v-if="isResearchGroupMember" widget>
+
+    <d-block v-if="isResearchGroupMember" widget separated>
       <template #title>
         <router-link
           class="a"
@@ -73,7 +73,7 @@
         Transfer
       </v-btn>
     </d-block>
-    <v-divider />
+
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
     <transfer-group-deip-tokens-dialog
@@ -87,10 +87,11 @@
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import HandleJoinRequestDialog from '@/components/research-group-details/components/HandleJoinRequestDialog';
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
-    components: { DBlock },
+    components: { HandleJoinRequestDialog, DBlock },
     data() {
       return {
         isApprovingJoinRequest: false,

@@ -5,41 +5,6 @@
     clipped
     permanent
   >
-    <!-- <template>
-      <v-list nav dense>
-        <v-subheader>Account</v-subheader>
-        <v-list-item :to="{ name: 'account.summary' }" exact>
-          <v-list-item-avatar>
-            <v-avatar>
-              <img
-                v-if="user.profile"
-                :src="user.profile | avatarSrc(2 * 40, 2 * 40, false)"
-              >
-              <v-gravatar
-                v-if="!user.profile && user.account"
-                :title="user.username"
-                :email="user.username + '@deip.world'"
-              />
-            </v-avatar>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{ user.profile.firstName }}
-              {{ user.profile.lastName }}
-            </v-list-item-title>
-            <v-list-item-subtitle class="text-caption">
-              {{ user.profile.email }}
-            </v-list-item-subtitle>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-btn icon small :to="{ name: 'account.profile' }">
-              <v-icon>edit</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
-      </v-list>
-      <v-divider />
-    </template> -->
 
     <template v-for="(menuBlock, menuIndex) of menu">
       <v-list :key="'menu-item-' + menuIndex" nav dense>

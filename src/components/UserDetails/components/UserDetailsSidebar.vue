@@ -86,9 +86,7 @@
       </v-dialog>
     </d-block>
 
-    <v-divider v-if="isOwner && hasInvites" />
-
-    <d-block v-if="isOwner && hasReviewRequests" widget>
+    <d-block v-if="isOwner && hasReviewRequests" widget separated>
       <div id="review-requests" class="text-h6 font-weight-bold pa-4">
         Review Requests: {{ reviewRequests.length }}
       </div>
@@ -133,12 +131,18 @@
       </div>
     </d-block>
 
-    <v-divider v-if="isOwner && hasReviewRequests" />
     <!--  TODO: need user disciplines  -->
-    <eci-stats
-      :account-name="userInfo.account.name"
-      :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
-    />
+    <d-block
+      widget
+      title="Expertise Contribution Index"
+      :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
+    >
+      <eci-stats
+        :account-name="userInfo.account.name"
+        :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
+        :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
+      />
+    </d-block>
 
     <user-claim-expertise-dialog
       :is-shown="isClaimExpertiseDialogShown"

@@ -6,59 +6,49 @@
       <research-details-materials :is-details-available="false" />
 
       <template #sidebar>
-        <div>
-          <v-sheet>
-            <div class="text-h6">
-              You are not logged in
-            </div>
-            <div class="my-2">
-              After creating an account/log in you can add new projects or enjoy shared materials
-            </div>
-            <v-btn
-              :to="{
-                name: 'SignIn'
-              }"
-              block
-              color="primary"
-              class="pa-2"
-            >
-              Sign in
-            </v-btn>
-          </v-sheet>
+        <d-block widget title="You are not logged in">
+          <div class="my-2 text-body-2">
+            After creating an account/log in you can add new projects or enjoy shared materials
+          </div>
+          <v-btn
+            :to="{
+              name: 'SignIn'
+            }"
+            block
+            color="primary"
+            class="pa-2"
+          >
+            Sign in
+          </v-btn>
+        </d-block>
 
-          <v-divider class="my-6" />
-
-          <v-sheet>
-            <div class="text-h6">
-              {{ group.name }}
+        <d-block widget separated :title="group.name">
+          <div
+            v-for="(member, i) in researchMembersList"
+            :key="member.account.id"
+            class="mt-4"
+            justify="space-between"
+            align-center
+          >
+            <div>
+              <platform-avatar
+                :key="'member-' + i"
+                :size="40"
+                :user="member"
+                :link-to-profile="false"
+                no-follow
+                link-to-profile-class="pl-4 bold"
+                pick-disabled
+              >
+                <span class="pl-2">{{ member | fullname }}</span>
+              </platform-avatar>
             </div>
-            <div
-              v-for="(member, i) in researchMembersList"
-              :key="member.account.id"
-              class="mt-4"
-              justify="space-between"
-              align-center
-            >
-              <div>
-                <platform-avatar
-                  :key="'member-' + i"
-                  :size="40"
-                  :user="member"
-                  :link-to-profile="false"
-                  no-follow
-                  link-to-profile-class="pl-4 bold"
-                  pick-disabled
-                >
-                  <span class="pl-2">{{ member | fullname }}</span>
-                </platform-avatar>
-              </div>
-            </div>
-          </v-sheet>
+          </div>
+        </d-block>
 
-          <v-divider class="my-6" />
-
+        <d-block widget separated>
           <div v-for="(item, i) in researchRef.tenantCriteriasReadingList" :key="`${i}-tenantCriteria`">
-            <div v-if="item.type == 'stepper'" class="mb-2">
+            <div v-if="item.type === 'stepper'" :class="{'mb-2': i + 1 < researchRef.tenantCriteriasReadingList.length}">
               <div class="display-flex">
                 <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
                   <span class="white--text font-weight-medium">{{ item.value.index + 1 }}</span>
@@ -72,15 +62,12 @@
               </div>
             </div>
           </div>
+        </d-block>
 
-          <div v-if="researchRef.partners.length">
-            <v-divider class="my-6" />
-            <div class="text-h6">
-              Partners
-            </div>
-            <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
-          </div>
-        </div>
+        <d-block v-if="researchRef.partners.length" widget separated title="Partners">
+          <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
+        </d-block>
+
       </template>
     </d-layout-section>
   </div>
@@ -96,6 +83,7 @@
   import ResearchDetailsMaterials from '@/components/research-details/components/ResearchDetailsMaterials';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ResearchTimeline from './components/ResearchTimeline';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchService = ResearchService.getInstance();
 
@@ -103,6 +91,7 @@
     name: 'ResearchDetailsPublic',
 
     components: {
+      DBlock,
       DLayoutSection,
       ResearchDetailsMaterials,
       ResearchDetailsHeader,

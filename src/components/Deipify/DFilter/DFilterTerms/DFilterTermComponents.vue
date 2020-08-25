@@ -4,7 +4,7 @@
       v-for="(item, index) in researchComponents"
       :key="'research-component-' + index"
       :title="item.component.readinessLevelShortTitle"
-      widget
+      widget="compact"
     >
       <v-chip-group
         v-model="internalValue"

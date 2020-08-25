@@ -5,9 +5,9 @@
       :key="`review-criteria-${i}`"
       no-gutters
       align="center"
-      class="full-width py-2"
+      :class="{'mb-2': i + 1 < criterias.length}"
     >
-      <v-col>
+      <v-col class="text-body-2">
         {{ criteria.title }}:
       </v-col>
       <v-col class="d-flex justify-end">

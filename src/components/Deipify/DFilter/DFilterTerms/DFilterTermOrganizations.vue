@@ -2,7 +2,7 @@
   <d-block
     v-if="organizations.length"
     title="Teams"
-    widget
+    widget="compact"
   >
     <d-list-expand :active="organizations.length > 4">
       <template #default="{expanded}">
