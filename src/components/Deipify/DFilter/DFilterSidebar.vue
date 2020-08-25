@@ -4,7 +4,6 @@
       outlined
       small
       color="primary"
-      class="ml-3"
       @click="toggle"
     >
       <v-icon left>

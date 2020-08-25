@@ -55,12 +55,13 @@
     <!-- ### END Research Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
-      <template #subtitle>
+      <template #addSome>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
           class="mt-4"
           outlined
+          small
           @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
         >
           Invite member
@@ -70,11 +71,11 @@
 
     <!-- ### START Research Group Research List Section ### -->
     <research-list namespace="groupDetails" :items="researchWithGroupInfoList">
-      <template #subtitle>
+      <template #addSome>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
-          class="mt-4"
+          small
           :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
           outlined
         >

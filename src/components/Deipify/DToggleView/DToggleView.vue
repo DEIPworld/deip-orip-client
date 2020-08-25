@@ -1,26 +1,30 @@
 <template>
-  <v-sheet :height="32" class="align-center d-flex">
+  <v-sheet outlined rounded>
     <v-item-group
       v-model="viewModel"
+      class="d-flex align-stretch"
+      style="margin: -1px"
       color="white"
       mandatory
       dense
       @change="change"
     >
       <v-item #default="{ active, toggle }" :value="VIEW_TYPES.GRID">
-        <v-btn icon class="my-n3" @click="toggle">
+        <v-btn tile icon small @click="toggle">
           <v-icon :color="active ? 'primary' : 'grey'">
             view_module
           </v-icon>
         </v-btn>
       </v-item>
+      <v-divider vertical />
       <v-item #default="{ active, toggle }" :value="VIEW_TYPES.LIST">
-        <v-btn icon class="my-n3" @click="toggle">
+        <v-btn tile icon small @click="toggle">
           <v-icon :color="active ? 'primary' : 'grey'">
             view_list
           </v-icon>
         </v-btn>
       </v-item>
+
     </v-item-group>
   </v-sheet>
 </template>

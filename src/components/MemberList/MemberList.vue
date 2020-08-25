@@ -1,12 +1,13 @@
 <template>
   <d-block v-if="$ready" ref="projectsView">
     <template #title>
-      Projects
+      Members
       <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
     </template>
 
     <template #titleAddon>
       <d-toggle-view :storage-key="storageViewModelKey" class="align-self-end" />
+      <slot name="addSome" />
     </template>
 
     <template #subtitle>

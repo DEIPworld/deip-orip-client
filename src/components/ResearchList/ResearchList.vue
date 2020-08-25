@@ -8,6 +8,7 @@
     <template #titleAddon>
       <d-toggle-view :storage-key="storageViewModelKey" class="align-self-end" />
       <research-list-filter v-if="withFilter" :storage-key="storageFilterModelKey" />
+      <slot name="addSome" />
     </template>
 
     <template #subtitle>

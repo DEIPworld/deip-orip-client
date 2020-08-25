@@ -22,8 +22,9 @@
             <slot name="subtitle" />
           </div>
         </div>
-
-        <slot name="titleAddon" />
+        <div v-if="$hasSlot('titleAddon')" :class="$style.actions">
+          <slot name="titleAddon" />
+        </div>
       </div>
 
       <slot />
@@ -92,3 +93,11 @@
     }
   };
 </script>
+
+<style lang="scss" module>
+  .actions {
+    display: grid;
+    grid-gap: 8px;
+    grid-auto-flow: column;
+  }
+</style>
