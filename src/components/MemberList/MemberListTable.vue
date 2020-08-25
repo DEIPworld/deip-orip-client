@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-      :headers="pendingProjectsHeaders"
+      :headers="pendingMembersHeaders"
       :items="items"
       disable-sort
       :hide-default-footer="items.length < 50"
@@ -93,7 +93,7 @@
           loading: false,
           action: () => false
         },
-        pendingProjectsHeaders: [
+        pendingMembersHeaders: [
           {
             text: 'Researcher',
             value: 'researcher'

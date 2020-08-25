@@ -81,7 +81,7 @@
 
       cancelButtonTitle: {
         type: String,
-        default: 'cancel'
+        default: 'Cancel'
       },
       cancelButtonHide: {
         type: Boolean,
@@ -90,7 +90,7 @@
 
       confirmButtonTitle: {
         type: String,
-        default: 'confirm'
+        default: 'Confirm'
       },
       confirmButtonHide: {
         type: Boolean,
