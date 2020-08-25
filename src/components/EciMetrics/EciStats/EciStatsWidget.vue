@@ -123,7 +123,7 @@
           return {
             name: 'UserExpertiseDetails',
             params: {
-              account_name: this.accountName
+              account_name: this.$route.params.account_name
             }
           };
         }
