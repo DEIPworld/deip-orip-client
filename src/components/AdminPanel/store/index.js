@@ -25,7 +25,7 @@ const getters = {
 
   categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories,
 
-  researchComponents: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchComponents,
+  researchAttributes: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchAttributes,
 
   pendingProjects: (state) => state.pendingProjects,
   publicProjects: (state) => state.publicProjects

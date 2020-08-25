@@ -22,8 +22,8 @@
 
     <td>
       <research-list-criterias
-        v-if="research.researchRef && research.researchRef.tenantCriteriasReadingList"
-        :criterias="research.researchRef.tenantCriteriasReadingList"
+        v-if="research.researchRef && research.researchRef.extendedAttributes"
+        :criterias="research.researchRef.extendedAttributes"
       />
     </td>
 

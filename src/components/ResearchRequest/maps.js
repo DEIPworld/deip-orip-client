@@ -5,7 +5,7 @@ export const NAMING_MAP = {
   location: 'Project location',
   problem: 'What area are you trying to impact?',
   solution: 'How will this solve a current problem?',
-  tenantCriterias: 'Project readines level',
+  attributes: 'Project readines level',
   funding: 'How much funding are you expecting?',
   eta: 'What is your project estimate?',
 

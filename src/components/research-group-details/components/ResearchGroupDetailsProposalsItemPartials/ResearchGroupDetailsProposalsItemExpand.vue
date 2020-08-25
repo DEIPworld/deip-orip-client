@@ -11,7 +11,7 @@
     </v-col>
     <v-col class="grey--text" cols="6" style="max-height: 70px">
       <v-row>
-        <span v-for="(label, i) in getDisciplineNames()" :key="i" class="pr-1">{{ label }}</span>
+        <!-- <span v-for="(label, i) in getDisciplineNames()" :key="i" class="pr-1">{{ label }}</span> -->
       </v-row>
     </v-col>
   </v-row>

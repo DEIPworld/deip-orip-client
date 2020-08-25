@@ -72,19 +72,22 @@
               data = Object.values(research[key]).filter((k) => k !== null).join(', ');
             }
 
-            if (key === 'tenantCriterias') {
-              data = research[key].reduce((a, criteria) => {
-                const crit = this.tenant.profile.settings.researchComponents.find((c) => c._id === criteria.component);
-                if (criteria.value.index !== null) {
-                  a.push({
-                    name: crit.component.readinessLevelTitle,
+            if (key === 'attributes') {
+              data = research[key].reduce((acc, attr) => {
+                const researchAttribute = this.tenant.profile.settings.researchAttributes.find((c) => c._id === attr.researchAttributeId);
+                if (attr.value !== null) {
+                  let value = researchAttribute.valueOptions.find(opt => opt.value == attr.value);
+                  let valueIdx = researchAttribute.valueOptions.indexOf(value);
+
+                  acc.push({
+                    name: researchAttribute.title,
                     value: {
-                      ...crit.component.readinessLevels[criteria.value.index],
-                      index: criteria.value.index + 1
+                      ...value,
+                      number: valueIdx + 1
                     }
                   });
                 }
-                return a;
+                return acc;
               }, []);
             }
 

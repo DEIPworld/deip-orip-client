@@ -87,12 +87,12 @@
       Research Criterials
     </div>
 
-    <template v-for="(item, i) in tenant.profile.settings.researchComponents">
+    <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
       <div v-if="item.isVisible" :key="`${i}-stepper`" class="my-6">
         <leveller-selector
-          v-model.number="tenantCriterias[i].value.index"
-          :items="stepperSelector(item.component.readinessLevels)"
-          :label="item.component.readinessLevelTitle"
+          v-model="attributes[i].value"
+          :items="stepperSelector(item.valueOptions)"
+          :label="item.title"
         />
       </div>
     </template>
@@ -242,7 +242,7 @@
           titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
           descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
         },
-        tenantCriterias: []
+        attributes: []
       };
     },
     computed: {
@@ -284,7 +284,7 @@
           || this.milestones.some((step) => !step.validation || step.validation.isValid === false)
           || !this.videoSrcIsValidOrAbsent
           || (this.partners.length ? this.partners.some((item) => item.title === '' || item.type === '') : false)
-          || this.tenantCriterias.some(({ isVisible, value: { index } }) => (isVisible ? index === null : false));
+          || this.attributes.some(({ isVisible, value }) => (isVisible ? value === null : false));
       },
 
       isValidLink() {
@@ -313,15 +313,21 @@
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
 
-      this.tenantCriterias = this.$store.getters['auth/tenant'].profile.settings.researchComponents
-        .map(({ _id, isVisible, component: componentSchema }) => {
-          const tenantCriteria = this.researchRef.tenantCriterias.find((criteria) => criteria.component === _id);
-          const enabledCriteria = { component: _id, isVisible, value: { index: tenantCriteria && tenantCriteria.value != null ? tenantCriteria.value.index : null } };
+      this.attributes = this.$store.getters['auth/tenant'].profile.settings.researchAttributes
+        .map((researchAttribute) => {
+          const attribute = this.researchRef.attributes.find((attr) => attr.researchAttributeId === researchAttribute._id);
 
-          if (componentSchema.readinessLevels[enabledCriteria.value.index]) { // check if a step is removed from the component after editing
-            return enabledCriteria;
+          const enabledAttribute = { 
+            researchAttributeId: researchAttribute._id, 
+            isVisible: researchAttribute.isVisible, 
+            value: attribute ? attribute.value : null 
+          };
+
+          if (attribute && researchAttribute.valueOptions.some(opt => opt.value == attribute.value)) { // check if a step is removed from the research attributeId after editing
+            return enabledAttribute;
           }
-          return { ...enabledCriteria, value: { index: null } };
+
+          return { ...enabledAttribute, value: null };
         });
 
       const milestones = this.milestones.map((m) => ({
@@ -336,10 +342,10 @@
       }));
     },
     methods: {
-      stepperSelector(readinessLevels) {
-        return readinessLevels.map((item, index) => ({
+      stepperSelector(options) {
+        return options.map((item, index) => ({
           text: item.title,
-          value: index,
+          value: item.value,
           num: index + 1
         }));
       },
@@ -416,12 +422,12 @@
               : false
           }));
 
-          const tenantCriterias = this.tenantCriterias.map((criteria) => (criteria.value.index != null ? { ...criteria } : { ...criteria, value: null }));
+          const attributes = this.attributes.map((attr) => (attr.value != null ? { ...attr } : { ...attr, value: null }));
           researchService.updateResearchOffchainMeta(this.research.external_id, {
             milestones,
             videoSrc: this.videoSrc,
             partners: this.partners,
-            tenantCriterias,
+            attributes: attributes,
             tenantCategory: this.tenantCategory
           })
             .then(() => {
