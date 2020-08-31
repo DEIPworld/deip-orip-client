@@ -21,9 +21,11 @@
     </td>
 
     <td>
-      <research-list-criterias
-        v-if="research.researchRef && research.researchRef.extendedAttributes"
-        :criterias="research.researchRef.extendedAttributes"
+      <attributes-read
+        v-for="(attribute, index) of research.researchRef.attributes"
+        :key="`attr-${index}`"
+        :value="attribute"
+        small
       />
     </td>
 
@@ -57,10 +59,11 @@
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
+  import AttributesRead from '@/components/Attributes/AttributesRead';
 
   export default {
     name: 'ResearchListRow',
-    components: { DSimpleTooltip, DBoxItem, DMetaItem },
+    components: { AttributesRead, DSimpleTooltip, DBoxItem, DMetaItem },
     mixins: [abstractResearchItem]
   };
 </script>

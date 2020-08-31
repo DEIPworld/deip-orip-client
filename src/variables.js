@@ -1,9 +1,16 @@
 import { createEnum } from '@deip/toolbox';
 
 import { PROPOSAL_TYPES } from '@deip/proposals-service';
-import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@deip/expertise-contributions-service';
+import {
+  EXPERTISE_CONTRIBUTION_TYPE,
+  ECI_STAT_PERIOD_STEP_TYPE
+} from '@deip/expertise-contributions-service';
 import { researchContentTypes } from '@deip/research-service';
-import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/grants-service';
+import {
+  AWARD_STATUS,
+  AWARD_RECIPIENT_STATUS,
+  AWARD_WITHDRAWAL_REQUEST_STATUS
+} from '@deip/grants-service';
 import { ASSESSMENT_CRITERIA_TYPE } from '@deip/research-content-reviews-service';
 
 const proposalTypesLabels = {
@@ -25,6 +32,24 @@ const VIEW_TYPES = createEnum({
   LIST: 2
 });
 
+const ATTR_TYPES = {
+  TEXT: 'text',
+  TEXTAREA: 'textarea',
+  STEPPER: 'stepper',
+  SELECT: 'select'
+};
+const ATTR_MODES = {
+  EDIT: 'edit',
+  READ: 'read',
+  SET: 'set'
+};
+const ATTR_TYPES_LIST = {
+  [ATTR_TYPES.TEXT]: { value: ATTR_TYPES.TEXT, text: 'Text field' },
+  [ATTR_TYPES.TEXTAREA]: { value: ATTR_TYPES.TEXTAREA, text: 'Text area' },
+  [ATTR_TYPES.SELECT]: { value: ATTR_TYPES.SELECT, text: 'Dropdown select' },
+  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' }
+};
+
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
@@ -37,5 +62,10 @@ export {
   maxTitleLength,
   maxDescriptionLength,
   VIEW_TYPES,
+
+  ATTR_TYPES,
+  ATTR_TYPES_LIST,
+  ATTR_MODES,
+
   ECI_STAT_PERIOD_STEP_TYPE
 };

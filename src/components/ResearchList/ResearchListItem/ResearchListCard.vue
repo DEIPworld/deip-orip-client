@@ -25,10 +25,13 @@
         :token-sale="research.tokenSale"
       />
 
-      <research-list-criterias
-        v-if="research.researchRef && research.researchRef.extendedAttributes"
+      <attributes-read
+        v-for="(attribute, index) of research.researchRef.attributes"
+        :key="`attr-${index}`"
+        :value="attribute.value"
+        :attribute="attribute.researchAttributeId"
+        small
         class="mt-4"
-        :criterias="research.researchRef.extendedAttributes"
       />
 
       <div
@@ -55,11 +58,11 @@
 
 <script>
   import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
-  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import AttributesRead from '@/components/Attributes/AttributesRead';
 
   export default {
     name: 'ResearchListCard',
-    components: { DBoxItem },
+    components: { AttributesRead },
     mixins: [abstractResearchItem]
   };
 </script>

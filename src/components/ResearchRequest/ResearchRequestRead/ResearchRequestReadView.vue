@@ -28,11 +28,8 @@
 </template>
 
 <script>
-  import LevellerNum from '@/components/Leveller/LevellerNum';
-
   export default {
     name: 'ResearchRequestReadView',
-    components: { LevellerNum },
     props: {
       research: {
         type: Array,

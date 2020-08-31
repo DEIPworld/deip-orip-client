@@ -16,7 +16,6 @@
   import FieldDate from './fields/FieldDate';
   import FieldEmail from './fields/FieldEmail';
   import FieldFile from './fields/FieldFile';
-  import FieldLevel from './fields/FieldLevel';
   import FieldPassword from './fields/FieldPassword';
   import FieldSelect from './fields/FieldSelect';
   import FieldText from './fields/FieldText';
@@ -28,7 +27,6 @@
       FieldDate,
       FieldEmail,
       FieldFile,
-      FieldLevel,
       FieldPassword,
       FieldSelect,
       FieldText,
@@ -62,7 +60,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

@@ -1,11 +1,15 @@
 <template>
-  <v-list>
+  <v-sheet>
     <slot />
-  </v-list>
+  </v-sheet>
 </template>
 
 <script>
   export default {
-    name: 'LevellerList'
+    name: 'DTimeline'
   };
 </script>
+
+<style scoped>
+
+</style>

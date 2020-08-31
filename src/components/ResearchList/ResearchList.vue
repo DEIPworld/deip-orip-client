@@ -147,11 +147,18 @@
             }
           } : {}),
 
-          ...(filter.researchAttributes.length ? {
-            researchRef: {
-              extendedAttributes: (researchAttribute) => filter.researchAttributes.some((i) => researchAttribute.map((ra) => `${ra.attribute._id}:${ra.value.value}`).includes(i))
+          ...(Object.keys(filter.researchAttributes).length && Object.keys(filter.researchAttributes).some((a) => filter.researchAttributes[a].length)
+            ? {
+              researchRef: {
+                attributes: (researchAttributes) => {
+                  const rVals = researchAttributes.map((a) => a.value);
+                  const fVals = Object.keys(filter.researchAttributes)
+                    .reduce((a, b) => ([...a, ...filter.researchAttributes[b]]), []);
+                  return fVals.some((val) => rVals.includes(val));
+                }
+              }
             }
-          } : {}),
+            : {}),
 
           ...(filter.categories.length ? {
             researchRef: {

@@ -26,7 +26,7 @@
   const defaultFilter = () => ({
     disciplines: [],
     organizations: [],
-    researchAttributes: [],
+    researchAttributes: {},
     categories: []
   });
 

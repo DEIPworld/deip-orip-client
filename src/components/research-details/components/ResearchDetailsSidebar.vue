@@ -142,21 +142,14 @@
     </d-block>
 
     <d-block widget separated>
-      <div v-for="(item, i) in researchRef.extendedAttributes" :key="`${i}-tenantCriteria`">
-        <div v-if="item.attribute.type === 'stepper'" :class="{'mb-2': i + 1 < researchRef.extendedAttributes.length}">
-          <div class="display-flex">
-            <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
-              <span class="white--text font-weight-medium">{{ item.value.number}}</span>
-            </v-avatar>
-            <div class="text-h6 align-self-start font-weight-medium">
-              {{ item.attribute.shortTitle }}
-              <div class="text-caption font-weight-bold">
-                {{ item.value.description }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      <attributes-read
+        v-for="(attribute, index) in researchRef.attributes"
+        :key="`${index}-attr`"
+        :value="attribute.value"
+        :attribute="attribute.researchAttributeId"
+      />
+
     </d-block>
 
     <d-block v-if="isResearchGroupMember" widget separated>
@@ -269,6 +262,7 @@
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+  import AttributesRead from '@/components/Attributes/AttributesRead';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -277,6 +271,7 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
+      AttributesRead,
       EciStats,
       DBlock
     },

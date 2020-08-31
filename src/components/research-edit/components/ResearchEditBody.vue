@@ -83,19 +83,32 @@
     </div>
 
     <v-divider />
-    <div class="text-h6 font-weight-medium my-6">
-      Research Criterials
-    </div>
 
-    <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
-      <div v-if="item.isVisible" :key="`${i}-stepper`" class="my-6">
-        <leveller-selector
-          v-model="attributes[i].value"
-          :items="stepperSelector(item.valueOptions)"
-          :label="item.title"
+    <d-block title="Research attributes" small>
+      <template
+        v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isVisible }) => isVisible)">
+        <attributes-set
+          :key="`${index}-attr`"
+          v-model="attributes"
+          :attribute="attribute._id"
         />
-      </div>
-    </template>
+      </template>
+    </d-block>
+
+
+    <!--    <div class="text-h6 font-weight-medium my-6">-->
+    <!--      Research Criterials-->
+    <!--    </div>-->
+
+    <!--    <template v-for="(item, i) in tenant.profile.settings.researchAttributes">-->
+    <!--      <div v-if="item.isVisible" :key="`${i}-stepper`" class="my-6">-->
+    <!--        <leveller-selector-->
+    <!--          v-model="attributes[i].value"-->
+    <!--          :items="stepperSelector(item.valueOptions)"-->
+    <!--          :label="item.title"-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </template>-->
 
     <v-divider class="mt-9" />
 
@@ -206,7 +219,8 @@
   import { ResearchService } from '@deip/research-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import ContentBlock from '@/components/layout/components/ContentBlock';
-  import LevellerSelector from '@/components/Leveller/LevellerSelector';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import AttributesSet from '@/components/Attributes/AttributesSet';
 
   const accessService = AccessService.getInstance();
   const researchService = ResearchService.getInstance();
@@ -216,9 +230,10 @@
     name: 'ResearchEditBody',
 
     components: {
+      AttributesSet,
+      DBlock,
       ContentBlock,
-      vueDropzone,
-      LevellerSelector
+      vueDropzone
     },
     data() {
       return {
@@ -242,7 +257,7 @@
           titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
           descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
         },
-        attributes: []
+        attributes: {}
       };
     },
     computed: {
@@ -284,7 +299,7 @@
           || this.milestones.some((step) => !step.validation || step.validation.isValid === false)
           || !this.videoSrcIsValidOrAbsent
           || (this.partners.length ? this.partners.some((item) => item.title === '' || item.type === '') : false)
-          || this.attributes.some(({ isVisible, value }) => (isVisible ? value === null : false));
+          // || this.attributes.some(({ isVisible, value }) => (isVisible ? value === null : false));
       },
 
       isValidLink() {
@@ -313,29 +328,32 @@
       this.isPublic = !this.research.is_private;
       this.partners = this.researchRef.partners.map((item) => _.cloneDeep(item));
 
-      this.attributes = this.$store.getters['auth/tenant'].profile.settings.researchAttributes
-        .map((researchAttribute) => {
-          const attribute = this.researchRef.attributes.find((attr) => attr.researchAttributeId === researchAttribute._id);
+      // this.attributes = this.$store.getters['auth/tenant'].profile.settings.researchAttributes
+      //   .map((researchAttribute) => {
+      //     const attribute = this.researchRef.attributes.find((attr) => attr.researchAttributeId === researchAttribute._id);
+      //
+      //     const enabledAttribute = {
+      //       researchAttributeId: researchAttribute._id,
+      //       isVisible: researchAttribute.isVisible,
+      //       value: attribute ? attribute.value : null
+      //     };
+      //
+      //     if (attribute && researchAttribute.valueOptions.some(opt => opt.value == attribute.value)) { // check if a step is removed from the research attributeId after editing
+      //       return enabledAttribute;
+      //     }
+      //
+      //     return { ...enabledAttribute, value: null };
+      //   });
 
-          const enabledAttribute = { 
-            researchAttributeId: researchAttribute._id, 
-            isVisible: researchAttribute.isVisible, 
-            value: attribute ? attribute.value : null 
-          };
-
-          if (attribute && researchAttribute.valueOptions.some(opt => opt.value == attribute.value)) { // check if a step is removed from the research attributeId after editing
-            return enabledAttribute;
-          }
-
-          return { ...enabledAttribute, value: null };
-        });
+      this.attributes = {...this.researchRef.attributes.reduce((a, attr) => ({ ...a, ...{ [attr.researchAttributeId]: attr.value } }), {})};
 
       const milestones = this.milestones.map((m) => ({
         goal: m.goal,
         budget: m.budget,
         purpose: m.purpose,
         details: m.details,
-        eta: moment(m.eta).toDate(),
+        eta: moment(m.eta)
+          .toDate(),
         isActive: this.activeMilestone
           ? m.goal == this.activeMilestone.goal
           : false
@@ -416,13 +434,17 @@
             budget: m.budget,
             purpose: m.purpose,
             details: m.details,
-            eta: moment(m.eta).toDate(),
+            eta: moment(m.eta)
+              .toDate(),
             isActive: this.activeMilestone
               ? m.goal === this.activeMilestone.goal
               : false
           }));
 
-          const attributes = this.attributes.map((attr) => (attr.value != null ? { ...attr } : { ...attr, value: null }));
+          const attributes = this.attributes.map((attr) => (attr.value != null ? { ...attr } : {
+            ...attr,
+            value: null
+          }));
           researchService.updateResearchOffchainMeta(this.research.external_id, {
             milestones,
             videoSrc: this.videoSrc,

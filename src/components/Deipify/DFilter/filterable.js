@@ -25,7 +25,7 @@ export const Filterable = {
 
   computed: {
     filterChanged() {
-      return JSON.stringify(this.updatedValue) !== JSON.stringify(this.internalValue);
+      return JSON.stringify(this.internalValue) !== this.updatedValue;
     }
   },
 
@@ -64,7 +64,12 @@ export const Filterable = {
           count += 1;
         }
 
-        if (type === 'object' && this.internalValue[key]) {
+        if (
+          type === 'object'
+          && this.internalValue[key]
+          && Object.keys(this.internalValue[key])
+            .filter((k) => this.internalValue[key][k].length).length
+        ) {
           count += 1;
         }
       }
@@ -73,13 +78,14 @@ export const Filterable = {
     },
 
     equaliseModels() {
-      if (kindOf(this.internalValue) === 'object') {
-        this.updatedValue = { ...this.internalValue };
-      } else if (kindOf(this.internalValue) === 'array') {
-        this.updatedValue = [...this.internalValue];
-      } else {
-        this.updatedValue = this.internalValue;
-      }
+      this.updatedValue = JSON.stringify(this.internalValue)
+      // if (kindOf(this.internalValue) === 'object') {
+      //   this.updatedValue = mergeDeep({}, this.internalValue);
+      // } else if (kindOf(this.internalValue) === 'array') {
+      //   this.updatedValue = [...this.internalValue];
+      // } else {
+      //   this.updatedValue = this.internalValue;
+      // }
     },
 
     setReset() {

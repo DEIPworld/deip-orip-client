@@ -43,9 +43,9 @@
             to: { name: 'admin.projects' }
           },
           {
-            title: 'Criteria',
+            title: 'Attributes',
             icon: 'extension',
-            to: { name: 'admin.criteria' }
+            to: { name: 'admin.attributes' }
           },
           {
             title: 'Project categories',

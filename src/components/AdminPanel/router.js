@@ -4,8 +4,8 @@ import { loadPage } from '@/router/utils/loadPage';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
 import UserRegistration from '@/components/auth/UserRegistration';
 import AdminProjects from '@/components/AdminPanel/AdminProjects';
-import AdminCriteria from '@/components/AdminPanel/AdminCriteria';
-import AdminCriteriaEdit from '@/components/AdminPanel/AdminCriteriaEdit';
+import AdminAttributes from '@/components/AdminPanel/AdminAttributes/AdminAttributes';
+import AdminAttributesEdit from '@/components/AdminPanel/AdminAttributes/AdminAttributesEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
@@ -48,19 +48,19 @@ export const adminRouting = [
         component: AdminProjects
       },
       {
-        path: 'criteria',
-        name: 'admin.criteria',
-        component: AdminCriteria,
+        path: 'attributes',
+        name: 'admin.attributes',
+        component: AdminAttributes,
         children: [
           {
-            path: 'add',
-            name: 'admin.criteria.add',
+            path: 'edit',
+            name: 'admin.attributes.edit',
             components: {
-              dialog: AdminCriteriaEdit
+              dialog: AdminAttributesEdit
             },
             props: {
               dialog: {
-                title: 'Add new criteria'
+                title: 'Add new attribute'
               }
             }
           }

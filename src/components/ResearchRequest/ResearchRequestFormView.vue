@@ -171,7 +171,6 @@
 
 <script>
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import LevellerSelector from '@/components/Leveller/LevellerSelector';
   import DInputFile from '@/components/Deipify/DInput/DInputFile';
   import { mapGetters } from 'vuex';
   import { FormMixin } from '@/utils/FormMixin';
@@ -185,7 +184,6 @@
     name: 'ResearchRequestFormView',
     components: {
       DInputFile,
-      LevellerSelector,
       DFormBlock
     },
     mixins: [FormMixin],

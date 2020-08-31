@@ -1,4 +1,4 @@
-import ResearchListCriterias from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListCriterias';
+
 import ResearchListTokenSale from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListTokenSale';
 import ResearchListGroup from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListGroup';
 import ResearchListStatus from '@/components/ResearchList/ResearchListItem/ResearchListItemPartials/ResearchListStatus';
@@ -8,7 +8,6 @@ import DMetaList from '@/components/Deipify/DMeta/DMetaList';
 
 export const abstractResearchItem = {
   components: {
-    ResearchListCriterias,
     ResearchListTokenSale,
     ResearchListTitle,
     ResearchListStatus,
