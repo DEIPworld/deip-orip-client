@@ -1,10 +1,8 @@
 <template>
   <div>
-    <!--v-model="internalValue[internalValue.indexOf(internalValue.find((i) => i.researchAttributeId === internalAttribute._id))]"-->
-    <!--v-model="internalValue[internalAttribute._id]"-->
     <v-select
       v-if="!multiple"
-      v-model="internalValue[internalAttribute._id]"
+      v-model="internalValue"
       :label="internalAttribute.title"
       :items="internalAttribute.valueOptions"
       item-text="title"
@@ -36,7 +34,7 @@
       widget="compact"
     >
       <v-chip-group
-        v-model="internalValue[internalAttribute._id]"
+        v-model="internalValue"
         column
         multiple
         active-class="primary--text"
@@ -82,5 +80,10 @@
       DBlock
     },
     mixins: [commonSet],
+    methods: {
+      onChange(key, value) {
+        this.$emit('change', { researchAttributeId: key, value })
+      }
+    }
   };
 </script>

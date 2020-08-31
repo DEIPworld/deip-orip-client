@@ -1,6 +1,6 @@
 <template>
   <v-select
-    v-model="internalValue[internalAttribute._id]"
+    v-model="internalValue"
     :label="internalAttribute.title"
     :items="internalAttribute.valueOptions"
     item-text="title"

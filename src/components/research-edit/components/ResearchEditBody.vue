@@ -89,7 +89,7 @@
         v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isVisible }) => isVisible)">
         <attributes-set
           :key="`${index}-attr`"
-          v-model="attributes"
+          v-model="attributes[attribute._id]"
           :attribute="attribute._id"
         />
       </template>
@@ -345,7 +345,10 @@
       //     return { ...enabledAttribute, value: null };
       //   });
 
-      this.attributes = {...this.researchRef.attributes.reduce((a, attr) => ({ ...a, ...{ [attr.researchAttributeId]: attr.value } }), {})};
+      this.attributes = {
+        ...this.researchRef.attributes
+          .reduce((a, attr) => ({ ...a, ...{ [attr.researchAttributeId]: attr.value } }), {})
+      };
 
       const milestones = this.milestones.map((m) => ({
         goal: m.goal,
