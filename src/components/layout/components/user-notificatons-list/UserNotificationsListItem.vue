@@ -11,7 +11,9 @@
           </v-icon> {{ new Date(date).toDateString() }}
         </v-col>
         <v-col cols="auto">
-          <a class="a orange--text caption" @click="$emit('mark-as-read')">Mark as read</a>
+          <a class="a orange--text caption" @click="$emit('mark-as-read')">
+            {{ $t('notifications.markRead') }}
+          </a>
         </v-col>
       </v-row>
     </v-list-item-content>

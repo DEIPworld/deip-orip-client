@@ -81,7 +81,7 @@
 
       cancelButtonTitle: {
         type: String,
-        default: 'Cancel'
+        default() { return this.$t('defaultNaming.cancel'); }
       },
       cancelButtonHide: {
         type: Boolean,
@@ -90,7 +90,7 @@
 
       confirmButtonTitle: {
         type: String,
-        default: 'Confirm'
+        default() { return this.$t('defaultNaming.confirm'); }
       },
       confirmButtonHide: {
         type: Boolean,

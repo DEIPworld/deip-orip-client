@@ -2,7 +2,7 @@
   <v-row no-gutters justify="center">
     <v-col cols="6">
       <div class="text-h5 text-center mb-3">
-        Add title and description
+        {{ $t('createResearch.metaBlock.add') }}
       </div>
 
       <div>
@@ -10,10 +10,13 @@
           <v-text-field
             v-model="title"
             name="title"
-            label="Title"
+            :label="$t('createResearch.metaBlock.titleField.label')"
             outlined
             :rules="[rules.titleLength]"
-            :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
+            :error-messages="isPermlinkVerifyed === false ?
+              $t('createResearch.metaBlock.titleField.err') :
+              ''
+            "
             @keyup="setTitle"
           />
         </div>
@@ -22,7 +25,7 @@
           <v-textarea
             v-model="description"
             name="Description"
-            label="Description"
+            :label="$t('createResearch.metaBlock.descriptionField')"
             outlined
             :rules="[rules.descriptionLength]"
             @keyup="setDescription"
@@ -33,7 +36,7 @@
           <v-text-field
             v-model="videoSrc"
             prepend-inner-icon="link"
-            label="Link to a video presentation"
+            :label="$t('createResearch.metaBlock.linkField')"
             outlined
             :rules="[rules.link]"
             @keyup="setVideo"
@@ -46,7 +49,7 @@
           <v-icon dark class="pr-1">
             keyboard_arrow_left
           </v-icon>
-          Back
+          {{ $t('createResearch.metaBlock.back') }}
         </v-btn>
 
         <v-btn
@@ -55,7 +58,7 @@
           :loading="isLoading"
           @click.native="nextStep()"
         >
-          Next
+          {{ $t('createResearch.metaBlock.next') }}
         </v-btn>
       </div>
     </v-col>
@@ -89,8 +92,8 @@
         isPermlinkVerifyed: true,
         rules: {
           link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
+          descriptionLength: (value) => value.length <= maxDescriptionLength || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
         }
       };
     },

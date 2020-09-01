@@ -7,9 +7,9 @@
         <research-details-materials :is-details-available="false" />
       </d-layout-section-main>
       <d-layout-section-sidebar>
-        <d-block widget title="You are not logged in">
+        <d-block widget :title="$t('researchDetailsPublic.notLogged')">
           <div class="my-2 text-body-2">
-            After creating an account/log in you can add new projects or enjoy shared materials
+            {{ $t('researchDetailsPublic.afterCreatingAcc') }}
           </div>
           <v-btn
             :to="{
@@ -19,7 +19,7 @@
             color="primary"
             class="pa-2"
           >
-            Sign in
+            {{ $t('researchDetailsPublic.signIn') }}
           </v-btn>
         </d-block>
 

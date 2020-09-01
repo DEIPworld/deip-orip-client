@@ -1,8 +1,8 @@
 <template>
   <d-dialog
     v-model="isOpen"
-    title="Invite user to Research Group"
-    confirm-button-title="Create proposal"
+    :title="$t('researchGroupDetails.addMemberDialog.title')"
+    :confirm-button-title="$t('researchGroupDetails.addMemberDialog.create')"
     :loading="isLoading"
     :disabled="isDisabled || isLoading"
     @click:confirm="sendProposal()"
@@ -14,7 +14,7 @@
       outlined
       item-text="profile.firstName"
       item-value="account"
-      placeholder="Find future member"
+      :placeholder="$t('researchGroupDetails.addMemberDialog.findPlaceholder')"
     >
       <template slot="selection" slot-scope="data">
         <div class="pl-2">
@@ -43,7 +43,7 @@
 
     <v-textarea
       v-model="coverLetter"
-      label="Invitation letter"
+      :label="$t('researchGroupDetails.addMemberDialog.letterLabel')"
       auto-grow
       outlined
       rows="6"
@@ -122,10 +122,10 @@
           approver: null
         })
           .then(() => {
-            this.$notifier.showSuccess('Invitation Proposal has been created successfully!');
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.addMemberDialog.success'));
             this.$emit('onSuccess');
           }).catch((err) => {
-            this.$notifier.showError('An error occurred while creating proposal, please try again later');
+            this.$notifier.showError(this.$t('researchGroupDetails.addMemberDialog.err'));
             console.error(err);
           }).finally(() => {
             this.isLoading = false;

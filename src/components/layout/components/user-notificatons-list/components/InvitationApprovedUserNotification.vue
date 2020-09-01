@@ -5,7 +5,7 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
-    approved invitation and now is a member of
+    {{ $t('notifications.approvedInv') }}
     "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
   </user-notifications-list-item>
 </template>

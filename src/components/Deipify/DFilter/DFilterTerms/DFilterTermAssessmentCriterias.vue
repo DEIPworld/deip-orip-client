@@ -3,16 +3,16 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ label: 'All', value: '' }, ...assessmentCriterias]"
+      :items="[{ label: $t('defaultNaming.all'), value: '' }, ...assessmentCriterias]"
       outlined
-      label="Assessment criteria"
+      :label="$t('defaultNaming.filters.assessmentCriteria')"
       item-text="label"
       item-value="value"
       hide-details
     />
     <d-block
       v-if="!singleChoice"
-      title="Assessment criteria"
+      :title="$t('defaultNaming.filters.assessmentCriteria')"
       widget="compact"
     >
       <d-list-expand :active="assessmentCriterias.length > 4">

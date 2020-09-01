@@ -1,7 +1,7 @@
 <template>
   <d-block ref="projectsView">
     <template #title>
-      Projects
+      {{ $t('defaultNaming.projects') }}
       <v-badge v-if="$ready" offset-y="-8" offset-x="4" :content="itemsList.length || '0'" />
     </template>
 
@@ -26,7 +26,7 @@
     >
       <v-data-iterator
         :items="itemsList"
-        no-data-text="No Projects found for specified criteria"
+        :no-data-text="$t('defaultNaming.noProjects')"
         :hide-default-footer="iteratorProps.hideDefaultFooter"
         :footer-props="iteratorProps.footerProps"
         :items-per-page="iteratorProps.itemsPerPage"

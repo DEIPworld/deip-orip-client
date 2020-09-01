@@ -8,9 +8,9 @@
   >
     <v-select
       v-model="filterModel.discipline"
-      label="Domain"
+      :label="$t('defaultNaming.filters.domainField')"
       outlined
-      :items="[{label: 'All', external_id: ''}, ...disciplines]"
+      :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
       item-text="label"
       item-value="external_id"
       hide-details="auto"
@@ -19,7 +19,7 @@
       v-model="filterModel.contribution"
       class="my-0 py-0"
       :items="contributions"
-      label="Contribution Type"
+      :label="$t('defaultNaming.filters.contributionType')"
       hide-details="auto"
       outlined
     />
@@ -27,13 +27,13 @@
       v-model="filterModel.criteria"
       class="my-0 py-0"
       :items="criterias"
-      label="Assessment criteria"
+      :label="$t('defaultNaming.filters.assessmentCriteria')"
       hide-details="auto"
       outlined
     />
     <d-input-date
       v-model="filterModel.date"
-      label="Period"
+      :label="$t('defaultNaming.filters.periodField')"
       :picker-props="{
         min: moment('2020-01-01').format('YYYY-MM-DD'),
         range: true

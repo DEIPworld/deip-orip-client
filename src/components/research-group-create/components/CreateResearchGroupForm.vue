@@ -1,25 +1,28 @@
 <template>
   <v-form ref="form" @submit="onSubmit">
-    <d-form-block title="Team name">
+    <d-form-block :title="$t('createResearchGroup.nameBlock.title')">
       <v-col cols="12">
         <v-text-field
           v-model="formData.name"
           outlined
           name="title"
-          label="Title"
+          :label="$t('createResearchGroup.nameBlock.titleField.label')"
           :rules="[rules.required, rules.titleLength]"
-          hint="Name of your team"
-          :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
+          :hint="$t('createResearchGroup.nameBlock.titleField.hint')"
+          :error-messages="isPermlinkVerifyed === false ?
+            $t('createResearchGroup.nameBlock.titleField.err') :
+            ''
+          "
         />
       </v-col>
     </d-form-block>
 
-    <d-form-block title="About the team">
+    <d-form-block :title="$t('createResearchGroup.aboutBlock.title')">
       <v-col cols="12">
         <v-textarea
           v-model="formData.description"
           name="Description"
-          label="Description"
+          :label="$t('createResearchGroup.aboutBlock.descField')"
           outlined
           auto-grow
           :rules="[rules.required, rules.descriptionLength]"
@@ -27,11 +30,11 @@
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Invite members">
+    <d-form-block :title="$t('createResearchGroup.inviteBlock.title')">
       <v-col cols="12">
         <v-text-field
           v-model="q"
-          label="Search..."
+          :label="$t('createResearchGroup.inviteBlock.searchField')"
           outlined
           append-icon="search"
           @input="debounceSearchUsers()"
@@ -56,7 +59,7 @@
             class="ma-0"
             @click="cancelMember(i)"
           >
-            Cancel
+            {{ $t('createResearchGroup.inviteBlock.cancel') }}
           </v-btn>
         </div>
 
@@ -81,7 +84,7 @@
             class="ma-0"
             @click="inviteMember(user)"
           >
-            + Invite
+            {{ $t('createResearchGroup.inviteBlock.invite') }}
           </v-btn>
         </div>
       </v-col>
@@ -108,7 +111,7 @@
           :disabled="disabled"
           @click="$router.back()"
         >
-          Cancel
+          {{ $t('createResearchGroup.cancel') }}
         </v-btn>
 
         <v-btn
@@ -117,7 +120,7 @@
           class="ml-2"
           :loading="loading"
         >
-          Create team
+          {{ $t('createResearchGroup.submitBtn') }}
         </v-btn>
       </slot>
     </div>
@@ -217,9 +220,9 @@
         selectableUsers: [],
         q: '',
         rules: {
-          required: (value) => !!value || 'This field is required',
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
+          descriptionLength: (value) => value.length <= maxDescriptionLength || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
         }
       };
     },

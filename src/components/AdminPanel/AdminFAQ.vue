@@ -1,11 +1,11 @@
 <template>
-  <admin-view title="FAQ">
+  <admin-view :title="$t('adminRouting.faq.title')">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.faq.add'}">
         <v-icon left>
           add_comment
         </v-icon>
-        Add question
+        {{ $t('adminRouting.faq.add') }}
       </v-btn>
     </template>
 
@@ -102,21 +102,21 @@
       openActionDialog(type, faqId) {
         const types = {
           publish: {
-            title: 'Publish Q&A?',
-            description: 'Selected question and answer will be published on FAQ page.',
-            actionLabel: 'Publish',
+            title: this.$t('adminRouting.faq.publishDialog.title'),
+            description: this.$t('adminRouting.faq.publishDialog.description'),
+            actionLabel: this.$t('adminRouting.faq.publishDialog.submitBtn'),
             action: () => { this.publishFAQ(faqId); }
           },
           unpublish: {
-            title: 'Unpublish Q&A?',
-            description: 'Selected question and answer will be removed from FAQ page.',
-            actionLabel: 'Unpublish',
+            title: this.$t('adminRouting.faq.unpublishDialog.title'),
+            description: this.$t('adminRouting.faq.unpublishDialog.description'),
+            actionLabel: this.$t('adminRouting.faq.unpublishDialog.submitBtn'),
             action: () => { this.unpublishFAQ(faqId); }
           },
           delete: {
-            title: 'Delete Q&A?',
-            description: 'Question and answer will be deleted permanently.',
-            actionLabel: 'Delete Q&A ',
+            title: this.$t('adminRouting.faq.deleteDialog.title'),
+            description: this.$t('adminRouting.faq.deleteDialog.description'),
+            actionLabel: this.$t('adminRouting.faq.deleteDialog.submitBtn'),
             action: () => { this.deleteFAQ(faqId); }
           }
         };

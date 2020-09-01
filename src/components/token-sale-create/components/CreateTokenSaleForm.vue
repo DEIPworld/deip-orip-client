@@ -205,16 +205,16 @@
           amountToSellRules: (v) => this.verifyAmountRange(v)
             || `Amount should be from 0% to ${this.ownedAmount / 100}%`,
 
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
 
           startDateShouldBeSmaller: (val) => !this.formData.endDate
             || Date.parse(val) < Date.parse(this.formData.endDate)
-            || 'Start date should be smaller than end date',
+            || this.$t('defaultNaming.fieldRules.startDate'),
 
           endDateShouldBeGreater: (val) => !this.formData.startDate
             || Date.parse(val) > Date.parse(this.formData.startDate)
-            || 'End date should be greater than start date',
+            || this.$t('defaultNaming.fieldRules.endDate'),
           softCapSmaller: () => {
             const isHardCapValid = this.deipTokenValidator(this.formData.hardCap) === true;
             const isSoftCapValid = this.deipTokenValidator(this.formData.softCap) === true;

@@ -8,7 +8,7 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete="currentStep > 1">
           <div class="text-uppercase">
-            Domain
+            {{ $t('createResearch.domainBlock.title') }}
           </div>
         </v-stepper-step>
 
@@ -16,7 +16,7 @@
 
         <v-stepper-step step="2" :complete="currentStep > 2">
           <div class="text-uppercase text-center">
-            Team
+            {{ $t('createResearch.teamBlock.title') }}
           </div>
         </v-stepper-step>
 
@@ -24,7 +24,7 @@
 
         <v-stepper-step step="3" :complete="currentStep > 3">
           <div class="text-uppercase">
-            Title
+            {{ $t('createResearch.metaBlock.title') }}
           </div>
         </v-stepper-step>
 
@@ -32,7 +32,7 @@
 
         <v-stepper-step step="4" :complete="currentStep > 4">
           <div class="text-uppercase">
-            Roadmap
+            {{ $t('createResearch.roadmapBlock.title') }}
           </div>
         </v-stepper-step>
 
@@ -40,7 +40,7 @@
 
         <v-stepper-step step="5" :complete="currentStep > 5">
           <div class="text-uppercase">
-            Settings
+            {{ $t('createResearch.settingsBlock.title') }}
           </div>
         </v-stepper-step>
 
@@ -48,7 +48,7 @@
 
         <v-stepper-step step="5">
           <div class="text-uppercase">
-            Reward shares
+            {{ $t('createResearch.sharesBlock.title') }}
           </div>
         </v-stepper-step>-->
       </v-stepper-header>
@@ -258,7 +258,7 @@
         )
           .then((research) => {
             this.isLoading = false;
-            this.$notifier.showSuccess(`Project "${research.title}" has been created successfully`);
+            this.$notifier.showSuccess(this.$t('createResearch.success', { title: research.title }));
 
             if (research) { // if not proposal
               this.$router.push({
@@ -275,7 +275,7 @@
           .catch((err) => {
             console.error(err);
             this.isLoading = false;
-            this.$notifier.showError('An error occurred while creating project, please try again later');
+            this.$notifier.showError(this.$t('createResearch.success'));
           });
       }
     }

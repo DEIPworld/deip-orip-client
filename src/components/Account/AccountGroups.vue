@@ -2,7 +2,7 @@
   <layout-section v-if="$ready">
     <d-block>
       <template #title>
-        Teams
+        {{ $t('account.groups.teams') }}
       </template>
       <v-row>
         <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">

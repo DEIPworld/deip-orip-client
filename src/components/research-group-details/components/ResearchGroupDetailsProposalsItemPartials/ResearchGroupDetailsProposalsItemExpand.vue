@@ -5,7 +5,7 @@
         {{ item.creator }}
       </div>
       <div class="pt-2">
-        Reviewers' reward:
+        {{ $t('researchGroupDetails.proposalExpand.reviewers') }}
         <span class="font-weight-bold">{{ item.payload.review_share }}</span>
       </div>
     </v-col>
@@ -29,7 +29,7 @@
       class="text-left grey--text break-word white-space-pre-line"
       cols="10"
     >
-      is being invited to the group
+      {{ $t('researchGroupDetails.proposalExpand.invToGroup') }}
     </v-col>
   </v-row>
 
@@ -46,14 +46,14 @@
       class="text-left grey--text break-word white-space-pre-line"
       cols="10"
     >
-      to left the group
+      {{ $t('researchGroupDetails.proposalExpand.leftGroup') }}
     </v-col>
   </v-row>
 
   <v-row v-else-if="item.action === PROPOSAL_TYPES.TRANSFER" no-gutters>
     <v-col cols="6">
       <div>
-        User:
+        {{ $t('researchGroupDetails.proposalExpand.user') }}
         <router-link
           :to="{
             name: 'UserDetails',
@@ -65,7 +65,7 @@
         </router-link>
       </div>
       <div>
-        Amount:
+        {{ $t('researchGroupDetails.proposalExpand.amount') }}
         <span class="font-weight-bold">{{ item.data.funds }}</span>
       </div>
     </v-col>
@@ -73,7 +73,9 @@
 
   <v-row v-else-if="item.action === PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE" no-gutters>
     <v-col class="display-flex justify" cols="4">
-      <span class="font-weight-bold">Research:</span>
+      <span class="font-weight-bold">
+        {{ $t('researchGroupDetails.proposalExpand.project') }}
+      </span>
       <router-link
         :to="{
           name: 'ResearchDetails',
@@ -90,22 +92,26 @@
     <v-col class="display-flex justify" cols="8">
       <div class="mr-4">
         <div>
-          Min:
+          {{ $t('researchGroupDetails.proposalExpand.min') }}
           <span class="px-4 font-weight-bold float-right">{{ item.payload.soft_cap }}</span>
         </div>
         <div>
-          Max:
+          {{ $t('researchGroupDetails.proposalExpand.max') }}
           <span class="px-4 font-weight-bold float-right">{{ item.payload.hard_cap }}</span>
         </div>
       </div>
       <div class="">
         <div>
-          Start Date:
-          <span class="px-4 font-weight-bold float-right">{{ item.payload.start_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
+          {{ $t('researchGroupDetails.proposalExpand.start') }}
+          <span class="px-4 font-weight-bold float-right">
+            {{ item.payload.start_time | dateFormat('HH:mm DD MMM YYYY', true) }}
+          </span>
         </div>
         <div>
-          End Date:
-          <span class="px-4 font-weight-bold float-right">{{ item.payload.end_time | dateFormat('HH:mm DD MMM YYYY', true) }}</span>
+          {{ $t('researchGroupDetails.proposalExpand.end') }}
+          <span class="px-4 font-weight-bold float-right">
+            {{ item.payload.end_time | dateFormat('HH:mm DD MMM YYYY', true) }}
+          </span>
         </div>
       </div>
     </v-col>
@@ -117,8 +123,10 @@
   >
     <v-col cols="6">
       <div>
-        Type:
-        <span class="font-weight-bold">Update group meta</span>
+        {{ $t('researchGroupDetails.proposalExpand.type') }}
+        <span class="font-weight-bold">
+          {{ $t('researchGroupDetails.proposalExpand.updateGrMeta') }}
+        </span>
       </div>
     </v-col>
   </v-row>
@@ -126,8 +134,10 @@
   <v-row v-else-if="item.action === PROPOSAL_TYPES.UPDATE_RESEARCH" no-gutters>
     <v-col cols="6">
       <div>
-        Type:
-        <span class="font-weight-bold">Update research meta</span>
+        {{ $t('researchGroupDetails.proposalExpand.type') }}
+        <span class="font-weight-bold">
+          {{ $t('researchGroupDetails.proposalExpand.updatePrMeta') }}
+        </span>
       </div>
     </v-col>
   </v-row>
@@ -135,7 +145,9 @@
   <v-row v-else-if="item.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL" no-gutters>
     <v-col cols="8">
       <div>
-        <span class="font-weight-bold">Authors:</span>
+        <span class="font-weight-bold">
+          {{ $t('researchGroupDetails.proposalExpand.authors') }}
+        </span>
         <span class="grey--text">
           {{ item.payload.authors.join(' · ') }}
         </span>
@@ -160,7 +172,9 @@
           {{ item.payload.title }}
         </router-link>
 
-        <span class="font-weight-bold">Research:</span>
+        <span class="font-weight-bold">
+          {{ $t('researchGroupDetails.proposalExpand.project') }}
+        </span>
         <router-link
           :to="{
             name: 'ResearchDetails',

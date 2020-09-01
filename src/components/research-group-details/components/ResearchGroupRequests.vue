@@ -14,7 +14,9 @@
           light
         >
           <div class="mr-auto d-flex">
-            <span class="text-h6 text-none">Join requests</span>
+            <span class="text-h6 text-none">
+              {{ $t('researchGroupDetails.groupReqs.joinReqs') }}
+            </span>
             <v-badge
               color="warning"
               inline
@@ -29,7 +31,9 @@
           dark
         >
           <div class="mr-auto d-flex">
-            <span class="text-h6 text-none">Pending invites</span>
+            <span class="text-h6 text-none">
+              {{ $t('researchGroupDetails.groupReqs.invites') }}
+            </span>
             <v-badge
               color="warning"
               inline
@@ -72,7 +76,7 @@
                     {{ join.user | fullname }}
                   </v-clamp>
                   <div class="text-caption text--secondary">
-                    Wants to join your group
+                    {{ $t('researchGroupDetails.groupReqs.wantJoin') }}
                   </div>
                 </d-box-item>
               </v-carousel-item>
@@ -90,7 +94,7 @@
               color="primary"
               @click="openJoinRequestDetails(pendingJoinRequests[joinRequestsSlider])"
             >
-              View
+              {{ $t('researchGroupDetails.groupReqs.view') }}
             </v-btn>
           </div>
         </v-tab-item>
@@ -157,7 +161,7 @@
               color="primary"
               :to="{ name: 'UserDetails', params: { account_name: invites[invitesSlider].user.account.name } }"
             >
-              View
+              {{ $t('researchGroupDetails.groupReqs.wantJoin') }}
             </v-btn>
           </div>
         </v-tab-item>

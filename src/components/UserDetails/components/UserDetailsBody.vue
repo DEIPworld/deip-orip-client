@@ -22,7 +22,7 @@
       <div v-if="commonGroups.length" class="py-6">
         <div class="d-flex mb-6">
           <div class="text-h5">
-            Teams
+            {{ $t('userDetailRouting.teams') }}
             <v-badge offset-y="-8" offset-x="4" :content="commonGroups.length || '0'" />
           </div>
           <v-spacer v-if="isOwner" />
@@ -33,7 +33,7 @@
               color="primary"
               :to="{ name: 'CreateResearchGroup', params: {account_name: currentUser.username} }"
             >
-              Add group
+              {{ $t('userDetailRouting.addGroup') }}
               <v-icon small>
                 add
               </v-icon>

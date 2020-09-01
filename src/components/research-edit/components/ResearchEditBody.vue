@@ -1,21 +1,18 @@
 <template>
   <content-block :max-width="800" centered>
-    <div>
-      <div class="text-h6 font-weight-medium pb-4">
-        Tilte:
-      </div>
+    <d-block :title="$t('researchEdit.titleBlock.title')" small>
       <v-text-field
         v-model="title"
         :rules="[rules.required, rules.titleLength]"
         name="title"
         outlined
-        :error-messages="isPermlinkVerifyed === false ? 'Research with the same name already exists' : ''"
+        :error-messages="isPermlinkVerifyed === false ?
+          $t('researchEdit.titleBlock.titleField.err') :
+          ''
+        "
       />
-    </div>
-    <div>
-      <div class="text-h6 font-weight-medium pb-4">
-        Description:
-      </div>
+    </d-block>
+    <d-block :title="$t('researchEdit.descriptionBlock.title')" small>
       <v-textarea
         v-model="description"
         :rules="[rules.required, rules.descriptionLength]"
@@ -23,23 +20,18 @@
         outlined
         auto-grow
       />
-    </div>
-    <div class="mb-4">
-      <div class="text-h6 font-weight-medium pb-4">
-        Visibility
+    </d-block>
+    <d-block :title="$t('researchEdit.visibilityBlock.title')" small>
+      <div class="display-inline-block" :class="{'grey--text':isPublic}">
+        {{ $t('researchEdit.visibilityBlock.private') }}
       </div>
-      <div>
-        <div class="display-inline-block" :class="{'grey--text':isPublic}">
-          Private project
-        </div>
-        <div class="display-inline-block">
-          <v-switch v-model="isPublic" class="my-0 ml-2 py-0" color="primary" />
-        </div>
-        <div class="display-inline-block" :class="{'grey--text':!isPublic}">
-          Public project
-        </div>
+      <div class="display-inline-block">
+        <v-switch v-model="isPublic" class="my-0 ml-2 py-0" color="primary" />
       </div>
-    </div>
+      <div class="display-inline-block" :class="{'grey--text':!isPublic}">
+        {{ $t('researchEdit.visibilityBlock.public') }}
+      </div>
+    </d-block>
     <div class="py-2 mb-4 text-end">
       <v-btn
         class="my-0 ml-2"
@@ -49,10 +41,10 @@
         color="primary"
         @click="updateResearch()"
       >
-        Update Research
+        {{ $t('researchEdit.updateResearch') }}
       </v-btn>
     </div>
-    <v-divider />
+    <v-divider class="mb-4" />
 
     <d-block title="Research attributes" small>
       <template
@@ -76,14 +68,11 @@
         color="primary"
         @click="updateResearch()"
       >
-        Update Info
+        {{ $t('researchEdit.updateInfo') }}
       </v-btn>
     </div>
 
-    <div class="pb-4">
-      <div class="text-h6 font-weight-medium pb-4">
-        Background:
-      </div>
+    <d-block :title="$t('researchEdit.backgroundBlock.title')" small>
       <v-row no-gutters>
         <v-col cols="3">
           <img
@@ -110,13 +99,13 @@
                 color="primary"
                 @click="updateBackgroundImage()"
               >
-                Update image
+                {{ $t('researchEdit.updateImg') }}
               </v-btn>
             </div>
           </div>
         </v-col>
       </v-row>
-    </div>
+    </d-block>
 
     <div class="pb-4">
       <v-btn
@@ -126,7 +115,7 @@
         large
         @click="cancel()"
       >
-        Back to project
+        {{ $t('researchEdit.back') }}
       </v-btn>
     </div>
   </content-block>
@@ -173,10 +162,10 @@
         isUploadingBackground: false,
         descriptionLength: 2048,
         rules: {
-          required: (value) => !!value || 'This field is required',
-          link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
-          titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          link: (value) => !value || this.isValidLink || this.$t('researchEdit.invalidLink'),
+          titleLength: (value) => (!!value && value.length <= maxTitleLength) || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
+          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
         },
         attributes: {}
       };
@@ -278,7 +267,7 @@
                 extensions: []
               }, { attributes })
                 .then(() => {
-                  this.$notifier.showSuccess('Proposal has been sent successfully!');
+                  this.$notifier.showSuccess(this.$t('researchEdit.successProp'));
                   if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
                     this.$router.push({
                       name: 'ResearchDetails',
@@ -300,7 +289,7 @@
                 .catch((err) => {
                   console.error(err);
 
-                  this.$notifier.showError('An error occurred during proposal sending');
+                  this.$notifier.showError(this.$t('researchEdit.errProp'));
                 })
                 .finally(() => {
                   this.isMetaSaving = false;
@@ -333,7 +322,7 @@
       backgroundUploadSuccess(file, response) {
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.showSuccess('Background image has been updated successfully ! Refresh the page please');
+        this.$notifier.showSuccess(this.$t('researchEdit.successImg'));
       },
 
       backgroundUploadError(file, message, xhr) {
@@ -341,7 +330,7 @@
 
         this.$refs.researchBackground.removeAllFiles();
         this.isUploadingBackground = false;
-        this.$notifier.showError('Sorry, an error occurred while uploading background image, please try again later');
+        this.$notifier.showError(this.$t('researchEdit.errImg'));
       }
     }
   };

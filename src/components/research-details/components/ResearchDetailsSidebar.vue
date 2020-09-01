@@ -35,7 +35,7 @@
           <v-icon small>
             add
           </v-icon>
-          <span class="pl-2 medium text-none">Join Research group</span>
+          <span class="pl-2 medium text-none">{{ $t('researchDetails.sidebar.join') }}</span>
         </v-btn>
 
         <v-dialog
@@ -48,7 +48,7 @@
           <v-card class="pa-6">
             <v-card-title>
               <div class="text-h5">
-                Provide a cover letter to your Join Request
+                {{ $t('researchDetails.sidebar.letter') }}
               </div>
               <div class="right-top-angle">
                 <v-btn icon class="pa-0 ma-0" @click="isJoinGroupDialogOpen = false">
@@ -66,7 +66,7 @@
                 outlined
                 auto-grow
                 name="Cover letter"
-                label="Cover letter"
+                :label="$t('researchDetails.sidebar.letterField')"
               />
             </v-card-text>
             <v-card-actions class="px-6">
@@ -79,7 +79,7 @@
                     block
                     @click="sendJoinGroupRequest()"
                   >
-                    Send
+                    {{ $t('researchDetails.sidebar.send') }}
                   </v-btn>
                 </v-col>
                 <v-col class="py-2" cols="12">
@@ -90,7 +90,7 @@
                     block
                     @click="isJoinGroupDialogOpen = false"
                   >
-                    Cancel
+                    {{ $t('researchDetails.sidebar.cancel') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -102,19 +102,19 @@
           v-if="isActiveJoinRequest"
           class="mt-4"
         >
-          You have sent a join request on
-          {{ new Date(currentJoinRequest.created).toDateString() }},
-          please wait for approval
+          {{ $t('researchDetails.sidebar.cancel',
+                { date: new Date(currentJoinRequest.created).toDateString() })
+          }}
         </div>
         <div v-if="isActiveInvite" class="mt-4">
-          Please accept invite on
+          {{ $t('researchDetails.sidebar.acceptInv') }}
           <router-link
             :to="{ name: 'UserDetails', params: { account_name: user.username}}"
             style="text-decoration: none"
           >
-            your profile page
+            {{ $t('researchDetails.sidebar.yourProfile') }}
           </router-link>
-          to join the research group
+          {{ $t('researchDetails.sidebar.joinResGroup') }}
         </div>
       </div>
     </d-block>
@@ -122,7 +122,7 @@
     <d-block
       widget
       separated
-      title="Expertise Contribution Index"
+      :title="$t('researchDetails.sidebar.eciBlock')"
     >
       <eci-stats
         :research-id="research.external_id"
@@ -149,13 +149,13 @@
         <v-icon class="mr-2" small color="black">
           lock
         </v-icon>
-        Private project
+        {{ $t('researchDetails.sidebar.private') }}
       </div>
       <div v-else class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           mdi-earth
         </v-icon>
-        Public project
+        {{ $t('researchDetails.sidebar.public') }}
       </div>
     </d-block>
 
@@ -163,7 +163,7 @@
       <research-partners is-read-only :partners="researchRef.partners" />
     </d-block>
 
-<!--    <d-block v-if="contentList.length" widget separated title="Expert Review">-->
+<!--    <d-block v-if="contentList.length" widget separated :title="$t('researchDetails.sidebar.expertBlock.title')">-->
 <!--      <v-dialog-->
 <!--        v-model="requestExpertReviewDialog.isShown"-->
 <!--        persistent-->
@@ -177,14 +177,14 @@
 <!--            class="mt-4"-->
 <!--            v-on="on"-->
 <!--          >-->
-<!--            Request Review-->
+<!--            {{ $t('researchDetails.sidebar.expertBlock.reqReview') }}-->
 <!--          </v-btn>-->
 <!--        </template>-->
 
 <!--        <v-card class="pa-6">-->
 <!--          <v-card-title>-->
 <!--            <div class="text-h5">-->
-<!--              Request review from an Expert-->
+<!--              {{ $t('researchDetails.sidebar.expertBlock.reqReviewExpert') }}-->
 <!--            </div>-->
 <!--            <div class="right-top-angle">-->
 <!--              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">-->
@@ -199,7 +199,7 @@
 <!--              v-model="selectedContentId"-->
 <!--              class="mt-4"-->
 <!--              :menu-props="{maxWidth:500}"-->
-<!--              label="Select a content to request review"-->
+<!--              :label="$t('researchDetails.sidebar.expertBlock.contentField')"-->
 <!--              item-text="title"-->
 <!--              outlined-->
 <!--              item-value="id"-->
@@ -207,7 +207,7 @@
 <!--              :items="contentListToReview"-->
 <!--            />-->
 <!--            <user-autocomplete-picker-->
-<!--              label="Find an expert to request a review"-->
+<!--              :label="$t('researchDetails.sidebar.expertBlock.expertField')"-->
 <!--              :users="experts"-->
 <!--              :is-disabled="!isSelectedContentId"-->
 <!--              :display-limit="6"-->
@@ -224,7 +224,7 @@
 <!--                  color="primary"-->
 <!--                  @click="requestReview()"-->
 <!--                >-->
-<!--                  Request-->
+<!--                  {{ $t('researchDetails.sidebar.expertBlock.request') }}-->
 <!--                </v-btn>-->
 <!--              </v-col>-->
 <!--              <v-col class="py-2" cols="12">-->
@@ -234,7 +234,7 @@
 <!--                  block-->
 <!--                  @click="requestExpertReviewDialog.isShown = false"-->
 <!--                >-->
-<!--                  Cancel-->
+<!--                  {{ $t('researchDetails.sidebar.expertBlock.cancel') }}-->
 <!--                </v-btn>-->
 <!--              </v-col>-->
 <!--            </v-row>-->
@@ -450,12 +450,12 @@
           expert: this.selectedExpert.account.name
         })
           .then(() => {
-            this.$notifier.showSuccess('Request for the review has been sent successfully');
+            this.$notifier.showSuccess(this.$t('researchDetails.sidebar.successReqReview'));
             this.selectedExpert = null;
             this.selectedContentId = null;
           })
           .catch((err) => {
-            let errMsg = 'An error occurred while requesting the review. Please try again later';
+            let errMsg = this.$t('researchDetails.sidebar.errReqReview');
             if (err.response && err.response.data) {
               errMsg = err.response.data;
             }
@@ -477,10 +477,10 @@
           })
           .then(() => {
             this.$store.dispatch('auth/loadJoinRequests');
-            this.$notifier.showSuccess('Join request has been sent successfully!');
+            this.$notifier.showSuccess(this.$t('researchDetails.sidebar.successJoinReq'));
           })
           .catch((err) => {
-            this.$notifier.showError('An error occurred while sending join request, please try again later!');
+            this.$notifier.showError(this.$t('researchDetails.sidebar.errJoinReq'));
             console.error(err);
           })
           .finally(() => {

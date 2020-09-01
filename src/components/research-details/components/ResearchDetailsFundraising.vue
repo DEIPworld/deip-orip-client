@@ -8,7 +8,7 @@
           </v-icon>
         </v-col>
         <v-col class="rd-block-header align-self-center">
-          Fundraising
+          {{ $t('researchDetails.fundraisingBlock.fundraising') }}
         </v-col>
       </v-row>
 
@@ -25,14 +25,14 @@
             }
           }"
         >
-          Start fundraise
+          {{ $t('researchDetails.fundraisingBlock.startFundraising') }}
         </v-btn>
       </div>
 
       <div v-if="isActiveTokenSale || isInactiveTokenSale">
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Start:
+            {{ $t('researchDetails.fundraisingBlock.start') }}
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             <span>{{ tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true) }}</span>
@@ -42,13 +42,13 @@
               style="height: 1.4em"
               color="primary lighten-3"
             >
-              {{ tokenSaleStartLeft }} left
+              {{ tokenSaleStartLeft }} {{ $t('researchDetails.fundraisingBlock.left') }}
             </v-chip>
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            End:
+            {{ $t('researchDetails.fundraisingBlock.end') }}
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             <span>{{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}</span>
@@ -58,13 +58,13 @@
               style="height: 1.4em"
               color="amber lighten-1"
             >
-              {{ tokenSaleEndLeft }} left
+              {{ tokenSaleEndLeft }} {{ $t('researchDetails.fundraisingBlock.left') }}
             </v-chip>
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Percentage On sale:
+            {{ $t('researchDetails.fundraisingBlock.salePercentage') }}
           </v-col>
           <v-col
             cols="12"
@@ -76,7 +76,7 @@
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Remaining Percentage:
+            {{ $t('researchDetails.fundraisingBlock.remainingPercentage') }}
           </v-col>
           <v-col
             cols="12"
@@ -88,7 +88,7 @@
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Min Goal:
+            {{ $t('researchDetails.fundraisingBlock.minGoal') }}
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             <!--            ${{ fromAssetsToFloat(tokenSale.soft_cap) }}-->
@@ -97,7 +97,7 @@
         </v-row>
         <v-row no-gutters class="pt-4">
           <v-col cols="12" lg="3" class="bold">
-            Max Goal:
+            {{ $t('researchDetails.fundraisingBlock.maxGoal') }}
           </v-col>
           <v-col cols="12" lg="9" class="pl-2">
             <!--            ${{ fromAssetsToFloat(tokenSale.hard_cap) }}-->
@@ -121,11 +121,11 @@
           v-if="currentCap >= fromAssetsToFloat(tokenSale.soft_cap)"
           class="rd-cap-chip"
         >
-          Min goal reached!
+          {{ $t('researchDetails.fundraisingBlock.minReached') }}
         </div>
         <div class="pl-6">
           <!--          Raised of ${{ fromAssetsToFloat(tokenSale.hard_cap) }} Goal-->
-          Raised of {{ tokenSale.hard_cap }} Goal
+          {{ $t('researchDetails.fundraisingBlock.raisedGoal', { hardCap: tokenSale.hard_cap }) }}
         </div>
       </v-row>
       <v-row no-gutters align="center" class="py-2">
@@ -147,7 +147,7 @@
             <v-text-field
               ref="amountToContribute"
               v-model="amountToContribute"
-              placeholder="Amount"
+              :append-icon="$t('researchDetails.fundraisingBlock.amountField')"
               outlined
               :suffix="tokenSale.soft_cap.split(' ')[1]"
               :rules="[rules.required, deipTokenValidator]"
@@ -162,7 +162,7 @@
               :disabled="isContributionToTokenSaleDisabled"
               @click="onContributeToTokenSaleClick()"
             >
-              Invest
+              {{ $t('researchDetails.fundraisingBlock.invest') }}
             </v-btn>
           </v-row>
         </v-form>
@@ -170,7 +170,7 @@
           <v-card class="pa-6">
             <v-card-title>
               <div class="text-h5 font-weight-bold">
-                SAFT (Simple Agreement for Future Tokens)
+                {{ $t('researchDetails.fundraisingBlock.saft') }}
               </div>
               <div class="right-top-angle">
                 <v-btn icon class="pa-0 ma-0" @click="disagreeSaft()">
@@ -191,7 +191,7 @@
               <v-row no-gutters>
                 <v-col class="py-2" cols="12">
                   <v-btn block color="primary" @click="agreeSaft()">
-                    Agree
+                    {{ $t('researchDetails.fundraisingBlock.agree') }}
                   </v-btn>
                 </v-col>
                 <v-col class="py-2" cols="12">
@@ -201,7 +201,7 @@
                     text
                     @click="disagreeSaft()"
                   >
-                    Disagree
+                    {{ $t('researchDetails.fundraisingBlock.disagree') }}
                   </v-btn>
                 </v-col>
               </v-row>
@@ -227,7 +227,7 @@
     data() {
       return {
         rules: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
         },
         amountToContribute: '',
         isInvesting: false,
@@ -260,19 +260,19 @@
         const start = moment.utc(this.tokenSale.start_time).local();
 
         const months = Math.floor(moment.duration(start.diff(now)).asMonths());
-        if (months > 1) return `${months} months`;
+        if (months > 1) return `${months} ${this.$t('defaultNaming.time.months')}`;
 
         const days = Math.floor(moment.duration(start.diff(now)).asDays());
-        if (days > 1) return `${days} days`;
+        if (days > 1) return `${days} ${this.$t('defaultNaming.time.days')}`;
 
         const hours = Math.floor(moment.duration(start.diff(now)).asHours());
-        if (hours > 1) return `${hours} hours`;
+        if (hours > 1) return `${hours} ${this.$t('defaultNaming.time.hours')}`;
 
         const minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
-        if (minutes > 1) return `${minutes} mins`;
+        if (minutes > 1) return `${minutes} ${this.$t('defaultNaming.time.mins')}`;
 
         const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
-        return `${seconds} secs`;
+        return `${seconds} ${this.$t('defaultNaming.time.secs')}`;
       },
       tokenSaleEndLeft() {
         if (!this.tokenSale) return null;
@@ -281,19 +281,19 @@
         const end = moment.utc(this.tokenSale.end_time).local();
 
         const months = Math.floor(moment.duration(end.diff(now)).asMonths());
-        if (months > 1) return `${months} months`;
+        if (months > 1) return `${months} ${this.$t('defaultNaming.time.months')}`;
 
         const days = Math.floor(moment.duration(end.diff(now)).asDays());
-        if (days > 1) return `${days} days`;
+        if (days > 1) return `${days} ${this.$t('defaultNaming.time.days')}`;
 
         const hours = Math.floor(moment.duration(end.diff(now)).asHours());
-        if (hours > 1) return `${hours} hours`;
+        if (hours > 1) return `${hours} ${this.$t('defaultNaming.time.hours')}`;
 
         const minutes = Math.floor(moment.duration(end.diff(now)).asMinutes());
-        if (minutes > 1) return `${minutes} mins`;
+        if (minutes > 1) return `${minutes} ${this.$t('defaultNaming.time.mins')}`;
 
         const seconds = Math.floor(moment.duration(end.diff(now)).asSeconds());
-        return `${seconds} secs`;
+        return `${seconds} ${this.$t('defaultNaming.time.secs')}`;
       },
       hasActiveTokenSale() {
         return this.tokenSale && this.tokenSale.status == 1;
@@ -378,12 +378,12 @@
             this.$refs.amountToContribute.reset();
             this.amountToContribute = '';
 
-            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`);
+            this.$notifier.showSuccess(this.$t('researchDetails.fundraisingBlock.success', { title: this.research.title }));
           })
           .catch((err) => {
             console.error(err);
             this.isInvesting = false;
-            this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
+            this.$notifier.showError(this.$t('researchDetails.fundraisingBlock.err'));
           });
       },
       agreeSaft() {

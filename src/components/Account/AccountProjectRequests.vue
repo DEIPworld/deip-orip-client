@@ -1,8 +1,8 @@
 <template>
   <layout-section v-if="$ready">
     <v-tabs v-model="tab">
-      <v-tab>Waiting for approval</v-tab>
-      <v-tab>Declined</v-tab>
+      <v-tab>{{ $t('account.projectRequests.waiting') }}</v-tab>
+      <v-tab>{{ $t('account.projectRequests.declined') }}</v-tab>
     </v-tabs>
     <v-divider />
     <v-tabs-items v-model="tab">
@@ -130,11 +130,11 @@
 
         pendingProjectsHeaders: [
           {
-            text: 'Title',
+            text: this.$t('account.projectRequests.tableHeader.title'),
             value: 'title'
           },
           {
-            text: 'Created',
+            text: this.$t('account.projectRequests.tableHeader.created'),
             value: 'created_at'
           },
           {
@@ -145,11 +145,11 @@
 
         rejectedProjectsHeaders: [
           {
-            text: 'Title',
+            text: this.$t('account.projectRequests.tableHeader.title'),
             value: 'title'
           },
           {
-            text: 'Created',
+            text: this.$t('account.projectRequests.tableHeader.created'),
             value: 'created_at'
           }
         ]
@@ -191,9 +191,9 @@
       openConfirmDialog(type, id) {
         const types = {
           delete: {
-            title: 'Delete request?',
-            description: 'Project will be hidden from platform permanently.',
-            actionLabel: 'Delete',
+            title: this.$t('account.projectRequests.deleteDialog.title'),
+            description: this.$t('account.projectRequests.deleteDialog.description'),
+            actionLabel: this.$t('account.projectRequests.deleteDialog.submitBtn'),
             action: () => { this.deleteRequest(id); }
           }
         };

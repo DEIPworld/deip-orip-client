@@ -5,9 +5,9 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ requestorProfile | fullname }}</span>
-    requested a review from you for
+    {{ $t('notifications.requestedReview') }}
     "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
-    material
+    {{ $t('notifications.material') }}
   </user-notifications-list-item>
 </template>
 

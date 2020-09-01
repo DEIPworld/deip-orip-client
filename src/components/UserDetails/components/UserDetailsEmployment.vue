@@ -2,7 +2,7 @@
   <div v-if="isProfileAvailable && (isEmploymentSpecified || isOwner)" class="py-2">
     <div class="d-flex mb-1">
       <div class="text-h6 text-left align-self-center">
-        Employment
+        {{ $t('userDetailRouting.detailsEmployment.title') }}
       </div>
       <v-spacer v-if="isOwner" />
       <div v-if="isOwner">
@@ -16,7 +16,7 @@
             name: 'account.employment'
           }"
         >
-          Add
+          {{ $t('userDetailRouting.detailsEmployment.add') }}
           <v-icon small>
             add
           </v-icon>
@@ -62,11 +62,11 @@
     <div v-if="isOwner">
       <d-dialog
         v-model="deleteEmploymentMeta.isShown"
-        :confirm-button-title="'Confirm'"
+        :confirm-button-title="$t('userDetailRouting.detailsEmployment.deleteBtn')"
         @click:confirm="deleteEmployment(deleteEmploymentMeta)"
       >
         <div class="pt-1">
-          Are you sure you want to delete this entry ?
+          {{ $t('userDetailRouting.detailsEmployment.sureDelete') }}
         </div>
       </d-dialog>
     </div>
@@ -136,9 +136,13 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${item.company}" employment has been deleted successfully!"`);
+            this.$notifier.showSuccess(
+              this.$t('userDetailRouting.detailsEmployment.success', { company: item.company })
+            );
           }, (err) => {
-            this.$notifier.showError(`An error occurred while deleting "${item.company}" employment details, please try again later`);
+            this.$notifier.showError(
+              this.$t('userDetailRouting.detailsEmployment.err', { company: item.company })
+            );
             console.error(err);
           })
           .finally(() => {

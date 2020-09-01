@@ -295,7 +295,7 @@
         isSavingDraft: false,
         isPermlinkVerifyed: true,
         rules: {
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
         allReferencesList: [],
         proposeContent: {

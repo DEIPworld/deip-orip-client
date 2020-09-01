@@ -2,7 +2,7 @@
   <div>
     <d-block v-if="isJoinRequestsSectionAvailable" widget>
       <template #title>
-        Join requests: {{ pendingJoinRequests.length }}
+        {{ $t('researchGroupDetails.sidebar.joinReq') }} {{ pendingJoinRequests.length }}
       </template>
 
       <v-row
@@ -14,7 +14,7 @@
         <v-row no-gutters class="flex-column">
           <platform-avatar :user="join.user" link-to-profile :size="40" />
           <div class="py-2 caption font-weight-medium">
-            wants to join your group
+            {{ $t('researchGroupDetails.sidebar.wantToJoin') }}
           </div>
           <div class="text-right full-width">
             <v-btn
@@ -25,7 +25,7 @@
               outlined
               @click="openJoinRequestDetails(join)"
             >
-              View
+              {{ $t('researchGroupDetails.sidebar.view') }}
             </v-btn>
           </div>
         </v-row>
@@ -59,7 +59,7 @@
             params: { research_group_permlink: group.permlink }
           }"
         >
-          Group Wallet
+          {{ $t('researchGroupDetails.sidebar.wallet') }}
         </router-link>
       </template>
 
@@ -70,7 +70,7 @@
         block
         @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
       >
-        Transfer
+        {{ $t('researchGroupDetails.sidebar.Transfer') }}
       </v-btn>
     </d-block>
 

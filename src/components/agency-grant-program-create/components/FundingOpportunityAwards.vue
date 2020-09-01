@@ -76,7 +76,7 @@
         isFormValid: false,
 
         rules: {
-          required: (v) => !!v || 'This field is required',
+          required: (v) => !!v || this.$t('defaultNaming.fieldRules.required'),
 
           totalProgrammingFundingValidator: () => {
             const totalProgramFunding = parseInt(this.foa.totalProgramFunding);

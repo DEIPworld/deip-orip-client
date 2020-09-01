@@ -12,7 +12,8 @@
           <v-icon small color="white">
             today
           </v-icon>
-          Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
+          {{ $t('researchDetails.created') }}
+          {{ research.created_at | dateFormat('D MMM YYYY', true) }}
         </div>
 
         <div v-if="isResearchGroupMember" class="pt-4">
@@ -29,7 +30,7 @@
               }
             }"
           >
-            Edit
+            {{ $t('researchDetails.edit') }}
           </v-btn>
         </div>
 

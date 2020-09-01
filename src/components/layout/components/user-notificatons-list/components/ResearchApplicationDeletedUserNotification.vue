@@ -5,9 +5,9 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ notification.metadata.requester | fullname }}</span>
-    deleted application for
+    {{ $t('notifications.deletedAppl') }}
     "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-    research
+    {{ $t('notifications.project') }}
   </user-notifications-list-item>
 </template>
 

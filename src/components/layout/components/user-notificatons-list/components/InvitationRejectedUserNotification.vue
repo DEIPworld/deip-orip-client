@@ -5,7 +5,7 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
-    declined invitation to
+    {{ $t('notifications.declinedInv') }}
     "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
   </user-notifications-list-item>
 </template>

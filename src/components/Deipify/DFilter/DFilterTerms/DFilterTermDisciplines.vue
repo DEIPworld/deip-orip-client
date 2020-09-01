@@ -3,17 +3,17 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ label: 'All', id: '' }, ...disciplines]"
+      :items="[{ label: $t('defaultNaming.all'), id: '' }, ...disciplines]"
       outlined
       hide-details
-      label="Domain"
+      :label="$t('defaultNaming.filters.domainField')"
       item-text="label"
       item-value="id"
     />
 
     <d-block
       v-if="!singleChoice"
-      title="Domain"
+      :title="$t('defaultNaming.filters.domainField')"
       widget="compact"
     >
       <d-list-expand :active="disciplines.length > 4">

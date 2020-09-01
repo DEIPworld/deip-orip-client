@@ -19,6 +19,8 @@ import AdminAttributesSettings
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
 
+import { i18n } from '@/plugins/i18n';
+
 export const adminRouting = [
   {
     path: '/admin',
@@ -39,7 +41,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new member',
+                title: i18n.t('adminRouting.members.addMembertitle'),
                 modal: true
               }
             }
@@ -65,7 +67,7 @@ export const adminRouting = [
             name: 'admin.attributes.edit',
             component: AdminAttributesEdit,
             props: {
-              title: 'Add new attribute'
+              title: i18n.t('adminRouting.attributes.attributesEdit.title')
             }
           },
           {
@@ -104,7 +106,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new category'
+                title: i18n.t('adminRouting.categories.categoryEdit.title')
               }
             }
           }
@@ -128,7 +130,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new question'
+                title: i18n.t('adminRouting.faq.faqEdit.title')
               }
             }
           }

@@ -6,27 +6,31 @@
   >
     <template v-if="isAutoAccepted">
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      uploaded new
-      "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
-      material in
+      {{ $t('notifications.uploadedNew') }}
+      "<span class="primary--text half-bold">
+        {{ notification.metadata.researchContent.title }}
+      </span>"
+      {{ $t('notifications.materialIn') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project
+      {{ $t('notifications.project') }}
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      accepted new
-      "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
-      material in
+      {{ $t('notifications.acceptedNew') }}
+      "<span class="primary--text half-bold">
+        {{ notification.metadata.researchContent.title }}
+      </span>"
+      {{ $t('notifications.materialIn') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project
+      {{ $t('notifications.project') }}
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      proposed to upload
+      {{ $t('notifications.propUpload') }}
       "<span class="primary--text half-bold">{{ notification.metadata.proposal.data.title }}</span>"
-      material for
+      {{ $t('notifications.materialFor') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project in
+      {{ $t('notifications.projectIn') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
   </user-notifications-list-item>

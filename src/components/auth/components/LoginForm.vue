@@ -13,7 +13,7 @@
           <v-text-field
             v-model="formData.username"
             outlined
-            label="Username"
+            :label="$t('signIn.form.usernameField')"
             :rules="[validation.required]"
             :disable="disable"
             prepend-inner-icon="person"
@@ -24,7 +24,7 @@
         <v-col cols="12">
           <d-input-password
             v-model="formData.password"
-            label="Password/Private Key"
+            :label="$t('signIn.form.passwordField')"
             :disable="disable"
             :rules="[validation.required]"
             prepend-inner-icon="lock"
@@ -40,16 +40,16 @@
             :loading="disable"
             :disabled="disable"
           >
-            Sign in
+            {{ $t('signIn.form.submitBtn') }}
           </v-btn>
         </v-col>
       </d-form-block>
     </d-form>
 
     <div v-if="showSignUp" class="mt-4 text-subtitle-2">
-      Want become a member?
+      {{ $t('signIn.form.bottomText') }}
       <router-link class="a" :to="{name: 'SignUp'}">
-        Sign Up now
+        {{ $t('signIn.form.bottomTextLink') }}
       </router-link>
     </div>
   </v-sheet>
@@ -96,7 +96,7 @@
       },
       title: {
         type: String,
-        default: 'Sign in to your account'
+        default() { return this.$t('signIn.form.title'); }
       },
       centered: {
         type: Boolean,
@@ -116,10 +116,6 @@
       }
     },
     data() {
-      const validation = {
-        required: (value) => !!value || 'This field is required'
-      };
-
       return {
         formData: {
           username: null,
@@ -127,7 +123,7 @@
         },
 
         validation: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
         },
 
         disable: false
@@ -148,7 +144,7 @@
         deipRpc.api.getAccountsAsync([this.formData.username])
           .then(([account]) => {
             if (!account) {
-              throw new Error('Invalid account name');
+              throw new Error(this.$t('signIn.form.rules.invalidAccount'));
             }
 
             if (
@@ -170,7 +166,7 @@
             } catch (err) {
               accessService.clearAccessToken();
               this.disable = false;
-              this.$notifier.showError('Invalid private key format');
+              this.$notifier.showError(this.$t('signIn.form.rules.invalidKey'));
               return;
             }
 

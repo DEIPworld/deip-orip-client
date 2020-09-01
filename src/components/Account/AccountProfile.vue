@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Edit personal info">
+  <full-screen-view :title="$t('account.profile.title')">
     <!-- <div class="dropzone-previews"></div> -->
     <v-avatar
       size="160px"
@@ -35,7 +35,7 @@
           :disabled="isSavingDisabled || isLoading"
           @click="save()"
         >
-          Update Info
+          {{ $t('account.profile.form.submitBtn') }}
         </v-btn>
       </template>
     </form-generator>
@@ -64,7 +64,7 @@
     },
     data() {
       const validation = {
-        required: (value) => !!value || 'This field is required'
+        required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
       };
 
       return {
@@ -74,12 +74,12 @@
 
         schema: [
           {
-            title: 'Personal information:',
+            title: this.$t('account.profile.form.personalBlock.title'),
             fields: [
               {
                 type: 'text',
                 name: 'firstName',
-                label: 'First Name',
+                label: this.$t('account.profile.form.personalBlock.firstNameFiled'),
                 cols: { md: 4 },
                 props: {
                   rules: [validation.required]
@@ -88,7 +88,7 @@
               {
                 type: 'text',
                 name: 'lastName',
-                label: 'Last Name',
+                label: this.$t('account.profile.form.personalBlock.lastNameFiled'),
                 cols: { md: 4 },
                 props: {
                   rules: [validation.required]
@@ -97,18 +97,18 @@
               {
                 type: 'date',
                 name: 'editedBirthdayDate',
-                label: 'Birthday',
+                label: this.$t('account.profile.form.personalBlock.birthdayFiled'),
                 cols: { md: 4 }
               }
             ]
           },
           {
-            title: 'Location:',
+            title: this.$t('account.profile.form.locationBlock.title'),
             fields: [
               {
                 type: 'text',
                 name: 'city',
-                label: 'City',
+                label: this.$t('account.profile.form.locationBlock.cityFiled'),
                 cols: { md: 4 },
                 props: {
                   rules: [validation.required]
@@ -117,7 +117,7 @@
               {
                 type: 'text',
                 name: 'country',
-                label: 'Country',
+                label: this.$t('account.profile.form.locationBlock.countryFiled'),
                 cols: { md: 4 },
                 props: {
                   rules: [validation.required]
@@ -126,12 +126,12 @@
             ]
           },
           {
-            title: 'Contact Information:',
+            title: this.$t('account.profile.form.contactBlock.title'),
             fields: [
               {
                 type: 'email',
                 name: 'email',
-                label: 'Email',
+                label: this.$t('account.profile.form.contactBlock.emailFiled'),
                 cols: { md: 4 },
                 props: {
                   rules: [validation.required]
@@ -140,12 +140,12 @@
             ]
           },
           {
-            title: 'Bio:',
+            title: this.$t('account.profile.form.bioBlock.title'),
             fields: [
               {
                 type: 'textarea',
                 name: 'bio',
-                label: 'Tell about yourself',
+                label: this.$t('account.profile.form.bioBlock.bioFiled'),
                 props: {
                   autoGrow: true,
                   rows: 5,
@@ -155,12 +155,12 @@
             ]
           }
           // {
-          //   title: 'Additional information:',
+          //   title: this.$t('account.profile.form.addInfBlock.title'),
           //   fields: [
           //     {
           //       type: 'select',
           //       name: 'category',
-          //       label: 'Category',
+          //       label: this.$t('account.profile.form.addInfBlock.categoryField'),
           //       cols: { md: 6 },
           //       props: {
           //         items: [
@@ -177,7 +177,7 @@
           //     {
           //       type: 'select',
           //       name: 'occupation',
-          //       label: 'Occupation',
+          //       label: 'this.$t('account.profile.form.addInfBlock.occupationField'),
           //       cols: { md: 6 },
           //       props: {
           //         items: [
@@ -192,7 +192,7 @@
           //     {
           //       type: 'text',
           //       name: 'webPage',
-          //       label: 'Web site',
+          //       label: this.$t('account.profile.form.addInfBlock.webSiteField'),
           //       props: {
           //         rules: [validation.required]
           //       }

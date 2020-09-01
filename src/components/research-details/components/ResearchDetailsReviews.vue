@@ -7,7 +7,7 @@
         </v-icon>
       </v-col>
       <v-col class="rd-block-header align-self-center">
-        Reviews
+        {{ $t('researchDetails.reviews') }}
       </v-col>
     </v-row>
 

@@ -2,7 +2,7 @@
   <v-row no-gutters justify="center">
     <v-col cols="6">
       <div class="text-h5 text-center mb-3">
-        Select team
+        {{ this.$t('createResearch.teamBlock.select') }}
       </div>
       <v-card outlined class="py-2">
         <v-list nav>
@@ -29,7 +29,7 @@
                      query: { 'back-token': getReturningToken }
               }"
             >
-              + Add new team
+              {{ this.$t('createResearch.teamBlock.add') }}
             </v-btn>
           </v-list-item>
         </v-list>
@@ -40,10 +40,10 @@
           <v-icon dark class="pr-1">
             keyboard_arrow_left
           </v-icon>
-          Back
+          {{ this.$t('createResearch.teamBlock.back') }}
         </v-btn>
         <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">
-          Next
+          {{ this.$t('createResearch.teamBlock.next') }}
         </v-btn>
       </div>
     </v-col>

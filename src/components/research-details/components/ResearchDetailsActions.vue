@@ -8,7 +8,7 @@
       :loading="isBookmarkActionInProgress"
       @click="addToBookmarks()"
     >
-      Follow
+      {{ $t('researchDetails.follow') }}
     </v-btn>
 
     <v-btn
@@ -19,7 +19,7 @@
       :loading="isBookmarkActionInProgress"
       @click="removeFromBookmarks()"
     >
-      Unfollow
+      {{ $t('researchDetails.unfollow') }}
     </v-btn>
   </div>
 </template>

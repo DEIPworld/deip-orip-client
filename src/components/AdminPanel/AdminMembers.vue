@@ -1,18 +1,18 @@
 <template>
-  <admin-view v-if="$ready" title="Members">
+  <admin-view v-if="$ready" :title="$t('adminRouting.members.title')">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
           person_add
-        </v-icon>Add member
+        </v-icon>{{ $t('adminRouting.members.add') }}
       </v-btn>
     </template>
 
     <template #toolbarExtension>
       <v-tabs v-model="tab">
-        <v-tab>Registered</v-tab>
+        <v-tab>{{ $t('adminRouting.members.registeredTab') }}</v-tab>
         <v-tab>
-          Waiting for approval
+          {{ $t('adminRouting.members.waitingTab') }}
           <v-badge
             v-if="waitingMembers.length"
             :content="waitingMembers.length"
@@ -90,35 +90,68 @@
       v-model="memberInfoDialog.isOpen"
       :hide-buttons="memberInfoDialog.hideButtons"
       :title="memberInfoDialog.title"
-      confirm-button-title="Approve"
-      cancel-button-title="Reject"
+      :confirm-button-title="$t('adminRouting.members.memberInfoDialog.submitBtn')"
+      :cancel-button-title="$t('adminRouting.members.memberInfoDialog.reject')"
       @click:confirm="approveMemberInfoDialog(memberInfoDialog.data)"
       @click:cancel="rejectMemberInfoDialog(memberInfoDialog.data)"
     >
       <template v-if="memberInfoDialog.data">
         <d-info-block title="Personal information">
-          <div>Name: {{ memberInfoDialog.data.firstName }}</div>
-          <div>Last name: {{ memberInfoDialog.data.lastName }}</div>
-          <div>Date of birth: {{ memberInfoDialog.data.birthdate | dateFormat('MMMM DD YYYY', true) }}</div>
-          <div>ID: {{ memberInfoDialog.data.foreignIds | joinByKey('id') }}</div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.name') }}
+            {{ memberInfoDialog.data.firstName }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.lastName') }}
+            {{ memberInfoDialog.data.lastName }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.birth') }}
+            {{ memberInfoDialog.data.birthdate | dateFormat('MMMM DD YYYY', true) }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.id') }}
+            {{ memberInfoDialog.data.foreignIds | joinByKey('id') }}
+          </div>
         </d-info-block>
 
         <d-info-block title="Account information">
-          <div>Email: <a :href="`mailto:${memberInfoDialog.data.email}`">{{ memberInfoDialog.data.email }}</a></div>
-          <div>Category: {{ memberInfoDialog.data.category }}</div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.email') }}
+            <a :href="`mailto:${memberInfoDialog.data.email}`">{{ memberInfoDialog.data.email }}</a>
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.category') }}
+            {{ memberInfoDialog.data.category }}
+          </div>
         </d-info-block>
 
         <d-info-block title="Contact information">
-          <div>Address: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.address : '' }}</div>
-          <div>City: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.city : '' }}</div>
-          <div>Country: {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.country : '' }}</div>
-          <div>Phone number: {{ memberInfoDialog.data.phoneNumbers | joinByKey('number') }}</div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.address') }}
+            {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.address : '' }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.city') }}
+            {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.city : '' }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.country') }}
+            {{ memberInfoDialog.data.location ? memberInfoDialog.data.location.country : '' }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.phone') }}
+            {{ memberInfoDialog.data.phoneNumbers | joinByKey('number') }}
+          </div>
         </d-info-block>
 
         <d-info-block title="Occupation information" is-last>
-          <div>Occupation: {{ memberInfoDialog.data.occupation }}</div>
           <div>
-            Web site:
+            {{ $t('adminRouting.members.memberInfoDialog.occupation') }}
+            {{ memberInfoDialog.data.occupation }}
+          </div>
+          <div>
+            {{ $t('adminRouting.members.memberInfoDialog.site') }}
             <a
               v-for="(item, i) in memberInfoDialog.data.webPages"
               :key="`${i}-webPage`"
@@ -163,34 +196,34 @@
 
         registeredMembersTableHeaders: [
           {
-            text: 'Name',
+            text: this.$t('adminRouting.members.registeredTable.name'),
             value: 'name',
             sortable: false
           },
           {
-            text: 'Member since',
+            text: this.$t('adminRouting.members.registeredTable.since'),
             value: 'created_at',
             sortable: false
           },
           {
-            text: 'Category',
+            text: this.$t('adminRouting.members.registeredTable.category'),
             value: 'profile.category',
             sortable: false
           },
           {
-            text: 'Country',
+            text: this.$t('adminRouting.members.registeredTable.country'),
             value: 'profile.location.country',
             sortable: false
           }
         ],
         waitingMembersTableHeaders: [
           {
-            text: 'Name',
+            text: this.$t('adminRouting.members.waitingTable.name'),
             value: 'name',
             sortable: false
           },
           {
-            text: 'Request date',
+            text: this.$t('adminRouting.members.waitingTable.date'),
             value: 'created_at',
             sortable: false
           },
@@ -259,15 +292,15 @@
       openActionDialog(type, username) {
         const types = {
           approve: {
-            title: 'Approve request?',
-            description: 'Request will be approved and person will become a member.',
-            confirmLabel: 'approve',
+            title: this.$t('adminRouting.members.approveDialog.title'),
+            description: this.$t('adminRouting.members.approveDialog.description'),
+            confirmLabel: this.$t('adminRouting.members.approveDialog.submitBtn'),
             action: () => { this.approveRequest(username); }
           },
           reject: {
-            title: 'Reject request?',
-            description: 'Request will be rejected and person will not published.',
-            confirmLabel: 'reject',
+            title: this.$t('adminRouting.members.rejectDialog.title'),
+            description: this.$t('adminRouting.members.rejectDialog.description'),
+            confirmLabel: this.$t('adminRouting.members.rejectDialog.submitBtn'),
             action: () => { this.rejectRequest(username); }
           }
         };
@@ -285,7 +318,7 @@
         this.isDisabled = true;
         return tenantService.approveSignUpRequest(name)
           .then(() => {
-            this.$notifier.showSuccess('Account successfully created');
+            this.$notifier.showSuccess(this.$t('adminRouting.members.approveRequest'));
             this.$store.dispatch('adminPanel/loadAllMembers', {});
           })
           .catch((err) => {

@@ -1,21 +1,21 @@
 <template>
   <d-layout>
     <d-layout-section-main>
-      <d-block title="Attributes">
+      <d-block :title="$t('adminRouting.attributes.title')">
 
         <template #titleAddon>
           <v-btn outlined small color="primary" :to="{name: 'admin.attributes.settings'}">
             <v-icon left>
               widgets
             </v-icon>
-            Placement settings
+            {{ $t('adminRouting.attributes.placementSettings') }}
           </v-btn>
 
           <v-btn small color="primary" :to="{name: 'admin.attributes.edit'}">
             <v-icon left>
               extension
             </v-icon>
-            Add attribute
+            {{ $t('adminRouting.attributes.add') }}
           </v-btn>
         </template>
 
@@ -113,17 +113,17 @@
 
         attributesTable: [
           {
-            text: 'Type',
+            text: this.$t('adminRouting.attributes.attributesTable.type'),
             value: 'type',
             width: '1%'
           },
           {
-            text: 'Title',
+            text: this.$t('adminRouting.attributes.attributesTable.title'),
             value: 'title',
             width: '50%'
           },
           {
-            text: 'Short Title',
+            text: this.$t('adminRouting.attributes.attributesTable.shortTitle'),
             value: 'shortTitle',
             width: '50%'
           },
@@ -146,35 +146,23 @@
       openActionDialog(type, researchAttributeId) {
         const types = {
           publish: {
-            title: 'Publish attribute?',
-            description: `Attribute will be set for each project and will appear on:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-            actionLabel: 'publish',
+            title: this.$t('adminRouting.attributes.publishDialog.title'),
+            description: this.$t('adminRouting.attributes.publishDialog.description'),
+            actionLabel: this.$t('adminRouting.attributes.publishDialog.submitBtn'),
             action: () => { this.publishCriteria(researchAttributeId); }
 
           },
           unpublish: {
-            title: 'Unpublish attribute?',
-            description: `Attribute will be removed from:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-            actionLabel: 'unpublish',
+            title: this.$t('adminRouting.attributes.unpublishDialog.title'),
+            description: this.$t('adminRouting.attributes.unpublishDialog.description'),
+            actionLabel: this.$t('adminRouting.attributes.unpublishDialog.submitBtn'),
             action: () => { this.unpublishCriteria(researchAttributeId); }
 
           },
           delete: {
-            title: 'Delete attribute?',
-            description: `Attribute will be deleted permanently and will be removed from:
-              - project page,
-              - project application form,
-              - explore page.
-              `,
-            actionLabel: 'delete',
+            title: this.$t('adminRouting.attributes.deleteDialog.title'),
+            description: this.$t('adminRouting.attributes.deleteDialog.description'),
+            actionLabel: this.$t('adminRouting.attributes.deleteDialog.submitBtn'),
             action: () => { this.deleteCriteria(researchAttributeId); }
 
           }

@@ -32,7 +32,7 @@
       <div v-if="review.researchContent" @click.stop>
         <div>
           <span>
-            Review to
+            {{ $t('researchDetails.reviewTo') }}
             <span
               class="bold"
             >{{ getResearchContentType(review.researchContent.content_type).text }}</span>
@@ -79,7 +79,7 @@
     <v-col cols="12" sm="4">
       <div>
         <div class="bold">
-          Assessment
+          {{ $t('researchDetails.assessment') }}
         </div>
         {{review.scores}}
         <review-assessment
@@ -99,7 +99,7 @@
           <div
             v-if="review.supporters.length"
           >
-            {{ review.supporters.length }} experts supported this review
+            {{ review.supporters.length }} {{ $t('researchDetails.supportedReview') }}
           </div>
         </v-tooltip>
       </div>
@@ -110,7 +110,7 @@
           outlined
           @click="goToReviewPage(review)"
         >
-          See review
+          {{ $t('researchDetails.seeReview') }}
         </v-btn>
       </div>
     </v-col>

@@ -7,7 +7,7 @@
         </v-icon>
       </v-col>
       <v-col class="rd-block-header align-self-center">
-        Project Timeline
+        {{ $t('researchDetails.timeline') }}
       </v-col>
     </v-row>
 
@@ -56,7 +56,7 @@
               class="ma-0"
               @click="onShowMoreTimelineClick()"
             >
-              Show more events
+              {{ $t('researchDetails.showEvents') }}
             </v-btn>
           </li>
         </ul>

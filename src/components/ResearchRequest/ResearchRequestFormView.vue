@@ -1,10 +1,10 @@
 <template>
   <v-form ref="form" @submit="onSubmit">
-    <d-form-block title="Basics">
+    <d-form-block :title="$t('defaultNaming.forms.researchRequest.basicBlock.title')">
       <v-col cols="12">
         <v-text-field
           v-model="formData.researchTitle"
-          label="Project name"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.nameField')"
           v-bind="fieldState"
           :disabled="partialDisabled.researchTitle"
           :rules="[rules.required, rules.titleLength]"
@@ -14,7 +14,7 @@
       <v-col cols="12">
         <v-textarea
           v-model="formData.description"
-          label="What is your idea?"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.ideaField')"
           auto-grow
           outlined
           rows="3"
@@ -27,7 +27,7 @@
       <v-col cols="12" md="6">
         <v-select
           v-model="formData.researchDisciplines[0]"
-          label="Domain"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.domainField')"
           v-bind="fieldState"
           :rules="[rules.required]"
           :disabled="partialDisabled.researchDisciplines"
@@ -38,7 +38,7 @@
       <v-col cols="12">
         <v-text-field
           v-model="formData.location.country"
-          label="Project location"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.locationField')"
           v-bind="fieldState"
           :rules="[rules.required]"
         />
@@ -47,7 +47,7 @@
       <v-col cols="12">
         <v-textarea
           v-model="formData.problem"
-          label="What area are you trying to impact?"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.areaField')"
           auto-grow
           outlined
           rows="3"
@@ -59,7 +59,7 @@
       <v-col cols="12">
         <v-textarea
           v-model="formData.solution"
-          label="How will this solve a current problem?"
+          :label="$t('defaultNaming.forms.researchRequest.basicBlock.solveField')"
           auto-grow
           outlined
           rows="3"
@@ -69,7 +69,7 @@
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Project readines level">
+    <d-form-block :title="$t('defaultNaming.forms.researchRequest.readinesBlock.title')">
       <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
         <v-col
           v-if="item.isPublished"
@@ -86,11 +86,11 @@
       </template>
     </d-form-block>
 
-    <d-form-block title="Funding">
+    <d-form-block :title="$t('defaultNaming.forms.researchRequest.fundingBlock.title')">
       <v-col cols="12" md="6">
         <v-text-field
           v-model="formData.funding"
-          label="How much funding are you expecting?"
+          :label="$t('defaultNaming.forms.researchRequest.fundingBlock.fundingField')"
           v-bind="fieldState"
           :rules="[rules.required]"
         />
@@ -99,19 +99,19 @@
       <v-col cols="12" md="6">
         <v-text-field
           v-model="formData.eta"
-          label="What is your project estimate?"
+          :label="$t('defaultNaming.forms.researchRequest.fundingBlock.estimateField')"
           v-bind="fieldState"
           :rules="[rules.required]"
         />
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Additional information">
+    <d-form-block :title="$t('defaultNaming.forms.researchRequest.addInfBlock.title')">
       <v-col cols="12" md="6">
         <d-input-file
           v-model="formData.budgetAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
-          label="Budget information"
+          :label="$t('defaultNaming.forms.researchRequest.addInfBlock.budgetInfField')"
           :exist="getAttachmentUrl(formData.budgetAttachment, false)"
         />
       </v-col>
@@ -120,7 +120,7 @@
         <d-input-file
           v-model="formData.businessPlanAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
-          label="Business plan"
+          :label="$t('defaultNaming.forms.researchRequest.addInfBlock.planField')"
           :exist="getAttachmentUrl(formData.businessPlanAttachment, false)"
         />
       </v-col>
@@ -129,7 +129,7 @@
         <d-input-file
           v-model="formData.cvAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
-          label="Resume/CV"
+          :label="$t('defaultNaming.forms.researchRequest.addInfBlock.cvField')"
           :exist="getAttachmentUrl(formData.cvAttachment, false)"
         />
       </v-col>
@@ -138,7 +138,7 @@
         <d-input-file
           v-model="formData.marketResearchAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
-          label="Market research document"
+          :label="$t('defaultNaming.forms.researchRequest.addInfBlock.documentField')"
           :exist="getAttachmentUrl(formData.marketResearchAttachment, false)"
         />
       </v-col>
@@ -153,7 +153,7 @@
           :disabled="disabled"
           @click="$router.back()"
         >
-          Cancel
+          {{ $t('defaultNaming.forms.researchRequest.cancel') }}
         </v-btn>
 
         <v-btn
@@ -162,7 +162,7 @@
           class="ml-2"
           :loading="loading"
         >
-          Apply request
+          {{ $t('defaultNaming.forms.researchRequest.submitBtn') }}
         </v-btn>
       </slot>
     </div>
@@ -222,9 +222,9 @@
     data() {
       return {
         rules: {
-          required: (value) => !!value || 'This field is required',
-          titleLength: (value) => (!!value && value.length <= maxTitleLength) || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || `Description max length is ${maxDescriptionLength} symbols`
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          titleLength: (value) => (!!value && value.length <= maxTitleLength) || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
+          descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
         },
         domains: [...disciplinesService.getTopLevelNodes().map(((d) => ({ text: d.label, value: d.id })))]
       };

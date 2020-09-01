@@ -53,7 +53,7 @@
       return {
         isFormValid: false,
 
-        required: (value) => !!value || 'This field is required'
+        required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
       };
     },
 

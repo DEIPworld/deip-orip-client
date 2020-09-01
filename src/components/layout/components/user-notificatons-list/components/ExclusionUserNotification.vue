@@ -5,7 +5,7 @@
     @click="clickNotification(notification)"
   >
     "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-    excluded you from members list
+    {{ $t('notifications.excludedMembList') }}
   </user-notifications-list-item>
 </template>
 

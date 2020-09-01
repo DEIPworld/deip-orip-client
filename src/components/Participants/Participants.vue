@@ -1,7 +1,7 @@
 <template>
   <app-layout>
     <layout-section>
-      <d-block title="Participants">
+      <d-block :title="$t('participantstRouting.title')">
         <template #titleAddon>
           <d-filter-sidebar
             v-model="filterModel"
@@ -15,7 +15,7 @@
                 class="mb-6"
                 prepend-inner-icon="search"
                 hide-details
-                label="Search by names"
+                :label="$t('participantstRouting.searchNamesField')"
               />
 
               <d-filter-term-disciplines
@@ -89,7 +89,7 @@
                 v-if="growth_rate"
                 :class="growth_rate | numDirClass"
               >{{ growth_rate | numDir }}</span>
-              <span v-else>N/A</span>
+              <span v-else>{{ $t('participantstRouting.na') }}</span>
             </template>
           </v-data-table>
         </v-skeleton-loader>
@@ -136,37 +136,37 @@
 
         participantsHeader: [
           {
-            text: 'Name',
+            text: this.$t('participantstRouting.tableHeader.name'),
             value: 'user.profile.firstName'
           },
           {
-            text: 'Total ECI',
+            text: this.$t('participantstRouting.tableHeader.totalECI'),
             value: 'eci',
             align: 'center',
             width: '15%'
           },
           {
-            text: 'Percentile rank',
+            text: this.$t('participantstRouting.tableHeader.percentileRank'),
             value: 'percentile_rank',
             align: 'center',
             width: '15%',
             sort: (a, b) => parseFloat(a) - parseFloat(b)
           },
           {
-            text: 'Growth rate',
+            text: this.$t('participantstRouting.tableHeader.growthRate'),
             value: 'growth_rate',
             align: 'center',
             width: '15%',
             sort: (a, b) => parseFloat(a) - parseFloat(b)
           },
           {
-            text: 'Сontributions number',
+            text: this.$t('participantstRouting.tableHeader.contributionsNumber'),
             value: 'contributions.length',
             align: 'center',
             width: '15%'
           },
           {
-            text: 'Projects number',
+            text: this.$t('participantstRouting.tableHeader.projectsNumber'),
             value: 'researches.length',
             align: 'center',
             width: '15%'

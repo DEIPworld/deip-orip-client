@@ -2,7 +2,7 @@
   <v-row no-gutters justify="center">
     <v-col cols="6">
       <div class="text-h5 text-center mb-3">
-        Select domain
+        {{ $t('createResearch.domainBlock.select') }}
       </div>
 
       <div class="text-subtitle-1 text-center mx-auto selected-disciplines discipline-picker">
@@ -21,7 +21,7 @@
 
       <div class="text-center py-4">
         <v-btn color="primary" :disabled="nextDisabled" @click.native="nextStep()">
-          Next
+          {{ $t('createResearch.domainBlock.next') }}
         </v-btn>
       </div>
     </v-col>
