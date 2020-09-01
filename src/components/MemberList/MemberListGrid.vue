@@ -4,16 +4,29 @@
       v-for="item in items"
       :key="'list-item-' + item.account.name"
       :member="item"
+      :group="group"
+      @showConfirmAction="showConfirmAction"
     />
+    <d-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :confirm-button-title="actionDialog.actionLabel"
+      :loading="actionDialog.loading"
+      @click:confirm="actionDialog.action()"
+    >
+      {{ actionDialog.description }}
+    </d-dialog>
   </div>
 </template>
 
 <script>
   import MemberListCard from '@/components/MemberList/MemberListItem/MemberListCard';
+  import { dropoutMember } from '@/components/MemberList/MemberListItem/dropoutMember';
 
   export default {
     name: 'MemberListGrid',
     components: { MemberListCard },
+    mixins: [dropoutMember],
     props: {
       items: {
         type: Array,

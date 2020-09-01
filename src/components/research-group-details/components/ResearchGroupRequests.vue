@@ -1,6 +1,6 @@
 <template>
   <v-sheet width="410">
-    <v-card height="120" outlined>
+    <v-card outlined>
       <v-tabs
         v-model="invitesTabs"
         grow
@@ -8,9 +8,13 @@
         light
         :hide-slider="!invites.length || !pendingJoinRequests.length"
       >
-        <v-tab v-if="pendingJoinRequests.length" light>
+        <v-tab
+          v-if="pendingJoinRequests.length"
+          :class="{ 'v-ripple__container': !invites.length }"
+          light
+        >
           <div class="mr-auto d-flex">
-            <span class="text-h6">Join requests</span>
+            <span class="text-h6 text-none">Join requests</span>
             <v-badge
               color="warning"
               inline
@@ -18,9 +22,14 @@
             />
           </div>
         </v-tab>
-        <v-tab v-if="invites.length" class="align-right" dark>
+        <v-tab
+          v-if="invites.length"
+          class="align-right"
+          :class="{ 'v-ripple__container': !pendingJoinRequests.length }"
+          dark
+        >
           <div class="mr-auto d-flex">
-            <span class="text-h6">Pending invites</span>
+            <span class="text-h6 text-none">Pending invites</span>
             <v-badge
               color="warning"
               inline
@@ -33,8 +42,11 @@
 
       <v-tabs-items v-model="invitesTabs">
         <v-tab-item v-if="pendingJoinRequests.length">
-          <div class="pt-4 px-6 d-flex align-center">
-            <v-icon @click="prevSlide('joinRequestsSlider', pendingJoinRequests)">
+          <div class="py-4 px-6 d-flex align-center">
+            <v-icon
+              v-if="pendingJoinRequests.length > 1"
+              @click="prevSlide('joinRequestsSlider', pendingJoinRequests)"
+            >
               navigate_before
             </v-icon>
             <v-carousel
@@ -49,29 +61,32 @@
                 :key="'join-request-' + index"
               >
                 <d-box-item
-                  :avatar="join.user.profile | avatarSrc(32, 32, false)"
-                  :size="32"
+                  :avatar="join.user.profile | avatarSrc(40, 40, false)"
+                  :size="40"
                 >
                   <v-clamp
                     autoresize
                     :max-lines="1"
-                    class="text-body-2"
+                    class="text-body-2 font-weight-medium"
                   >
                     {{ join.user | fullname }}
                   </v-clamp>
-                  <div class="text-caption">
+                  <div class="text-caption text--secondary">
                     Wants to join your group
                   </div>
                 </d-box-item>
               </v-carousel-item>
             </v-carousel>
-            <v-icon @click="nextSlide('joinRequestsSlider', pendingJoinRequests)">
+            <v-icon
+              v-if="pendingJoinRequests.length > 1"
+              @click="nextSlide('joinRequestsSlider', pendingJoinRequests)"
+            >
               navigate_next
             </v-icon>
             <v-btn
               text
               small
-              class="ml-1 align-self-start"
+              class="ml-1"
               color="primary"
               @click="openJoinRequestDetails(pendingJoinRequests[joinRequestsSlider])"
             >
@@ -80,8 +95,13 @@
           </div>
         </v-tab-item>
         <v-tab-item v-if="invites.length">
-          <div class="pt-4 px-6 d-flex align-center">
-            <v-btn small icon @click="prevSlide('invitesSlider', invites)">
+          <div class="py-4 px-6 d-flex align-center">
+            <v-btn
+              v-if="invites.length > 1"
+              small
+              icon
+              @click="prevSlide('invitesSlider', invites)"
+            >
               <v-icon>
                 navigate_before
               </v-icon>
@@ -100,20 +120,19 @@
                 :key="'invite-request-' + index"
               >
                 <d-box-item
-                  :avatar="invite.user.profile | avatarSrc(32, 32, false)"
-                  :size="32"
+                  :avatar="invite.user.profile | avatarSrc(40, 40, false)"
+                  :size="40"
                 >
                   <v-clamp
                     autoresize
                     :max-lines="1"
-                    class="text-body-2"
+                    class="text-body-2 font-weight-medium"
                   >
                     {{ invite.user | fullname }}
                   </v-clamp>
                   <v-clamp
-                    autoresize
-                    :max-lines="2"
-                    class="text-caption"
+                    :max-lines="1"
+                    class="text-caption text--secondary"
                   >
                     {{ invite.user | employmentOrEducation }}
                   </v-clamp>
@@ -121,7 +140,12 @@
               </v-carousel-item>
             </v-carousel>
 
-            <v-btn small icon @click="nextSlide('invitesSlider', invites)">
+            <v-btn
+              v-if="invites.length > 1"
+              small
+              icon
+              @click="nextSlide('invitesSlider', invites)"
+            >
               <v-icon>
                 navigate_next
               </v-icon>
@@ -129,7 +153,7 @@
             <v-btn
               text
               small
-              class="ml-1 align-self-start"
+              class="ml-1"
               color="primary"
               :to="{ name: 'UserDetails', params: { account_name: invites[invitesSlider].user.account.name } }"
             >
