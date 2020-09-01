@@ -20,8 +20,9 @@
 
       <div v-if="commonGroups.length" class="py-6">
         <div class="d-flex mb-6">
-          <div class="text-h6">
-            Teams: {{ commonGroups.length }}
+          <div class="text-h5">
+            Teams
+            <v-badge offset-y="-8" offset-x="4" :content="commonGroups.length || '0'" />
           </div>
           <v-spacer v-if="isOwner" />
           <div v-if="isOwner">
@@ -51,22 +52,33 @@
                   research_group_permlink: encodeURIComponent(group.permlink) }
               }"
             >
-              <div class="py-4 px-6 ma-auto text-body-2 flex-grow-1 d-flex justify-space-between">
-                <d-box-item
-                  :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
-                  :size="32"
+              <d-box-item
+                :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
+                :size="32"
+                class="w-100 pa-4"
+              >
+                <v-clamp
+                  autoresize
+                  :max-lines="2"
+                  class="text-h6"
                 >
-                  <div class="text-body-2">
-                    {{ group.name }}
-                  </div>
-                </d-box-item>
-                <div class="flex-shrink-0 align-self-center">
+                  {{ group.name }}
+                </v-clamp>
+                <template #action>
                   <v-icon>
                     group
                   </v-icon>
-                  {{ group.shares.length }}
-                </div>
-              </div>
+                </template>
+                <template #actionText>
+                  <v-clamp
+                    autoresize
+                    :max-lines="2"
+                    class="text-body-2"
+                  >
+                    {{ group.shares.length }}
+                  </v-clamp>
+                </template>
+              </d-box-item>
             </v-card>
           </v-col>
         </v-row>
