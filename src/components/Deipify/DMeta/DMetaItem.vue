@@ -3,7 +3,12 @@
     <v-icon v-if="meta.icon" class="mr-1" size="18">
       {{ meta.icon }}
     </v-icon>
-    <div>{{ meta.label }}</div>
+    <div>
+      <template v-if="meta.label">
+        {{ meta.label }}
+      </template>
+      <slot />
+    </div>
   </div>
 </template>
 

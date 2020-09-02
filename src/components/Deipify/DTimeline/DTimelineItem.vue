@@ -1,10 +1,7 @@
 <template>
   <v-sheet class="d-flex">
     <v-sheet class="d-flex flex-column align-center" :width="40" :min-height="40">
-      <div
-        :class="$style['top-stroke']"
-        :style="{ minHeight: dotTop + 'px' }"
-      />
+      <div :style="lineTopStyle" class="mb-1" />
       <v-avatar
         :size="dotSize"
         :color="dotColor"
@@ -13,7 +10,7 @@
         {{ dotText }}
         <slot name="dot" />
       </v-avatar>
-      <div :class="$style['bottom-stroke']" />
+      <div :style="lineBottomStyle" class="mt-1 flex-grow-1 flex-shrink-1" />
     </v-sheet>
     <div class="spacer my-2 ml-4 align-self-center">
       <slot />
@@ -52,22 +49,45 @@
       ctrlHeight: {
         type: Number,
         default: 40
+      },
+
+      lineColor: {
+        type: String,
+        default: 'rgba(26, 27, 34, 0.12)'
+      },
+      lineWidth: {
+        type: Number,
+        default: 2
+      },
+      lineTop: {
+        type: Boolean,
+        default: true
+      },
+      lineBottom: {
+        type: Boolean,
+        default: true
+      }
+    },
+    computed: {
+      lineStyle() {
+        return {
+          width: `${this.lineWidth}px`,
+          background: this.lineColor
+        };
+      },
+      lineTopStyle() {
+        return {
+          minHeight: `${this.dotTop}px`,
+          ...this.lineStyle,
+          ...(!this.lineTop ? { opacity: 0 } : {})
+        };
+      },
+      lineBottomStyle() {
+        return {
+          ...this.lineStyle,
+          ...(!this.lineBottom ? { opacity: 0 } : {})
+        };
       }
     }
   };
 </script>
-
-<style module>
-  .top-stroke {
-    width: 2px;
-    background: rgba(26, 27, 34, 0.12);
-    margin-bottom: 4px;
-  }
-
-  .bottom-stroke {
-    margin-top: 4px;
-    flex: 1;
-    width: 2px;
-    background: rgba(26, 27, 34, 0.12);
-  }
-</style>
