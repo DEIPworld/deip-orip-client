@@ -15,6 +15,10 @@
   import AttributesTextareaSet from '@/components/Attributes/AttributesTextarea/AttributesTextareaSet';
   import AttributesSelectSet from '@/components/Attributes/AttributesSelect/AttributesSelectSet';
   import AttributesStepperSet from '@/components/Attributes/AttributesStepper/AttributesStepperSet';
+  import AttributesVideoUrlSet from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlSet';
+  import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
+  import AttributesPartnersSet from '@/components/Attributes/AttributesPartners/AttributesPartnersSet';
+
   import { commonAttribute, internalType } from '@/components/Attributes/mixins';
 
   export default {
@@ -23,7 +27,10 @@
       AttributesTextSet,
       AttributesTextareaSet,
       AttributesSelectSet,
-      AttributesStepperSet
+      AttributesStepperSet,
+      AttributesVideoUrlSet,
+      AttributesRoadmapSet,
+      AttributesPartnersSet
     },
     mixins: [commonAttribute, internalType],
     computed: {

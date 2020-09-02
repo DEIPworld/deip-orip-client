@@ -1,8 +1,8 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import AttributesCommonEditOpts
   from '@/components/Attributes/AttributesCommon/AttributesCommonEditOpts';
-import AttributesCommonEditNode
-  from '@/components/Attributes/AttributesCommon/AttributesCommonEditNode';
+import AttributesCommonEditMeta
+  from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
 import { ATTR_TYPES } from '@/variables';
 
 export const defaultAttributeModel = () => ({
@@ -88,7 +88,7 @@ export const commonAttribute = {
 export const commonEdit = {
   components: {
     AttributesCommonEditOpts,
-    AttributesCommonEditNode
+    AttributesCommonEditMeta
   },
   mixins: [Proxyable, resetModelOnCreate]
 };

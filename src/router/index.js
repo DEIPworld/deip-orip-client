@@ -77,6 +77,8 @@ import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequ
 import { awaitStore } from '@/router/utils/awaitStore';
 import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
+import { sandboxRouting } from '@/components/_Sandbox/router';
+import { researchRouting } from '@/components/Research/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -447,11 +449,13 @@ const router = new Router({
     component: CreateTokenSale
   },
 
-  ...userDetailRouting,
-  ...accountRouting,
-  ...adminRouting,
-  ...ParticipantstRouting,
-  ...overviewRouting,
+    ...sandboxRouting,
+    ...userDetailRouting,
+    ...accountRouting,
+    ...adminRouting,
+    ...ParticipantstRouting,
+    ...overviewRouting,
+    ...researchRouting,
 
   {
     path: '/user-wallet',

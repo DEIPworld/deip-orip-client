@@ -1,9 +1,9 @@
 <template>
-<!--  <v-text-field-->
-<!--    v-model="internalValue"-->
-<!--    :label="internalAttribute.title"-->
-<!--    outlined-->
-<!--  />-->
+  <v-text-field
+    v-model="internalValue"
+    :label="internalAttribute.title"
+    outlined
+  />
 </template>
 
 <script>

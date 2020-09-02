@@ -36,18 +36,19 @@ const ATTR_TYPES = {
   TEXT: 'text',
   TEXTAREA: 'textarea',
   STEPPER: 'stepper',
-  SELECT: 'select'
-};
-const ATTR_MODES = {
-  EDIT: 'edit',
-  READ: 'read',
-  SET: 'set'
+  SELECT: 'select',
+  VIDEO_URL: 'video-url',
+  ROADMAP: 'roadmap',
+  PARTNERS: 'partners'
 };
 const ATTR_TYPES_LIST = {
   [ATTR_TYPES.TEXT]: { value: ATTR_TYPES.TEXT, text: 'Text field' },
   [ATTR_TYPES.TEXTAREA]: { value: ATTR_TYPES.TEXTAREA, text: 'Text area' },
   [ATTR_TYPES.SELECT]: { value: ATTR_TYPES.SELECT, text: 'Dropdown select' },
-  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' }
+  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' },
+  [ATTR_TYPES.VIDEO_URL]: { value: ATTR_TYPES.VIDEO_URL, text: 'Video URL' },
+  [ATTR_TYPES.ROADMAP]: { value: ATTR_TYPES.ROADMAP, text: 'Roadmap', system: true },
+  [ATTR_TYPES.PARTNERS]: { value: ATTR_TYPES.PARTNERS, text: 'Partners', system: true },
 };
 
 export {
@@ -65,7 +66,6 @@ export {
 
   ATTR_TYPES,
   ATTR_TYPES_LIST,
-  ATTR_MODES,
 
   ECI_STAT_PERIOD_STEP_TYPE
 };

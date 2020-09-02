@@ -8,6 +8,9 @@
         Add attribute
       </v-btn>
     </template>
+<!--    <pre>-->
+<!--      {{researchAttributes[6]}}-->
+<!--    </pre>-->
 
     <v-data-table
       :headers="attributesTable"
@@ -17,7 +20,7 @@
 
       <template #item.type="{ item }">
         <v-chip outlined>
-          {{ ATTR_TYPES_LIST[item.type].text }}
+          {{ ATTR_TYPES_LIST[item.type] ? ATTR_TYPES_LIST[item.type].text : 'undefined' }}
         </v-chip>
       </template>
 
@@ -31,12 +34,21 @@
           >
             <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
           </v-btn>
-          <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
-            <v-icon>edit</v-icon>
-          </v-btn>
-          <v-btn icon small @click="openActionDialog('delete', item._id)">
-            <v-icon>delete</v-icon>
-          </v-btn>
+
+          <template v-if="item.isEditable">
+            <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <v-btn icon small @click="openActionDialog('delete', item._id)">
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </template>
+          <template v-else>
+            <v-btn icon small disabled>
+              <v-icon>lock</v-icon>
+            </v-btn>
+          </template>
+
         </crud-actions>
       </template>
 
@@ -104,7 +116,8 @@
           },
           {
             value: 'actions',
-            width: '1%'
+            width: '1%',
+            // align: 'end'
           },
         ]
       };

@@ -7,7 +7,7 @@
           outlined
           hide-details="auto"
           label="Attribute type"
-          :items="Object.values(ATTR_TYPES_LIST)"
+          :items="$where(Object.values(ATTR_TYPES_LIST), {'!system': true})"
         />
         <v-divider class="my-6" />
       </template>

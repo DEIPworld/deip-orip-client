@@ -23,6 +23,7 @@ import { DSnackbarPlugin } from '@/components/Deipify/DSnackbar/DSnackbarPlugin'
 import { getEnvConfig } from '@/plugins/getEnvConfig';
 import { vuetify } from '@/plugins/vuetify';
 import { ifEnabled } from '@/plugins/ifEnabled';
+import { filterWhere } from '@/plugins/filterWhere';
 
 import { dataReadyMixin } from '@/mixins/dataReadyMixin';
 import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
@@ -61,6 +62,7 @@ Vue.component('v-clamp', VClamp);
 
 Vue.use(DSnackbarPlugin);
 Vue.use(ifEnabled);
+Vue.use(filterWhere);
 
 Vue.mixin(dataReadyMixin);
 Vue.mixin(contextHelpersMixin);

@@ -11,7 +11,7 @@
           <slot name="dot" :option="option" :index="index" />
         </template>
 
-        <attributes-common-edit-node
+        <attributes-common-edit-meta
           v-model="internalValue.valueOptions[index]"
           :field-label-key="fieldLabelKey"
           :class="{ 'mb-6': index + 1 < internalValue.valueOptions.length }"
@@ -33,14 +33,14 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import AttributesCommonEditNode from '@/components/Attributes/AttributesCommon/AttributesCommonEditNode';
+  import AttributesCommonEditMeta from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
 
   export default {
     name: 'AttributesCommonEditOpts',
     components: {
       DTimeline,
-      AttributesCommonEditNode,
+      AttributesCommonEditMeta,
       DTimelineItem,
       DTimelineAdd,
       DBlock

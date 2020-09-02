@@ -10,6 +10,10 @@
   import AttributesTextareaEdit from '@/components/Attributes/AttributesTextarea/AttributesTextareaEdit';
   import AttributesSelectEdit from '@/components/Attributes/AttributesSelect/AttributesSelectEdit';
   import AttributesStepperEdit from '@/components/Attributes/AttributesStepper/AttributesStepperEdit';
+  import AttributesVideoUrlEdit from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlEdit';
+  import AttributesRoadmapEdit from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapEdit';
+  import AttributesPartnersEdit from '@/components/Attributes/AttributesPartners/AttributesPartnersEdit';
+
   import { commonAttribute } from '@/components/Attributes/mixins';
 
   export default {
@@ -18,7 +22,10 @@
       AttributesTextEdit,
       AttributesTextareaEdit,
       AttributesSelectEdit,
-      AttributesStepperEdit
+      AttributesStepperEdit,
+      AttributesVideoUrlEdit,
+      AttributesRoadmapEdit,
+      AttributesPartnersEdit
     },
     mixins: [commonAttribute],
     computed: {

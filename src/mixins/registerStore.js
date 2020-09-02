@@ -20,3 +20,16 @@ export const componentStoreFactory = (storeModule) => ({
     }
   }
 });
+
+export const componentStoreFactoryOne = (storeModule, name) => ({
+  created() {
+    this.registerStoreModule(storeModule);
+  },
+  methods: {
+    registerStoreModule(module) {
+      if (!(this.$store && this.$store.state && this.$store.state[name])) {
+        this.$store.registerModule(name, module);
+      }
+    }
+  }
+});

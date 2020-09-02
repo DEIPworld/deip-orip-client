@@ -33,7 +33,7 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   export default {
-    name: 'AttributesCommonEditNode',
+    name: 'AttributesCommonEditMeta',
     mixins: [Proxyable],
     props: {
       fieldLabelKey: {

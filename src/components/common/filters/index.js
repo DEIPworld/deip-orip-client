@@ -78,10 +78,10 @@ Vue.filter('commaNumber', (value, separator = ',') => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 });
 
-Vue.filter('where', (value, f = {}) => {
-  if (!value) return '';
-  return value.filter(where(f));
-});
+// Vue.filter('where', (value, f = {}) => {
+//   if (!value) return '';
+//   return value.filter(where(f));
+// });
 
 Vue.filter('numDir', (value) => {
   if (!value) return '';

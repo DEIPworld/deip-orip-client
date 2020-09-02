@@ -2,7 +2,7 @@
   import AttributesTextEdit from '@/components/Attributes/AttributesText/AttributesTextEdit';
 
   export default {
-    name: 'AttributesTextareaEdit',
+    name: 'AttributesVideoUrlEdit',
     mixins: [AttributesTextEdit]
   };
 </script>
