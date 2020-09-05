@@ -134,43 +134,53 @@
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
 
-        const filtered = {
-          ...(filter.disciplines.length ? {
-            disciplines: [{
-              external_id: filter.disciplines
-            }]
-          } : {}),
+        // const filtered = {
+        //   ...(filter.disciplines.length ? {
+        //     disciplines: [{
+        //       external_id: filter.disciplines
+        //     }]
+        //   } : {}),
 
-          ...(filter.organizations.length ? {
-            research_group: {
-              external_id: filter.organizations
-            }
-          } : {}),
+        //   ...(filter.organizations.length ? {
+        //     research_group: {
+        //       external_id: filter.organizations
+        //     }
+        //   } : {}),
 
-          ...(Object.keys(filter.researchAttributes).length && Object.keys(filter.researchAttributes).some((a) => filter.researchAttributes[a].length)
-            ? {
-              researchRef: {
-                attributes: (researchAttributes) => {
-                  const rVals = researchAttributes.map((a) => a.value);
-                  const fVals = Object.keys(filter.researchAttributes)
-                    .reduce((a, b) => ([...a, ...filter.researchAttributes[b]]), []);
-                  return fVals.some((val) => rVals.includes(val));
-                }
-              }
-            }
-            : {}),
+        //   ...(Object.keys(filter.researchAttributes).length && Object.keys(filter.researchAttributes).some((a) => filter.researchAttributes[a].length)
+        //     ? {
+        //       researchRef: {
+        //         attributes: (researchAttributes) => {
+        //           const rVals = researchAttributes.map((a) => a.value);
+        //           const fVals = Object.keys(filter.researchAttributes)
+        //             .reduce((a, b) => ([...a, ...filter.researchAttributes[b]]), []);
+        //           return fVals.some((val) => rVals.includes(val));
+        //         }
+        //       }
+        //     }
+        //     : {}),
 
-          ...(filter.categories.length ? {
-            researchRef: {
-              tenantCategory: {
-                _id: filter.categories
-              }
-            }
-          } : {})
+        //   ...(filter.categories.length ? {
+        //     researchRef: {
+        //       tenantCategory: {
+        //         _id: filter.categories
+        //       }
+        //     }
+        //   } : {})
 
-        };
+        // };
 
-        this.itemsList = [...this.$options.filters.where(this.items, filtered)];
+        this.$store.dispatch('feed/loadResearchFeed', { 
+          filter: { ...filter, researchAttributes: Object.keys(filter.researchAttributes).filter(a => filter.researchAttributes[a].length).map(a => {
+            return { researchAttributeId: a, values: filter.researchAttributes[a] };
+          }) } 
+        })
+          .then((items) => {
+            this.itemsList = items;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
     }
   };
