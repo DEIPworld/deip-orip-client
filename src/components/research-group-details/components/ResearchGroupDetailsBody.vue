@@ -86,7 +86,6 @@
 
     <add-member-to-group-dialog
       v-if="group"
-      :is-open="options.isAddMemberDialogOpen"
       :group-external-id="group.external_id"
       :users="usersToInvite"
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
@@ -140,7 +139,6 @@
         userGroups: 'auth/userGroups',
         group: 'researchGroup/group',
         researchList: 'researchGroup/researchList',
-        options: 'researchGroup/options',
         members: 'researchGroup/members',
         invites: 'researchGroup/invites',
         isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',

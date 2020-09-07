@@ -8,30 +8,40 @@
         <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
           <v-card
             outlined
+            class="full-height d-flex"
             :to="{
               name: 'ResearchGroupDetails',
               params: {
                 research_group_permlink: encodeURIComponent(group.permlink) }
             }"
           >
-            <div class="pa-4">
-              <d-box-item
-                :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
-                :size="32"
-                :title="group.name"
+            <d-box-item
+              :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
+              :size="32"
+              class="w-100 pa-4"
+            >
+              <v-clamp
+                autoresize
+                :max-lines="2"
+                class="text-h6"
               >
-                <template #action>
-                  <v-icon>
-                    group
-                  </v-icon>
-                </template>
-                <template #actionText>
-                  <div class="text-body-2">
-                    {{ group.shares.length }}
-                  </div>
-                </template>
-              </d-box-item>
-            </div>
+                {{ group.name }}
+              </v-clamp>
+              <template #action>
+                <v-icon>
+                  group
+                </v-icon>
+              </template>
+              <template #actionText>
+                <v-clamp
+                  autoresize
+                  :max-lines="2"
+                  class="text-body-2"
+                >
+                  {{ group.shares.length }}
+                </v-clamp>
+              </template>
+            </d-box-item>
           </v-card>
         </v-col>
       </v-row>
