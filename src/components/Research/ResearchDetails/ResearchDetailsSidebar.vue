@@ -6,12 +6,12 @@
           class="research-group-link"
           :to="routerLink"
         >
-          {{ group.name }}
+          {{ research.research_group.name }}
         </router-link>
       </template>
 
       <div
-        v-for="(member, i) in researchMembersList"
+        v-for="(member, i) in members"
         :key="member.account.id"
         class="mb-4"
       >
@@ -130,26 +130,15 @@
       />
     </d-block>
 
-    <d-block v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" widget separated>
+    <d-block v-if="research.researchRef.tenantCategory && research.researchRef.tenantCategory.text" widget separated>
       <div class="display-flex">
         <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
           <span class="white--text font-weight-medium">C</span>
         </v-avatar>
         <div class="align-self-center">
-          {{ researchRef.tenantCategory.text }}
+          {{ research.researchRef.tenantCategory.text }}
         </div>
       </div>
-    </d-block>
-
-    <d-block widget separated>
-
-      <attributes-read
-        v-for="(attribute, index) in researchRef.attributes"
-        :key="`${index}-attr`"
-        :value="attribute.value"
-        :attribute="attribute.researchAttributeId"
-      />
-
     </d-block>
 
     <d-block v-if="isResearchGroupMember" widget separated>
@@ -167,11 +156,11 @@
       </div>
     </d-block>
 
-    <d-block v-if="researchRef.partners.length" widget separated>
-      <research-partners is-read-only :partners="researchRef.partners" />
+    <d-block v-if="research.researchRef.partners.length" widget separated>
+      <research-partners is-read-only :partners="research.researchRef.partners" />
     </d-block>
 
-    <d-block v-if="contentList.length" widget separated title="Expert Review">
+    <d-block v-if="contents.length" widget separated title="Expert Review">
       <v-dialog
         v-model="requestExpertReviewDialog.isShown"
         persistent
@@ -216,7 +205,7 @@
             />
             <user-autocomplete-picker
               label="Find an expert to request a review"
-              :users="experts"
+              :users="internalExperts"
               :is-disabled="!isSelectedContentId"
               :display-limit="6"
               @onSelectUser="selectExpert"
@@ -262,7 +251,6 @@
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
-  import AttributesRead from '@/components/Attributes/AttributesRead';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -271,7 +259,6 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
-      AttributesRead,
       EciStats,
       DBlock
     },
@@ -295,31 +282,29 @@
     },
     computed: {
       ...mapGetters({
-        contentList: 'rd/contentList',
-        group: 'rd/group',
-        disciplinesList: 'rd/disciplinesList',
+        research: 'research/data',
         experts: 'research/experts',
-        groupInvitesList: 'rd/groupInvitesList',
-        researchMembersList: 'rd/researchMembersList',
-        researchGroupMembersList: 'rd/researchGroupMembersList',
-        research: 'rd/research',
-        researchRef: 'rd/researchRef',
-        reviewsList: 'rd/reviewsList',
-        user: 'auth/user',
-        userJoinRequests: 'auth/userJoinRequests',
-        tenant: 'auth/tenant',
-        researchEciStatsRecords: 'rd/researchEciStatsRecords'
+        members: 'research/members',
+        contents: 'research/contents',
+        reviews: 'research/reviews',
+
+        // groupInvitesList: 'rd/groupInvitesList',
+        // researchMembersList: 'rd/researchMembersList',
+        // research: 'rd/research',
+        // userJoinRequests: 'auth/userJoinRequests',
+        // tenant: 'auth/tenant',
+        // researchEciStatsRecords: 'rd/researchEciStatsRecords'
       }),
       isSelectedContentId() {
         return this.selectedContentId !== null;
       },
       contentListToReview() {
         const expert = this.selectedExpert;
-        if (!expert) return this.contentList;
-        const expertReviews = this.reviewsList.filter(
-          (r) => r.author.account.name == expert.account.name
+        if (!expert) return this.contents;
+        const expertReviews = this.reviews.filter(
+          (r) => r.author.account.name === expert.account.name
         );
-        return this.contentList.filter(
+        return this.contents.filter(
           (content) => !expertReviews.some((r) => r.research_content_id == content.id)
         );
       },
@@ -329,8 +314,8 @@
       canJoinResearchGroup() {
         if (this.research) {
           if (
-            this.researchGroupMembersList.some(
-              (m) => m.account.name === this.user.username
+            this.members.some(
+              (m) => m.account.name === this.$currentUserName
             )
           ) {
             return false;
@@ -365,15 +350,15 @@
           };
         });
       },
-      experts() {
+      internalExperts() {
         const blackList = [
           'regacc',
           'hermes',
           'initdelegate',
-          this.user.username,
-          ...this.researchGroupMembersList.map((m) => m.account.name)
+          this.$currentUserName,
+          ...this.members.map((m) => m.account.name)
         ];
-        const existingReviewsForContent = this.reviewsList.filter(
+        const existingReviewsForContent = this.reviews.filter(
           (r) => r.research_content_id === this.selectedContentId
         );
         blackList.push(
@@ -383,7 +368,7 @@
       },
       isActiveInvite() {
         return this.groupInvitesList.some(
-          (invite) => invite.account_name == this.user.username
+          (invite) => invite.account_name === this.$currentUserName
         );
       },
       isActiveJoinRequest() {
@@ -415,14 +400,13 @@
         const eciSum = this.eciList.reduce((acc, curr) => acc + curr.value, 0);
         const eciSign = eciSum >= 0 ? 1 : -1;
         const eciRatio = eciSign * Math.min(+`${eciSum * eciSign}`.substring(0, 2), 50);
-        const contentRatio = Math.min(this.contentList.length + 1, 50);
+        const contentRatio = Math.min(this.contents.length + 1, 50);
         return Math.max(eciRatio + contentRatio, 0);
       },
       routerLink() {
         const route = {};
-
-        if (this.group.is_personal) {
-          if (this.user.username === this.research.members[0]) {
+        if (this.research.research_group.is_personal) {
+          if (this.$currentUserName === this.research.members[0]) {
             route.path = '/account';
           } else {
             route.name = 'UserDetails';
@@ -479,7 +463,7 @@
 
         researchGroupService
           .createJoinRequest({
-            username: this.user.username,
+            username: this.$currentUserName,
             groupId: this.research.research_group_id,
             coverLetter: this.coverLetter
           })
@@ -499,37 +483,3 @@
     }
   };
 </script>
-
-<style lang="less" scoped>
-  .expertise {
-    background: #ebf5fe;
-    border: 1px solid #8fc3f7;
-    box-sizing: border-box;
-    border-radius: 2px;
-    font-family: Muli;
-
-    &__disc-name {
-      font-weight: 600;
-    }
-
-    &__divider {
-      border-color: #8fc3f7;
-    }
-  }
-
-  .research-group-link {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .rd-sidebar-block-title {
-    font-family: Roboto;
-    font-weight: bold;
-    font-size: 18px;
-    line-height: 21px;
-    color: #000000;
-  }
-</style>

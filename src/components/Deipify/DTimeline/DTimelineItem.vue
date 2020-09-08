@@ -1,16 +1,21 @@
 <template>
   <v-sheet class="d-flex">
-    <v-sheet class="d-flex flex-column align-center" :width="40" :min-height="40">
-      <div :style="lineTopStyle" class="mb-1" />
+    <v-sheet class="d-flex flex-column align-center flex-shrink-0" :width="40" :min-height="40">
+      <div :style="topLineStyle" class="mb-1" />
       <v-avatar
+        :class="{'link': dotHover}"
         :size="dotSize"
         :color="dotColor"
         class="d-flex flex-shrink-0 flex-grow-0"
+        @click="onClickDot"
       >
-        {{ dotText }}
-        <slot name="dot" />
+        <slot name="dot">
+          <v-icon small color="white">
+            adjust
+          </v-icon>
+        </slot>
       </v-avatar>
-      <div :style="lineBottomStyle" class="mt-1 flex-grow-1 flex-shrink-1" />
+      <div :style="bottomLineStyle" class="mt-1 flex-grow-1 flex-shrink-1" />
     </v-sheet>
     <div class="spacer my-2 ml-4 align-self-center">
       <slot />
@@ -29,10 +34,6 @@
   export default {
     name: 'DTimelineItem',
     props: {
-      dotText: {
-        type: [String, Number],
-        default: ''
-      },
       dotTop: {
         type: Number,
         default: 4
@@ -45,6 +46,10 @@
         type: String,
         default: 'primary'
       },
+      dotHover: {
+        type: Boolean,
+        default: false
+      },
 
       ctrlHeight: {
         type: Number,
@@ -55,38 +60,38 @@
         type: String,
         default: 'rgba(26, 27, 34, 0.12)'
       },
+      topLineColor: {
+        type: [String, Boolean],
+        default: false
+      },
+      bottomLineColor: {
+        type: [String, Boolean],
+        default: false
+      },
+
       lineWidth: {
         type: Number,
         default: 2
-      },
-      lineTop: {
-        type: Boolean,
-        default: true
-      },
-      lineBottom: {
-        type: Boolean,
-        default: true
       }
     },
     computed: {
-      lineStyle() {
-        return {
-          width: `${this.lineWidth}px`,
-          background: this.lineColor
-        };
-      },
-      lineTopStyle() {
+      topLineStyle() {
         return {
           minHeight: `${this.dotTop}px`,
-          ...this.lineStyle,
-          ...(!this.lineTop ? { opacity: 0 } : {})
+          background: this.topLineColor ? this.topLineColor : this.lineColor,
+          width: `${this.lineWidth}px`
         };
       },
-      lineBottomStyle() {
+      bottomLineStyle() {
         return {
-          ...this.lineStyle,
-          ...(!this.lineBottom ? { opacity: 0 } : {})
+          background: this.bottomLineColor ? this.bottomLineColor : this.lineColor,
+          width: `${this.lineWidth}px`
         };
+      }
+    },
+    methods: {
+      onClickDot() {
+        this.$emit('click:dot');
       }
     }
   };

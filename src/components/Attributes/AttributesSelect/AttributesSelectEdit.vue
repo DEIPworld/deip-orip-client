@@ -5,13 +5,7 @@
     <v-divider />
     <attributes-common-edit-opts
       v-model="internalValue"
-    >
-      <template #dot>
-        <v-icon small color="white">
-          adjust
-        </v-icon>
-      </template>
-    </attributes-common-edit-opts>
+    />
   </div>
 </template>
 

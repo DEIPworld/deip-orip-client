@@ -1,9 +1,10 @@
 <template>
-<!--  <v-textarea-->
-<!--    v-model="internalValue"-->
-<!--    :label="internalAttribute.title"-->
-<!--    outlined-->
-<!--  />-->
+  <v-textarea
+    v-model="internalValue"
+    :label="internalAttribute.title"
+    hide-details="auto"
+    outlined
+  />
 </template>
 
 <script>

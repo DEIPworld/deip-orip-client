@@ -1,130 +1,130 @@
 <template>
-    <v-container class="fill-height pa-0 full-height" fluid>
-        <v-stepper
-                v-model="currentStep"
-                alt-labels
-                class="display-flex flex-column full-width fill-height full-height elevation-0"
-        >
-            <v-stepper-header>
-                <v-stepper-step step="1" :complete="currentStep > 1">
-                    <div class="text-uppercase">
-                        Domain
-                    </div>
-                </v-stepper-step>
+  <v-container class="fill-height pa-0 full-height" fluid>
+    <v-stepper
+      v-model="currentStep"
+      alt-labels
+      class="display-flex flex-column full-width fill-height full-height elevation-0"
+    >
+      <v-stepper-header>
+        <v-stepper-step step="1" :complete="currentStep > 1">
+          <div class="text-uppercase">
+            Domain
+          </div>
+        </v-stepper-step>
 
-                <v-divider />
+        <v-divider />
 
-                <v-stepper-step step="2" :complete="currentStep > 2">
-                    <div class="text-uppercase text-center">
-                        Team
-                    </div>
-                </v-stepper-step>
+        <v-stepper-step step="2" :complete="currentStep > 2">
+          <div class="text-uppercase text-center">
+            Team
+          </div>
+        </v-stepper-step>
 
-                <v-divider />
+        <v-divider />
 
-                <v-stepper-step step="3" :complete="currentStep > 3">
-                    <div class="text-uppercase">
-                        Title
-                    </div>
-                </v-stepper-step>
+        <v-stepper-step step="3" :complete="currentStep > 3">
+          <div class="text-uppercase">
+            Title
+          </div>
+        </v-stepper-step>
 
-                <v-divider />
+        <v-divider />
 
-                <v-stepper-step step="4" :complete="currentStep > 4">
-                    <div class="text-uppercase">
-                        Roadmap
-                    </div>
-                </v-stepper-step>
+        <v-stepper-step step="4" :complete="currentStep > 4">
+          <div class="text-uppercase">
+            Roadmap
+          </div>
+        </v-stepper-step>
 
-                <v-divider />
+        <v-divider />
 
-                <v-stepper-step step="5" :complete="currentStep > 5">
-                    <div class="text-uppercase">
-                        Settings
-                    </div>
-                </v-stepper-step>
+        <v-stepper-step step="5" :complete="currentStep > 5">
+          <div class="text-uppercase">
+            Settings
+          </div>
+        </v-stepper-step>
 
-                <!-- <v-divider></v-divider>
+        <!-- <v-divider></v-divider>
 
-                <v-stepper-step step="5">
-                  <div class="text-uppercase">
-                    Reward shares
-                  </div>
-                </v-stepper-step>-->
-            </v-stepper-header>
+        <v-stepper-step step="5">
+          <div class="text-uppercase">
+            Reward shares
+          </div>
+        </v-stepper-step>-->
+      </v-stepper-header>
 
-            <v-stepper-items class="full-height">
-                <v-stepper-content step="1" class="full-height">
-                    <v-card>
-                        <create-research-pick-discipline
-                                :research="research"
-                                @incStep="incStep"
-                                @setDisciplines="setDisciplines"
-                        />
-                    </v-card>
-                </v-stepper-content>
+      <v-stepper-items class="full-height">
+        <v-stepper-content step="1" class="full-height">
+          <v-card>
+            <create-research-pick-discipline
+              :research="research"
+              @incStep="incStep"
+              @setDisciplines="setDisciplines"
+            />
+          </v-card>
+        </v-stepper-content>
 
-                <v-stepper-content step="2">
-                    <v-card>
-                        <create-research-pick-group
-                                :research="research"
-                                @incStep="incStep"
-                                @decStep="decStep"
-                                @setGroup="setGroup"
-                        />
-                    </v-card>
-                </v-stepper-content>
+        <v-stepper-content step="2">
+          <v-card>
+            <create-research-pick-group
+              :research="research"
+              @incStep="incStep"
+              @decStep="decStep"
+              @setGroup="setGroup"
+            />
+          </v-card>
+        </v-stepper-content>
 
-                <v-stepper-content step="3">
-                    <v-card>
-                        <create-research-meta
-                                :research="research"
-                                :is-loading="isLoading"
-                                @setTitle="setTitle"
-                                @setDescription="setDescription"
-                                @setVideo="setVideo"
-                                @incStep="incStep"
-                                @decStep="decStep"
-                        />
-                    </v-card>
-                </v-stepper-content>
+        <v-stepper-content step="3">
+          <v-card>
+            <create-research-meta
+              :research="research"
+              :is-loading="isLoading"
+              @setTitle="setTitle"
+              @setDescription="setDescription"
+              @setVideo="setVideo"
+              @incStep="incStep"
+              @decStep="decStep"
+            />
+          </v-card>
+        </v-stepper-content>
 
-                <v-stepper-content step="4">
-                    <v-card>
-                        <create-research-roadmap
-                                :research="research"
-                                :is-loading="isLoading"
-                                @decStep="decStep"
-                                @incStep="incStep"
-                        />
-                    </v-card>
-                </v-stepper-content>
+        <v-stepper-content step="4">
+          <v-card>
+            <create-research-roadmap
+              :research="research"
+              :is-loading="isLoading"
+              @decStep="decStep"
+              @incStep="incStep"
+            />
+          </v-card>
+        </v-stepper-content>
 
-                <v-stepper-content step="5">
-                    <v-card>
-                        <create-research-settings
-                                :research="research"
-                                :is-loading="isLoading"
-                                @finish="finish"
-                                @decStep="decStep"
-                                @setPrivateFlag="setPrivateFlag"
-                        />
-                    </v-card>
-                </v-stepper-content>
+        <v-stepper-content step="5">
+          <v-card>
+            <create-research-settings
+              :research="research"
+              :is-loading="isLoading"
+              @finish="finish"
+              @decStep="decStep"
+              @setPrivateFlag="setPrivateFlag"
+            />
+          </v-card>
+        </v-stepper-content>
 
-                <!-- <v-stepper-content step="5">
-                  <v-card>
-                    <create-research-share
-                      @finish="finish" @decStep="decStep"
-                      @setReviewShare="setReviewShare"
-                      :research="research"
-                      :isLoading="isLoading"
-                    />
-                  </v-card>
-                </v-stepper-content>-->
-            </v-stepper-items>
-        </v-stepper>
-    </v-container>
+        <!-- <v-stepper-content step="5">
+          <v-card>
+            <create-research-share
+              @finish="finish" @decStep="decStep"
+              @setReviewShare="setReviewShare"
+              :research="research"
+              :isLoading="isLoading"
+            />
+          </v-card>
+        </v-stepper-content>-->
+      </v-stepper-items>
+    </v-stepper>
+  </v-container>
 </template>
 
 <script>
@@ -233,6 +233,7 @@
         this.isLoading = true;
 
         const isProposal = !this.research.group.is_personal;
+
         return researchService.createResearchViaOffchain(
           this.user.privKey,
           isProposal,
@@ -260,7 +261,10 @@
             })),
             partners: this.research.partners,
             attributes: Object.keys(this.research.attributes)
-              .map((attribute) => ({ researchAttributeId: attribute, value: this.research.attributes[attribute] }))
+              .map((attribute) => ({
+                researchAttributeId: attribute,
+                value: this.research.attributes[attribute]
+              }))
           }
         )
           .then(({ rm }) => {

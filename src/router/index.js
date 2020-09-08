@@ -79,6 +79,7 @@ import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
 import { researchRouting } from '@/components/Research/router';
+import { groupRouting } from '@/components/Group/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -450,12 +451,17 @@ const router = new Router({
   },
 
     ...sandboxRouting,
+
+    ...researchRouting,
+    ...groupRouting,
+
     ...userDetailRouting,
     ...accountRouting,
     ...adminRouting,
     ...ParticipantstRouting,
     ...overviewRouting,
-    ...researchRouting,
+
+
 
   {
     path: '/user-wallet',
