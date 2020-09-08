@@ -40,7 +40,7 @@
           </v-col>
           <v-col cols="12">
             <v-textarea
-              v-model="item.description"
+              v-model="item.details"
               label="Milestone description"
               outlined
             />

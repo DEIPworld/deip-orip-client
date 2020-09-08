@@ -37,7 +37,7 @@
               this.formProcessing = true;
 
               const invitees = this.formData.members
-                .filter((m) => m.account.name != this.user.username)
+                .filter((m) => m.account.name !== this.user.username)
                 .map((m) => ({
                   account: m.account.name,
                   rgt: m.stake * this.DEIP_1_PERCENT,

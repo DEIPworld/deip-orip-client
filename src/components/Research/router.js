@@ -29,6 +29,11 @@ export const researchRouting = [{
           name: 'research.expertise',
           path: 'expertise',
           component: ResearchExpertise
+        },
+        {
+          name: 'research.edit',
+          path: 'edit',
+          component: ResearchEdit
         }
       ]
     },

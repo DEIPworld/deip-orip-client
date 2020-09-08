@@ -20,7 +20,18 @@
         <div>
           <v-divider />
           <div class="px-2 pt-2">
-            <v-btn text small color="primary" class="px-2">
+            <v-btn
+              class="px-2"
+              color="primary"
+              text
+              small
+              :to="{
+                name: 'group.create',
+                query: {
+                  backTo: 'research.create'
+                }
+              }"
+            >
               Add new group
             </v-btn>
           </div>

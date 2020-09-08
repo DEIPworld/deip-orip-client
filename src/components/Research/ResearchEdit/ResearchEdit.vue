@@ -1,11 +1,21 @@
 <template>
   <d-layout-full-screen>
-    <d-form :disabled="isLoading" @submit="createResearch">
+    <d-form :disabled="processing" @submit="onSubmit">
+
+<!--      <v-image-input-->
+<!--        v-model="formData.image"-->
+<!--        :image-quality="0.85"-->
+<!--        clearable-->
+<!--        image-format="jpeg"-->
+<!--      />-->
+
+      {{formData.image}}
+
       <d-stack :gap="32">
         <d-block title="Add title and description">
           <d-stack>
             <v-text-field
-              v-model="formData.research.title"
+              v-model="formData.title"
               label="Title"
               outlined
               hide-details="auto"
@@ -14,7 +24,7 @@
             />
 
             <v-textarea
-              v-model="formData.research.abstract"
+              v-model="formData.abstract"
               name="Description"
               label="Description"
               outlined
@@ -23,9 +33,9 @@
           </d-stack>
         </d-block>
 
-        <attributes-disciplines-set v-model="formData.research.disciplines" />
+        <attributes-disciplines-set v-model="formData.disciplines" />
 
-        <attributes-group-set v-model="formData.research.researchGroup" />
+        <attributes-group-set v-model="formData.researchGroup" />
 
         <d-block title="Research attributes">
           <d-stack>
@@ -34,7 +44,7 @@
             >
               <attributes-set
                 :key="`${index}-attr`"
-                v-model="formData.offchainMeta.attributes[attr._id]"
+                v-model="formData.researchRef.attributes[attr._id]"
                 :attribute="attr._id"
               />
             </template>
@@ -46,7 +56,7 @@
         >
           <attributes-set
             :key="`${index}-attr`"
-            v-model="formData.offchainMeta.attributes[attr._id]"
+            v-model="formData.researchRef.attributes[attr._id]"
             :attribute="attr._id"
           />
         </template>
@@ -56,7 +66,7 @@
 
           <div class="d-flex justify-space-between align-center">
             <v-switch
-              v-model="formData.research.isPrivate"
+              v-model="formData.isPrivate"
               label="Private project"
               hide-details="auto"
             />
@@ -65,7 +75,11 @@
               <v-btn text color="primary">
                 Cancel
               </v-btn>
-              <v-btn type="submit" color="primary">
+              <v-btn
+                type="submit"
+                color="primary"
+                :disabled="processing || !isChanged"
+              >
                 Create project
               </v-btn>
             </d-stack>
@@ -80,6 +94,7 @@
 </template>
 
 <script>
+  import VImageInput from 'vuetify-image-input';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { ResearchService } from '@deip/research-service';
   import { maxDescriptionLength, maxTitleLength } from '@/variables';
@@ -91,6 +106,12 @@
   import DForm from '@/components/Deipify/DForm/DForm';
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
+  import {
+    compactResearchAttributes,
+    camelizeObjectKeys,
+    expandResearchAttributes,
+    compareModels
+  } from '@/utils/helpers';
 
   const researchService = ResearchService.getInstance();
 
@@ -103,7 +124,8 @@
       AttributesDisciplinesSet,
       AttributesSet,
       DBlock,
-      DStack
+      DStack,
+      VImageInput
     },
     props: {
       preset: {
@@ -113,31 +135,27 @@
     },
     data() {
       return {
-        isLoading: false,
+        processing: false,
+
+        cachedFormData: {},
+
         formData: {
-          research: {
-            title: '',
-            abstract: '',
-            disciplines: [],
-            researchGroup: '',
-            isPrivate: false,
 
-            // not used
-            // members: undefined,
-            // reviewShare: undefined,
-            // compensationShare: undefined,
-            // extensions: []
+          title: '',
+          abstract: '',
+          disciplines: [],
+          researchGroup: '',
+          isPrivate: false,
+
+          researchRef: {
+            attributes: {}
           },
-          offchainMeta: {
-            attributes: {},
 
-            // not used
-            // videoSrc: '',
-            // milestones: [],
-            // partners: [],
-          }
+          image: undefined
         },
+
         isPermlinkVerifyed: true,
+
         rules: {
           link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
           titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
@@ -147,80 +165,204 @@
     },
     computed: {
       ...mapGetters({
-        userGroups: 'auth/userGroups',
+        userGroups: 'auth/userGroups'
       }),
 
       userGroup() {
-        return this.$where(this.userGroups, { is_personal: true })[0]
+        return this.$where(this.userGroups, { is_personal: true })[0];
       },
 
-      stringFormData() {
-        return JSON.stringify(this.formData)
-      }
+      isProposal() {
+        return this.formData.researchGroup !== this.userGroup.external_id;
+      },
+
+      isChanged() {
+        return !compareModels(this.cachedFormData, this.formData);
+      },
     },
     watch: {
-      stringFormData(val, oldVal) {
-          console.log('новое значение: %s, старое значение: %s', val, oldVal)
+      formData: {
+        deep: true,
+        handler() {
+          this.storeDraft();
+        }
+      }
+    },
+    created() {
+      if (this.$route.params.researchExternalId) {
+        this.$store
+          .dispatch('research/getResearch', this.$route.params.researchExternalId)
+          .then(() => {
+            const clone = camelizeObjectKeys(_.cloneDeep(this.$store.getters['research/data']));
+
+            const transformed = {
+              ...clone,
+              ...{
+                disciplines: clone.disciplines.map((d) => d.external_id),
+                researchGroup: clone.researchGroup.external_id,
+                researchRef: {
+                  attributes: expandResearchAttributes(clone.researchRef.attributes)
+                },
+
+                // image: this.$options.filters.researchBackgroundSrc(clone.externalId),
+
+                isPrivate: !this.isPublic,
+                reviewShare: undefined,
+                compensationShare: undefined,
+                members: undefined
+              }
+            };
+
+            this.generateBase64(this.$options.filters.researchBackgroundSrc(clone.externalId))
+            .then((res) => {
+              console.log(res);
+            })
+
+            this.formData = { ..._.cloneDeep(transformed) };
+            this.cachedFormData = { ..._.cloneDeep(transformed) };
+          });
       }
     },
     methods: {
+      generateBase64(url) {
+        return fetch(url)
+          .then((response) => response.blob())
+          .then((blob) => {
+            return new Promise((resolve, reject) => {
+              const reader = new FileReader();
+
+              reader.onload = () => {
+                resolve(reader.result);
+              };
+
+              reader.onerror = reject;
+              reader.readAsDataURL(blob);
+            })
+          });
+      },
+
+
+
+      storeDraft() {
+        this.$ls.set('researchDraft', this.formData, 1000 * 60 * 60);
+      },
+      readDraft() {},
+      clearDraft() {},
+
       verifyPermlink() {
-        researchService
+        return researchService
           .checkResearchExistenceByPermlink(
-            this.formData.research.researchGroup.external_id,
-            this.research.title
+            this.formData.researchGroup,
+            this.formData.title
           )
           .then((exists) => {
             this.isPermlinkVerifyed = !exists;
-            if (this.isPermlinkVerifyed) {
-              this.$emit('incStep');
-            }
+            return exists;
           })
           .catch(() => {
             this.isPermlinkVerifyed = false;
           });
       },
 
-      createResearch(valid) {
-        if (!valid) return;
+      goToResearch(research) {
+        if (research) { // if not proposal
+          this.$router.push({
+            name: 'research.details',
+            params: {
+              researchExternalId: research.external_id
+            }
+          });
+        } else {
+          this.$router.push({ name: 'ResearchFeed' });
+        }
+      },
 
-        const isProposal = this.formData.research.researchGroup !== this.userGroup.external_id;
-        const researchData = this.formData.research;
-        const offchainMeta = {
-          ...this.formData.offchainMeta,
+      createResearch(exist) {
+        if (exist) return false;
+
+        const researchRef = {
+          ...this.formData.researchRef,
           ...{
-            attributes: []
+            attributes: compactResearchAttributes(this.formData.researchRef.attributes)
           }
         };
 
-        researchService.createResearchViaOffchain(
+        return researchService.createResearchViaOffchain(
           this.$currentUser.privKey,
-          isProposal,
-          researchData,
-          offchainMeta
+          this.isProposal,
+          this.formData,
+          researchRef
         )
           .then(({ rm }) => {
-            this.isLoading = false;
-            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`);
+            this.$notifier.showSuccess(`Project "${this.formData.title}" has been created successfully`);
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
-            if (research) { // if not proposal
-              this.$router.push({
-                name: 'research.details',
-                params: {
-                  researchExternalId: research.external_id
-                }
-              });
-            } else {
-              this.$router.push({ name: 'ResearchFeed' });
-            }
+            this.goToResearch(research);
           })
           .catch((err) => {
             console.error(err);
-            this.isLoading = false;
             this.$notifier.showError('An error occurred while creating project, please try again later');
           });
+      },
+
+      updateResearch(exist) {
+        if (this.cachedFormData.title !== this.formData.title) {
+          this.isPermlinkVerifyed = !exist;
+        } else {
+          this.isPermlinkVerifyed = true;
+        }
+
+        if (!exist) return false;
+
+        const researchRef = {
+          ...this.formData.researchRef,
+          ...{
+            attributes: compactResearchAttributes(this.formData.researchRef.attributes)
+          }
+        };
+
+        const updateResearch = researchService.updateResearchViaOffchain(
+          this.$currentUser.privKey,
+          this.isProposal,
+          this.formData
+        );
+
+        const updateResearchRef = researchService.updateResearchOffchainMeta(
+          this.formData.externalId,
+          researchRef
+        );
+
+        const updateResearchImage = '';
+
+        return Promise.all([
+          updateResearch,
+          updateResearchRef
+        ])
+          .then(() => {
+            this.$notifier.showSuccess('Info has been change successfully!');
+            this.goToResearch(true);
+          })
+          .catch((err) => {
+            this.$notifier.showError('An error occurred during change info');
+            console.error(err);
+          });
+      },
+
+      onSubmit(valid) {
+        if (valid) {
+          this.processing = true;
+
+          this.verifyPermlink()
+            .then((exist) => {
+              return this.$route.params.researchExternalId
+                ? this.updateResearch(exist)
+                : this.createResearch(exist);
+            })
+            .finally(() => {
+              this.processing = false;
+            });
+        }
       }
     }
   };

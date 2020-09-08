@@ -370,6 +370,7 @@
           num: index + 1
         }));
       },
+
       updateResearch() {
         researchService.checkResearchExistenceByPermlink(this.research.research_group.external_id, this.title)
           .then((exists) => {
