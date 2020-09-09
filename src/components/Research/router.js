@@ -1,4 +1,7 @@
 import Research from '@/components/Research/Research';
+import ResearchDetails from '@/components/Research/ResearchDetails/ResearchDetails';
+import ResearchExpertise from '@/components/Research/ResearchExpertise/ResearchExpertise';
+import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
 
 export const researchRouting = [{
   path: '/p',
@@ -8,9 +11,7 @@ export const researchRouting = [{
     {
       name: 'research.create',
       path: 'create',
-      component: {
-        template: '<div>create</div>'
-      }
+      component: ResearchEdit
     },
 
     {
@@ -22,16 +23,17 @@ export const researchRouting = [{
         {
           name: 'research.details',
           path: '',
-          component: {
-            template: '<div>details</div>'
-          },
+          component: ResearchDetails
         },
         {
-          name: 'research.expetise',
-          path: 'expetise',
-          component: {
-            template: '<div>expetise</div>'
-          },
+          name: 'research.expertise',
+          path: 'expertise',
+          component: ResearchExpertise
+        },
+        {
+          name: 'research.edit',
+          path: 'edit',
+          component: ResearchEdit
         }
       ]
     },

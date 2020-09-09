@@ -20,7 +20,7 @@
             v-slot:default="{ active, toggle }"
           >
             <d-timeline-item
-              :dot-size="active ? 24 : 18"
+              :dot-size="active ? 24 : 16"
               :dot-top="active ? 2 : 6"
               :dot-color="colors[index]"
               :top-line-color="colors[index]"
@@ -28,11 +28,6 @@
               :bottom-line-color="`linear-gradient(to bottom, ${colors[index]}, ${colors[index + 1]})`"
               @click:dot="toggle"
             >
-
-              <template #dot>
-                <div />
-              </template>
-
               <div class="text-body-2 font-weight-medium text-uppercase">
                 {{ item.date }}
               </div>
@@ -55,33 +50,39 @@
 <script>
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import { commonRead } from '@/components/Attributes/mixins';
   import moment from 'moment';
+  import { mapGetters } from 'vuex';
   import { chartGradient } from '@/plugins/charts';
 
   export default {
-    name: 'AttributesRoadmapRead',
+    name: 'ResearchDetailsMilestones',
 
     components: {
       DTimelineItem,
       DTimeline
     },
 
-    mixins: [commonRead],
-
     data() {
       return {
         activeMs: undefined
-      };
+      }
     },
 
     computed: {
+      ...mapGetters({
+        research: 'research/data'
+      }),
+
+      milestones() {
+        return this.$where(this.research.researchRef.attributes, { researchAttributeId: '5f4e094fefb3cb06c5d6a5bf' })[0].value;
+      },
+
       colors() {
-        return chartGradient(this.roadmap.length + 1);
+        return chartGradient(this.milestones.length + 1);
       },
 
       roadmap() {
-        const roadmap = this.internalValue.map((milestone, i) => ({
+        const roadmap = this.milestones.map((milestone, i) => ({
           id: i + 1,
           date: moment
             .utc(milestone.eta)

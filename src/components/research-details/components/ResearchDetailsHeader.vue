@@ -14,6 +14,7 @@
           </v-icon>
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
         </div>
+
         <div v-if="isResearchGroupMember" class="pt-4">
           <v-btn
             class="ma-0 pa-0"
@@ -31,6 +32,7 @@
             Edit
           </v-btn>
         </div>
+
         <toggle-text class="py-4" :text="research.abstract" />
       </v-col>
       <v-col v-if="researchRef.videoSrc" cols="auto" class="ml-auto">

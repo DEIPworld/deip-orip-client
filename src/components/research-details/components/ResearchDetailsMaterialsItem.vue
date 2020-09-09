@@ -10,6 +10,8 @@
         <v-col cols="2" class="text-capitalize bold">
           {{ getResearchContentType(content.content_type).text }}
         </v-col>
+
+
         <v-col cols="8" class="bold">
           <router-link
             v-if="isDetailsAvailable"
@@ -27,6 +29,8 @@
           </router-link>
           <span v-else class="grey--text">{{ content.title }}</span>
         </v-col>
+
+
         <v-col cols="2">
           <div class="d-flex justify-space-between px-2">
             <div v-if="isDetailsAvailable">
@@ -55,6 +59,8 @@
                 <span>Browse references</span>
               </v-tooltip>
             </div>
+
+
             <div v-if="hasReviews(content)" class="align-self-center">
               <v-icon size="14px">
                 chat_bubble
@@ -67,11 +73,16 @@
         </v-col>
       </v-row>
     </v-expansion-panel-header>
+
+
     <v-expansion-panel-content>
       <div class="ml-6 py-2">
         <div class="grey--text">
           {{ createContentAuthorsString(content.authors) }}
         </div>
+
+
+
         <div>
           <span
             v-for="eci of getContentEciList(content)"
@@ -82,6 +93,8 @@
             <span class="mr-6 bold">{{ eci.value }}</span>
           </span>
         </div>
+
+
         <div class="mt-2">
           <v-icon size="18px">
             event
@@ -145,6 +158,11 @@
           .map((m) => this.$options.filters.fullname(m))
           .join('  ·  ');
       },
+
+
+
+
+
       hasNegativeReviews(content) {
         return content.reviews.some((r) => !r.is_positive);
       },
@@ -157,6 +175,7 @@
           0
         );
       },
+
       hasReviews(content) {
         return content.reviews.length;
       },
@@ -169,6 +188,3 @@
     }
   };
 </script>
-
-<style scoped>
-</style>

@@ -2,6 +2,7 @@
   <v-text-field
     v-model="internalValue"
     :label="internalAttribute.title"
+    hide-details="auto"
     outlined
   />
 </template>

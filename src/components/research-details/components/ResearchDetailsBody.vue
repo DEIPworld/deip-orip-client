@@ -1,13 +1,17 @@
 <template>
   <v-sheet>
+    {{research.external_id}}
     <research-details-fundraising />
     <research-details-investors />
+
     <research-timeline :timeline="timeline" />
     <research-details-materials :is-details-available="true" />
 
     <div v-if="isResearchGroupMember && !research.is_finished">
       <research-details-draft-list />
+
       <upload-research-content-file-dialog @onFinish="newContentUploaded" />
+
       <v-btn
         :loading="isCreatingDraft"
         :disabled="isCreatingDraft"

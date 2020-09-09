@@ -5,6 +5,7 @@
       v-model="internalValue"
       :label="internalAttribute.title"
       :items="internalAttribute.valueOptions"
+      hide-details="auto"
       item-text="title"
       item-value="value"
       outlined
@@ -51,7 +52,6 @@
 
                 style="width:100%"
               >
-                <!-- :class="internalValue.includes(`${item._id}:${step.value}`) ? 'transparent' : 'grey lighten-4'"-->
                 <v-avatar left color="primary" class="white--text">
                   {{ i + 1 }}
                 </v-avatar>
