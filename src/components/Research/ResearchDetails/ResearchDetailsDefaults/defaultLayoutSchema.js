@@ -9,6 +9,21 @@ export const defaultLayoutSchema = [
   }
 ];
 
+const schema = [
+  { component: 'ResearchHeader' },
+  {
+    component: 'LayoutSection',
+    children: [
+      { component: 'ResearchMainAttrs' },
+      { component: 'ResearchContents' },
+      { component: 'ResearchReviews' },
+      {
+        component: 'LayoutSectionSidebar',
+        children: []
+      }
+    ]
+  }
+];
 
 // EXPANDED EXAMPLE
 
