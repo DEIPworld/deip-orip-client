@@ -1,8 +1,24 @@
 import crc32 from 'crc/crc32';
+import dotProp from 'dot-prop';
 
-export const componentStoreFactory = (storeModule) => ({
+export const registerStore = {
+  methods: {
+    registerStoreModule(module, name) {
+      if (!(this.$store && this.$store.state && this.$store.state[name])) {
+        this.$store.registerModule(name, module);
+      }
+    }
+  }
+};
+
+export const componentStoreFactory = (storeModule, hashFromProp) => ({
+  mixins: [registerStore],
   data() {
-    const storeModuleHash = crc32(JSON.stringify(this.$options.propsData)).toString(32);
+    const hashProp = !hashFromProp
+      ? this.$options.propsData
+      : dotProp(this, hashFromProp, this.$options.propsData);
+
+    const storeModuleHash = crc32(JSON.stringify(hashProp)).toString(32);
     const storeNS = `${this.$options.name}-${storeModuleHash}`;
 
     return {
@@ -10,26 +26,13 @@ export const componentStoreFactory = (storeModule) => ({
     };
   },
   created() {
-    this.registerStoreModule(storeModule);
-  },
-  methods: {
-    registerStoreModule(module) {
-      if (!(this.$store && this.$store.state && this.$store.state[this.storeNS])) {
-        this.$store.registerModule(this.storeNS, module);
-      }
-    }
+    this.registerStoreModule(storeModule, this.storeNS);
   }
 });
 
-export const componentStoreFactoryOne = (storeModule, name) => ({
+export const componentStoreFactoryOnce = (storeModule, name) => ({
+  mixins: [registerStore],
   created() {
-    this.registerStoreModule(storeModule);
-  },
-  methods: {
-    registerStoreModule(module) {
-      if (!(this.$store && this.$store.state && this.$store.state[name])) {
-        this.$store.registerModule(name, module);
-      }
-    }
+    this.registerStoreModule(storeModule, name || this.$options.name);
   }
 });

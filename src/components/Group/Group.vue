@@ -3,11 +3,11 @@
 </template>
 
 <script>
-  import { componentStoreFactoryOne } from '@/mixins/registerStore';
+  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { researchStore } from '@/components/Research/store';
 
   export default {
     name: 'Research',
-    mixins: [componentStoreFactoryOne(researchStore, 'group')]
+    mixins: [componentStoreFactoryOnce(researchStore, 'group')]
   };
 </script>
