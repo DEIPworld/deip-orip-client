@@ -53,6 +53,13 @@ const ATTR_TYPES_LIST = {
   [ATTR_TYPES.PARTNERS]: { value: ATTR_TYPES.PARTNERS, text: 'Partners', system: true },
 };
 
+const ATTR_AREAS = {
+  MAIN: 'main',
+  SIDEBAR: 'sidebar',
+  HEADER: 'header',
+  CARD: 'card'
+};
+
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
@@ -68,6 +75,8 @@ export {
 
   ATTR_TYPES,
   ATTR_TYPES_LIST,
+
+  ATTR_AREAS,
 
   ECI_STAT_PERIOD_STEP_TYPE
 };

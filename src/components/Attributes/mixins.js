@@ -3,7 +3,7 @@ import AttributesCommonEditOpts
   from '@/components/Attributes/AttributesCommon/AttributesCommonEditOpts';
 import AttributesCommonEditMeta
   from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
-import { ATTR_TYPES } from '@/variables';
+import { ATTR_TYPES, ATTR_AREAS } from '@/variables';
 
 export const defaultAttributeModel = () => ({
   isVisible: true,
@@ -11,7 +11,9 @@ export const defaultAttributeModel = () => ({
   shortTitle: '',
   description: '',
   // defaultValue: null,
-  valueOptions: []
+  valueOptions: [],
+  areas: [ATTR_AREAS.MAIN],
+  order: 0
 });
 
 const PROPS = {
