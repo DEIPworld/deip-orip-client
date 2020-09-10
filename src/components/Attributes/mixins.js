@@ -12,6 +12,8 @@ export const defaultAttributeModel = () => ({
   description: '',
   // defaultValue: null,
   valueOptions: [],
+  isFilterable: false,
+  isEditable: true,
   areas: [ATTR_AREAS.MAIN],
   order: 0
 });
