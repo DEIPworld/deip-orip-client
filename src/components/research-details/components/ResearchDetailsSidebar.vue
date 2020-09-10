@@ -142,12 +142,15 @@
     </d-block>
 
     <d-block widget separated>
+<!--      <pre>-->
+<!--        {{ $where(researchRef.extendedAttributes, { attribute: { '!type': ['partners', 'roadmap'] } }) }}-->
+<!--      </pre>-->
 
       <attributes-read
-        v-for="(attribute, index) in researchRef.attributes"
+        v-for="(attribute, index) in $where(researchRef.extendedAttributes, { '!value': null, attribute: { '!type': ['partners', 'roadmap'] } })"
         :key="`${index}-attr`"
-        :value="attribute.value"
-        :attribute="attribute.researchAttributeId"
+        :value="attribute.value.value"
+        :attribute="attribute.attribute._id"
       />
 
     </d-block>
@@ -171,85 +174,85 @@
       <research-partners is-read-only :partners="researchRef.partners" />
     </d-block>
 
-    <d-block v-if="contentList.length" widget separated title="Expert Review">
-      <v-dialog
-        v-model="requestExpertReviewDialog.isShown"
-        persistent
-        max-width="600px"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            block
-            color="primary"
-            dark
-            class="mt-4"
-            v-on="on"
-          >
-            Request Review
-          </v-btn>
-        </template>
+<!--    <d-block v-if="contentList.length" widget separated title="Expert Review">-->
+<!--      <v-dialog-->
+<!--        v-model="requestExpertReviewDialog.isShown"-->
+<!--        persistent-->
+<!--        max-width="600px"-->
+<!--      >-->
+<!--        <template v-slot:activator="{ on }">-->
+<!--          <v-btn-->
+<!--            block-->
+<!--            color="primary"-->
+<!--            dark-->
+<!--            class="mt-4"-->
+<!--            v-on="on"-->
+<!--          >-->
+<!--            Request Review-->
+<!--          </v-btn>-->
+<!--        </template>-->
 
-        <v-card class="pa-6">
-          <v-card-title>
-            <div class="text-h5">
-              Request review from an Expert
-            </div>
-            <div class="right-top-angle">
-              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
-                <v-icon color="black">
-                  close
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <v-select
-              v-model="selectedContentId"
-              class="mt-4"
-              :menu-props="{maxWidth:500}"
-              label="Select a content to request review"
-              item-text="title"
-              outlined
-              item-value="id"
-              :disabled="isRequestingReview"
-              :items="contentListToReview"
-            />
-            <user-autocomplete-picker
-              label="Find an expert to request a review"
-              :users="experts"
-              :is-disabled="!isSelectedContentId"
-              :display-limit="6"
-              @onSelectUser="selectExpert"
-            />
-          </v-card-text>
-          <v-card-actions class="px-6">
-            <v-row>
-              <v-col class="py-2" cols="12">
-                <v-btn
-                  :loading="isRequestingReview"
-                  :disabled="isRequestingReviewDisabled"
-                  block
-                  color="primary"
-                  @click="requestReview()"
-                >
-                  Request
-                </v-btn>
-              </v-col>
-              <v-col class="py-2" cols="12">
-                <v-btn
-                  color="primary"
-                  text
-                  block
-                  @click="requestExpertReviewDialog.isShown = false"
-                >
-                  Cancel
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </d-block>
+<!--        <v-card class="pa-6">-->
+<!--          <v-card-title>-->
+<!--            <div class="text-h5">-->
+<!--              Request review from an Expert-->
+<!--            </div>-->
+<!--            <div class="right-top-angle">-->
+<!--              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">-->
+<!--                <v-icon color="black">-->
+<!--                  close-->
+<!--                </v-icon>-->
+<!--              </v-btn>-->
+<!--            </div>-->
+<!--          </v-card-title>-->
+<!--          <v-card-text>-->
+<!--            <v-select-->
+<!--              v-model="selectedContentId"-->
+<!--              class="mt-4"-->
+<!--              :menu-props="{maxWidth:500}"-->
+<!--              label="Select a content to request review"-->
+<!--              item-text="title"-->
+<!--              outlined-->
+<!--              item-value="id"-->
+<!--              :disabled="isRequestingReview"-->
+<!--              :items="contentListToReview"-->
+<!--            />-->
+<!--            <user-autocomplete-picker-->
+<!--              label="Find an expert to request a review"-->
+<!--              :users="experts"-->
+<!--              :is-disabled="!isSelectedContentId"-->
+<!--              :display-limit="6"-->
+<!--              @onSelectUser="selectExpert"-->
+<!--            />-->
+<!--          </v-card-text>-->
+<!--          <v-card-actions class="px-6">-->
+<!--            <v-row>-->
+<!--              <v-col class="py-2" cols="12">-->
+<!--                <v-btn-->
+<!--                  :loading="isRequestingReview"-->
+<!--                  :disabled="isRequestingReviewDisabled"-->
+<!--                  block-->
+<!--                  color="primary"-->
+<!--                  @click="requestReview()"-->
+<!--                >-->
+<!--                  Request-->
+<!--                </v-btn>-->
+<!--              </v-col>-->
+<!--              <v-col class="py-2" cols="12">-->
+<!--                <v-btn-->
+<!--                  color="primary"-->
+<!--                  text-->
+<!--                  block-->
+<!--                  @click="requestExpertReviewDialog.isShown = false"-->
+<!--                >-->
+<!--                  Cancel-->
+<!--                </v-btn>-->
+<!--              </v-col>-->
+<!--            </v-row>-->
+<!--          </v-card-actions>-->
+<!--        </v-card>-->
+<!--      </v-dialog>-->
+<!--    </d-block>-->
   </div>
 </template>
 

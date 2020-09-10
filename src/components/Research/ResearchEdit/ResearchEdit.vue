@@ -2,14 +2,7 @@
   <d-layout-full-screen>
     <d-form :disabled="processing" @submit="onSubmit">
 
-<!--      <v-image-input-->
-<!--        v-model="formData.image"-->
-<!--        :image-quality="0.85"-->
-<!--        clearable-->
-<!--        image-format="jpeg"-->
-<!--      />-->
-
-      {{formData.image}}
+      <d-input-image :value="formData.image" :aspect-ratio="4" />
 
       <d-stack :gap="32">
         <d-block title="Add title and description">
@@ -94,9 +87,10 @@
 </template>
 
 <script>
-  import VImageInput from 'vuetify-image-input';
-  import DStack from '@/components/Deipify/DStack/DStack';
   import { ResearchService } from '@deip/research-service';
+  import { HttpService } from '@deip/http-service'
+
+  import DStack from '@/components/Deipify/DStack/DStack';
   import { maxDescriptionLength, maxTitleLength } from '@/variables';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import AttributesSet from '@/components/Attributes/AttributesSet';
@@ -113,20 +107,25 @@
     compareModels
   } from '@/utils/helpers';
 
+  import DInputImage from '@/components/Deipify/DInput/DInputImage';
+  import { componentStoreFactory } from '@/mixins/registerStore';
+
   const researchService = ResearchService.getInstance();
+  const httpService = HttpService.getInstance();
 
   export default {
     name: 'ResearchEdit',
     components: {
+      DInputImage,
       DForm,
       DLayoutFullScreen,
       AttributesGroupSet,
       AttributesDisciplinesSet,
       AttributesSet,
       DBlock,
-      DStack,
-      VImageInput
+      DStack
     },
+    mixins: [componentStoreFactory({}, '$route.props.researchExternalId')],
     props: {
       preset: {
         type: Object,
@@ -178,7 +177,7 @@
 
       isChanged() {
         return !compareModels(this.cachedFormData, this.formData);
-      },
+      }
     },
     watch: {
       formData: {
@@ -204,7 +203,7 @@
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
 
-                // image: this.$options.filters.researchBackgroundSrc(clone.externalId),
+                image: this.$options.filters.researchBackgroundSrc(clone.externalId),
 
                 isPrivate: !this.isPublic,
                 reviewShare: undefined,
@@ -213,36 +212,12 @@
               }
             };
 
-            this.generateBase64(this.$options.filters.researchBackgroundSrc(clone.externalId))
-            .then((res) => {
-              console.log(res);
-            })
-
             this.formData = { ..._.cloneDeep(transformed) };
             this.cachedFormData = { ..._.cloneDeep(transformed) };
           });
       }
     },
     methods: {
-      generateBase64(url) {
-        return fetch(url)
-          .then((response) => response.blob())
-          .then((blob) => {
-            return new Promise((resolve, reject) => {
-              const reader = new FileReader();
-
-              reader.onload = () => {
-                resolve(reader.result);
-              };
-
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            })
-          });
-      },
-
-
-
       storeDraft() {
         this.$ls.set('researchDraft', this.formData, 1000 * 60 * 60);
       },
@@ -306,6 +281,35 @@
           });
       },
 
+      updateResearchData() {
+        return researchService.updateResearchViaOffchain(
+          this.$currentUser.privKey,
+          this.isProposal,
+          this.formData
+        );
+      },
+
+      updateResearchRef() {
+        return researchService.updateResearchOffchainMeta(
+          this.formData.externalId,
+          {
+            ...this.formData.researchRef,
+            ...{
+              attributes: compactResearchAttributes(this.formData.researchRef.attributes)
+            }
+          }
+        );
+      },
+
+      updateResearchImage() {
+        return httpService.post(
+          `${this.$env.DEIP_SERVER_URL}/api/research/background`,
+          {
+            'research-background': ''
+          }
+        );
+      },
+
       updateResearch(exist) {
         if (this.cachedFormData.title !== this.formData.title) {
           this.isPermlinkVerifyed = !exist;
@@ -315,29 +319,10 @@
 
         if (!exist) return false;
 
-        const researchRef = {
-          ...this.formData.researchRef,
-          ...{
-            attributes: compactResearchAttributes(this.formData.researchRef.attributes)
-          }
-        };
-
-        const updateResearch = researchService.updateResearchViaOffchain(
-          this.$currentUser.privKey,
-          this.isProposal,
-          this.formData
-        );
-
-        const updateResearchRef = researchService.updateResearchOffchainMeta(
-          this.formData.externalId,
-          researchRef
-        );
-
-        const updateResearchImage = '';
-
         return Promise.all([
-          updateResearch,
-          updateResearchRef
+          this.updateResearch(),
+          this.updateResearchRef(),
+          this.updateResearchImage()
         ])
           .then(() => {
             this.$notifier.showSuccess('Info has been change successfully!');
@@ -354,11 +339,9 @@
           this.processing = true;
 
           this.verifyPermlink()
-            .then((exist) => {
-              return this.$route.params.researchExternalId
-                ? this.updateResearch(exist)
-                : this.createResearch(exist);
-            })
+            .then((exist) => (this.$route.params.researchExternalId
+              ? this.updateResearch(exist)
+              : this.createResearch(exist)))
             .finally(() => {
               this.processing = false;
             });

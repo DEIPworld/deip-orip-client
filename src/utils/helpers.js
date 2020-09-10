@@ -22,3 +22,18 @@ export const camelizeObjectKeys = (obj) => {
 };
 
 export const compareModels = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+export const toBase64 = (url) => {
+  return fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    }));
+};
