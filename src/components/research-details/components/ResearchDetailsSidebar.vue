@@ -242,7 +242,6 @@
 <!--        </v-card>-->
 <!--      </v-dialog>-->
 <!--    </d-block>-->
->>>>>>> feature/new-forms
   </div>
 </template>
 
