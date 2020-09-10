@@ -133,8 +133,8 @@
       openActionDialog(type, researchAttributeId) {
         const types = {
           publish: {
-            title: 'Publish criterion?',
-            description: `Criterion will be set for each project and will appear on:
+            title: 'Publish attribute?',
+            description: `Attribute will be set for each project and will appear on:
               - project page,
               - project application form,
               - explore page.
@@ -144,8 +144,8 @@
 
           },
           unpublish: {
-            title: 'Unpublish criterion?',
-            description: `Criterion will be removed from:
+            title: 'Unpublish attribute?',
+            description: `Attribute will be removed from:
               - project page,
               - project application form,
               - explore page.
@@ -155,8 +155,8 @@
 
           },
           delete: {
-            title: 'Delete criterion?',
-            description: `Criterion will be deleted permanently and will be removed from:
+            title: 'Delete attribute?',
+            description: `Attribute will be deleted permanently and will be removed from:
               - project page,
               - project application form,
               - explore page.

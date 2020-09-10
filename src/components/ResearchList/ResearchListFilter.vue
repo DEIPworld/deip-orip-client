@@ -7,7 +7,6 @@
   >
     <template>
       <d-filter-term-disciplines v-model="filterModel.disciplines" />
-      <d-filter-term-categories v-model="filterModel.categories" />
       <d-filter-term-components v-model="filterModel.researchAttributes" />
       <d-filter-term-organizations v-model="filterModel.organizations" />
     </template>
@@ -26,8 +25,7 @@
   const defaultFilter = () => ({
     disciplines: [],
     organizations: [],
-    researchAttributes: {},
-    categories: []
+    researchAttributes: {}
   });
 
   export default {

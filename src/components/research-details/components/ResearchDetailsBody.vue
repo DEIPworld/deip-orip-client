@@ -1,6 +1,5 @@
 <template>
   <v-sheet>
-    {{research.external_id}}
     <research-details-fundraising />
     <research-details-investors />
 

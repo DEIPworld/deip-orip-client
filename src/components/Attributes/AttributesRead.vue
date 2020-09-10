@@ -11,6 +11,7 @@
   import AttributesTextRead from '@/components/Attributes/AttributesText/AttributesTextRead';
   import AttributesTextareaRead from '@/components/Attributes/AttributesTextarea/AttributesTextareaRead';
   import AttributesSelectRead from '@/components/Attributes/AttributesSelect/AttributesSelectRead';
+  import AttributesMultiSelectRead from '@/components/Attributes/AttributesMultiSelect/AttributesMultiSelectRead';
   import AttributesStepperRead from '@/components/Attributes/AttributesStepper/AttributesStepperRead';
   import AttributesVideoUrlRead from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlRead';
   import AttributesRoadmapRead from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapRead';
@@ -24,6 +25,7 @@
       AttributesTextRead,
       AttributesTextareaRead,
       AttributesSelectRead,
+      AttributesMultiSelectRead,
       AttributesStepperRead,
       AttributesVideoUrlRead,
       AttributesRoadmapRead,

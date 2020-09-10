@@ -22,7 +22,7 @@
             v-model="formData.isVisible"
             class="ma-0 pa-0"
             hide-details
-            label="Publish Criterion"
+            label="Publish Attribute"
           />
         </v-col>
         <v-spacer />
