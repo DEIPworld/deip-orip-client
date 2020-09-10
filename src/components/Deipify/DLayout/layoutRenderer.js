@@ -89,17 +89,19 @@ export const layoutRenderer = {
     },
 
     replaceFn(val) {
-      const propPattern = /{{\s*(.*?)\s*}}/gm;
+      const stringPattern = /{{\s*(.*?)\s*}}/gm;
+      const modelPattern = /^@([a-zA-Z0-9_.-]*)/;
 
       if (kindOf(val) === 'string') {
-        const matches = [...val.matchAll(propPattern)];
+        const stringMatches = [...val.matchAll(stringPattern)];
+        const modelMatches = val.match(modelPattern);
 
-        if (matches.length === 1 && matches[0][0] === matches[0].input) {
-          return getObjectValueByPath(this, matches[0][1]);
+        if (modelMatches && modelMatches.length) {
+          return getObjectValueByPath(this, modelMatches[1]);
         }
 
-        if (matches.length > 1) {
-          return val.replace(propPattern, (...args) => {
+        if (stringMatches && stringMatches.length) {
+          return val.replace(stringPattern, (...args) => {
             return getObjectValueByPath(this, args[1]);
           });
         }

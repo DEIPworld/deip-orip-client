@@ -3,8 +3,7 @@ export const defaultLayoutSchema = [
     is: 'research-details-header',
     data: {
       props: {
-        research: '{{research}}',
-        research2: '{{research}} ccc {{research2}}'
+        research: '@research'
       }
     }
   }
