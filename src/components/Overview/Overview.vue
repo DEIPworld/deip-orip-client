@@ -1,5 +1,5 @@
 <template>
-  <app-layout v-if="$ready">
+  <app-layout>
     <layout-section>
       <v-row>
         <v-col cols="4">
@@ -7,12 +7,21 @@
             title="Expertise contribution index value"
             subtitle="Updated today"
           >
-            <d-chart-pie
-              donut
-              :data="eciValueDataTable"
-              :options="{legend: 'none'}"
-              @select="goToParticipants"
-            />
+            <v-skeleton-loader
+              :loading="!$ready"
+              min-height="232px"
+              type="pie-chart"
+              :types="{
+                'pie-chart': 'avatar',
+              }"
+            >
+              <d-chart-pie
+                donut
+                :data="eciValueDataTable"
+                :options="{legend: 'none'}"
+                @select="goToParticipants"
+              />
+            </v-skeleton-loader>
           </d-block>
         </v-col>
 
@@ -21,18 +30,24 @@
             title="Expertise contribution index overview"
             subtitle="Updated today"
           >
-            <d-chart-area
-              :data="eciOverviewDataTable"
-              :options="{
-                legend: 'none',
-                vAxis: {
-                  format: '##%'
-                },
-                hAxis: {
-                  showTextEvery: parseInt(eciOverviewDataTable.length / 6)
-                }
-              }"
-            />
+            <v-skeleton-loader
+              :loading="!$ready"
+              min-height="232px"
+              type="image"
+            >
+              <d-chart-area
+                :data="eciOverviewDataTable"
+                :options="{
+                  legend: 'none',
+                  vAxis: {
+                    format: '##%'
+                  },
+                  hAxis: {
+                    showTextEvery: parseInt(eciOverviewDataTable.length / 6)
+                  }
+                }"
+              />
+            </v-skeleton-loader>
           </d-block>
         </v-col>
 
@@ -72,19 +87,28 @@
           />
         </d-filter-block>
 
-        <d-chart-pie
-          :data="distributionChartData"
-          :options="{
-            legend: {
-              position: 'right',
-              alignment:'center'
-            },
-            chartArea: {
-              top: 0
-            }
+        <v-skeleton-loader
+          :loading="!$ready"
+          min-height="232px"
+          type="pie-chart"
+          :types="{
+            'pie-chart': 'avatar',
           }"
-          style="max-width: 400px;"
-        />
+        >
+          <d-chart-pie
+            :data="distributionChartData"
+            :options="{
+              legend: {
+                position: 'right',
+                alignment:'center'
+              },
+              chartArea: {
+                top: 0
+              }
+            }"
+            style="max-width: 400px;"
+          />
+        </v-skeleton-loader>
       </d-block>
 
       <eci-history />

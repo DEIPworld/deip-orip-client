@@ -304,17 +304,7 @@ const router = new Router({
   {
     path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
     name: 'ResearchContentDetails',
-    component: preliminaryDataLoader(ResearchContentDetails, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          content_permlink: decodeURIComponent(to.params.content_permlink),
-          ref: to.query.ref
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
+    component: ResearchContentDetails
   },
 
   {
