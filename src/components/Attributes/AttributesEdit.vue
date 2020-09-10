@@ -9,6 +9,7 @@
   import AttributesTextEdit from '@/components/Attributes/AttributesText/AttributesTextEdit';
   import AttributesTextareaEdit from '@/components/Attributes/AttributesTextarea/AttributesTextareaEdit';
   import AttributesSelectEdit from '@/components/Attributes/AttributesSelect/AttributesSelectEdit';
+  import AttributesMultiSelectEdit from '@/components/Attributes/AttributesMultiSelect/AttributesMultiSelectEdit';
   import AttributesStepperEdit from '@/components/Attributes/AttributesStepper/AttributesStepperEdit';
   import AttributesVideoUrlEdit from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlEdit';
   import AttributesRoadmapEdit from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapEdit';
@@ -22,6 +23,7 @@
       AttributesTextEdit,
       AttributesTextareaEdit,
       AttributesSelectEdit,
+      AttributesMultiSelectEdit,
       AttributesStepperEdit,
       AttributesVideoUrlEdit,
       AttributesRoadmapEdit,

@@ -14,6 +14,7 @@
   import AttributesTextSet from '@/components/Attributes/AttributesText/AttributesTextSet';
   import AttributesTextareaSet from '@/components/Attributes/AttributesTextarea/AttributesTextareaSet';
   import AttributesSelectSet from '@/components/Attributes/AttributesSelect/AttributesSelectSet';
+  import AttributesMultiSelectSet from '@/components/Attributes/AttributesMultiSelect/AttributesMultiSelectSet';
   import AttributesStepperSet from '@/components/Attributes/AttributesStepper/AttributesStepperSet';
   import AttributesVideoUrlSet from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlSet';
   import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
@@ -27,6 +28,7 @@
       AttributesTextSet,
       AttributesTextareaSet,
       AttributesSelectSet,
+      AttributesMultiSelectSet,
       AttributesStepperSet,
       AttributesVideoUrlSet,
       AttributesRoadmapSet,

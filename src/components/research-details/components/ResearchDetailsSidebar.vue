@@ -130,17 +130,6 @@
       />
     </d-block>
 
-    <d-block v-if="researchRef.tenantCategory && researchRef.tenantCategory.text" widget separated>
-      <div class="display-flex">
-        <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
-          <span class="white--text font-weight-medium">C</span>
-        </v-avatar>
-        <div class="align-self-center">
-          {{ researchRef.tenantCategory.text }}
-        </div>
-      </div>
-    </d-block>
-
     <d-block widget separated>
 <!--      <pre>-->
 <!--        {{ $where(researchRef.extendedAttributes, { attribute: { '!type': ['partners', 'roadmap'] } }) }}-->

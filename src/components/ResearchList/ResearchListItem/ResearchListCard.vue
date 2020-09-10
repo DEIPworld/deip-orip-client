@@ -33,13 +33,6 @@
         small
         class="mt-4"
       />
-
-      <div
-        v-if="research.researchRef && research.researchRef.tenantCategory && research.researchRef.tenantCategory.text"
-        class="text-caption mt-4"
-      >
-        {{ research.researchRef.tenantCategory.text }}
-      </div>
     </v-card-text>
 
     <v-divider />

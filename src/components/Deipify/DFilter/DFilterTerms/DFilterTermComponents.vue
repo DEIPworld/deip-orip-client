@@ -39,10 +39,7 @@
     created() {
       this.researchAttributes = this.$options.filters.where(
         this.tenant.profile.settings.researchAttributes,
-        {
-          isVisible: true,
-          type: 'stepper'
-        }
+        (attr) => attr.isFilterable && attr.isVisible
       );
     }
   };

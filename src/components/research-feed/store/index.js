@@ -68,16 +68,13 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchFeed({
-    state, dispatch, commit, rootGetters
-  }) {
+  loadResearchFeed({state, dispatch, commit, rootGetters}, { filter = {} }) {
     const { username } = rootGetters['auth/user'];
 
-    let fullResearchListing = [];
-    return researchService.getPublicResearchListing()
+    const fullResearchListing = [];
+    return researchService.getPublicResearchListing(filter)
       .then((listing) => {
-        fullResearchListing = listing
-          .map((item) => ({ ...item, isCollapsed: true }));
+        fullResearchListing.push(...listing.map((item) => ({ ...item, isCollapsed: true })));
 
         const researchReviewsLoad = Promise.all(listing
           .map((r) => deipRpc.api.getReviewsByResearchAsync(r.external_id)
@@ -121,6 +118,8 @@ const actions = {
       })
       .then((tokenSalesContributions) => {
         commit('SET_RESEARCH_FEED_TOKEN_SALES_CONTRIBUTIONS_LIST', [].concat.apply([], [].concat.apply([], tokenSalesContributions)));
+
+        return fullResearchListing;
       });
   }
 };

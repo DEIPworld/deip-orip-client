@@ -1,6 +1,6 @@
 <template>
   <div v-if="internalValue">
-<!--    {{ internalAttribute.title }}: {{ valueOption.title }}-->
+   {{ internalAttribute.title }}: {{ valueOption.title }}
   </div>
 </template>
 
