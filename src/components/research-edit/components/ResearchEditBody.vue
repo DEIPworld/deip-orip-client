@@ -60,7 +60,7 @@
         <attributes-set
           :key="`${index}-attr`"
           v-model="attributes[attribute._id]"
-          :attribute="attribute._id"
+          :attribute-id="attribute._id"
         />
       </template>
     </d-block>
@@ -89,7 +89,7 @@
           <img
             class="ma-0"
             style="width: 150px; height: 150px"
-            :src="$options.filters.researchBackgroundSrc(research.external_id, 300, 300)"
+            :src="research.external_id | researchBackgroundSrc(300, 300)"
           >
         </v-col>
         <v-col cols="9">
@@ -307,14 +307,14 @@
 
       updateResearchMetadata() {
         this.isRefSaving = true;
-        
+
         const attributes = Object.keys(this.attributes).map((a) => {
           return {
             researchAttributeId: a,
             value: this.attributes[a] || null
           }
         });
-        
+
         researchService.updateResearchOffchainMeta(this.research.external_id, {
           attributes: attributes
         })
@@ -335,7 +335,7 @@
           .finally(() => {
             this.isRefSaving = false;
           });
-      
+
       },
 
       updateBackgroundImage() {

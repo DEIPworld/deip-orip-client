@@ -2,13 +2,15 @@
   import { vSheetModify } from '@/mixins/vSheetModify';
 
   export default {
-    name: 'DLayoutSection',
+    name: 'DLayoutSectionMain',
     mixins: [vSheetModify],
     computed: {
       additionalClasses() {
         return {
-          'd-flex': true,
-          'align-stretch': true
+          'pa-6': true,
+          'pa-md-12': true,
+          'flex-grow-1': true,
+          'flex-shrink-1': true
         };
       }
     }

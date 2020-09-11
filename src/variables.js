@@ -35,10 +35,14 @@ const VIEW_TYPES = createEnum({
 const ATTR_TYPES = {
   TEXT: 'text',
   TEXTAREA: 'textarea',
-  STEPPER: 'stepper',
   SELECT: 'select',
+  SWITCH: 'switch',
+  CHECKBOX: 'checkbox',
   MULTI_SELECT: 'multi-select',
+
   VIDEO_URL: 'video-url',
+  STEPPER: 'stepper',
+
   ROADMAP: 'roadmap',
   PARTNERS: 'partners'
 };
@@ -46,9 +50,13 @@ const ATTR_TYPES_LIST = {
   [ATTR_TYPES.TEXT]: { value: ATTR_TYPES.TEXT, text: 'Text field' },
   [ATTR_TYPES.TEXTAREA]: { value: ATTR_TYPES.TEXTAREA, text: 'Text area' },
   [ATTR_TYPES.SELECT]: { value: ATTR_TYPES.SELECT, text: 'Dropdown select' },
-  [ATTR_TYPES.MULTI_SELECT]: { value: ATTR_TYPES.MULTI_SELECT, text: 'Dropdown multiple select' },
-  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' },
+  [ATTR_TYPES.SWITCH]: { value: ATTR_TYPES.SWITCH, text: 'Switch' },
+  [ATTR_TYPES.CHECKBOX]: { value: ATTR_TYPES.CHECKBOX, text: 'Checkbox' },
+  [ATTR_TYPES.MULTI_SELECT]: { value: ATTR_TYPES.MULTI_SELECT, text: 'Multiple select' },
+
   [ATTR_TYPES.VIDEO_URL]: { value: ATTR_TYPES.VIDEO_URL, text: 'Video URL' },
+  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' },
+
   [ATTR_TYPES.ROADMAP]: { value: ATTR_TYPES.ROADMAP, text: 'Roadmap', system: true },
   [ATTR_TYPES.PARTNERS]: { value: ATTR_TYPES.PARTNERS, text: 'Partners', system: true },
 };

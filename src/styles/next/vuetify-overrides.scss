@@ -1,3 +1,10 @@
+.v-application {
+  .reset-height {
+    min-height: 0;
+    height: auto;
+  }
+}
+
 .v-main {
   transition: none !important;
 }

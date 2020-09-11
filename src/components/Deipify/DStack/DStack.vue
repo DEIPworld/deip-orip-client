@@ -1,10 +1,10 @@
 <script>
-  import { VSheet } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
+  import { vSheetModify } from '@/mixins/vSheetModify';
 
   export default {
     name: 'DStack',
-    mixins: [VSheet],
+    mixins: [vSheetModify],
     props: {
       gap: {
         type: [Number, String],
@@ -16,32 +16,18 @@
       }
     },
     computed: {
-      stacksStyles() {
+      additionalStyles() {
         return {
           '--d-stack-gap': convertToUnit(this.gap)
         };
       },
 
-      stackClasses() {
+      additionalClasses() {
         return {
           'd-stack': true,
           [`d-stack--${this.horizontal ? 'horizontal' : 'vertical'}`]: true
         };
       }
-    },
-    render(h) {
-      const data = {
-        class: {
-          ...this.classes,
-          ...this.stackClasses
-        },
-        style: {
-          ...this.styles,
-          ...this.stacksStyles
-        },
-        on: this.listeners$
-      };
-      return h(this.tag, this.setBackgroundColor(this.color, data), this.$slots.default);
     }
   };
 </script>

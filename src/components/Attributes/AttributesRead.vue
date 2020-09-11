@@ -2,7 +2,7 @@
   <component
     :is="componentType"
     v-model="internalValue"
-    :attribute="attribute"
+    :attribute-id="attributeId"
     :small="small"
   />
 </template>

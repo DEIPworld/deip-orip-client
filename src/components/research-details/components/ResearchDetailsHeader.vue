@@ -1,6 +1,6 @@
 <template>
   <layout-header
-    :background="$options.filters.researchBackgroundSrc(research.external_id)"
+    :background="research.external_id | researchBackgroundSrc"
     :max-width="researchRef.videoSrc ? '100%' : 800"
   >
     <v-row no-gutters>

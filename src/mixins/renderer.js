@@ -109,23 +109,36 @@ export const componentsRenderer = {
 
   methods: {
     getChildren(children = null, h) {
-      if (kindOf(children) === 'array') {
-        return children.map((n) => this.generateNode(n, h));
-      }
+      if (children) {
+        if (kindOf(children) === 'array') {
+          return children.map((n) => this.generateNode(n, h));
+        }
 
-      throw new Error('Children must be an Array');
+        throw new Error('Children must be an Array');
+      };
+
+      return null;
     },
 
     generateNode(node, h) {
       const data = {
         ...(node.props ? { props: node.props } : {}),
-        ...(node.class ? { class: node.class } : {})
+        ...(node.class ? { class: node.class } : {}),
+        ...(node.slot ? { slot: node.slot } : {})
       };
 
       const isStringNode = kindOf(node) === 'string';
 
       const component = isStringNode ? node : node.component;
-      const content = isStringNode ? null : this.getChildren(node.children, h);
+
+      let content = this.getChildren(node.children, h);
+
+      if (node.text) {
+        content = node.text;
+      }
+      if (isStringNode) {
+        content = null;
+      }
 
       return h(
         component,

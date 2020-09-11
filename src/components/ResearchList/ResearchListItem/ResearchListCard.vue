@@ -29,7 +29,7 @@
         v-for="(attribute, index) of research.researchRef.attributes"
         :key="`attr-${index}`"
         :value="attribute.value"
-        :attribute="attribute.researchAttributeId"
+        :attribute-id="attribute.researchAttributeId"
         small
         class="mt-4"
       />

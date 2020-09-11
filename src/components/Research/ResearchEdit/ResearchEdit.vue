@@ -38,7 +38,7 @@
               <attributes-set
                 :key="`${index}-attr`"
                 v-model="formData.researchRef.attributes[attr._id]"
-                :attribute="attr._id"
+                :attribute-id="attr._id"
               />
             </template>
           </d-stack>
@@ -50,7 +50,7 @@
           <attributes-set
             :key="`${index}-attr`"
             v-model="formData.researchRef.attributes[attr._id]"
-            :attribute="attr._id"
+            :attribute-id="attr._id"
           />
         </template>
 
@@ -202,7 +202,7 @@
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
-
+                // todo: check
                 image: this.$options.filters.researchBackgroundSrc(clone.externalId),
 
                 isPrivate: !this.isPublic,

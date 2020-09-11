@@ -1,6 +1,6 @@
 <template>
   <d-layout-header
-    :background="this.$options.filters.researchBackgroundSrc(research.external_id)"
+    :background="research.external_id | researchBackgroundSrc"
   >
     <div class="d-flex justify-space-between">
 

@@ -9,7 +9,7 @@
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { researchStore } from '@/components/Research/ResearchDetails/store';
-  import { defaultLayoutSchema } from '@/components/Research/ResearchDetails/ResearchDetailsDefaults/defaultLayoutSchema';
+  import { defaultResearchTemplateSchema } from '@/components/Research/ResearchDetails/ResearchDetailsDefaults/defaultLayoutSchema';
   import { mapGetters } from 'vuex';
   import ResearchDetailsRenderer from '@/components/Research/ResearchDetails/ResearchDetailsRenderer';
 
@@ -19,30 +19,20 @@
     mixins: [componentStoreFactoryOnce(researchStore)],
     data() {
       return {
-        defaultLayoutSchema
+        defaultResearchTemplateSchema
       };
     },
     computed: {
       ...mapGetters({
-        rawResearch: 'ResearchDetails/data'
+        research: 'ResearchDetails/data'
       }),
-
-      research() {
-        return {
-          ...this.rawResearch,
-          ...{
-            headerBackground: this.$options.filters.researchBackgroundSrc(this.rawResearch.external_id),
-            created_at: this.$options.filters.dateFormat(this.rawResearch.created_at, 'D MMM YYYY', true)
-          }
-        };
-      },
 
       isOwner() {
         return this.research.members.includes(this.$currentUserName);
       },
 
       layoutSchema() {
-        return defaultLayoutSchema;
+        return defaultResearchTemplateSchema;
       }
     },
     created() {

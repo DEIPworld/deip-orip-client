@@ -1,14 +1,28 @@
 <template>
   <div v-if="internalValue">
-   {{ internalAttribute.title }}: {{ valueOptions.map(v => v.title).join(', ') }}
+    <d-block small widget separated :title="internalAttribute.title">
+      <template v-for="(item, index) of valueOptions">
+        <router-link
+          class="link text--secondary text-caption"
+          :to="{
+            name: 'ResearchFeed'
+          }"
+        >
+          {{ item.title }}
+        </router-link>
+      </template>
+
+    </d-block>
   </div>
 </template>
 
 <script>
   import { commonRead } from '@/components/Attributes/mixins';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'AttributesMultiSelectRead',
+    components: { DBlock },
     mixins: [commonRead],
     computed: {
       valueOptions() {

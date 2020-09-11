@@ -4,6 +4,7 @@ import AttributesCommonEditOpts
 import AttributesCommonEditMeta
   from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
 import { ATTR_TYPES, ATTR_AREAS } from '@/variables';
+import { tenantAttributes } from '@/mixins/platformAttributes';
 
 export const defaultAttributeModel = () => ({
   isVisible: true,
@@ -31,7 +32,7 @@ const PROPS = {
         .indexOf(val) !== -1;
     }
   },
-  attribute: {
+  attributeId: {
     type: String,
     default: undefined
   },
@@ -52,28 +53,20 @@ export const resetModelOnCreate = {
   }
 };
 
-export const internalAttributes = {
-  computed: {
-    internalAttributes() {
-      return this.$store.getters['auth/tenant'].profile.settings.researchAttributes;
-    }
-  }
-};
-
 export const internalAttribute = {
   computed: {
     internalAttribute() {
-      return this.internalAttributes.find(({ _id }) => _id === this.attribute);
+      return this.tenantAttributes.find(({ _id }) => _id === this.attributeId);
     }
   }
 };
 
 export const internalType = {
-  mixins: [internalAttributes],
+  mixins: [tenantAttributes],
   computed: {
     internalType() {
-      return this.attribute
-        ? this.internalAttributes.find(({ _id }) => _id === this.attribute).type
+      return this.attributeId
+        ? this.tenantAttributes.find(({ _id }) => _id === this.attributeId).type
         : this.type;
     }
   }
@@ -84,7 +77,7 @@ export const commonAttribute = {
   props: {
     type: PROPS.type,
     small: PROPS.small,
-    attribute: PROPS.attribute,
+    attributeId: PROPS.attributeId,
     multiple: PROPS.multiple
   }
 };
@@ -98,23 +91,17 @@ export const commonEdit = {
 };
 
 export const commonRead = {
-  mixins: [Proxyable, internalAttributes, internalAttribute],
+  mixins: [Proxyable, tenantAttributes, internalAttribute],
   props: {
-    attribute: PROPS.attribute,
+    attributeId: PROPS.attributeId,
     small: PROPS.small
   }
 };
 
 export const commonSet = {
-  mixins: [Proxyable, internalAttributes, internalAttribute],
+  mixins: [Proxyable, tenantAttributes, internalAttribute],
   props: {
-    attribute: PROPS.attribute,
+    attributeId: PROPS.attributeId,
     multiple: PROPS.multiple
-  },
-  created() {
-    // console.log(this.internalValue[this.internalAttribute._id])
-    // // if(!this.internalValue[this.internalAttribute._id]) {
-    // //   this.$set(this.internalValue, this.internalAttribute._id, null)
-    // // }
   }
 };

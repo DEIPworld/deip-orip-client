@@ -3,12 +3,12 @@
     <portal to="sidebar">
       <investor-portfolio-inbox-left-sidebar />
     </portal>
-
-    <investor-portfolio-inbox />
-
-    <template #sidebar>
+    <d-layout-section-main>
+      <investor-portfolio-inbox />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <investor-portfolio-inbox-right-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
@@ -22,10 +22,14 @@
     from '@/components/investor-portfolio/components/InvestorPortfolioInboxRightSidebar';
   import InvestorPortfolioInbox from '@/components/investor-portfolio/components/InvestorPortfolioInbox';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'InvestorPortfolio',
     components: {
+      DLayoutSectionSidebar,
+      DLayoutSectionMain,
       DLayoutSection,
       InvestorPortfolioInbox,
       InvestorPortfolioInboxRightSidebar,

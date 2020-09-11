@@ -25,6 +25,7 @@
         v-for="(attribute, index) of research.researchRef.attributes"
         :key="`attr-${index}`"
         :value="attribute"
+        :attribute-id="attribute.researchAttributeId"
         small
       />
     </td>

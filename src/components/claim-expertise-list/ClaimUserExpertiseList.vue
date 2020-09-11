@@ -1,10 +1,11 @@
 <template>
   <d-layout-section>
-    <claim-user-expertise-list-body />
-
-    <template #sidebar>
+    <d-layout-section-main>
+      <claim-user-expertise-list-body />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <claim-user-expertise-list-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
@@ -12,10 +13,12 @@
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ClaimUserExpertiseList',
-    components: { DLayoutSection },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     created() {},
 
     methods: {}

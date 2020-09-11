@@ -23,50 +23,50 @@
     <d-layout-section>
 <!--      <research-details-milestones />-->
 
-      <d-stack :gap="32">
-        <attributes-read
-          v-for="(attribute, index) in research.researchRef.attributes"
-          :key="`${index}-attr`"
-          :value="attribute.value"
-          :attribute="attribute.researchAttributeId"
-        />
-      </d-stack>
+      <d-layout-section-main>
+        <d-stack :gap="32">
+          <attributes-read
+            v-for="(attribute, index) in research.researchRef.attributes"
+            :key="`${index}-attr`"
+            :value="attribute.value"
+            :attribute-id="attribute.researchAttributeId"
+          />
+        </d-stack>
 
-      <research-details-contents />
+        <research-details-contents />
 
-      <template v-if="research.members.includes($currentUserName) && !research.is_finished">
-        <research-details-contents
-          class="mt-6"
-          :drafts="true"
-          title="Research materials drafts"
-        />
+        <template v-if="research.members.includes($currentUserName) && !research.is_finished">
+          <research-details-contents
+            class="mt-6"
+            :drafts="true"
+            title="Research materials drafts"
+          />
 
-        <!-- TODO: need move -->
-        <upload-research-content-file-dialog class="mt-6" @onFinish="reloadContents()" />
+          <!-- TODO: need move -->
+          <upload-research-content-file-dialog class="mt-6" @onFinish="reloadContents()" />
 
-        <v-btn
-          :loading="isCreatingDraft"
-          :disabled="isCreatingDraft"
-          block
-          outlined
-          color="primary"
-          dark
-          class="mt-2"
-          @click="createDarDraft()"
-        >
-          Use Editor
-        </v-btn>
-      </template>
+          <v-btn
+            :loading="isCreatingDraft"
+            :disabled="isCreatingDraft"
+            block
+            outlined
+            color="primary"
+            dark
+            class="mt-2"
+            @click="createDarDraft()"
+          >
+            Use Editor
+          </v-btn>
+        </template>
 
-      <research-details-reviews />
-
-      <template #sidebar>
+        <research-details-reviews />
+      </d-layout-section-main>
+      <d-layout-section-sidebar #sidebar>
         <research-details-sidebar
           :research="research"
           :members="members"
         />
-      </template>
-
+      </d-layout-section-sidebar>
     </d-layout-section>
   </div>
 </template>
@@ -84,6 +84,8 @@
   import ResearchDetailsSidebar from '@/components/Research/ResearchDetails/ResearchDetailsSidebar';
   import AttributesRead from '@/components/Attributes/AttributesRead';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   const researchContentService = ResearchContentService.getInstance();
 
@@ -91,6 +93,8 @@
     name: 'ResearchDetailsTemp',
 
     components: {
+      DLayoutSectionSidebar,
+      DLayoutSectionMain,
       DStack,
       AttributesRead,
       ResearchDetailsSidebar,

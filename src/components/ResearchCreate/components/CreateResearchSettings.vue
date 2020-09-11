@@ -33,7 +33,7 @@
           <attributes-set
             :key="`${index}-attr`"
             v-model="research.attributes"
-            :attribute="attribute._id"
+            :attribute-id="attribute._id"
           />
         </template>
       </d-block>

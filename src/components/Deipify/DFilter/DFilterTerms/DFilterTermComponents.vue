@@ -4,7 +4,7 @@
       v-for="(attribute, index) of researchAttributes"
       :key="`${index}-attr`"
       v-model="internalValue[attribute._id]"
-      :attribute="attribute._id"
+      :attribute-id="attribute._id"
       :multiple="true"
     />
   </div>

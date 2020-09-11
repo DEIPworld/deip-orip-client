@@ -1,9 +1,13 @@
 <template>
-  <v-sheet class="d-flex">
-    <v-sheet class="d-flex flex-column align-center flex-shrink-0" :width="40" :min-height="40">
+
+  <v-list-item
+    class="pa-0 reset-height rounded overflow-hidden"
+    @click="$emit('click')"
+  >
+
+    <v-sheet class="d-flex align-self-stretch flex-column align-center flex-shrink-0" :width="40" :min-height="40">
       <div :style="topLineStyle" class="mb-1" />
       <v-avatar
-        :class="{'link': dotHover}"
         :size="dotSize"
         :color="dotColor"
         class="d-flex flex-shrink-0 flex-grow-0"
@@ -17,17 +21,20 @@
       </v-avatar>
       <div :style="bottomLineStyle" class="mt-1 flex-grow-1 flex-shrink-1" />
     </v-sheet>
-    <div class="spacer my-2 ml-4 align-self-center">
+
+    <v-list-item-content class="py-2 ml-2">
       <slot />
-    </div>
-    <div
-      v-if="$hasSlot('action')"
+    </v-list-item-content>
+
+    <v-list-item-action
       class="d-flex align-self-start align-center ml-4 my-2"
+      v-if="$hasSlot('action')"
       :style="{ height: ctrlHeight + 'px' }"
     >
       <slot name="action" />
-    </div>
-  </v-sheet>
+    </v-list-item-action>
+
+  </v-list-item>
 </template>
 
 <script>
@@ -45,10 +52,6 @@
       dotColor: {
         type: String,
         default: 'primary'
-      },
-      dotHover: {
-        type: Boolean,
-        default: false
       },
 
       ctrlHeight: {

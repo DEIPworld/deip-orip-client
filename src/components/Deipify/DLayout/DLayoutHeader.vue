@@ -4,9 +4,9 @@
     v-bind="headerProps"
   >
     <d-layout-section>
-
-      <slot />
-
+      <d-layout-section-main>
+        <slot />
+      </d-layout-section-main>
     </d-layout-section>
   </component>
 </template>
@@ -15,10 +15,12 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import { VImg, VSheet } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 
   export default {
     name: 'DLayoutHeader',
     components: {
+      DLayoutSectionMain,
       DLayoutSection,
       VImg,
       VSheet

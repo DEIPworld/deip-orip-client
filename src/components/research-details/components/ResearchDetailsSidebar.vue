@@ -139,7 +139,7 @@
         v-for="(attribute, index) in $where(researchRef.extendedAttributes, { '!value': null, attribute: { '!type': ['partners', 'roadmap'] } })"
         :key="`${index}-attr`"
         :value="attribute.value.value"
-        :attribute="attribute.attribute._id"
+        :attribute-id="attribute.attribute._id"
       />
 
     </d-block>

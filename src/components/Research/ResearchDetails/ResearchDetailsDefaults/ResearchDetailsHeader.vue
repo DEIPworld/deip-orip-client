@@ -1,15 +1,16 @@
 <template>
-  <d-layout-header v-if="Object.keys(research).length"
-    :background="research.headerBackground"
+  <d-layout-header
+    v-if="Object.keys(research).length"
+    :background="research.external_id | researchBackgroundSrc"
   >
     <div class="d-flex justify-space-between">
-      <v-sheet :max-width="800" color="transparent">
-        <div class="text-h4 mb-4">
+      <d-stack :max-width="800" color="transparent">
+        <div class="text-h4">
           {{ research.title }}
         </div>
 
-        <d-meta-item :meta="{icon: 'today'}" class="mb-4">
-          Created {{ research.created_at }}
+        <d-meta-item icon="today">
+          Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
         </d-meta-item>
 
         <d-truncate-more>
@@ -32,7 +33,7 @@
         >
           Edit
         </v-btn>
-      </v-sheet>
+      </d-stack>
 
       <iframe
         v-if="research.researchRef.videoSrc"
@@ -45,16 +46,16 @@
 </template>
 
 <script>
-  import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-
-  import { mapGetters } from 'vuex';
   import DLayoutHeader from '@/components/Deipify/DLayout/DLayoutHeader';
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import DTruncateMore from '@/components/Deipify/DTruncateMore/DTruncateMore';
 
   export default {
     name: 'ResearchDetailsHeaderTemp',
 
     components: {
+      DStack,
       DTruncateMore,
       DLayoutHeader,
       DMetaItem
@@ -66,11 +67,9 @@
         default: () => ({})
       }
     },
-
-    // computed: {
-    //   ...mapGetters({
-    //     research: 'research/data'
-    //   })
-    // }
+    created() {
+      // console.log(this.research.researchRef.extendedAttributes)
+      // console.log(this.$tenantSettings)
+    }
   };
 </script>
