@@ -1,32 +1,30 @@
 <script>
-  import { layoutRenderer } from '@/components/Deipify/DLayout/layoutRenderer';
+  import { nativeRenderer } from '@/mixins/renderer';
+
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutHeader from '@/components/Deipify/DLayout/DLayoutHeader';
   import ResearchDetailsHeader
     from '@/components/Research/ResearchDetails/ResearchDetailsDefaults/ResearchDetailsHeader';
+
+  import { VSheet, VBtn } from 'vuetify/lib';
+
+
 
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
-      ResearchDetailsHeader
+      DLayoutSection,
+      DLayoutHeader,
+      ResearchDetailsHeader,
+
+      VSheet,
+      VBtn
     },
-    mixins: [layoutRenderer],
+    mixins: [nativeRenderer],
     props: {
       research: {
         type: Object,
         default: () => ({})
-      }
-    },
-    computed: {
-      isOwner() {
-        return this.research.members.includes(this.$currentUserName);
-      },
-
-      $templateReplacingMap() {
-        return {
-          research: this.research,
-          conditions: {
-            isOwner: this.isOwner
-          }
-        };
       }
     }
   };
