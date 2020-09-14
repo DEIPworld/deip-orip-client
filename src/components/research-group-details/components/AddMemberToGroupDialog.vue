@@ -66,7 +66,6 @@
     components: { DDialog },
 
     props: {
-      isOpen: { required: true, type: Boolean },
       groupExternalId: { required: true, type: String },
       users: { required: true, type: Array, default: () => [] }
     },
@@ -80,8 +79,17 @@
     },
     computed: {
       ...mapGetters({
-        user: 'auth/user'
+        user: 'auth/user',
+        options: 'researchGroup/options'
       }),
+      isOpen: {
+        get() {
+          return this.options.isAddMemberDialogOpen;
+        },
+        set() {
+          this.close();
+        }
+      },
       isDisabled() {
         return _.isEmpty(this.selectedUser)
           // || _.isEmpty(this.tokensAmount)

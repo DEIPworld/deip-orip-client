@@ -7,7 +7,7 @@
     <research-timeline :timeline="timeline" />
     <research-details-materials :is-details-available="true" />
 
-    <div v-if="isResearchGroupMember && !research.is_finished">
+    <div class="mb-6" v-if="isResearchGroupMember && !research.is_finished">
       <research-details-draft-list />
 
       <upload-research-content-file-dialog @onFinish="newContentUploaded" />

@@ -3,7 +3,7 @@
     class="d-flex flex-column"
     outlined
   >
-    <v-card-text class="py-4 text--primary d-flex" style="height: 88px">
+    <v-card-text class="py-4 pr-12 text--primary d-flex" style="height: 88px">
       <div class="d-flex my-auto">
         <member-list-title :member="member" />
       </div>
@@ -41,12 +41,24 @@
         {{ member | userLocation }}
       </div>
     </v-card-text>
+    <v-btn
+      v-if="isExcludingMemberAvailable(member.account.name)"
+      icon
+      small
+      absolute
+      right
+      top
+      @click="showConfirmAction(member)"
+    >
+      <v-icon>close</v-icon>
+    </v-btn>
   </v-card>
 </template>
 
 <script>
   import { abstractMemberItem } from '@/components/MemberList/MemberListItem/abstractMemberItem';
   import MemberListItemStatInfo from '@/components/MemberList/MemberListItem/MemberListItemPartials/MemberListItemStatInfo';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'MemberListCard',
@@ -57,9 +69,37 @@
 
     mixins: [abstractMemberItem],
 
+    props: {
+      group: {
+        type: Object,
+        default: undefined
+      }
+    },
+
     computed: {
+      ...mapGetters({
+        userPersonalGroup: 'auth/userPersonalGroup',
+        user: 'auth/user'
+      }),
+      isResearchGroupMember() {
+        return this.$store.getters['auth/userIsResearchGroupMember'](this.group.id);
+      },
+      isPersonalGroup() {
+        return this.group.id == this.userPersonalGroup.id;
+      },
       disciplineNames() {
         return this.member.expertise.map(({ discipline_name }) => discipline_name).join(' · ');
+      },
+      isGroupMembersActionsColumnAvailable() {
+        return this.group && !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
+      }
+    },
+    methods: {
+      showConfirmAction(member) {
+        this.$emit('showConfirmAction', member);
+      },
+      isExcludingMemberAvailable(username) {
+        return this.isGroupMembersActionsColumnAvailable && this.user.username != username;
       }
     }
   };
