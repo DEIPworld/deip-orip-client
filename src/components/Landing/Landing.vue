@@ -7,6 +7,7 @@
             <v-text-field
               v-model="technologie"
               outlined
+              hide-details
               label="Find technologies"
               append-icon="search"
               @click:append="redirect"
@@ -15,6 +16,7 @@
           <div class="text-right">
             <v-btn
               text
+              class="px-1"
               color="primary"
               :to="{name: 'ResearchFeed'}"
             >
