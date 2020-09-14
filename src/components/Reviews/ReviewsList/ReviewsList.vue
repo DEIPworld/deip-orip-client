@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="internalReviews.length" title="Reviews">
+  <d-block v-if="$ready && internalReviews.length" title="Reviews">
     <template v-for="(review, index) of internalReviews">
       <v-row :key="`review-${index}`" class="text-body-2">
         <v-col cols="12" md="wide">
@@ -38,11 +38,10 @@
               class="a py-2"
               tag="div"
               :to="{
-                name: 'ResearchContentDetails',
+                name: 'research.content.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(research.research_group.permlink),
-                  research_permlink: encodeURIComponent(research.permlink),
-                  content_permlink: encodeURIComponent(review.researchContent.permlink)
+                  contentExternalId: review.researchContent.external_id,
+                  researchExternalId: researchId,
                 }
               }"
             >
@@ -78,7 +77,6 @@
           <div class="text-h6">
             Assessment
           </div>
-
           <review-assessment
             v-model="review.scores"
             :research-content-type="review.researchContent.content_type"
@@ -105,7 +103,13 @@
               small
               color="primary"
               outlined
-              @click="goToReviewPage(review)"
+              :to="{
+                name: 'research.review.details',
+                params: {
+                  reviewExternalId: review.researchContent.external_id,
+                  researchExternalId: researchId,
+                }
+              }"
             >
               See review
             </v-btn>
@@ -118,21 +122,29 @@
 </template>
 
 <script>
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import { ResearchService } from '@deip/research-service';
-  import deipRpc from '@deip/rpc-client';
+  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
+  import { reviewsListStore } from '@/components/Reviews/ReviewsList/store';
   import { mapGetters } from 'vuex';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import deipRpc from '@deip/rpc-client';
+  import { ResearchService } from '@deip/research-service';
 
   const researchService = ResearchService.getInstance();
 
   export default {
-    name: 'ResearchDetailsReviewsTemp',
+    name: 'ReviewsList',
     components: { DBlock },
+    mixins: [componentStoreFactoryOnce(reviewsListStore, 'ResearchReviews')],
+    props: {
+      researchId: {
+        type: String,
+        default: null
+      },
+    },
     computed: {
       ...mapGetters({
-        research: 'research/data',
-        contents: 'research/contents',
-        reviews: 'research/reviews',
+        reviews: 'ResearchReviews/list',
+        contents: 'ResearchContents/list', // temp
       }),
 
       internalReviews() {
@@ -151,7 +163,7 @@
               acc[score[0]] = score[1];
               return acc;
             }, {}),
-            researchContent: this.internalContents.find(
+            researchContent: this.$where(this.contents, { isDraft: false }).find(
               (c) => c.id === review.research_content_id
             ),
             disciplines
@@ -161,12 +173,22 @@
           return model;
         });
       },
-
-      internalContents() {
-        return this.$where(this.contents, { isDraft: false })
-      }
+    },
+    created() {
+      this.updateData();
     },
     methods: {
+      updateData() {
+        this.$setReady(false);
+
+        return Promise.all([
+          this.$store.dispatch('ResearchReviews/getReviews', this.$route.params.researchExternalId)
+        ])
+          .then(() => {
+            this.$setReady(true);
+          });
+      },
+
       doesUserHaveLocation(userProfile) {
         return (
           userProfile.location
@@ -180,25 +202,25 @@
       goToReviewPage(review) {
         const params = { review_id: review.id };
 
-        deipRpc.api
-          .getResearchContentByIdAsync(review.research_content_id)
-          .then((content) => {
-            params.content_permlink = encodeURIComponent(content.permlink);
-            return deipRpc.api.getResearchByIdAsync(content.research_id);
-          })
-          .then((research) => {
-            params.research_permlink = encodeURIComponent(research.permlink);
-            return deipRpc.api.getResearchGroupByIdAsync(
-              research.research_group_id
-            );
-          })
-          .then((group) => {
-            params.research_group_permlink = encodeURIComponent(group.permlink);
-            this.$router.push({
-              name: 'ResearchContentReview',
-              params
-            });
-          });
+        // deipRpc.api
+        //   .getResearchContentByIdAsync(review.research_content_id)
+        //   .then((content) => {
+        //     params.content_permlink = encodeURIComponent(content.permlink);
+        //     return deipRpc.api.getResearchByIdAsync(content.research_id);
+        //   })
+        //   .then((research) => {
+        //     params.research_permlink = encodeURIComponent(research.permlink);
+        //     return deipRpc.api.getResearchGroupByIdAsync(
+        //       research.research_group_id
+        //     );
+        //   })
+        //   .then((group) => {
+        //     params.research_group_permlink = encodeURIComponent(group.permlink);
+        //     this.$router.push({
+        //       name: 'ResearchContentReview',
+        //       params
+        //     });
+        //   });
       },
 
       extractReviewPreview(review) {

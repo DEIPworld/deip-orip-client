@@ -13,10 +13,6 @@
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
         </d-meta-item>
 
-        <d-truncate-more>
-          {{ research.abstract }}
-        </d-truncate-more>
-
         <v-btn
           v-if="research.members.includes($currentUserName)"
           class="mt-4"

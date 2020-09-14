@@ -4,10 +4,10 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { researchStore } from '@/components/Research/store';
+  // import { researchStore } from '@/components/Research/store';
 
   export default {
     name: 'Research',
-    mixins: [componentStoreFactoryOnce(researchStore, 'group')]
+    // mixins: [componentStoreFactoryOnce(researchStore, 'group')]
   };
 </script>

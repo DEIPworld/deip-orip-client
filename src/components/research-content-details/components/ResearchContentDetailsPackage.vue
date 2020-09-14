@@ -63,11 +63,11 @@
         </div>
       </v-col>
       <v-col cols="12">
-        <!-- START Research Content Reviews section -->
+        <!-- START Research ContentDetails Reviews section -->
         <div class="c-pt-5 sidebar-fullwidth">
           <v-divider />
         </div>
-        <!-- END Research Content Reviews section -->
+        <!-- END Research ContentDetails Reviews section -->
       </v-col>
     </v-row>
   </div>

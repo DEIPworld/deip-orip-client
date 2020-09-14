@@ -19,10 +19,9 @@ export const componentStoreFactory = (storeModule, hashFromProp) => ({
       : dotProp(this, hashFromProp, this.$options.propsData);
 
     const storeModuleHash = crc32(JSON.stringify(hashProp)).toString(32);
-    const storeNS = `${this.$options.name}-${storeModuleHash}`;
 
     return {
-      storeNS
+      storeNS: `${this.$options.name}-${storeModuleHash}`
     };
   },
   created() {

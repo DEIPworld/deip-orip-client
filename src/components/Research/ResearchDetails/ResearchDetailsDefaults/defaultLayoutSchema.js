@@ -29,6 +29,14 @@ export const defaultResearchTemplateSchema = [
               {
                 component: 'AttributesReadIterator',
                 props: { attributes: '@attributesByArea.main' }
+              },
+              {
+                component: 'ContentList',
+                props: { researchId: '@research.external_id' }
+              },
+              {
+                component: 'ReviewsList',
+                props: { researchId: '@research.external_id' }
               }
             ]
           }

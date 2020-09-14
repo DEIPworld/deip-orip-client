@@ -36,7 +36,7 @@
       },
       minHeight: {
         type: [Number, String],
-        default: 320
+        default: 280
       }
     },
     computed: {

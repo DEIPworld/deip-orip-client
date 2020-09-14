@@ -51,7 +51,7 @@
             :research-members="researchMembersList"
           />
 
-          <!-- START Research Content Reviews section -->
+          <!-- START Research ContentDetails Reviews section -->
           <div v-if="isPublished && contentReviewsList.length" class="py-6">
             <div id="reviews">
               <div class="py-2 title">
@@ -153,7 +153,7 @@
               outlined
               :rules="[rules.titleLength]"
               label="Title"
-              :error-messages="isPermlinkVerifyed === false ? 'Content with the same name already exists' : ''"
+              :error-messages="isPermlinkVerifyed === false ? 'ContentDetails with the same name already exists' : ''"
             />
 
             <v-select
