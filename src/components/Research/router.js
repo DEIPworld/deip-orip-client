@@ -4,6 +4,7 @@ import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
 import ContentDetails from '@/components/Contents/ContentDetails/ContentDetails';
 import { reviewRoutingFabric } from '@/components/Reviews/router';
 import { contentRoutingFabric } from '@/components/Contents/router';
+import Research from '@/components/Research/Research';
 
 const routerView = { template: '<router-view />' };
 
@@ -21,7 +22,7 @@ export const researchRouting = [{
 
     {
       path: ':researchExternalId',
-      component: routerView,
+      component: Research,
 
       children: [
         {

@@ -190,7 +190,7 @@
     created() {
       if (this.$route.params.researchExternalId) {
         this.$store
-          .dispatch('research/getResearch', this.$route.params.researchExternalId)
+          .dispatch('Research/getResearch', this.$route.params.researchExternalId)
           .then(() => {
             const clone = camelizeObjectKeys(_.cloneDeep(this.$store.getters['research/data']));
 

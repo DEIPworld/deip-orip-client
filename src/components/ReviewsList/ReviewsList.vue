@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="$ready && internalReviews.length" title="Reviews">
+  <d-block v-if="$ready && internalReviews.length && contents.length" title="Reviews">
     <template v-for="(review, index) of internalReviews">
       <v-row :key="`review-${index}`" class="text-body-2">
         <v-col cols="12" md="wide">
