@@ -13,11 +13,6 @@
   export default {
     name: 'ResearchDetails',
     components: { ResearchDetailsRenderer },
-    data() {
-      return {
-        defaultResearchTemplateSchema
-      };
-    },
     computed: {
       ...mapGetters({
         research: 'Research/data'

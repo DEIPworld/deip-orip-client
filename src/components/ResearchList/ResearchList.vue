@@ -23,7 +23,7 @@
       :items-per-page="iteratorProps.itemsPerPage"
       @update:page="onPaginationUpdated"
     >
-      <template #default="{items}">
+      <template #default="{ items }">
         <component :is="listComponent" :items="items" />
       </template>
     </v-data-iterator>
@@ -57,7 +57,7 @@
     },
 
     props: {
-      items: {
+      data: {
         type: Array,
         default: () => ([])
       },
@@ -108,7 +108,7 @@
         this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
       }
 
-      this.itemsList = [...this.items];
+      this.itemsList = [...this.data];
     },
 
     beforeDestroy() {
@@ -134,10 +134,11 @@
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
 
-        this.$store.dispatch('feed/loadResearchFeed', { 
-          filter: { ...filter, researchAttributes: Object.keys(filter.researchAttributes).filter(a => filter.researchAttributes[a].length).map(a => {
-            return { researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] };
-          }) } 
+        this.$store.dispatch('feed/loadResearchFeed', {
+          filter: {
+            ...filter,
+            researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
+          }
         })
           .then((items) => {
             this.itemsList = items;

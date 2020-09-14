@@ -28,7 +28,7 @@
           <research-list
             v-if="myResearches.length"
             namespace="dashboard"
-            :items="myResearches"
+            :data="myResearches"
             no-filter
           />
 
@@ -57,7 +57,7 @@
           <research-list
             v-if="followingResearches.length"
             namespace="dashboard"
-            :items="followingResearches"
+            :data="followingResearches"
             no-filter
           />
 

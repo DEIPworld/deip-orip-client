@@ -3,7 +3,7 @@
     <component
       :is="componentType"
       v-model="internalValue"
-      :attribute="attribute"
+      :attribute-id="attributeId"
       :multiple="multiple"
     />
   </div>

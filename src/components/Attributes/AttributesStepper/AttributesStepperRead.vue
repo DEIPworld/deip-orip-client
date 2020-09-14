@@ -15,11 +15,17 @@
       </d-simple-tooltip>
 
       <d-simple-tooltip :tooltip="valueOption.title">
+<!--        <v-avatar-->
+<!--          class="d-flex white&#45;&#45;text font-weight-medium justify-center align-center"-->
+<!--          :class="!small ? 'text-body-1' : 'text-caption'"-->
+<!--          :color="!small ? 'primary' : 'grey'"-->
+<!--          :size="!small ? 32 : 18"-->
+<!--        >-->
         <v-avatar
-          class="d-flex white--text font-weight-medium justify-center align-center"
-          :class="!small ? 'text-body-1' : 'text-caption'"
-          :color="!small ? 'primary' : 'grey'"
-          :size="!small ? 32 : 18"
+        class="d-flex white--text font-weight-medium justify-center align-center"
+        :class="'text-body-1'"
+        :color="'primary'"
+        :size="32"
         >
           <span>
             {{ internalAttribute.valueOptions.indexOf(valueOption) + 1 }}
@@ -46,11 +52,12 @@
 
       textClassList() {
         return {
-          'text-h6': !this.small,
-          'text-overline': this.small,
-
-          'mr-2': !this.small,
-          'mr-1': this.small
+          'text-h6': true,
+          // 'text-h6': !this.small,
+          // 'text-overline': this.small,
+          //
+          // 'mr-2': !this.small,
+          // 'mr-1': this.small
         };
       }
     }

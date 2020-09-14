@@ -3,11 +3,11 @@
     <v-divider />
     <v-simple-table>
       <tbody>
-        <research-list-row
-          v-for="item in items"
-          :key="'list-item-' + item.external_id"
-          :research="item"
-        />
+<!--        <research-list-row-->
+<!--          v-for="item in items"-->
+<!--          :key="'list-item-' + item.external_id"-->
+<!--          :research="item"-->
+<!--        />-->
       </tbody>
     </v-simple-table>
     <v-divider />

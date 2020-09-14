@@ -19,11 +19,20 @@ export const defaultAttributeModel = () => ({
   order: 0
 });
 
-const PROPS = {
+export const PROPS = {
   small: {
     type: Boolean,
     default: false
   },
+
+  viewType: {
+    type: String,
+    validator(val) {
+      return Object.values(['card', 'main', 'sidebar'])
+        .indexOf(val) !== -1;
+    }
+  },
+
   type: {
     type: String,
     default: ATTR_TYPES.TEXT,
@@ -94,7 +103,7 @@ export const commonRead = {
   mixins: [Proxyable, tenantAttributes, internalAttribute],
   props: {
     attributeId: PROPS.attributeId,
-    small: PROPS.small
+    viewType: PROPS.viewType
   }
 };
 

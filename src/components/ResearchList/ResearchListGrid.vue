@@ -9,7 +9,7 @@
 </template>
 
 <script>
-  import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
+  import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard/ResearchListCard';
   import DGrid from '@/components/Deipify/DGrid/DGrid';
 
   export default {

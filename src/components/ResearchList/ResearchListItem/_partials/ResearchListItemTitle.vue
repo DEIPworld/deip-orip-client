@@ -1,23 +1,22 @@
 <template>
-  <v-tooltip bottom :max-width="260" :open-delay="500">
-    <template v-slot:activator="{ on }">
-      <div :class="titleClass" v-on="on">
-        <v-clamp autoresize :max-lines="2">
-          {{ title }}
-        </v-clamp>
-      </div>
-    </template>
-    <span>{{ title }}</span>
-  </v-tooltip>
+  <d-simple-tooltip
+    :tooltip="text"
+  >
+    <v-clamp autoresize :max-lines="2" class="text-h6">
+      {{ text }}
+    </v-clamp>
+  </d-simple-tooltip>
 </template>
 
 <script>
 
-  export default {
-    name: 'ResearchListTitle',
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
+  export default {
+    name: 'ResearchListItemTitle',
+    components: { DSimpleTooltip },
     props: {
-      title: {
+      text: {
         type: String,
         default: null
       },

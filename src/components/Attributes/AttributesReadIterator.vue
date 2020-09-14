@@ -5,6 +5,7 @@
       :key="`${index}-attr`"
       :value="attribute.value"
       :attribute-id="attribute.researchAttributeId"
+      :view-type="viewType"
     />
   </d-stack>
 </template>
@@ -12,6 +13,7 @@
 <script>
   import AttributesRead from '@/components/Attributes/AttributesRead';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { PROPS } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesReadIterator',
@@ -24,7 +26,8 @@
       gap: {
         type: [Number, String],
         default: 24
-      }
+      },
+      viewType: PROPS.viewType
     }
   };
 </script>

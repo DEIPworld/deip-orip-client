@@ -29,7 +29,7 @@
 
     <d-layout-section>
       <d-layout-section-main>
-        <research-list :items="researchFeed" namespace="feed" with-filter />
+        <research-list :data="researchFeed" namespace="feed" with-filter />
       </d-layout-section-main>
     </d-layout-section>
   </app-layout>

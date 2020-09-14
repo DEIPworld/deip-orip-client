@@ -70,7 +70,7 @@
     </member-list>
 
     <!-- ### START Research Group Research List Section ### -->
-    <research-list namespace="groupDetails" :items="researchWithGroupInfoList">
+    <research-list namespace="groupDetails" :data="researchWithGroupInfoList">
       <template #addSome>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
