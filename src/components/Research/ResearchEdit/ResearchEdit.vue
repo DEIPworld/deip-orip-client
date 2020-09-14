@@ -108,7 +108,8 @@
   } from '@/utils/helpers';
 
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
-  import { componentStoreFactory } from '@/mixins/registerStore';
+  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
+  import { researchStore } from '@/components/Research/store';
 
   const researchService = ResearchService.getInstance();
   const httpService = HttpService.getInstance();
@@ -125,7 +126,7 @@
       DBlock,
       DStack
     },
-    mixins: [componentStoreFactory({}, '$route.props.researchExternalId')],
+    mixins: [componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId')],
     props: {
       preset: {
         type: Object,
@@ -190,9 +191,9 @@
     created() {
       if (this.$route.params.researchExternalId) {
         this.$store
-          .dispatch('Research/getResearch', this.$route.params.researchExternalId)
+          .dispatch('ResearchEdit/getResearch', this.$route.params.researchExternalId)
           .then(() => {
-            const clone = camelizeObjectKeys(_.cloneDeep(this.$store.getters['research/data']));
+            const clone = camelizeObjectKeys(_.cloneDeep(this.$store.getters['ResearchEdit/data']));
 
             const transformed = {
               ...clone,
