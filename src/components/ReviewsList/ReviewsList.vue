@@ -123,7 +123,7 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { reviewsListStore } from '@/components/Reviews/ReviewsList/store';
+  import { reviewsListStore } from '@/components/ReviewsList/store';
   import { mapGetters } from 'vuex';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import deipRpc from '@deip/rpc-client';

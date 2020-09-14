@@ -461,7 +461,6 @@ const router = new Router({
     ...adminRouting,
     ...ParticipantstRouting,
     ...overviewRouting,
-    ...researchRouting,
     ...landingRouting,
 
   {

@@ -14,8 +14,8 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
   import UsersListWidget from '@/components/Users/UsersListWidget';
-  import ContentList from '@/components/Contents/ContentsList/ContentsList';
-  import ReviewsList from '@/components/Reviews/ReviewsList/ReviewsList';
+  import ContentList from '@/components/ContentsList/ContentsList';
+  import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   export default {
     name: 'ResearchDetailsRenderer',

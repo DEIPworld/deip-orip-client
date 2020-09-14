@@ -63,7 +63,7 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { contentListStore } from '@/components/Contents/ContentsList/store';
+  import { contentListStore } from '@/components/ContentsList/store';
   import { mapGetters } from 'vuex';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
