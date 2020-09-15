@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import { defaultResearchTemplateSchema } from '@/components/Research/ResearchDetails/ResearchDetailsDefaults/defaultLayoutSchema';
+  import { researchDetailsSchema } from '@/components/Research/ResearchDetails/researchDetailsSchema';
   import { mapGetters } from 'vuex';
   import ResearchDetailsRenderer from '@/components/Research/ResearchDetails/ResearchDetailsRenderer';
 
@@ -23,7 +23,7 @@
       },
 
       layoutSchema() {
-        return defaultResearchTemplateSchema;
+        return researchDetailsSchema;
       }
     }
   };

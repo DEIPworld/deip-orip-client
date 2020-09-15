@@ -13,40 +13,22 @@ export const tenantAttributes = {
   }
 };
 
-
 export const researchAttributes = {
   mixins: [tenantAttributes],
   computed: {
-    // filledAttributes() {
-    //   return this.$where(
-    //     this.research.researchRef.attributes,
-    //     { value: (v) => !!v }
-    //   );
-    // },
-
     attributesByArea() {
-      return {
-        header: this.getAttrsByArea(ATTR_AREAS.HEADER),
-        main: this.getAttrsByArea(ATTR_AREAS.MAIN),
-        sidebar: this.getAttrsByArea(ATTR_AREAS.SIDEBAR),
-        card: this.getAttrsByArea(ATTR_AREAS.CARD)
-      };
+      const attrs = this.$tenantSettings.researchAttributesAreas;
+
+      return Object.keys(attrs).reduce((obj, area) => ({
+        ...obj,
+        ...{
+          [area]: attrs[area].map(
+            (id) => this.research.researchRef.attributes.find(
+              (attr) => attr.researchAttributeId === id
+            )
+          )
+        }
+      }), {});
     }
   },
-
-  methods: {
-    getAttrsByArea(area) {
-      return this.$where(
-        this.research.researchRef.attributes,
-        (attr) => attr.value
-            && this.$where(
-              this.tenantAttributes,
-              {
-                _id: attr.researchAttributeId,
-                '+areas': area
-              }
-            ).length
-      );
-    }
-  }
 };

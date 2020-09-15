@@ -1,8 +1,14 @@
 <template>
   <v-sheet
-    class="mx-auto pa-12"
+    :class="contentClasses"
     v-bind="contentAttrs"
   >
+    <portal to="sidebar">
+      <div class="d-none">
+        <!-- hide sidebar if present -->
+      </div>
+    </portal>
+
     <portal to="toolbar">
       <v-app-bar
         :key="$route.fullPath + '-toolbar'"
@@ -39,25 +45,26 @@
       contentWidth: {
         type: [Number, String],
         default: 800
+      },
+      fullWidth: {
+        type: Boolean,
+        default: false
+      },
+      noGutters: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
       contentAttrs() {
         return {
-          maxWidth: convertToUnit(this.contentWidth)
+          ...(!this.fullWidth ? { maxWidth: convertToUnit(this.contentWidth) } : {})
         };
       },
-      dividerStyles() {
-        const {
-          bar, top, right, left
-        } = this.$vuetify.application;
-
+      contentClasses() {
         return {
-          position: 'fixed',
-          zIndex: 6,
-          top: `${top + bar}px`,
-          right: `${right}px`,
-          left: `${left}px`
+          'mx-auto': !this.fullWidth,
+          'pa-12': !this.noGutters
         };
       }
     }

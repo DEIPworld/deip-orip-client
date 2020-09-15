@@ -1,7 +1,7 @@
 <template>
   <div>
     <component
-      :is="componentType"
+      :is="attributeTypeComponent"
       v-model="internalValue"
       :attribute-id="attributeId"
       :multiple="multiple"
@@ -20,7 +20,7 @@
   import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
   import AttributesPartnersSet from '@/components/Attributes/AttributesPartners/AttributesPartnersSet';
 
-  import { commonAttribute, internalType } from '@/components/Attributes/mixins';
+  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesSet',
@@ -34,11 +34,6 @@
       AttributesRoadmapSet,
       AttributesPartnersSet
     },
-    mixins: [commonAttribute, internalType],
-    computed: {
-      componentType() {
-        return `attributes-${this.internalType}-set`;
-      }
-    }
+    mixins: [commonAttribute, attributeTypeComponent]
   };
 </script>

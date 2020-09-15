@@ -1,4 +1,4 @@
-export const defaultResearchTemplateSchema = [
+export const researchDetailsSchema = [
   {
     component: 'ResearchDetailsHeader',
     props: { research: '@research' }
@@ -28,7 +28,7 @@ export const defaultResearchTemplateSchema = [
               },
               {
                 component: 'AttributesReadIterator',
-                props: { attributes: '@attributesByArea.main' }
+                props: { attributes: '@attributesByArea.researchDetailsBody' }
               },
               {
                 component: 'ContentList',
@@ -57,7 +57,7 @@ export const defaultResearchTemplateSchema = [
           },
           {
             component: 'AttributesReadIterator',
-            props: { attributes: '@attributesByArea.sidebar', gap: 0 }
+            props: { attributes: '@attributesByArea.researchDetailsRightSidebar', gap: 0, viewType: 'sidebar' }
           }
         ]
       }

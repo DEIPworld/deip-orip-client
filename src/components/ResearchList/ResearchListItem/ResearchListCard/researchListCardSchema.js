@@ -13,7 +13,7 @@ export const researchListCardSchema = [
           { component: 'ResearchListItemAbstract', props: { text: '@research.abstract' } },
           {
             component: 'AttributesReadIterator',
-            props: { attributes: '@attributesByArea.card', gap: 0, small: true }
+            props: { attributes: '@attributesByArea.researchCard', gap: 0, viewType: 'card' }
           }
         ]
       }

@@ -5,13 +5,13 @@ import AttributesCommonEditMeta
   from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
 import { ATTR_TYPES, ATTR_AREAS } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
+import { pascalCase } from 'change-case';
 
 export const defaultAttributeModel = () => ({
   isVisible: true,
   title: '',
   shortTitle: '',
   description: '',
-  // defaultValue: null,
   valueOptions: [],
   isFilterable: false,
   isEditable: true,
@@ -20,17 +20,9 @@ export const defaultAttributeModel = () => ({
 });
 
 export const PROPS = {
-  small: {
-    type: Boolean,
-    default: false
-  },
-
   viewType: {
     type: String,
-    validator(val) {
-      return Object.values(['card', 'main', 'sidebar'])
-        .indexOf(val) !== -1;
-    }
+    default: null
   },
 
   type: {
@@ -63,6 +55,7 @@ export const resetModelOnCreate = {
 };
 
 export const internalAttribute = {
+  mixins: [tenantAttributes],
   computed: {
     internalAttribute() {
       return this.tenantAttributes.find(({ _id }) => _id === this.attributeId);
@@ -70,13 +63,35 @@ export const internalAttribute = {
   }
 };
 
-export const internalType = {
+export const attributeTypeComponent = {
   mixins: [tenantAttributes],
   computed: {
-    internalType() {
-      return this.attributeId
+    attributeTypeComponent() {
+      const a = this.$options.name.split(/(?=[A-Z])/);
+      const t = this.attributeId
         ? this.tenantAttributes.find(({ _id }) => _id === this.attributeId).type
         : this.type;
+
+      a.splice(1, 0, pascalCase(t));
+
+      return a.join('');
+    }
+  }
+};
+
+export const attributeViewTypeComponent = {
+  data() {
+    return {
+      allowedViewTypes$: ['main', 'card', 'sidebar'],
+      defaultViewType$: 'main'
+    };
+  },
+  computed: {
+    attributeViewTypeComponent() {
+      const viewType = this.viewType && this.allowedViewTypes$.includes(this.viewType)
+        ? this.viewType
+        : this.defaultViewType$;
+      return `${this.$options.name}${pascalCase(viewType)}`;
     }
   }
 };
@@ -85,7 +100,7 @@ export const commonAttribute = {
   mixins: [Proxyable],
   props: {
     type: PROPS.type,
-    small: PROPS.small,
+    viewType: PROPS.viewType,
     attributeId: PROPS.attributeId,
     multiple: PROPS.multiple
   }
@@ -112,5 +127,13 @@ export const commonSet = {
   props: {
     attributeId: PROPS.attributeId,
     multiple: PROPS.multiple
+  }
+};
+
+export const optionsRead = {
+  computed: {
+    valueOption() {
+      return this.internalAttribute.valueOptions.find(({ value }) => value === this.internalValue);
+    }
   }
 };

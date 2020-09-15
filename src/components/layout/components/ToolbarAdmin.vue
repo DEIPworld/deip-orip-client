@@ -5,12 +5,12 @@
     </div>
 
     <v-app-bar
-      :key="$route.fullPath + '-toolbar'"
-      v-custom="'light'"
       app
       fixed
       flat
       clipped-left
+      clipped-right
+      v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
         <img height="40px" class="logo-image" :src="tenant.account | tenantLogoSrc(80, 80, false)">

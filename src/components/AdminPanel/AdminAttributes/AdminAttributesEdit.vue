@@ -1,5 +1,5 @@
 <template>
-  <full-screen-modal :title="title">
+  <d-layout-full-screen :title="title">
     <v-form ref="form">
       <template v-if="!formData._id">
         <v-select
@@ -47,7 +47,7 @@
         </v-col>
       </v-row>
     </v-form>
-  </full-screen-modal>
+  </d-layout-full-screen>
 </template>
 
 <script>
@@ -58,12 +58,14 @@
 
   import { defaultAttributeModel } from '@/components/Attributes/mixins';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
+  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminAttributesEdit',
     components: {
+      DLayoutFullScreen,
       AttributesEdit,
       FullScreenModal,
     },

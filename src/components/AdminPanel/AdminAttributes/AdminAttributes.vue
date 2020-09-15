@@ -1,59 +1,69 @@
 <template>
-  <admin-view title="Attributes">
-    <template #toolbarAction>
-      <v-btn outlined color="primary" :to="{name: 'admin.attributes.edit'}">
-        <v-icon left>
-          extension
-        </v-icon>
-        Add attribute
-      </v-btn>
-    </template>
-<!--    <pre>-->
-<!--      {{researchAttributes[6]}}-->
-<!--    </pre>-->
+  <d-layout>
+    <d-layout-section-main>
+      <d-block title="Attributes">
 
-    <v-data-table
-      :headers="attributesTable"
-      :items="researchAttributes"
-      :items-per-page="50"
-    >
-
-      <template #item.type="{ item }">
-        <v-chip outlined>
-          {{ ATTR_TYPES_LIST[item.type] ? ATTR_TYPES_LIST[item.type].text : 'undefined' }}
-        </v-chip>
-      </template>
-
-      <template #item.actions="{ item }">
-        <crud-actions row>
-          <v-btn
-            :color="item.isVisible ? 'success' : null"
-            icon
-            small
-            @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
-          >
-            <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
+        <template #titleAddon>
+          <v-btn outlined small color="primary" :to="{name: 'admin.attributes.settings'}">
+            <v-icon left>
+              widgets
+            </v-icon>
+            Placement settings
           </v-btn>
 
-          <template v-if="item.isEditable">
-            <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn icon small @click="openActionDialog('delete', item._id)">
-              <v-icon>delete</v-icon>
-            </v-btn>
+          <v-btn small color="primary" :to="{name: 'admin.attributes.edit'}">
+            <v-icon left>
+              extension
+            </v-icon>
+            Add attribute
+          </v-btn>
+        </template>
+
+        <v-divider class="mb-6" />
+        <v-data-table
+          :headers="attributesTable"
+          :items="researchAttributes"
+          :items-per-page="50"
+        >
+
+          <template #item.type="{ item }">
+            <v-chip outlined small>
+              {{ ATTR_TYPES_LIST[item.type] ? ATTR_TYPES_LIST[item.type].text : 'undefined' }}
+            </v-chip>
           </template>
-          <template v-else>
-            <v-btn icon small disabled>
-              <v-icon>lock</v-icon>
-            </v-btn>
+
+          <template #item.actions="{ item }">
+            <crud-actions row>
+              <v-btn
+                :color="item.isVisible ? 'success' : null"
+                icon
+                small
+                @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+              >
+                <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
+              </v-btn>
+
+              <template v-if="item.isEditable">
+                <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+                <v-btn icon small @click="openActionDialog('delete', item._id)">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn icon small disabled>
+                  <v-icon>lock</v-icon>
+                </v-btn>
+              </template>
+
+            </crud-actions>
           </template>
 
-        </crud-actions>
-      </template>
+        </v-data-table>
 
-    </v-data-table>
-
+      </d-block>
+    </d-layout-section-main>
 
     <d-dialog
       v-model="actionDialog.isOpen"
@@ -64,7 +74,7 @@
     >
       {{ actionDialog.description }}
     </d-dialog>
-  </admin-view>
+  </d-layout>
 </template>
 
 <script>
@@ -74,20 +84,28 @@
   import { ATTR_TYPES, ATTR_TYPES_LIST } from '@/variables';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import CrudActions from '@/components/layout/CrudActions';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DLayout from '@/components/Deipify/DLayout/DLayout';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DStack from '@/components/Deipify/DStack/DStack';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminAttributes',
     components: {
+      DLayoutSectionMain,
+      DLayout,
+      DBlock,
       CrudActions,
       DDialog,
-      AdminView
     },
     data() {
       return {
         ATTR_TYPES,
         ATTR_TYPES_LIST,
+
+        xxx: [],
 
         isDisabled: false,
 
@@ -116,9 +134,8 @@
           },
           {
             value: 'actions',
-            width: '1%',
-            // align: 'end'
-          },
+            width: '1%'
+          }
         ]
       };
     },
@@ -180,7 +197,10 @@
       },
       publishCriteria(id) {
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
-        tenantService.updateTenantResearchAttribute({ ...researchAttribute, isVisible: true })
+        tenantService.updateTenantResearchAttribute({
+          ...researchAttribute,
+          isVisible: true
+        })
           .then(() => {
             this.$notifier.showSuccess();
             const tenant = window.env.TENANT;
@@ -194,7 +214,10 @@
       },
       unpublishCriteria(id) {
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
-        tenantService.updateTenantResearchAttribute({ ...researchAttribute, isVisible: false })
+        tenantService.updateTenantResearchAttribute({
+          ...researchAttribute,
+          isVisible: false
+        })
           .then(() => {
             this.$notifier.showSuccess();
             const tenant = window.env.TENANT;

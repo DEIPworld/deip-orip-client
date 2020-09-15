@@ -1,8 +1,17 @@
 <template>
   <d-layout-section class="fill-height">
     <d-layout-section-main class="align-self-center">
-      <v-sheet max-width="580" class="mx-auto mb-12">
-        <d-block title="Search by technology">
+
+      <d-stack :gap="48">
+        <d-stack
+          :gap="16"
+          :max-width="580"
+          width="100%"
+          class="mx-auto"
+        >
+          <div class="text-h5">
+            Search by technology
+          </div>
           <v-form @submit="redirect">
             <v-text-field
               v-model="technologie"
@@ -12,45 +21,49 @@
               append-icon="search"
               @click:append="redirect"
             />
+            <div class="text-right">
+              <v-btn
+                text
+                small
+                class="px-1"
+                color="primary"
+                :to="{name: 'ResearchFeed'}"
+              >
+                Advanced Search
+              </v-btn>
+            </div>
           </v-form>
-          <div class="text-right">
-            <v-btn
-              text
-              class="px-1"
-              color="primary"
-              :to="{name: 'ResearchFeed'}"
-            >
-              Advanced Search
-            </v-btn>
-          </div>
-        </d-block>
-      </v-sheet>
-      <div class="text-center ma-n2">
-        <v-chip
-          v-for="(item, i) in disciplines"
-          :key="`${i}-discipline`"
-          class="ma-2"
-          outlined
-          :to="{name: 'ResearchFeed', query: {disciplineExternal_id: item.id}}"
-        >
-          {{ item.label }}
-        </v-chip>
-      </div>
+        </d-stack>
+
+        <div class="text-center ma-n2">
+          <v-chip
+            v-for="(item, i) in disciplines"
+            :key="`${i}-discipline`"
+            class="ma-2"
+            outlined
+            :to="{name: 'ResearchFeed', query: {disciplineExternal_id: item.id}}"
+          >
+            {{ item.label }}
+          </v-chip>
+        </div>
+      </d-stack>
+
     </d-layout-section-main>
   </d-layout-section>
 </template>
 
 <script>
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
+
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DStack from '@/components/Deipify/DStack/DStack';
 
 
   export default {
     name: 'Landing',
     components: {
-      DBlock,
+      DStack,
       DLayoutSectionMain,
       DLayoutSection
     },

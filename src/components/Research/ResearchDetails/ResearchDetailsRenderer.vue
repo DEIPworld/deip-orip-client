@@ -4,7 +4,7 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutHeader from '@/components/Deipify/DLayout/DLayoutHeader';
   import ResearchDetailsHeader
-    from '@/components/Research/ResearchDetails/ResearchDetailsDefaults/ResearchDetailsHeader';
+    from '@/components/Research/ResearchDetails/_partials/ResearchDetailsHeader';
 
   import { VSheet, VBtn } from 'vuetify/lib';
   import { researchAttributes } from '@/mixins/platformAttributes';

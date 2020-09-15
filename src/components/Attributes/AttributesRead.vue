@@ -1,9 +1,9 @@
 <template>
   <component
-    :is="componentType"
+    :is="attributeTypeComponent"
     v-model="internalValue"
     :attribute-id="attributeId"
-    :small="small"
+    :view-type="viewType"
   />
 </template>
 
@@ -17,7 +17,7 @@
   import AttributesRoadmapRead from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapRead';
   import AttributesPartnersRead from '@/components/Attributes/AttributesPartners/AttributesPartnersRead';
 
-  import { commonAttribute, internalType } from '@/components/Attributes/mixins';
+  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesRead',
@@ -31,11 +31,6 @@
       AttributesRoadmapRead,
       AttributesPartnersRead
     },
-    mixins: [commonAttribute, internalType],
-    computed: {
-      componentType() {
-        return `attributes-${this.internalType}-read`;
-      }
-    }
+    mixins: [commonAttribute, attributeTypeComponent]
   };
 </script>

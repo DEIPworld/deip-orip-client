@@ -27,6 +27,7 @@
         type: [Number, String],
         default: 24
       },
+      // eslint-disable-next-line vue/require-default-prop
       viewType: PROPS.viewType
     }
   };

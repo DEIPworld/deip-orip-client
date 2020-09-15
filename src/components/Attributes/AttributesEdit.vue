@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="componentType"
+    :is="attributeTypeComponent"
     v-model="internalValue"
   />
 </template>
@@ -15,7 +15,7 @@
   import AttributesRoadmapEdit from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapEdit';
   import AttributesPartnersEdit from '@/components/Attributes/AttributesPartners/AttributesPartnersEdit';
 
-  import { commonAttribute } from '@/components/Attributes/mixins';
+  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesEdit',
@@ -29,11 +29,6 @@
       AttributesRoadmapEdit,
       AttributesPartnersEdit
     },
-    mixins: [commonAttribute],
-    computed: {
-      componentType() {
-        return `attributes-${this.type}-edit`;
-      }
-    }
+    mixins: [commonAttribute, attributeTypeComponent],
   };
 </script>

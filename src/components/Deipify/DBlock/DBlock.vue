@@ -1,7 +1,9 @@
 <template>
   <v-sheet>
     <v-divider v-if="separated" />
+
     <div :class="contentClassList">
+
       <div v-if="hasHeader" :class="headerClassList">
         <slot name="titleLeft" />
 
@@ -26,6 +28,7 @@
           <slot name="titleAddon" />
         </div>
       </div>
+
 
       <slot />
     </div>
@@ -74,6 +77,7 @@
       headerClassList() {
         return {
           'd-flex': true,
+          'align-center': true,
           'mb-4': this.small || this.widget,
           'mb-6': !(this.small || this.widget)
         };
