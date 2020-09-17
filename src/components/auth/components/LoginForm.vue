@@ -64,7 +64,6 @@
   import DForm from '@/components/Deipify/DForm/DForm';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import DInputPassword from '@/components/Deipify/DInput/DInputPassword';
-  import DInputText from '@/components/Deipify/DInput/DInputText';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
@@ -86,7 +85,6 @@
   export default {
     name: 'LoginForm',
     components: {
-      DInputText,
       DInputPassword,
       DFormBlock,
       DForm

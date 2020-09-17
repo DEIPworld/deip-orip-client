@@ -16,6 +16,7 @@ import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequ
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 import AdminAttributesSettings
   from '@/components/AdminPanel/AdminAttributes/AdminAttributesSettings';
+import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 
 export const adminRouting = [
   {
@@ -70,6 +71,17 @@ export const adminRouting = [
             path: 'settings',
             name: 'admin.attributes.settings',
             component: AdminAttributesSettings
+          }
+        ]
+      },
+      {
+        path: 'layouts',
+        component: { template: '<router-view />'},
+        children: [
+          {
+            path: '',
+            name: 'admin.layouts',
+            component: AdminLayouts
           }
         ]
       },

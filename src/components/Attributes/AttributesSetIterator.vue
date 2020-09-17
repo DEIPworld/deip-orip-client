@@ -1,23 +1,25 @@
 <template>
   <d-stack :gap="gap">
-    <attributes-read
+    <attributes-set
       v-for="(attribute, index) in internalAttributes"
       :key="`${index}-attr`"
       :value="attribute.value"
-      :attribute-id="attribute.researchAttributeId"
+      :attribute-id="attribute._id"
       :view-type="viewType"
     />
   </d-stack>
 </template>
 
 <script>
-  import AttributesRead from '@/components/Attributes/AttributesRead';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { PROPS } from '@/components/Attributes/mixins';
+  import AttributesSet from '@/components/Attributes/AttributesSet';
+  import { tenantAttributes } from '@/mixins/platformAttributes';
 
   export default {
     name: 'AttributesReadIterator',
-    components: { DStack, AttributesRead },
+    components: { AttributesSet, DStack },
+    mixins: [tenantAttributes],
     props: {
       attributes: {
         type: Array,
@@ -39,8 +41,7 @@
         return !this.area
           ? this.attributes
           : this.$tenantSettings.researchAttributesAreas[this.area]
-            .map((id) => this.attributes.find((attr) => attr.researchAttributeId === id))
-            .filter((attr) => attr);
+            .map((id) => this.attributes.find((attr) => attr._id === id));
       }
     }
   };

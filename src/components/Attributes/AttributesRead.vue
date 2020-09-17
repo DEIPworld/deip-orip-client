@@ -16,6 +16,9 @@
   import AttributesVideoUrlRead from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlRead';
   import AttributesRoadmapRead from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapRead';
   import AttributesPartnersRead from '@/components/Attributes/AttributesPartners/AttributesPartnersRead';
+  import AttributesUrlRead from '@/components/Attributes/AttributesUrl/AttributesUrlRead';
+  import AttributesCheckboxRead from '@/components/Attributes/AttributesCheckbox/AttributesCheckboxRead';
+  import AttributesSwitchRead from '@/components/Attributes/AttributesSwitch/AttributesSwitchRead';
 
   import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
@@ -29,7 +32,10 @@
       AttributesStepperRead,
       AttributesVideoUrlRead,
       AttributesRoadmapRead,
-      AttributesPartnersRead
+      AttributesPartnersRead,
+      AttributesUrlRead,
+      AttributesCheckboxRead,
+      AttributesSwitchRead
     },
     mixins: [commonAttribute, attributeTypeComponent]
   };

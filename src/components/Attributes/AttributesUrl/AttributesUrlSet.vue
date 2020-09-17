@@ -11,39 +11,18 @@
         <v-row>
           <v-col cols="6">
             <v-text-field
-              v-model="item.goal"
-              label="Goal"
-              outlined
-              hide-details="auto"
-            />
-          </v-col>
-          <v-col cols="6">
-            <d-input-date
-              v-model="item.eta"
-              label="Deadline"
-            />
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-              v-model="item.budget"
-              label="Estimated budget"
+              v-model="item.label"
+              label="Label"
               outlined
               hide-details="auto"
             />
           </v-col>
           <v-col cols="6">
             <v-text-field
-              v-model="item.purpose"
-              label="Budget purpose"
+              v-model="item.url"
+              label="URL"
               outlined
               hide-details="auto"
-            />
-          </v-col>
-          <v-col cols="12">
-            <v-textarea
-              v-model="item.details"
-              label="Milestone description"
-              outlined
             />
           </v-col>
         </v-row>
@@ -69,17 +48,13 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { commonSet } from '@/components/Attributes/mixins';
 
-  const stepModel = () => ({
-    goal: '',
-    eta: '',
-    budget: '',
-    purpose: '',
-    details: '',
-    isActive: false
+  const attrModel = () => ({
+    label: '',
+    url: ''
   });
 
   export default {
-    name: 'AttributesRoadmapSet',
+    name: 'AttributesUrlSet',
 
     components: {
       DBlock,
@@ -89,14 +64,7 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(stepModel()), commonSet],
-
-    // props: {
-    //   value: {
-    //     type: Array,
-    //     default: () => ([])
-    //   }
-    // },
+    mixins: [arrayModelAddFactory(attrModel()), commonSet],
 
     created() {
       if (!this.internalValue) {

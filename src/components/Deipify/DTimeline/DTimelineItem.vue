@@ -1,10 +1,8 @@
 <template>
-
   <v-list-item
     class="pa-0 reset-height rounded overflow-hidden"
-    @click="$emit('click')"
+    v-on="on"
   >
-
     <v-sheet class="d-flex align-self-stretch flex-column align-center flex-shrink-0" :width="40" :min-height="40">
       <div :style="topLineStyle" class="mb-1" />
       <v-avatar
@@ -27,13 +25,12 @@
     </v-list-item-content>
 
     <v-list-item-action
-      class="d-flex align-self-start align-center ml-4 my-2"
       v-if="$hasSlot('action')"
+      class="d-flex align-self-start align-center ml-4 my-2"
       :style="{ height: ctrlHeight + 'px' }"
     >
       <slot name="action" />
     </v-list-item-action>
-
   </v-list-item>
 </template>
 
@@ -89,6 +86,11 @@
         return {
           background: this.bottomLineColor ? this.bottomLineColor : this.lineColor,
           width: `${this.lineWidth}px`
+        };
+      },
+      on() {
+        return {
+          ...(this.$listeners.click ? { click: this.$emit('click') } : {})
         };
       }
     },

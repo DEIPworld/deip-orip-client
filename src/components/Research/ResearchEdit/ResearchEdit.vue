@@ -1,83 +1,42 @@
 <template>
-  <d-layout-full-screen>
+  <d-layout-full-screen :title="title">
     <d-form :disabled="processing" @submit="onSubmit">
+      <d-stack>
 
-      <d-input-image :value="formData.image" :aspect-ratio="4" />
+        <attributes-set-iterator
+          :attributes="$where($tenantSettings.researchAttributes, {isVisible: true})"
+          area="researchForm"
+        />
 
-      <d-stack :gap="32">
-        <d-block title="Add title and description">
-          <d-stack>
-            <v-text-field
-              v-model="formData.title"
-              label="Title"
-              outlined
-              hide-details="auto"
-              :rules="[rules.titleLength]"
-              :error-messages="!isPermlinkVerifyed ? 'Research with the same name already exists' : ''"
-            />
+        <d-input-image
+          :value="formData.image"
+          :aspect-ratio="4"
+          label="Header image"
+        />
 
-            <v-textarea
-              v-model="formData.abstract"
-              name="Description"
-              label="Description"
-              outlined
-              :rules="[rules.descriptionLength]"
-            />
-          </d-stack>
-        </d-block>
+        <v-divider />
 
-        <attributes-disciplines-set v-model="formData.disciplines" />
-
-        <attributes-group-set v-model="formData.researchGroup" />
-
-        <d-block title="Research attributes">
-          <d-stack>
-            <template
-              v-for="(attr, index) of $where($tenantSettings.researchAttributes, {isVisible: true, isEditable: true})"
-            >
-              <attributes-set
-                :key="`${index}-attr`"
-                v-model="formData.researchRef.attributes[attr._id]"
-                :attribute-id="attr._id"
-              />
-            </template>
-          </d-stack>
-        </d-block>
-
-        <template
-          v-for="(attr, index) of $where($tenantSettings.researchAttributes, {isVisible: true, isEditable: false})"
-        >
-          <attributes-set
-            :key="`${index}-attr`"
-            v-model="formData.researchRef.attributes[attr._id]"
-            :attribute-id="attr._id"
+        <div class="d-flex justify-space-between align-center">
+          <v-switch
+            v-model="formData.isPrivate"
+            label="Private project"
+            hide-details="auto"
           />
-        </template>
 
-        <d-stack>
-          <v-divider />
-
-          <div class="d-flex justify-space-between align-center">
-            <v-switch
-              v-model="formData.isPrivate"
-              label="Private project"
-              hide-details="auto"
-            />
-
-            <d-stack horizontal :gap="8">
-              <v-btn text color="primary">
-                Cancel
-              </v-btn>
-              <v-btn
-                type="submit"
-                color="primary"
-                :disabled="processing || !isChanged"
-              >
-                Create project
-              </v-btn>
-            </d-stack>
-          </div>
-        </d-stack>
+          <d-stack horizontal :gap="8">
+            <v-btn text color="primary">
+              Cancel
+            </v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              :disabled="processing || !isChanged"
+            >
+              Create project
+            </v-btn>
+          </d-stack>
+        </div>
+      </d-stack>
       </d-stack>
     </d-form>
     <pre>
@@ -88,14 +47,10 @@
 
 <script>
   import { ResearchService } from '@deip/research-service';
-  import { HttpService } from '@deip/http-service'
+  import { HttpService } from '@deip/http-service';
 
   import DStack from '@/components/Deipify/DStack/DStack';
   import { maxDescriptionLength, maxTitleLength } from '@/variables';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import AttributesSet from '@/components/Attributes/AttributesSet';
-  import AttributesDisciplinesSet from '@/components/Attributes/AttributesDisciplines/AttributesDisciplinesSet';
-  import AttributesGroupSet from '@/components/Attributes/AttributesGroup/AttributesGroupSet';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import DForm from '@/components/Deipify/DForm/DForm';
   import deipRpc from '@deip/rpc-client';
@@ -111,26 +66,33 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { researchStore } from '@/components/Research/store';
 
+  import AttributesSetIterator from '@/components/Attributes/AttributesSetIterator';
+  import { researchAttributes } from '@/mixins/platformAttributes';
+
   const researchService = ResearchService.getInstance();
   const httpService = HttpService.getInstance();
 
   export default {
     name: 'ResearchEdit',
     components: {
+      AttributesSetIterator,
       DInputImage,
       DForm,
       DLayoutFullScreen,
-      AttributesGroupSet,
-      AttributesDisciplinesSet,
-      AttributesSet,
-      DBlock,
       DStack
     },
-    mixins: [componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId')],
+    mixins: [
+      componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
+      researchAttributes
+    ],
     props: {
       preset: {
         type: Object,
         default: () => ({})
+      },
+      title: {
+        type: String,
+        default: null
       }
     },
     data() {

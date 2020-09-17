@@ -1,0 +1,8 @@
+<script>
+  import AttributesTextEdit from '@/components/Attributes/AttributesText/AttributesTextEdit';
+
+  export default {
+    name: 'AttributesUrlEdit',
+    mixins: [AttributesTextEdit]
+  };
+</script>

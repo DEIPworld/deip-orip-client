@@ -14,6 +14,9 @@
   import AttributesVideoUrlEdit from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlEdit';
   import AttributesRoadmapEdit from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapEdit';
   import AttributesPartnersEdit from '@/components/Attributes/AttributesPartners/AttributesPartnersEdit';
+  import AttributesUrlEdit from '@/components/Attributes/AttributesUrl/AttributesUrlEdit';
+  import AttributesCheckboxEdit from '@/components/Attributes/AttributesCheckbox/AttributesCheckboxEdit';
+  import AttributesSwitchEdit from '@/components/Attributes/AttributesSwitch/AttributesSwitchEdit';
 
   import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
@@ -27,7 +30,10 @@
       AttributesStepperEdit,
       AttributesVideoUrlEdit,
       AttributesRoadmapEdit,
-      AttributesPartnersEdit
+      AttributesPartnersEdit,
+      AttributesUrlEdit,
+      AttributesCheckboxEdit,
+      AttributesSwitchEdit
     },
     mixins: [commonAttribute, attributeTypeComponent],
   };

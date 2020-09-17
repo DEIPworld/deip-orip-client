@@ -17,7 +17,10 @@ export const researchRouting = [{
     {
       name: 'research.create',
       path: 'create',
-      component: ResearchEdit
+      component: ResearchEdit,
+      props: {
+        title: 'Submit new technology'
+      }
     },
 
     {

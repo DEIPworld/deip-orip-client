@@ -42,6 +42,7 @@ const ATTR_TYPES = {
 
   VIDEO_URL: 'video-url',
   STEPPER: 'stepper',
+  URL: 'url',
 
   ROADMAP: 'roadmap',
   PARTNERS: 'partners'
@@ -56,6 +57,7 @@ const ATTR_TYPES_LIST = {
 
   [ATTR_TYPES.VIDEO_URL]: { value: ATTR_TYPES.VIDEO_URL, text: 'Video URL' },
   [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' },
+  [ATTR_TYPES.URL]: { value: ATTR_TYPES.URL, text: 'URL`s list' },
 
   [ATTR_TYPES.ROADMAP]: { value: ATTR_TYPES.ROADMAP, text: 'Roadmap', system: true },
   [ATTR_TYPES.PARTNERS]: { value: ATTR_TYPES.PARTNERS, text: 'Partners', system: true },

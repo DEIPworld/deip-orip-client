@@ -1,5 +1,3 @@
-import { ATTR_AREAS } from '@/variables';
-
 export const tenantAttributes = {
   computed: {
     tenantAttributes() {

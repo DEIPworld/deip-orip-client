@@ -14,21 +14,11 @@ export const researchDetailsSchema = [
             props: { gap: 32 },
             children: [
               {
-                component: 'DBlock',
-                props: {
-                  title: 'Description'
-                },
-                children: [
-                  {
-                    component: 'div',
-                    class: 'text-body-2',
-                    text: '{{ research.abstract }}'
-                  }
-                ]
-              },
-              {
                 component: 'AttributesReadIterator',
-                props: { attributes: '@attributesByArea.researchDetailsBody' }
+                props: {
+                  attributes: '@research.researchRef.attributes',
+                  area: 'researchDetailsBody'
+                }
               },
               {
                 component: 'ContentList',
@@ -57,7 +47,12 @@ export const researchDetailsSchema = [
           },
           {
             component: 'AttributesReadIterator',
-            props: { attributes: '@attributesByArea.researchDetailsRightSidebar', gap: 0, viewType: 'sidebar' }
+            props: {
+              attributes: '@research.researchRef.attributes',
+              area: 'researchDetailsRightSidebar',
+              gap: 0,
+              viewType: 'sidebar'
+            }
           }
         ]
       }

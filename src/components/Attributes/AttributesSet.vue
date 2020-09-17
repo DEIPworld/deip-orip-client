@@ -19,6 +19,9 @@
   import AttributesVideoUrlSet from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlSet';
   import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
   import AttributesPartnersSet from '@/components/Attributes/AttributesPartners/AttributesPartnersSet';
+  import AttributesUrlSet from '@/components/Attributes/AttributesUrl/AttributesUrlSet';
+  import AttributesCheckboxSet from '@/components/Attributes/AttributesCheckbox/AttributesCheckboxSet';
+  import AttributesSwitchSet from '@/components/Attributes/AttributesSwitch/AttributesSwitchSet';
 
   import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
 
@@ -32,7 +35,10 @@
       AttributesStepperSet,
       AttributesVideoUrlSet,
       AttributesRoadmapSet,
-      AttributesPartnersSet
+      AttributesPartnersSet,
+      AttributesUrlSet,
+      AttributesCheckboxSet,
+      AttributesSwitchSet
     },
     mixins: [commonAttribute, attributeTypeComponent]
   };
