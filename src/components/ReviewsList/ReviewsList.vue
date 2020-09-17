@@ -99,7 +99,24 @@
             </v-tooltip>
           </div>
           <div class="text-right">
+            <!-- START TEMP SOLUTION (query) -->
             <v-btn
+              small
+              color="primary"
+              outlined
+              :to="{
+                name: 'ResearchContentReview',
+                params: {
+                  research_group_permlink: $store.getters['Research/data'].research_group.permlink,
+                  content_permlink: review.researchContentPermlink,
+                  research_permlink: $store.getters['Research/data'].permlink,
+                  review_id: review.id
+                }
+              }"
+            >
+            <!-- END TEMP SOLUTION (query) -->
+            
+            <!-- <v-btn
               small
               color="primary"
               outlined
@@ -110,7 +127,7 @@
                   researchExternalId: researchId,
                 }
               }"
-            >
+            > -->
               See review
             </v-btn>
           </div>
@@ -157,8 +174,17 @@
             });
           });
 
+          ///////// START TEMP SOLUTION (contentPermlink) /////////
+          const researchContentPermlink = this.$store.getters['ResearchContents/list'].find(
+            ({ external_id }) => external_id === review.research_content_external_id
+          ).permlink;
+          ///////// END TEMP SOLUTION (contentPermlink) /////////
+
           const model = {
             ...review,
+            ///////// START TEMP SOLUTION (contentPermlink) /////////
+            researchContentPermlink,
+            ///////// END TEMP SOLUTION (contentPermlink) /////////
             scores: review.scores.reduce((acc, score) => {
               acc[score[0]] = score[1];
               return acc;
