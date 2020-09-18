@@ -70,7 +70,7 @@
 
 
   export default {
-    name: 'AttributesDisciplinesSet',
+    name: 'AttributesDisciplinesListSet',
     components: { DBlock, DStack },
     mixins: [commonSet],
     data() {

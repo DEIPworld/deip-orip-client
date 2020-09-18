@@ -278,7 +278,6 @@
         }
       },
       logoUploadError(file, message, xhr) {
-        // console.log(message);
         this.$refs.researchGroupLogo.removeAllFiles();
         this.isLoading = false;
         this.$notifier.showError('Sorry, an error occurred while uploading logo image, please try again later');
@@ -377,7 +376,7 @@
                   this.cancel(true);
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
 
                   this.$notifier.showError('An error occurred during proposal sending');
                 })

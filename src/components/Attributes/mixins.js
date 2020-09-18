@@ -1,22 +1,26 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import AttributesCommonEditOpts
-  from '@/components/Attributes/AttributesCommon/AttributesCommonEditOpts';
+  from '@/components/Attributes/_partials/Edit/AttributesCommonEditOpts';
 import AttributesCommonEditMeta
-  from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
+  from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
 import { ATTR_TYPES, ATTR_AREAS } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
 
 export const defaultAttributeModel = () => ({
-  isVisible: true,
+  blockchainFieldMeta: null,
+  isBlockchainMeta: false,
+
   title: '',
   shortTitle: '',
   description: '',
+
+  defaultValue: null,
   valueOptions: [],
+
+  isVisible: true,
   isFilterable: false,
-  isEditable: true,
-  areas: [ATTR_AREAS.MAIN],
-  order: 0
+  isRequired: false
 });
 
 export const PROPS = {

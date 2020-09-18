@@ -28,32 +28,32 @@
 
           <template #item.type="{ item }">
             <v-chip outlined small>
-              {{ ATTR_TYPES_LIST[item.type] ? ATTR_TYPES_LIST[item.type].text : 'undefined' }}
+              {{ ATTR_TYPES_LABELS[item.type] ? ATTR_TYPES_LABELS[item.type] : 'undefined' }}
             </v-chip>
           </template>
 
           <template #item.actions="{ item }">
             <crud-actions row>
-              <v-btn
-                :color="item.isVisible ? 'success' : null"
-                icon
-                small
-                @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
-              >
-                <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
-              </v-btn>
+              <template v-if="item.isRequired">
+                <v-btn icon small disabled class="ml-auto">
+                  <v-icon>lock</v-icon>
+                </v-btn>
+              </template>
+              <template v-else>
+                <v-btn
+                  :color="item.isVisible ? 'success' : null"
+                  icon
+                  small
+                  @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+                >
+                  <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
+                </v-btn>
 
-              <template v-if="item.isEditable">
                 <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
                   <v-icon>edit</v-icon>
                 </v-btn>
                 <v-btn icon small @click="openActionDialog('delete', item._id)">
                   <v-icon>delete</v-icon>
-                </v-btn>
-              </template>
-              <template v-else>
-                <v-btn icon small disabled>
-                  <v-icon>lock</v-icon>
                 </v-btn>
               </template>
 
@@ -81,7 +81,7 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import { ATTR_TYPES, ATTR_TYPES_LIST } from '@/variables';
+  import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import CrudActions from '@/components/layout/CrudActions';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -103,7 +103,7 @@
     data() {
       return {
         ATTR_TYPES,
-        ATTR_TYPES_LIST,
+        ATTR_TYPES_LABELS,
 
         xxx: [],
 
@@ -134,7 +134,8 @@
           },
           {
             value: 'actions',
-            width: '1%'
+            width: '1%',
+            align: 'end'
           }
         ]
       };

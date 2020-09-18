@@ -1,11 +1,14 @@
 <template>
-  <d-layout-full-screen
+  <d-layout-full-screen v-if="tenantAttributes.length"
     title="Attributes placement settings"
     full-width
     :style="{height: `calc(100vh - ${$vuetify.application.top}px)`}"
     class="d-flex flex-column"
     no-gutters
   >
+<!--    <pre>-->
+<!--      {{researchAttributesAreas}}-->
+<!--    </pre>-->
     <div class="flex-grow-1 flex-shrink-1 overflow-hidden d-flex">
       <v-sheet
         :width="320"
@@ -169,6 +172,7 @@
           ...{
             [area]: this.$tenantSettings.researchAttributesAreas[area]
               .map((attr) => this.getAttributeInfo(attr))
+              .filter((attr) => attr)
           }
         }), {});
 
@@ -194,6 +198,7 @@
         this.processing = true;
 
         const clonedProfile = _.cloneDeep(this.$tenant.profile);
+
         const updatedAreas = Object.keys(this.researchAttributesAreas)
           .reduce((obj, area) => ({
             ...obj,

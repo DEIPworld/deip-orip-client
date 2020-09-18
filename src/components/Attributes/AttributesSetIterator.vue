@@ -1,10 +1,10 @@
 <template>
   <d-stack :gap="gap">
     <attributes-set
-      v-for="(attribute, index) in internalAttributes"
+      v-for="(attr, index) in internalAttributes"
       :key="`${index}-attr`"
-      :value="attribute.value"
-      :attribute-id="attribute._id"
+      v-model="internalValue[attr._id]"
+      :attribute-id="attr._id"
       :view-type="viewType"
     />
   </d-stack>
@@ -15,11 +15,12 @@
   import { PROPS } from '@/components/Attributes/mixins';
   import AttributesSet from '@/components/Attributes/AttributesSet';
   import { tenantAttributes } from '@/mixins/platformAttributes';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   export default {
     name: 'AttributesReadIterator',
     components: { AttributesSet, DStack },
-    mixins: [tenantAttributes],
+    mixins: [tenantAttributes, Proxyable],
     props: {
       attributes: {
         type: Array,

@@ -38,8 +38,6 @@
         const isProposal = !this.research.research_group.is_personal;
         const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        console.log('share:', `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`);
-
         researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
           researchGroup: this.research.research_group.external_id,
           researchExternalId: this.research.external_id,

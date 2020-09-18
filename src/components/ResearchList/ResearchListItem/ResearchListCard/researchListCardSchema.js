@@ -9,11 +9,14 @@ export const researchListCardSchema = [
           gap: 16
         },
         children: [
-          { component: 'ResearchListItemTitle', props: { text: '@research.title' } },
-          { component: 'ResearchListItemAbstract', props: { text: '@research.abstract' } },
           {
             component: 'AttributesReadIterator',
-            props: { attributes: '@attributesByArea.researchCard', gap: 0, viewType: 'card' }
+            props: {
+              attributes: '@research.researchRef.attributes',
+              gap: 16,
+              viewType: 'card',
+              area: 'researchCard'
+            }
           }
         ]
       }

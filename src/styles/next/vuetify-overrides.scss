@@ -1,7 +1,7 @@
 .v-application {
   .reset-height {
-    min-height: 0;
-    height: auto;
+    min-height: 0 !important;
+    height: auto !important;
   }
 }
 

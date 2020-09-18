@@ -62,10 +62,6 @@
         type: Object,
         default: () => ({})
       }
-    },
-    created() {
-      // console.log(this.research.researchRef.extendedAttributes)
-      // console.log(this.$tenantSettings)
     }
   };
 </script>

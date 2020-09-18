@@ -7,7 +7,7 @@
           outlined
           hide-details="auto"
           label="Attribute type"
-          :items="$where(Object.values(ATTR_TYPES_LIST), {'!system': true})"
+          :items="attrsList"
         />
         <v-divider class="my-6" />
       </template>
@@ -53,8 +53,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
-  import { ATTR_TYPES, ATTR_TYPES_LIST } from '@/variables';
+  import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
 
   import { defaultAttributeModel } from '@/components/Attributes/mixins';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
@@ -67,7 +66,6 @@
     components: {
       DLayoutFullScreen,
       AttributesEdit,
-      FullScreenModal,
     },
     props: {
       title: {
@@ -78,7 +76,7 @@
     data() {
       return {
         ATTR_TYPES,
-        ATTR_TYPES_LIST,
+        ATTR_TYPES_LABELS,
 
         rules: { required: (value) => !!value || 'This field is required' },
 
@@ -95,7 +93,12 @@
       ...mapGetters({
         tenant: 'auth/tenant',
         researchAttributes: 'adminPanel/researchAttributes'
-      })
+      }),
+
+      attrsList() {
+        return Object.keys(this.ATTR_TYPES_LABELS)
+          .map((key) => ({ value: key, text: this.ATTR_TYPES_LABELS[key] }));
+      }
     },
     created() {
       if (this.$route.query.id) {

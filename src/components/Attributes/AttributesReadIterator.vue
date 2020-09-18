@@ -1,5 +1,6 @@
 <template>
   <d-stack :gap="gap">
+<!--    {{internalAttributes}}-->
     <attributes-read
       v-for="(attribute, index) in internalAttributes"
       :key="`${index}-attr`"
@@ -40,7 +41,7 @@
           ? this.attributes
           : this.$tenantSettings.researchAttributesAreas[this.area]
             .map((id) => this.attributes.find((attr) => attr.researchAttributeId === id))
-            .filter((attr) => attr);
+            .filter((attr) => !!attr);
       }
     }
   };

@@ -2,7 +2,7 @@
   import AttributesCommonRead from '@/components/Attributes/_partials/Read/AttributesCommonRead';
 
   export default {
-    name: 'AttributesPartnersRead',
+    name: 'AttributesUserRead',
     mixins: [AttributesCommonRead]
   };
 </script>

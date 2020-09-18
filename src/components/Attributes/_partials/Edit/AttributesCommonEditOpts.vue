@@ -33,7 +33,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import AttributesCommonEditMeta from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
+  import AttributesCommonEditMeta from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
 
   export default {

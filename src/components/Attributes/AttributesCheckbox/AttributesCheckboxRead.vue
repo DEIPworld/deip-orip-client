@@ -1,14 +1,8 @@
-<template>
-  <div v-if="internalValue">
-    {{ internalAttribute.title }}: {{ internalValue }}
-  </div>
-</template>
-
 <script>
-  import { commonRead } from '@/components/Attributes/mixins';
+  import AttributesCommonRead from '@/components/Attributes/_partials/Read/AttributesCommonRead';
 
   export default {
     name: 'AttributesCheckboxRead',
-    mixins: [commonRead]
+    mixins: [AttributesCommonRead]
   };
 </script>

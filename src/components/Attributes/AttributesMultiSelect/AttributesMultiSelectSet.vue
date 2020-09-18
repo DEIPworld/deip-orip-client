@@ -1,18 +1,21 @@
 <template>
-  <d-input-multiselect
+  <d-autocomplete
     v-model="internalValue"
     :label="internalAttribute.title"
     :items="internalAttribute.valueOptions"
+    item-text="title"
+    item-value="researchAttributeId"
+    outlined
   />
 </template>
 
 <script>
   import { commonSet } from '@/components/Attributes/mixins';
-  import DInputMultiselect from '@/components/Deipify/DInput/DInputMultiselect';
+  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
     name: 'AttributesMultiSelectSet',
-    components: { DInputMultiselect },
+    components: { DAutocomplete },
     mixins: [commonSet]
   };
 </script>

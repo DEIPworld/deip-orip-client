@@ -1,8 +1,8 @@
 <script>
-  import AttributesTextEdit from '@/components/Attributes/AttributesText/AttributesTextEdit';
+  import AttributesCommonEdit from '@/components/Attributes/_partials/Edit/AttributesCommonEdit';
 
   export default {
     name: 'AttributesVideoUrlEdit',
-    mixins: [AttributesTextEdit]
+    mixins: [AttributesCommonEdit]
   };
 </script>

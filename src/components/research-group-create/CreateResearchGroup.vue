@@ -113,7 +113,7 @@
                   }
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
                   this.isLoading = false;
                   this.$notifier.showError('An error occurred while creating Research Group, please try again later');
                 });

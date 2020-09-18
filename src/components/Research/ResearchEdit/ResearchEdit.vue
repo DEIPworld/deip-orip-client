@@ -2,8 +2,11 @@
   <d-layout-full-screen :title="title">
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
-
+<!--        <pre>-->
+<!--          {{ transformedFormData }}-->
+<!--        </pre>-->
         <attributes-set-iterator
+          v-model="formData.researchRef.attributes"
           :attributes="$where($tenantSettings.researchAttributes, {isVisible: true})"
           area="researchForm"
         />
@@ -105,8 +108,8 @@
           title: '',
           abstract: '',
           disciplines: [],
-          research_group: '',
-          is_private: false,
+          researchGroup: this.$currentUserName,
+          isPrivate: false,
 
           researchRef: {
             attributes: {}
@@ -126,8 +129,7 @@
     },
     computed: {
       ...mapGetters({
-        userGroups: 'auth/userGroups',
-        tenant: 'auth/tenant'
+        userGroups: 'auth/userGroups'
       }),
 
       userGroup() {
@@ -140,6 +142,32 @@
 
       isChanged() {
         return !compareModels(this.cachedFormData, this.formData);
+      },
+
+      transformedFormData() {
+        const attributes = compactResearchAttributes(this.formData.researchRef.attributes);
+
+        const chainFields = this.$tenantSettings.researchAttributes
+          .filter((attr) => !!attr.blockchainFieldMeta)
+          .reduce((acc, attr) => {
+            const value = this.formData.researchRef.attributes[attr._id];
+            acc[attr.blockchainFieldMeta.field] = value;
+            return acc;
+          }, {});
+
+        const disciplinesMarker = this.$tenantSettings.researchAttributes.find((a) => a.type === 'disciplines-list')._id
+        const disciplines = this.formData.researchRef.attributes[disciplinesMarker]
+
+        return {
+          data: {
+            ...this.formData,
+            ...chainFields,
+            ...{
+              disciplines
+            }
+          },
+          offchainMeta: { attributes }
+        };
       }
     },
     watch: {
@@ -160,15 +188,15 @@
               ...clone,
               ...{
                 disciplines: clone.disciplines.map((d) => d.external_id),
-                research_group: clone.research_group.external_id,
+                researchGroup: clone.research_group.external_id,
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
                 // todo: check
                 image: this.$options.filters.researchBackgroundSrc(clone.external_id),
 
-                is_private: !this.isPublic,
-                review_share: undefined,
+                isPrivate: !this.isPublic,
+                reviewShare: undefined,
                 compensation_share: undefined,
                 members: undefined
               }
@@ -177,6 +205,8 @@
             this.formData = { ..._.cloneDeep(transformed) };
             this.cachedFormData = { ..._.cloneDeep(transformed) };
           });
+      } else {
+        this.formData.researchGroup = this.$currentUserName;
       }
     },
     methods: {
@@ -189,8 +219,8 @@
       verifyPermlink() {
         return researchService
           .checkResearchExistenceByPermlink(
-            this.formData.research_group,
-            this.formData.title
+            this.$currentUserName,
+            this.transformedFormData.data.title
           )
           .then((exists) => {
             this.isPermlinkVerifyed = !exists;
@@ -217,20 +247,11 @@
       createResearch(exist) {
         if (exist) return false;
 
-        const attributes = compactResearchAttributes(this.formData.researchRef.attributes);
-        const chainFields = this.tenant.profile.settings.researchAttributes
-          .filter((attr) => !!attr.blockchainFieldMeta)
-          .reduce((acc, attr) => {
-            let value = attributes[attr._id];
-            acc[attr.blockchainFieldMeta.field] = value; 
-            return acc;
-          }, {});
-
         return researchService.createResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
-          { ...this.formData, ...chainFields },
-          { attributes }
+          this.transformedFormData.data,
+          this.transformedFormData.offchainMeta
         )
           .then(({ rm }) => {
             this.$notifier.showSuccess(`Project "${this.formData.title}" has been created successfully`);
@@ -246,21 +267,11 @@
       },
 
       updateResearchData() {
-
-        const attributes = compactResearchAttributes(this.formData.researchRef.attributes);
-        const chainFields = this.tenant.profile.settings.researchAttributes
-          .filter((attr) => !!attr.blockchainFieldMeta)
-          .reduce((acc, attr) => {
-            let value = attributes[attr._id];
-            acc[attr.blockchainFieldMeta.field] = value; 
-            return acc;
-          }, {});
-
         return researchService.updateResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
-          { ...this.formData, ...chainFields },
-          { attributes }
+          this.transformedFormData.data,
+          this.transformedFormData.offchainMeta
         );
       },
 

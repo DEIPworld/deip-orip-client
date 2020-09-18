@@ -4,10 +4,6 @@
 
 <script>
   export default {
-    name: 'AttributesUsersSet'
+    name: 'AttributesUserSet'
   };
 </script>
-
-<style scoped>
-
-</style>

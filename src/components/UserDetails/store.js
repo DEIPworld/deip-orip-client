@@ -190,7 +190,6 @@ const actions = {
           ...item,
           discipline_name: disciplinesName[i]
         }));
-        // console.log(fullData)
         commit('SET_EXPERTISE', fullData);
       })
       .finally(() => {

@@ -35,32 +35,59 @@ const VIEW_TYPES = createEnum({
 const ATTR_TYPES = {
   TEXT: 'text',
   TEXTAREA: 'textarea',
+
   SELECT: 'select',
-  SWITCH: 'switch',
-  CHECKBOX: 'checkbox',
   MULTI_SELECT: 'multi-select',
 
+  SWITCH: 'switch',
+  CHECKBOX: 'checkbox',
+
+  //=============================
+
+  URL: 'url',
   VIDEO_URL: 'video-url',
   STEPPER: 'stepper',
-  URL: 'url',
+
+  USER: 'user',
+  USERS_LIST: 'users-list',
+
+  DISCIPLINE: 'discipline',
+  DISCIPLINES_LIST: 'disciplines-list',
+
+  RESEARCH_GROUP: 'research-group',
+  RESEARCH_GROUPS_LIST: 'research-groups-list',
 
   ROADMAP: 'roadmap',
   PARTNERS: 'partners'
 };
-const ATTR_TYPES_LIST = {
-  [ATTR_TYPES.TEXT]: { value: ATTR_TYPES.TEXT, text: 'Text field' },
-  [ATTR_TYPES.TEXTAREA]: { value: ATTR_TYPES.TEXTAREA, text: 'Text area' },
-  [ATTR_TYPES.SELECT]: { value: ATTR_TYPES.SELECT, text: 'Dropdown select' },
-  [ATTR_TYPES.SWITCH]: { value: ATTR_TYPES.SWITCH, text: 'Switch' },
-  [ATTR_TYPES.CHECKBOX]: { value: ATTR_TYPES.CHECKBOX, text: 'Checkbox' },
-  [ATTR_TYPES.MULTI_SELECT]: { value: ATTR_TYPES.MULTI_SELECT, text: 'Multiple select' },
 
-  [ATTR_TYPES.VIDEO_URL]: { value: ATTR_TYPES.VIDEO_URL, text: 'Video URL' },
-  [ATTR_TYPES.STEPPER]: { value: ATTR_TYPES.STEPPER, text: 'Level select' },
-  [ATTR_TYPES.URL]: { value: ATTR_TYPES.URL, text: 'URL`s list' },
+const ATTR_TYPES_LABELS = {
+  [ATTR_TYPES.TEXT]: 'Text field',
+  [ATTR_TYPES.TEXTAREA]: 'Text area',
 
-  [ATTR_TYPES.ROADMAP]: { value: ATTR_TYPES.ROADMAP, text: 'Roadmap', system: true },
-  [ATTR_TYPES.PARTNERS]: { value: ATTR_TYPES.PARTNERS, text: 'Partners', system: true },
+  [ATTR_TYPES.SELECT]: 'Dropdown select',
+  [ATTR_TYPES.MULTI_SELECT]: 'Multiple select',
+
+  [ATTR_TYPES.SWITCH]: 'Switch',
+  [ATTR_TYPES.CHECKBOX]: 'Checkbox',
+
+  //=============================
+
+  [ATTR_TYPES.URL]: 'URL`s list',
+  [ATTR_TYPES.VIDEO_URL]: 'Video URL',
+  [ATTR_TYPES.STEPPER]: 'Level select',
+
+  [ATTR_TYPES.USER]: 'user',
+  [ATTR_TYPES.USERS_LIST]: 'users-list',
+
+  [ATTR_TYPES.DISCIPLINE]: 'Discipline',
+  [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
+
+  [ATTR_TYPES.RESEARCH_GROUP]: 'research-group',
+  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: 'research-groups-list',
+
+  [ATTR_TYPES.ROADMAP]: 'Roadmap',
+  [ATTR_TYPES.PARTNERS]: 'Partners',
 };
 
 const ATTR_AREAS = {
@@ -84,7 +111,7 @@ export {
   VIEW_TYPES,
 
   ATTR_TYPES,
-  ATTR_TYPES_LIST,
+  ATTR_TYPES_LABELS,
 
   ATTR_AREAS,
 

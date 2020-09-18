@@ -11,35 +11,19 @@
 </template>
 
 <script>
-  import AttributesTextSet from '@/components/Attributes/AttributesText/AttributesTextSet';
-  import AttributesTextareaSet from '@/components/Attributes/AttributesTextarea/AttributesTextareaSet';
-  import AttributesSelectSet from '@/components/Attributes/AttributesSelect/AttributesSelectSet';
-  import AttributesMultiSelectSet from '@/components/Attributes/AttributesMultiSelect/AttributesMultiSelectSet';
-  import AttributesStepperSet from '@/components/Attributes/AttributesStepper/AttributesStepperSet';
-  import AttributesVideoUrlSet from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlSet';
-  import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
-  import AttributesPartnersSet from '@/components/Attributes/AttributesPartners/AttributesPartnersSet';
-  import AttributesUrlSet from '@/components/Attributes/AttributesUrl/AttributesUrlSet';
-  import AttributesCheckboxSet from '@/components/Attributes/AttributesCheckbox/AttributesCheckboxSet';
-  import AttributesSwitchSet from '@/components/Attributes/AttributesSwitch/AttributesSwitchSet';
-
   import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
+
+  const componentsContext = require.context('./', true, /Attributes(.*)\/(.*)Set\.vue$/);
+  const components = componentsContext.keys().reduce((obj, c) => ({
+    ...obj,
+    ...{
+      [c.replace(/^.*[\\/]/, '').replace(/\.vue/, '').split('/').pop()]: componentsContext(c).default
+    }
+  }), {});
 
   export default {
     name: 'AttributesSet',
-    components: {
-      AttributesTextSet,
-      AttributesTextareaSet,
-      AttributesSelectSet,
-      AttributesMultiSelectSet,
-      AttributesStepperSet,
-      AttributesVideoUrlSet,
-      AttributesRoadmapSet,
-      AttributesPartnersSet,
-      AttributesUrlSet,
-      AttributesCheckboxSet,
-      AttributesSwitchSet
-    },
+    components,
     mixins: [commonAttribute, attributeTypeComponent]
   };
 </script>

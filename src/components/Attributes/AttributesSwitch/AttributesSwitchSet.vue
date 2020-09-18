@@ -10,7 +10,7 @@
   import { commonSet } from '@/components/Attributes/mixins';
 
   export default {
-    name: 'AttributesCheckboxSet',
+    name: 'AttributesSwitchSet',
     mixins: [commonSet]
   };
 </script>

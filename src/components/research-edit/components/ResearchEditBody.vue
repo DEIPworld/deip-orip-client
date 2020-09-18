@@ -298,7 +298,7 @@
                   }
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
 
                   this.$notifier.showError('An error occurred during proposal sending');
                 })

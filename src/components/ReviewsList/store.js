@@ -19,8 +19,6 @@ const ACTIONS = {
       .then((items) => {
         reviews.push(...items);
 
-        console.log(items);
-
         return Promise.all([
           Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
           usersService.getEnrichedProfiles(reviews.map((r) => r.author))

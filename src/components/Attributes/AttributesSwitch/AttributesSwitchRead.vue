@@ -1,8 +1,8 @@
 <script>
-  import AttributesCheckboxRead from '@/components/Attributes/AttributesCheckbox/AttributesCheckboxRead';
+  import AttributesCommonRead from '@/components/Attributes/_partials/Read/AttributesCommonRead';
 
   export default {
-    name: 'AttributesCheckboxRead',
-    mixins: [AttributesCheckboxRead]
+    name: 'AttributesSwitchRead',
+    mixins: [AttributesCommonRead]
   };
 </script>
