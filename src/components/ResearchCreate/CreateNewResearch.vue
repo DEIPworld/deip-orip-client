@@ -156,7 +156,7 @@
           videoSrc: '',
           review_share_in_percent: 5,
           milestones: [],
-          isPrivate: false,
+          is_private: false,
           partners: [],
           attributes: {}
         }
@@ -226,7 +226,7 @@
       },
 
       setPrivateFlag(isPublic) {
-        this.research.isPrivate = !isPublic;
+        this.research.is_private = !isPublic;
       },
 
       finish() {
@@ -238,28 +238,17 @@
           this.user.privKey,
           isProposal,
           {
-            researchGroup: this.research.group.account.name,
+            research_group: this.research.group.account.name,
             title: this.research.title,
             abstract: this.research.description,
             disciplines: this.research.disciplines.map((d) => d.id),
-            isPrivate: this.research.isPrivate,
+            is_private: this.research.is_private,
             members: undefined,
-            reviewShare: undefined,
-            compensationShare: undefined,
+            review_share: undefined,
+            compensation_share: undefined,
             extensions: []
           },
           {
-            videoSrc: this.research.videoSrc,
-            milestones: this.research.milestones.map((m, i) => ({
-              goal: m.goal,
-              budget: m.budget,
-              purpose: m.purpose,
-              details: m.details,
-              eta: moment(m.eta)
-                .toDate(),
-              isActive: i === 0
-            })),
-            partners: this.research.partners,
             attributes: Object.keys(this.research.attributes)
               .map((attribute) => ({
                 researchAttributeId: attribute,

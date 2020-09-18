@@ -74,7 +74,7 @@
         :loading="isRefSaving"
         :disabled="isRefSaving"
         color="primary"
-        @click="updateResearchMetadata()"
+        @click="updateResearch()"
       >
         Update Info
       </v-btn>
@@ -258,18 +258,25 @@
             if (this.isPermlinkVerifyed) {
               this.isMetaSaving = true;
 
+              const attributes = Object.keys(this.attributes).map((a) => {
+                return {
+                  researchAttributeId: a,
+                  value: this.attributes[a] || null
+                }
+              });
+
               const isProposal = !this.research.research_group.is_personal;
               researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
-                researchGroup: this.research.research_group.external_id,
-                externalId: this.research.external_id,
+                research_group: this.research.research_group.external_id,
+                external_id: this.research.external_id,
                 title: this.title,
                 abstract: this.description,
-                isPrivate: !this.isPublic,
-                reviewShare: undefined,
-                compensationShare: undefined,
+                is_private: !this.isPublic,
+                review_share: undefined,
+                compensation_share: undefined,
                 members: undefined,
                 extensions: []
-              })
+              }, { attributes })
                 .then(() => {
                   this.$notifier.showSuccess('Proposal has been sent successfully!');
                   if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
@@ -303,39 +310,6 @@
           .catch((error) => {
             this.isPermlinkVerifyed = false;
           });
-      },
-
-      updateResearchMetadata() {
-        this.isRefSaving = true;
-
-        const attributes = Object.keys(this.attributes).map((a) => {
-          return {
-            researchAttributeId: a,
-            value: this.attributes[a] || null
-          }
-        });
-
-        researchService.updateResearchOffchainMeta(this.research.external_id, {
-          attributes: attributes
-        })
-          .then(() => {
-            this.$notifier.showSuccess('Info has been change successfully!');
-            this.$router.push({
-              name: 'ResearchDetails',
-              params: {
-                research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                research_permlink: encodeURIComponent(this.research.permlink)
-              }
-            });
-          })
-          .catch((err) => {
-            console.error(err);
-            this.$notifier.showError('An error occurred during change info');
-          })
-          .finally(() => {
-            this.isRefSaving = false;
-          });
-
       },
 
       updateBackgroundImage() {
