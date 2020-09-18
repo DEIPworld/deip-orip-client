@@ -12,7 +12,22 @@
       </template>
 
       <template #item.title="{item}">
+        <!-- START TEMP SOLUTION (query) -->
         <router-link
+          v-if="$isLoggedIn"
+          class="a"
+          :to="{
+            name: 'ResearchContentDetails',
+            params: {
+              research_group_permlink: $store.getters['Research/data'].research_group.permlink,
+              content_permlink: item.permlink,
+              research_permlink: $store.getters['Research/data'].permlink,
+            }
+          }"
+        >
+        <!-- END TEMP SOLUTION (query) -->
+
+        <!-- <router-link
           v-if="$isLoggedIn"
           class="a"
           :to="{
@@ -22,7 +37,7 @@
               researchExternalId: $route.params.researchExternalId,
             }
           }"
-        >
+        > -->
           {{ item.title }}
         </router-link>
         <template v-else>
