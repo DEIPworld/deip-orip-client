@@ -5,6 +5,7 @@ import ContentDetails from '@/components/Contents/ContentDetails/ContentDetails'
 import { reviewRoutingFabric } from '@/components/Reviews/router';
 import { contentRoutingFabric } from '@/components/Contents/router';
 import Research from '@/components/Research/Research';
+import ResearchFoundraising from '@/components/Research/ResearchFoundraising/ResearchFoundraising';
 
 const routerView = { template: '<router-view />' };
 
@@ -54,6 +55,11 @@ export const researchRouting = [{
           name: 'research.edit',
           path: 'edit',
           component: ResearchEdit
+        },
+        {
+          name: 'research.fundraising',
+          path: 'fundraising',
+          component: ResearchFoundraising
         }
       ]
     },
