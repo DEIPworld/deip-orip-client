@@ -2,9 +2,6 @@
   <d-layout-full-screen :title="title">
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
-<!--        <pre>-->
-<!--          {{ transformedFormData }}-->
-<!--        </pre>-->
         <attributes-set-iterator
           v-model="formData.researchRef.attributes"
           :attributes="$where($tenantSettings.researchAttributes, {isVisible: true})"
@@ -108,7 +105,7 @@
           title: '',
           abstract: '',
           disciplines: [],
-          researchGroup: this.$currentUserName,
+          researchGroup: null,
           isPrivate: false,
 
           researchRef: {
@@ -137,7 +134,7 @@
       },
 
       isProposal() {
-        return this.formData.research_group !== this.userGroup.external_id;
+        return this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
       },
 
       isChanged() {
@@ -236,7 +233,7 @@
           this.$router.push({
             name: 'research.details',
             params: {
-              researchExternalId: research
+              researchExternalId: research.external_id
             }
           });
         } else {
@@ -254,7 +251,7 @@
           this.transformedFormData.offchainMeta
         )
           .then(({ rm }) => {
-            console.log(rm)
+
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             return deipRpc.api.getResearchAsync(rm._id);
           })
