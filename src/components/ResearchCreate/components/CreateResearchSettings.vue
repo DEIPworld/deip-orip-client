@@ -101,7 +101,7 @@
     },
     data() {
       return {
-        isPublic: !this.research.isPrivate,
+        isPublic: !this.research.is_private,
         attributes: {}
       };
     },
