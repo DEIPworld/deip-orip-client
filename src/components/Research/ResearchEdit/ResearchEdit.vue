@@ -236,7 +236,7 @@
           this.$router.push({
             name: 'research.details',
             params: {
-              researchExternalId: research.external_id
+              researchExternalId: research
             }
           });
         } else {
@@ -254,7 +254,8 @@
           this.transformedFormData.offchainMeta
         )
           .then(({ rm }) => {
-            this.$notifier.showSuccess(`Project "${this.formData.title}" has been created successfully`);
+            console.log(rm)
+            this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {

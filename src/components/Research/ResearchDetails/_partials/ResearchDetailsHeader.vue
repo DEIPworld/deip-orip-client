@@ -5,9 +5,13 @@
   >
     <div class="d-flex justify-space-between">
       <d-stack :max-width="800" color="transparent">
-        <div class="text-h4">
-          {{ research.title }}
-        </div>
+
+
+        <attributes-read-iterator
+          :attributes="research.researchRef.attributes"
+          area="researchDetailsHeader"
+          :gap="16"
+        />
 
         <d-meta-item icon="today">
           Created {{ research.created_at | dateFormat('D MMM YYYY', true) }}
@@ -46,11 +50,13 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import DTruncateMore from '@/components/Deipify/DTruncateMore/DTruncateMore';
+  import AttributesReadIterator from '@/components/Attributes/AttributesReadIterator';
 
   export default {
     name: 'ResearchDetailsHeaderTemp',
 
     components: {
+      AttributesReadIterator,
       DStack,
       DTruncateMore,
       DLayoutHeader,

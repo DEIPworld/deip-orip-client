@@ -11,7 +11,7 @@ export const researchDetailsSchema = [
         children: [
           {
             component: 'DStack',
-            props: { gap: 32 },
+            props: { gap: 48 },
             children: [
               {
                 component: 'AttributesReadIterator',
