@@ -24,10 +24,9 @@
           outlined
           color="white"
           :to="{
-            name: 'ResearchEdit',
+            name: 'research.edit',
             params: {
-              research_group_permlink: encodeURIComponent(research.research_group.permlink),
-              research_permlink: encodeURIComponent(research.permlink)
+              researchExternalId: research.external_id,
             }
           }"
         >

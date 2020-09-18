@@ -1,5 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
+    {{transformedFormData.offchainMeta}}
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
         <attributes-set-iterator
@@ -181,6 +182,7 @@
           .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
           .then(() => {
             const clone = _.cloneDeep(this.$store.getters['Research/data']);
+            // const transformed = camelizeObjectKeys({
             const transformed = {
               ...clone,
               ...{
@@ -198,10 +200,12 @@
                 members: undefined
               }
             };
+            // });
 
             this.formData = { ..._.cloneDeep(transformed) };
             this.cachedFormData = { ..._.cloneDeep(transformed) };
           });
+          // });
       } else {
         this.formData.researchGroup = this.$currentUserName;
       }
@@ -293,7 +297,7 @@
 
         return Promise.all([
           this.updateResearchData(),
-          this.updateResearchImage()
+          // this.updateResearchImage()
         ])
           .then(() => {
             this.$notifier.showSuccess('Info has been change successfully!');
