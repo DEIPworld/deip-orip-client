@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { mapGetters } from 'vuex';
   import DStack from '@/components/Deipify/DStack/DStack';
@@ -50,7 +50,7 @@
   export default {
     name: 'AttributesGroupSet',
     components: { DStack, DBlock },
-    mixins: [commonSet],
+    mixins: [attributeSet],
     data() {
       return {
         isPersonal: true

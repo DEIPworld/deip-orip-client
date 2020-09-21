@@ -1,7 +1,6 @@
 <script>
   import { VAutocomplete } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
-  import { VNode } from 'vue';
 
   export default {
     name: 'DAutocomplete',
@@ -91,7 +90,6 @@
           this.genProgress()
         ];
       }
-
     }
   };
 </script>

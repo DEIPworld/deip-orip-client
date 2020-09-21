@@ -41,6 +41,10 @@ export const PROPS = {
     type: String,
     default: undefined
   },
+  attribute: {
+    type: Object,
+    default: () => ({})
+  },
   multiple: {
     type: Boolean,
     default: false
@@ -106,6 +110,7 @@ export const commonAttribute = {
     type: PROPS.type,
     viewType: PROPS.viewType,
     attributeId: PROPS.attributeId,
+    attribute: PROPS.attribute,
     multiple: PROPS.multiple
   }
 };
@@ -118,13 +123,7 @@ export const commonEdit = {
   mixins: [Proxyable, resetModelOnCreate]
 };
 
-export const commonRead = {
-  mixins: [Proxyable, tenantAttributes, internalAttribute],
-  props: {
-    attributeId: PROPS.attributeId,
-    viewType: PROPS.viewType
-  }
-};
+
 
 export const commonSet = {
   mixins: [Proxyable, tenantAttributes, internalAttribute],
@@ -134,10 +133,66 @@ export const commonSet = {
   }
 };
 
+
+export const commonRead = {
+  mixins: [Proxyable, tenantAttributes, internalAttribute],
+  props: {
+    attribute: PROPS.attribute,
+    attributeId: PROPS.attributeId,
+    viewType: PROPS.viewType
+  }
+};
+
 export const optionsRead = {
   computed: {
     valueOption() {
       return this.internalAttribute.valueOptions.find(({ value }) => value === this.internalValue);
     }
+  }
+};
+
+////////////////////////////////////////////////
+
+// export const attributeInfo = {
+//   mixins: [tenantAttributes],
+//   computed: {
+//     attributeInfo() {
+//       const id = this.attribute._id || this.attribute.researchAttributeId;
+//       return this.tenantAttributes.find(({ _id }) => _id === id);
+//     }
+//   }
+// };
+
+export const attributeRead = {
+  mixins: [tenantAttributes],
+  props: {
+    attribute: PROPS.attribute,
+    viewType: PROPS.viewType
+  },
+  computed: {
+    attributeInfo() {
+      const id = this.attribute._id || this.attribute.researchAttributeId;
+      return this.tenantAttributes.find(({ _id }) => _id === id);
+    }
+  },
+  render(h) {
+    return this._v(this.attribute.value);
+  }
+};
+
+export const attributeReadOption = {
+  mixins: [attributeRead],
+  computed: {
+    valueOption() {
+      return this.attributeInfo.valueOptions.find(({ value }) => value === this.attribute.value);
+    }
+  }
+};
+
+export const attributeSet = {
+  mixins: [Proxyable],
+  props: {
+    attribute: PROPS.attribute,
+    viewType: PROPS.viewType
   }
 };

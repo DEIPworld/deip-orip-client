@@ -2,9 +2,9 @@
   <d-block widget separated>
     <div class="d-flex align-center">
 
-      <d-simple-tooltip :tooltip="internalAttribute.title" tag="div">
+      <d-simple-tooltip :tooltip="attributeInfo.title" tag="div">
         <div class="text-h6 font-weight-medium mr-2">
-          {{ internalAttribute.shortTitle }}
+          {{ attributeInfo.shortTitle }}
         </div>
       </d-simple-tooltip>
 
@@ -15,7 +15,7 @@
           :size="32"
         >
           <div>
-            {{ internalAttribute.valueOptions.indexOf(valueOption) + 1 }}
+            {{ attributeInfo.valueOptions.indexOf(valueOption) + 1 }}
           </div>
         </v-avatar>
       </d-simple-tooltip>
@@ -24,13 +24,13 @@
 </template>
 
 <script>
-  import { commonRead, optionsRead } from '@/components/Attributes/mixins';
+  import { attributeReadOption } from '@/components/Attributes/mixins';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'AttributesStepperReadSidebar',
     components: { DBlock, DSimpleTooltip },
-    mixins: [commonRead, optionsRead]
+    mixins: [attributeReadOption]
   };
 </script>

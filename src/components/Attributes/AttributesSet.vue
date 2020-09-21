@@ -4,6 +4,7 @@
       :is="attributeTypeComponent"
       v-model="internalValue"
       :attribute-id="attributeId"
+      :attribute="attribute"
       :multiple="multiple"
     />
   </div>

@@ -1,21 +1,25 @@
 <template>
   <d-autocomplete
     v-model="internalValue"
-    :label="internalAttribute.title"
-    :items="internalAttribute.valueOptions"
+    :label="attribute.title"
+    :items="attribute.valueOptions"
     item-text="title"
     item-value="researchAttributeId"
     outlined
+    multiple
+    chips
+    outlined-chips
+    deletable-chips
   />
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
     name: 'AttributesMultiSelectSet',
     components: { DAutocomplete },
-    mixins: [commonSet]
+    mixins: [attributeSet]
   };
 </script>

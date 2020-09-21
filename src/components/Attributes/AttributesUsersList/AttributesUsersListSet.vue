@@ -2,7 +2,7 @@
   <d-autocomplete
     v-if="$ready"
     v-model="internalValue"
-    :label="internalAttribute.title"
+    :label="attribute.title"
     :items="usersList"
     :item-text="userFullName"
     :item-value="userId"

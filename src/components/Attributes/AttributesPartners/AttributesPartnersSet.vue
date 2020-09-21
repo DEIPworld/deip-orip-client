@@ -1,5 +1,5 @@
 <template>
-  <d-block :title="internalAttribute.title">
+  <d-block :title="attribute.title">
     <d-timeline-item
       v-for="(partner, index) of internalValue"
       :key="`row-${index}`"
@@ -67,7 +67,7 @@
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
 
   import researchPartners from './researchPartners.json';
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   const partnerModel = () => ({
     type: '',
@@ -77,7 +77,7 @@
   export default {
     name: 'AttributesPartnersSet',
     components: { DTimelineAdd, DTimelineItem, DBlock },
-    mixins: [arrayModelAddFactory(partnerModel()), commonSet],
+    mixins: [arrayModelAddFactory(partnerModel()), attributeSet],
     data() {
       return {
         partnersInfo: researchPartners

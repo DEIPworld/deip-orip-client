@@ -3,8 +3,8 @@
     <v-select
       v-if="!multiple"
       v-model="internalValue"
-      :label="internalAttribute.title"
-      :items="internalAttribute.valueOptions"
+      :label="attribute.title"
+      :items="attribute.valueOptions"
       hide-details="auto"
       item-text="title"
       item-value="value"
@@ -13,7 +13,7 @@
       <template #selection="{ item }">
         <div class="d-flex align-center">
           <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
-            {{ internalAttribute.valueOptions.indexOf(item) + 1 }}
+            {{ attribute.valueOptions.indexOf(item) + 1 }}
           </v-avatar>
           <span class="text-body-2">{{ item.title }}</span>
         </div>
@@ -22,7 +22,7 @@
       <template #item="{ item, on }">
         <div class="d-flex align-center" v-on="on">
           <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
-            {{ internalAttribute.valueOptions.indexOf(item) + 1 }}
+            {{ attribute.valueOptions.indexOf(item) + 1 }}
           </v-avatar>
           <span class="text-body-2">{{ item.title }}</span>
         </div>
@@ -31,7 +31,7 @@
 
     <d-block
       v-else
-      :title="internalAttribute.title"
+      :title="attribute.title"
       widget="compact"
     >
       <v-chip-group
@@ -41,9 +41,9 @@
         active-class="primary--text"
         class="mt-n4"
       >
-        <d-list-expand :active="internalAttribute.valueOptions.length > 4">
+        <d-list-expand :active="attribute.valueOptions.length > 4">
           <template #default="{expanded}">
-            <template v-for="(item, i) in internalAttribute.valueOptions">
+            <template v-for="(item, i) in attribute.valueOptions">
               <v-chip
                 v-if="expanded || i < 4"
                 :key="`research-attribute-filter-${i}`"
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
@@ -79,8 +79,9 @@
       DListExpand,
       DBlock
     },
-    mixins: [commonSet],
+    mixins: [attributeSet],
     methods: {
+      // TODO: check
       onChange(key, value) {
         this.$emit('change', { researchAttributeId: key, value })
       }

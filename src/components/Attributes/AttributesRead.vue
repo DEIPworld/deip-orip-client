@@ -1,8 +1,9 @@
 <template>
   <component
     :is="attributeTypeComponent"
-    v-model="internalValue"
+    :value="internalValue"
     :attribute-id="attributeId"
+    :attribute="attribute"
     :view-type="viewType"
   />
 </template>

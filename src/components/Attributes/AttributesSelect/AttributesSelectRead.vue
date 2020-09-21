@@ -1,8 +1,13 @@
 <script>
-  import AttributesCommonOptionsRead from '@/components/Attributes/_partials/Read/AttributesCommonOptionsRead';
+  import { attributeRead } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesSelectRead',
-    mixins: [AttributesCommonOptionsRead]
+    mixins: [attributeRead],
+    computed: {
+      valueOption() {
+        return this.attributeInfo.valueOptions.find(({ value }) => value === this.attribute.value);
+      }
+    }
   };
 </script>

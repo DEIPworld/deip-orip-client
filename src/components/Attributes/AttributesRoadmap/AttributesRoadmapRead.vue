@@ -52,7 +52,7 @@
 <script>
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import { commonRead } from '@/components/Attributes/mixins';
+  import { attributeRead } from '@/components/Attributes/mixins';
   import moment from 'moment';
   import { chartGradient } from '@/plugins/charts';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -66,7 +66,7 @@
       DTimeline
     },
 
-    mixins: [commonRead],
+    mixins: [attributeRead],
 
     data() {
       return {
@@ -80,7 +80,7 @@
       },
 
       roadmap() {
-        const roadmap = this.internalValue.map((milestone, i) => ({
+        const roadmap = this.attribute.value.map((milestone, i) => ({
           id: i + 1,
           date: moment
             .utc(milestone.eta)
