@@ -1,5 +1,6 @@
 <template>
   <d-autocomplete
+    v-if="$ready"
     v-model="internalValue"
     :label="internalAttribute.title"
     :items="usersList"
@@ -33,7 +34,7 @@
 
   export default {
     name: 'AttributesUserSet',
-    mixins: [AttributesCommonUsersSet],
-    components: { DAutocomplete }
+    components: { DAutocomplete },
+    mixins: [AttributesCommonUsersSet]
   };
 </script>

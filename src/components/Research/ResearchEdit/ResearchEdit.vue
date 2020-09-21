@@ -1,6 +1,5 @@
 <template>
   <d-layout-full-screen :title="title">
-    {{transformedFormData.offchainMeta}}
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
         <attributes-set-iterator

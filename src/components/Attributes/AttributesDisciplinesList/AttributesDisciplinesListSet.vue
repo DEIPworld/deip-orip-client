@@ -1,5 +1,6 @@
 <template>
   <d-block title="Select research domains">
+    {{internalValue}}
     <v-radio-group v-model="isPersonal">
       <d-stack horizontal>
         <v-radio :value="true" label="Personal domains" class="ma-0" />

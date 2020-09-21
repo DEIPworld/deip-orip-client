@@ -26,11 +26,10 @@
     },
     methods: {
       userFullName(e) {
-        // return this.$options.filters.fullname(e.profile)
-        return e.profile.firstName;
+        return e.profile ? this.$options.filters.fullname(e) : 'undefined'
       },
       userId(e) {
-        return e.profile._id;
+        return e.profile ? e.profile._id  : 'undefined';
       }
     }
   };

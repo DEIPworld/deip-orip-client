@@ -1,5 +1,6 @@
 <template>
   <d-autocomplete
+    v-if="$ready"
     v-model="internalValue"
     :label="internalAttribute.title"
     :items="usersList"
