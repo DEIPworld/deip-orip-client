@@ -1,8 +1,8 @@
 <template>
   <v-select
     v-model="internalValue"
-    :label="internalAttribute.title"
-    :items="internalAttribute.valueOptions"
+    :label="attribute.title"
+    :items="attribute.valueOptions"
     hide-details="auto"
     item-text="title"
     item-value="value"
@@ -11,10 +11,10 @@
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesSelectSet',
-    mixins: [commonSet]
+    mixins: [attributeSet]
   };
 </script>

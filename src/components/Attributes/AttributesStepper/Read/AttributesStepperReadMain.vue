@@ -3,7 +3,10 @@
 </template>
 
 <script>
+  import { attributeReadOption } from '@/components/Attributes/mixins';
+
   export default {
-    name: 'AttributesStepperReadMain'
+    name: 'AttributesStepperReadMain',
+    mixins: [attributeReadOption]
   };
 </script>

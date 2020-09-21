@@ -1,8 +1,8 @@
 <script>
-  import AttributesCommonRead from '@/components/Attributes/_partials/Read/AttributesCommonRead';
+  import { attributeRead } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesPartnersRead',
-    mixins: [AttributesCommonRead]
+    mixins: [attributeRead]
   };
 </script>

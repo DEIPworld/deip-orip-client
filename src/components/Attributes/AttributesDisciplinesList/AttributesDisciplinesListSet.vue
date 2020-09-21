@@ -1,9 +1,9 @@
 <template>
-  <d-block title="Select research domains">
+  <d-block :title="`Select research ${attribute.title.toLowerCase()}`">
     <v-radio-group v-model="isPersonal">
       <d-stack horizontal>
         <v-radio :value="true" label="Personal domains" class="ma-0" />
-        <v-radio :value="false" label="All domains" class="ma-0" />
+        <v-radio :value="false" :label="`All ${attribute.title.toLowerCase()}`" class="ma-0" />
       </d-stack>
     </v-radio-group>
 
@@ -17,7 +17,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
           v-model="search"
-          label="Domain"
+          :label="attribute.title"
           outlined
           hide-details="auto"
           v-bind="attrs"
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
   import { find as deepFind } from 'find-keypath';
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 
@@ -72,7 +72,7 @@
   export default {
     name: 'AttributesDisciplinesListSet',
     components: { DBlock, DStack },
-    mixins: [commonSet],
+    mixins: [attributeSet],
     data() {
       return {
         isPersonal: true,

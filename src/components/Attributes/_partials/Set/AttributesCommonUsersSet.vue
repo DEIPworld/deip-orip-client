@@ -1,14 +1,14 @@
 <template />
 
 <script>
-  import { mapState } from 'vuex';
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { usersStore } from '@/components/Users/store';
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
+  import { mapState } from 'vuex';
 
   export default {
     name: 'AttributesCommonUsersSet',
-    mixins: [componentStoreFactory(usersStore), commonSet],
+    mixins: [componentStoreFactory(usersStore), attributeSet],
     computed: {
       ...mapState({
         usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
@@ -26,11 +26,10 @@
     },
     methods: {
       userFullName(e) {
-        // return this.$options.filters.fullname(e.profile)
-        return e.profile.firstName;
+        return e.profile ? this.$options.filters.fullname(e) : 'undefined'
       },
       userId(e) {
-        return e.profile._id;
+        return e.profile ? e.profile._id  : 'undefined';
       }
     }
   };

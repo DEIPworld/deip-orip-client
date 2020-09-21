@@ -1,6 +1,5 @@
 <template>
   <d-layout-full-screen :title="title">
-    {{transformedFormData.offchainMeta}}
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
         <attributes-set-iterator
@@ -33,7 +32,7 @@
               color="primary"
               :disabled="processing || !isChanged"
             >
-              Create project
+              {{ formData.external_id ? 'Update research' : 'Create project' }}
             </v-btn>
           </d-stack>
         </div>
@@ -284,7 +283,7 @@
       },
 
       updateResearch(exists) {
-        if (this.cachedFormData.title !== this.formData.title) {
+        if (this.cachedFormData.title !== this.transformedFormData.data.title) {
           this.isPermlinkVerifyed = !exists;
         } else {
           this.isPermlinkVerifyed = true;
@@ -296,7 +295,7 @@
           this.updateResearchData(),
           // this.updateResearchImage()
         ])
-          .then(([research, ]) => {
+          .then(([research]) => {
             this.$notifier.showSuccess('Info has been change successfully!');
             this.goToResearch(research);
           })

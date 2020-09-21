@@ -1,16 +1,16 @@
 <template>
   <v-switch
     v-model="internalValue"
-    :label="internalAttribute.title"
+    :label="attribute.title"
     hide-details="auto"
   />
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesSwitchSet',
-    mixins: [commonSet]
+    mixins: [attributeSet]
   };
 </script>

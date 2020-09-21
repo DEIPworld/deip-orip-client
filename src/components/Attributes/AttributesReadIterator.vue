@@ -4,8 +4,11 @@
     <attributes-read
       v-for="(attribute, index) in internalAttributes"
       :key="`${index}-attr`"
+
       :value="attribute.value"
       :attribute-id="attribute.researchAttributeId"
+
+      :attribute="attribute"
       :view-type="viewType"
     />
   </d-stack>

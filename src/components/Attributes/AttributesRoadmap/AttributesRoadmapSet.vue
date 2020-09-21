@@ -1,5 +1,5 @@
 <template>
-  <d-block :title="internalAttribute.title">
+  <d-block :title="attribute.title">
     <d-timeline>
       <d-timeline-item
         v-for="(item, index) of internalValue"
@@ -67,7 +67,7 @@
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   const stepModel = () => ({
     goal: '',
@@ -89,14 +89,7 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(stepModel()), commonSet],
-
-    // props: {
-    //   value: {
-    //     type: Array,
-    //     default: () => ([])
-    //   }
-    // },
+    mixins: [arrayModelAddFactory(stepModel()), attributeSet],
 
     created() {
       if (!this.internalValue) {

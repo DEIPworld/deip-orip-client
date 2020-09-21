@@ -1,14 +1,14 @@
 <template>
   <component
     :is="attributeViewTypeComponent"
-    v-model="internalValue"
-    :attribute-id="attributeId"
+    :attribute="attribute"
     :view-type="viewType"
   />
 </template>
 
 <script>
   import {
+    attributeRead, attributeReadOption,
     attributeViewTypeComponent,
     commonAttribute
   } from '@/components/Attributes/mixins';
@@ -25,6 +25,6 @@
       AttributesStepperReadMain,
       AttributesStepperReadCard
     },
-    mixins: [commonAttribute, attributeViewTypeComponent]
+    mixins: [attributeReadOption, attributeViewTypeComponent]
   };
 </script>
