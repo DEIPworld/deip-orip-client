@@ -1,10 +1,8 @@
 <template>
   <d-layout-full-screen :title="title">
+    {{transformedFormData.offchainMeta}}
     <d-form :disabled="processing" @submit="onSubmit">
       <d-stack>
-<!--        <pre>-->
-<!--          {{ transformedFormData }}-->
-<!--        </pre>-->
         <attributes-set-iterator
           v-model="formData.researchRef.attributes"
           :attributes="$where($tenantSettings.researchAttributes, {isVisible: true})"
@@ -108,7 +106,7 @@
           title: '',
           abstract: '',
           disciplines: [],
-          researchGroup: this.$currentUserName,
+          researchGroup: null,
           isPrivate: false,
 
           researchRef: {
@@ -137,7 +135,7 @@
       },
 
       isProposal() {
-        return this.formData.research_group !== this.userGroup.external_id;
+        return this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
       },
 
       isChanged() {
@@ -184,6 +182,7 @@
           .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
           .then(() => {
             const clone = _.cloneDeep(this.$store.getters['Research/data']);
+            // const transformed = camelizeObjectKeys({
             const transformed = {
               ...clone,
               ...{
@@ -201,10 +200,12 @@
                 members: undefined
               }
             };
+            // });
 
             this.formData = { ..._.cloneDeep(transformed) };
             this.cachedFormData = { ..._.cloneDeep(transformed) };
           });
+          // });
       } else {
         this.formData.researchGroup = this.$currentUserName;
       }
@@ -236,7 +237,7 @@
           this.$router.push({
             name: 'research.details',
             params: {
-              researchExternalId: research
+              researchExternalId: research.external_id
             }
           });
         } else {
@@ -254,7 +255,7 @@
           this.transformedFormData.offchainMeta
         )
           .then(({ rm }) => {
-            console.log(rm)
+
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             return deipRpc.api.getResearchAsync(rm._id);
           })
@@ -296,7 +297,7 @@
 
         return Promise.all([
           this.updateResearchData(),
-          this.updateResearchImage()
+          // this.updateResearchImage()
         ])
           .then(() => {
             this.$notifier.showSuccess('Info has been change successfully!');

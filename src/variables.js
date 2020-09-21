@@ -77,8 +77,8 @@ const ATTR_TYPES_LABELS = {
   [ATTR_TYPES.VIDEO_URL]: 'Video URL',
   [ATTR_TYPES.STEPPER]: 'Level select',
 
-  [ATTR_TYPES.USER]: 'user',
-  [ATTR_TYPES.USERS_LIST]: 'users-list',
+  [ATTR_TYPES.USER]: 'User select',
+  [ATTR_TYPES.USERS_LIST]: 'Multiple users select',
 
   [ATTR_TYPES.DISCIPLINE]: 'Discipline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
