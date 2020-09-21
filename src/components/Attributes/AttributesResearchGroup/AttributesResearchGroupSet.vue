@@ -48,7 +48,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
-    name: 'AttributesGroupSet',
+    name: 'AttributesResearchGroupSet',
     components: { DStack, DBlock },
     mixins: [commonSet],
     data() {
