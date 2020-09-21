@@ -11,7 +11,7 @@
           You can choose between 0-50%
         </div>
         <v-text-field
-          v-model="review_share"
+          v-model="reviewShare"
           v-mask="'##'"
           suffix="%"
           outlined
@@ -19,8 +19,8 @@
           @keyup="setReviewShare"
         />
 
-        <div v-if="review_share" class="pt-8 caption grey--text">
-          {{ review_share }}% of potential research reward will be shared between all
+        <div v-if="reviewShare" class="pt-8 caption grey--text">
+          {{ reviewShare }}% of potential research reward will be shared between all
           the reviewers according to their Review Index
         </div>
       </div>
@@ -57,7 +57,7 @@
 
     data() {
       return {
-        review_share: this.research.review_share_in_percent // default
+        reviewShare: this.research.review_share_in_percent // default
       };
     },
 
@@ -88,7 +88,7 @@
         this.$emit('decStep');
       },
       setReviewShare() {
-        this.$emit('setReviewShare', this.review_share);
+        this.$emit('setReviewShare', this.reviewShare);
       },
       finish() {
         this.$emit('finish');

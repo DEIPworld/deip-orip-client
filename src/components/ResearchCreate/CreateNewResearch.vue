@@ -156,7 +156,7 @@
           videoSrc: '',
           review_share_in_percent: 5,
           milestones: [],
-          is_private: false,
+          isPrivate: false,
           partners: [],
           attributes: {}
         }
@@ -226,7 +226,7 @@
       },
 
       setPrivateFlag(isPublic) {
-        this.research.is_private = !isPublic;
+        this.research.isPrivate = !isPublic;
       },
 
       finish() {
@@ -238,14 +238,14 @@
           this.user.privKey,
           isProposal,
           {
-            research_group: this.research.group.account.name,
+            researchGroup: this.research.group.account.name,
             title: this.research.title,
             abstract: this.research.description,
             disciplines: this.research.disciplines.map((d) => d.id),
-            is_private: this.research.is_private,
+            isPrivate: this.research.isPrivate,
             members: undefined,
-            review_share: undefined,
-            compensation_share: undefined,
+            reviewShare: undefined,
+            compensationShare: undefined,
             extensions: []
           },
           {
@@ -256,12 +256,10 @@
               }))
           }
         )
-          .then(({ rm }) => {
-            this.isLoading = false;
-            this.$notifier.showSuccess(`Project "${this.research.title}" has been created successfully`);
-            return deipRpc.api.getResearchAsync(rm._id);
-          })
           .then((research) => {
+            this.isLoading = false;
+            this.$notifier.showSuccess(`Project "${research.title}" has been created successfully`);
+
             if (research) { // if not proposal
               this.$router.push({
                 name: 'ResearchDetails',

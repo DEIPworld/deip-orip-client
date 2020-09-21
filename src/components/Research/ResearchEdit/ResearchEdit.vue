@@ -19,7 +19,7 @@
 
         <div class="d-flex justify-space-between align-center">
           <v-switch
-            v-model="formData.is_private"
+            v-model="formData.isPrivate"
             label="Private project"
             hide-details="auto"
           />
@@ -145,13 +145,13 @@
       transformedFormData() {
         const attributes = compactResearchAttributes(this.formData.researchRef.attributes);
 
-        const chainFields = this.$tenantSettings.researchAttributes
+        const chainFields = camelizeObjectKeys(this.$tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
             const value = this.formData.researchRef.attributes[attr._id];
             acc[attr.blockchainFieldMeta.field] = value;
             return acc;
-          }, {});
+          }, {}));
 
         const disciplinesMarker = this.$tenantSettings.researchAttributes.find((a) => a.type === 'disciplines-list')._id
         const disciplines = this.formData.researchRef.attributes[disciplinesMarker]
@@ -186,6 +186,7 @@
             const transformed = {
               ...clone,
               ...{
+                externalId: clone.external_id,
                 disciplines: clone.disciplines.map((d) => d.external_id),
                 researchGroup: clone.research_group.external_id,
                 researchRef: {
@@ -196,7 +197,7 @@
 
                 isPrivate: !this.isPublic,
                 reviewShare: undefined,
-                compensation_share: undefined,
+                compensationShare: undefined,
                 members: undefined
               }
             };
@@ -245,8 +246,8 @@
         }
       },
 
-      createResearch(exist) {
-        if (exist) return false;
+      createResearch(exists) {
+        if (exists) return false;
 
         return researchService.createResearchViaOffchain(
           this.$currentUser.privKey,
@@ -254,12 +255,8 @@
           this.transformedFormData.data,
           this.transformedFormData.offchainMeta
         )
-          .then(({ rm }) => {
-
-            this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
-            return deipRpc.api.getResearchAsync(rm._id);
-          })
           .then((research) => {
+            this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             this.goToResearch(research);
           })
           .catch((err) => {
@@ -286,22 +283,22 @@
         );
       },
 
-      updateResearch(exist) {
+      updateResearch(exists) {
         if (this.cachedFormData.title !== this.formData.title) {
-          this.isPermlinkVerifyed = !exist;
+          this.isPermlinkVerifyed = !exists;
         } else {
           this.isPermlinkVerifyed = true;
         }
 
-        if (!exist) return false;
+        if (!exists) return false;
 
         return Promise.all([
           this.updateResearchData(),
           // this.updateResearchImage()
         ])
-          .then(() => {
+          .then(([research, ]) => {
             this.$notifier.showSuccess('Info has been change successfully!');
-            this.goToResearch(true);
+            this.goToResearch(research);
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred during change info');
@@ -314,9 +311,9 @@
           this.processing = true;
 
           this.verifyPermlink()
-            .then((exist) => (this.$route.params.researchExternalId
-              ? this.updateResearch(exist)
-              : this.createResearch(exist)))
+            .then((exists) => (this.$route.params.researchExternalId
+              ? this.updateResearch(exists)
+              : this.createResearch(exists)))
             .finally(() => {
               this.processing = false;
             });

@@ -267,13 +267,13 @@
 
               const isProposal = !this.research.research_group.is_personal;
               researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
-                research_group: this.research.research_group.external_id,
-                external_id: this.research.external_id,
+                researchGroup: this.research.research_group.external_id,
+                externalId: this.research.external_id,
                 title: this.title,
                 abstract: this.description,
-                is_private: !this.isPublic,
-                review_share: undefined,
-                compensation_share: undefined,
+                isPrivate: !this.isPublic,
+                reviewShare: undefined,
+                compensationShare: undefined,
                 members: undefined,
                 extensions: []
               }, { attributes })
