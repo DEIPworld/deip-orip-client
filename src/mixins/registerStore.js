@@ -15,7 +15,7 @@ export const componentStoreFactory = (storeModule, hashFromProp) => ({
   mixins: [registerStore],
   data() {
     const hashProp = !hashFromProp
-      ? this.$options.propsData
+      ? (this.$options.propsData || {})
       : dotProp(this, hashFromProp, this.$options.propsData);
 
     const storeModuleHash = crc32(JSON.stringify(hashProp)).toString(32);

@@ -6,6 +6,7 @@
     :item-text="userFullName"
     :item-value="userId"
     outlined
+    multiple
   >
     <template #item="{ item }">
       <v-list-item-avatar :size="24">
@@ -17,23 +18,27 @@
     </template>
 
     <template #selection="{ item }">
-      <div class="d-inline-flex mr-4 align-center">
-        <v-avatar size="24" class="mr-4">
+      <v-chip
+        close
+        close-icon="clear"
+        outlined
+      >
+        <v-avatar left style="margin-left: -8px;">
           <img :src="item.profile | avatarSrc(2 * 24, 2 * 24, false)" />
         </v-avatar>
         {{ item | fullname }}
-      </div>
+      </v-chip>
     </template>
   </d-autocomplete>
 </template>
 
 <script>
-  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import AttributesCommonUsersSet from '@/components/Attributes/_partials/Set/AttributesCommonUsersSet';
+  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
-    name: 'AttributesUserSet',
-    mixins: [AttributesCommonUsersSet],
-    components: { DAutocomplete }
+    name: 'AttributesUsersListSet',
+    components: { DAutocomplete },
+    mixins: [AttributesCommonUsersSet]
   };
 </script>

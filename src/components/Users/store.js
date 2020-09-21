@@ -16,6 +16,12 @@ const ACTIONS = {
       .then((res) => {
         commit('storeUsersProfiles', res);
       });
+  },
+  getActiveUsers({ commit }) {
+    return usersService.getActiveUsers()
+      .then((res) => {
+        commit('storeUsersProfiles', res);
+      });
   }
 };
 
