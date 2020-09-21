@@ -17,12 +17,6 @@
         <v-divider />
 
         <div class="d-flex justify-space-between align-center">
-          <v-switch
-            v-model="formData.isPrivate"
-            label="Private project"
-            hide-details="auto"
-          />
-
           <d-stack horizontal :gap="8">
             <v-btn text color="primary">
               Cancel
@@ -102,12 +96,6 @@
 
         formData: {
 
-          title: '',
-          abstract: '',
-          disciplines: [],
-          researchGroup: null,
-          isPrivate: false,
-
           researchRef: {
             attributes: {}
           },
@@ -148,20 +136,21 @@
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
             const value = this.formData.researchRef.attributes[attr._id];
-            acc[attr.blockchainFieldMeta.field] = value;
+            if (attr.blockchainFieldMeta.isPartial) {
+              if (!value) return acc;
+              acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field] 
+                ? [...acc[attr.blockchainFieldMeta.field], value] 
+                : [value];
+            } else {
+              acc[attr.blockchainFieldMeta.field] = value;
+            }
             return acc;
           }, {}));
-
-        const disciplinesMarker = this.$tenantSettings.researchAttributes.find((a) => a.type === 'disciplines-list')._id
-        const disciplines = this.formData.researchRef.attributes[disciplinesMarker]
 
         return {
           data: {
             ...this.formData,
-            ...chainFields,
-            ...{
-              disciplines
-            }
+            ...chainFields
           },
           offchainMeta: { attributes }
         };
@@ -188,16 +177,13 @@
                 externalId: clone.external_id,
                 disciplines: clone.disciplines.map((d) => d.external_id),
                 researchGroup: clone.research_group.external_id,
+                isPrivate: clone.is_private,
+                members: clone.research_group.is_personal ? undefined : clone.members,
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
                 // todo: check
                 image: this.$options.filters.researchBackgroundSrc(clone.external_id),
-
-                isPrivate: !this.isPublic,
-                reviewShare: undefined,
-                compensationShare: undefined,
-                members: undefined
               }
             };
             // });
@@ -220,7 +206,7 @@
       verifyPermlink() {
         return researchService
           .checkResearchExistenceByPermlink(
-            this.$currentUserName,
+            this.formData.researchGroup,
             this.transformedFormData.data.title
           )
           .then((exists) => {
@@ -233,7 +219,7 @@
       },
 
       goToResearch(research) {
-        if (research) { // if not proposal
+        if (research && research.external_id) { // if not proposal
           this.$router.push({
             name: 'research.details',
             params: {

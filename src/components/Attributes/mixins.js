@@ -9,7 +9,6 @@ import { pascalCase } from 'change-case';
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
-  isBlockchainMeta: false,
 
   title: '',
   shortTitle: '',
