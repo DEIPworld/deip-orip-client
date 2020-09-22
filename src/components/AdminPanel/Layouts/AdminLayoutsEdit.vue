@@ -1,48 +1,38 @@
 <template>
-  <d-layout-section>
-    <d-layout-section-main>
-      <v-row>
-        <v-col cols="3">
-          <admin-layouts-modules
-            :modules="modules"
-          />
-        </v-col>
-        <v-divider vertical />
-        <v-col>
-          <admin-layouts-composer
-            title="Layout"
-            :schema="schema"
-          />
-        </v-col>
-      </v-row>
+  <d-layout-full-screen full-width color="grey lighten-4">
+    <portal to="sidebar">
+      <v-navigation-drawer
+        :width="280"
+        app
+        clipped
+        permanent
+      >
+        <admin-layouts-modules
+          :modules="modules"
+          style="margin-right: 10px;"
+        />
+      </v-navigation-drawer>
+    </portal>
 
-      <pre>
-        {{ schema }}
-      </pre>
-    </d-layout-section-main>
-  </d-layout-section>
+    <v-card flat class="pa-2">
+      <admin-layouts-composer
+        :schema="schema"
+      />
+    </v-card>
 
 
+  </d-layout-full-screen>
 </template>
 
 <script>
-
-  import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
-  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
-  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-
-  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
-
+  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import { baseLayoutModules, gridModules, helperLayoutModules } from '@/components/AdminPanel/Layouts/modules';
+  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
+  import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
 
   export default {
-    name: 'AdminLayouts',
-    components: {
-      AdminLayoutsModules,
-      DLayoutSectionMain,
-      DLayoutSection,
-      AdminLayoutsComposer
-    },
+    name: 'AdminLayoutsEdit',
+    components: { AdminLayoutsComposer, AdminLayoutsModules, DLayoutFullScreen },
     data() {
       return {
         schema: [],

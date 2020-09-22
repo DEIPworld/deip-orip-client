@@ -27,7 +27,7 @@
     computed: {
       valueOptions() {
         // TODO: check
-        return this.attributeInfo.valueOptions.filter(({ value }) => this.attribute.value && this.attribute.value.some(v => v === value));
+        return this.attributeInfo.valueOptions.filter(({ value }) => this.attribute.value && this.attribute.value.some((v) => v === value));
       },
     }
   };

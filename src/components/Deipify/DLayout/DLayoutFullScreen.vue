@@ -1,6 +1,8 @@
 <template>
   <v-sheet
+    class="flex-shrink-1 flex-grow-1"
     :class="contentClasses"
+    :style="contentStyles"
     v-bind="contentAttrs"
   >
     <portal to="sidebar">
@@ -34,9 +36,11 @@
 
 <script>
   import { convertToUnit } from 'vuetify/lib/util/helpers';
+  import Colorable from 'vuetify/lib/mixins/colorable';
 
   export default {
     name: 'DLayoutFullScreen',
+    mixins: [Colorable],
     props: {
       title: {
         type: String,
@@ -64,7 +68,13 @@
       contentClasses() {
         return {
           'mx-auto': !this.fullWidth,
-          'pa-12': !this.noGutters
+          'pa-12': !this.noGutters,
+          ...(this.setBackgroundColor(this.color).class || {})
+        };
+      },
+      contentStyles() {
+        return {
+          ...(this.setBackgroundColor(this.color).style || {})
         };
       }
     }

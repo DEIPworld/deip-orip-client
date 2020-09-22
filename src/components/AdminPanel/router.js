@@ -17,6 +17,7 @@ import ReviewSetup from '@/components/review-setup/ReviewSetup';
 import AdminAttributesSettings
   from '@/components/AdminPanel/AdminAttributes/AdminAttributesSettings';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
+import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/AdminLayoutsEdit';
 
 export const adminRouting = [
   {
@@ -82,6 +83,11 @@ export const adminRouting = [
             path: '',
             name: 'admin.layouts',
             component: AdminLayouts
+          },
+          {
+            path: 'edit',
+            name: 'admin.layouts.edit',
+            component: AdminLayoutsEdit
           }
         ]
       },

@@ -1,4 +1,4 @@
-export const layoutModules = [
+export const baseLayoutModules = [
   { component: 'DLayoutHeader', name: 'Header' },
   { component: 'DLayoutSection', name: 'Section' },
   { component: 'DLayoutSectionMain', name: 'Section content' },
@@ -10,9 +10,16 @@ export const layoutModules = [
       { component: 'div' },
       { component: 'div' }
     ]
-  },
+  }
+];
 
+export const helperLayoutModules = [
   { component: 'DBlock', name: 'Titled block' },
   { component: 'DStack', name: 'Elements stack' },
-  { component: 'DGrid', name: 'Automatic grid' },
+];
+
+export const gridModules = [
+  { component: 'DGrid', name: 'Auto grid' },
+  { component: 'VRow', name: 'Grid row' },
+  { component: 'VCol', name: 'Grid column' },
 ];

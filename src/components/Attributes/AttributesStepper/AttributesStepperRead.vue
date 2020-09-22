@@ -8,9 +8,8 @@
 
 <script>
   import {
-    attributeRead, attributeReadOption,
-    attributeViewTypeComponent,
-    commonAttribute
+    attributeReadOption,
+    attributeViewTypeComponent
   } from '@/components/Attributes/mixins';
 
   import AttributesStepperReadCard from '@/components/Attributes/AttributesStepper/Read/AttributesStepperReadCard';
