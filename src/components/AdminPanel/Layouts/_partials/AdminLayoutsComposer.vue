@@ -7,6 +7,7 @@
   >
     <div v-if="title" class="px-2 py-1 text-caption">
       {{ title }}
+      <v-btn @click="removeNode"></v-btn>
     </div>
     <draggable
       :list="schema"
@@ -28,11 +29,11 @@
       </template>
     </draggable>
   </v-card>
-  <!--  :class="{ 'mb-4': index < schema.length + 1 }" -->
 </template>
 
 <script>
   import draggable from 'vuedraggable';
+  import { find as deepFind } from 'find-keypath';
 
   export default {
     name: 'AdminLayoutsComposer',
@@ -56,14 +57,33 @@
     computed: {
       hostStyles() {
         return {
-          ...(!this.root ? { backgroundColor: 'rgba(0,0,0,.02' } : {})
+          ...(!this.root ? {
+            backgroundColor: 'rgba(0,0,0,.02'
+          } : {})
         };
       },
       hostClasses() {
         return {
-          dotted: !this.root
+          dotted: !this.root,
+          [this.$style.host]: true
         };
+      }
+    },
+    methods: {
+      getNodePath(id) {
+        const path = deepFind(this.schema, id);
+        path.pop();
+        return path;
+      },
+      removeNode(id) {
+        console.log(this.getNodePath(id))
       }
     }
   };
 </script>
+
+<style lang="scss" module>
+  .host:not(:last-child) {
+    margin-bottom: 8px;
+  }
+</style>

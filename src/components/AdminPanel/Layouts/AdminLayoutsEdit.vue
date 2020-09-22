@@ -1,5 +1,6 @@
 <template>
   <d-layout-full-screen full-width color="grey lighten-4">
+<!--    <pre>{{$tenantSettings}}</pre>-->
     <portal to="sidebar">
       <v-navigation-drawer
         :width="280"
@@ -9,7 +10,6 @@
       >
         <admin-layouts-modules
           :modules="modules"
-          style="margin-right: 10px;"
         />
       </v-navigation-drawer>
     </portal>
@@ -19,6 +19,8 @@
         :schema="schema"
       />
     </v-card>
+
+    {{schema}}
 
 
   </d-layout-full-screen>

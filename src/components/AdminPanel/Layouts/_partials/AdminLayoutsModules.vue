@@ -1,28 +1,29 @@
 <template>
   <div>
     <template v-for="(category, index) of modules">
-      <div
-        :key="`ttl-${index}`"
-        class="text-overline"
-      >
-        {{ category.name }}
-      </div>
-
-      <div>
+      <v-list nav dense :key="`ttl-${index}`">
+        <v-subheader>{{ category.name }}</v-subheader>
         <draggable
           :key="`drg-${index}`"
           :list="category.modules"
           :group="{ name: 'g1', pull: 'clone', put: false }"
           :clone="onClone"
-          class="d-flex flex-wrap ma-n1"
         >
-          <v-chip v-for="module of category.modules" :key="module.name" class="ma-1" outlined>
-            <div class="text-caption">
+          <v-list-item link v-for="module of category.modules" :key="module.name">
+            <v-list-item-icon class="mr-3 reset-width">
+              <v-icon size="12" class="grey--text text--lighten-1">drag_indicator</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-avatar size="24" class="mr-3">
+              <v-icon size="18">{{ module.icon }}</v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content class="text-caption font-weight-medium">
               {{ module.name }}
-            </div>
-          </v-chip>
+            </v-list-item-content>
+          </v-list-item>
         </draggable>
-      </div>
+      </v-list>
       <v-divider />
 
     </template>
@@ -55,7 +56,6 @@
         return {
           ..._.cloneDeep(item),
           ...{
-            ...(!isAttribute ? { children: item.children || [] } : {}),
             ...(item.id$ ? { originalId: item.id$ } : {}),
             id$: crc,
           }
