@@ -14,13 +14,13 @@
       </v-navigation-drawer>
     </portal>
 
-    <v-card flat class="pa-2">
+    <v-card flat class="pa-4">
       <admin-layouts-composer
-        :schema="schema"
+        v-model="schema"
       />
     </v-card>
 
-    {{schema}}
+    <pre>{{ JSON.stringify(schema, null, 2) }}</pre>
 
 
   </d-layout-full-screen>
@@ -28,7 +28,12 @@
 
 <script>
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
-  import { baseLayoutModules, gridModules, helperLayoutModules } from '@/components/AdminPanel/Layouts/modules';
+  import {
+    baseLayoutModules,
+    gridModules,
+    helperLayoutModules,
+    typographyModules
+  } from '@/components/AdminPanel/Layouts/modules';
   import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
 
@@ -54,6 +59,10 @@
           {
             name: 'Grid',
             modules: gridModules
+          },
+          {
+            name: 'Typography',
+            modules: typographyModules
           },
           {
             name: 'Attributes',

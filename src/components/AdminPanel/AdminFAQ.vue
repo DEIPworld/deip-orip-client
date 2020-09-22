@@ -21,11 +21,11 @@
       <template #actions>
         <div class="display-flex flex-column">
           <v-btn
-            :color="item.isVisible ? 'success' : null"
+            :color="item.isPublished ? 'success' : null"
             icon
-            @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+            @click="openActionDialog(item.isPublished ? 'unpublish' : 'publish', item._id)"
           >
-            <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
+            <v-icon>{{ item.isPublished ? 'flag' : 'outlined_flag' }}</v-icon>
           </v-btn>
           <v-btn icon :to="{name: 'admin.faq.add', query:{id:item._id}}">
             <v-icon>edit</v-icon>
@@ -137,7 +137,7 @@
           if (q._id === id) {
             return {
               ...q,
-              isVisible: true
+              isPublished: true
             };
           }
           return q;
@@ -149,7 +149,7 @@
           if (q._id === id) {
             return {
               ...q,
-              isVisible: false
+              isPublished: false
             };
           }
           return q;

@@ -29,10 +29,10 @@
           </d-simple-tooltip>
           <d-simple-tooltip
             tag="div"
-            :tooltip="attribute.isVisible ? 'Published' : 'Unpublished'"
+            :tooltip="attribute.isPublished ? 'Published' : 'Unpublished'"
           >
             <v-icon small class="d-flex">
-              {{ attribute.isVisible ? 'flag' : 'outlined_flag' }}
+              {{ attribute.isPublished ? 'flag' : 'outlined_flag' }}
             </v-icon>
           </d-simple-tooltip>
         </d-stack>

@@ -56,7 +56,7 @@
 
     <d-block title="Research attributes" small>
       <template
-        v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isVisible }) => isVisible)">
+        v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isPublished }) => isPublished)">
         <attributes-set
           :key="`${index}-attr`"
           v-model="attributes[attribute._id]"

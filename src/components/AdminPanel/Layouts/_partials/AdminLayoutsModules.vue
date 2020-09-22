@@ -52,7 +52,6 @@
     methods: {
       onClone(item) {
         const crc = crc32(JSON.stringify(module)).toString(32) + crc32(new Date().getTime().toString()).toString(32);
-        const isAttribute = item.component === 'AttributesRead';
         return {
           ..._.cloneDeep(item),
           ...{

@@ -17,7 +17,7 @@ export const defaultAttributeModel = () => ({
   defaultValue: null,
   valueOptions: [],
 
-  isVisible: true,
+  isPublished: true,
   isFilterable: false,
   isRequired: false
 });

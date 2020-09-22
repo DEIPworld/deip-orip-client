@@ -4,7 +4,7 @@
       <d-stack>
         <attributes-set-iterator
           v-model="formData.researchRef.attributes"
-          :attributes="$where($tenantSettings.researchAttributes, {isVisible: true})"
+          :attributes="$where($tenantSettings.researchAttributes, {isPublished: true})"
           area="researchForm"
         />
 
@@ -138,8 +138,8 @@
             const value = this.formData.researchRef.attributes[attr._id];
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
-              acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field] 
-                ? [...acc[attr.blockchainFieldMeta.field], value] 
+              acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
+                ? [...acc[attr.blockchainFieldMeta.field], value]
                 : [value];
             } else {
               acc[attr.blockchainFieldMeta.field] = value;

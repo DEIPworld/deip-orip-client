@@ -41,12 +41,12 @@
               </template>
               <template v-else>
                 <v-btn
-                  :color="item.isVisible ? 'success' : null"
+                  :color="item.isPublished ? 'success' : null"
                   icon
                   small
-                  @click="openActionDialog(item.isVisible ? 'unpublish' : 'publish', item._id)"
+                  @click="openActionDialog(item.isPublished ? 'unpublish' : 'publish', item._id)"
                 >
-                  <v-icon>{{ item.isVisible ? 'flag' : 'outlined_flag' }}</v-icon>
+                  <v-icon>{{ item.isPublished ? 'flag' : 'outlined_flag' }}</v-icon>
                 </v-btn>
 
                 <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
@@ -200,7 +200,7 @@
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
         tenantService.updateTenantResearchAttribute({
           ...researchAttribute,
-          isVisible: true
+          isPublished: true
         })
           .then(() => {
             this.$notifier.showSuccess();
@@ -217,7 +217,7 @@
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
         tenantService.updateTenantResearchAttribute({
           ...researchAttribute,
-          isVisible: false
+          isPublished: false
         })
           .then(() => {
             this.$notifier.showSuccess();

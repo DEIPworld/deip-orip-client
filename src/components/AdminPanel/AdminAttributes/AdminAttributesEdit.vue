@@ -19,7 +19,7 @@
       <v-row no-gutters class="align-center">
         <v-col cols="auto">
           <v-checkbox
-            v-model="formData.isVisible"
+            v-model="formData.isPublished"
             class="ma-0 pa-0"
             hide-details
             label="Publish Attribute"
