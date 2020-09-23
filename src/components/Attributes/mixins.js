@@ -36,6 +36,13 @@ export const PROPS = {
         .indexOf(val) !== -1;
     }
   },
+
+  clamped: {
+    type: [Number, String],
+    default: null
+  },
+
+
   attributeId: {
     type: String,
     default: undefined
@@ -75,8 +82,8 @@ export const attributeTypeComponent = {
   computed: {
     attributeTypeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
-      const t = this.attributeId
-        ? this.tenantAttributes.find(({ _id }) => _id === this.attributeId).type
+      const t = this.attribute.researchAttributeId
+        ? this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type
         : this.type;
 
       a.splice(1, 0, pascalCase(t));
@@ -130,7 +137,8 @@ export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
     attribute: PROPS.attribute,
-    viewType: PROPS.viewType
+    viewType: PROPS.viewType,
+    clamped: PROPS.clamped
   },
   computed: {
     attributeInfo() {
@@ -138,7 +146,15 @@ export const attributeRead = {
       return this.tenantAttributes.find(({ _id }) => _id === id);
     }
   },
-  render() {
+  render(h) {
+    if (this.clamped) {
+      return h('v-clamp', {
+        props: {
+          autoresize: true,
+          maxLines: parseInt(this.clamped)
+        }
+      }, this.attribute.value);
+    }
     return this._v(this.attribute.value);
   }
 };

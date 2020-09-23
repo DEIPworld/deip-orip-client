@@ -85,7 +85,7 @@ export const adminRouting = [
             component: AdminLayouts
           },
           {
-            path: 'edit',
+            path: ':layoutName/edit',
             name: 'admin.layouts.edit',
             component: AdminLayoutsEdit
           }

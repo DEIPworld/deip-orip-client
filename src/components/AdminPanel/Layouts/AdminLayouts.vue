@@ -1,81 +1,55 @@
 <template>
   <d-layout-section>
     <d-layout-section-main>
-      <v-row>
-        <v-col cols="3">
-          <admin-layouts-modules
-            :modules="modules"
-          />
-        </v-col>
-        <v-divider vertical />
-        <v-col>
-          <admin-layouts-composer
-            title="Layout"
-            :schema="schema"
-          />
-        </v-col>
-      </v-row>
-
-      <pre>
-        {{ schema }}
-      </pre>
+      <d-grid>
+        <v-card
+          v-for="(key, index) of Object.keys(layouts)"
+          :key="index"
+          outlined
+          :to="{ name: 'admin.layouts.edit', params: { layoutName: key} }"
+        >
+          <v-list-item>
+            <v-list-item-icon class="mr-4">
+              <v-icon>{{ layouts[key].icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="text-h6">
+              {{ layouts[key].name }}
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </d-grid>
     </d-layout-section-main>
   </d-layout-section>
-
-
 </template>
 
 <script>
 
-  import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 
-  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
+  import DGrid from '@/components/Deipify/DGrid/DGrid';
+  import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
 
-  import { baseLayoutModules, gridModules, helperLayoutModules } from '@/components/AdminPanel/Layouts/modules';
+
 
   export default {
     name: 'AdminLayouts',
     components: {
-      AdminLayoutsModules,
+      DGrid,
       DLayoutSectionMain,
-      DLayoutSection,
-      AdminLayoutsComposer
+      DLayoutSection
     },
     data() {
       return {
-        schema: [],
+        schema: []
       };
     },
     computed: {
-      modules() {
-        return [
-          {
-            name: 'Base Layout',
-            modules: baseLayoutModules
-          },
-          {
-            name: 'Layout helpers',
-            modules: helperLayoutModules
-          },
-          {
-            name: 'Grid',
-            modules: gridModules
-          },
-          {
-            name: 'Attributes',
-            modules: this.$tenantSettings.researchAttributes
-              .map((attr) => ({
-                component: 'AttributesRead',
-                name: attr.title,
-                props: {
-                  attribute: `@research.researchRef.attributes.${attr._id}`
-                },
-                id$: attr._id
-              }))
-          }
-        ];
+      layouts() {
+        return {
+          ...baseLayouts(),
+          ..._.cloneDeep(this.$tenantSettings.researchLayouts)
+        };
       }
     }
   };

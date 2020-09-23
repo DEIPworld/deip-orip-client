@@ -1,6 +1,6 @@
 const vCol = {
   component: 'VCol',
-  name: 'Grid column',
+  name: 'Column',
   icon: 'mdi-view-grid-plus-outline',
   children: []
 };
@@ -10,31 +10,44 @@ const div = {
   children: []
 };
 
+export const moduleProps = (availableProps, props = {}) => ({
+  availableProps,
+  props
+});
 
 export const baseLayoutModules = [
   // { component: 'DLayoutHeader', name: 'Header' },
   {
     component: 'DLayoutSection',
     name: 'Section',
+    ...moduleProps({
+      background: 'string',
+      backgroundOverlay: 'string'
+    }),
     icon: 'mdi-view-day-outline',
     children: [
       {
         component: 'DLayoutSectionMain',
         name: 'Section main content',
         icon: 'mdi-view-array-outline',
+        required: true,
         children: []
-      },
+      }
     ]
   },
   {
     component: 'DLayoutSectionSidebar',
-    name: 'Section sidebar',
+    name: 'Sidebar',
     icon: 'mdi-view-split-vertical',
     children: []
   },
   {
     component: 'DLayoutSectionSplit',
-    name: 'Section columns',
+    name: 'Splitter',
+    ...moduleProps({
+      template: 'string',
+      gap: 'number'
+    }),
     icon: 'mdi-view-column-outline',
     children: [div, div]
   }
@@ -43,15 +56,38 @@ export const baseLayoutModules = [
 export const helperLayoutModules = [
   {
     component: 'DBlock',
-    name: 'Titled block',
+    name: 'Block',
     icon: 'mdi-card-text-outline',
+    ...moduleProps({
+      title: 'string',
+      small: 'boolean',
+      widget: 'boolean'
+    }),
     children: []
   },
   {
     component: 'DStack',
-    name: 'Elements stack',
+    name: 'Stack',
+    ...moduleProps({
+      gap: 'number',
+      horizontal: 'boolean'
+    }),
     icon: 'mdi-view-headline',
     children: []
+  },
+  {
+    component: 'VDivider',
+    name: 'Divider',
+    icon: 'mdi-minus',
+  },
+  {
+    component: 'DMetaItem',
+    name: 'Metadata',
+    icon: 'mdi-text-short',
+    ...moduleProps({
+      icon: 'string',
+      label: 'string'
+    })
   }
 ];
 
@@ -60,6 +96,9 @@ export const gridModules = [
     component: 'DGrid',
     name: 'Auto grid',
     icon: 'mdi-view-module-outline',
+    ...moduleProps({
+      itemMaxWidth: 'number'
+    }),
     children: []
   },
   {
@@ -78,17 +117,27 @@ export const gridModules = [
 ];
 
 export const typographyModules = [
-  ...new Array(6).fill('').map((val, index) => ({
-    component: 'div',
-    name: `Headline ${index + 1}`,
-    icon: `mdi-format-header-${index + 1}`,
-    // icon: `
-    // <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    //   <g fill="000" fill-opacity=".9" fill-rule="evenodd" font-family="BebasNeueBold, Bebas Neue" font-size="24" font-weight="bold" line-spacing="20">
-    //     <text><tspan x="0" y="23">H${index + 1}</tspan></text>
-    //   </g>
-    // </svg>
-    // `,
+  ...new Array(6).fill('')
+    .map((val, index) => ({
+      component: 'div',
+      name: `Headline ${index + 1}`,
+      icon: `mdi-format-header-${index + 1}`,
+      class: `text-h${index + 1}`,
+      children: []
+    })),
+
+  {
+    component: 'p',
+    name: 'Paragraph',
+    icon: 'mdi-text-subject',
+    class: 'text-body-2',
     children: []
-  }))
+  },
+  {
+    component: 'p',
+    name: 'Caption',
+    icon: 'mdi-text-short',
+    class: 'text-caption',
+    children: []
+  },
 ];

@@ -39,6 +39,7 @@
     "@deip/user-service": "1.37.0",
     "@deip/users-service": "1.37.0",
     "@mdi/font": "^5.5.55",
+    "@mdi/js": "^5.6.55",
     "@sfem/breakpoint": "^2.0.0",
     "@sfem/scss-sugars": "^2.0.0",
     "@vue/web-component-wrapper": "^1.2.0",

@@ -1,41 +1,20 @@
 <script>
   import { componentsRenderer } from '@/mixins/renderer';
 
-  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
-  import DLayoutHeader from '@/components/Deipify/DLayout/DLayoutHeader';
-  import ResearchDetailsHeader
-    from '@/components/Research/ResearchDetails/_partials/ResearchDetailsHeader';
+  import AttributesRead from '@/components/Attributes/AttributesRead';
 
-  import { VSheet, VBtn } from 'vuetify/lib';
-  import { researchAttributes } from '@/mixins/platformAttributes';
-  import AttributesReadIterator from '@/components/Attributes/AttributesReadIterator';
-  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import DStack from '@/components/Deipify/DStack/DStack';
-  import UsersListWidget from '@/components/Users/UsersListWidget';
   import ContentList from '@/components/ContentsList/ContentsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
-      ReviewsList,
-      ContentList,
-      UsersListWidget,
-      DStack,
-      DBlock,
-      DLayoutSectionSidebar,
-      DLayoutSectionMain,
-      AttributesReadIterator,
-      DLayoutSection,
-      DLayoutHeader,
-      ResearchDetailsHeader,
+      AttributesRead,
 
-      VSheet,
-      VBtn
+      ReviewsList,
+      ContentList
     },
-    mixins: [componentsRenderer, researchAttributes],
+    mixins: [componentsRenderer],
     props: {
       research: {
         type: Object,

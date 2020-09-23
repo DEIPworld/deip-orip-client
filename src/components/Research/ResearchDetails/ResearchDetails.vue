@@ -1,14 +1,14 @@
 <template>
   <research-details-renderer
     :schema="layoutSchema"
-    :research="research"
+    :research="research$"
   />
 </template>
 
 <script>
-  import { researchDetailsSchema } from '@/components/Research/ResearchDetails/researchDetailsSchema';
   import { mapGetters } from 'vuex';
   import ResearchDetailsRenderer from '@/components/Research/ResearchDetails/ResearchDetailsRenderer';
+  import { researchAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchDetails',
@@ -23,7 +23,18 @@
       },
 
       layoutSchema() {
-        return researchDetailsSchema;
+        return this.$tenantSettings.researchLayouts.researchDetails.layout;
+      },
+      research$() {
+        return {
+          ...this.research,
+          ...{
+            created_at: this.$options.filters.dateFormat(this.research.created_at, 'D MMM YYYY', true),
+            researchRef: {
+              attributes: researchAttributesToObject(this.research.researchRef.attributes)
+            }
+          }
+        };
       }
     }
   };

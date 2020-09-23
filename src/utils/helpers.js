@@ -14,6 +14,12 @@ export const expandResearchAttributes = (attrs) => {
   }, {});
 };
 
+export const researchAttributesToObject = (attrs) => {
+  return attrs.reduce((res, attr) => {
+    return { ...res, ...{ [attr.researchAttributeId]: attr } };
+  }, {});
+};
+
 export const camelizeObjectKeys = (obj) => {
   if (!obj) return {};
 

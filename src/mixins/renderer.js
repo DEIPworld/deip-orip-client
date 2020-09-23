@@ -3,8 +3,29 @@ import { findAndReplaceIf as replace } from 'find-and-replace-anything';
 import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
+import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
+
+import DStack from '@/components/Deipify/DStack/DStack';
+import DBlock from '@/components/Deipify/DBlock/DBlock';
+import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
+
+import { VDivider } from 'vuetify/lib/components';
 
 const rendererCommon = {
+  components: {
+    DLayout,
+    DLayoutSectionSidebar,
+    DLayoutSectionMain,
+    DLayoutSection,
+
+    DStack,
+    DBlock,
+    DMetaItem,
+
+    VDivider
+  },
   props: {
     schema: {
       type: Array,
@@ -15,9 +36,7 @@ const rendererCommon = {
       default: 'd-layout'
     }
   },
-  components: {
-    DLayout
-  },
+
   methods: {
     replaceFn(val) {
       const stringPattern = /{{\s*(.*?)\s*}}/gm;

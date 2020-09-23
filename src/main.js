@@ -8,7 +8,7 @@ import lsWatcher from 'vue-storage-watcher';
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
-import VClamp from 'vue-clamp';
+import VClamp from 'vue-clamp/Clamp.js';
 import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';

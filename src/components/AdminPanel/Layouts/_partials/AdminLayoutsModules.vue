@@ -1,29 +1,39 @@
 <template>
   <div>
     <template v-for="(category, index) of modules">
-      <v-list nav dense :key="`ttl-${index}`">
+      <div :key="`ttl-${index}`">
         <v-subheader>{{ category.name }}</v-subheader>
         <draggable
           :key="`drg-${index}`"
           :list="category.modules"
           :group="{ name: 'g1', pull: 'clone', put: false }"
           :clone="onClone"
+          :class="$style.list"
+          class="px-4 pb-4"
         >
-          <v-list-item link v-for="module of category.modules" :key="module.name">
-            <v-list-item-icon class="mr-3 reset-width">
-              <v-icon size="12" class="grey--text text--lighten-1">drag_indicator</v-icon>
-            </v-list-item-icon>
+          <v-hover
+            v-for="module of category.modules"
+            :key="module.name"
+            #default="{ hover }"
+          >
 
-            <v-list-item-avatar size="24" class="mr-3">
-              <v-icon size="18">{{ module.icon }}</v-icon>
-            </v-list-item-avatar>
+            <v-sheet
+              class="text-center pa-2"
+              :color="`grey ${hover ? 'lighten-3' : 'lighten-4'}`"
+              rounded
+            >
+<!--              <v-fade-transition>-->
+<!--                -->
+<!--              </v-fade-transition>-->
 
-            <v-list-item-content class="text-caption font-weight-medium">
-              {{ module.name }}
-            </v-list-item-content>
-          </v-list-item>
+              <v-icon>{{ module.icon }}</v-icon>
+              <div class="text-caption text--secondary mt-1 text-truncate" style="line-height: 1.2">
+                {{ module.name }}
+              </div>
+            </v-sheet>
+          </v-hover>
         </draggable>
-      </v-list>
+      </div>
       <v-divider />
 
     </template>
@@ -52,6 +62,7 @@
     methods: {
       onClone(item) {
         const crc = crc32(JSON.stringify(module)).toString(32) + crc32(new Date().getTime().toString()).toString(32);
+
         return {
           ..._.cloneDeep(item),
           ...{
@@ -63,3 +74,11 @@
     }
   };
 </script>
+
+<style lang="scss" module>
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(33.333% - .5rem), 1fr));
+    grid-gap: .5rem;
+  }
+</style>

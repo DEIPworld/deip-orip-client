@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="d-flex flex-column"
+    class="d-flex flex-column pa-6"
     outlined
     :to="{
       name: 'research.details',
@@ -12,24 +12,38 @@
     <research-list-card-renderer
       class="d-flex flex-column flex-shrink-1 flex-grow-1"
       :schema="layoutSchema"
-      :research="research"
+      :research="research$"
     />
   </v-card>
 </template>
 
 <script>
-  import { abstractResearchItem } from '@/components/ResearchList/ResearchListItem/abstractResearchItem';
   import ResearchListCardRenderer
     from '@/components/ResearchList/ResearchListItem/ResearchListCard/ResearchListCardRenderer';
-  import { researchListCardSchema } from '@/components/ResearchList/ResearchListItem/ResearchListCard/researchListCardSchema';
+  import { researchAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchListCard',
     components: { ResearchListCardRenderer },
-    mixins: [abstractResearchItem],
+    props: {
+      research: {
+        type: Object,
+        default: () => ({})
+      }
+    },
     computed: {
       layoutSchema() {
-        return researchListCardSchema;
+        return this.$tenantSettings.researchLayouts.researchCard.layout;
+      },
+      research$() {
+        return {
+          ...this.research,
+          ...{
+            researchRef: {
+              attributes: researchAttributesToObject(this.research.researchRef.attributes)
+            }
+          }
+        };
       }
     }
   };

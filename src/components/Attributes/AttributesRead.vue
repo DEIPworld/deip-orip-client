@@ -1,15 +1,14 @@
 <template>
   <component
     :is="attributeTypeComponent"
-    :value="internalValue"
-    :attribute-id="attributeId"
     :attribute="attribute"
     :view-type="viewType"
+    :clamped="clamped"
   />
 </template>
 
 <script>
-  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeRead, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   const componentsContext = require.context('./', true, /Attributes(.*)\/(.*)Read\.vue$/);
   const components = componentsContext.keys().reduce((obj, c) => ({
@@ -22,6 +21,6 @@
   export default {
     name: 'AttributesRead',
     components,
-    mixins: [commonAttribute, attributeTypeComponent]
+    mixins: [attributeRead, attributeTypeComponent]
   };
 </script>
