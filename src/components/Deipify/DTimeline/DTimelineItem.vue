@@ -75,12 +75,6 @@
       }
     },
 
-    // data() {
-    //   return {
-    //     on: {}
-    //   };
-    // },
-
     computed: {
       topLineStyle() {
         return {
@@ -96,12 +90,6 @@
         };
       }
     },
-
-    // created() {
-    //   if (this.$listeners.click) {
-    //     this.on = { ...this.on, ...{ click: this.$emit('click') } }
-    //   }
-    // },
 
     methods: {
       onClickDot() {

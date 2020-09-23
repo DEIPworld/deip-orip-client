@@ -72,6 +72,8 @@
     "moment": "^2.27.0",
     "object-rename-keys": "^1.2.1",
     "portal-vue": "^2.1.7",
+    "recursive-iterator": "^3.3.0",
+    "sort-keys": "^4.0.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "substance": "1.0.0-beta.6.2",

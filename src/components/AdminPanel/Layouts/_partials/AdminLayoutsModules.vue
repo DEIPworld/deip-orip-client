@@ -7,13 +7,14 @@
           :key="`drg-${index}`"
           :list="category.modules"
           :group="{ name: 'g1', pull: 'clone', put: false }"
+          :sort="false"
           :clone="onClone"
           :class="$style.list"
           class="px-4 pb-4"
         >
           <v-hover
             v-for="module of category.modules"
-            :key="module.name"
+            :key="module.moduleId"
             #default="{ hover }"
           >
 
@@ -44,6 +45,7 @@
 <script>
   import draggable from 'vuedraggable';
   import crc32 from 'crc/crc32';
+  import { genObjectId } from '@/utils/helpers';
 
   export default {
     name: 'AdminLayoutsModules',
@@ -61,7 +63,8 @@
     },
     methods: {
       onClone(item) {
-        const crc = crc32(JSON.stringify(module)).toString(32) + crc32(new Date().getTime().toString()).toString(32);
+        // const crc = crc32(JSON.stringify(module)).toString(32) + crc32(new Date().getTime().toString()).toString(32);
+        const crc = genObjectId({ date: new Date().getTime().toString() })
 
         return {
           ..._.cloneDeep(item),

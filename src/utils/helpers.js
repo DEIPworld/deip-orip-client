@@ -1,4 +1,8 @@
 import { camelCase } from 'change-case';
+import sortKeys from 'sort-keys';
+import crc32 from 'crc/crc32';
+import RecursiveIterator from 'recursive-iterator';
+import kindOf from 'kind-of';
 
 export const compactResearchAttributes = (attrs) => {
   return Object.keys(attrs)
@@ -18,6 +22,15 @@ export const researchAttributesToObject = (attrs) => {
   return attrs.reduce((res, attr) => {
     return { ...res, ...{ [attr.researchAttributeId]: attr } };
   }, {});
+};
+
+export const genObjectId = (obj, turns = 3) => {
+  const sorted = sortKeys(obj, { deep: true });
+
+  return new Array(turns)
+    .fill(null)
+    .map((x, index) => index)
+    .reduce((x, index) => x + crc32(`turn-${index + 1}-${JSON.stringify(sorted)}`).toString(16), '');
 };
 
 export const camelizeObjectKeys = (obj) => {

@@ -14,29 +14,6 @@
       </v-navigation-drawer>
     </portal>
 
-    <!--    <v-hover #default="{ hover }">-->
-    <!--      <v-btn-->
-    <!--        class="ma-6"-->
-    <!--        color="primary"-->
-    <!--        :fab="!hover"-->
-    <!--        :large="hover"-->
-    <!--        rounded-->
-    <!--        fixed-->
-    <!--        bottom-->
-    <!--        right-->
-    <!--      >-->
-    <!--        <v-icon-->
-    <!--          :left="hover"-->
-    <!--          size="24"-->
-    <!--        >-->
-    <!--          mdi-content-save-->
-    <!--        </v-icon>-->
-    <!--        <v-expand-x-transition>-->
-    <!--          <div v-if="hover">Save</div>-->
-    <!--        </v-expand-x-transition>-->
-    <!--      </v-btn>-->
-    <!--    </v-hover>-->
-
     <v-btn
       class="ma-6"
       color="primary"
@@ -86,6 +63,9 @@
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
   import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
   import { TenantService } from '@deip/tenant-service';
+  import { genObjectId } from '@/utils/helpers';
+  import RecursiveIterator from 'recursive-iterator';
+  import kindOf from 'kind-of';
 
   const tenantService = TenantService.getInstance();
 
@@ -104,42 +84,45 @@
       };
     },
     computed: {
+      attrModules() {
+        return this.$tenantSettings.researchAttributes
+          .map((attr) => ({
+            component: 'AttributesRead',
+            name: attr.shortTitle || attr.title,
+            ...(/text|textarea/.test(attr.type)
+              ? moduleProps({
+                clamped: 'number'
+              })
+              : {}),
+            ...{
+              props: {
+                attribute: `@research.researchRef.attributes.${attr._id}`
+              },
+            },
+          }))
+      },
+
       modules() {
         return [
           {
             name: 'Base Layout',
-            modules: baseLayoutModules
+            modules: this.setModulesId(baseLayoutModules)
           },
           {
             name: 'Layout helpers',
-            modules: helperLayoutModules
+            modules: this.setModulesId(helperLayoutModules)
           },
           {
             name: 'Grid',
-            modules: gridModules
+            modules: this.setModulesId(gridModules)
           },
           {
             name: 'Typography',
-            modules: typographyModules
+            modules: this.setModulesId(typographyModules)
           },
           {
             name: 'Attributes',
-            modules: this.$tenantSettings.researchAttributes
-              .map((attr) => ({
-                component: 'AttributesRead',
-                name: attr.shortTitle || attr.title,
-                ...(/text|textarea/.test(attr.type)
-                  ? moduleProps({
-                    clamped: 'number'
-                  })
-                  : {}),
-                ...{
-                  props: {
-                    attribute: `@research.researchRef.attributes.${attr._id}`
-                  },
-                },
-                id$: attr._id
-              }))
+            modules: this.setModulesId(this.attrModules)
           }
         ];
       },
@@ -167,6 +150,16 @@
     },
 
     methods: {
+      setModulesId(obj) {
+        for (const { node } of new RecursiveIterator(obj)) {
+          if (kindOf(node) === 'object' && node.component) {
+            node.moduleId = genObjectId(node);
+          }
+        }
+
+        return obj;
+      },
+
       safeSettings() {
         this.processing = true;
 
