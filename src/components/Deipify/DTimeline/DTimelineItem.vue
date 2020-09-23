@@ -1,7 +1,7 @@
 <template>
   <v-list-item
     class="pa-0 reset-height rounded overflow-hidden"
-    v-on="on"
+    v-on="$listeners"
   >
     <v-sheet class="d-flex align-self-stretch flex-column align-center flex-shrink-0" :width="40" :min-height="40">
       <div :style="topLineStyle" class="mb-1" />
@@ -74,6 +74,13 @@
         default: 2
       }
     },
+
+    // data() {
+    //   return {
+    //     on: {}
+    //   };
+    // },
+
     computed: {
       topLineStyle() {
         return {
@@ -87,13 +94,15 @@
           background: this.bottomLineColor ? this.bottomLineColor : this.lineColor,
           width: `${this.lineWidth}px`
         };
-      },
-      on() {
-        return {
-          ...(this.$listeners.click ? { click: this.$emit('click') } : {})
-        };
       }
     },
+
+    // created() {
+    //   if (this.$listeners.click) {
+    //     this.on = { ...this.on, ...{ click: this.$emit('click') } }
+    //   }
+    // },
+
     methods: {
       onClickDot() {
         this.$emit('click:dot');

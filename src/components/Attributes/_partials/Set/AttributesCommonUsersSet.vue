@@ -29,7 +29,7 @@
         return e.profile ? this.$options.filters.fullname(e) : 'undefined'
       },
       userId(e) {
-        return e.profile ? e.profile._id  : 'undefined';
+        return e.profile ? e.profile._id : 'undefined';
       }
     }
   };

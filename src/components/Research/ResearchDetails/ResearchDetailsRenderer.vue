@@ -20,6 +20,9 @@
         type: Object,
         default: () => ({})
       }
+    },
+    created() {
+      console.log(this.research)
     }
   };
 </script>

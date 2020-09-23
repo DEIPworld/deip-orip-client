@@ -1,8 +1,8 @@
 <script>
-  import { attributeRead } from '@/components/Attributes/mixins';
+  import AttributesUserRead from '@/components/Attributes/AttributesUser/AttributesUserRead';
 
   export default {
     name: 'AttributesUsersListRead',
-    mixins: [attributeRead]
+    mixins: [AttributesUserRead]
   };
 </script>
