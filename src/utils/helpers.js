@@ -1,8 +1,6 @@
 import { camelCase } from 'change-case';
 import sortKeys from 'sort-keys';
 import crc32 from 'crc/crc32';
-import RecursiveIterator from 'recursive-iterator';
-import kindOf from 'kind-of';
 
 export const compactResearchAttributes = (attrs) => {
   return Object.keys(attrs)

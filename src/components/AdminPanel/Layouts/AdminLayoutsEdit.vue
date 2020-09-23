@@ -15,7 +15,7 @@
     </portal>
 
     <v-btn
-      class="ma-6"
+      class="ma-8"
       color="primary"
       :disabled="!modelChanged || processing"
       fab
@@ -68,6 +68,7 @@
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
   import { TenantService } from '@deip/tenant-service';
+  import { ATTR_TYPES, ATTR_TYPES_ICONS } from '@/variables';
 
   const tenantService = TenantService.getInstance();
 
@@ -90,6 +91,7 @@
         return this.$tenantSettings.researchAttributes
           .map((attr) => ({
             component: 'AttributesRead',
+            icon: ATTR_TYPES_ICONS[attr.type],
             name: attr.shortTitle || attr.title,
             ...(/text|textarea/.test(attr.type)
               ? setComponentProps({

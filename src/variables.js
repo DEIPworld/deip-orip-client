@@ -90,6 +90,35 @@ const ATTR_TYPES_LABELS = {
   [ATTR_TYPES.PARTNERS]: 'Partners',
 };
 
+const ATTR_TYPES_ICONS = {
+  [ATTR_TYPES.TEXT]: 'mdi-form-textbox',
+  [ATTR_TYPES.TEXTAREA]: 'mdi-form-textarea',
+
+  [ATTR_TYPES.SELECT]: 'mdi-form-select',
+  [ATTR_TYPES.MULTI_SELECT]: 'mdi-format-list-checkbox',
+
+  [ATTR_TYPES.SWITCH]: 'mdi-toggle-switch-outline',
+  [ATTR_TYPES.CHECKBOX]: 'mdi-check-box-outline',
+
+  //=============================
+
+  [ATTR_TYPES.URL]: 'mdi-link-variant-plus',
+  [ATTR_TYPES.VIDEO_URL]: 'mdi-video-outline',
+  [ATTR_TYPES.STEPPER]: 'mdi-format-list-numbered',
+
+  [ATTR_TYPES.USER]: 'mdi-account-outline',
+  [ATTR_TYPES.USERS_LIST]: 'mdi-account-multiple-outline',
+
+  [ATTR_TYPES.DISCIPLINE]: 'mdi-flask-empty-outline',
+  [ATTR_TYPES.DISCIPLINES_LIST]: 'mdi-flask-empty-plus-outline',
+
+  [ATTR_TYPES.RESEARCH_GROUP]: 'mdi-account-box-outline',
+  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: 'mdi-account-box-multiple-outline',
+
+  [ATTR_TYPES.ROADMAP]: 'mdi-timeline-clock-outline',
+  [ATTR_TYPES.PARTNERS]: 'mdi-account-tie-outline',
+};
+
 const ATTR_AREAS = {
   MAIN: 'main',
   SIDEBAR: 'sidebar',
@@ -112,6 +141,7 @@ export {
 
   ATTR_TYPES,
   ATTR_TYPES_LABELS,
+  ATTR_TYPES_ICONS,
 
   ATTR_AREAS,
 

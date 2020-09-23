@@ -1,74 +1,68 @@
 <template>
-  <v-hover v-model="hoverHost">
-    <v-card
-      flat
-      :style="hostStyles"
-      :class="hostClasses"
-      :outlined="!root"
-      :data-component-host="item.component"
-    >
-      <v-sheet v-if="!root" :class="controlClasses" color="transparent">
+  <v-card
+    flat
+    :style="hostStyles"
+    :class="hostClasses"
+    :outlined="!root"
+    :data-component-host="item.component"
+  >
+    <v-system-bar v-if="!root" color="grey lighten-4">
+      <v-icon size="12" class="mr-1">
+        {{ item.icon }}
+      </v-icon>
 
-        <div class="d-flex align-center">
-          <v-icon size="12" class="mr-1">
-            {{ item.icon }}
-          </v-icon>
+      <div v-if="item.name" class="text-overline">
+        {{ item.name }}
+      </div>
 
-          <div v-if="item.name" class="text-overline">
-            {{ item.name }}
-          </div>
+      <div class="spacer"></div>
 
-          <admin-layouts-node-settings
-            v-model="item.props"
-            :item="item"
-          />
+      <admin-layouts-node-settings
+        v-model="item.props"
+        :item="item"
+      />
 
-          <v-btn
-            v-if="!(root || item.required)"
-            icon
-            x-small
-            class="ml-auto"
-            @click="onRemoveNode"
-          >
-            <v-icon small>clear</v-icon>
-          </v-btn>
-
-
-        </div>
-
-      </v-sheet>
-
-      <draggable
-        ref="inner"
-        :list="internalValue"
-        :group="{ name: 'g1' }"
-        :style="viewStyles"
-        :class="viewClasses"
-        :data-component="item.component"
+      <v-btn
+        v-if="!(root || item.required)"
+        icon
+        x-small
+        class="mr-n1"
+        @click="onRemoveNode"
       >
-        <v-hover
-          v-for="(node, index) in internalValue"
-          v-model="hoverView"
-        >
-          <admin-layouts-composer
-            v-if="node.children"
-            :key="node.id$"
-            v-model="node.children"
-            :item="node"
-            :root="false"
-            @remove:node="removeNode"
-          />
+        <v-icon class="ma-0">clear</v-icon>
+      </v-btn>
+    </v-system-bar>
 
-          <admin-layouts-node-simple
-            v-else
-            :item="node"
-            @remove:node="removeNode"
-          />
-        </v-hover>
-      </draggable>
+    <draggable
+      ref="inner"
+      :list="internalValue"
+      :group="{ name: 'g1' }"
+      :style="viewStyles"
+      :class="viewClasses"
+      :data-component="item.component"
+    >
+      <template
+        v-for="(node, index) in internalValue"
+      >
+        <admin-layouts-composer
+          v-if="node.children"
+          :key="`composer-node-${node.id$}`"
+          v-model="node.children"
+          :item="node"
+          :root="false"
+          @remove:node="removeNode"
+        />
 
-    </v-card>
-  </v-hover>
+        <admin-layouts-node-simple
+          v-else
+          :key="`composer-simple-${node.id$}`"
+          :item="node"
+          @remove:node="removeNode"
+        />
+      </template>
+    </draggable>
+
+  </v-card>
 </template>
 
 <script>
@@ -76,14 +70,12 @@
   import { find as deepFind } from 'find-keypath';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import AdminLayoutsNodeSimple from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsNodeSimple';
-  import DStack from '@/components/Deipify/DStack/DStack';
   import AdminLayoutsNodeSettings from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsNodeSettings';
 
   export default {
     name: 'AdminLayoutsComposer',
     components: {
       AdminLayoutsNodeSettings,
-      DStack,
       AdminLayoutsNodeSimple,
       draggable
     },
@@ -107,16 +99,16 @@
     computed: {
       hostStyles() {
         return {
-          ...(!this.root ? {
-            backgroundColor: 'rgba(0,0,0,.02'
-          } : {})
+          // ...(!this.root ? {
+          //   backgroundColor: 'rgba(0,0,0,.02'
+          // } : {})
         };
       },
 
       hostClasses() {
         return {
           [this.$style.host]: true,
-          'pa-4': true,
+          // 'pa-4': true,
           'd-flex': true,
           'flex-column': true,
 
@@ -126,14 +118,13 @@
         };
       },
 
-
       viewClasses() {
         return {
           'flex-shrink-1': true,
           'flex-grow-1': true,
 
           'pa-4': true,
-          'ma-n4': true,
+          // 'ma-n4': true,
 
           row: this.item.component === 'VRow'
         };

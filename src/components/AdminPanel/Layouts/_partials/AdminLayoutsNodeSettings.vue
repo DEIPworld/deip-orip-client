@@ -7,7 +7,7 @@
         class="ml-1"
         v-on="on"
       >
-        <v-icon size="12">settings</v-icon>
+        <v-icon size="14" class="ma-0">settings</v-icon>
       </v-btn>
     </template>
 
