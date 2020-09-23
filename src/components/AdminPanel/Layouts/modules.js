@@ -1,14 +1,14 @@
-const vCol = {
+const vCol = () => ({
   component: 'VCol',
   name: 'Column',
   icon: 'mdi-view-grid-plus-outline',
   children: []
-};
+});
 
-const div = {
+const div = () => ({
   component: 'VCol',
   children: []
-};
+});
 
 export const moduleProps = (availableProps, props = {}) => ({
   availableProps,
@@ -49,7 +49,7 @@ export const baseLayoutModules = [
       gap: 'number'
     }),
     icon: 'mdi-view-column-outline',
-    children: [div, div]
+    children: [div(), div()]
   }
 ];
 
@@ -105,15 +105,15 @@ export const gridModules = [
     component: 'VContainer',
     name: 'Container',
     icon: 'mdi-card-outline',
-    children: [vCol, vCol, vCol]
+    children: []
   },
   {
     component: 'VRow',
     name: 'Columns',
     icon: 'mdi-view-grid-outline',
-    children: [vCol, vCol, vCol]
+    children: [vCol(), vCol(), vCol()]
   },
-  vCol
+  vCol()
 ];
 
 export const typographyModules = [
