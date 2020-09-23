@@ -1,3 +1,9 @@
+import RecursiveIterator from 'recursive-iterator';
+import kindOf from 'kind-of';
+import { genObjectId } from '@/utils/helpers';
+
+// partials
+
 const vCol = () => ({
   component: 'VCol',
   name: 'Column',
@@ -10,17 +16,31 @@ const div = () => ({
   children: []
 });
 
-export const moduleProps = (availableProps, props = {}) => ({
+// helpers
+
+export const setComponentProps = (availableProps, props = {}) => ({
   availableProps,
   props
 });
 
-export const baseLayoutModules = [
+export const setModulesId = (obj) => {
+  for (const { node } of new RecursiveIterator(obj)) {
+    if (kindOf(node) === 'object' && node.component) {
+      node.moduleId = genObjectId(node);
+    }
+  }
+
+  return obj;
+};
+
+// modules
+
+export const modulesLayout = [
   // { component: 'DLayoutHeader', name: 'Header' },
   {
     component: 'DLayoutSection',
     name: 'Section',
-    ...moduleProps({
+    ...setComponentProps({
       background: 'string',
       backgroundOverlay: 'string'
     }),
@@ -44,7 +64,7 @@ export const baseLayoutModules = [
   {
     component: 'DLayoutSectionSplit',
     name: 'Splitter',
-    ...moduleProps({
+    ...setComponentProps({
       template: 'string',
       gap: 'number'
     }),
@@ -53,12 +73,12 @@ export const baseLayoutModules = [
   }
 ];
 
-export const helperLayoutModules = [
+export const modulesHelpers = [
   {
     component: 'DBlock',
     name: 'Block',
     icon: 'mdi-card-text-outline',
-    ...moduleProps({
+    ...setComponentProps({
       title: 'string',
       small: 'boolean',
       widget: 'boolean'
@@ -68,7 +88,7 @@ export const helperLayoutModules = [
   {
     component: 'DStack',
     name: 'Stack',
-    ...moduleProps({
+    ...setComponentProps({
       gap: 'number',
       horizontal: 'boolean'
     }),
@@ -78,25 +98,25 @@ export const helperLayoutModules = [
   {
     component: 'VDivider',
     name: 'Divider',
-    icon: 'mdi-minus',
+    icon: 'mdi-minus'
   },
   {
     component: 'DMetaItem',
     name: 'Metadata',
     icon: 'mdi-text-short',
-    ...moduleProps({
+    ...setComponentProps({
       icon: 'string',
       label: 'string'
     })
   }
 ];
 
-export const gridModules = [
+export const modulesGrid = [
   {
     component: 'DGrid',
     name: 'Auto grid',
     icon: 'mdi-view-module-outline',
-    ...moduleProps({
+    ...setComponentProps({
       itemMaxWidth: 'number'
     }),
     children: []
@@ -116,7 +136,7 @@ export const gridModules = [
   vCol()
 ];
 
-export const typographyModules = [
+export const modulesTypography = [
   ...new Array(6).fill('')
     .map((val, index) => ({
       component: 'div',
@@ -139,5 +159,5 @@ export const typographyModules = [
     icon: 'mdi-text-short',
     class: 'text-caption',
     children: []
-  },
+  }
 ];

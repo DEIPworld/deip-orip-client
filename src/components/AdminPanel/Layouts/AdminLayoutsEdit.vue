@@ -53,19 +53,21 @@
 
 <script>
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
+
   import {
-    baseLayoutModules,
-    gridModules,
-    helperLayoutModules, moduleProps,
-    typographyModules
+    modulesLayout,
+    modulesGrid,
+    modulesHelpers,
+    modulesTypography,
+    setComponentProps,
+    setModulesId
   } from '@/components/AdminPanel/Layouts/modules';
+
   import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsComposer';
+
   import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
   import { TenantService } from '@deip/tenant-service';
-  import { genObjectId } from '@/utils/helpers';
-  import RecursiveIterator from 'recursive-iterator';
-  import kindOf from 'kind-of';
 
   const tenantService = TenantService.getInstance();
 
@@ -90,7 +92,7 @@
             component: 'AttributesRead',
             name: attr.shortTitle || attr.title,
             ...(/text|textarea/.test(attr.type)
-              ? moduleProps({
+              ? setComponentProps({
                 clamped: 'number'
               })
               : {}),
@@ -106,23 +108,23 @@
         return [
           {
             name: 'Base Layout',
-            modules: this.setModulesId(baseLayoutModules)
+            modules: setModulesId(modulesLayout)
           },
           {
             name: 'Layout helpers',
-            modules: this.setModulesId(helperLayoutModules)
+            modules: setModulesId(modulesHelpers)
           },
           {
             name: 'Grid',
-            modules: this.setModulesId(gridModules)
+            modules: setModulesId(modulesGrid)
           },
           {
             name: 'Typography',
-            modules: this.setModulesId(typographyModules)
+            modules: setModulesId(modulesTypography)
           },
           {
             name: 'Attributes',
-            modules: this.setModulesId(this.attrModules)
+            modules: setModulesId(this.attrModules)
           }
         ];
       },
@@ -138,7 +140,6 @@
         };
       },
 
-
       modelChanged() {
         return this.schemaCache !== JSON.stringify(this.schema);
       }
@@ -150,16 +151,6 @@
     },
 
     methods: {
-      setModulesId(obj) {
-        for (const { node } of new RecursiveIterator(obj)) {
-          if (kindOf(node) === 'object' && node.component) {
-            node.moduleId = genObjectId(node);
-          }
-        }
-
-        return obj;
-      },
-
       safeSettings() {
         this.processing = true;
 
