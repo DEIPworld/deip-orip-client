@@ -69,8 +69,7 @@
         return {
           ..._.cloneDeep(item),
           ...{
-            ...(item.id$ ? { originalId: item.id$ } : {}),
-            id$: crc,
+            id$: crc
           }
         };
       }
