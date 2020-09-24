@@ -1,39 +1,17 @@
 <template>
   <d-layout-full-screen :title="title">
+
+<!--    <pre>{{ JSON.stringify(layoutSchema, null, 2) }}</pre>-->
+
     <d-form :disabled="processing" @submit="onSubmit">
-      <d-stack>
-        <attributes-set-iterator
-          v-model="formData.researchRef.attributes"
-          :attributes="$where($tenantSettings.researchAttributes, {isPublished: true})"
-          area="researchForm"
-        />
-
-        <d-input-image
-          :value="formData.image"
-          :aspect-ratio="4"
-          label="Header image"
-        />
-
-        <v-divider />
-
-        <div class="d-flex justify-space-between align-center">
-          <d-stack horizontal :gap="8">
-            <v-btn text color="primary">
-              Cancel
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              :disabled="processing || !isChanged"
-            >
-              {{ formData.external_id ? 'Update research' : 'Create project' }}
-            </v-btn>
-          </d-stack>
-        </div>
-      </d-stack>
+      <research-edit-renderer
+        v-model="formData"
+        :schema="layoutSchema"
+        :attributes="attributes$"
+      />
     </d-form>
     <pre>
-      {{ formData.research }}
+      {{ formData }}
     </pre>
   </d-layout-full-screen>
 </template>
@@ -52,7 +30,7 @@
     compactResearchAttributes,
     camelizeObjectKeys,
     expandResearchAttributes,
-    compareModels
+    compareModels, tenantAttributesToObject
   } from '@/utils/helpers';
 
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
@@ -61,6 +39,7 @@
 
   import AttributesSetIterator from '@/components/Attributes/AttributesSetIterator';
   import { researchAttributes } from '@/mixins/platformAttributes';
+  import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
 
   const researchService = ResearchService.getInstance();
   const httpService = HttpService.getInstance();
@@ -68,11 +47,9 @@
   export default {
     name: 'ResearchEdit',
     components: {
-      AttributesSetIterator,
-      DInputImage,
+      ResearchEditRenderer,
       DForm,
       DLayoutFullScreen,
-      DStack
     },
     mixins: [
       componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
@@ -104,18 +81,20 @@
         },
 
         isPermlinkVerifyed: true,
-
-        rules: {
-          link: (value) => !value || this.isValidLink || 'Invalid http(s) link',
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
-        }
       };
     },
     computed: {
       ...mapGetters({
         userGroups: 'auth/userGroups'
       }),
+
+      layoutSchema() {
+        return this.$tenantSettings.researchLayouts.researchForm.layout;
+      },
+
+      attributes$() {
+        return tenantAttributesToObject(this.$tenantSettings.researchAttributes)
+      },
 
       userGroup() {
         return this.$where(this.userGroups, { is_personal: true })[0];

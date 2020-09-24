@@ -66,7 +66,7 @@
     </draggable>
 
     <template v-if="!root && isTypography">
-      <v-divider vertical class="dashed" />
+      <v-divider vertical class="dashed ml-2" />
 
       <admin-layouts-node-settings
         v-model="item"

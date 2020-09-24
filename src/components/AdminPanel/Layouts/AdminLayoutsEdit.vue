@@ -88,21 +88,33 @@
     },
     computed: {
       attrModules() {
+        const forSets = (attr) => ({
+          component: 'AttributesSet',
+          model: `researchRef.attributes.${attr._id}`,
+          props: {
+            attribute: `@attributes.${attr._id}`
+          }
+        });
+
+        const forReads = (attr) => ({
+          component: 'AttributesRead',
+          ...(/text|textarea/.test(attr.type)
+            ? setComponentProps({
+              clamped: 'number'
+            }, {
+              attribute: `@research.researchRef.attributes.${attr._id}`
+            })
+            : {}),
+        });
+
         return this.$tenantSettings.researchAttributes
           .map((attr) => ({
-            component: 'AttributesRead',
             icon: ATTR_TYPES_ICONS[attr.type],
             name: attr.shortTitle || attr.title,
-            ...(/text|textarea/.test(attr.type)
-              ? setComponentProps({
-                clamped: 'number'
-              })
-              : {}),
-            ...{
-              props: {
-                attribute: `@research.researchRef.attributes.${attr._id}`
-              }
-            }
+            props: {
+              attribute: `@attributes.${attr._id}`
+            },
+            ...(this.layoutKey.includes('Form') ? forSets(attr) : forReads(attr))
           }));
       },
 
@@ -170,9 +182,9 @@
             this.$notifier.showSuccess();
             const tenant = this.$env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
-            this.$router.push({
-              name: 'admin.layouts'
-            });
+            // this.$router.push({
+            //   name: 'admin.layouts'
+            // });
             this.processing = false;
           })
           .catch((err) => {

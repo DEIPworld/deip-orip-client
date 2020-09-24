@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex ml-2">
+  <div class="d-inline-flex align-center">
 
     <v-menu v-if="internalValue.availableProps" :close-on-content-click="false">
       <template v-slot:activator="{ on }">
@@ -43,7 +43,6 @@
       v-if="!internalValue.required"
       icon
       x-small
-      class="mr-n1"
       @click="$emit('click:remove')"
     >
       <v-icon class="ma-0">clear</v-icon>

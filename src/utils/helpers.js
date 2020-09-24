@@ -22,6 +22,12 @@ export const researchAttributesToObject = (attrs) => {
   }, {});
 };
 
+export const tenantAttributesToObject = (attrs) => {
+  return attrs.reduce((res, attr) => {
+    return { ...res, ...{ [attr._id]: attr } };
+  }, {});
+};
+
 export const genObjectId = (obj, turns = 3) => {
   const sorted = sortKeys(obj, { deep: true });
 

@@ -82,9 +82,15 @@ export const attributeTypeComponent = {
   computed: {
     attributeTypeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
-      const t = this.attribute.researchAttributeId
-        ? this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type
-        : this.type;
+      let t;
+      console.log(this.attribute)
+      if (this.attribute.type) {
+        t = this.attribute.type;
+      } else if (this.attribute.researchAttributeId) {
+        t = this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type
+      } else {
+        throw new Error('Unknown attribute');
+      }
 
       a.splice(1, 0, pascalCase(t));
 
@@ -163,7 +169,6 @@ export const attributeReadOption = {
   mixins: [attributeRead],
   computed: {
     valueOption() {
-      // return this.attributeInfo.valueOptions.find(({ value }) => value === this.attribute.value);
       return this.$where(
         this.attributeInfo.valueOptions,
         {
@@ -179,5 +184,13 @@ export const attributeSet = {
   props: {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType
+  },
+  watch: {
+    internalValue: {
+      deep: true,
+      handler(val) {
+        this.$emit('change', val);
+      }
+    }
   }
 };

@@ -1,22 +1,23 @@
 <script>
   import { componentsRenderer } from '@/mixins/renderer';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
-  import AttributesRead from '@/components/Attributes/AttributesRead';
+  import AttributesSet from '@/components/Attributes/AttributesSet';
 
   import ContentList from '@/components/ContentsList/ContentsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   export default {
-    name: 'ResearchDetailsRenderer',
+    name: 'ResearchEditRenderer',
     components: {
-      AttributesRead,
+      AttributesSet,
 
       ReviewsList,
       ContentList
     },
-    mixins: [componentsRenderer],
+    mixins: [componentsRenderer, Proxyable],
     props: {
-      research: {
+      attributes: {
         type: Object,
         default: () => ({})
       }

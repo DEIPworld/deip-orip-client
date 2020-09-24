@@ -28,6 +28,6 @@ export const vSheetModify = {
       },
       on: this.listeners$
     };
-    return h(this.tag, this.setBackgroundColor(this.color, data), this.$slots.default);
+    return h(this.tag, this.setBackgroundColor(this.color, data), [this.$slots.default]);
   }
 }

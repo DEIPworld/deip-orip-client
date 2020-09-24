@@ -1,6 +1,7 @@
 import kindOf from 'kind-of';
 import { findAndReplaceIf as replace } from 'find-and-replace-anything';
-import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
+import { getObjectValueByPath, mergeDeep } from 'vuetify/lib/util/helpers';
+import dotProp from 'dot-prop';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
 import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
@@ -125,7 +126,7 @@ export const componentsRenderer = {
   mixins: [
     rendererCommon
   ],
-
+  props: ['value'],
   methods: {
     getChildren(children = null, h) {
       if (children) {
@@ -134,17 +135,35 @@ export const componentsRenderer = {
         }
 
         throw new Error('Children must be an Array');
-      };
+      }
 
       return null;
     },
 
     generateNode(node, h) {
+      const self = this;
+
       const data = {
         ...(node.props ? { props: node.props } : {}),
         ...(node.class ? { class: node.class } : {}),
         ...(node.slot ? { slot: node.slot } : {})
       };
+
+      let vModel = {};
+
+      if (node.model) {
+        vModel = {
+          domProps: {
+            value: self.value
+          },
+          on: {
+            change(event) {
+              const a = dotProp.set(self.internalValue, node.model, event);
+              self.internalValue = { ...self.internalValue, ...a };
+            }
+          }
+        };
+      }
 
       const isStringNode = kindOf(node) === 'string';
 
@@ -161,7 +180,7 @@ export const componentsRenderer = {
 
       return h(
         component,
-        data,
+        mergeDeep(data, vModel),
         content
       );
     }

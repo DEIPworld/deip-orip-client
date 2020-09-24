@@ -1,18 +1,13 @@
 <template>
-  <div>
-    <component
-      :is="attributeTypeComponent"
-      v-model="internalValue"
-      :attribute-id="attributeId"
-      :attribute="attribute"
-      :multiple="multiple"
-    />
-  </div>
-
+  <component
+    :is="attributeTypeComponent"
+    v-model="internalValue"
+    :attribute="attribute"
+  />
 </template>
 
 <script>
-  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   const componentsContext = require.context('./', true, /Attributes(.*)\/(.*)Set\.vue$/);
   const components = componentsContext.keys().reduce((obj, c) => ({
@@ -25,6 +20,6 @@
   export default {
     name: 'AttributesSet',
     components,
-    mixins: [commonAttribute, attributeTypeComponent]
+    mixins: [attributeSet, attributeTypeComponent]
   };
 </script>

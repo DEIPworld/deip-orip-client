@@ -89,12 +89,6 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(stepModel()), attributeSet],
-
-    created() {
-      if (!this.internalValue) {
-        this.internalValue = [];
-      }
-    }
+    mixins: [arrayModelAddFactory(stepModel()), attributeSet]
   };
 </script>

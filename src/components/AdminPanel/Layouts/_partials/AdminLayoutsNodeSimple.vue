@@ -5,7 +5,10 @@
     outlined
     rounded
   >
-    <div class="spacer text-caption">
+    <v-icon size="12" class="mr-1">
+      {{ item.icon }}
+    </v-icon>
+    <div class="spacer text-overline text--secondary">
       {{ item.name }}
     </div>
 

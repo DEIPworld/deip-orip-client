@@ -37,7 +37,6 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
   return obj;
 };
 
-
 // modules
 
 export const modulesLayout = [
@@ -154,14 +153,14 @@ export const modulesTypography = [
   {
     component: 'p',
     name: 'Paragraph',
-    icon: 'mdi-text-subject',
+    icon: 'mdi-format-paragraph',
     class: 'text-body-2',
     children: []
   },
   {
     component: 'p',
     name: 'Caption',
-    icon: 'mdi-text-short',
+    icon: 'mdi-closed-caption-outline',
     class: 'text-caption',
     children: []
   }

@@ -4,8 +4,15 @@ export const arrayModelAddFactory = (model, target) => ({
   mixins: [Proxyable],
 
   computed: {
-    target$() {
-      return target ? this.internalValue[target] : this.internalValue;
+    target$: {
+      get() { return target ? this.internalValue[target] : this.internalValue; },
+      set(val) {
+        if (target) {
+          this.internalValue[target] = val;
+        } else {
+          this.internalValue = val
+        }
+      }
     }
   },
 
@@ -20,9 +27,21 @@ export const arrayModelAddFactory = (model, target) => ({
     }
   },
 
-  mounted() {
+  // watch: {
+  //   value: {
+  //     deep: true,
+  //     handler(val) {
+  //       this.internalLazyValue = val;
+  //     }
+  //   }
+  // },
+
+  created() {
+    if (!this.target$) {
+      this.target$ = [{ ...model }];
+    }
     if (!this.target$.length) {
       this.appendModel();
     }
-  }
+  },
 });

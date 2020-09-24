@@ -80,6 +80,11 @@
       DBlock
     },
     mixins: [attributeSet],
+    data() {
+      return {
+        multiple: false // temp
+      }
+    },
     methods: {
       // TODO: check
       onChange(key, value) {
