@@ -18,7 +18,7 @@
     computed: {
       additionalStyles() {
         return {
-          '--d-stack-gap': convertToUnit(this.gap)
+          '--d-stack-gap': convertToUnit(this.gap || 24)
         };
       },
 

@@ -24,3 +24,4 @@
     mixins: [attributeRead, attributeTypeComponent]
   };
 </script>
+

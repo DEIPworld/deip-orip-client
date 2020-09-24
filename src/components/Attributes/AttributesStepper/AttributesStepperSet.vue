@@ -11,11 +11,11 @@
       outlined
     >
       <template #selection="{ item }">
-        <div class="d-flex align-center">
+        <div class="d-flex align-center" style="max-width: 100%">
           <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
             {{ attribute.valueOptions.indexOf(item) + 1 }}
           </v-avatar>
-          <span class="text-body-2">{{ item.title }}</span>
+          <div class="text-body-2 text-truncate">{{ item.title }}</div>
         </div>
       </template>
 
@@ -24,7 +24,7 @@
           <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
             {{ attribute.valueOptions.indexOf(item) + 1 }}
           </v-avatar>
-          <span class="text-body-2">{{ item.title }}</span>
+          <div class="text-body-2 text-truncate">{{ item.title }}</div>
         </div>
       </template>
     </v-select>

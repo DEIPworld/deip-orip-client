@@ -10,7 +10,17 @@
     chips
     outlined-chips
     deletable-chips
-  />
+  >
+    <template #selection="{ item }">
+      <v-chip
+        close
+        close-icon="clear"
+        outlined
+      >
+        {{ item }}
+      </v-chip>
+    </template>
+  </d-autocomplete>
 </template>
 
 <script>
