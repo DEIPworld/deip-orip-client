@@ -4,13 +4,14 @@
     :min-height="32"
     outlined
     rounded
+    max-width="100%"
   >
     <v-icon size="12" class="mr-1">
       {{ item.icon }}
     </v-icon>
-    <div class="spacer text-overline text--secondary">
+    <v-sheet class="spacer text-overline text--secondary text-truncate">
       {{ item.name }}
-    </div>
+    </v-sheet>
 
     <admin-layouts-node-settings
       v-model="item"

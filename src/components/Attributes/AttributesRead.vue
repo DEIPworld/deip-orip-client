@@ -1,5 +1,6 @@
 <template>
   <component
+    v-if="Object.keys(attribute).length"
     :is="attributeTypeComponent"
     :attribute="attribute"
     :view-type="viewType"
