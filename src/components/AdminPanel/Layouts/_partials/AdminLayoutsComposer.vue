@@ -6,7 +6,7 @@
     :outlined="!root"
     :data-component-host="item.component"
   >
-    <v-system-bar v-if="!root" color="grey lighten-4">
+    <v-system-bar v-if="!(root || isTypography)" color="grey lighten-4">
       <v-icon size="12" class="mr-1">
         {{ item.icon }}
       </v-icon>
@@ -18,20 +18,22 @@
       <div class="spacer"></div>
 
       <admin-layouts-node-settings
-        v-model="item.props"
-        :item="item"
+        v-model="item"
+        @click:remove="onRemoveNode"
       />
 
-      <v-btn
-        v-if="!(root || item.required)"
-        icon
-        x-small
-        class="mr-n1"
-        @click="onRemoveNode"
-      >
-        <v-icon class="ma-0">clear</v-icon>
-      </v-btn>
     </v-system-bar>
+
+    <template v-if="!root && isTypography">
+      <v-sheet color="grey lighten-4" class="d-flex align-center">
+        <v-icon class="pa-3">
+          {{ item.icon }}
+        </v-icon>
+      </v-sheet>
+
+      <v-divider vertical class="dashed" />
+    </template>
+
 
     <draggable
       ref="inner"
@@ -40,6 +42,7 @@
       :style="viewStyles"
       :class="viewClasses"
       :data-component="item.component"
+      class="spacer"
     >
       <template
         v-for="(node, index) in internalValue"
@@ -61,6 +64,15 @@
         />
       </template>
     </draggable>
+
+    <template v-if="!root && isTypography">
+      <v-divider vertical class="dashed" />
+
+      <admin-layouts-node-settings
+        v-model="item"
+        @click:remove="onRemoveNode"
+      />
+    </template>
 
   </v-card>
 </template>
@@ -90,27 +102,19 @@
         default: true
       }
     },
-    data() {
-      return {
-        hoverHost: false,
-        hoverView: false
-      };
-    },
     computed: {
+
+      isTypography() { return this.item.type === 'typography'; },
+
       hostStyles() {
-        return {
-          // ...(!this.root ? {
-          //   backgroundColor: 'rgba(0,0,0,.02'
-          // } : {})
-        };
+        return { };
       },
 
       hostClasses() {
         return {
           [this.$style.host]: true,
-          // 'pa-4': true,
           'd-flex': true,
-          'flex-column': true,
+          'flex-column': !this.isTypography,
 
           col: this.item.component === 'VCol',
 
@@ -120,11 +124,8 @@
 
       viewClasses() {
         return {
-          'flex-shrink-1': true,
-          'flex-grow-1': true,
-
-          'pa-4': true,
-          // 'ma-n4': true,
+          'pa-4': !this.isTypography,
+          'pa-2': this.isTypography,
 
           row: this.item.component === 'VRow'
         };

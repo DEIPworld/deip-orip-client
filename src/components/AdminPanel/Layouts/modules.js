@@ -23,15 +23,20 @@ export const setComponentProps = (availableProps, props = {}) => ({
   props
 });
 
-export const setModulesId = (obj) => {
+export const extendModuleObject = (obj, ext = { type: 'common' }) => {
   for (const { node } of new RecursiveIterator(obj)) {
     if (kindOf(node) === 'object' && node.component) {
       node.moduleId = genObjectId(node);
+
+      for (const key of Object.keys(ext)) {
+        node[key] = ext[key];
+      }
     }
   }
 
   return obj;
 };
+
 
 // modules
 

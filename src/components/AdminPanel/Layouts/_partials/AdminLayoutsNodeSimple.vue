@@ -1,20 +1,20 @@
 <template>
-  <v-chip
-    class="text-caption"
-    label
+  <v-sheet
+    class="px-2 d-inline-flex align-center"
+    :min-height="32"
     outlined
-    close
-    close-icon="clear"
-    @click:close="onRemoveNode"
+    rounded
   >
-    {{ item.name }}
+    <div class="spacer text-caption">
+      {{ item.name }}
+    </div>
 
     <admin-layouts-node-settings
-      v-model="item.props"
-      :item="item"
+      v-model="item"
+      @click:remove="onRemoveNode"
     />
 
-  </v-chip>
+  </v-sheet>
 </template>
 
 <script>

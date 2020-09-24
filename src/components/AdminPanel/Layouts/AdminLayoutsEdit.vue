@@ -60,7 +60,7 @@
     modulesHelpers,
     modulesTypography,
     setComponentProps,
-    setModulesId
+    extendModuleObject
   } from '@/components/AdminPanel/Layouts/modules';
 
   import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
@@ -68,7 +68,7 @@
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
   import { TenantService } from '@deip/tenant-service';
-  import { ATTR_TYPES, ATTR_TYPES_ICONS } from '@/variables';
+  import { ATTR_TYPES_ICONS } from '@/variables';
 
   const tenantService = TenantService.getInstance();
 
@@ -101,32 +101,32 @@
             ...{
               props: {
                 attribute: `@research.researchRef.attributes.${attr._id}`
-              },
-            },
-          }))
+              }
+            }
+          }));
       },
 
       modules() {
         return [
           {
             name: 'Base Layout',
-            modules: setModulesId(modulesLayout)
+            modules: extendModuleObject(modulesLayout)
           },
           {
             name: 'Layout helpers',
-            modules: setModulesId(modulesHelpers)
+            modules: extendModuleObject(modulesHelpers)
           },
           {
             name: 'Grid',
-            modules: setModulesId(modulesGrid)
+            modules: extendModuleObject(modulesGrid)
           },
           {
             name: 'Typography',
-            modules: setModulesId(modulesTypography)
+            modules: extendModuleObject(modulesTypography, { type: 'typography' })
           },
           {
             name: 'Attributes',
-            modules: setModulesId(this.attrModules)
+            modules: extendModuleObject(this.attrModules, { type: 'attribute' })
           }
         ];
       },
