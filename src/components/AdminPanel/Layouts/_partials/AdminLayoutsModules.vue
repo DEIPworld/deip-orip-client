@@ -44,8 +44,9 @@
 
 <script>
   import draggable from 'vuedraggable';
-  import crc32 from 'crc/crc32';
   import { genObjectId } from '@/utils/helpers';
+  import RecursiveIterator from 'recursive-iterator';
+  import kindOf from 'kind-of';
 
   export default {
     name: 'AdminLayoutsModules',
@@ -63,15 +64,20 @@
     },
     methods: {
       onClone(item) {
-        // const crc = crc32(JSON.stringify(module)).toString(32) + crc32(new Date().getTime().toString()).toString(32);
-        const crc = genObjectId({ date: new Date().getTime().toString() })
+        const crc = () => genObjectId({ salt: Math.random() + new Date().getTime().toString() });
+        const clone = _.cloneDeep(item);
 
-        return {
-          ..._.cloneDeep(item),
-          ...{
-            id$: crc
+        clone.id$ = crc();
+
+        if (item.children && item.children.length) {
+          for (const { node } of new RecursiveIterator(clone)) {
+            if (kindOf(node) === 'object' && node.component) {
+              node.id$ = crc();
+            }
           }
-        };
+        }
+
+        return clone;
       }
     }
   };

@@ -19,8 +19,8 @@ const div = () => ({
 // helpers
 
 export const setComponentProps = (availableProps, props = {}) => ({
-  availableProps,
-  props
+  ...{ availableProps },
+  ...{ props }
 });
 
 export const extendModuleObject = (obj, ext = { type: 'common' }) => {

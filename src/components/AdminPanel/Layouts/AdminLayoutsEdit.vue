@@ -47,7 +47,7 @@
       />
     </v-card>
 
-<!--    <pre>{{ JSON.stringify(schema, null, 2) }}</pre>-->
+    <pre>{{ JSON.stringify(schema, null, 2) }}</pre>
   </d-layout-full-screen>
 </template>
 
@@ -101,19 +101,19 @@
           ...(/text|textarea/.test(attr.type)
             ? setComponentProps({
               clamped: 'number'
-            }, {
-              attribute: `@research.researchRef.attributes.${attr._id}`
             })
             : {}),
+          ...{
+            props: {
+              attribute: `@research.researchRef.attributes.${attr._id}`
+            }
+          }
         });
 
         return this.$tenantSettings.researchAttributes
           .map((attr) => ({
             icon: ATTR_TYPES_ICONS[attr.type],
             name: attr.shortTitle || attr.title,
-            props: {
-              attribute: `@attributes.${attr._id}`
-            },
             ...(this.layoutKey.includes('Form') ? forSets(attr) : forReads(attr))
           }));
       },
@@ -182,9 +182,9 @@
             this.$notifier.showSuccess();
             const tenant = this.$env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
-            // this.$router.push({
-            //   name: 'admin.layouts'
-            // });
+            this.$router.push({
+              name: 'admin.layouts'
+            });
             this.processing = false;
           })
           .catch((err) => {
