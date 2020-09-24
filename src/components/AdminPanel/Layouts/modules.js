@@ -12,7 +12,7 @@ const vCol = () => ({
 });
 
 const div = () => ({
-  component: 'VCol',
+  component: 'div',
   children: []
 });
 
@@ -46,7 +46,11 @@ export const modulesLayout = [
     name: 'Section',
     ...setComponentProps({
       background: 'string',
-      backgroundOverlay: 'string'
+      backgroundOverlay: 'string',
+      alignContent: 'string',
+      height: 'number',
+      minHeight: 'number',
+      dark: 'boolean'
     }),
     icon: 'mdi-view-day-outline',
     children: [

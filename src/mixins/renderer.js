@@ -7,6 +7,7 @@ import DLayout from '@/components/Deipify/DLayout/DLayout';
 import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
 import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
+import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSplit';
 
 import DStack from '@/components/Deipify/DStack/DStack';
 import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -17,9 +18,10 @@ import { VDivider } from 'vuetify/lib/components';
 const rendererCommon = {
   components: {
     DLayout,
-    DLayoutSectionSidebar,
-    DLayoutSectionMain,
     DLayoutSection,
+    DLayoutSectionMain,
+    DLayoutSectionSidebar,
+    DLayoutSectionSplit,
 
     DStack,
     DBlock,

@@ -14,6 +14,14 @@ export const vSheetModify = {
     },
     additionalStyles() {
       return { };
+    },
+    additionalChildren() {
+      return [];
+    }
+  },
+  methods: {
+    genAdditionalChildren(h) {
+      return this.additionalChildren.map((child) => h(...child));
     }
   },
   render(h) {
@@ -28,6 +36,10 @@ export const vSheetModify = {
       },
       on: this.listeners$
     };
-    return h(this.tag, this.setBackgroundColor(this.color, data), [this.$slots.default]);
+    return h(
+      this.tag,
+      this.setBackgroundColor(this.color, data),
+      [...this.genAdditionalChildren(h), this.$slots.default]
+    );
   }
-}
+};

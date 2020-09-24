@@ -83,7 +83,6 @@ export const attributeTypeComponent = {
     attributeTypeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
       let t;
-      console.log(this.attribute)
       if (this.attribute.type) {
         t = this.attribute.type;
       } else if (this.attribute.researchAttributeId) {

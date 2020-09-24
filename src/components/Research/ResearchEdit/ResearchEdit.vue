@@ -1,18 +1,35 @@
 <template>
   <d-layout-full-screen :title="title">
-
-<!--    <pre>{{ JSON.stringify(layoutSchema, null, 2) }}</pre>-->
-
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
         :schema="layoutSchema"
         :attributes="attributes$"
       />
+
+<!--      <d-input-image-->
+<!--        :value="formData.image"-->
+<!--        :aspect-ratio="4"-->
+<!--        label="Header image"-->
+<!--      />-->
+
+      <v-divider class="mt-8 mb-6" />
+
+      <div class="d-flex justify-end align-center">
+        <d-stack horizontal :gap="8">
+          <v-btn text color="primary">
+            Cancel
+          </v-btn>
+          <v-btn
+            type="submit"
+            color="primary"
+            :disabled="processing || !isChanged"
+          >
+            {{ formData.external_id ? 'Update research' : 'Create project' }}
+          </v-btn>
+        </d-stack>
+      </div>
     </d-form>
-    <pre>
-      {{ formData }}
-    </pre>
   </d-layout-full-screen>
 </template>
 
@@ -47,6 +64,7 @@
   export default {
     name: 'ResearchEdit',
     components: {
+      DStack,
       ResearchEditRenderer,
       DForm,
       DLayoutFullScreen,

@@ -47,7 +47,7 @@
       />
     </v-card>
 
-    <pre>{{ JSON.stringify(schema, null, 2) }}</pre>
+<!--    <pre>{{ JSON.stringify(schema, null, 2) }}</pre>-->
   </d-layout-full-screen>
 </template>
 
