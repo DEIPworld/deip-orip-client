@@ -7,7 +7,7 @@
 
 
 <script>
-  import { commonAttribute, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeEdit, attributeTypeComponent } from '@/components/Attributes/mixins';
 
   const componentsContext = require.context('./', true, /Attributes(.*)\/(.*)Edit\.vue$/);
   const components = componentsContext.keys().reduce((obj, c) => ({
@@ -20,6 +20,6 @@
   export default {
     name: 'AttributesEdit',
     components,
-    mixins: [commonAttribute, attributeTypeComponent]
+    mixins: [attributeEdit, attributeTypeComponent]
   };
 </script>

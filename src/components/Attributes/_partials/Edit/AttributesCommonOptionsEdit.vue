@@ -11,12 +11,12 @@
 
 <script>
 
-  import { commonEdit } from '@/components/Attributes/mixins';
+  import { attributeEdit } from '@/components/Attributes/mixins';
   import AttributesCommonEditProps from '@/components/Attributes/_partials/Edit/AttributesCommonEditProps';
 
   export default {
     name: 'AttributesCommonOptionsEdit',
     components: { AttributesCommonEditProps },
-    mixins: [commonEdit]
+    mixins: [attributeEdit]
   };
 </script>

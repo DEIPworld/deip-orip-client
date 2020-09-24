@@ -5,8 +5,6 @@
       :key="`${index}-attr`"
       v-model="internalValue[attr._id]"
 
-      :attribute-id="attr._id"
-
       :attribute="attr"
       :view-type="viewType"
     />

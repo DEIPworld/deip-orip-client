@@ -21,6 +21,9 @@
         type: Object,
         default: () => ({})
       }
+    },
+    created() {
+      console.log(this.attributes)
     }
   };
 </script>

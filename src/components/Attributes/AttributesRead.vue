@@ -1,7 +1,7 @@
 <template>
   <component
-    v-if="Object.keys(attribute).length"
     :is="attributeTypeComponent"
+    v-if="Object.keys(attribute).length"
     :attribute="attribute"
     :view-type="viewType"
     :clamped="clamped"

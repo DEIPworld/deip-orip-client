@@ -3,7 +3,7 @@ import AttributesCommonEditOpts
   from '@/components/Attributes/_partials/Edit/AttributesCommonEditOpts';
 import AttributesCommonEditMeta
   from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
-import { ATTR_TYPES, ATTR_AREAS } from '@/variables';
+import { ATTR_TYPES } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
 
@@ -23,11 +23,6 @@ export const defaultAttributeModel = () => ({
 });
 
 export const PROPS = {
-  viewType: {
-    type: String,
-    default: null
-  },
-
   type: {
     type: String,
     default: ATTR_TYPES.TEXT,
@@ -37,43 +32,31 @@ export const PROPS = {
     }
   },
 
+  attribute: {
+    type: Object,
+    default: () => ({})
+  },
+
+  viewType: {
+    type: String,
+    default: null
+  },
+
   clamped: {
     type: [Number, String],
     default: null
   },
 
+  // //////////////////////////////////////////////
 
   attributeId: {
     type: String,
     default: undefined
   },
-  attribute: {
-    type: Object,
-    default: () => ({})
-  },
+
   multiple: {
     type: Boolean,
     default: false
-  }
-};
-
-export const resetModelOnCreate = {
-  created() {
-    if (!this.internalValue._id) {
-      this.internalValue = {
-        ...this.internalValue,
-        ...defaultAttributeModel()
-      };
-    }
-  }
-};
-
-export const internalAttribute = {
-  mixins: [tenantAttributes],
-  computed: {
-    internalAttribute() {
-      return this.tenantAttributes.find(({ _id }) => _id === this.attributeId);
-    }
   }
 };
 
@@ -83,10 +66,13 @@ export const attributeTypeComponent = {
     attributeTypeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
       let t;
-      if (this.attribute.type) {
+
+      if (this.type) {
+        t = this.type;
+      } else if (this.attribute.type) {
         t = this.attribute.type;
       } else if (this.attribute.researchAttributeId) {
-        t = this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type
+        t = this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type;
       } else {
         throw new Error('Unknown attribute');
       }
@@ -115,28 +101,26 @@ export const attributeViewTypeComponent = {
   }
 };
 
-export const commonAttribute = {
-  mixins: [Proxyable],
-  props: {
-    type: PROPS.type,
+// //////////////////////////////////////////////
 
-    attributeId: PROPS.attributeId,
-
-    attribute: PROPS.attribute,
-    multiple: PROPS.multiple,
-    viewType: PROPS.viewType
-  }
-};
-
-export const commonEdit = {
+export const attributeEdit = {
   components: {
     AttributesCommonEditOpts,
     AttributesCommonEditMeta
   },
-  mixins: [Proxyable, resetModelOnCreate]
+  mixins: [Proxyable],
+  props: {
+    type: PROPS.type
+  },
+  created() {
+    if (!this.internalValue._id) {
+      this.internalValue = {
+        ...this.internalValue,
+        ...defaultAttributeModel()
+      };
+    }
+  }
 };
-
-////////////////////////////////////////////////
 
 export const attributeRead = {
   mixins: [tenantAttributes],
@@ -156,6 +140,7 @@ export const attributeRead = {
       return h('v-clamp', {
         props: {
           autoresize: true,
+          // eslint-disable-next-line radix
           maxLines: parseInt(this.clamped)
         }
       }, this.attribute.value);
