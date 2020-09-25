@@ -1,24 +1,30 @@
 <template>
-  <div class="ma-6">
-    <attributes-set
+  <div>
+    <d-block
       v-for="(attribute, index) of researchAttributes"
       :key="`${index}-attr`"
-      v-model="internalValue[attribute._id]"
-      :attribute="attribute"
-      view-type="filter"
-    />
+      widget="compact"
+      :title="attribute.title"
+    >
+      <attributes-set
+        v-model="internalValue[attribute._id]"
+        :attribute="attribute"
+        view-type="filter"
+      />
+    </d-block>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import AttributesSet from '@/components/Attributes/AttributesSet';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'DFilterTermComponents',
 
     components: {
+      DBlock,
       AttributesSet
     },
 
@@ -30,15 +36,9 @@
       };
     },
 
-    computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      })
-    },
-
     created() {
-      this.researchAttributes = this.$options.filters.where(
-        this.tenant.profile.settings.researchAttributes,
+      this.researchAttributes = this.$where(
+        this.$tenantSettings.researchAttributes,
         (attr) => attr.isFilterable && attr.isPublished
       );
     }

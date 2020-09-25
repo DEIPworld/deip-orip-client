@@ -1,34 +1,27 @@
 <template>
   <d-filter-sidebar
+    ref="filter"
     v-model="filterModel"
     :reset-model="resetFilterModel"
     @apply="applyFilter"
     @reset="resetFilter"
   >
-    <template>
-      <d-block widget="compact">
-        <v-text-field
-          v-model="filterModel.searchTerm"
-          label="Search terms"
-          outlined
-          hide-details="auto"
-        />
-      </d-block>
+    <d-block widget="compact">
+      <v-text-field
+        v-model="filterModel.searchTerm"
+        label="Search terms"
+        outlined
+        hide-details="auto"
+      />
+    </d-block>
 
-<!--      <d-filter-term-disciplines v-model="filterModel.disciplines" />-->
-      <d-filter-term-components v-model="filterModel.researchAttributes" />
-<!--      <d-filter-term-organizations v-model="filterModel.organizations" />-->
-    </template>
+    <d-filter-term-components v-model="filterModel.researchAttributes" />
   </d-filter-sidebar>
 </template>
 
 <script>
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
-  import DFilterTermDisciplines
-    from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
-  import DFilterTermOrganizations
-    from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermOrganizations';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const defaultFilter = () => ({
@@ -43,9 +36,7 @@
 
     components: {
       DBlock,
-      DFilterTermOrganizations,
       DFilterTermComponents,
-      DFilterTermDisciplines,
       DFilterSidebar
     },
 
@@ -65,9 +56,16 @@
 
     created() {
       const q = this.$route.query.rFilter;
+
       if (q) {
-        this.filterModel = JSON.parse(q);
+        this.filterModel = {
+          ...this.filterModel,
+          ...JSON.parse(q)
+        };
         this.applyFilter();
+        this.$nextTick(() => {
+          this.$refs.filter.process();
+        })
       } else if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }
@@ -83,6 +81,10 @@
         this.filterModel = { ...defaultFilter() };
 
         this.applyFilter();
+
+        this.$nextTick(() => {
+          this.$refs.filter.process();
+        })
       }
     }
 

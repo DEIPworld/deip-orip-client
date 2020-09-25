@@ -145,6 +145,11 @@
         this.$nextTick(() => {
           this.internalValue = [];
         });
+      },
+      internalValue(val) {
+        if (!val) {
+          this.internalValue = [];
+        }
       }
     },
 

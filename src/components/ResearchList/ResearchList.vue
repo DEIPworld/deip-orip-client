@@ -41,6 +41,7 @@
   import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
   import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
+  import { objectNotEmpty } from '@/utils/helpers';
 
   export default {
     name: 'ResearchList',
@@ -133,11 +134,14 @@
 
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
+
+        console.log(filter)
+
         this.$store.dispatch('feed/loadResearchFeed', {
           filter: {
             ...filter,
             ...(
-              filter.researchAttributes ? {
+              objectNotEmpty(filter.researchAttributes) ? {
                 researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
               } : {}
             )

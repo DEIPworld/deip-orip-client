@@ -74,3 +74,5 @@ export const excludeObjectKeys = (obj, keys = []) => {
 
   return filtered;
 };
+
+export const objectNotEmpty = (obj) => (obj && Object.keys(obj).length);
