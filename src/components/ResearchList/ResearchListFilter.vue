@@ -6,13 +6,18 @@
     @reset="resetFilter"
   >
     <template>
-      <v-text-field
-        v-model="filterModel.searchTerm"
-        label="Search terms"
-      />
-      <d-filter-term-disciplines v-model="filterModel.disciplines" />
+      <d-block widget="compact">
+        <v-text-field
+          v-model="filterModel.searchTerm"
+          label="Search terms"
+          outlined
+          hide-details="auto"
+        />
+      </d-block>
+
+<!--      <d-filter-term-disciplines v-model="filterModel.disciplines" />-->
       <d-filter-term-components v-model="filterModel.researchAttributes" />
-      <d-filter-term-organizations v-model="filterModel.organizations" />
+<!--      <d-filter-term-organizations v-model="filterModel.organizations" />-->
     </template>
   </d-filter-sidebar>
 </template>
@@ -24,6 +29,7 @@
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
   import DFilterTermOrganizations
     from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermOrganizations';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const defaultFilter = () => ({
     searchTerm: '',
@@ -36,6 +42,7 @@
     name: 'ResearchListFilter',
 
     components: {
+      DBlock,
       DFilterTermOrganizations,
       DFilterTermComponents,
       DFilterTermDisciplines,

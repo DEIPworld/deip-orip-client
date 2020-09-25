@@ -3,6 +3,7 @@
     :is="attributeTypeComponent"
     v-model="internalValue"
     :attribute="attribute"
+    :view-type="viewType"
   />
 </template>
 

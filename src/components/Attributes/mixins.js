@@ -89,8 +89,8 @@ export const attributeTypeComponent = {
 export const attributeViewTypeComponent = {
   data() {
     return {
-      allowedViewTypes$: ['main', 'card', 'sidebar'],
-      defaultViewType$: 'main'
+      allowedViewTypes$: ['default'],
+      defaultViewType$: 'default'
     };
   },
   computed: {

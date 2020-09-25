@@ -13,7 +13,7 @@
   } from '@/components/Attributes/mixins';
 
   import AttributesStepperReadCard from '@/components/Attributes/AttributesStepper/Read/AttributesStepperReadCard';
-  import AttributesStepperReadMain from '@/components/Attributes/AttributesStepper/Read/AttributesStepperReadMain';
+  import AttributesStepperReadDefault from '@/components/Attributes/AttributesStepper/Read/AttributesStepperReadDefault';
   import AttributesStepperReadSidebar
     from '@/components/Attributes/AttributesStepper/Read/AttributesStepperReadSidebar';
 
@@ -21,7 +21,7 @@
     name: 'AttributesStepperRead',
     components: {
       AttributesStepperReadSidebar,
-      AttributesStepperReadMain,
+      AttributesStepperReadDefault,
       AttributesStepperReadCard
     },
     mixins: [attributeReadOption, attributeViewTypeComponent]

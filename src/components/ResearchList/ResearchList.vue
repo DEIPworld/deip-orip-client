@@ -37,10 +37,10 @@
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
 
-  import ResearchListGrid from '@/components/ResearchList/ResearchListGrid/ResearchListGrid';
-  import ResearchListTable from '@/components/ResearchList/ResearchListTable/ResearchListTable';
+  import ResearchListGrid from '@/components/ResearchList/ResearchListGrid';
+  import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
-  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter/ResearchListFilter';
+  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
 
   export default {
     name: 'ResearchList',

@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="ma-6">
     <attributes-set
       v-for="(attribute, index) of researchAttributes"
       :key="`${index}-attr`"
       v-model="internalValue[attribute._id]"
       :attribute="attribute"
-      :multiple="true"
-      class="ma-6"
+      view-type="filter"
     />
   </div>
 </template>
