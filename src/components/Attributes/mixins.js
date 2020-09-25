@@ -139,17 +139,25 @@ export const attributeRead = {
       return this.tenantAttributes.find(({ _id }) => _id === id);
     }
   },
-  render(h) {
-    if (this.clamped) {
-      return h('v-clamp', {
-        props: {
-          autoresize: true,
-          // eslint-disable-next-line radix
-          maxLines: parseInt(this.clamped)
-        }
-      }, this.attribute.value);
+  methods: {
+    genContent(h) {
+      if (this.clamped) {
+        return h('v-clamp', {
+          props: {
+            autoresize: true,
+            // eslint-disable-next-line radix
+            maxLines: parseInt(this.clamped)
+          }
+        }, this.attribute.value);
+      }
+      return this._v(this.attribute.value);
     }
-    return this._v(this.attribute.value);
+  },
+  render(h) {
+    if (this.wrap) {
+      return h(this.wrap, this.genContent(h));
+    }
+    return this.genContent(h);
   }
 };
 

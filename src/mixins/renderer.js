@@ -129,6 +129,7 @@ export const componentsRenderer = {
 
       const data = {
         ...(node.props ? { props: node.props } : {}),
+        ...(node.attrs ? { attrs: node.attrs } : {}),
         ...(node.class ? { class: node.class } : {}),
         ...(node.slot ? { slot: node.slot } : {})
       };

@@ -16,5 +16,11 @@ export const baseLayouts = () => ({
     icon: 'mdi-card-text-outline',
     type: 'Read',
     layout: []
+  },
+  researchRow: {
+    name: 'Research row',
+    icon: 'mdi-card-text-outline',
+    type: 'Read',
+    layout: []
   }
 });

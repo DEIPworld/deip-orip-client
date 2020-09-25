@@ -174,5 +174,12 @@ export const modulesTypography = [
     icon: 'mdi-closed-caption-outline',
     class: 'text-caption',
     children: []
+  },
+  {
+    component: 'span',
+    name: 'Bold',
+    icon: 'mdi-format-bold',
+    class: 'font-weight-medium',
+    children: []
   }
 ];

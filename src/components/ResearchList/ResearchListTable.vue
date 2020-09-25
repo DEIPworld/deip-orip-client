@@ -3,11 +3,11 @@
     <v-divider />
     <v-simple-table>
       <tbody>
-<!--        <research-list-row-->
-<!--          v-for="item in items"-->
-<!--          :key="'list-item-' + item.external_id"-->
-<!--          :research="item"-->
-<!--        />-->
+        <research-list-item-row
+          v-for="item in items"
+          :key="'list-item-' + item.external_id"
+          :research="item"
+        />
       </tbody>
     </v-simple-table>
     <v-divider />
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-  import ResearchListRow from '@/components/ResearchList/ResearchListItem/ResearchListRow';
+  import ResearchListItemRow from '@/components/ResearchList/ResearchListItem/ResearchListItemRow';
 
   export default {
     name: 'ResearchListTable',
-    components: { ResearchListRow },
+    components: { ResearchListItemRow },
     props: {
       items: {
         type: Array,

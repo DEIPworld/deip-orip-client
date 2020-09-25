@@ -5,7 +5,7 @@
   import AttributesRead from '@/components/Attributes/AttributesRead';
 
   export default {
-    name: 'ResearchListCardRenderer',
+    name: 'ResearchListItemRenderer',
     components: {
       AttributesRead
     },

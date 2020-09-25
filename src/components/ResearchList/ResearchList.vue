@@ -37,10 +37,10 @@
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
 
-  import ResearchListGrid from '@/components/ResearchList/ResearchListGrid';
-  import ResearchListTable from '@/components/ResearchList/ResearchListTable';
+  import ResearchListGrid from '@/components/ResearchList/ResearchListGrid/ResearchListGrid';
+  import ResearchListTable from '@/components/ResearchList/ResearchListTable/ResearchListTable';
 
-  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
+  import ResearchListFilter from '@/components/ResearchList/ResearchListFilter/ResearchListFilter';
 
   export default {
     name: 'ResearchList',
@@ -133,9 +133,6 @@
 
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
-
-        console.log(filter)
-
         this.$store.dispatch('feed/loadResearchFeed', {
           filter: {
             ...filter,
