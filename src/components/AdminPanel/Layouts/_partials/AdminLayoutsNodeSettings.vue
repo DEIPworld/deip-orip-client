@@ -105,6 +105,12 @@
         propSettings: {}
       };
     },
+    created() {
+      this.propSettings = {
+        ...this.propSettings,
+        ...this.internalValue.props
+      }
+    },
     methods: {
       applySettings() {
         this.internalValue.props = {
