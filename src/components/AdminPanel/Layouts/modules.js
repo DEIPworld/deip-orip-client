@@ -40,10 +40,10 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
 
 // typing
 
-const str = typeof String();
-const num = typeof Number();
-const arr = typeof Array();
-const bool = typeof Boolean();
+const setAs = (type, val) => ({
+  type: kindOf(type()),
+  value: val || null
+});
 
 // modules
 
@@ -52,12 +52,12 @@ export const modulesLayout = [
     component: 'DLayoutSection',
     name: 'Section',
     ...setComponentProps({
-      background: str,
-      backgroundOverlay: str,
-      alignContent: str,
-      height: num,
-      minHeight: num,
-      dark: bool
+      background: setAs(String),
+      backgroundOverlay: setAs(String),
+      alignContent: setAs(Array, ['top', 'center', 'bottom']),
+      height: setAs(Number),
+      minHeight: setAs(Number),
+      dark: setAs(Boolean)
     }),
     icon: 'mdi-view-day-outline',
     children: [
@@ -80,8 +80,8 @@ export const modulesLayout = [
     component: 'DLayoutSectionSplit',
     name: 'Splitter',
     ...setComponentProps({
-      template: str,
-      gap: num
+      template: setAs(String),
+      gap: setAs(Number)
     }),
     icon: 'mdi-view-column-outline',
     children: [div(), div()]
@@ -94,9 +94,9 @@ export const modulesHelpers = [
     name: 'Block',
     icon: 'mdi-card-text-outline',
     ...setComponentProps({
-      title: str,
-      small: bool,
-      widget: bool
+      title: setAs(String),
+      small: setAs(Boolean),
+      widget: setAs(Boolean)
     }),
     children: []
   },
@@ -104,8 +104,8 @@ export const modulesHelpers = [
     component: 'DStack',
     name: 'Stack',
     ...setComponentProps({
-      gap: num,
-      horizontal: bool
+      gap: setAs(Number),
+      horizontal: setAs(Boolean)
     }),
     icon: 'mdi-view-headline',
     children: []
@@ -120,8 +120,8 @@ export const modulesHelpers = [
     name: 'Metadata',
     icon: 'mdi-text-short',
     ...setComponentProps({
-      icon: str,
-      label: str
+      icon: setAs(String),
+      label: setAs(String)
     })
   }
 ];
@@ -132,7 +132,7 @@ export const modulesGrid = [
     name: 'Auto grid',
     icon: 'mdi-view-module-outline',
     ...setComponentProps({
-      itemMaxWidth: num
+      itemMaxWidth: setAs(Number)
     }),
     children: []
   },
