@@ -183,3 +183,31 @@ export const modulesTypography = [
     children: []
   }
 ];
+
+export const modulesComponents = [
+  {
+    component: 'ContentList',
+    name: 'Contents',
+    props: {
+      researchId: '@research.external_id',
+      drafts: false,
+      title: 'Research contents'
+    }
+  },
+  {
+    component: 'ContentList',
+    name: 'Drafts',
+    props: {
+      researchId: '@research.external_id',
+      drafts: true,
+      title: 'Research contents drafts'
+    }
+  },
+  {
+    component: 'ReviewsList',
+    name: 'Reviews',
+    props: {
+      researchId: '@research.external_id',
+    }
+  }
+];

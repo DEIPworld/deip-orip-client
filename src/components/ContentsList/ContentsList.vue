@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="contents.length" :title="title">
+  <d-block v-if="internalContents.length" :title="title">
     <v-data-table
       :headers="tableHeaders"
       :items="internalContents"

@@ -115,7 +115,7 @@
               }"
             >
             <!-- END TEMP SOLUTION (query) -->
-            
+
             <!-- <v-btn
               small
               color="primary"

@@ -58,6 +58,7 @@
     modulesGrid,
     modulesHelpers,
     modulesTypography,
+    modulesComponents,
     setComponentProps,
     extendModuleObject
   } from '@/components/AdminPanel/Layouts/modules';
@@ -139,6 +140,10 @@
           {
             name: 'Attributes',
             modules: extendModuleObject(this.attrModules, { type: 'attribute' })
+          },
+          {
+            name: 'Components',
+            modules: extendModuleObject(modulesComponents, { type: 'staticComponent' })
           }
         ];
       },
