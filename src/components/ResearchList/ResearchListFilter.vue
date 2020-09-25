@@ -64,7 +64,11 @@
     },
 
     created() {
-      if (this.$ls.get(this.storageKey)) {
+      const q = this.$route.query.rFilter;
+      if (q) {
+        this.filterModel = JSON.parse(q);
+        this.applyFilter();
+      } else if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }
     },

@@ -12,14 +12,14 @@
           <div class="text-h5">
             Search by technology
           </div>
-          <v-form @submit="redirect">
+          <v-form @submit="goToSearch">
             <v-text-field
-              v-model="technologie"
+              v-model="searchTerm"
               outlined
               hide-details
               label="Find technologies"
               append-icon="search"
-              @click:append="redirect"
+              @click:append="goToSearch"
             />
             <div class="text-right">
               <v-btn
@@ -41,7 +41,7 @@
             :key="`${i}-discipline`"
             class="ma-2"
             outlined
-            :to="{name: 'ResearchFeed', query: {disciplineExternal_id: item.id}}"
+            @click="goToDiscipline(item.external_id)"
           >
             {{ item.label }}
           </v-chip>
@@ -53,12 +53,13 @@
 </template>
 
 <script>
+  import { find as deepFind } from 'find-keypath';
+
   import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DStack from '@/components/Deipify/DStack/DStack';
-
 
   export default {
     name: 'Landing',
@@ -69,17 +70,46 @@
     },
     data() {
       return {
-        technologie: '',
+        searchTerm: '',
         disciplines: disciplinesService.getTopLevelNodes()
       };
     },
     methods: {
-      redirect() {
-        const route = { name: 'ResearchFeed', query: {} };
-        if (this.technologie) {
-          route.query.q = this.technologie;
+      goToSearch() {
+        const route = { name: 'ResearchFeed' };
+        const q = {
+          searchTerm: this.searchTerm
+        };
+
+        if (this.searchTerm) {
+          route.query = {};
+          route.query.rFilter = JSON.stringify(q);
         }
         this.$router.push(route);
+      },
+
+      goToDiscipline(id) {
+        const dAttr = this.$where(
+          this.$tenantSettings.researchAttributes,
+          {
+            blockchainFieldMeta: {
+              field: 'disciplines'
+            }
+          }
+        )[0];
+
+        const q = {
+          researchAttributes: {
+            [dAttr._id]: [id]
+          }
+        };
+
+        this.$router.push({
+          name: 'ResearchFeed',
+          query: {
+            rFilter: JSON.stringify(q)
+          }
+        });
       }
     }
   };
