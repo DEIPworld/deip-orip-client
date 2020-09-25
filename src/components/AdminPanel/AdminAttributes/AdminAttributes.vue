@@ -78,7 +78,6 @@
 </template>
 
 <script>
-  import AdminView from '@/components/AdminPanel/AdminView';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
   import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
@@ -87,7 +86,6 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import DStack from '@/components/Deipify/DStack/DStack';
 
   const tenantService = TenantService.getInstance();
 

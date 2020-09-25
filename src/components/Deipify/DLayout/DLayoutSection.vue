@@ -54,8 +54,7 @@
         }, null];
 
         return [
-          ...(this.background ? [img] : []),
-          ...(this.backgroundOverlay ? [overlay] : [])
+          ...(this.background ? [img] : [])
         ];
       }
     }

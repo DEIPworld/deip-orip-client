@@ -30,7 +30,7 @@ const moduleMutations = {
   }
 };
 
-export const dSnackbarStore = {
+export const snackbarStore = {
   namespaced: true,
   state: moduleState,
   getters: moduleGetters,

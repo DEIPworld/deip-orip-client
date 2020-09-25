@@ -5,6 +5,7 @@
 </template>
 
 <script>
+  // TODO: refactorin to VSheet renderer
   import { convertToUnit } from 'vuetify/lib/util/helpers';
 
   export default {

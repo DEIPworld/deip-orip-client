@@ -5,7 +5,7 @@ import { authStore } from '@/components/auth/store';
 import { accountStore } from '@/components/Account/store';
 import { userDetailsStore } from '@/components/UserDetails/store';
 
-import { dSnackbarStore } from '@/components/Deipify/DSnackbar/DSnackbarStore';
+import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 import { feedStore } from '../components/research-feed/store';
@@ -38,7 +38,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
-    snackbar: dSnackbarStore,
+    snackbar: snackbarStore,
 
     auth: authStore,
     account: accountStore,

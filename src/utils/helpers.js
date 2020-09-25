@@ -60,3 +60,17 @@ export const toBase64 = (url) => {
       reader.readAsDataURL(blob);
     }));
 };
+
+export const excludeObjectKeys = (obj, keys = []) => {
+  if (!keys.length) return obj;
+
+  const filtered = {};
+
+  for (const key of Object.keys(obj)) {
+    if (!keys.includes(key)) {
+      filtered[key] = obj[key];
+    }
+  }
+
+  return filtered;
+};

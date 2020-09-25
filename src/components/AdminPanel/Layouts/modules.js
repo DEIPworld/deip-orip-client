@@ -1,6 +1,7 @@
 import RecursiveIterator from 'recursive-iterator';
 import kindOf from 'kind-of';
 import { genObjectId } from '@/utils/helpers';
+import { createRange } from 'vuetify/lib/util/helpers';
 
 // partials
 
@@ -145,7 +146,7 @@ export const modulesGrid = [
 ];
 
 export const modulesTypography = [
-  ...new Array(6).fill('')
+  ...createRange(6)
     .map((val, index) => ({
       component: 'div',
       name: `Headline ${index + 1}`,

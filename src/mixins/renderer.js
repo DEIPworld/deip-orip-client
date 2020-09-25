@@ -1,5 +1,4 @@
 import kindOf from 'kind-of';
-import { findAndReplaceIf as replace } from 'find-and-replace-anything';
 import { getObjectValueByPath, mergeDeep } from 'vuetify/lib/util/helpers';
 import dotProp from 'dot-prop';
 
@@ -14,6 +13,7 @@ import DBlock from '@/components/Deipify/DBlock/DBlock';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 
 import { VDivider } from 'vuetify/lib/components';
+import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
   components: {
@@ -41,47 +41,29 @@ const rendererCommon = {
   },
 
   methods: {
-    replaceFn(val) {
+    normalizeSchema(children = null) {
+      const clone = _.cloneDeep(children);
+
       const stringPattern = /{{\s*(.*?)\s*}}/gm;
       const modelPattern = /^@([a-zA-Z0-9_.-]*)$/;
 
-      if (kindOf(val) === 'string') {
-        const stringMatches = [...val.matchAll(stringPattern)];
-        const modelMatches = val.match(modelPattern);
+      for (const { parent, node, key } of new RecursiveIterator(clone)) {
+        if (kindOf(node) === 'string') {
+          const stringMatches = [...node.matchAll(stringPattern)];
+          const modelMatches = node.match(modelPattern);
 
-        if (modelMatches && modelMatches.length) {
-          return getObjectValueByPath(this, modelMatches[1]);
+          if (modelMatches && modelMatches.length) {
+            parent[key] = getObjectValueByPath(this, modelMatches[1]);
+          }
+
+          if (stringMatches && stringMatches.length) {
+            parent[key] = node
+              .replace(stringPattern, (...args) => getObjectValueByPath(this, args[1]));
+          }
         }
-
-        if (stringMatches && stringMatches.length) {
-          return val.replace(stringPattern, (...args) => getObjectValueByPath(this, args[1]));
-        }
-
-        return val;
       }
 
-      return val;
-    },
-
-    normalizeSchema(children = null) {
-      if (kindOf(children) === 'string') {
-        return replace(children, this.replaceFn);
-      }
-
-      if (kindOf(children) === 'array') {
-        return children.map((node) => ({
-          ...replace(node, this.replaceFn),
-          ...(node.children ? {
-            children: this.normalizeSchema(node.children)
-          } : {})
-        }));
-      }
-
-      if (kindOf(children) === 'object') {
-        throw new Error('Children must be an Array');
-      }
-
-      return children;
+      return clone;
     }
   }
 };
@@ -128,7 +110,7 @@ export const componentsRenderer = {
   mixins: [
     rendererCommon
   ],
-  props: ['value'],
+  // props: ['value'],
   methods: {
     getChildren(children = null, h) {
       if (children) {
