@@ -19,7 +19,9 @@ export const defaultAttributeModel = () => ({
 
   isPublished: true,
   isFilterable: false,
-  isRequired: false
+  // isEditable: true,
+  isRequired: false,
+  isHidden: false
 });
 
 export const PROPS = {
@@ -122,6 +124,8 @@ export const attributeEdit = {
   }
 };
 
+// //////////////////////////////////////////////
+
 export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
@@ -158,10 +162,12 @@ export const attributeReadOption = {
         {
           '+value': this.attribute.value
         }
-      );
+      )[0];
     }
   }
 };
+
+// //////////////////////////////////////////////
 
 export const attributeSet = {
   mixins: [Proxyable],
@@ -174,6 +180,19 @@ export const attributeSet = {
       deep: true,
       handler(val) {
         this.$emit('change', val);
+      }
+    }
+  }
+};
+
+export const attributeSetOption = {
+  mixins: [attributeSet],
+  methods: {
+    remove(item) {
+      const idx = this.internalValue.indexOf(item);
+      if (idx !== -1) {
+        this.internalValue.splice(idx, 1);
+        this.internalValue = [...new Set(this.internalValue)];
       }
     }
   }

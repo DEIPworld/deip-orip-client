@@ -6,6 +6,10 @@
     @reset="resetFilter"
   >
     <template>
+      <v-text-field
+        v-model="filterModel.searchTerm"
+        label="Search terms"
+      />
       <d-filter-term-disciplines v-model="filterModel.disciplines" />
       <d-filter-term-components v-model="filterModel.researchAttributes" />
       <d-filter-term-organizations v-model="filterModel.organizations" />
@@ -17,12 +21,12 @@
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
   import DFilterTermDisciplines
     from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
-  import DFilterTermCategories from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermCategories';
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
   import DFilterTermOrganizations
     from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermOrganizations';
 
   const defaultFilter = () => ({
+    searchTerm: '',
     disciplines: [],
     organizations: [],
     researchAttributes: {}
@@ -34,7 +38,6 @@
     components: {
       DFilterTermOrganizations,
       DFilterTermComponents,
-      DFilterTermCategories,
       DFilterTermDisciplines,
       DFilterSidebar
     },

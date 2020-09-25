@@ -6,7 +6,6 @@
         {{ attributeInfo.shortTitle }}
       </div>
     </d-simple-tooltip>
-
     <d-simple-tooltip :tooltip="valueOption.title">
       <v-avatar
         class="d-flex white--text font-weight-medium text-caption"
