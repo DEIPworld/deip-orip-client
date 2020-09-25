@@ -12,7 +12,7 @@
           <div class="text-h5">
             Search by technology
           </div>
-          <v-form @submit="goToSearch">
+          <v-form @submit.prevent="goToSearch">
             <v-text-field
               v-model="searchTerm"
               outlined
