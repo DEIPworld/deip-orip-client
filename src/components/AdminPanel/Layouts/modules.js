@@ -38,20 +38,26 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
   return obj;
 };
 
+// typing
+
+const str = typeof String();
+const num = typeof Number();
+const arr = typeof Array();
+const bool = typeof Boolean();
+
 // modules
 
 export const modulesLayout = [
-  // { component: 'DLayoutHeader', name: 'Header' },
   {
     component: 'DLayoutSection',
     name: 'Section',
     ...setComponentProps({
-      background: 'string',
-      backgroundOverlay: 'string',
-      alignContent: 'string',
-      height: 'number',
-      minHeight: 'number',
-      dark: 'boolean'
+      background: str,
+      backgroundOverlay: str,
+      alignContent: str,
+      height: num,
+      minHeight: num,
+      dark: bool
     }),
     icon: 'mdi-view-day-outline',
     children: [
@@ -74,8 +80,8 @@ export const modulesLayout = [
     component: 'DLayoutSectionSplit',
     name: 'Splitter',
     ...setComponentProps({
-      template: 'string',
-      gap: 'number'
+      template: str,
+      gap: num
     }),
     icon: 'mdi-view-column-outline',
     children: [div(), div()]
@@ -88,9 +94,9 @@ export const modulesHelpers = [
     name: 'Block',
     icon: 'mdi-card-text-outline',
     ...setComponentProps({
-      title: 'string',
-      small: 'boolean',
-      widget: 'boolean'
+      title: str,
+      small: bool,
+      widget: bool
     }),
     children: []
   },
@@ -98,8 +104,8 @@ export const modulesHelpers = [
     component: 'DStack',
     name: 'Stack',
     ...setComponentProps({
-      gap: 'number',
-      horizontal: 'boolean'
+      gap: num,
+      horizontal: bool
     }),
     icon: 'mdi-view-headline',
     children: []
@@ -114,8 +120,8 @@ export const modulesHelpers = [
     name: 'Metadata',
     icon: 'mdi-text-short',
     ...setComponentProps({
-      icon: 'string',
-      label: 'string'
+      icon: str,
+      label: str
     })
   }
 ];
@@ -126,7 +132,7 @@ export const modulesGrid = [
     name: 'Auto grid',
     icon: 'mdi-view-module-outline',
     ...setComponentProps({
-      itemMaxWidth: 'number'
+      itemMaxWidth: num
     }),
     children: []
   },

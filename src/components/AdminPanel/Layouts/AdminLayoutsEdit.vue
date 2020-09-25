@@ -1,6 +1,5 @@
 <template>
   <d-layout-full-screen full-width color="grey lighten-4">
-    <!--    <pre>{{$tenantSettings}}</pre>-->
     <portal to="sidebar">
       <v-navigation-drawer
         :width="280"
@@ -88,6 +87,7 @@
     },
     computed: {
       attrModules() {
+
         const forSets = (attr) => ({
           component: 'AttributesSet',
           model: `researchRef.attributes.${attr._id}`,

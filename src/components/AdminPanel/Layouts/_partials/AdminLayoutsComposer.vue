@@ -168,19 +168,6 @@
 
 <style lang="scss" module>
   .host {
-    //&:not(:last-child) {
-    //  margin-bottom: 12px;
-    //
-    //  [data-component="DLayoutSection"] &,
-    //  [data-component="DLayoutSectionSplit"] &,
-    //  [data-component="VRow"] & {
-    //    margin-bottom: 0;
-    //  }
-    //}
-    //
-    //[data-component="VRow"] {
-    //  margin: 0;
-    //}
 
     [data-component="DLayoutSection"] {
       display: flex;

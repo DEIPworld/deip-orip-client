@@ -1,6 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
-    <pre>{{JSON.stringify(formData, null, 2)}}</pre>
+<!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
