@@ -73,16 +73,16 @@
 
     watch: {
       isPersonal(value) {
-        if (value) {
-          this.internalValue = this.personalGroup.external_id;
-        } else {
+        // if (value) {
+        //   this.internalValue = this.personalGroup.external_id;
+        // } else {
           this.internalValue = null;
-        }
+        // }
       }
     },
 
     created() {
-      this.internalValue = this.personalGroup.external_id;
+      // this.internalValue = this.personalGroup.external_id;
     }
   };
 </script>

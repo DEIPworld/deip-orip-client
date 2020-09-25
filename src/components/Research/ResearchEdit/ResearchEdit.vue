@@ -1,5 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
+    <pre>{{JSON.stringify(formData, null, 2)}}</pre>
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
@@ -14,7 +15,6 @@
 <!--      />-->
 
       <v-divider class="mt-8 mb-6" />
-
       <div class="d-flex justify-end align-center">
         <d-stack horizontal :gap="8">
           <v-btn text color="primary">

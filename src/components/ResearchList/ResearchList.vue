@@ -134,10 +134,16 @@
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
 
+        console.log(filter)
+
         this.$store.dispatch('feed/loadResearchFeed', {
           filter: {
             ...filter,
-            researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
+            ...(
+              filter.researchAttributes ? {
+                researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
+              } : {}
+            )
           }
         })
           .then((items) => {
