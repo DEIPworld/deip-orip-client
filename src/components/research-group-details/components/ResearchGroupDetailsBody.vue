@@ -76,7 +76,7 @@
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
           small
-          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
+          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'research.create' } : { name: 'CreateResearchProposal' }"
           outlined
         >
           Start a project

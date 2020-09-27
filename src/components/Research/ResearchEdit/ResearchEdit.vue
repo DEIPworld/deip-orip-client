@@ -119,7 +119,7 @@
       },
 
       isProposal() {
-        return this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
+        return this.transformedFormData.data.researchGroup !== null && this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
       },
 
       isChanged() {
@@ -136,10 +136,10 @@
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
               acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
-                ? [...acc[attr.blockchainFieldMeta.field], value]
-                : [value];
+                ? [...acc[attr.blockchainFieldMeta.field], ...(Array.isArray(value) ? value : [value])]
+                : [...(Array.isArray(value) ? value : [value])];
             } else {
-              acc[attr.blockchainFieldMeta.field] = value;
+              acc[attr.blockchainFieldMeta.field] = value || null;
             }
             return acc;
           }, {}));
@@ -190,7 +190,7 @@
           });
           // });
       } else {
-        this.formData.researchGroup = this.$currentUserName;
+        this.formData.researchGroup = null; // TODO: Extract default value from hidden atttribute or set it from non-hidden
       }
     },
     methods: {
@@ -231,13 +231,20 @@
       createResearch(exists) {
         if (exists) return false;
 
+        let newResearchGroupMeta = this.formData.researchGroup === null ? {
+          creator: this.$currentUser.account.name,
+          memo: this.$currentUser.account.memo_key,
+          fee: this.toAssetUnits(0)
+        } : null;
+        
         return researchService.createResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
-          this.transformedFormData.data,
-          this.transformedFormData.offchainMeta
+          { ...this.transformedFormData.data, newResearchGroupMeta },
+          this.transformedFormData.offchainMeta,
         )
           .then((research) => {
+            
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             this.goToResearch(research);
           })

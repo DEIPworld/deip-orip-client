@@ -56,7 +56,7 @@
                 this.user.privKey,
                 {
                   fee: this.toAssetUnits(0),
-                  creator,
+                  creator: creator,
                   accountOwnerAuth: auth,
                   accountActiveAuth: auth,
                   accountMemoPubKey: memo,
@@ -77,7 +77,7 @@
                   const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
                     this.user.privKey,
                     {
-                      researchGroup: res.rm._id,
+                      researchGroup: res.external_id,
                       member: invitee.account,
                       rewardShare: '0.00 %',
                       researches: undefined, // all researches
@@ -106,7 +106,7 @@
                       }
                     });
                   } else {
-                    if (this.backRouterToken.name === 'CreateResearch') {
+                    if (this.backRouterToken.name === 'research.create') {
                       this.backRouterToken.query.externalId = researchGroup.external_id;
                     }
                     this.$router.push(this.backRouterToken);
