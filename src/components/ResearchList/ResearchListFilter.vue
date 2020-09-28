@@ -6,7 +6,7 @@
     @apply="applyFilter"
     @reset="resetFilter"
   >
-    <d-block widget="compact">
+    <d-block widget>
       <v-text-field
         v-model="filterModel.searchTerm"
         label="Search terms"
@@ -15,7 +15,7 @@
       />
     </d-block>
 
-    <d-filter-term-components v-model="filterModel.researchAttributes" />
+    <d-filter-term-components v-model="filterModel.researchAttributes" class="mb-6" />
   </d-filter-sidebar>
 </template>
 

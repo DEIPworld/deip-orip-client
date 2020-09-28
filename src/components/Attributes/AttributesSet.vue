@@ -1,26 +1,41 @@
-<template>
-  <component
-    :is="attributeTypeComponent"
-    v-model="internalValue"
-    :attribute="attribute"
-    :view-type="viewType"
-  />
-</template>
-
 <script>
   import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
-
-  const componentsContext = require.context('./', true, /Attributes(.*)\/(.*)Set\.vue$/);
-  const components = componentsContext.keys().reduce((obj, c) => ({
-    ...obj,
-    ...{
-      [c.replace(/^.*[\\/]/, '').replace(/\.vue/, '').split('/').pop()]: componentsContext(c).default
-    }
-  }), {});
+  import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
+  import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
+  import AttributesMultiSelectSet from './AttributesMultiSelect/AttributesMultiSelectSet';
+  import AttributesPartnersSet from './AttributesPartners/AttributesPartnersSet';
+  import AttributesResearchGroupSet from './AttributesResearchGroup/AttributesResearchGroupSet';
+  import AttributesRoadmapSet from './AttributesRoadmap/AttributesRoadmapSet';
+  import AttributesSelectSet from './AttributesSelect/AttributesSelectSet';
+  import AttributesStepperSet from './AttributesStepper/AttributesStepperSet';
+  import AttributesSwitchSet from './AttributesSwitch/AttributesSwitchSet';
+  import AttributesTextSet from './AttributesText/AttributesTextSet';
+  import AttributesTextareaSet from './AttributesTextarea/AttributesTextareaSet';
+  import AttributesUrlSet from './AttributesUrl/AttributesUrlSet';
+  import AttributesUserSet from './AttributesUser/AttributesUserSet';
+  import AttributesUsersListSet from './AttributesUsersList/AttributesUsersListSet';
+  import AttributesVideoUrlSet from './AttributesVideoUrl/AttributesVideoUrlSet';
 
   export default {
     name: 'AttributesSet',
-    components,
+    components: {
+      AttributesCheckboxSet,
+      AttributesDisciplinesListSet,
+      AttributesMultiSelectSet,
+      AttributesPartnersSet,
+      AttributesResearchGroupSet,
+      AttributesRoadmapSet,
+      AttributesSelectSet,
+      AttributesStepperSet,
+      AttributesSwitchSet,
+      AttributesTextSet,
+      AttributesTextareaSet,
+      AttributesUrlSet,
+      AttributesUserSet,
+      AttributesUsersListSet,
+      AttributesVideoUrlSet,
+    },
+
     mixins: [attributeSet, attributeTypeComponent]
   };
 </script>

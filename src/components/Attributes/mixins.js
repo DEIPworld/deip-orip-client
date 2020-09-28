@@ -65,7 +65,7 @@ export const PROPS = {
 export const attributeTypeComponent = {
   mixins: [tenantAttributes],
   computed: {
-    attributeTypeComponent() {
+    attributeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
       let t;
 
@@ -99,6 +99,12 @@ export const attributeViewTypeComponent = {
         ? this.viewType
         : this.defaultViewType$;
       return `${this.$options.name}${pascalCase(viewType)}`;
+    },
+    attributeComponent() {
+      const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
+      const defaultView = `${this.$options.name}${pascalCase('default')}`;
+      const requestedViewExist = Object.keys(this.$options.components).includes(requestedView);
+      return requestedViewExist ? requestedView : defaultView;
     }
   }
 };
@@ -154,9 +160,6 @@ export const attributeRead = {
     }
   },
   render(h) {
-    if (this.wrap) {
-      return h(this.wrap, this.genContent(h));
-    }
     return this.genContent(h);
   }
 };
@@ -175,6 +178,21 @@ export const attributeReadOption = {
   }
 };
 
+export const attributeReadText = {
+  render(h) {
+    if (this.clamped) {
+      return h('v-clamp', {
+        props: {
+          autoresize: true,
+          // eslint-disable-next-line radix
+          maxLines: parseInt(this.clamped)
+        }
+      }, this.attribute.value);
+    }
+    return this._v(this.attribute.value);
+  }
+}
+
 // //////////////////////////////////////////////
 
 export const attributeSet = {
@@ -183,6 +201,12 @@ export const attributeSet = {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType
   },
+  computed: {
+    attributeComponent() {
+      console.warn('No attribute type/view specified!!!');
+      return 'div';
+    }
+  },
   watch: {
     internalValue: {
       deep: true,
@@ -190,6 +214,15 @@ export const attributeSet = {
         this.$emit('change', val);
       }
     }
+  },
+  render(h) {
+    return h(this.attributeComponent, {
+      props: {
+        value: this.internalValue,
+        attribute: this.attribute,
+        viewType: this.viewType
+      }
+    }, null);
   }
 };
 

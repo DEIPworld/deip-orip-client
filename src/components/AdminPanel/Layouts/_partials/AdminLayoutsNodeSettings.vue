@@ -24,6 +24,7 @@
         <v-divider />
         <v-card-text style="max-height: 80vh;" class="py-6">
           <d-stack :gap="16">
+            {{internalValue.availableProps}}
             <div v-for="[key, prop] of Object.entries(internalValue.availableProps)" :key="key">
 
               <v-text-field

@@ -3,6 +3,7 @@
     v-model="internalValue"
     :label="attribute.title"
     hide-details="auto"
+    class="ma-0"
   />
 </template>
 

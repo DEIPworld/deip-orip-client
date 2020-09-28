@@ -60,7 +60,8 @@
     modulesTypography,
     modulesComponents,
     setComponentProps,
-    extendModuleObject
+    extendModuleObject,
+    setAs
   } from '@/components/AdminPanel/Layouts/modules';
 
   import AdminLayoutsModules from '@/components/AdminPanel/Layouts/_partials/AdminLayoutsModules';
@@ -101,7 +102,7 @@
           component: 'AttributesRead',
           ...(/text|textarea/.test(attr.type)
             ? setComponentProps({
-              clamped: 'number'
+              clamped: setAs(Number)
             })
             : {}),
           ...{

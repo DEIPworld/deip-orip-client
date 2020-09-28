@@ -40,7 +40,7 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
 
 // typing
 
-const setAs = (type, val) => ({
+export const setAs = (type, val) => ({
   type: kindOf(type()),
   value: val || null
 });
