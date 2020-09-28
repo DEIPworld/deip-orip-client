@@ -138,8 +138,8 @@ export const componentsRenderer = {
 
       if (node.model) {
         vModel = {
-          domProps: {
-            value: self.value
+          props: {
+            value: getObjectValueByPath(self.internalValue, node.model)
           },
           on: {
             change(event) {
