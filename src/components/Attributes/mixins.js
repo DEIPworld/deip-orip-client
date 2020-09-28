@@ -100,11 +100,16 @@ export const attributeViewTypeComponent = {
         : this.defaultViewType$;
       return `${this.$options.name}${pascalCase(viewType)}`;
     },
+
     attributeComponent() {
-      const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
       const defaultView = `${this.$options.name}${pascalCase('default')}`;
-      const requestedViewExist = Object.keys(this.$options.components).includes(requestedView);
-      return requestedViewExist ? requestedView : defaultView;
+
+      if (this.viewType) {
+        const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
+        const requestedViewExist = Object.keys(this.$options.components).includes(requestedView);
+        return requestedViewExist ? requestedView : defaultView;
+      }
+      return defaultView;
     }
   }
 };
