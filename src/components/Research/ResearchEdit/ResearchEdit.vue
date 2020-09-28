@@ -231,7 +231,7 @@
       createResearch(exists) {
         if (exists) return false;
 
-        let newResearchGroupMeta = this.formData.researchGroup === null ? {
+        let newResearchGroupMeta = this.transformedFormData.data.researchGroup === null ? {
           creator: this.$currentUser.account.name,
           memo: this.$currentUser.account.memo_key,
           fee: this.toAssetUnits(0)
