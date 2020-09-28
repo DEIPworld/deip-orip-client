@@ -6,6 +6,7 @@ import AttributesCommonEditMeta
 import { ATTR_TYPES } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
+import dotProp from 'dot-prop';
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
@@ -221,11 +222,17 @@ export const attributeSet = {
     }
   },
   render(h) {
+    const self = this;
     return h(this.attributeComponent, {
       props: {
         value: this.internalValue,
         attribute: this.attribute,
         viewType: this.viewType
+      },
+      on: {
+        change(e) {
+          self.$emit('change', e);
+        }
       }
     }, null);
   }
