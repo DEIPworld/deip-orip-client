@@ -5,6 +5,7 @@
     :class="hostClasses"
     :outlined="!root"
     :data-component-host="item.component"
+    min-width="0%"
   >
     <v-system-bar v-if="!(root || isTypography)" color="grey lighten-4">
       <v-icon size="12" class="mr-1">
@@ -133,6 +134,7 @@
       viewStyles() {
         return {
           minHeight: '48px',
+          minWidth: '0px',
 
           ...(this.item.component === 'DLayoutSectionSplit' ? {
             display: 'grid',
@@ -178,8 +180,8 @@
     }
 
     [data-component-host="DLayoutSectionSidebar"] {
-      flex: 0 0 256px;
-      max-width: 256px;
+      flex: 0 0 360px;
+      max-width: 360px;
       margin-left: 1rem;
     }
 

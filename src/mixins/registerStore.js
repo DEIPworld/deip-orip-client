@@ -7,6 +7,14 @@ export const registerStore = {
       if (!(this.$store && this.$store.state && this.$store.state[name])) {
         this.$store.registerModule(name, module);
       }
+    },
+    setNs(hashFromProp) {
+      const hashProp = !hashFromProp
+        ? (this.$options.propsData || {})
+        : dotProp.get(this, hashFromProp, this.$options.propsData);
+
+      const storeModuleHash = crc32(JSON.stringify(hashProp)).toString(32);
+      this.storeNS = `${this.$options.name}-${storeModuleHash}`;
     }
   }
 };
@@ -14,18 +22,13 @@ export const registerStore = {
 export const componentStoreFactory = (storeModule, hashFromProp) => ({
   mixins: [registerStore],
   data() {
-    const hashProp = !hashFromProp
-      ? (this.$options.propsData || {})
-      : dotProp(this, hashFromProp, this.$options.propsData);
-
-    const storeModuleHash = crc32(JSON.stringify(hashProp)).toString(32);
-
     return {
-      storeNS: `${this.$options.name}-${storeModuleHash}`
+      storeNS: null
     };
   },
   created() {
-    this.registerStoreModule(storeModule, this.storeNS);
+    this.setNs(hashFromProp);
+    this.registerStoreModule(_.cloneDeep(storeModule), this.storeNS);
   }
 });
 

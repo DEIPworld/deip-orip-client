@@ -188,9 +188,9 @@
             this.$notifier.showSuccess();
             const tenant = this.$env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
-            this.$router.push({
-              name: 'admin.layouts'
-            });
+            // this.$router.push({
+            //   name: 'admin.layouts'
+            // });
             this.processing = false;
           })
           .catch((err) => {

@@ -30,7 +30,9 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
       node.moduleId = genObjectId(node);
 
       for (const key of Object.keys(ext)) {
-        node[key] = ext[key];
+        if (!node[key]) {
+          node[key] = ext[key];
+        }
       }
     }
   }
@@ -123,6 +125,16 @@ export const modulesHelpers = [
       icon: setAs(String),
       label: setAs(String)
     })
+  },
+  {
+    component: 'DMetaItem',
+    name: 'Metadata with Content',
+    icon: 'mdi-text-short',
+    type: 'typography',
+    ...setComponentProps({
+      icon: setAs(String)
+    }),
+    children: []
   }
 ];
 

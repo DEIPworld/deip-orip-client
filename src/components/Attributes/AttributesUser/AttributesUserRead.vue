@@ -25,17 +25,22 @@
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { usersStore } from '@/components/Users/store';
   import { mapState } from 'vuex';
+  import kindOf from 'kind-of';
 
   export default {
     name: 'AttributesUserRead',
-    mixins: [componentStoreFactory(usersStore), attributeRead],
+    mixins: [componentStoreFactory(usersStore, 'attribute.value'), attributeRead],
     computed: {
       ...mapState({
         usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
       })
     },
     created() {
-      this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.attribute.value)
+      console.log(333, this.storeNS)
+      const users = kindOf(this.attribute.value) === 'string'
+        ? [this.attribute.value]
+        : this.attribute.value;
+      this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
         .then(() => {
           this.$setReady();
         });

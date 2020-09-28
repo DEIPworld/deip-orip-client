@@ -5,6 +5,7 @@
     outlined
     rounded
     max-width="100%"
+    min-width="0px"
   >
     <v-icon size="12" class="mr-1">
       {{ item.icon }}

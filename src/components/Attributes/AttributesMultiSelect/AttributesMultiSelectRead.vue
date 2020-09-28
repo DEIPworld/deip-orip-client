@@ -1,18 +1,23 @@
 <template>
-  <div v-if="attribute && attribute.value">
-    <d-block small widget separated :title="attribute.title">
-      <template v-for="(item, index) of valueOptions">
-        <router-link
-          class="link text--secondary text-caption"
-          :to="{
+  <div v-if="attribute && attribute.value" class="d-flex align-center text-caption text--secondary">
+    <template v-for="(item, index) of valueOptions">
+      <router-link
+        :key="`link-${index}`"
+        class="link text--secondary"
+        :to="{
             name: 'ResearchFeed'
           }"
-        >
-          {{ item.title }}
-        </router-link>
-      </template>
-
-    </d-block>
+      >
+        {{ item.title }}
+      </router-link>
+      <div
+        v-if="index + 1 < valueOptions.length"
+        :key="`dot-${index}`"
+        class="mx-2"
+      >
+        •
+      </div>
+    </template>
   </div>
 </template>
 
@@ -22,13 +27,12 @@
 
   export default {
     name: 'AttributesMultiSelectRead',
-    components: { DBlock },
     mixins: [attributeRead],
     computed: {
       valueOptions() {
         // TODO: check
         return this.attributeInfo.valueOptions.filter(({ value }) => this.attribute.value && this.attribute.value.some((v) => v === value));
-      },
+      }
     }
   };
 </script>
