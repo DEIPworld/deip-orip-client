@@ -7,13 +7,15 @@
     min-width="0px"
     max-width="100%"
   >
-    <v-icon class="px-2" size="16">
-      {{ icon }}
-    </v-icon>
+    <!--    temp solution-->
+    <template v-if="node.type !== 'attribute'">
+      <v-icon class="px-2" size="16">
+        {{ icon }}
+      </v-icon>
+      <v-divider vertical class="dashed" />
+    </template>
 
-    <v-divider vertical class="dashed" />
-
-    <div class="spacer text-caption text--secondary text-truncate px-2">
+    <div class="spacer text-caption text--secondary text-truncate ml-2">
       <template v-if="title">
         <span class="font-weight-medium mr-1">{{ title }}</span>
         <span style="font-size: 10px">({{ node.name }})</span>
@@ -24,13 +26,10 @@
     </div>
 
     <template v-if="$hasSlot('settings')">
-      <v-divider vertical class="dashed" />
-
-      <v-sheet class="px-1">
+      <v-sheet class="mr-1">
         <slot name="settings" />
       </v-sheet>
     </template>
-
   </v-card>
 </template>
 

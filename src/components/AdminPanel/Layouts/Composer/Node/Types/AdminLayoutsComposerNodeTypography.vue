@@ -31,8 +31,6 @@
     />
 
     <template v-if="$hasSlot('settings')">
-      <v-divider vertical class="dashed" />
-
       <v-sheet class="pa-2 align-self-center">
         <slot name="settings" />
       </v-sheet>

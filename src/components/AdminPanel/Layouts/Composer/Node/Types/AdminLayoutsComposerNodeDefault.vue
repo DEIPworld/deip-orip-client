@@ -3,13 +3,14 @@
     outlined
     class="dashed d-flex flex-column"
     :data-node-host="node.component"
+    min-width="0px"
   >
     <v-system-bar color="grey lighten-4">
       <v-icon size="16" class="mr-1">
         {{ node.icon }}
       </v-icon>
 
-      <div v-if="node.name" class="text-caption">
+      <div v-if="node.name" class="text-caption text-truncate">
         <template v-if="title">
           <span class="font-weight-medium mr-1">{{ title }}</span>
           <span style="font-size: 10px">({{ node.name }})</span>
@@ -32,8 +33,9 @@
     <admin-layouts-composer-nodes
       v-if="node.children"
       v-model="node.children"
-      class="pa-4 spacer"
+      class="pa-2 spacer"
       :data-nodes="node.component"
+      :style="{minHeight: '40px'}"
       @click:remove="onClickRemove"
     />
 

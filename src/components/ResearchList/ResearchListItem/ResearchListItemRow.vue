@@ -17,7 +17,13 @@
       layoutSchema() {
         const { layout } = this.$tenantSettings.researchLayouts.projectListRow;
         const row = layout[0];
-        return row ? row.children : layout;
+        if (row) {
+          for (const cell of row.children) {
+            delete cell.attrs.title;
+          }
+          return row.children;
+        }
+        return layout;
       }
     },
     methods: {

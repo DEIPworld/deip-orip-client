@@ -6,7 +6,7 @@
   >
     <template #settings>
       <admin-layouts-composer-node-settings
-        v-model="node"
+        v-model="internalValue"
         @click:remove="onClickRemove"
       />
     </template>
@@ -24,8 +24,12 @@
 
   import AdminLayoutsComposerNodeAttribute
     from '@/components/AdminPanel/Layouts/Composer/Node/Types/AdminLayoutsComposerNodeAttribute';
+
+  import AdminLayoutsComposerNodeIcon
+    from '@/components/AdminPanel/Layouts/Composer/Node/Types/AdminLayoutsComposerNodeIcon';
+
   import AdminLayoutsComposerNodeSettings
-    from '@/components/AdminPanel/Layouts/Composer/Node/AdminLayoutsComposerNodeSettings';
+    from '@/components/AdminPanel/Layouts/Composer/Node/Settings/AdminLayoutsComposerNodeSettings';
 
   export default {
     name: 'AdminLayoutsComposerNode',
@@ -33,7 +37,8 @@
       AdminLayoutsComposerNodeSettings,
       AdminLayoutsComposerNodeDefault,
       AdminLayoutsComposerNodeTypography,
-      AdminLayoutsComposerNodeAttribute
+      AdminLayoutsComposerNodeAttribute,
+      AdminLayoutsComposerNodeIcon
     },
     mixins: [ProxyableFactory('node')],
     computed: {
@@ -43,6 +48,9 @@
         }
         if (this.node.type === 'attribute' || this.node.type === 'staticComponent') {
           return 'AdminLayoutsComposerNodeAttribute';
+        }
+        if (this.node.component === 'VIcon') {
+          return 'AdminLayoutsComposerNodeIcon';
         }
 
         return 'AdminLayoutsComposerNodeDefault';

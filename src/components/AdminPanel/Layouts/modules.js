@@ -138,6 +138,21 @@ export const modulesHelpers = [
     children: []
   },
   {
+    component: 'DSimpleTooltip',
+    name: 'Tooltip',
+    icon: 'mdi-tooltip-text-outline',
+    children: []
+  },
+  {
+    component: 'VIcon',
+    name: 'Icon',
+    icon: 'mdi-star-box-outline',
+    text: '',
+    ...setComponentProps({
+      size: setAs(Number)
+    })
+  },
+  {
     component: 'VSheet',
     name: 'Container',
     icon: 'mdi-card-outline',

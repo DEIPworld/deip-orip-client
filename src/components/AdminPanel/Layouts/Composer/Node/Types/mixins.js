@@ -13,8 +13,11 @@ export const abstractNode = {
       return propTitle || attrTitle || null;
     },
     icon() {
-      if (this.node.props) {
-        return this.node.props.icon || this.node.icon;
+      if (this.node.props && this.node.props.icon) {
+        return this.node.props.icon;
+      }
+      if (this.node.component === 'VIcon' && this.node.text) {
+        return this.node.text;
       }
       return this.node.icon;
     }

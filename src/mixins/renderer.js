@@ -11,8 +11,9 @@ import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSpli
 import DStack from '@/components/Deipify/DStack/DStack';
 import DBlock from '@/components/Deipify/DBlock/DBlock';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
+import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
-import { VDivider, VSheet } from 'vuetify/lib/components';
+import { VDivider, VSheet, VIcon } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
@@ -26,9 +27,11 @@ const rendererCommon = {
     DStack,
     DBlock,
     DMetaItem,
+    DSimpleTooltip,
 
     VDivider,
-    VSheet
+    VSheet,
+    VIcon
   },
   props: {
     schema: {

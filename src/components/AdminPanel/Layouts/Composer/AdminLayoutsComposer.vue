@@ -42,13 +42,13 @@
       display: grid;
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
-      grid-gap: 1rem;
+      grid-gap: .5rem;
     }
 
     [data-nodes="DStack"] {
       display: grid;
       grid-auto-flow: row;
-      grid-gap: 1rem;
+      grid-gap: .5rem;
     }
 
     [data-nodes="DLayoutSection"] {
@@ -56,13 +56,13 @@
     }
 
     [data-node-host="DLayoutSectionMain"] {
-      flex:1
+      flex: 1;
     }
 
     [data-node-host="DLayoutSectionSidebar"] {
       flex: 0 0 380px;
       max-width: 380px;
-      margin-left: 1rem;
+      margin-left: .5rem;
     }
 
     [data-nodes="tr"] {
@@ -74,6 +74,14 @@
       flex: 1;
 
       margin: 0 4px;
+      min-width: 0px;
+    }
+
+    [data-nodes="DSimpleTooltip"] {
+      display: grid;
+      grid-auto-flow: row;
+      grid-gap: .5rem;
+      justify-items: left;
     }
   }
 </style>
