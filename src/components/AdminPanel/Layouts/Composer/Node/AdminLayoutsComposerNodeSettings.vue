@@ -13,7 +13,7 @@
     </v-btn>
 
     <v-dialog
-      v-if="node.availableProps"
+      v-if="node.availableProps || node.availableAttrs"
       v-model="settingsOpen"
       :max-width="400"
       scrollable
@@ -37,52 +37,96 @@
         <v-divider />
         <v-card-text style="max-height: 80vh;" class="py-6">
           <d-stack :gap="16">
-            <div v-for="[key, prop] of Object.entries(node.availableProps)" :key="key">
-              <d-autocomplete
-                v-if="key === 'icon'"
-                v-model="propSettings[key]"
-                :items="icons"
-                outlined
-                hide-details="auto"
-                label="Icon"
-              >
-                <template #item="{ item }">
-                  <v-list-item-icon class="mr-4">
-                    <v-icon>{{ item.value }}</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content class="text-body-2">
-                    {{ item.text }}
-                  </v-list-item-content>
-                </template>
-              </d-autocomplete>
 
-              <v-text-field
-                v-if="/string|number/.test(prop.type) && key !== 'icon'"
-                v-model="propSettings[key]"
-                :label="key"
-                outlined
-                hide-details="auto"
-                class="ma-0"
-              />
+            <d-stack v-if="node.availableProps" :gap="16">
+              <div class="text-caption font-weight-medium">
+                Module properties
+              </div>
+              <div v-for="[key, prop] of Object.entries(node.availableProps)" :key="key">
+                <d-autocomplete
+                  v-if="key === 'icon'"
+                  v-model="propsSettings[key]"
+                  :items="icons"
+                  outlined
+                  hide-details="auto"
+                  label="Icon"
+                >
+                  <template #item="{ item }">
+                    <v-list-item-icon class="mr-4">
+                      <v-icon>{{ item.value }}</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content class="text-body-2">
+                      {{ item.text }}
+                    </v-list-item-content>
+                  </template>
+                </d-autocomplete>
 
-              <v-checkbox
-                v-if="prop.type === 'boolean'"
-                v-model="propSettings[key]"
-                :label="key"
-                hide-details="auto"
-                class="ma-0"
-              />
+                <v-text-field
+                  v-if="/string|number/.test(prop.type) && key !== 'icon'"
+                  v-model="propsSettings[key]"
+                  :label="key"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
+                />
 
-              <v-select
-                v-if="prop.type === 'array'"
-                v-model="propSettings[key]"
-                :items="prop.value"
-                :label="key"
-                outlined
-                hide-details="auto"
-                class="ma-0"
-              />
-            </div>
+                <v-checkbox
+                  v-if="prop.type === 'boolean'"
+                  v-model="propsSettings[key]"
+                  :label="key"
+                  hide-details="auto"
+                  class="ma-0"
+                />
+
+                <v-select
+                  v-if="prop.type === 'array'"
+                  v-model="propsSettings[key]"
+                  :items="prop.value"
+                  :label="key"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
+                />
+              </div>
+            </d-stack>
+
+            <d-stack v-if="node.availableAttrs" :gap="16">
+              <div class="text-caption font-weight-medium">
+                Module attributes
+              </div>
+              <div v-for="[key, attr] of Object.entries(node.availableAttrs)" :key="key">
+
+                <v-text-field
+                  v-if="/string|number/.test(attr.type) && key !== 'icon'"
+                  v-model="attrsSettings[key]"
+                  :label="key"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
+                />
+
+                <v-checkbox
+                  v-if="attr.type === 'boolean'"
+                  v-model="attrsSettings[key]"
+                  :label="key"
+                  hide-details="auto"
+                  class="ma-0"
+                />
+
+                <v-select
+                  v-if="attr.type === 'array'"
+                  v-model="attrsSettings[key]"
+                  :items="attr.value"
+                  :label="key"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
+                />
+              </div>
+            </d-stack>
+
+
+
 
             <div>
               <v-btn
@@ -173,7 +217,8 @@
       return {
         settingsOpen: false,
         advancedOpen: false,
-        propSettings: {},
+        propsSettings: {},
+        attrsSettings: {},
         optionalChildren: false
       };
     },
@@ -187,16 +232,24 @@
       }
     },
     created() {
-      this.propSettings = {
-        ...this.propSettings,
+      this.propsSettings = {
+        ...this.propsSettings,
         ...this.node.props
+      };
+      this.attrsSettings = {
+        ...this.attrsSettings,
+        ...this.node.attrs
       };
     },
     methods: {
       applySettings() {
         this.node.props = {
           ...this.node.props,
-          ...this.propSettings
+          ...this.propsSettings
+        };
+        this.node.attrs = {
+          ...this.node.attrs,
+          ...this.attrsSettings
         };
         this.settingsOpen = false;
       },

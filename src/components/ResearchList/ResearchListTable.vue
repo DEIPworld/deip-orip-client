@@ -2,6 +2,18 @@
   <div>
     <v-divider />
     <v-simple-table>
+      <thead>
+        <tr>
+          <th
+            v-for="(cell, index) of tableHeaderCells"
+            :key="index"
+            :class="cell.class"
+            v-bind="cell.attrs"
+          >
+            {{ cell.text }}
+          </th>
+        </tr>
+      </thead>
       <tbody>
         <research-list-item-row
           v-for="item in items"
@@ -24,6 +36,22 @@
       items: {
         type: Array,
         default: () => ([])
+      }
+    },
+    computed: {
+      tableHeaderCells() {
+        const { layout } = this.$tenantSettings.researchLayouts.projectListRow;
+        const row = layout[0];
+
+        if (row) {
+          return row.children.map((cell) => ({
+            text: cell.attrs && cell.attrs.title ? cell.attrs.title : '',
+            class: cell.class || {},
+            attrs: cell.attrs || {}
+          }));
+        }
+
+        return [];
       }
     }
   };

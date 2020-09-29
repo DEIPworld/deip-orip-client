@@ -15,14 +15,9 @@
     mixins: [researchItem],
     computed: {
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.projectListRow.layout
-          .map((el) => ({
-            component: 'td',
-            attrs: {
-              width: `${100 / this.$tenantSettings.researchLayouts.projectListRow.layout.length}%`
-            },
-            children: [el]
-          }));
+        const { layout } = this.$tenantSettings.researchLayouts.projectListRow;
+        const row = layout[0];
+        return row ? row.children : layout;
       }
     },
     methods: {

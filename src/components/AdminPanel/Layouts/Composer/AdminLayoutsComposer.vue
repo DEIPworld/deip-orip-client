@@ -64,5 +64,16 @@
       max-width: 380px;
       margin-left: 1rem;
     }
+
+    [data-nodes="tr"] {
+      display: flex;
+      margin: 0 -4px;
+    }
+
+    [data-node-host="td"] {
+      flex: 1;
+
+      margin: 0 4px;
+    }
   }
 </style>

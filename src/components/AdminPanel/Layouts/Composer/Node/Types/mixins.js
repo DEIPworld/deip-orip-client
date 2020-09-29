@@ -8,10 +8,9 @@ export const abstractNode = {
   mixins: [ProxyableFactory('node')],
   computed: {
     title() {
-      if (this.node.props) {
-        return this.node.props.title || this.node.props.label || null;
-      }
-      return null;
+      const propTitle = this.node.props ? (this.node.props.title || this.node.props.label || null) : null;
+      const attrTitle = this.node.attrs ? (this.node.attrs.title || null) : null;
+      return propTitle || attrTitle || null;
     },
     icon() {
       if (this.node.props) {

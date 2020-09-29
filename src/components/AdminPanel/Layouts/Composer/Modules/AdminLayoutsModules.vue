@@ -46,7 +46,7 @@
   import {
     extendModuleObject, modulesComponents,
     modulesHelpers,
-    modulesLayout, modulesTypography,
+    modulesLayout, modulesTable, modulesTypography,
     setAs,
     setComponentProps
   } from '@/components/AdminPanel/Layouts/modules';
@@ -116,6 +116,10 @@
           {
             name: 'Layout helpers',
             modules: extendModuleObject(modulesHelpers)
+          },
+          {
+            name: 'Table',
+            modules: extendModuleObject(modulesTable)
           },
           {
             name: 'Typography',
