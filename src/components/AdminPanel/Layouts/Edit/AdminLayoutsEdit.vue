@@ -13,6 +13,11 @@
       </v-navigation-drawer>
     </portal>
 
+    <admin-layouts-composer
+      v-model="schema"
+      @click:remove="removeNode"
+    />
+
     <v-btn
       class="ma-8"
       color="primary"
@@ -20,7 +25,7 @@
       fixed
       bottom
       right
-      @click="safeSettings()"
+      @click="saveSettings()"
     >
       <v-icon
         size="24"
@@ -28,10 +33,6 @@
         mdi-content-save
       </v-icon>
     </v-btn>
-
-    <admin-layouts-composer
-      v-model="schema"
-    />
 
     <pre>{{ JSON.stringify(schema, null, 2) }}</pre>
   </d-layout-full-screen>
@@ -45,6 +46,7 @@
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/layouts';
   import { TenantService } from '@deip/tenant-service';
+  import { find as deepFind } from 'find-keypath';
 
   const tenantService = TenantService.getInstance();
 
@@ -86,7 +88,7 @@
     },
 
     methods: {
-      safeSettings() {
+      saveSettings() {
         this.processing = true;
 
         const clonedProfile = _.cloneDeep(this.$tenant.profile);
@@ -115,6 +117,24 @@
             this.$notifier.showError();
             this.processing = false;
           });
+      },
+
+      removeNode(id) {
+        const targetPath = deepFind(this.schema, id).slice(0, -1);
+        const nodeIndex = targetPath.pop();
+        let location = this.schema;
+
+        if (targetPath.length) {
+          for (const [idx, step] of targetPath.entries()) {
+            location = location[step];
+
+            if (idx === targetPath.length - 1) {
+              location = location.splice(nodeIndex, 1);
+            }
+          }
+        } else {
+          location = location.splice(nodeIndex, 1);
+        }
       }
     }
   };

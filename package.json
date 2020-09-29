@@ -76,6 +76,7 @@
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "substance": "1.0.0-beta.6.2",
+    "v-clipboard": "^2.2.3",
     "v-credit-card": "^1.2.0",
     "vue": "^2.6.12",
     "vue-clamp": "^0.3.1",

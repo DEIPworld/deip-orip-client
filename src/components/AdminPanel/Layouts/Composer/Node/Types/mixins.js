@@ -19,5 +19,10 @@ export const abstractNode = {
       }
       return this.node.icon;
     }
+  },
+  methods: {
+    onClickRemove(e) {
+      this.$emit('click:remove', e);
+    }
   }
 };

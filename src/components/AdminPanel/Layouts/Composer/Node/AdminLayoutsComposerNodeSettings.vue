@@ -5,6 +5,7 @@
       v-if="/AttributesRead|AttributesSet/.test(node.component)"
       icon
       x-small
+      @click="copyAttrId()"
     >
       <v-icon class="ma-0" size="14">
         mdi-clipboard-multiple-outline
@@ -145,7 +146,7 @@
       v-if="!node.required"
       icon
       x-small
-      @click="$emit('click:remove')"
+      @click="clickRemove()"
     >
       <v-icon class="ma-0">
         clear
@@ -198,6 +199,13 @@
           ...this.propSettings
         };
         this.settingsOpen = false;
+      },
+      copyAttrId() {
+        const id = this.node.props.attribute.split('.').slice(-1).pop();
+        this.$clipboard(id);
+      },
+      clickRemove() {
+        this.$emit('click:remove', this.node.id$);
       }
     }
   };

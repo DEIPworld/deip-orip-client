@@ -127,7 +127,8 @@ export const modulesHelpers = [
     icon: 'mdi-tag-text-outline',
     type: 'typography',
     ...setComponentProps({
-      icon: setAs(String)
+      icon: setAs(String),
+      title: setAs(String)
     }),
     children: []
   },
@@ -160,14 +161,19 @@ export const modulesTypography = [
     })),
 
   {
-    component: 'div',
+    component: 'VSheet',
     name: 'Base text',
     icon: 'mdi-text-subject',
     class: 'text-body-2',
+    ...setComponentProps({
+      maxWidth: setAs(Number)
+    }, {
+      color: 'transparent'
+    }),
     children: []
   },
   {
-    component: 'p',
+    component: 'div',
     name: 'Caption',
     icon: 'mdi-closed-caption-outline',
     class: 'text-caption',

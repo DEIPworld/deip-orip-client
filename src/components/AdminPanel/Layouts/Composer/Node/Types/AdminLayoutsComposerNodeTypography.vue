@@ -2,11 +2,22 @@
   <v-card
     outlined
     class="dashed d-flex"
+    max-width="100%"
+    min-width="0px"
   >
     <v-sheet color="grey lighten-4" class="d-flex align-center">
-      <v-icon class="pa-2">
+      <v-icon v-if="!(node.props && node.props.title)" class="pa-2">
         {{ icon }}
       </v-icon>
+
+      <v-sheet
+        v-if="node.props && node.props.title"
+        class="pa-2 text-caption font-weight-medium text--secondary text-truncate"
+        color="transparent"
+        :min-width="0"
+      >
+        {{ node.props.title }}
+      </v-sheet>
     </v-sheet>
 
     <v-divider vertical class="dashed" />
@@ -15,6 +26,8 @@
       v-if="node.children"
       v-model="node.children"
       class="pa-1 spacer"
+      @click:remove="onClickRemove"
+      style="max-width: 100%; min-width: 0px"
     />
 
     <template v-if="$hasSlot('settings')">

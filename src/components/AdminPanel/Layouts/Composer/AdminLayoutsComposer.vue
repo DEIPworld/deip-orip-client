@@ -13,6 +13,8 @@
     <div class="pa-12">
       <admin-layouts-composer-nodes
         v-model="nodes"
+        :class="$style.host"
+        @click:remove="onClickRemove"
       />
     </div>
   </v-card>
@@ -25,6 +27,42 @@
   export default {
     name: 'AdminLayoutsComposer',
     components: { AdminLayoutsComposerNodes },
-    mixins: [ProxyableFactory('nodes')]
+    mixins: [ProxyableFactory('nodes')],
+    methods: {
+      onClickRemove(e) {
+        this.$emit('click:remove', e)
+      },
+    }
   };
 </script>
+
+<style lang="scss" module>
+  .host {
+    [data-nodes="DLayoutSectionSplit"] {
+      display: grid;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      grid-gap: 1rem;
+    }
+
+    [data-nodes="DStack"] {
+      display: grid;
+      grid-auto-flow: row;
+      grid-gap: 1rem;
+    }
+
+    [data-nodes="DLayoutSection"] {
+      display: flex;
+    }
+
+    [data-node-host="DLayoutSectionMain"] {
+      flex:1
+    }
+
+    [data-node-host="DLayoutSectionSidebar"] {
+      flex: 0 0 380px;
+      max-width: 380px;
+      margin-left: 1rem;
+    }
+  }
+</style>

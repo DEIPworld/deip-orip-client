@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import VueResize from 'vue-resize';
+import Clipboard from 'v-clipboard';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
 import PortalVue from 'portal-vue';
@@ -40,6 +41,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
+Vue.use(Clipboard)
 Vue.use(PortalVue);
 Vue.use(VueTheMask);
 

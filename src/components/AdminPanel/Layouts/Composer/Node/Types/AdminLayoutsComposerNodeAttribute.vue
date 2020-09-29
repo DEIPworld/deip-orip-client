@@ -4,6 +4,8 @@
     class="dashed d-inline-flex align-center"
     :class="$style.host"
     :height="32"
+    min-width="0px"
+    max-width="100%"
   >
     <v-icon class="px-2" size="16">
       {{ icon }}

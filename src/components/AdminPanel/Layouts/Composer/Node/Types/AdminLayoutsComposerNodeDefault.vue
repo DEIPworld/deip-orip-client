@@ -1,8 +1,8 @@
 <template>
   <v-card
     outlined
-    class="dashed"
-    :class="$style.host"
+    class="dashed d-flex flex-column"
+    :data-node-host="node.component"
   >
     <v-system-bar color="grey lighten-4">
       <v-icon size="16" class="mr-1">
@@ -32,8 +32,9 @@
     <admin-layouts-composer-nodes
       v-if="node.children"
       v-model="node.children"
-      class="pa-4"
-      :data-node="node.component"
+      class="pa-4 spacer"
+      :data-nodes="node.component"
+      @click:remove="onClickRemove"
     />
 
   </v-card>
@@ -47,20 +48,3 @@
     mixins: [abstractNode]
   };
 </script>
-
-<style lang="scss" module>
-  .host {
-    [data-node="DLayoutSectionSplit"] {
-      display: grid;
-      grid-auto-columns: 1fr;
-      grid-auto-flow: column;
-      grid-gap: 1rem;
-    }
-
-    [data-node="DStack"] {
-      display: grid;
-      grid-auto-flow: row;
-      grid-gap: 1rem;
-    }
-  }
-</style>

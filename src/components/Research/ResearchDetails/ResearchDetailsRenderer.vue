@@ -5,6 +5,7 @@
 
   import ContentList from '@/components/ContentsList/ContentsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
+  import kindOf from 'kind-of';
 
   export default {
     name: 'ResearchDetailsRenderer',
@@ -19,6 +20,20 @@
       research: {
         type: Object,
         default: () => ({})
+      }
+    },
+    methods: {
+      ifAttribute(id) {
+        const attr = this.research.researchRef.attributes[id];
+
+        if (attr) {
+          const arrayVal = kindOf(attr.value) === 'array' && attr.value.length;
+          const strVal = kindOf(attr.value) === 'string' && attr.value;
+          const boolVal = kindOf(attr.value) === 'boolean' && attr.value;
+
+          return !!(arrayVal || strVal || boolVal);
+        }
+        return false;
       }
     }
   };

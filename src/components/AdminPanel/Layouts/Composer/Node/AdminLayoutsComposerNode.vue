@@ -2,11 +2,12 @@
   <component
     :is="nodeComponent"
     v-model="node"
+    @click:remove="onClickRemove"
   >
     <template #settings>
       <admin-layouts-composer-node-settings
         v-model="node"
-        @click:remove="$emit('click:remove', node)"
+        @click:remove="onClickRemove"
       />
     </template>
   </component>
@@ -40,11 +41,16 @@
         if (this.node.type === 'typography') {
           return 'AdminLayoutsComposerNodeTypography';
         }
-        if (this.node.type === 'attribute') {
+        if (this.node.type === 'attribute' || this.node.type === 'staticComponent') {
           return 'AdminLayoutsComposerNodeAttribute';
         }
 
         return 'AdminLayoutsComposerNodeDefault';
+      }
+    },
+    methods: {
+      onClickRemove(e) {
+        this.$emit('click:remove', e);
       }
     }
   };

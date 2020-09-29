@@ -9,7 +9,7 @@
       <admin-layouts-composer-node
         :key="`node-${node.id$}`"
         v-model="nodes[index]"
-        @click:remove="removeNode"
+        @click:remove="onClickRemove"
       />
     </template>
 
@@ -29,9 +29,8 @@
     },
     mixins: [ProxyableFactory('nodes')],
     methods: {
-      removeNode(node) {
-        const index = this.nodes.indexOf(node);
-        if (index >= 0) this.nodes.splice(node, 1);
+      onClickRemove(e) {
+        this.$emit('click:remove', e);
       }
     }
   };
