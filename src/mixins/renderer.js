@@ -12,7 +12,7 @@ import DStack from '@/components/Deipify/DStack/DStack';
 import DBlock from '@/components/Deipify/DBlock/DBlock';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 
-import { VDivider } from 'vuetify/lib/components';
+import { VDivider, VSheet } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
@@ -27,7 +27,8 @@ const rendererCommon = {
     DBlock,
     DMetaItem,
 
-    VDivider
+    VDivider,
+    VSheet
   },
   props: {
     schema: {
@@ -127,6 +128,9 @@ export const componentsRenderer = {
     generateNode(node, h) {
       const self = this;
 
+      // eslint-disable-next-line no-eval
+      let condition = node.if ? eval(`${node.if}`) : true;
+
       const data = {
         ...(node.props ? { props: node.props } : {}),
         ...(node.attrs ? { attrs: node.attrs } : {}),
@@ -163,11 +167,15 @@ export const componentsRenderer = {
         content = null;
       }
 
-      return h(
-        component,
-        mergeDeep(data, vModel),
-        content
-      );
+      if (condition) {
+        return h(
+          component,
+          mergeDeep(data, vModel),
+          content
+        );
+      }
+
+      return false;
     }
   },
 

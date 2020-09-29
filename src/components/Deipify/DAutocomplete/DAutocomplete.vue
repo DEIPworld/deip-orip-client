@@ -68,7 +68,8 @@
         if (Array.isArray(selections)) {
           selections.push(input);
         } else {
-          selections.children = selections.children || [];
+          // selections.children = selections.children || [];
+          selections.children = [];
           selections.children.push(input);
         }
 

@@ -92,6 +92,15 @@ export const modulesLayout = [
 
 export const modulesHelpers = [
   {
+    component: 'DGrid',
+    name: 'Auto grid',
+    icon: 'mdi-view-module-outline',
+    ...setComponentProps({
+      itemMaxWidth: setAs(Number)
+    }),
+    children: []
+  },
+  {
     component: 'DBlock',
     name: 'Block',
     icon: 'mdi-card-text-outline',
@@ -109,58 +118,35 @@ export const modulesHelpers = [
       gap: setAs(Number),
       horizontal: setAs(Boolean)
     }),
-    icon: 'mdi-view-headline',
+    icon: 'mdi-view-sequential-outline',
+    children: []
+  },
+  {
+    component: 'DMetaItem',
+    name: 'Meta data',
+    icon: 'mdi-tag-text-outline',
+    type: 'typography',
+    ...setComponentProps({
+      icon: setAs(String)
+    }),
+    children: []
+  },
+  {
+    component: 'VSheet',
+    name: 'Container',
+    icon: 'mdi-card-outline',
+    ...setComponentProps({
+      itemMaxWidth: setAs(Number)
+    }, {
+      color: 'transparent'
+    }),
     children: []
   },
   {
     component: 'VDivider',
     name: 'Divider',
     icon: 'mdi-minus'
-  },
-  {
-    component: 'DMetaItem',
-    name: 'Metadata',
-    icon: 'mdi-text-short',
-    ...setComponentProps({
-      icon: setAs(String),
-      label: setAs(String)
-    })
-  },
-  {
-    component: 'DMetaItem',
-    name: 'Metadata with Content',
-    icon: 'mdi-text-short',
-    type: 'typography',
-    ...setComponentProps({
-      icon: setAs(String)
-    }),
-    children: []
   }
-];
-
-export const modulesGrid = [
-  {
-    component: 'DGrid',
-    name: 'Auto grid',
-    icon: 'mdi-view-module-outline',
-    ...setComponentProps({
-      itemMaxWidth: setAs(Number)
-    }),
-    children: []
-  },
-  {
-    component: 'VContainer',
-    name: 'Container',
-    icon: 'mdi-card-outline',
-    children: []
-  },
-  {
-    component: 'VRow',
-    name: 'Columns',
-    icon: 'mdi-view-grid-outline',
-    children: [vCol(), vCol(), vCol()]
-  },
-  vCol()
 ];
 
 export const modulesTypography = [
@@ -174,9 +160,9 @@ export const modulesTypography = [
     })),
 
   {
-    component: 'p',
-    name: 'Paragraph',
-    icon: 'mdi-format-paragraph',
+    component: 'div',
+    name: 'Base text',
+    icon: 'mdi-text-subject',
     class: 'text-body-2',
     children: []
   },
@@ -199,27 +185,28 @@ export const modulesTypography = [
 export const modulesComponents = [
   {
     component: 'ContentList',
-    name: 'Contents',
+    name: 'Materials',
+    icon: 'mdi-file-document-outline',
     props: {
       researchId: '@research.external_id',
-      drafts: false,
-      title: 'Research contents'
+      drafts: false
     }
   },
   {
     component: 'ContentList',
     name: 'Drafts',
+    icon: 'mdi-file-edit-outline',
     props: {
       researchId: '@research.external_id',
-      drafts: true,
-      title: 'Research contents drafts'
+      drafts: true
     }
   },
   {
     component: 'ReviewsList',
     name: 'Reviews',
+    icon: 'mdi-comment-processing-outline',
     props: {
-      researchId: '@research.external_id',
+      researchId: '@research.external_id'
     }
   }
 ];

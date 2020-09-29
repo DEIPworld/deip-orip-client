@@ -15,11 +15,11 @@
     mixins: [researchItem],
     computed: {
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.researchRow.layout
+        return this.$tenantSettings.researchLayouts.projectListRow.layout
           .map((el) => ({
             component: 'td',
             attrs: {
-              width: `${100 / this.$tenantSettings.researchLayouts.researchRow.layout.length}%`
+              width: `${100 / this.$tenantSettings.researchLayouts.projectListRow.layout.length}%`
             },
             children: [el]
           }));

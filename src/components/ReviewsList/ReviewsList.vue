@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="$ready && internalReviews.length && contents.length" title="Reviews">
+  <div v-if="$ready && internalReviews.length && contents.length">
     <template v-for="(review, index) of internalReviews">
       <v-row :key="`review-${index}`" class="text-body-2">
         <v-col cols="12" md="wide">
@@ -135,14 +135,13 @@
       </v-row>
       <v-divider v-if="index !== reviews.length - 1" :key="`review-d-${index}`" />
     </template>
-  </d-block>
+  </div>
 </template>
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { reviewsListStore } from '@/components/ReviewsList/store';
   import { mapGetters } from 'vuex';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import deipRpc from '@deip/rpc-client';
   import { ResearchService } from '@deip/research-service';
 
@@ -150,7 +149,6 @@
 
   export default {
     name: 'ReviewsList',
-    components: { DBlock },
     mixins: [componentStoreFactoryOnce(reviewsListStore, 'ResearchReviews')],
     props: {
       researchId: {

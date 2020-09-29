@@ -5,7 +5,7 @@
         <slot />
       </component>
     </template>
-    <span>{{ tooltip }}</span>
+    <span v-if="tooltip">{{ tooltip }}</span>
     <slot name="tooltip" />
   </v-tooltip>
 </template>

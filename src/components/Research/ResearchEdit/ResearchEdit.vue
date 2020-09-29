@@ -1,6 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
-<!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
+<!--    <pre>{{JSON.stringify(formData, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
@@ -107,7 +107,7 @@
       }),
 
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.researchForm.layout;
+        return this.$tenantSettings.researchLayouts.projectEditForm.layout;
       },
 
       attributes$() {
@@ -236,7 +236,7 @@
           memo: this.$currentUser.account.memo_key,
           fee: this.toAssetUnits(0)
         } : null;
-        
+
         return researchService.createResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
@@ -244,7 +244,7 @@
           this.transformedFormData.offchainMeta,
         )
           .then((research) => {
-            
+
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             this.goToResearch(research);
           })
@@ -255,6 +255,7 @@
       },
 
       updateResearchData() {
+        console.log(this.transformedFormData.data)
         return researchService.updateResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,

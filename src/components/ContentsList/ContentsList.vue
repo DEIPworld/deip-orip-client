@@ -1,22 +1,22 @@
 <template>
-  <d-block v-if="internalContents.length" :title="title">
-    <v-data-table
-      :headers="tableHeaders"
-      :items="internalContents"
-      disable-sort
-      disable-pagination
-      hide-default-footer
-    >
-      <template #item.type="{item}">
-        {{ getResearchContentType(item.content_type).text }}
-      </template>
+  <v-data-table
+    v-if="internalContents.length"
+    :headers="tableHeaders"
+    :items="internalContents"
+    disable-sort
+    disable-pagination
+    hide-default-footer
+  >
+    <template #item.type="{item}">
+      {{ getResearchContentType(item.content_type).text }}
+    </template>
 
-      <template #item.title="{item}">
-        <!-- START TEMP SOLUTION (query) -->
-        <router-link
-          v-if="$isLoggedIn"
-          class="a"
-          :to="{
+    <template #item.title="{item}">
+      <!-- START TEMP SOLUTION (query) -->
+      <router-link
+        v-if="$isLoggedIn"
+        class="a"
+        :to="{
             name: 'ResearchContentDetails',
             params: {
               research_group_permlink: $store.getters['Research/data'].research_group.permlink,
@@ -24,7 +24,7 @@
               research_permlink: $store.getters['Research/data'].permlink,
             }
           }"
-        >
+      >
         <!-- END TEMP SOLUTION (query) -->
 
         <!-- <router-link
@@ -38,49 +38,49 @@
             }
           }"
         > -->
-          {{ item.title }}
-        </router-link>
-        <template v-else>
-          {{ item.title }}
-        </template>
+        {{ item.title }}
+      </router-link>
+      <template v-else>
+        {{ item.title }}
       </template>
+    </template>
 
-      <template #item.ref="{item}">
-        <d-simple-tooltip tooltip="Browse references">
-          <v-btn
-            icon
-            small
-            :to="{
-              name: 'research.content.details',
-              params: {
-                contentExternalId: item.external_id,
-                researchExternalId: researchId,
-              }
-            }"
-          >
-            <v-icon small>
-              device_hub
-            </v-icon>
-          </v-btn>
-        </d-simple-tooltip>
-      </template>
+    <template #item.ref="{item}">
+      <d-simple-tooltip tooltip="Browse references">
+        <v-btn
+          icon
+          small
+          :to="{
+            name: 'research.content.details',
+            params: {
+              contentExternalId: item.external_id,
+              researchExternalId: researchId,
+            }
+          }"
+        >
+          <v-icon small>
+            device_hub
+          </v-icon>
+        </v-btn>
+      </d-simple-tooltip>
+    </template>
 
-      <template #item.comments="{ item }">
-        <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
-          <span v-show="hasPositiveReviews(item)" class="success--text font-weight-medium">{{ countContentReviews(item, true) }}</span>
-          <span v-show="hasPositiveReviews(item) && hasNegativeReviews(item)">/</span>
-          <span v-show="hasNegativeReviews(item)" class="error--text font-weight-medium">{{ countContentReviews(item, false) }}</span>
-        </d-meta-item>
-      </template>
-    </v-data-table>
-  </d-block>
+    <template #item.comments="{ item }">
+      <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
+        <span v-show="hasPositiveReviews(item)"
+              class="success--text font-weight-medium">{{ countContentReviews(item, true) }}</span>
+        <span v-show="hasPositiveReviews(item) && hasNegativeReviews(item)">/</span>
+        <span v-show="hasNegativeReviews(item)"
+              class="error--text font-weight-medium">{{ countContentReviews(item, false) }}</span>
+      </d-meta-item>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { contentListStore } from '@/components/ContentsList/store';
   import { mapGetters } from 'vuex';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { ResearchService } from '@deip/research-service';
@@ -89,7 +89,10 @@
 
   export default {
     name: 'ContentsList',
-    components: { DMetaItem, DSimpleTooltip, DBlock },
+    components: {
+      DMetaItem,
+      DSimpleTooltip,
+    },
     mixins: [componentStoreFactoryOnce(contentListStore, 'ResearchContents')],
     props: {
       researchId: {
@@ -99,10 +102,6 @@
       drafts: {
         type: Boolean,
         default: false
-      },
-      title: {
-        type: String,
-        default: 'Research materials'
       }
     },
     data() {
@@ -127,7 +126,10 @@
             value: 'comments',
             width: '10%'
           },
-          { text: '', value: 'data-table-expand' }
+          {
+            text: '',
+            value: 'data-table-expand'
+          }
         ]
       };
     },
@@ -179,7 +181,7 @@
             : acc),
           0
         );
-      },
+      }
     }
   };
 </script>

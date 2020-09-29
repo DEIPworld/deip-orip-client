@@ -23,7 +23,7 @@
       },
 
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.researchDetails.layout;
+        return this.$tenantSettings.researchLayouts.projectDetails.layout;
       },
       research$() {
         return {

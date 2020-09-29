@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="d-flex flex-column pa-6"
+    class="d-flex flex-column"
     outlined
     :to="{
       name: 'research.details',

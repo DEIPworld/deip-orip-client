@@ -28,7 +28,7 @@
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 
   import DGrid from '@/components/Deipify/DGrid/DGrid';
-  import { baseLayouts } from '@/components/AdminPanel/Layouts/baseLayouts';
+  import { baseLayouts } from '@/components/AdminPanel/Layouts/layouts';
 
 
 
@@ -54,3 +54,18 @@
     }
   };
 </script>
+
+Layouts
+-- index.vue
+-- Edit
+---- index.vue
+---- Modules
+------ index.vue
+---- Composer
+------ index.vue
+------ Nodes
+-------- index.vue
+------ Node
+-------- index.vue
+-------- Types
+---------- ...

@@ -126,6 +126,12 @@ const ATTR_AREAS = {
   CARD: 'card'
 };
 
+export const LAYOUT_TYPES = createEnum({
+  SET: 1,
+  READ: 2,
+  EDIT: 3
+});
+
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
