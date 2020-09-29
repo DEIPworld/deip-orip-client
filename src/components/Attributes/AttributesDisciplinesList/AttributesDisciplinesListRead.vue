@@ -1,5 +1,24 @@
 <template>
-  <div class="text-caption text--secondary">{{disciplines}}</div>
+  <div v-if="attribute && attribute.value" class="d-flex align-center text-caption text--secondary">
+    <template v-for="(item, index) of disciplines">
+      <router-link
+        :key="`link-${index}`"
+        class="link text--secondary"
+        :to="{
+          name: 'ResearchFeed'
+        }"
+      >
+        {{ item.label }}
+      </router-link>
+      <div
+        v-if="index + 1 < disciplines.length"
+        :key="`dot-${index}`"
+        class="mx-2"
+      >
+        •
+      </div>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -13,7 +32,7 @@
     mixins: [attributeRead],
     computed: {
       disciplines() {
-        return this.attribute.value.map((d) => this.getItemObject(d).label).join(' • ');
+        return this.attribute.value.map((d) => this.getItemObject(d));
       }
     },
     methods: {
