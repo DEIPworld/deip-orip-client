@@ -188,21 +188,6 @@ export const attributeReadOption = {
   }
 };
 
-export const attributeReadText = {
-  render(h) {
-    if (this.clamped) {
-      return h('v-clamp', {
-        props: {
-          autoresize: true,
-          // eslint-disable-next-line radix
-          maxLines: parseInt(this.clamped)
-        }
-      }, this.attribute.value);
-    }
-    return this._v(this.attribute.value);
-  }
-}
-
 // //////////////////////////////////////////////
 
 export const attributeSet = {

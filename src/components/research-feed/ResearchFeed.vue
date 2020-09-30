@@ -21,7 +21,7 @@
           <!--            Start a project-->
           <!--          </v-btn>-->
 
-          <template v-if="!$isLoggedIn">
+          <div v-if="!$isLoggedIn">
             <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
               Sign in
             </v-btn>
@@ -29,7 +29,7 @@
               After creating an account/log in you can add
               new projects or enjoy shared materials
             </div>
-          </template>
+          </div>
         </d-stack>
       </d-layout-section-main>
     </d-layout-section>

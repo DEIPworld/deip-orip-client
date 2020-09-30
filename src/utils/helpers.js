@@ -87,4 +87,10 @@ export const routeNameGenerator = (namespace, parent) => ({
       ...(name ? [name] : [])
     ].join('.');
   }
-})
+});
+
+export const stripHtml = (html) => {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
