@@ -16,7 +16,7 @@
     computed: {
       layoutSchema() {
         const { layout } = this.$tenantSettings.researchLayouts.projectListRow;
-        const row = layout[0];
+        const row = _.cloneDeep(layout[0]);
         if (row) {
           for (const cell of row.children) {
             delete cell.attrs.title;

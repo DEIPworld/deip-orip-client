@@ -32,11 +32,9 @@
         />
       </v-sheet>
     </v-menu>
-    <v-chip-group
+    <div
       v-if="internalValue.length"
-      v-model="internalValue"
-      column
-      class="pt-1 pb-0"
+      class="pt-1 ma-n1"
     >
       <v-chip
         v-for="id in sortedLabels"
@@ -44,11 +42,12 @@
         outlined
         close
         close-icon="close"
+        class="ma-1"
         @click:close="removeItem(id)"
       >
         {{ getItemObject(id).label }}
       </v-chip>
-    </v-chip-group>
+    </div>
   </div>
 </template>
 
