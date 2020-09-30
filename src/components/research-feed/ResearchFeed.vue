@@ -2,6 +2,7 @@
   <d-layout>
     <d-layout-section
       :background="$options.filters.tenantBackgroundSrc(tenant.account)"
+      background-overlay="to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)"
       dark
       :min-height="300"
       align-content="end"
