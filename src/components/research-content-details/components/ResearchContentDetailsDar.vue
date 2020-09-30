@@ -1,6 +1,7 @@
 <template>
   <div class="full-height">
     <div class="full-height">
+      <v-skeleton-loader v-if="showSkeleton" :loading="true" type="article" />
       <div
         ref="deip-texture-container"
         class="deip-texture full-height"
@@ -35,6 +36,7 @@
     },
     data() {
       return {
+        showSkeleton: true,
         texture: null,
         fileStorageBaseUrl: window.env.DEIP_SERVER_URL,
         isReadOnly: undefined,
@@ -100,6 +102,7 @@
         })
         .then((texture) => {
           this.texture = texture;
+          this.showSkeleton = false;
         });
 
       bus.$on('texture:getArticleTitle', this.getArticleTitle);

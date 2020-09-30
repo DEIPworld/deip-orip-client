@@ -1,5 +1,5 @@
 <template>
-  <app-layout v-if="$ready">
+  <app-layout>
     <layout-section>
       <d-block title="Participants">
         <template #titleAddon>
@@ -18,8 +18,16 @@
                 label="Search by names"
               />
 
-              <d-filter-term-disciplines class="mb-6" v-model="filterModel.discipline" single-choice />
-              <d-filter-term-contributions class="mb-6" v-model="filterModel.contribution" single-choice />
+              <d-filter-term-disciplines
+                v-model="filterModel.discipline"
+                class="mb-6"
+                single-choice
+              />
+              <d-filter-term-contributions
+                v-model="filterModel.contribution"
+                class="mb-6"
+                single-choice
+              />
               <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
             </div>
           </d-filter-sidebar>
@@ -29,51 +37,62 @@
       <v-divider class="my-4" />
 
       <content-block>
-        <v-data-table
-          v-custom="'hover-row'"
-          :hide-default-footer="participantsList.length < 50"
-          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
-          :items-per-page="50"
-          :headers="participantsHeader"
-          :items="participantsList"
-          sort-by="created_at"
-          sort-desc
+        <v-skeleton-loader
+          class="mt-2"
+          :loading="!$ready"
+          type="table-thead, table-tbody, table-tfoot"
         >
-          <template #item.user.profile.firstName="{ item: { user } }">
-            <router-link
-              :to="$store.getters['auth/user'].account.name === user.account.name ?
-                {
-                  name: 'account.expertiseDetails'
-                }:{
-                  name: 'UserExpertiseDetails',
-                  params: {account_name: user.account.name}
-                }"
-              class="a"
-            >
-              <v-row no-gutters class="py-2">
-                <v-col cols="auto" align-self="center">
-                  <v-avatar size="24">
-                    <img v-if="user.profile" :src="user.profile | avatarSrc(2 * 20, 2 * 20, false)">
-                  </v-avatar>
-                </v-col>
-                <v-col class="text-caption font-weight-medium ml-2">
-                  <div>{{ user | fullname }}</div>
-                  <div>{{ user.profile.employment[0] ? user.profile.employment[0].position : '' }}</div>
-                </v-col>
-              </v-row>
-            </router-link>
-          </template>
-          <template #item.eci="{ item: { eci } }">
-            <span class="font-weight-bold">{{ `${eci}` | commaNumber }}</span> ECI
-          </template>
-          <template #item.growth_rate="{ item: { growth_rate } }">
-            <span
-              v-if="growth_rate"
-              :class="growthRateIsUp(growth_rate) ? 'green--text' : 'red--text'"
-            >{{ growthRateIsUp(growth_rate) ? `+${growth_rate}` : growth_rate }}</span>
-            <span v-else>N/A</span>
-          </template>
-        </v-data-table>
+          <v-data-table
+            v-custom="'hover-row'"
+            :hide-default-footer="participantsList.length < 50"
+            :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
+            :items-per-page="50"
+            :headers="participantsHeader"
+            :items="participantsList"
+            sort-by="created_at"
+            sort-desc
+          >
+            <template #item.user.profile.firstName="{ item: { user } }">
+              <router-link
+                :to="$store.getters['auth/user'].account.name === user.account.name ?
+                  {
+                    name: 'account.expertiseDetails'
+                  }:{
+                    name: 'UserExpertiseDetails',
+                    params: {account_name: user.account.name}
+                  }"
+                class="a"
+              >
+                <v-row no-gutters class="py-2">
+                  <v-col cols="auto" align-self="center">
+                    <v-avatar size="24">
+                      <img
+                        v-if="user.profile"
+                        :src="user.profile | avatarSrc(2 * 20, 2 * 20, false)"
+                      >
+                    </v-avatar>
+                  </v-col>
+                  <v-col class="text-caption font-weight-medium ml-2">
+                    <div>{{ user | fullname }}</div>
+                    <div>
+                      {{ user.profile.employment[0] ? user.profile.employment[0].position : '' }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </router-link>
+            </template>
+            <template #item.eci="{ item: { eci } }">
+              <span class="font-weight-bold">{{ `${eci}` | commaNumber }}</span> ECI
+            </template>
+            <template #item.growth_rate="{ item: { growth_rate } }">
+              <span
+                v-if="growth_rate"
+                :class="growth_rate | numDirClass"
+              >{{ growth_rate | numDir }}</span>
+              <span v-else>N/A</span>
+            </template>
+          </v-data-table>
+        </v-skeleton-loader>
       </content-block>
     </layout-section>
   </app-layout>
@@ -191,15 +210,12 @@
       },
 
       updateData() {
+        this.$setReady(false);
         return this.$store.dispatch('participants/loadFilterParticipants', {
           filter: this.$ls.get(this.storageFilterModelKey)
         }).then(() => {
           this.$setReady();
         });
-      },
-
-      growthRateIsUp(rate) {
-        return parseFloat(rate) >= 0;
       }
     }
   };

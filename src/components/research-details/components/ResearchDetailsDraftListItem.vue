@@ -122,7 +122,7 @@
         researchContentService
           .deleteContentDraft(draft._id)
           .then(() => {
-            this.$store.dispatch('rd/loadResearchContentRefs', {
+            this.$store.dispatch('rd/loadResearchContent', {
               researchExternalId: draft.researchExternalId
             });
           })
