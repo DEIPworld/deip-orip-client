@@ -20,6 +20,15 @@ export const abstractNode = {
         return this.node.text;
       }
       return this.node.icon;
+    },
+    nodeDataAttrs() {
+      const data = {
+        ...(this.node.props || {}),
+        ...(this.node.attrs || {}),
+      };
+      return Object.keys(data).map((item) => ({
+        [`data-${item}`]: data[item]
+      }));
     }
   },
   methods: {

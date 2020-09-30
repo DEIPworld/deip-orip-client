@@ -3,9 +3,10 @@
     outlined
     class="dashed d-flex flex-column"
     :data-node-host="node.component"
+    v-bind="nodeDataAttrs"
     min-width="0px"
   >
-    <v-system-bar color="grey lighten-4">
+    <v-system-bar color="grey lighten-4" data-system-bar>
       <v-icon size="16" class="mr-1">
         {{ node.icon }}
       </v-icon>
@@ -35,6 +36,7 @@
       v-model="node.children"
       class="pa-2 spacer"
       :data-nodes="node.component"
+      v-bind="nodeDataAttrs"
       :style="{minHeight: '40px'}"
       @click:remove="onClickRemove"
     />

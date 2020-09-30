@@ -49,6 +49,11 @@
       display: grid;
       grid-auto-flow: row;
       grid-gap: .5rem;
+
+      &[data-horizontal="true"] {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(200px, min-content);
+      }
     }
 
     [data-nodes="DLayoutSection"] {
@@ -67,21 +72,30 @@
 
     [data-nodes="tr"] {
       display: flex;
-      margin: 0 -4px;
+      margin: -4px;
+      flex-wrap: wrap;
     }
 
     [data-node-host="td"] {
-      flex: 1;
+      //flex: 1;
 
-      margin: 0 4px;
+      margin: 4px;
       min-width: 0px;
     }
 
     [data-nodes="DSimpleTooltip"] {
       display: grid;
-      grid-auto-flow: row;
+      grid-auto-flow: column;
       grid-gap: .5rem;
       justify-items: left;
     }
+
+    //[data-node-host="VDivider"] {
+    //  border: 0;
+    //
+    //  [data-system-bar] {
+    //    background: transparent !important;
+    //  }
+    //}
   }
 </style>
