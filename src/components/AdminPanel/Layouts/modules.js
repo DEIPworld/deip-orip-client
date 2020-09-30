@@ -304,5 +304,14 @@ export const modulesComponents = [
     props: {
       researchId: '@research.external_id'
     }
+  },
+  {
+    component: 'ResearchEditCta',
+    name: 'Edit CTA',
+    icon: 'mdi-circle-edit-outline',
+    props: {
+      researchId: '@research.external_id'
+    },
+    if: 'this.research.members.includes(this.$currentUserName)'
   }
 ];

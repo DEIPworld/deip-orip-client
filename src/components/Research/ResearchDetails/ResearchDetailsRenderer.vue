@@ -7,10 +7,12 @@
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
   import kindOf from 'kind-of';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
+  import ResearchEditCta from '@/components/Research/ResearchEdit/ResearchEditCta';
 
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
+      ResearchEditCta,
       AttributesRead,
 
       ReviewsList,
