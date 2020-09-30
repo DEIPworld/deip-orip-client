@@ -78,14 +78,9 @@ export const Filterable = {
     },
 
     equaliseModels() {
-      this.updatedValue = JSON.stringify(this.internalValue)
-      // if (kindOf(this.internalValue) === 'object') {
-      //   this.updatedValue = mergeDeep({}, this.internalValue);
-      // } else if (kindOf(this.internalValue) === 'array') {
-      //   this.updatedValue = [...this.internalValue];
-      // } else {
-      //   this.updatedValue = this.internalValue;
-      // }
+      this.$nextTick(() => {
+        this.updatedValue = JSON.stringify(this.internalValue);
+      });
     },
 
     setReset() {

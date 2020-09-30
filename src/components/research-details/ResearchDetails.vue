@@ -7,11 +7,13 @@
     </layout-toolbar>
 
     <d-layout-section>
-      <research-details-body />
+      <d-layout-section-main>
+        <research-details-body />
+      </d-layout-section-main>
 
-      <template #sidebar>
+      <d-layout-section-sidebar>
         <research-details-sidebar />
-      </template>
+      </d-layout-section-sidebar>
     </d-layout-section>
   </div>
 </template>
@@ -25,10 +27,14 @@
   import ResearchDetailsSidebar from '@/components/research-details/components/ResearchDetailsSidebar';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ResearchDetails',
     components: {
+      DLayoutSectionSidebar,
+      DLayoutSectionMain,
       DLayoutSection,
       LayoutToolbar,
       ResearchDetailsSidebar,

@@ -23,7 +23,7 @@
       :items-per-page="iteratorProps.itemsPerPage"
       @update:page="onPaginationUpdated"
     >
-      <template #default="{items}">
+      <template #default="{ items }">
         <component :is="listComponent" :items="items" />
       </template>
     </v-data-iterator>
@@ -41,6 +41,7 @@
   import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
   import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
+  import { objectNotEmpty } from '@/utils/helpers';
 
   export default {
     name: 'ResearchList',
@@ -57,7 +58,7 @@
     },
 
     props: {
-      items: {
+      data: {
         type: Array,
         default: () => ([])
       },
@@ -108,7 +109,7 @@
         this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
       }
 
-      this.itemsList = [...this.items];
+      this.itemsList = [...this.data];
     },
 
     beforeDestroy() {
@@ -134,43 +135,22 @@
       applyFilter() {
         const filter = this.$ls.get(this.storageFilterModelKey);
 
-        const filtered = {
-          ...(filter.disciplines.length ? {
-            disciplines: [{
-              external_id: filter.disciplines
-            }]
-          } : {}),
-
-          ...(filter.organizations.length ? {
-            research_group: {
-              external_id: filter.organizations
-            }
-          } : {}),
-
-          ...(Object.keys(filter.researchAttributes).length && Object.keys(filter.researchAttributes).some((a) => filter.researchAttributes[a].length)
-            ? {
-              researchRef: {
-                attributes: (researchAttributes) => {
-                  const rVals = researchAttributes.map((a) => a.value);
-                  const fVals = Object.keys(filter.researchAttributes)
-                    .reduce((a, b) => ([...a, ...filter.researchAttributes[b]]), []);
-                  return fVals.some((val) => rVals.includes(val));
-                }
-              }
-            }
-            : {}),
-
-          ...(filter.categories.length ? {
-            researchRef: {
-              tenantCategory: {
-                _id: filter.categories
-              }
-            }
-          } : {})
-
-        };
-
-        this.itemsList = [...this.$options.filters.where(this.items, filtered)];
+        this.$store.dispatch('feed/loadResearchFeed', {
+          filter: {
+            ...filter,
+            ...(
+              objectNotEmpty(filter.researchAttributes) ? {
+                researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
+              } : {}
+            )
+          }
+        })
+          .then((items) => {
+            this.itemsList = items;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
     }
   };

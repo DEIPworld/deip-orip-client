@@ -3,8 +3,8 @@ import deepmerge from 'deepmerge';
 import defaultTheme from '../defaultTheme.json';
 
 const state = {
-  success: { isVisible: false, message: '' },
-  error: { isVisible: false, message: '' },
+  success: { isPublished: false, message: '' },
+  error: { isPublished: false, message: '' },
   globalLoader: { isLoading: false },
   themeSettings: defaultTheme
 };

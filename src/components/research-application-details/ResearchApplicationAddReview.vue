@@ -1,20 +1,23 @@
 <template>
   <d-layout-section v-if="isPageLoaded">
-    <research-application-add-review-body />
-
-    <template #sidebar>
+    <d-layout-section-main>
+      <research-application-add-review-body />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <research-application-add-review-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ResearchApplicationAddReview',
-    components: { DLayoutSection },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     data() {
       return {};
     },

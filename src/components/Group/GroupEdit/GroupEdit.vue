@@ -1,0 +1,133 @@
+<template>
+  <d-layout-full-screen>
+    <d-form @submit="onSubmit">
+      <d-stack>
+        <v-text-field
+          v-model="formData.name"
+          outlined
+          label="Title"
+          :rules="[rules.required, rules.titleLength]"
+          hint="Name of your team"
+          :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
+        />
+
+        <v-textarea
+          v-model="formData.description"
+          name="Description"
+          label="Description"
+          outlined
+          auto-grow
+          :rules="[rules.required, rules.descriptionLength]"
+        />
+
+
+      </d-stack>
+    </d-form>
+  </d-layout-full-screen>
+</template>
+
+<script>
+  import { ResearchGroupService } from '@deip/research-group-service';
+
+  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
+  import DForm from '@/components/Deipify/DForm/DForm';
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import { maxDescriptionLength, maxTitleLength } from '@/variables';
+
+  const researchGroupService = ResearchGroupService.getInstance();
+
+  export default {
+    name: 'GroupEdit',
+    components: { DStack, DForm, DLayoutFullScreen },
+    data() {
+      return {
+        isPermlinkVerifyed: true,
+        formProcessing: false,
+
+        formData: {
+          name: '',
+          description: '',
+          members: []
+        },
+
+        rules: {
+          required: (value) => !!value || 'This field is required',
+          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
+          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
+        }
+      };
+    },
+    methods: {
+      checkPermlink() {
+        return researchGroupService
+          .checkResearchGroupExistenceByPermlink(this.formData.name)
+          .then((exists) => {
+            this.isPermlinkVerifyed = !exists;
+            return exists;
+          })
+          .catch((err) => {
+            console.error(err);
+            this.isLoading = false;
+            this.$notifier.showError();
+          });
+      },
+
+      createGroup() {
+        const creator = this.$currentUserName;
+        const memo = this.$currentUser.account.memo_key;
+        const auth = {
+          account_auths: [[creator, 1]],
+          key_auths: [],
+          weight_threshold: 1
+        };
+
+        return researchGroupService.createResearchGroupViaOffchain(
+            this.$currentUser.privKey,
+            {
+              fee: this.toAssetUnits(0),
+              creator,
+              accountOwnerAuth: auth,
+              accountActiveAuth: auth,
+              accountMemoPubKey: memo,
+              accountJsonMetadata: undefined,
+              accountExtensions: []
+            },
+            {
+              researchGroupName: this.formData.name,
+              researchGroupDescription: this.formData.description,
+              researchGroupThresholdOverrides: []
+            }
+          )
+          .then((res) => {
+            this.$store.dispatch('auth/loadGroups'); // reload user groups
+            this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`);
+
+            return res;
+          })
+          .catch((err) => {
+            console.error(err);
+            this.isLoading = false;
+            this.$notifier.showError('An error occurred while creating Research Group, please try again later');
+          });
+      },
+
+      sendInvites() {
+
+      },
+
+      onSubmit(valid) {
+        if (valid) {
+          this.checkPermlink()
+            .then((exist) => {
+              if (!exist) {
+                this.createGroup()
+                  .then(() => {
+
+                  });
+              }
+            });
+        }
+      }
+    }
+  };
+</script>

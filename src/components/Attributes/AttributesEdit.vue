@@ -1,37 +1,48 @@
 <template>
   <component
-    :is="componentType"
+    :is="attributeTypeComponent"
     v-model="internalValue"
   />
 </template>
 
 <script>
-  import AttributesTextEdit from '@/components/Attributes/AttributesText/AttributesTextEdit';
-  import AttributesTextareaEdit from '@/components/Attributes/AttributesTextarea/AttributesTextareaEdit';
-  import AttributesSelectEdit from '@/components/Attributes/AttributesSelect/AttributesSelectEdit';
-  import AttributesStepperEdit from '@/components/Attributes/AttributesStepper/AttributesStepperEdit';
-  import AttributesVideoUrlEdit from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlEdit';
-  import AttributesRoadmapEdit from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapEdit';
-  import AttributesPartnersEdit from '@/components/Attributes/AttributesPartners/AttributesPartnersEdit';
+  import { attributeEdit, attributeTypeComponent } from '@/components/Attributes/mixins';
 
-  import { commonAttribute } from '@/components/Attributes/mixins';
+  import AttributesCheckboxEdit from './AttributesCheckbox/AttributesCheckboxEdit';
+  import AttributesDisciplinesListEdit from './AttributesDisciplinesList/AttributesDisciplinesListEdit';
+  import AttributesMultiSelectEdit from './AttributesMultiSelect/AttributesMultiSelectEdit';
+  import AttributesPartnersEdit from './AttributesPartners/AttributesPartnersEdit';
+  import AttributesResearchGroupEdit from './AttributesResearchGroup/AttributesResearchGroupEdit';
+  import AttributesRoadmapEdit from './AttributesRoadmap/AttributesRoadmapEdit';
+  import AttributesSelectEdit from './AttributesSelect/AttributesSelectEdit';
+  import AttributesStepperEdit from './AttributesStepper/AttributesStepperEdit';
+  import AttributesSwitchEdit from './AttributesSwitch/AttributesSwitchEdit';
+  import AttributesTextEdit from './AttributesText/AttributesTextEdit';
+  import AttributesTextareaEdit from './AttributesTextarea/AttributesTextareaEdit';
+  import AttributesUrlEdit from './AttributesUrl/AttributesUrlEdit';
+  import AttributesUserEdit from './AttributesUser/AttributesUserEdit';
+  import AttributesUsersListEdit from './AttributesUsersList/AttributesUsersListEdit';
+  import AttributesVideoUrlEdit from './AttributesVideoUrl/AttributesVideoUrlEdit';
 
   export default {
     name: 'AttributesEdit',
     components: {
-      AttributesTextEdit,
-      AttributesTextareaEdit,
+      AttributesCheckboxEdit,
+      AttributesDisciplinesListEdit,
+      AttributesMultiSelectEdit,
+      AttributesPartnersEdit,
+      AttributesResearchGroupEdit,
+      AttributesRoadmapEdit,
       AttributesSelectEdit,
       AttributesStepperEdit,
+      AttributesSwitchEdit,
+      AttributesTextEdit,
+      AttributesTextareaEdit,
+      AttributesUrlEdit,
+      AttributesUserEdit,
+      AttributesUsersListEdit,
       AttributesVideoUrlEdit,
-      AttributesRoadmapEdit,
-      AttributesPartnersEdit
     },
-    mixins: [commonAttribute],
-    computed: {
-      componentType() {
-        return `attributes-${this.type}-edit`;
-      }
-    }
+    mixins: [attributeEdit, attributeTypeComponent]
   };
 </script>

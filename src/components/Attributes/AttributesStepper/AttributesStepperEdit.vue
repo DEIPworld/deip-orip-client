@@ -18,12 +18,12 @@
 </template>
 
 <script>
-  import { commonEdit } from '@/components/Attributes/mixins';
-  import AttributesCommonEditProps from '@/components/Attributes/AttributesCommon/AttributesCommonEditProps';
+  import { attributeEdit } from '@/components/Attributes/mixins';
+  import AttributesCommonEditProps from '@/components/Attributes/_partials/Edit/AttributesCommonEditProps';
 
   export default {
     name: 'AttributesStepperEdit',
     components: { AttributesCommonEditProps },
-    mixins: [commonEdit]
+    mixins: [attributeEdit]
   };
 </script>

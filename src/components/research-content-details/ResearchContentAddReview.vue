@@ -1,19 +1,22 @@
 <template>
   <d-layout-section>
-    <research-content-add-review-body />
-
-    <template #sidebar>
+    <d-layout-section-main>
+      <research-content-add-review-body />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <research-content-add-review-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
 <script>
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ResearchContentAddReview',
-    components: { DLayoutSection },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     data() {
       return {};
     },

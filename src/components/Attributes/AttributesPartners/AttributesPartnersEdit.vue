@@ -1,13 +1,8 @@
-<template>
-
-</template>
-
 <script>
+  import AttributesCommonEdit from '@/components/Attributes/_partials/Edit/AttributesCommonEdit';
+
   export default {
-    name: 'AttributesPartnersEdit'
+    name: 'AttributesPartnersEdit',
+    mixins: [AttributesCommonEdit]
   };
 </script>
-
-<style scoped>
-
-</style>

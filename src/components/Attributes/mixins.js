@@ -1,24 +1,35 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import AttributesCommonEditOpts
-  from '@/components/Attributes/AttributesCommon/AttributesCommonEditOpts';
+  from '@/components/Attributes/_partials/Edit/AttributesCommonEditOpts';
 import AttributesCommonEditMeta
-  from '@/components/Attributes/AttributesCommon/AttributesCommonEditMeta';
+  from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
 import { ATTR_TYPES } from '@/variables';
+import { tenantAttributes } from '@/mixins/platformAttributes';
+import { pascalCase } from 'change-case';
+import dotProp from 'dot-prop';
+import kindOf from 'kind-of';
+import { mapState } from 'vuex';
+import { componentStoreFactory } from '@/mixins/registerStore';
+import { usersStore } from '@/components/Users/store';
 
 export const defaultAttributeModel = () => ({
-  isVisible: true,
+  blockchainFieldMeta: null,
+
   title: '',
   shortTitle: '',
   description: '',
-  // defaultValue: null,
-  valueOptions: []
+
+  defaultValue: null,
+  valueOptions: [],
+
+  isPublished: true,
+  isFilterable: false,
+  // isEditable: true,
+  isRequired: false,
+  isHidden: false
 });
 
-const PROPS = {
-  small: {
-    type: Boolean,
-    default: false
-  },
+export const PROPS = {
   type: {
     type: String,
     default: ATTR_TYPES.TEXT,
@@ -27,17 +38,98 @@ const PROPS = {
         .indexOf(val) !== -1;
     }
   },
+
   attribute: {
+    type: Object,
+    default: () => ({})
+  },
+
+  viewType: {
+    type: String,
+    default: null
+  },
+
+  clamped: {
+    type: [Number, String],
+    default: null
+  },
+
+  // //////////////////////////////////////////////
+
+  attributeId: {
     type: String,
     default: undefined
   },
+
   multiple: {
     type: Boolean,
     default: false
   }
 };
 
-export const resetModelOnCreate = {
+export const attributeTypeComponent = {
+  mixins: [tenantAttributes],
+  computed: {
+    attributeComponent() {
+      const a = this.$options.name.split(/(?=[A-Z])/);
+      let t;
+
+      if (this.type) {
+        t = this.type;
+      } else if (this.attribute.type) {
+        t = this.attribute.type;
+      } else if (this.attribute.researchAttributeId) {
+        t = this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type;
+      } else {
+        throw new Error('Unknown attribute');
+      }
+
+      a.splice(1, 0, pascalCase(t));
+
+      return a.join('');
+    }
+  }
+};
+
+export const attributeViewTypeComponent = {
+  data() {
+    return {
+      allowedViewTypes$: ['default'],
+      defaultViewType$: 'default'
+    };
+  },
+  computed: {
+    attributeViewTypeComponent() {
+      const viewType = this.viewType && this.allowedViewTypes$.includes(this.viewType)
+        ? this.viewType
+        : this.defaultViewType$;
+      return `${this.$options.name}${pascalCase(viewType)}`;
+    },
+
+    attributeComponent() {
+      const defaultView = `${this.$options.name}${pascalCase('default')}`;
+
+      if (this.viewType) {
+        const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
+        const requestedViewExist = Object.keys(this.$options.components).includes(requestedView);
+        return requestedViewExist ? requestedView : defaultView;
+      }
+      return defaultView;
+    }
+  }
+};
+
+// //////////////////////////////////////////////
+
+export const attributeEdit = {
+  components: {
+    AttributesCommonEditOpts,
+    AttributesCommonEditMeta
+  },
+  mixins: [Proxyable],
+  props: {
+    type: PROPS.type
+  },
   created() {
     if (!this.internalValue._id) {
       this.internalValue = {
@@ -48,69 +140,142 @@ export const resetModelOnCreate = {
   }
 };
 
-export const internalAttributes = {
+// //////////////////////////////////////////////
+
+export const attributeRead = {
+  mixins: [tenantAttributes],
+  props: {
+    attribute: PROPS.attribute,
+    viewType: PROPS.viewType,
+    clamped: PROPS.clamped
+  },
   computed: {
-    internalAttributes() {
-      return this.$store.getters['auth/tenant'].profile.settings.researchAttributes;
+    attributeInfo() {
+      const id = this.attribute._id || this.attribute.researchAttributeId;
+      return this.tenantAttributes.find(({ _id }) => _id === id);
+    }
+  },
+  methods: {
+    genContent(h) {
+      if (this.clamped) {
+        return h('v-clamp', {
+          props: {
+            autoresize: true,
+            // eslint-disable-next-line radix
+            maxLines: parseInt(this.clamped)
+          }
+        }, this.attribute.value);
+      }
+      return this._v(this.attribute.value);
+    }
+  },
+  render(h) {
+    return this.genContent(h);
+  }
+};
+
+export const attributeReadOption = {
+  mixins: [attributeRead],
+  computed: {
+    valueOption() {
+      return this.$where(
+        this.attributeInfo.valueOptions,
+        {
+          '+value': this.attribute.value
+        }
+      )[0];
     }
   }
 };
 
-export const internalAttribute = {
-  computed: {
-    internalAttribute() {
-      return this.internalAttributes.find(({ _id }) => _id === this.attribute);
+export const attributeReadText = {
+  render(h) {
+    if (this.clamped) {
+      return h('v-clamp', {
+        props: {
+          autoresize: true,
+          // eslint-disable-next-line radix
+          maxLines: parseInt(this.clamped)
+        }
+      }, this.attribute.value);
     }
+    return this._v(this.attribute.value);
   }
-};
+}
 
-export const internalType = {
-  mixins: [internalAttributes],
-  computed: {
-    internalType() {
-      return this.attribute
-        ? this.internalAttributes.find(({ _id }) => _id === this.attribute).type
-        : this.type;
-    }
-  }
-};
+// //////////////////////////////////////////////
 
-export const commonAttribute = {
+export const attributeSet = {
   mixins: [Proxyable],
   props: {
-    type: PROPS.type,
-    small: PROPS.small,
     attribute: PROPS.attribute,
-    multiple: PROPS.multiple
-  }
-};
-
-export const commonEdit = {
-  components: {
-    AttributesCommonEditOpts,
-    AttributesCommonEditMeta
+    viewType: PROPS.viewType
   },
-  mixins: [Proxyable, resetModelOnCreate]
-};
-
-export const commonRead = {
-  mixins: [Proxyable, internalAttributes, internalAttribute],
-  props: {
-    attribute: PROPS.attribute,
-    small: PROPS.small
+  computed: {
+    attributeComponent() {
+      console.warn('No attribute type/view specified!!!');
+      return 'div';
+    }
+  },
+  watch: {
+    internalValue: {
+      deep: true,
+      handler(val) {
+        this.$emit('change', val);
+      }
+    }
+  },
+  render(h) {
+    const self = this;
+    return h(this.attributeComponent, {
+      props: {
+        value: this.internalValue,
+        attribute: this.attribute,
+        viewType: this.viewType
+      },
+      on: {
+        change(e) {
+          self.$emit('change', e);
+        }
+      }
+    }, null);
   }
 };
 
-export const commonSet = {
-  mixins: [Proxyable, internalAttributes, internalAttribute],
-  props: {
-    attribute: PROPS.attribute,
-    multiple: PROPS.multiple
+export const attributeSetOption = {
+  mixins: [attributeSet],
+  methods: {
+    remove(item) {
+      const idx = this.internalValue.indexOf(item);
+      if (idx !== -1) {
+        this.internalValue.splice(idx, 1);
+        this.internalValue = [...new Set(this.internalValue)];
+      }
+    }
+  }
+};
+
+export const attributeReadUsers = {
+  mixins: [attributeRead, componentStoreFactory(usersStore, 'attribute.value')],
+  computed: {
+    ...mapState({
+      usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
+    })
   },
   created() {
-    // console.log(this.internalValue[this.internalAttribute._id])
-    // // if(!this.internalValue[this.internalAttribute._id]) {
-    // //   this.$set(this.internalValue, this.internalAttribute._id, null)
-    // // }
+    const users = kindOf(this.attribute.value) === 'string'
+      ? [this.attribute.value]
+      : this.attribute.value;
+    this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
+      .then(() => {
+        this.$setReady();
+      });
+  },
+  methods: {
+    userDetailsRoute(name) {
+      return this.$currentUserName === name
+        ? { name: 'account.summary' }
+        : { name: 'UserDetails', params: { account_name: name } };
+    }
   }
-};
+}

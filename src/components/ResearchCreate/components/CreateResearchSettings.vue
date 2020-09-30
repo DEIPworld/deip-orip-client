@@ -29,11 +29,11 @@
       <v-divider class="my-6" />
 
       <d-block title="Research attributes" small>
-        <template v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isVisible }) => isVisible)">
+        <template v-for="(attribute, index) of tenant.profile.settings.researchAttributes.filter(({ isPublished }) => isPublished)">
           <attributes-set
             :key="`${index}-attr`"
             v-model="research.attributes"
-            :attribute="attribute._id"
+            :attribute-id="attribute._id"
           />
         </template>
       </d-block>
@@ -45,7 +45,7 @@
 <!--        no-gutters-->
 <!--        class="my-6"-->
 <!--      >-->
-<!--        <v-col v-if="item.isVisible" cols="12">-->
+<!--        <v-col v-if="item.isPublished" cols="12">-->
 <!--          <div class="text-h6 font-weight-medium mb-6">-->
 <!--            {{ item.title }}-->
 <!--          </div>-->
@@ -115,7 +115,7 @@
     },
     // created() {
     //   const enabledAttributes = this.$store.getters['auth/tenant'].profile.settings.researchAttributes.reduce((acc, item) => {
-    //     if (item.isVisible) {
+    //     if (item.isPublished) {
     //       return [...acc, { researchAttributeId: item._id, value: null }]; // set the first entry
     //     }
     //     return [...acc]; // set empty entry

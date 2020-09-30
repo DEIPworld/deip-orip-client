@@ -1,19 +1,13 @@
-<template>
-  <div v-if="internalValue">
-<!--    {{ internalAttribute.title }}: {{ valueOption.title }}-->
-  </div>
-</template>
-
 <script>
-  import { commonRead } from '@/components/Attributes/mixins';
+  import { attributeRead } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesSelectRead',
-    mixins: [commonRead],
+    mixins: [attributeRead],
     computed: {
       valueOption() {
-        return this.internalAttribute.valueOptions.find(({ value }) => value === this.internalValue);
-      },
+        return this.attributeInfo.valueOptions.find(({ value }) => value === this.attribute.value);
+      }
     }
   };
 </script>

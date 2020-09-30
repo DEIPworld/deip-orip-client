@@ -19,8 +19,20 @@
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+
+          <v-list-item-title>
+            {{ item.title }}
+          </v-list-item-title>
+
         </v-list-item-content>
+        <v-chip
+          v-if="item.badge"
+          x-small
+          color="warning"
+          class="px-2 font-weight-medium"
+        >
+          {{ item.badge }}
+        </v-chip>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -48,10 +60,17 @@
             to: { name: 'admin.attributes' }
           },
           {
-            title: 'Project categories',
-            icon: 'category',
-            to: { name: 'admin.categories' }
+            title: 'Layouts',
+            icon: 'mdi-view-dashboard-outline',
+            badge: 'pre-alpha',
+            to: { name: 'admin.layouts' }
           },
+          // TODO: remove categoryes code from all components
+          // {
+          //   title: 'Project categories',
+          //   icon: 'category',
+          //   to: { name: 'admin.categories' }
+          // },
           {
             title: 'Review model',
             icon: 'rate_review',
@@ -72,7 +91,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

@@ -171,8 +171,6 @@
           }
         });
 
-        // console.log(nodes);
-
         return nodes;
       },
       links() { return this.data.links; },

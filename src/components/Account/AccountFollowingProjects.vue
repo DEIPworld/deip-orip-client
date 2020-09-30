@@ -3,7 +3,7 @@
     <research-list
       v-if="researches.length"
       namespace="dashboard"
-      :items="researches"
+      :data="researches"
       no-filter
     />
 

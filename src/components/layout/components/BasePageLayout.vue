@@ -9,11 +9,12 @@
     <slot name="addons" />
 
     <d-layout-section>
-      <template #sidebar>
+      <d-layout-section-main>
+        <slot name="default" />
+      </d-layout-section-main>
+      <d-layout-section-sidebar>
         <slot name="sidebar" />
-      </template>
-
-      <slot name="default" />
+      </d-layout-section-sidebar>
     </d-layout-section>
 
     <!-- TODO: REFACTORING   -->
@@ -32,10 +33,12 @@
 <script>
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'BasePageLayout',
-    components: { DLayoutSection, LayoutToolbar },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection, LayoutToolbar },
     computed: {
       adjustedContentClass() {
         if (this.contentClass) return this.contentClass;

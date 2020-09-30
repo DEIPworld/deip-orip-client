@@ -70,13 +70,13 @@
     </member-list>
 
     <!-- ### START Research Group Research List Section ### -->
-    <research-list namespace="groupDetails" :items="researchWithGroupInfoList">
+    <research-list namespace="groupDetails" :data="researchWithGroupInfoList">
       <template #addSome>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
           small
-          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'CreateResearch' } : { name: 'CreateResearchProposal' }"
+          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'research.create' } : { name: 'CreateResearchProposal' }"
           outlined
         >
           Start a project

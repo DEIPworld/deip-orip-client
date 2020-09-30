@@ -26,6 +26,7 @@
 </template>
 
 <script>
+  // TODO: refactoring
   // import Routable from 'vuetify/lib/mixins/routable';
 
   export default {

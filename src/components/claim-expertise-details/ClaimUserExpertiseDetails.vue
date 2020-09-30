@@ -1,19 +1,23 @@
 <template>
   <d-layout-section>
-    <claim-user-expertise-details-body />
-    <template #sidebar>
+    <d-layout-section-main>
+      <claim-user-expertise-details-body />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <claim-user-expertise-details-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
 <script>
   import deipRpc from '@deip/rpc-client';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ClaimUserExpertiseDetails',
-    components: { DLayoutSection },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     data() {
       return {};
     },

@@ -1,14 +1,8 @@
-<template>
-  <div v-if="internalValue">
-    {{ internalAttribute.title }}: {{ internalValue }}
-  </div>
-</template>
-
 <script>
-  import { commonRead } from '@/components/Attributes/mixins';
+  import { attributeRead } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesTextRead',
-    mixins: [commonRead]
+    mixins: [attributeRead]
   };
 </script>

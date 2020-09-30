@@ -79,6 +79,8 @@ import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
 import { researchRouting } from '@/components/Research/router';
+import { groupRouting } from '@/components/Group/router';
+import { landingRouting } from '@/components/Landing/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -440,12 +442,16 @@ const router = new Router({
   },
 
     ...sandboxRouting,
+
+    ...researchRouting,
+    ...groupRouting,
+
     ...userDetailRouting,
     ...accountRouting,
     ...adminRouting,
     ...ParticipantstRouting,
     ...overviewRouting,
-    ...researchRouting,
+    ...landingRouting,
 
   {
     path: '/user-wallet',
@@ -534,7 +540,7 @@ const router = new Router({
             params: { agency: tenant.account.permlink }
           });
         } else {
-          next({ name: 'ResearchFeed' });
+          next({ name: 'landing' });
         }
       });
     }
@@ -574,6 +580,7 @@ const authDataLoad = () => Promise.all([
 router.beforeEach((to, from, next) => {
   const PUBLIC_PAGES_NAMES = [
     'ResearchFeed',
+    'landing',
     'ResearchDetailsPublic',
     'NoAccessPage',
     'FAQ',
@@ -601,7 +608,7 @@ router.beforeEach((to, from, next) => {
   } else if (accessService.isLoggedIn()) {
     authDataLoad().then(() => { next(); }); // if there is a token allow to visit requested route
   } else {
-    next(!to.path.includes('admin') ? { name: 'ResearchFeed' } : { name: 'admin.login' }); // otherwise redirect to sign-in page
+    next(!to.path.includes('admin') ? { name: 'landing' } : { name: 'admin.login' }); // otherwise redirect to sign-in page
   }
 });
 

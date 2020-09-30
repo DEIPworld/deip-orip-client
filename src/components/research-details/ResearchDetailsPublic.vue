@@ -2,10 +2,11 @@
   <div>
     <research-details-header />
     <d-layout-section>
-      <research-timeline :timeline="timeline" />
-      <research-details-materials :is-details-available="false" />
-
-      <template #sidebar>
+      <d-layout-section-main>
+        <research-timeline :timeline="timeline" />
+        <research-details-materials :is-details-available="false" />
+      </d-layout-section-main>
+      <d-layout-section-sidebar>
         <d-block widget title="You are not logged in">
           <div class="my-2 text-body-2">
             After creating an account/log in you can add new projects or enjoy shared materials
@@ -48,7 +49,8 @@
 
         <d-block widget separated>
           <div v-for="(item, i) in researchRef.extendedAttributes" :key="`${i}-tenantCriteria`">
-            <div v-if="item.attribute.type == 'stepper'" :class="{'mb-2': i + 1 < researchRef.extendedAttributes.length}">
+            <div v-if="item.attribute.type == 'stepper'"
+                 :class="{'mb-2': i + 1 < researchRef.extendedAttributes.length}">
               <div class="display-flex">
                 <v-avatar size="30" color="#0386b0" class="align-self-start mr-2">
                   <span class="white--text font-weight-medium">{{ item.value.number }}</span>
@@ -68,7 +70,7 @@
           <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
         </d-block>
 
-      </template>
+      </d-layout-section-sidebar>
     </d-layout-section>
   </div>
 </template>
@@ -84,6 +86,8 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ResearchTimeline from './components/ResearchTimeline';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   const researchService = ResearchService.getInstance();
 
@@ -91,6 +95,8 @@
     name: 'ResearchDetailsPublic',
 
     components: {
+      DLayoutSectionSidebar,
+      DLayoutSectionMain,
       DBlock,
       DLayoutSection,
       ResearchDetailsMaterials,

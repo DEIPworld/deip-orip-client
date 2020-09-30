@@ -1,16 +1,18 @@
 <template>
-<!--  <v-textarea-->
-<!--    v-model="internalValue"-->
-<!--    :label="internalAttribute.title"-->
-<!--    outlined-->
-<!--  />-->
+  <v-textarea
+    v-model="internalValue"
+    :label="attribute.title"
+    hide-details="auto"
+    auto-grow
+    outlined
+  />
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesTextareaSet',
-    mixins: [commonSet]
+    mixins: [attributeSet]
   };
 </script>

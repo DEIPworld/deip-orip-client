@@ -5,7 +5,8 @@
 </template>
 
 <script>
-  import kindOf from 'kind-of';
+  // TODO: refactorin to VSheet renderer
+  import { convertToUnit } from 'vuetify/lib/util/helpers';
 
   export default {
     name: 'DGrid',
@@ -18,9 +19,8 @@
     computed: {
       vars() {
         if (this.itemMaxWidth) {
-          const width = kindOf(this.itemMaxWidth) === 'number' ? `${this.itemMaxWidth}px` : this.itemMaxWidth;
           return {
-            '--grid-item-max-width': width
+            '--grid-item-max-width': convertToUnit(this.itemMaxWidth)
           };
         }
         return false;

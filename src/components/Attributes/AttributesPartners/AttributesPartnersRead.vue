@@ -1,13 +1,8 @@
-<template>
-
-</template>
-
 <script>
+  import { attributeRead } from '@/components/Attributes/mixins';
+
   export default {
-    name: 'AttributesPartnersRead'
+    name: 'AttributesPartnersRead',
+    mixins: [attributeRead]
   };
 </script>
-
-<style scoped>
-
-</style>

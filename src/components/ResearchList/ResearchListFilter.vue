@@ -1,43 +1,42 @@
 <template>
   <d-filter-sidebar
+    ref="filter"
     v-model="filterModel"
     :reset-model="resetFilterModel"
     @apply="applyFilter"
     @reset="resetFilter"
   >
-    <template>
-      <d-filter-term-disciplines v-model="filterModel.disciplines" />
-      <d-filter-term-categories v-model="filterModel.categories" />
-      <d-filter-term-components v-model="filterModel.researchAttributes" />
-      <d-filter-term-organizations v-model="filterModel.organizations" />
-    </template>
+    <d-block widget>
+      <v-text-field
+        v-model="filterModel.searchTerm"
+        label="Search terms"
+        outlined
+        hide-details="auto"
+      />
+    </d-block>
+
+    <d-filter-term-components v-model="filterModel.researchAttributes" class="mb-6" />
   </d-filter-sidebar>
 </template>
 
 <script>
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
-  import DFilterTermDisciplines
-    from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
-  import DFilterTermCategories from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermCategories';
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
-  import DFilterTermOrganizations
-    from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermOrganizations';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const defaultFilter = () => ({
+    searchTerm: '',
     disciplines: [],
     organizations: [],
-    researchAttributes: {},
-    categories: []
+    researchAttributes: {}
   });
 
   export default {
     name: 'ResearchListFilter',
 
     components: {
-      DFilterTermOrganizations,
+      DBlock,
       DFilterTermComponents,
-      DFilterTermCategories,
-      DFilterTermDisciplines,
       DFilterSidebar
     },
 
@@ -56,7 +55,18 @@
     },
 
     created() {
-      if (this.$ls.get(this.storageKey)) {
+      const q = this.$route.query.rFilter;
+
+      if (q) {
+        this.filterModel = {
+          ...this.filterModel,
+          ...JSON.parse(q)
+        };
+        this.applyFilter();
+        this.$nextTick(() => {
+          this.$refs.filter.process();
+        })
+      } else if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }
     },
@@ -71,6 +81,10 @@
         this.filterModel = { ...defaultFilter() };
 
         this.applyFilter();
+
+        this.$nextTick(() => {
+          this.$refs.filter.process();
+        })
       }
     }
 

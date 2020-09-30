@@ -1,16 +1,17 @@
 <template>
   <v-text-field
     v-model="internalValue"
-    :label="internalAttribute.title"
+    :label="attribute.title"
+    hide-details="auto"
     outlined
   />
 </template>
 
 <script>
-  import { commonSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins';
 
   export default {
     name: 'AttributesTextSet',
-    mixins: [commonSet]
+    mixins: [attributeSet]
   };
 </script>

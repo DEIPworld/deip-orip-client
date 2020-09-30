@@ -1,5 +1,5 @@
 <template>
-  <full-screen-modal :title="title">
+  <d-layout-full-screen :title="title">
     <v-form ref="form">
       <template v-if="!formData._id">
         <v-select
@@ -7,7 +7,7 @@
           outlined
           hide-details="auto"
           label="Attribute type"
-          :items="$where(Object.values(ATTR_TYPES_LIST), {'!system': true})"
+          :items="attrsList"
         />
         <v-divider class="my-6" />
       </template>
@@ -19,10 +19,10 @@
       <v-row no-gutters class="align-center">
         <v-col cols="auto">
           <v-checkbox
-            v-model="formData.isVisible"
+            v-model="formData.isPublished"
             class="ma-0 pa-0"
             hide-details
-            label="Publish Criterion"
+            label="Publish Attribute"
           />
         </v-col>
         <v-spacer />
@@ -47,25 +47,25 @@
         </v-col>
       </v-row>
     </v-form>
-  </full-screen-modal>
+  </d-layout-full-screen>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
-  import { ATTR_TYPES, ATTR_TYPES_LIST } from '@/variables';
+  import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
 
   import { defaultAttributeModel } from '@/components/Attributes/mixins';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
+  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminAttributesEdit',
     components: {
+      DLayoutFullScreen,
       AttributesEdit,
-      FullScreenModal,
     },
     props: {
       title: {
@@ -76,7 +76,7 @@
     data() {
       return {
         ATTR_TYPES,
-        ATTR_TYPES_LIST,
+        ATTR_TYPES_LABELS,
 
         rules: { required: (value) => !!value || 'This field is required' },
 
@@ -93,7 +93,12 @@
       ...mapGetters({
         tenant: 'auth/tenant',
         researchAttributes: 'adminPanel/researchAttributes'
-      })
+      }),
+
+      attrsList() {
+        return Object.keys(this.ATTR_TYPES_LABELS)
+          .map((key) => ({ value: key, text: this.ATTR_TYPES_LABELS[key] }));
+      }
     },
     created() {
       if (this.$route.query.id) {

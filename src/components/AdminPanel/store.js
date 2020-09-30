@@ -81,7 +81,7 @@ const actions = {
   },
 
   getPublicProjects(context) {
-    return researchService.getPublicResearchListing()
+    return researchService.getPublicResearchListing({})
       .then((result) => {
         context.commit('getPublicProjects', result);
       });

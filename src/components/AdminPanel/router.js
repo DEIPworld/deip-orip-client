@@ -14,6 +14,10 @@ import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
+import AdminAttributesSettings
+  from '@/components/AdminPanel/AdminAttributes/AdminAttributesSettings';
+import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
+import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
 
 export const adminRouting = [
   {
@@ -49,20 +53,41 @@ export const adminRouting = [
       },
       {
         path: 'attributes',
-        name: 'admin.attributes',
-        component: AdminAttributes,
+        component: { template: '<router-view />'},
         children: [
+          {
+            path: '',
+            name: 'admin.attributes',
+            component: AdminAttributes
+          },
           {
             path: 'edit',
             name: 'admin.attributes.edit',
-            components: {
-              dialog: AdminAttributesEdit
-            },
+            component: AdminAttributesEdit,
             props: {
-              dialog: {
-                title: 'Add new attribute'
-              }
+              title: 'Add new attribute'
             }
+          },
+          {
+            path: 'settings',
+            name: 'admin.attributes.settings',
+            component: AdminAttributesSettings
+          }
+        ]
+      },
+      {
+        path: 'layouts',
+        component: { template: '<router-view />'},
+        children: [
+          {
+            path: '',
+            name: 'admin.layouts',
+            component: AdminLayouts
+          },
+          {
+            path: ':layoutName/edit',
+            name: 'admin.layouts.edit',
+            component: AdminLayoutsEdit
           }
         ]
       },

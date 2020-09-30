@@ -175,48 +175,56 @@ const actions = {
             notify: resolve
           });
         });
+
         const membersLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchMembers', {
             groupId: state.research.research_group_id,
             notify: resolve
           });
         });
+
         const reviewsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchReviews', {
             researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
+
         const disciplinesLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchDisciplines', {
             researchId: state.research.id,
             notify: resolve
           });
         });
+
         const tokenHoldersLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchTokenHolders', {
             researchId: state.research.id,
             notify: resolve
           });
         });
+
         const tokenSaleLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchTokenSale', {
             researchId: state.research.id,
             notify: resolve
           });
         });
+
         const tokenSalesLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchTokenSales', {
             researchId: state.research.id,
             notify: resolve
           });
         });
+
         const groupLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupDetails', {
             group_permlink,
             notify: resolve
           });
         });
+
         const applicationsLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchApplications', {
             researchId: state.research.id,
@@ -483,12 +491,12 @@ const mutations = {
     state.research = research;
   },
 
-  SET_RESEARCH_MEMBERS_LIST(state, list) {
-    state.researchGroupMembersList = list;
-  },
-
   SET_RESEARCH_CONTENT_LIST(state, list) {
     state.allContentsList = list;
+  },
+
+  SET_RESEARCH_MEMBERS_LIST(state, list) {
+    state.researchGroupMembersList = list;
   },
 
   SET_RESEARCH_APPLICATIONS_LIST(state, applications) {

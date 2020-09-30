@@ -1,13 +1,20 @@
 <template>
-  <router-view />
+  <router-view v-if="$ready" />
 </template>
 
 <script>
-  import { componentStoreFactoryOne } from '@/mixins/registerStore';
+  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { researchStore } from '@/components/Research/store';
 
   export default {
     name: 'Research',
-    mixins: [componentStoreFactoryOne(researchStore, 'research')]
+    mixins: [componentStoreFactoryOnce(researchStore)],
+    created() {
+      this.$store
+        .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
+        .then(() => {
+          this.$setReady();
+        });
+    }
   };
 </script>

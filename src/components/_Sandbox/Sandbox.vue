@@ -1,22 +1,67 @@
 <template>
-  <layout-section>
-    <v-tabs v-model="tab">
-      <v-tab>Layout generator</v-tab>
-    </v-tabs>
-    <v-divider class="mb-12" />
-    <v-tabs-items v-model="tab">
-      <v-tab-item><sandbox-layout /></v-tab-item>
-    </v-tabs-items>
-  </layout-section>
+  <d-layout-section>
+    <d-layout-section-main>
+
+      <d-autocomplete
+        label="label"
+        class="mb-12"
+        outlined
+        :items="[
+          'anim ad',
+          'ex incididunt',
+          'anim quis',
+          'aliqua eiusmod',
+          'magna enim',
+          'magna qui',
+          'ea aliqua',
+          'reprehenderit laborum',
+          'nulla ea',
+          'magna exercitation',
+          'aute et',
+          'magna tempor',
+          'do sunt',
+          'laborum consectetur',
+          'officia ex'
+        ]"
+      />
+
+      <d-autocomplete
+        label="label"
+        outlined
+        multiple
+        chips
+        deletable-chips
+        :items="[
+          'anim ad',
+          'ex incididunt',
+          'anim quis',
+          'aliqua eiusmod',
+          'magna enim',
+          'magna qui',
+          'ea aliqua',
+          'reprehenderit laborum',
+          'nulla ea',
+          'magna exercitation',
+          'aute et',
+          'magna tempor',
+          'do sunt',
+          'laborum consectetur',
+          'officia ex'
+        ]"
+      />
+
+    </d-layout-section-main>
+  </d-layout-section>
 </template>
 
 <script>
-  import LayoutSection from '@/components/layout/components/LayoutSection';
-  import SandboxLayout from '@/components/_Sandbox/SandboxLayout';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
     name: 'Sandbox',
-    components: { SandboxLayout, LayoutSection },
+    components: { DAutocomplete, DLayoutSectionMain, DLayoutSection },
     data() {
       return {
         tab: undefined

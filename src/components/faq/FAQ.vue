@@ -59,7 +59,7 @@
         tenant: 'auth/tenant'
       }),
       faqs() {
-        return this.tenant.profile.settings.faq.filter(({ isVisible }) => isVisible);
+        return this.tenant.profile.settings.faq.filter(({ isPublished }) => isPublished);
       }
     }
   };

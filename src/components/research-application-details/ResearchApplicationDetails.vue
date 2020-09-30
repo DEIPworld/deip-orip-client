@@ -1,10 +1,11 @@
 <template>
   <d-layout-section v-if="isPageLoaded">
-    <research-application-details-package />
-
-    <template #sidebar>
+    <d-layout-section-main>
+      <research-application-details-package />
+    </d-layout-section-main>
+    <d-layout-section-sidebar>
       <research-application-details-sidebar />
-    </template>
+    </d-layout-section-sidebar>
   </d-layout-section>
 </template>
 
@@ -12,10 +13,12 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 
   export default {
     name: 'ResearchApplicationDetails',
-    components: { DLayoutSection },
+    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     data() {
       return {};
     },

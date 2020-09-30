@@ -88,7 +88,7 @@ export const ResearchRequestModelMixin = {
 
   created() {
     this.$store.getters['auth/tenant'].profile.settings.researchAttributes.forEach((item) => {
-      if (item.isVisible) {
+      if (item.isPublished) {
         this.formData.attributes.push({
           researchAttributeId: item._id,
           type: 'stepper',

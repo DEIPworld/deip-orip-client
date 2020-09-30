@@ -1,16 +1,19 @@
 <template>
   <d-layout-section v-if="$ready">
-    <research-group-details-body />
+    <d-layout-section-main>
+      <research-group-details-body />
+    </d-layout-section-main>
   </d-layout-section>
 </template>
 
 <script>
   import ResearchGroupDetailsBody from '@/components/research-group-details/components/ResearchGroupDetailsBody';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 
   export default {
     name: 'ResearchGroupDetails',
-    components: { DLayoutSection, ResearchGroupDetailsBody },
+    components: { DLayoutSectionMain, DLayoutSection, ResearchGroupDetailsBody },
 
     data() {
       return {};

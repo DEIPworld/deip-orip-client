@@ -79,7 +79,7 @@
 
       getReturningToken() {
         const token = {
-          name: 'CreateResearch',
+          name: 'research.create',
           query: { disciplineIds: this.research.disciplines.map((item) => item.id) }
         };
 

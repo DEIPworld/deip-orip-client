@@ -13,6 +13,7 @@
 </template>
 
 <script>
+  // TODO: deprecated
   export default {
     name: 'DInfoBlock',
     props: {

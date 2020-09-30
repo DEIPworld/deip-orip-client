@@ -16,7 +16,7 @@
     <div v-if="!$route.name.includes('account')" class="user-research-groups-container spinner-container mb-4">
       <!-- TODO: hotfix -->
       <div class="py-6">
-        <research-list :items="researchList" namespace="userDetails" />
+        <research-list :data="researchList" namespace="userDetails" />
       </div>
 
       <div v-if="commonGroups.length" class="py-6">

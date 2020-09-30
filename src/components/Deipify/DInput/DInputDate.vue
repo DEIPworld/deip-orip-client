@@ -2,7 +2,6 @@
   <v-menu
     v-model.trim="open"
     :close-on-content-click="false"
-    transition="scale-transition"
     offset-y
     min-width="290px"
   >

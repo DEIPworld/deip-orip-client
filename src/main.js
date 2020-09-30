@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import VueResize from 'vue-resize';
+import Clipboard from 'v-clipboard';
 import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
 import PortalVue from 'portal-vue';
@@ -8,7 +9,7 @@ import lsWatcher from 'vue-storage-watcher';
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
-import VClamp from 'vue-clamp';
+import VClamp from 'vue-clamp/Clamp.js';
 import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
@@ -40,6 +41,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
+Vue.use(Clipboard)
 Vue.use(PortalVue);
 Vue.use(VueTheMask);
 

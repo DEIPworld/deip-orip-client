@@ -72,7 +72,7 @@
     <d-form-block title="Project readines level">
       <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
         <v-col
-          v-if="item.isVisible"
+          v-if="item.isPublished"
           :key="`${i}-stepper`"
           cols="12"
         >

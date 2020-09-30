@@ -1,0 +1,174 @@
+<template>
+  <div>
+    <template v-for="(category, index) of modules">
+      <div :key="`ttl-${index}`">
+        <v-subheader class="text-overline">{{ category.name }}</v-subheader>
+        <draggable
+          :key="`drg-${index}`"
+          :list="category.modules"
+          :group="{ name: 'nodes', pull: 'clone', put: false }"
+          :sort="false"
+          :clone="onClone"
+          :class="$style.list"
+          class="px-4 pb-4"
+        >
+          <v-hover
+            v-for="module of category.modules"
+            :key="module.moduleId"
+            #default="{ hover }"
+          >
+
+            <v-sheet
+              class="text-center pa-2"
+              :color="`grey ${hover ? 'lighten-3' : 'lighten-4'}`"
+              rounded
+            >
+              <v-icon>{{ module.icon }}</v-icon>
+              <div class="text-caption text--secondary mt-1 text-truncate" style="line-height: 16px">
+                {{ module.name }}
+              </div>
+            </v-sheet>
+          </v-hover>
+        </draggable>
+      </div>
+      <v-divider />
+
+    </template>
+  </div>
+
+</template>
+
+<script>
+  import draggable from 'vuedraggable';
+  import { genObjectId } from '@/utils/helpers';
+  import RecursiveIterator from 'recursive-iterator';
+  import kindOf from 'kind-of';
+  import {
+    extendModuleObject, modulesBasic, modulesComponents, modulesGrid,
+    modulesHelpers,
+    modulesLayout, modulesTable, modulesTypography, modulesUi,
+    setAs,
+    setComponentProps
+  } from '@/components/AdminPanel/Layouts/modules';
+  import { ATTR_TYPES_ICONS, LAYOUT_TYPES } from '@/variables';
+
+  export default {
+    name: 'AdminLayoutsModules',
+    components: {
+      draggable
+    },
+    props: {
+      layoutType: {
+        type: [String, Number],
+        default: LAYOUT_TYPES.READ
+      }
+    },
+    data() {
+      return { };
+    },
+    computed: {
+      attrModules() {
+        const extenders = {
+          [LAYOUT_TYPES.SET]: (attr) => ({
+            component: 'AttributesSet',
+            model: `researchRef.attributes.${attr._id}`,
+            props: {
+              attribute: `@attributes.${attr._id}`
+            }
+          }),
+          [LAYOUT_TYPES.READ]: (attr) => ({
+            component: 'AttributesRead',
+            ...(/text|textarea/.test(attr.type)
+              ? setComponentProps({
+                clamped: setAs(Number)
+              })
+              : {}),
+            ...{
+              props: {
+                attribute: `@research.researchRef.attributes.${attr._id}`
+              }
+            }
+          })
+        };
+
+        return [
+          {
+            component: 'span',
+            name: 'Creation date',
+            text: '@research.created_at',
+            icon: 'mdi-calendar-text'
+          },
+          ...this.$tenantSettings.researchAttributes
+            .map((attr) => ({
+              icon: ATTR_TYPES_ICONS[attr.type],
+              name: attr.shortTitle || attr.title,
+              ...extenders[this.layoutType](attr)
+            }))
+        ];
+      },
+
+      modules() {
+        return [
+          {
+            name: 'Layout',
+            modules: extendModuleObject(modulesLayout)
+          },
+          {
+            name: 'Grid',
+            modules: extendModuleObject(modulesGrid)
+          },
+          {
+            name: 'Basic',
+            modules: extendModuleObject(modulesBasic)
+          },
+          {
+            name: 'UI components',
+            modules: extendModuleObject(modulesUi)
+          },
+          {
+            name: 'Table',
+            modules: extendModuleObject(modulesTable)
+          },
+          {
+            name: 'Typography',
+            modules: extendModuleObject(modulesTypography, { type: 'typography' })
+          },
+          {
+            name: 'Attributes',
+            modules: extendModuleObject(this.attrModules, { type: 'attribute' })
+          },
+          {
+            name: 'Components',
+            modules: extendModuleObject(modulesComponents, { type: 'staticComponent' })
+          }
+        ];
+      }
+    },
+    methods: {
+      onClone(item) {
+        const crc = () => genObjectId({ salt: Math.random() + new Date().getTime().toString() });
+        const clone = _.cloneDeep(item);
+
+        clone.id$ = crc();
+
+        if (item.children && item.children.length) {
+          for (const { node } of new RecursiveIterator(clone)) {
+            if (kindOf(node) === 'object' && node.component) {
+              node.id$ = crc();
+            }
+          }
+        }
+
+        return clone;
+      }
+    }
+  };
+</script>
+
+<style lang="scss" module>
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(33.333% - .5rem), 1fr));
+    grid-gap: .5rem;
+  }
+</style>

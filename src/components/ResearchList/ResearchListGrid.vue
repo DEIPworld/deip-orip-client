@@ -1,6 +1,6 @@
 <template>
   <d-grid>
-    <research-list-card
+    <research-list-item-card
       v-for="item in items"
       :key="'list-item-' + item.external_id"
       :research="item"
@@ -9,12 +9,12 @@
 </template>
 
 <script>
-  import ResearchListCard from '@/components/ResearchList/ResearchListItem/ResearchListCard';
+  import ResearchListItemCard from '@/components/ResearchList/ResearchListItem/ResearchListItemCard';
   import DGrid from '@/components/Deipify/DGrid/DGrid';
 
   export default {
     name: 'ResearchListGrid',
-    components: { DGrid, ResearchListCard },
+    components: { DGrid, ResearchListItemCard },
     props: {
       items: {
         type: Array,

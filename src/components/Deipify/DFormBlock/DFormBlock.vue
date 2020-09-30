@@ -14,6 +14,7 @@
 </template>
 
 <script>
+  // TODO: deprecated
   export default {
     name: 'DFormBlock',
     props: {
@@ -28,7 +29,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

@@ -7,7 +7,6 @@
       </div>
     </template>
     <v-data-table
-      v-custom="'expand-elevation-0'"
       :hide-default-footer="filteredProposals.length < 50"
       :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
       :items-per-page="50"

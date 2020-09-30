@@ -5,6 +5,7 @@
         <v-col cols="auto">
           <platform-avatar :user="review.author" :size="80" />
         </v-col>
+
         <v-col
           class="px-6"
           cols="12"
@@ -73,11 +74,14 @@
         {{ moment(review.created_at).format('D, MMM YYYY') }}
       </div>
     </v-col>
+
+
     <v-col cols="12" sm="4">
       <div>
         <div class="bold">
           Assessment
         </div>
+        {{review.scores}}
         <review-assessment
           v-model="review.scores"
           :research-content-type="review.researchContent.content_type"

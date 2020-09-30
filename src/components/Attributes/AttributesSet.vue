@@ -1,42 +1,41 @@
-<template>
-  <div>
-    <component
-      :is="componentType"
-      v-model="internalValue"
-      :attribute="attribute"
-      :multiple="multiple"
-    />
-  </div>
-
-</template>
-
 <script>
-  import AttributesTextSet from '@/components/Attributes/AttributesText/AttributesTextSet';
-  import AttributesTextareaSet from '@/components/Attributes/AttributesTextarea/AttributesTextareaSet';
-  import AttributesSelectSet from '@/components/Attributes/AttributesSelect/AttributesSelectSet';
-  import AttributesStepperSet from '@/components/Attributes/AttributesStepper/AttributesStepperSet';
-  import AttributesVideoUrlSet from '@/components/Attributes/AttributesVideoUrl/AttributesVideoUrlSet';
-  import AttributesRoadmapSet from '@/components/Attributes/AttributesRoadmap/AttributesRoadmapSet';
-  import AttributesPartnersSet from '@/components/Attributes/AttributesPartners/AttributesPartnersSet';
-
-  import { commonAttribute, internalType } from '@/components/Attributes/mixins';
+  import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
+  import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
+  import AttributesMultiSelectSet from './AttributesMultiSelect/AttributesMultiSelectSet';
+  import AttributesPartnersSet from './AttributesPartners/AttributesPartnersSet';
+  import AttributesResearchGroupSet from './AttributesResearchGroup/AttributesResearchGroupSet';
+  import AttributesRoadmapSet from './AttributesRoadmap/AttributesRoadmapSet';
+  import AttributesSelectSet from './AttributesSelect/AttributesSelectSet';
+  import AttributesStepperSet from './AttributesStepper/AttributesStepperSet';
+  import AttributesSwitchSet from './AttributesSwitch/AttributesSwitchSet';
+  import AttributesTextSet from './AttributesText/AttributesTextSet';
+  import AttributesTextareaSet from './AttributesTextarea/AttributesTextareaSet';
+  import AttributesUrlSet from './AttributesUrl/AttributesUrlSet';
+  import AttributesUserSet from './AttributesUser/AttributesUserSet';
+  import AttributesUsersListSet from './AttributesUsersList/AttributesUsersListSet';
+  import AttributesVideoUrlSet from './AttributesVideoUrl/AttributesVideoUrlSet';
 
   export default {
     name: 'AttributesSet',
     components: {
-      AttributesTextSet,
-      AttributesTextareaSet,
+      AttributesCheckboxSet,
+      AttributesDisciplinesListSet,
+      AttributesMultiSelectSet,
+      AttributesPartnersSet,
+      AttributesResearchGroupSet,
+      AttributesRoadmapSet,
       AttributesSelectSet,
       AttributesStepperSet,
+      AttributesSwitchSet,
+      AttributesTextSet,
+      AttributesTextareaSet,
+      AttributesUrlSet,
+      AttributesUserSet,
+      AttributesUsersListSet,
       AttributesVideoUrlSet,
-      AttributesRoadmapSet,
-      AttributesPartnersSet
     },
-    mixins: [commonAttribute, internalType],
-    computed: {
-      componentType() {
-        return `attributes-${this.internalType}-set`;
-      }
-    }
+
+    mixins: [attributeSet, attributeTypeComponent]
   };
 </script>

@@ -37,7 +37,7 @@
               this.formProcessing = true;
 
               const invitees = this.formData.members
-                .filter((m) => m.account.name != this.user.username)
+                .filter((m) => m.account.name !== this.user.username)
                 .map((m) => ({
                   account: m.account.name,
                   rgt: m.stake * this.DEIP_1_PERCENT,
@@ -56,7 +56,7 @@
                 this.user.privKey,
                 {
                   fee: this.toAssetUnits(0),
-                  creator,
+                  creator: creator,
                   accountOwnerAuth: auth,
                   accountActiveAuth: auth,
                   accountMemoPubKey: memo,
@@ -77,7 +77,7 @@
                   const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
                     this.user.privKey,
                     {
-                      researchGroup: res.rm._id,
+                      researchGroup: res.external_id,
                       member: invitee.account,
                       rewardShare: '0.00 %',
                       researches: undefined, // all researches
@@ -106,14 +106,14 @@
                       }
                     });
                   } else {
-                    if (this.backRouterToken.name === 'CreateResearch') {
+                    if (this.backRouterToken.name === 'research.create') {
                       this.backRouterToken.query.externalId = researchGroup.external_id;
                     }
                     this.$router.push(this.backRouterToken);
                   }
                 })
                 .catch((err) => {
-                  console.log(err);
+                  console.error(err);
                   this.isLoading = false;
                   this.$notifier.showError('An error occurred while creating Research Group, please try again later');
                 });
