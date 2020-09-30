@@ -34,28 +34,25 @@
 
           <template #item.actions="{ item }">
             <crud-actions row>
-              <template v-if="item.isRequired">
-                <v-btn icon small disabled class="ml-auto">
-                  <v-icon>lock</v-icon>
-                </v-btn>
-              </template>
-              <template v-else>
-                <v-btn
-                  :color="item.isPublished ? 'success' : null"
-                  icon
-                  small
-                  @click="openActionDialog(item.isPublished ? 'unpublish' : 'publish', item._id)"
-                >
-                  <v-icon>{{ item.isPublished ? 'flag' : 'outlined_flag' }}</v-icon>
-                </v-btn>
 
-                <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
-                  <v-icon>edit</v-icon>
-                </v-btn>
-                <v-btn icon small @click="openActionDialog('delete', item._id)">
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </template>
+
+              <v-btn
+                v-if="!item.isRequired"
+                :color="item.isPublished ? 'success' : null"
+                icon
+                small
+                @click="openActionDialog(item.isPublished ? 'unpublish' : 'publish', item._id)"
+              >
+                <v-icon>{{ item.isPublished ? 'flag' : 'outlined_flag' }}</v-icon>
+              </v-btn>
+
+              <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
+                <v-icon>edit</v-icon>
+              </v-btn>
+
+              <v-btn icon small :disabled="item.isRequired" class="ml-auto">
+                <v-icon>{{ item.isRequired ? 'lock' : 'delete' }}</v-icon>
+              </v-btn>
 
             </crud-actions>
           </template>
@@ -96,7 +93,7 @@
       DLayout,
       DBlock,
       CrudActions,
-      DDialog,
+      DDialog
     },
     data() {
       return {
