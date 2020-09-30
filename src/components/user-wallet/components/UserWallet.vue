@@ -1012,15 +1012,15 @@
       deposit() {
         this.depositDialog.isDepositing = true;
         return deipRpc.broadcast.transferAsync(
-          '5J7xMbqRbaP4wnP3NnzPERR8msN6yrcXrZBbKenFiQpDjNcdvfc',
-          'hermes',
+          '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa',
+          'kim',
           this.user.username,
           this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
           `deposit for ${this.user.username}`,
           []
         )
           .then(() => {
-            this.$notifier.showError('Funds have been deposited successfully!');
+            this.$notifier.showSuccess('Funds have been deposited successfully!');
             this.closeDepositDialog();
           })
           .catch((err) => {
@@ -1038,13 +1038,13 @@
         return deipRpc.broadcast.transferAsync(
           this.user.privKey,
           this.user.username,
-          'hermes',
+          'kim',
           this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
           `withdraw for ${this.user.username}`,
           []
         )
           .then(() => {
-            this.$notifier.showError('Funds have been withdrawn successfully!');
+            this.$notifier.showSuccess('Funds have been withdrawn successfully!');
             this.closeWithdrawDialog();
           })
           .catch((err) => {

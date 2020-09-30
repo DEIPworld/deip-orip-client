@@ -33,31 +33,31 @@
           </div>
           <v-card v-for="file in contentRef.packageFiles" :key="file.hash">
             <v-card-text>
-              <div class="legacy-row-nowrap">
-                <span class="legacy-col-10">
+              <v-row>
+                <v-col cols="10">
                   <a
                     v-if="isPreviewAvailable(file.ext)"
                     target="_blank"
                     class="a"
                     :href="getContentUrl(file.hash)"
                   >
-                    {{ file.filename }}
+                    <v-clamp autoresize :max-lines="1">
+                      {{ file.filename }}
+                    </v-clamp>
                   </a>
                   <span v-else class="text-body-2">
                     {{ file.filename }}
                   </span>
-                </span>
-                <span class="legacy-col-1 text-align-right">
+                </v-col>
+                <v-col class="text-align-right">
                   <span>
                     <a class="a download-content" :href="getContentUrl(file.hash, true)">
                       <v-icon small>save</v-icon>
                     </a>
                   </span>
-                </span>
-                <span class="legacy-col-1 text-align-right">
-                  <span class="text-body-2 grey--text">{{ file.hash.slice(0, 8) }}</span>
-                </span>
-              </div>
+                  <span class="text-body-2 grey--text ml-2">{{ file.hash.slice(0, 8) }}</span>
+                </v-col>
+              </v-row>
             </v-card-text>
           </v-card>
         </div>
