@@ -3,7 +3,8 @@
 
   import AttributesRead from '@/components/Attributes/AttributesRead';
 
-  import ContentList from '@/components/ContentsList/ContentsList';
+  import ContentsList from '@/components/ContentsList/ContentsList';
+  import DraftsList from '@/components/DraftsList/DraftsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
   import kindOf from 'kind-of';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
@@ -18,7 +19,8 @@
       ReviewsList,
 
       ContentUpload,
-      ContentList
+      ContentsList,
+      DraftsList
     },
     mixins: [componentsRenderer],
     props: {

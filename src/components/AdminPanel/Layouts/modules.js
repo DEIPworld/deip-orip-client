@@ -272,21 +272,19 @@ export const modulesTypography = [
 
 export const modulesComponents = [
   {
-    component: 'ContentList',
+    component: 'ContentsList',
     name: 'Materials',
     icon: 'mdi-file-document-outline',
     props: {
-      researchId: '@research.external_id',
-      drafts: false
+      researchId: '@research.external_id'
     }
   },
   {
-    component: 'ContentList',
+    component: 'DraftsList',
     name: 'Drafts',
     icon: 'mdi-file-edit-outline',
     props: {
-      researchId: '@research.external_id',
-      drafts: true
+      researchId: '@research.external_id'
     }
   },
   {

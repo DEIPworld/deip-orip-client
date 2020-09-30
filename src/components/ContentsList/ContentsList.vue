@@ -1,8 +1,8 @@
 <template>
   <v-data-table
-    v-if="internalContents.length"
+    v-if="researchContents.length"
     :headers="tableHeaders"
-    :items="internalContents"
+    :items="researchContents"
     disable-sort
     disable-pagination
     hide-default-footer
@@ -98,10 +98,6 @@
       researchId: {
         type: String,
         default: null
-      },
-      drafts: {
-        type: Boolean,
-        default: false
       }
     },
     data() {
@@ -135,12 +131,8 @@
     },
     computed: {
       ...mapGetters({
-        contents: 'ResearchContents/list'
-      }),
-
-      internalContents() {
-        return this.$where(this.contents, { isDraft: this.drafts });
-      }
+        researchContents: 'ResearchContents/list'
+      })
     },
     created() {
       this.updateData();

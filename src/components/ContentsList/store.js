@@ -17,7 +17,8 @@ const ACTIONS = {
 
     return researchContentService.getResearchContentByResearch(researchExternalId)
       .then((list) => {
-        researchContents.push(...list);
+        researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
+
         return Promise.all(
           researchContents.map(
             (content) => deipRpc.api.getReviewsByResearchContentAsync(content.external_id)
