@@ -290,6 +290,14 @@ export const modulesComponents = [
     }
   },
   {
+    component: 'ContentUpload',
+    name: 'Material Upload',
+    icon: 'mdi-file-upload-outline',
+    props: {
+      researchId: '@research.external_id'
+    }
+  },
+  {
     component: 'ReviewsList',
     name: 'Reviews',
     icon: 'mdi-comment-processing-outline',

@@ -17,13 +17,13 @@
         v-if="$isLoggedIn"
         class="a"
         :to="{
-            name: 'ResearchContentDetails',
-            params: {
-              research_group_permlink: $store.getters['Research/data'].research_group.permlink,
-              content_permlink: item.permlink,
-              research_permlink: $store.getters['Research/data'].permlink,
-            }
-          }"
+          name: 'ResearchContentDetails',
+          params: {
+            research_group_permlink: $store.getters['Research/data'].research_group.permlink,
+            content_permlink: item.permlink,
+            research_permlink: $store.getters['Research/data'].permlink,
+          }
+        }"
       >
         <!-- END TEMP SOLUTION (query) -->
 

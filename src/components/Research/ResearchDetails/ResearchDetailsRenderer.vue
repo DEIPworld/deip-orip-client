@@ -6,6 +6,7 @@
   import ContentList from '@/components/ContentsList/ContentsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
   import kindOf from 'kind-of';
+  import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
 
   export default {
     name: 'ResearchDetailsRenderer',
@@ -13,6 +14,8 @@
       AttributesRead,
 
       ReviewsList,
+
+      ContentUpload,
       ContentList
     },
     mixins: [componentsRenderer],

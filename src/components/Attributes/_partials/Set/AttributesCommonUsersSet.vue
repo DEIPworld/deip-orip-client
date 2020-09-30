@@ -9,6 +9,12 @@
   export default {
     name: 'AttributesCommonUsersSet',
     mixins: [componentStoreFactory(usersStore), attributeSet],
+    props: {
+      users: {
+        type: Array,
+        default: () => ([])
+      }
+    },
     computed: {
       ...mapState({
         usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
@@ -19,10 +25,17 @@
         this.internalValue = [];
       }
 
-      this.$store.dispatch(`${this.storeNS}/getActiveUsers`, this.users)
-        .then(() => {
-          this.$setReady();
-        });
+      if (this.users.length) {
+        this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.users)
+          .then(() => {
+            this.$setReady();
+          });
+      } else {
+        this.$store.dispatch(`${this.storeNS}/getActiveUsers`, this.users)
+          .then(() => {
+            this.$setReady();
+          });
+      }
     },
     methods: {
       userFullName(e) {
