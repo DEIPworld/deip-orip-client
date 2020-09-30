@@ -4,7 +4,7 @@
       v-for="(item, index) of attribute.value"
       :key="index"
     >
-      <a :href="item.url" class="text--secondary text-caption">{{ item.label }}</a>
+      <a :href="item.url" target="_blank" class="text--secondary text-caption">{{ item.label }}</a>
     </div>
   </d-stack>
 </template>

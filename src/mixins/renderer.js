@@ -13,7 +13,7 @@ import DBlock from '@/components/Deipify/DBlock/DBlock';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
-import { VDivider, VSheet, VIcon } from 'vuetify/lib/components';
+import { VDivider, VSheet, VIcon, VRow, VCol } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
@@ -31,7 +31,9 @@ const rendererCommon = {
 
     VDivider,
     VSheet,
-    VIcon
+    VIcon,
+    VRow,
+    VCol
   },
   props: {
     schema: {

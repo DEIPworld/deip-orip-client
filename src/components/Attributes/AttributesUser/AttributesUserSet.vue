@@ -7,6 +7,7 @@
     :item-text="userFullName"
     :item-value="userId"
     outlined
+    hide-details="auto"
   >
     <template #item="{ item }">
       <v-list-item-avatar :size="24">

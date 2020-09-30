@@ -1,6 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
-<!--    <pre>{{JSON.stringify(formData, null, 2)}}</pre>-->
+<!--        <pre>{{JSON.stringify(formData, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
@@ -8,11 +8,11 @@
         :attributes="attributes$"
       />
 
-<!--      <d-input-image-->
-<!--        :value="formData.image"-->
-<!--        :aspect-ratio="4"-->
-<!--        label="Header image"-->
-<!--      />-->
+      <!--      <d-input-image-->
+      <!--        :value="formData.image"-->
+      <!--        :aspect-ratio="4"-->
+      <!--        label="Header image"-->
+      <!--      />-->
 
       <v-divider class="mt-8 mb-6" />
       <div class="d-flex justify-end align-center">
@@ -54,7 +54,6 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { researchStore } from '@/components/Research/store';
 
-  import AttributesSetIterator from '@/components/Attributes/AttributesSetIterator';
   import { researchAttributes } from '@/mixins/platformAttributes';
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
 
@@ -67,7 +66,7 @@
       DStack,
       ResearchEditRenderer,
       DForm,
-      DLayoutFullScreen,
+      DLayoutFullScreen
     },
     mixins: [
       componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
@@ -98,7 +97,7 @@
           image: undefined
         },
 
-        isPermlinkVerifyed: true,
+        isPermlinkVerifyed: true
       };
     },
     computed: {
@@ -111,7 +110,7 @@
       },
 
       attributes$() {
-        return tenantAttributesToObject(this.$tenantSettings.researchAttributes)
+        return tenantAttributesToObject(this.$tenantSettings.researchAttributes);
       },
 
       userGroup() {
@@ -180,7 +179,7 @@
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
                 // todo: check
-                image: this.$options.filters.researchBackgroundSrc(clone.external_id),
+                image: this.$options.filters.researchBackgroundSrc(clone.external_id)
               }
             };
             // });
@@ -188,7 +187,7 @@
             this.formData = { ..._.cloneDeep(transformed) };
             this.cachedFormData = { ..._.cloneDeep(transformed) };
           });
-          // });
+        // });
       } else {
         this.formData.researchGroup = null; // TODO: Extract default value from hidden atttribute or set it from non-hidden
       }
@@ -231,7 +230,7 @@
       createResearch(exists) {
         if (exists) return false;
 
-        let newResearchGroupMeta = this.transformedFormData.data.researchGroup === null ? {
+        const newResearchGroupMeta = this.transformedFormData.data.researchGroup === null ? {
           creator: this.$currentUser.account.name,
           memo: this.$currentUser.account.memo_key,
           fee: this.toAssetUnits(0)
@@ -241,10 +240,9 @@
           this.$currentUser.privKey,
           this.isProposal,
           { ...this.transformedFormData.data, newResearchGroupMeta },
-          this.transformedFormData.offchainMeta,
+          this.transformedFormData.offchainMeta
         )
           .then((research) => {
-
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
             this.goToResearch(research);
           })
@@ -255,7 +253,7 @@
       },
 
       updateResearchData() {
-        console.log(this.transformedFormData.data)
+        console.log(this.transformedFormData.data);
         return researchService.updateResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
@@ -283,7 +281,7 @@
         if (!exists) return false;
 
         return Promise.all([
-          this.updateResearchData(),
+          this.updateResearchData()
           // this.updateResearchImage()
         ])
           .then(([research]) => {

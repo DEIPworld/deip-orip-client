@@ -4,6 +4,7 @@
     class="dashed d-inline-flex align-center"
     :class="$style.host"
     :height="32"
+    :data-node-host="node.component"
     min-width="0px"
     max-width="100%"
   >

@@ -90,12 +90,30 @@
       justify-items: left;
     }
 
-    //[data-node-host="VDivider"] {
-    //  border: 0;
-    //
-    //  [data-system-bar] {
-    //    background: transparent !important;
-    //  }
-    //}
+    [data-nodes="VRow"] {
+      display: flex;
+      margin: -4px;
+      flex-wrap: wrap;
+    }
+
+    [data-node-host="VCol"] {
+      flex: 1;
+      margin: 4px;
+
+      @for $i from 1 through 12 {
+        $w: 100% / $i;
+        &[data-cols="#{$i}"] {
+          flex: 0 0 calc(#{$w} - 8px);
+          max-width: calc(#{$w} - 8px);
+        }
+      }
+    }
+
+    [data-node-host="VIcon"] + [data-node-host="AttributesRead"] {
+      [data-addition="icon"],
+      [data-addition="icon-divider"]{
+        display: none;
+      }
+    }
   }
 </style>

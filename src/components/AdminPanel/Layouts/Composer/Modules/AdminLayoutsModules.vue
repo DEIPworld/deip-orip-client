@@ -2,7 +2,7 @@
   <div>
     <template v-for="(category, index) of modules">
       <div :key="`ttl-${index}`">
-        <v-subheader>{{ category.name }}</v-subheader>
+        <v-subheader class="text-overline">{{ category.name }}</v-subheader>
         <draggable
           :key="`drg-${index}`"
           :list="category.modules"
@@ -24,7 +24,7 @@
               rounded
             >
               <v-icon>{{ module.icon }}</v-icon>
-              <div class="text-caption text--secondary mt-1 text-truncate" style="line-height: 1.2">
+              <div class="text-caption text--secondary mt-1 text-truncate" style="line-height: 16px">
                 {{ module.name }}
               </div>
             </v-sheet>
@@ -44,9 +44,9 @@
   import RecursiveIterator from 'recursive-iterator';
   import kindOf from 'kind-of';
   import {
-    extendModuleObject, modulesComponents,
+    extendModuleObject, modulesBasic, modulesComponents, modulesGrid,
     modulesHelpers,
-    modulesLayout, modulesTable, modulesTypography,
+    modulesLayout, modulesTable, modulesTypography, modulesUi,
     setAs,
     setComponentProps
   } from '@/components/AdminPanel/Layouts/modules';
@@ -110,12 +110,20 @@
       modules() {
         return [
           {
-            name: 'Base Layout',
+            name: 'Layout',
             modules: extendModuleObject(modulesLayout)
           },
           {
-            name: 'Layout helpers',
-            modules: extendModuleObject(modulesHelpers)
+            name: 'Grid',
+            modules: extendModuleObject(modulesGrid)
+          },
+          {
+            name: 'Basic',
+            modules: extendModuleObject(modulesBasic)
+          },
+          {
+            name: 'UI components',
+            modules: extendModuleObject(modulesUi)
           },
           {
             name: 'Table',

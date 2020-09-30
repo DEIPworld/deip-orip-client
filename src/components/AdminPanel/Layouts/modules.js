@@ -3,20 +3,6 @@ import kindOf from 'kind-of';
 import { genObjectId } from '@/utils/helpers';
 import { createRange } from 'vuetify/lib/util/helpers';
 
-// partials
-
-const vCol = () => ({
-  component: 'VCol',
-  name: 'Column',
-  icon: 'mdi-view-grid-plus-outline',
-  children: []
-});
-
-const div = () => ({
-  component: 'div',
-  children: []
-});
-
 // helpers
 
 export const setComponentProps = (availableProps, props = {}) => ({
@@ -50,6 +36,23 @@ export const extendModuleObject = (obj, ext = { type: 'common' }) => {
 export const setAs = (type, val) => ({
   type: kindOf(type()),
   value: val || null
+});
+
+// partials
+
+const vCol = () => ({
+  component: 'VCol',
+  name: 'Column',
+  icon: 'mdi-view-grid-plus-outline',
+  ...setComponentProps({
+    cols: setAs(Number),
+  }),
+  children: []
+});
+
+const div = () => ({
+  component: 'div',
+  children: []
 });
 
 // modules
@@ -95,7 +98,7 @@ export const modulesLayout = [
   }
 ];
 
-export const modulesHelpers = [
+export const modulesGrid = [
   {
     component: 'DGrid',
     name: 'Auto grid',
@@ -106,13 +109,27 @@ export const modulesHelpers = [
     children: []
   },
   {
-    component: 'DBlock',
-    name: 'Block',
-    icon: 'mdi-card-text-outline',
+    component: 'VRow',
+    name: 'Grid row',
+    icon: 'mdi-view-grid-outline',
     ...setComponentProps({
-      title: setAs(String),
-      small: setAs(Boolean),
-      widget: setAs(Boolean)
+      noGutters: setAs(Boolean)
+    }),
+    children: [vCol(), vCol()]
+  },
+  vCol()
+];
+
+export const modulesBasic = [
+
+  {
+    component: 'VSheet',
+    name: 'Container',
+    icon: 'mdi-card-outline',
+    ...setComponentProps({
+      itemMaxWidth: setAs(Number)
+    }, {
+      color: 'transparent'
     }),
     children: []
   },
@@ -126,6 +143,20 @@ export const modulesHelpers = [
     icon: 'mdi-view-sequential-outline',
     children: []
   },
+  {
+    component: 'DBlock',
+    name: 'Block',
+    icon: 'mdi-card-text-outline',
+    ...setComponentProps({
+      title: setAs(String),
+      small: setAs(Boolean),
+      widget: setAs(Boolean)
+    }),
+    children: []
+  }
+];
+
+export const modulesUi = [
   {
     component: 'DMetaItem',
     name: 'Meta data',
@@ -151,17 +182,6 @@ export const modulesHelpers = [
     ...setComponentProps({
       size: setAs(Number)
     })
-  },
-  {
-    component: 'VSheet',
-    name: 'Container',
-    icon: 'mdi-card-outline',
-    ...setComponentProps({
-      itemMaxWidth: setAs(Number)
-    }, {
-      color: 'transparent'
-    }),
-    children: []
   },
   {
     component: 'VDivider',
@@ -209,7 +229,7 @@ export const modulesTable = [
       width: setAs(String)
     }),
     children: []
-  },
+  }
 ];
 
 export const modulesTypography = [

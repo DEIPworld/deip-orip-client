@@ -4,16 +4,14 @@
     class="dashed d-inline-flex align-center"
     :class="$style.host"
     :height="32"
+    :data-node-host="node.component"
     min-width="0px"
     max-width="100%"
   >
-    <!--    temp solution-->
-    <template v-if="node.type !== 'attribute'">
-      <v-icon class="px-2" size="16">
-        {{ icon }}
-      </v-icon>
-      <v-divider vertical class="dashed" />
-    </template>
+    <v-icon class="px-2" size="16" data-addition="icon">
+      {{ icon }}
+    </v-icon>
+    <v-divider vertical class="dashed" data-addition="icon-divider" />
 
     <div class="spacer text-caption text--secondary text-truncate ml-2">
       <template v-if="title">

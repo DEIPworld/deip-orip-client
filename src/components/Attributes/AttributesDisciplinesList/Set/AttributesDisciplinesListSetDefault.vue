@@ -1,12 +1,5 @@
 <template>
-  <d-block :title="`Select research ${attribute.title.toLowerCase()}`">
-    <v-radio-group v-model="isPersonal">
-      <d-stack horizontal>
-        <v-radio :value="true" label="Personal domains" class="ma-0" />
-        <v-radio :value="false" :label="`All ${attribute.title.toLowerCase()}`" class="ma-0" />
-      </d-stack>
-    </v-radio-group>
-
+  <div>
     <v-menu
       v-model="open"
       :close-on-content-click="false"
@@ -39,11 +32,11 @@
         />
       </v-sheet>
     </v-menu>
-
     <v-chip-group
+      v-if="internalValue.length"
       v-model="internalValue"
       column
-      class="mt-1"
+      class="pt-1 pb-0"
     >
       <v-chip
         v-for="id in sortedLabels"
@@ -56,7 +49,7 @@
         {{ getItemObject(id).label }}
       </v-chip>
     </v-chip-group>
-  </d-block>
+  </div>
 </template>
 
 <script>
@@ -71,11 +64,10 @@
 
   export default {
     name: 'AttributesDisciplinesListSet',
-    components: { DBlock, DStack },
+    components: { DBlock },
     mixins: [attributeSet],
     data() {
       return {
-        isPersonal: true,
         search: '',
         open: false,
         oldValue: [],
@@ -83,13 +75,8 @@
       };
     },
     computed: {
-      userDisciplinesTree() {
-        return disciplineTreeService.getNodesByIdList(
-          this.$currentUser.expertTokens.map((token) => token.discipline_external_id)
-        );
-      },
 
-      allDisciplinesTree() {
+      disciplinesTree() {
         function transform(obj) {
           for (const item of Object.keys(obj)) {
             const t = obj[item];
@@ -104,24 +91,20 @@
         return transform(disciplineTreeService.disciplineTree.children);
       },
 
-      disciplinesTree() {
-        return this.isPersonal ? this.userDisciplinesTree : this.allDisciplinesTree;
-      },
-
       disciplinesListIds() {
         const disciplines = [];
 
-        function transfrom(tree) {
+        function transform(tree) {
           for (const item of tree) {
             const { children } = item;
             disciplines.push(item.id);
             if (children) {
-              transfrom(children);
+              transform(children);
             }
           }
         }
 
-        transfrom(this.disciplinesTree);
+        transform(this.disciplinesTree);
 
         return disciplines;
       },
@@ -141,11 +124,6 @@
     },
 
     watch: {
-      isPersonal() {
-        this.$nextTick(() => {
-          this.internalValue = [];
-        });
-      },
       internalValue(val) {
         if (!val) {
           this.internalValue = [];
