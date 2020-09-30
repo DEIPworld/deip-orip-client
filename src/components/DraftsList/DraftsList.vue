@@ -23,7 +23,7 @@
         <v-btn
           icon
           small
-          @click="deleteDraft(draft)"
+          @click="deleteDraft(item)"
         >
           <v-icon small>
             delete
