@@ -33,8 +33,12 @@
           );
         }
 
+        let staticClass = 'v-select__selections';
+        staticClass += this.multiple ? ' py-0 reset-height' : '';
+        staticClass += this.multiple && children.length ? ' pt-1' : '';
+
         return this.$createElement('div', {
-          staticClass: this.multiple ? 'v-select__selections pb-0 pt-1 reset-height' : 'v-select__selections'
+          staticClass
         }, children);
       },
 
@@ -68,8 +72,8 @@
         if (Array.isArray(selections)) {
           selections.push(input);
         } else {
-          // selections.children = selections.children || [];
-          selections.children = [];
+          selections.children = selections.children || [];
+          // selections.children = [];
           selections.children.push(input);
         }
 
