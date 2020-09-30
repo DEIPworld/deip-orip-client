@@ -4,7 +4,8 @@
 
   import AttributesSet from '@/components/Attributes/AttributesSet';
 
-  import ContentList from '@/components/ContentsList/ContentsList';
+  import ContentsList from '@/components/ContentsList/ContentsList';
+  import DraftsList from '@/components/DraftsList/DraftsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   export default {
@@ -13,7 +14,8 @@
       AttributesSet,
 
       ReviewsList,
-      ContentList
+      ContentsList,
+      DraftsList
     },
     mixins: [componentsRenderer, Proxyable],
     props: {
