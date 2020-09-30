@@ -9,7 +9,7 @@
     <d-block widget>
       <v-text-field
         v-model="filterModel.searchTerm"
-        label="Search terms"
+        label="Search text..."
         outlined
         hide-details="auto"
       />
