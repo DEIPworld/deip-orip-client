@@ -1,5 +1,6 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import kindOf from 'kind-of';
+import RecursiveIterator from 'recursive-iterator';
 
 export const Filterable = {
   mixins: [Proxyable],
@@ -53,23 +54,11 @@ export const Filterable = {
     setCount() {
       let count = 0;
 
-      for (const key of Object.keys(this.internalValue)) {
-        const type = kindOf(this.internalValue[key]);
-
-        if ((type === 'string' || type === 'number') && this.internalValue[key]) {
+      for (const { parent, node } of new RecursiveIterator(this.internalValue)) {
+        if (kindOf(node) === 'array' && node.length) {
           count += 1;
         }
-
-        if (type === 'array' && this.internalValue[key].length) {
-          count += 1;
-        }
-
-        if (
-          type === 'object'
-          && this.internalValue[key]
-          && Object.keys(this.internalValue[key])
-            .filter((k) => this.internalValue[key][k].length).length
-        ) {
+        if (kindOf(node) === 'string' && node && kindOf(parent) !== 'array') {
           count += 1;
         }
       }
