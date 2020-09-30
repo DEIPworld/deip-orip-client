@@ -7,6 +7,10 @@ import { ATTR_TYPES } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
 import dotProp from 'dot-prop';
+import kindOf from 'kind-of';
+import { mapState } from 'vuex';
+import { componentStoreFactory } from '@/mixins/registerStore';
+import { usersStore } from '@/components/Users/store';
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
@@ -250,3 +254,28 @@ export const attributeSetOption = {
     }
   }
 };
+
+export const attributeReadUsers = {
+  mixins: [attributeRead, componentStoreFactory(usersStore, 'attribute.value')],
+  computed: {
+    ...mapState({
+      usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
+    })
+  },
+  created() {
+    const users = kindOf(this.attribute.value) === 'string'
+      ? [this.attribute.value]
+      : this.attribute.value;
+    this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
+      .then(() => {
+        this.$setReady();
+      });
+  },
+  methods: {
+    userDetailsRoute(name) {
+      return this.$currentUserName === name
+        ? { name: 'account.summary' }
+        : { name: 'UserDetails', params: { account_name: name } };
+    }
+  }
+}
