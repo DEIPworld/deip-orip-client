@@ -2,7 +2,7 @@
   <d-block ref="projectsView">
     <template #title>
       Projects
-      <v-badge offset-y="-8" offset-x="4" :content="itemsList.length || '0'" />
+      <v-badge v-if="$ready" offset-y="-8" offset-x="4" :content="itemsList.length || '0'" />
     </template>
 
     <template #titleAddon>
@@ -15,18 +15,28 @@
       <slot name="subtitle" />
     </template>
 
-    <v-data-iterator
-      :items="itemsList"
-      no-data-text="No Projects found for specified criteria"
-      :hide-default-footer="iteratorProps.hideDefaultFooter"
-      :footer-props="iteratorProps.footerProps"
-      :items-per-page="iteratorProps.itemsPerPage"
-      @update:page="onPaginationUpdated"
+    <v-skeleton-loader
+      class=""
+      :loading="!$ready"
+      min-height="232px"
+      type="cards-list"
+      :types="{
+        'cards-list': 'image@4'
+      }"
     >
-      <template #default="{ items }">
-        <component :is="listComponent" :items="items" />
-      </template>
-    </v-data-iterator>
+      <v-data-iterator
+        :items="itemsList"
+        no-data-text="No Projects found for specified criteria"
+        :hide-default-footer="iteratorProps.hideDefaultFooter"
+        :footer-props="iteratorProps.footerProps"
+        :items-per-page="iteratorProps.itemsPerPage"
+        @update:page="onPaginationUpdated"
+      >
+        <template #default="{ items }">
+          <component :is="listComponent" :items="items" />
+        </template>
+      </v-data-iterator>
+    </v-skeleton-loader>
   </d-block>
 </template>
 
@@ -100,13 +110,16 @@
     },
 
     created() {
+      const q = this.$route.query.rFilter;
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
 
       if (this.withFilter) {
         this.storageFilterModelKey = `${this.namespace}__filter`;
 
-        this.$ls.on(this.storageFilterModelKey, this.applyFilter, true);
+        this.$ls.on(this.storageFilterModelKey, this.applyFilter, !q);
+      } else {
+        this.$setReady();
       }
 
       this.itemsList = [...this.data];
@@ -147,6 +160,7 @@
         })
           .then((items) => {
             this.itemsList = items;
+            this.$setReady();
           })
           .catch((err) => {
             console.error(err);
@@ -155,3 +169,13 @@
     }
   };
 </script>
+
+<style lang="scss">
+  .v-skeleton-loader{
+    &__cards-list {
+      display: grid;
+      grid-gap: 1.5rem;
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

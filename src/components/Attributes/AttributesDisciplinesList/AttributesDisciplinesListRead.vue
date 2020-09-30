@@ -4,9 +4,7 @@
       <router-link
         :key="`link-${index}`"
         class="link text--secondary"
-        :to="{
-          name: 'ResearchFeed'
-        }"
+        :to="goToDiscipline(item.id)"
       >
         {{ item.label }}
       </router-link>
@@ -47,6 +45,20 @@
           this.getItemPath(id)
         );
       },
+      goToDiscipline(id) {
+        const q = {
+          researchAttributes: {
+            [this.attribute.researchAttributeId]: [id]
+          }
+        };
+
+        return {
+          name: 'ResearchFeed',
+          query: {
+            rFilter: JSON.stringify(q)
+          }
+        };
+      }
     }
   };
 </script>

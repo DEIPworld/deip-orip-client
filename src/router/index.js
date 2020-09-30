@@ -236,12 +236,7 @@ const router = new Router({
   }, {
     path: '/research-feed',
     name: 'ResearchFeed',
-    component: preliminaryDataLoader(ResearchFeed, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
-        loadPage(loadPagePromise, next);
-      }
-    })
+    component: ResearchFeed
   },
 
   {

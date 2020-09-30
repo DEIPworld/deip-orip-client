@@ -22,6 +22,7 @@
         class="main-nav"
         v-bind="themeSettings.appBar.tabs"
         right
+        optional
       >
         <v-tab
           v-for="(item, index) of mainMenu"
