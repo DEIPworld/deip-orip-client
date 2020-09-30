@@ -4,9 +4,7 @@
       <router-link
         :key="`link-${index}`"
         class="link text--secondary"
-        :to="{
-            name: 'ResearchFeed'
-          }"
+        :to="goToAttribute(item.value)"
       >
         {{ item.title }}
       </router-link>
@@ -32,6 +30,22 @@
       valueOptions() {
         // TODO: check
         return this.attributeInfo.valueOptions.filter(({ value }) => this.attribute.value && this.attribute.value.some((v) => v === value));
+      }
+    },
+    methods: {
+      goToAttribute(id) {
+        const q = {
+          researchAttributes: {
+            [this.attribute.researchAttributeId]: [id]
+          }
+        };
+
+        return {
+          name: 'ResearchFeed',
+          query: {
+            rFilter: JSON.stringify(q)
+          }
+        };
       }
     }
   };

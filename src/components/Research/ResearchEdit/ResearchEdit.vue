@@ -25,7 +25,7 @@
             color="primary"
             :disabled="processing || !isChanged"
           >
-            {{ formData.external_id ? 'Update research' : 'Create project' }}
+            {{ formData.external_id ? 'Update research' : 'Create' }}
           </v-btn>
         </d-stack>
       </div>

@@ -41,7 +41,7 @@
             :key="`${i}-discipline`"
             class="ma-2"
             outlined
-            @click="goToDiscipline(item.external_id)"
+            @click="goToDiscipline(item.external_id || item.id)"
           >
             {{ item.label }}
           </v-chip>
