@@ -146,6 +146,7 @@
       },
 
       applyFilter() {
+        this.$setReady(false);
         const filter = this.$ls.get(this.storageFilterModelKey);
 
         this.$store.dispatch('feed/loadResearchFeed', {

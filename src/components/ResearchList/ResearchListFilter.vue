@@ -65,7 +65,8 @@
         this.applyFilter();
         this.$nextTick(() => {
           this.$refs.filter.process();
-        })
+          this.$router.replace({ query: {} });
+        });
       } else if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }

@@ -83,7 +83,8 @@
     },
     computed: {
       ...mapGetters({
-        drafts: 'ResearchDrafts/list'
+        drafts: 'ResearchDrafts/list',
+        research: 'Research/data'
       })
     },
     created() {
@@ -104,12 +105,17 @@
         if (draft.type === 'dar') {
           // we have to reload the window as Texture InMemory buffer is getting flushed after the first saving
           // and doesn't persist new changes for several instances during the current session
-          window.location.replace(`${window.location.href}/!draft?ref=${draft._id}`);
-          location.reload();
+          // window.location.replace(`${window.location.href}/!draft?ref=${draft._id}`);
+          // location.reload();
+          //////////////// START TEMP SOLUTION ///////////////////
+          this.$router.push({
+            path: `/${decodeURIComponent(this.research.researchGroup.permlink)}/research/${decodeURIComponent(this.research.permlink)}/!draft?ref=${draft._id}`
+          });
+          //////////////// END TEMP SOLUTION ///////////////////
         } else {
           const params = {
-            group_permlink: this.$store.getters['Research/data'].research_group.permlink,
-            research_permlink: this.$store.getters['Research/data'].permlink,
+            research_group_permlink: this.research.researchGroup.permlink,
+            research_permlink: this.research.permlink,
             content_permlink: '!draft'
           };
           const query = { ref: draft._id };

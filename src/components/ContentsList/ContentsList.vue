@@ -19,7 +19,7 @@
         :to="{
           name: 'ResearchContentDetails',
           params: {
-            research_group_permlink: $store.getters['Research/data'].research_group.permlink,
+            research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
             content_permlink: item.permlink,
             research_permlink: $store.getters['Research/data'].permlink,
           }
