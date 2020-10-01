@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Start a project">
+  <full-screen-view :title="$t('defaultNaming.forms.researchRequest.start')">
     <research-request-form-view
       v-model="formData"
       :disabled="formProcessing"
@@ -54,7 +54,7 @@
 
         researchService.createResearchApplicationViaOffchain(researcherPrivKey, formData)
           .then(({ rm }) => {
-            this.$notifier.showSuccess('Project request has been applied successfully. We will notify you as soon as your project form will be approved.');
+            this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successReq'));
             return deipRpc.api.getResearchAsync(rm._id);
           })
           .then((research) => {
@@ -73,7 +73,7 @@
           .catch((err) => {
             this.formProcessing = false;
             console.error(err);
-            this.$notifier.showError('An error occurred while creating project, please try again later');
+            this.$notifier.showError(this.$t('defaultNaming.forms.researchRequest.errReq'));
           });
       }
     }

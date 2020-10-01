@@ -9,7 +9,7 @@
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
-              ECI
+              {{ $t('defaultNaming.eciShort') }}
             </div>
           </v-col>
 
@@ -19,7 +19,7 @@
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
-              Percentile rank
+              {{ $t('defaultNaming.percentile') }}
             </div>
           </v-col>
 
@@ -32,7 +32,7 @@
             </div>
             <v-divider class="my-3" />
             <div class="text-body-1 grey--text text-center">
-              Growth rate
+              {{ $t('defaultNaming.growthRate') }}
             </div>
           </v-col>
         </v-row>
@@ -69,7 +69,7 @@
           ...(
             this.data.contributions && this.data.contributions.length
               ? [{
-                label: 'Contributions',
+                label: this.$t('defaultNaming.contributions'),
                 value: this.data.contributions.length
               }]
               : []
@@ -77,7 +77,7 @@
           ...(
             this.data.researches && this.data.researches.length
               ? [{
-                label: 'Citations',
+                label: this.$t('defaultNaming.citations'),
                 value: this.data.researches.length
               }]
               : []
@@ -85,7 +85,7 @@
           ...(
             this.data.researches && this.data.researches.length
               ? [{
-                label: 'H-index',
+                label: this.$t('defaultNaming.hIndex'),
                 value: this.data.researches.length
               }]
               : []

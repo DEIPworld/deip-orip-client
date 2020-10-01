@@ -181,7 +181,7 @@
             return false;
           },
           isDigit: (val) => (val && val.match(/^\d+$/) === null ? 'Incorrect amount format' : !!val),
-          required: (val) => !!val || 'This field is required',
+          required: (val) => !!val || this.$t('defaultNaming.fieldRules.required'),
           payentNumber: (v) => {
             if (!v) return 'Required';
             if (v.length < PAYMENT_NUMBER_MIN_LENGTH) {

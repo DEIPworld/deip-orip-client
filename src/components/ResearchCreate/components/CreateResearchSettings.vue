@@ -2,16 +2,16 @@
   <v-row no-gutters justify="center">
     <v-col cols="7">
       <div class="text-h5 text-center mb-3">
-        Project settings
+        {{ $t('createResearch.settingsBlock.settings') }}
       </div>
 
       <div class="text-h6 text-align-left mb-3">
-        Visibility
+        {{ $t('createResearch.settingsBlock.visibility') }}
       </div>
 
       <div>
         <div class="display-inline-block" :class="{'grey--text':isPublic}">
-          Private project
+          {{ $t('createResearch.settingsBlock.private') }}
         </div>
         <div class="display-inline-block">
           <v-switch
@@ -22,7 +22,7 @@
           />
         </div>
         <div class="display-inline-block" :class="{'grey--text':!isPublic}">
-          Public project
+          {{ $t('createResearch.settingsBlock.public') }}
         </div>
       </div>
 
@@ -59,7 +59,7 @@
 
       <div>
         <div class="text-h6 mb-3">
-          Partners
+          {{ $t('createResearch.settingsBlock.partners') }}
         </div>
         <research-partners :partners="research.partners" />
       </div>
@@ -68,7 +68,8 @@
         <v-btn text small @click.native="prevStep()">
           <v-icon dark class="pr-1">
             keyboard_arrow_left
-          </v-icon>Back
+          </v-icon>
+          {{ $t('createResearch.settingsBlock.back') }}
         </v-btn>
         <v-btn
           :loading="isLoading"
@@ -76,7 +77,7 @@
           color="primary"
           @click.native="nextStep()"
         >
-          Create project
+          {{ $t('createResearch.settingsBlock.next') }}
         </v-btn>
       </div>
     </v-col>

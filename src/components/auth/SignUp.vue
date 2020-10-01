@@ -12,7 +12,7 @@
         <v-icon left>
           arrow_back
         </v-icon>
-        Explorer
+        {{ $t('signUp.free.toolbarButton') }}
       </v-btn>
     </template>
 
@@ -20,7 +20,7 @@
       <v-col class="d-flex align-center justify-center">
         <v-sheet max-width="800" class="pa-12 mx-auto">
           <div class="text-h5 font-weight-bold mb-10">
-            Registration
+            {{ $t('signUp.free.form.title') }}
           </div>
           <v-form
             v-show="!isServerValidated"
@@ -30,7 +30,7 @@
             <v-text-field
               v-model="formData.email"
               outlined
-              label="Email"
+              :label="$t('signUp.free.form.emailField')"
               :rules="[rules.required, rules.email]"
               :disabled="isSaving"
             />
@@ -38,7 +38,7 @@
             <v-text-field
               v-model="formData.firstName"
               outlined
-              label="First name"
+              :label="$t('signUp.free.form.firstNameFiled.label')"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
             />
@@ -46,7 +46,7 @@
             <v-text-field
               v-model="formData.lastName"
               outlined
-              label="Last name"
+              :label="$t('signUp.free.form.lastNameFiled.label')"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
             />
@@ -55,7 +55,7 @@
               v-model="formData.username"
               outlined
               name="username"
-              label="Username"
+              :label="$t('signUp.free.form.usernameField')"
               :rules="[
                 rules.required,
                 rules.unique,
@@ -70,7 +70,7 @@
               v-model="formData.masterPassword"
               outlined
               class="mt-4"
-              label="Master Password"
+              :label="$t('signUp.free.form.passwordField')"
               :disabled="isSaving"
               :rules="[rules.required, rules.masterPassword]"
               :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
@@ -84,7 +84,7 @@
               v-model="formData.reEnterMasterPassword"
               outlined
               class="mt-2"
-              label="Re-Enter Master Password"
+              :label="$t('signUp.free.form.rePasswordField')"
               :disabled="isSaving"
               :rules="[rules.required, rules.reEnterMasterPassword]"
               :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
@@ -93,23 +93,18 @@
             />
 
             <div class="text-justify caption grey--text">
-              Please confirm you have saved the generated key and want to be added to the list of private beta
-              participants with the information specified above:
+              {{ $t('signUp.free.form.savedKeyText') }}
             </div>
 
             <v-checkbox
               v-model="formData.isMasterPasswordSaved"
               class="my-2 pa-0"
-              label="I have saved the password and want to be added to the list"
+              :label="$t('signUp.free.form.savedKeyCheckbox.label')"
               :disabled="isSaving"
               hide-details
             />
 
-            <div class="pb-4 text-justify caption grey--text">
-              No data is stored until you press “Finish Registration” button.
-              For more information about our privacy terms please read <a class="a" target="_blank" href="https://deip.world/DEIP%20PRIVACY%20POLICY.pdf">Privacy Policy</a>.
-              By clicking below, you agree that we may process ypur information in accordance with these terms.
-            </div>
+            <div class="pb-4 text-justify caption grey--text" v-html="$t('signUp.free.form.privacyText', {link:'https://deip.world/pdf/PRIVACY-POLICY-January-22-2020.pdf'})"></div>
 
             <v-btn
               block
@@ -118,14 +113,14 @@
               :disabled="!formData.isMasterPasswordSaved || isSaving"
               @click="finishRegistration()"
             >
-              Finish registration
+              {{ $t('signUp.free.form.submitBtn') }}
             </v-btn>
             <div class="primary--text text-center mt-2">
-              Already have an account?
+              {{ $t('signUp.free.form.bottomText') }}
               <router-link
                 :to="{ name: 'SignIn' }"
               >
-                Sign In
+                {{ $t('signUp.free.form.bottomTextLink') }}
               </router-link>
             </div>
           </v-form>
@@ -142,31 +137,31 @@
           style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;"
         >
           <div class="text-h2 font-weight-bold">
-            Open Research and Innovation Platform
+            {{ $t('signUp.free.title') }}
           </div>
           <div class="text-subtitle-1 mt-12">
             <v-icon small>
               mdi-message-reply-text
             </v-icon>
-            <span class="ml-4">Collaboration</span>
+            <span class="ml-4">{{ $t('signUp.free.collaboration') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-lightbulb-on
             </v-icon>
-            <span class="ml-4">Project tokenization</span>
+            <span class="ml-4">{{ $t('signUp.free.tokenization') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-shield-check
             </v-icon>
-            <span class="ml-4">Licensing of intellectual property</span>
+            <span class="ml-4">{{ $t('signUp.free.licensing') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-account-multiple-plus
             </v-icon>
-            <span class="ml-4">Crowd investing</span>
+            <span class="ml-4">{{ $t('signUp.free.investing') }}</span>
           </div>
         </v-sheet>
       </v-col>
@@ -215,11 +210,11 @@
         },
 
         rules: {
-          required: (value) => !!value || 'This field is required',
-          unique: (value) => !!value && this.isUsernameVerifyed !== false || 'Username should be unique in system',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          unique: (value) => !!value && this.isUsernameVerifyed !== false || this.$t('signUp.free.form.rules.unique'),
           nameChars: (value) => (
             value.match(/^[a-z][a-z ,.'-]*$/i) !== null
-            || 'Incorrect value'
+            || this.$t('signUp.free.form.rules.nameChars')
           ),
           usernameFormat: (value) => {
             const result = deipRpc.utils.validateAccountName(value);
@@ -227,18 +222,18 @@
           },
           email: (value) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return pattern.test(value) || 'Invalid E-mail';
+            return pattern.test(value) || this.$t('signUp.free.form.rules.email');
           },
           masterPassword: (value) => {
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-              return 'Master password should be at least 10 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMinLength');
             } if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-              return 'Master password max length is 100 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMaxLength');
             }
 
             return true;
           },
-          reEnterMasterPassword: (value) => value === this.formData.masterPassword || 'Password doesn\'t match'
+          reEnterMasterPassword: (value) => value === this.formData.masterPassword || this.$t('signUp.free.form.rules.reEnterMasterPassword')
         }
       };
     },
@@ -275,12 +270,12 @@
         }).then(() => {
           this.isSaving = false;
           this.isServerValidated = true;
-          this.$notifier.showSuccess(`Account '${this.formData.username}' has been created successfully! Use the private key to sign in to the DEIP platform!`);
+          this.$notifier.showSuccess(this.$t('signUp.free.form.success', {account: this.formData.username}));
           this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
           this.isSaving = false;
           const message = err.response && err.response.data
-            || 'Sorry, the service is temporarily unavailable, please try again later';
+            || this.$t('signUp.free.form.err');
 
           this.$notifier.showError(message);
           console.error(err);

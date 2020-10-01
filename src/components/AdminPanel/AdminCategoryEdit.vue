@@ -5,7 +5,7 @@
         v-model="categoryTitle"
         outlined
         hide-details
-        label="Category name"
+        :label="$t('adminRouting.categories.categoryEdit.nameField')"
         :rules="[rules.required]"
         :disabled="isSaving"
       />
@@ -18,7 +18,7 @@
           :disabled="isSaving"
           @click="$router.back()"
         >
-          Cancel
+          {{ $t('adminRouting.categories.categoryEdit.cancel') }}
         </v-btn>
         <v-btn
           color="primary"
@@ -26,7 +26,7 @@
           :disabled="isSaving"
           @click="save()"
         >
-          Save
+          {{ $t('adminRouting.categories.categoryEdit.submitBtn') }}
         </v-btn>
       </div>
     </v-form>
@@ -47,7 +47,7 @@
     props: {
       title: {
         type: String,
-        default: 'Sign Up'
+        default() { return this.$t('adminRouting.categories.categoryEdit.title'); }
       },
       hideAgree: {
         type: Boolean,
@@ -56,7 +56,7 @@
     },
     data() {
       return {
-        rules: { required: (value) => !!value || 'This field is required' },
+        rules: { required: (value) => !!value || this.$t('defaultNaming.fieldRules.required') },
         categoryTitle: '',
         isFormValid: false,
         isSaving: false

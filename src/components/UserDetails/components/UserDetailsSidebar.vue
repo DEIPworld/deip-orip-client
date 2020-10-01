@@ -2,7 +2,7 @@
   <div>
     <d-block v-if="isOwner && hasInvites" widget>
       <div id="invites" class="text-h6 font-weight-bold">
-        Invites: {{ invites.length }}
+        {{ $t('userDetailRouting.sidebar.invites') }} {{ invites.length }}
       </div>
       <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
       <div
@@ -18,7 +18,7 @@
           {{ invite.group.name }}
         </router-link>
         <div class="py-2 caption font-weight-medium">
-          invited you to join them with
+          {{ $t('userDetailRouting.sidebar.invitedYou') }}
         </div>
         <div class="text-right full-width">
           <v-btn
@@ -28,7 +28,7 @@
             text
             @click="openInviteDetailsDialog(invite, index)"
           >
-            View
+            {{ $t('userDetailRouting.sidebar.viewBtn') }}
           </v-btn>
         </div>
       </div>
@@ -66,7 +66,7 @@
                 :loading="inviteDetailsDialog.isApprovingInvite"
                 @click="approveInvite()"
               >
-                Accept
+                {{ $t('userDetailRouting.sidebar.acceptBtn') }}
               </v-btn>
             </div>
             <div class="w-100 py-2">
@@ -78,7 +78,7 @@
                 :loading="inviteDetailsDialog.isRejectingInvite"
                 @click="rejectInvite()"
               >
-                Reject
+                {{ $t('userDetailRouting.sidebar.rejectBtn') }}
               </v-btn>
             </div>
           </v-card-actions>
@@ -88,7 +88,7 @@
 
     <d-block v-if="isOwner && hasReviewRequests" widget separated>
       <div id="review-requests" class="text-h6 font-weight-bold pa-4">
-        Review Requests: {{ reviewRequests.length }}
+        {{ $t('userDetailRouting.sidebar.reviewReq') }} {{ reviewRequests.length }}
       </div>
       <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
       <div
@@ -98,8 +98,7 @@
       >
         <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
         <div class="py-2 caption font-weight-medium">
-          requests your review for "{{ reviewRequest.research.title }}"
-          research
+          {{ $t('userDetailRouting.sidebar.reqYouReview', { title:reviewRequest.research.title }) }}
         </div>
 
         <div class="pt-2 full-width display-flex justify-space-between">
@@ -114,7 +113,7 @@
               content_permlink: encodeURIComponent(reviewRequest.content.permlink)
             }}"
           >
-            Proceed
+            {{ $t('userDetailRouting.sidebar.proceedBtn') }}
           </v-btn>
           <v-btn
             color="red"
@@ -124,7 +123,7 @@
             :loading="reviewRequest.isDenying"
             @click="denyReviewRequest(reviewRequest._id)"
           >
-            Reject
+            {{ $t('userDetailRouting.sidebar.rejectBtn') }}
           </v-btn>
         </div>
         <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />

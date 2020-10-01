@@ -2,12 +2,11 @@
   <v-row no-gutters justify="center">
     <v-col cols="7">
       <div class="text-h5 text-center mb-3">
-        Roadmap
+        {{ this.$t('createResearch.roadmapBlock.roadmap') }}
       </div>
 
       <div class="text-subtitle-1 text-center">
-        Let’s create a roadmap for your project. Well-presented and
-        detailed roadmap attracts more investors to help you to get the funding
+        {{ this.$t('createResearch.roadmapBlock.roadmapText') }}
       </div>
 
       <div class="pt-4">
@@ -19,7 +18,7 @@
           <v-icon dark class="pr-1">
             keyboard_arrow_left
           </v-icon>
-          Back
+          {{ this.$t('createResearch.teamBlock.back') }}
         </v-btn>
         <v-btn
           :loading="isLoading"
@@ -27,7 +26,7 @@
           color="primary"
           @click.native="nextStep()"
         >
-          Next step
+          {{ this.$t('createResearch.teamBlock.next') }}
         </v-btn>
       </div>
     </v-col>

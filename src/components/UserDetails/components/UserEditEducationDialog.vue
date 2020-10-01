@@ -1,17 +1,17 @@
 <template>
-  <full-screen-view title="Education">
+  <full-screen-view :title="$t('userDetailRouting.educationDialog.title')">
     <v-form ref="form" v-model="isFormValid">
-      <d-form-block title="Educational institution">
+      <d-form-block :title="$t('userDetailRouting.educationDialog.educationalBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.educationalInstitution"
             outlined
-            label="Educational institution"
+            :label="$t('userDetailRouting.educationDialog.educationalBlock.educationalField')"
             :rules="[ rules.required ]"
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Dates attended">
+      <d-form-block :title="$t('userDetailRouting.educationDialog.datesBlock.title')">
         <v-col cols="5">
           <v-menu
             v-model="dateFromMenu"
@@ -25,7 +25,7 @@
                 ref="dateFromInput"
                 v-model="formData.period.from"
                 outlined
-                label="From"
+                :label="$t('userDetailRouting.educationDialog.datesBlock.fromField')"
                 append-icon="event"
                 readonly
                 :rules="[
@@ -52,7 +52,7 @@
                 ref="dateToInput"
                 v-model="formData.period.to"
                 outlined
-                label="To"
+                :label="$t('userDetailRouting.educationDialog.datesBlock.toField')"
                 append-icon="event"
                 :disabled="formData.isActive"
                 :rules="[
@@ -71,40 +71,40 @@
           <v-checkbox
             v-model="formData.isActive"
             class="ma-0 pa-0 pb-4"
-            label="In progress"
+            :label="$t('userDetailRouting.educationDialog.datesBlock.inProgressField')"
             hide-details
             style="max-width: 140px"
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Degree obtained">
+      <d-form-block :title="$t('userDetailRouting.educationDialog.obtainedBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.degree"
             outlined
-            label="Degree obtained"
+            :label="$t('userDetailRouting.educationDialog.obtainedBlock.obtainedField')"
             :rules="[ rules.required ]"
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Area of study">
+      <d-form-block :title="$t('userDetailRouting.educationDialog.studyBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.area"
             outlined
-            label="Area of study"
+            :label="$t('userDetailRouting.educationDialog.studyBlock.studyField')"
             :rules="[ rules.required ]"
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Description (optional)">
+      <d-form-block :title="$t('userDetailRouting.educationDialog.descriptionBlock.title')">
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
             outlined
             :rows="6"
             auto-grow
-            label="Description"
+            :label="$t('userDetailRouting.educationDialog.descriptionBlock.descriptionField')"
           />
         </v-col>
       </d-form-block>
@@ -118,7 +118,7 @@
             :disabled="isProcessing"
             @click.native="$router.back()"
           >
-            Cancel
+            {{ $t('userDetailRouting.educationDialog.cancel') }}
           </v-btn>
           <v-btn
             class="ma-0"
@@ -127,7 +127,7 @@
             :loading="isProcessing"
             @click="save()"
           >
-            Save
+            {{ $t('userDetailRouting.educationDialog.submitBtn') }}
           </v-btn>
         </slot>
       </div>
@@ -171,21 +171,21 @@
         isFormValid: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
-          requiredDateTo: (value) => this.formData.isActive || !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          requiredDateTo: (value) => this.formData.isActive || !!value || this.$t('defaultNaming.fieldRules.required'),
           startDateValidation: (value) => {
             if (!value || !this.formData.period.to) {
               return true;
             }
 
-            return Date.parse(value) < Date.parse(this.formData.period.to) ? true : 'Start date should be smaller than end date';
+            return Date.parse(value) < Date.parse(this.formData.period.to) ? true : this.$t('defaultNaming.fieldRules.startDate');
           },
           endDateValidation: (value) => {
             if (!value || !this.formData.period.from) {
               return true;
             }
 
-            return Date.parse(value) > Date.parse(this.formData.period.from) ? true : 'End date should be greater than start date';
+            return Date.parse(value) > Date.parse(this.formData.period.from) ? true : this.$t('defaultNaming.fieldRules.endDate');
           }
         }
       };

@@ -6,19 +6,19 @@
   >
     <template v-if="isAutoAccepted">
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      updated
+      {{ $t('notifications.updated') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      team data
+      {{ $t('notifications.teamData') }}
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      updated team data
+      {{ $t('notifications.updatedTeam') }}
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      proposed to update
+      {{ $t('notifications.propUpdate') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      team data
+      {{ $t('notifications.teamData') }}
     </template>
   </user-notifications-list-item>
 </template>

@@ -93,16 +93,16 @@
         isFormValid: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
 
           startDateShouldBeSmaller: (val) => !this.grantInfo.endDate
             || Date.parse(val) < Date.parse(this.grantInfo.endDate)
-            || 'Start date should be smaller than end date',
+            || this.$t('defaultNaming.fieldRules.startDate'),
 
           endDateShouldBeGreater: (val) => !this.grantInfo.startDate
             || Date.parse(val) > Date.parse(this.grantInfo.startDate)
-            || 'End date should be greater than start date'
+            || this.$t('defaultNaming.fieldRules.endDate')
         }
       };
     },

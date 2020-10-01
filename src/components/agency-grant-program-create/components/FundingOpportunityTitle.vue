@@ -53,7 +53,7 @@
         MIN_FOA_NUMBER_LENGTH: 3,
         MAX_FOA_NUMBER_LENGTH: 15,
         rules: {
-          required: (v) => !!v || 'This field is required',
+          required: (v) => !!v || this.$t('defaultNaming.fieldRules.required'),
           foaNumber: (v) => {
             if (v.length < this.MIN_FOA_NUMBER_LENGTH) {
               return `Award number length should be greater/equal than ${this.MIN_FOA_NUMBER_LENGTH}`;

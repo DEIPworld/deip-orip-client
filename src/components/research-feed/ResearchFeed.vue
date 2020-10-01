@@ -10,7 +10,7 @@
       <d-layout-section-main>
         <d-stack>
           <div class="text-h3 uppercase">
-            {{ $t('researchFeed.headerTitle') }}
+            {{ $t('researchFeed.title') }}
           </div>
 
           <!--          <v-btn-->
@@ -19,16 +19,15 @@
           <!--            color="primary"-->
           <!--            class="ma-0"-->
           <!--          >-->
-          <!--            Start a project-->
+          <!--            {{ $t('researchFeed.startProjectBtn') }}-->
           <!--          </v-btn>-->
 
           <div v-if="!$isLoggedIn">
             <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
-              Sign in
+              {{ $t('researchFeed.signInBtn') }}
             </v-btn>
             <div class="white--text text-body-1 mt-2">
-              After creating an account/log in you can add
-              new projects or enjoy shared materials
+              {{ $t('researchFeed.signInText') }}
             </div>
           </div>
         </d-stack>

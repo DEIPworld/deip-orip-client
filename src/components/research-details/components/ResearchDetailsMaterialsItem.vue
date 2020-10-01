@@ -56,7 +56,7 @@
                     </v-icon>
                   </v-btn>
                 </template>
-                <span>Browse references</span>
+                <span>Browse references{{ $t('researchDetails.references') }}</span>
               </v-tooltip>
             </div>
 

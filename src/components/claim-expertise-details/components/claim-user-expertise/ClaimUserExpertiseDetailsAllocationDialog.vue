@@ -88,7 +88,7 @@
       return {
         DIGIT_REGEX: /^\d+$/,
         digitRule: (value) => (value.match(this.DIGIT_REGEX) === null ? 'Incorrect amount format' : true),
-        required: (value) => !!value || 'This field is required',
+        required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
         isFormValid: false,
         isLoading: false,
 

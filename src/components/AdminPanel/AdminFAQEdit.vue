@@ -6,7 +6,7 @@
         outlined
         auto-grow
         rows="1"
-        label="Question"
+        :label="$t('adminRouting.faq.faqEdit.questionField')"
         :rules="[rules.required]"
         :disabled="isSaving"
       />
@@ -15,7 +15,7 @@
         outlined
         auto-grow
         rows="8"
-        label="Answer"
+        :label="$t('adminRouting.faq.faqEdit.answerField')"
         :rules="[rules.required]"
         :disabled="isSaving"
       />
@@ -25,7 +25,7 @@
             v-model="formData.isPublished"
             class="ma-0 pa-0"
             hide-details
-            label="Publish on FAQ page"
+            :label="$t('adminRouting.faq.faqEdit.publishField')"
           />
         </v-col>
         <v-spacer />
@@ -38,7 +38,7 @@
             :disabled="isSaving"
             @click="$router.back()"
           >
-            Cancel
+            {{ $t('adminRouting.faq.faqEdit.cancel') }}
           </v-btn>
           <v-btn
             color="primary"
@@ -46,7 +46,7 @@
             :disabled="isSaving"
             @click="save()"
           >
-            Save
+            {{ $t('adminRouting.faq.faqEdit.submitBtn') }}
           </v-btn>
         </v-col>
       </v-row>
@@ -68,7 +68,7 @@
     props: {
       title: {
         type: String,
-        default: 'Sign Up'
+        default() { return this.$t('adminRouting.faq.faqEdit.title'); }
       },
       hideAgree: {
         type: Boolean,
@@ -77,7 +77,7 @@
     },
     data() {
       return {
-        rules: { required: (value) => !!value || 'This field is required' },
+        rules: { required: (value) => !!value || this.$t('defaultNaming.fieldRules.required') },
         isFormValid: false,
         isSaving: false,
         formData: {

@@ -1,10 +1,10 @@
 <template>
-  <admin-view title="Project categories">
+  <admin-view :title="$t('adminRouting.categories.title')">
     <template #toolbarAction>
       <v-btn outlined color="primary" :to="{name: 'admin.categories.add'}">
         <v-icon left>
           category
-        </v-icon>Create catergory
+        </v-icon>{{ $t('adminRouting.categories.create') }}
       </v-btn>
     </template>
 
@@ -56,12 +56,12 @@
 
         categoriesTableHeader: [
           {
-            text: 'Name',
+            text: this.$t('adminRouting.categories.categoriesTable.name'),
             value: 'text',
             sortable: false
           },
           {
-            text: 'Assigned projects',
+            text: this.$t('adminRouting.categories.categoriesTable.projects'),
             value: 'researchCount',
             align: 'center',
             sortable: false
@@ -95,11 +95,9 @@
       openActionDialog(type, item) {
         const types = {
           delete: {
-            title: 'Delete category?',
-            description: `Category  will be deleted permanently.
-              Assigned projects will stay without category
-            `,
-            actionLabel: 'Delete',
+            title: this.$t('adminRouting.categories.deleteDialog.title'),
+            description: this.$t('adminRouting.categories.deleteDialog.description'),
+            actionLabel: this.$t('adminRouting.categories.deleteDialog.submitBtn'),
             action: () => { this.deleteCategory(item); }
           }
         };

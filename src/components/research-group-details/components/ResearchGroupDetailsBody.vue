@@ -22,15 +22,15 @@
         </div>
         <div class="text-body-2">
           {{ group ? group.description : '' }}
-          <v-btn
-            v-if="isJoinBtnAvailable"
-            class="mt-4"
-            color="primary"
-            outlined
-          >
-            Join team
-          </v-btn>
         </div>
+        <v-btn
+          v-if="isJoinBtnAvailable"
+          class="mt-4"
+          color="primary"
+          outlined
+        >
+          {{ $t('researchGroupDetails.join') }}
+        </v-btn>
       </v-col>
       <v-col v-if="(isJoinRequestsSectionAvailable || invites.length) && isResearchGroupMember" cols="auto">
         <research-group-requests />
@@ -64,7 +64,7 @@
           small
           @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
         >
-          Invite member
+          {{ $t('researchGroupDetails.invite') }}
         </v-btn>
       </template>
     </member-list>
@@ -79,7 +79,7 @@
           :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'research.create' } : { name: 'CreateResearchProposal' }"
           outlined
         >
-          Start a project
+          {{ $t('researchGroupDetails.start') }}
         </v-btn>
       </template>
     </research-list>
@@ -213,11 +213,11 @@
           approver: null
         })
           .then(() => {
-            this.$notifier.showSuccess('Dropout Proposal has been created successfully!');
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.successDrop'));
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occurred while creating proposal, please try again later');
+            this.$notifier.showError(this.$t('researchGroupDetails.errDrop'));
             console.error(err);
           })
           .finally(() => {

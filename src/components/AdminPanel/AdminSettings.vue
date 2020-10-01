@@ -1,7 +1,7 @@
 <template>
-  <admin-view title="Settings">
+  <admin-view :title="$t('adminRouting.settings.title')">
     <div class="text-h6 mb-6">
-      Change banner on Explore page
+      {{ $t('adminRouting.settings.change') }}
     </div>
     <div class="display-flex flex-wrap">
       <div class="mr-6 mb-2">
@@ -32,7 +32,7 @@
             color="primary"
             @click="updateBanner()"
           >
-            Update banner
+            {{ $t('adminRouting.settings.update') }}
           </v-btn>
         </div>
       </div>
@@ -81,7 +81,7 @@
       bannerUploadSuccess(file, response) {
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
-        this.$notifier.showSuccess('Banner image has been updated successfully ! Refresh the page to see thr changes');
+        this.$notifier.showSuccess(this.$t('adminRouting.settings.success'));
       },
 
       bannerUploadSending(file, xhr, formData) {
@@ -95,7 +95,7 @@
 
         this.$refs.tenantBanner.removeAllFiles();
         this.isUploadingTenantBanner = false;
-        this.$notifier.showError('Sorry, an error occurred while uploading banner image, please try again later');
+        this.$notifier.showError(this.$t('adminRouting.settings.err'));
       },
 
       updateBanner() {

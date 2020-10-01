@@ -11,17 +11,17 @@
       <v-col cols="auto" class="text-center">
         <img width="64px" class="mb-3" src="/assets/img/follow-project.png">
         <div class="text-h5 mb-3">
-          You’re not following any project yet
+          {{ $t('account.followingProjects.notFollPr') }}
         </div>
         <div class="text-body-1 mb-12">
-          We have a lot of incredible projects on our platform. Take a look
+          {{ $t('account.followingProjects.aLotOfPr') }}
         </div>
         <div>
           <v-btn
             :to="{ name: 'ResearchFeed' }"
             color="primary"
           >
-            Browse projects
+            {{ $t('account.followingProjects.browseBtn') }}
           </v-btn>
         </div>
       </v-col>

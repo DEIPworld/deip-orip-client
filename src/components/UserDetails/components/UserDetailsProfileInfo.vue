@@ -40,7 +40,7 @@
             <div class="mb-2">
               <span v-if="isOwner && !isLocationSpecified" class="owner-hint mt-1">
                 <v-icon size="18">location_on</v-icon>
-                Add location info
+                {{ $t('userDetailRouting.profileInfo.location') }}
               </span>
               <span v-else class="mt-1">
                 <v-icon v-if="isLocationSpecified" size="18">location_on</v-icon>
@@ -62,7 +62,7 @@
                 today
               </v-icon>
               <span class="font-weight-medium">
-                Member since:
+                {{ $t('userDetailRouting.profileInfo.regSince') }}
               </span>
               {{ moment(userInfo.profile.created_at).format('MMM DD, YYYY') }}
             </div>
@@ -70,7 +70,7 @@
             <div>
               <span v-if="isOwner && !userInfo.profile.email" class="owner-hint">
                 <v-icon size="18">mail</v-icon>
-                Add your email here
+                {{ $t('userDetailRouting.profileInfo.email') }}
               </span>
               <span v-else>
                 <v-icon v-if="userInfo.profile.email" size="18">mail</v-icon>
@@ -89,11 +89,11 @@
           <v-icon small>
             subject
           </v-icon>
-          Add short bio
+          {{ $t('userDetailRouting.profileInfo.bio') }}
         </div>
         <div v-else>
           <div class="text-h6 mb-2">
-            About
+            {{ $t('userDetailRouting.profileInfo.about') }}
           </div>
           <div class="text-body-2">
             {{ userInfo.profile.bio }}

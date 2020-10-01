@@ -2,7 +2,7 @@
   <div v-if="isProfileAvailable && (isEducationSpecified || isOwner)" class="py-2">
     <div class="d-flex mb-1">
       <div class="text-h6 text-left align-self-center">
-        Education
+        {{ $t('userDetailRouting.detailsEducation.title') }}
       </div>
       <v-spacer v-if="isOwner" />
       <div v-if="isOwner">
@@ -16,7 +16,7 @@
             name: 'account.education'
           }"
         >
-          Add
+          {{ $t('userDetailRouting.detailsEducation.add') }}
           <v-icon small>
             add
           </v-icon>
@@ -61,11 +61,11 @@
     <div v-if="isOwner">
       <d-dialog
         v-model="deleteEducationMeta.isShown"
-        :confirm-button-title="'Confirm'"
+        :confirm-button-title="$t('userDetailRouting.detailsEducation.deleteBtn')"
         @click:confirm="deleteEducation(deleteEducationMeta)"
       >
         <div class="pt-1">
-          Are you sure you want to delete this entry ?
+          {{ $t('userDetailRouting.detailsEducation.sureDelete') }}
         </div>
       </d-dialog>
     </div>
@@ -136,9 +136,13 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('userDetails/loadUserProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${item.educationalInstitution}" Institute has been deleted successfully!"`);
+            this.$notifier.showSuccess(
+              this.$t('userDetailRouting.detailsEducation.success', { educationalInstitution: item.educationalInstitution })
+            );
           }, (err) => {
-            this.$notifier.showError(`An error occurred while deleting "${item.educationalInstitution}" details, please try again later`);
+            this.$notifier.showError(
+              this.$t('userDetailRouting.detailsEducation.err', { educationalInstitution: item.educationalInstitution })
+            );
             console.error(err);
           })
           .finally(() => {

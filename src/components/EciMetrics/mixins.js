@@ -53,19 +53,23 @@ export const filterableMetrics = {
     },
     filterCriterias: {
       type: [Array, Boolean],
-      default: () => mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
-        blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
-        allowBlank: true,
-        blankLabel: 'All'
-      })
+      default() {
+        return mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: this.$t('defaultNaming.all')
+        });
+      }
     },
     filterContributions: {
       type: [Array, Boolean],
-      default: () => mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, {
-        blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
-        allowBlank: true,
-        blankLabel: 'All'
-      })
+      default() {
+        return mapSelectListFromEnum(EXPERTISE_CONTRIBUTION_TYPE, {
+          blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
+          allowBlank: true,
+          blankLabel: this.$t('defaultNaming.all')
+        });
+      }
     }
   },
   data() {

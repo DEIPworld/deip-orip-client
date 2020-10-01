@@ -5,9 +5,9 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ notification.metadata.rejecter | fullname }}</span>
-    rejected application for
+    {{ $t('notifications.rejectedAppl') }}
     "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-    research
+    {{ $t('notifications.project') }}
   </user-notifications-list-item>
 </template>
 

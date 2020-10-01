@@ -1,10 +1,10 @@
 <template>
-  <admin-view v-if="$ready" title="Projects">
+  <admin-view v-if="$ready" :title="$t('adminRouting.projects.title')">
     <template #toolbarExtension>
       <v-tabs v-model="tab">
-        <v-tab>All projects</v-tab>
+        <v-tab>{{ $t('adminRouting.projects.allTab') }}</v-tab>
         <v-tab>
-          Waiting for approval
+          {{ $t('adminRouting.projects.waitingTab') }}
           <v-badge
             v-if="pendingProjects.length"
             :content="pendingProjects.length"
@@ -82,8 +82,8 @@
     <d-dialog
       v-model="researchDialog.isOpen"
       max-width="800"
-      cancel-button-title="Reject"
-      confirm-button-title="Approve"
+      :cancel-button-title="$t('adminRouting.projects.researchDialog.reject')"
+      :confirm-button-title="$t('adminRouting.projects.researchDialog.submitBtn')"
       @click:cancel="openActionDialog('reject', researchDialog.data._id)"
       @click:confirm="openActionDialog('approve', researchDialog.data._id)"
     >
@@ -148,11 +148,11 @@
 
         publicProjectsHeaders: [
           {
-            text: 'Title',
+            text: this.$t('adminRouting.projects.publicTable.title'),
             value: 'title'
           },
           {
-            text: 'Created',
+            text: this.$t('adminRouting.projects.publicTable.created'),
             value: 'created_at'
           },
           {
@@ -163,15 +163,15 @@
 
         pendingProjectsHeaders: [
           {
-            text: 'Title',
+            text: this.$t('adminRouting.projects.pendingTable.title'),
             value: 'title'
           },
           {
-            text: 'Created',
+            text: this.$t('adminRouting.projects.pendingTable.created'),
             value: 'created_at'
           },
           {
-            text: 'Project innovator',
+            text: this.$t('adminRouting.projects.pendingTable.innovator'),
             value: 'researcher'
           },
           {
@@ -267,21 +267,21 @@
 
         const types = {
           approve: {
-            title: 'Approve request?',
-            description: 'Project request will be approved and project will be published.',
-            actionLabel: 'Approve',
+            title: this.$t('adminRouting.projects.approveDialog.title'),
+            description: this.$t('adminRouting.projects.approveDialog.description'),
+            actionLabel: this.$t('adminRouting.projects.approveDialog.submitBtn'),
             action: () => { this.approveResearchApplication(id); }
           },
           reject: {
-            title: 'Reject request?',
-            description: 'Project request will not be approved and project will not be published.',
-            actionLabel: 'Reject',
+            title: this.$t('adminRouting.projects.rejectDialog.title'),
+            description: this.$t('adminRouting.projects.rejectDialog.description'),
+            actionLabel: this.$t('adminRouting.projects.rejectDialog.submitBtn'),
             action: () => { this.rejectResearchApplication(id); }
           },
           delete: {
-            title: 'Delete project?',
-            description: 'Project will be hidden from platform permanently.',
-            actionLabel: 'Delete',
+            title: this.$t('adminRouting.projects.deleteDialog.title'),
+            description: this.$t('adminRouting.projects.deleteDialog.description'),
+            actionLabel: this.$t('adminRouting.projects.deleteDialog.submitBtn'),
             action: () => { this.deleteResearchApplication(id); }
           }
         };

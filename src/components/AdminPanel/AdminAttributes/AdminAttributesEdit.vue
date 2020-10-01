@@ -6,7 +6,7 @@
           v-model="formData.type"
           outlined
           hide-details="auto"
-          label="Attribute type"
+          :label="$t('adminRouting.attributes.attributesEdit.typeField')"
           :items="attrsList"
         />
         <v-divider class="my-6" />
@@ -22,7 +22,7 @@
             v-model="formData.isPublished"
             class="ma-0 pa-0"
             hide-details
-            label="Publish Attribute"
+            :label="$t('adminRouting.attributes.attributesEdit.publishField')"
           />
         </v-col>
         <v-spacer />
@@ -34,7 +34,7 @@
             :disabled="isSaving"
             @click="$router.back()"
           >
-            Cancel
+            {{ $t('adminRouting.attributes.attributesEdit.cancel') }}
           </v-btn>
           <v-btn
             color="primary"
@@ -42,7 +42,7 @@
             :disabled="isSaving"
             @click="save()"
           >
-            Save
+            {{ $t('adminRouting.attributes.attributesEdit.submitBtn') }}
           </v-btn>
         </v-col>
       </v-row>
@@ -70,7 +70,7 @@
     props: {
       title: {
         type: String,
-        default: 'Sign Up'
+        default() { return this.t('adminRouting.attributes.attributesEdit.title'); }
       }
     },
     data() {
@@ -78,7 +78,7 @@
         ATTR_TYPES,
         ATTR_TYPES_LABELS,
 
-        rules: { required: (value) => !!value || 'This field is required' },
+        rules: { required: (value) => !!value || this.$t('defaultNaming.fieldRules.required') },
 
         formData: {
           type: ATTR_TYPES.TEXT,

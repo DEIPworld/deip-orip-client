@@ -8,7 +8,7 @@
     <v-card class="pa-6">
       <v-card-title>
         <div class="text-h5">
-          Join Request
+          {{ $t('researchGroupDetails.joinRequestDialog.join') }}
         </div>
         <div class="right-top-angle">
           <v-btn icon class="pa-0 ma-0" @click="close()">
@@ -35,7 +35,7 @@
         <v-text-field
           v-model="tokensAmount"
           v-mask="'##'"
-          label="Research Group Tokens"
+          :label="$t('researchGroupDetails.joinRequestDialog.tokensLabel')"
           outlined
           suffix="%"
         />
@@ -51,7 +51,7 @@
               :loading="isApprovingLoading"
               @click="sendProposal()"
             >
-              Approve and create proposal
+              {{ $t('researchGroupDetails.joinRequestDialog.submitBtn') }}
             </v-btn>
           </v-col>
           <v-col class="py-2" cols="12">
@@ -63,7 +63,7 @@
               :disabled="isDenyingLoading || isApprovingLoading"
               @click="denyJoinRequest()"
             >
-              Reject
+              {{ $t('researchGroupDetails.joinRequestDialog.reject') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -144,9 +144,9 @@
           .then(() => {
             this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
-            this.$notifier.showError(`Invite proposal for "${this.joinRequest.username}" has been created successfully !`);
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
           }, (err) => {
-            this.$notifier.showError('An error occurred while approving join request, please try again later');
+            this.$notifier.showError(this.$t('researchGroupDetails.joinRequestDialog.errSend'));
             console.error(err);
           })
           .finally(() => {
@@ -166,7 +166,7 @@
         researchGroupService.updateJoinRequest({ request: update })
           .then((updatedRequest) => {
                   self.$store.dispatch('researchGroup/loadJoinRequests', { groupId: self.groupId });
-                  this.$notifier.showSuccess(`You have denied join request from  "${self.joinRequest.username}" successfully !`);
+                  this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
 
                   setTimeout(() => self.close(), 500);
                 },

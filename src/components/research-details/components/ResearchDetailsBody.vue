@@ -22,7 +22,7 @@
         class="mt-2"
         @click="createDarDraft()"
       >
-        Use Editor
+        {{ $t('researchDetails.editor') }}
       </v-btn>
     </div>
 

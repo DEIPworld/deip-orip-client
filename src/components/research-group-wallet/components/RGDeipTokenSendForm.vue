@@ -87,7 +87,7 @@
         isFormValid: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           isExist: (value) => (value !== this.user.username
             ? this.isUsernameExist !== false || 'No user with such name'
             : 'You can\'t send tokens to this user'),

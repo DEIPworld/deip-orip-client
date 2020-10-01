@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form ref="form-data" class="mb-4">
-      <d-form-block title="Update group logo:">
+      <d-form-block :title="$t('researchGroupSettings.dataForm.logoBlock.title')">
         <v-col>
           <v-avatar
             size="160px"
@@ -25,24 +25,28 @@
           </v-avatar>
         </v-col>
       </d-form-block>
-      <d-form-block title="Group name">
+      <d-form-block :title="$t('researchGroupSettings.dataForm.nameBlock.title')">
         <v-col cols="12">
           <v-text-field
             v-model="newResearchGroupName"
             :rules="[rules.required, rules.titleLength]"
-            label="Name"
+            :label="$t('researchGroupSettings.dataForm.nameBlock.nameField.label')"
             outlined
-            :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
+            :error-messages="
+              isPermlinkVerifyed === false ?
+                $t('researchGroupSettings.dataForm.nameBlock.nameField.err') :
+                ''
+            "
           />
         </v-col>
       </d-form-block>
-      <d-form-block title="Group description:">
+      <d-form-block :title="$t('researchGroupSettings.dataForm.descBlock.title')">
         <v-col cols="12">
           <v-textarea
             v-model="newResearchGroupDescription"
             :rules="[rules.required, rules.descriptionLength]"
             name="Description"
-            label="Description"
+            :label="$t('researchGroupSettings.dataForm.nameBlock.descField')"
             outlined
             auto-grow
           />
@@ -57,7 +61,7 @@
             large
             @click="cancel()"
           >
-            Cancel
+            {{ $t('researchGroupSettings.dataForm.cancel') }}
           </v-btn>
           <v-btn
             class="ml-2"
@@ -67,13 +71,13 @@
             color="primary"
             @click="save()"
           >
-            Save changes
+            {{ $t('researchGroupSettings.dataForm.submitBtn') }}
           </v-btn>
         </slot>
       </div>
     </v-form>
     <!-- <v-form v-if="group.is_dao" ref="form-quorum" class="mb-4">
-      <d-form-block title="Quorum threshold:">
+      <d-form-block :title="$t('researchGroupSettings.quorumForm.quorumBlock.title')">
         <v-col cols="12">
           <div class="pt-4">
             <div v-for="(proposalBlock, i) in proposalOrderMap" :key="`proposalBlock-${i}`">
@@ -103,7 +107,7 @@
             <div
               class="pt-2 caption line-height-1 text-align-right primary--text text--lighten-3"
             >
-              The proposal will be sent to group members and after it's approved the threshold will be changed
+              {{ $t('researchGroupSettings.quorumForm.text') }}
             </div>
           </div>
         </v-col>
@@ -118,7 +122,7 @@
             color="primary"
             @click=""
           >
-            Update Quorum
+            $t('researchGroupSettings.quorumForm.submitBtn')
           </v-btn>
         </slot>
       </div>
@@ -186,9 +190,9 @@
         newResearchGroupDescription: '',
         shadowProposalOrderMap: undefined,
         rules: {
-          required: (value) => !!value || 'This field is required',
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`,
-          descriptionLength: (value) => value.length <= maxDescriptionLength || `Description max length is ${maxDescriptionLength} symbols`
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
+          descriptionLength: (value) => value.length <= maxDescriptionLength || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
         }
       };
     },
@@ -273,14 +277,14 @@
         } else {
           this.$refs.researchGroupLogo.removeAllFiles();
           this.isLoading = false;
-          this.$notifier.showSuccess('Logo has been updated successfully ! Refresh the page please');
+          this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successLogo'));
           this.cancel();
         }
       },
       logoUploadError(file, message, xhr) {
         this.$refs.researchGroupLogo.removeAllFiles();
         this.isLoading = false;
-        this.$notifier.showError('Sorry, an error occurred while uploading logo image, please try again later');
+        this.$notifier.showError(this.$t('researchGroupSettings.dataForm.errLogo'));
       },
       fillValues() {
         this.groupName = this.group.name;
@@ -321,7 +325,7 @@
       //   Promise.all(promises)
       //     .then(() => {
       //       this.$store.dispatch('layout/setSuccess', {
-      //         message: 'Proposal has been sent successfully!'
+      //         message: this.$t('researchGroupSettings.quorumForm.successProposal')
       //       });
       //       this.cancel(true);
       //     })
@@ -329,7 +333,7 @@
       //       console.error(err);
 
       //       this.$store.dispatch('layout/setError', {
-      //         message: 'An error occurred during proposal sending'
+      //         message: this.$t('researchGroupSettings.quorumForm.errProposal')
       //       });
       //     })
       //     .finally(() => {
@@ -372,13 +376,13 @@
                 researchGroupDescription: this.newResearchGroupDescription
               })
                 .then(() => {
-                  this.$notifier.showSuccess('Proposal has been sent successfully!');
+                  this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
                   this.cancel(true);
                 })
                 .catch((err) => {
                   console.error(err);
 
-                  this.$notifier.showError('An error occurred during proposal sending');
+                  this.$notifier.showError(this.$t('researchGroupSettings.dataForm.errProposal'));
                 })
                 .finally(() => {
                   this.isLoading = false;
