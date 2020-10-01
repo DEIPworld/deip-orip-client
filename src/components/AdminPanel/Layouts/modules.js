@@ -303,13 +303,39 @@ export const modulesComponents = [
       researchId: '@research.external_id'
     }
   },
+
   {
-    component: 'ResearchEditCta',
-    name: 'Edit CTA',
+    name: 'Edit Button',
+    component: 'VBtn',
     icon: 'mdi-circle-edit-outline',
-    props: {
-      researchId: '@research.external_id'
-    },
-    if: 'this.research.members.includes(this.$currentUserName)'
+    class: 'justify-self-start mt-2',
+    if: 'this.research.members.includes(this.$currentUserName)',
+    ...setComponentProps({
+      color: setAs(String)
+    }, {
+      small: true,
+      outlined: true,
+      to: {
+        name: 'research.edit',
+        params: {
+          researchExternalId: '{{$route.params.researchExternalId}}'
+        }
+      }
+    }),
+    children: [
+      {
+        component: 'VIcon',
+        required: true,
+        props: {
+          left: true,
+          size: 18
+        },
+        text: 'mdi-pencil-outline'
+      },
+      {
+        component: 'span',
+        text: 'Edit'
+      }
+    ]
   }
 ];

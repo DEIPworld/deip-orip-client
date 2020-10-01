@@ -73,6 +73,7 @@ const actions = {
     const user = context.rootGetters['auth/user'];
 
     const researchIds = user.researchBookmarks.map(({ researchId }) => researchId);
+
     return Promise.all(researchIds.map((externalId) => researchService.getResearch(externalId)))
       .then((followingProjects) => {
         context.commit('SET_USER_FOLLOWING_PROJECTS', followingProjects);

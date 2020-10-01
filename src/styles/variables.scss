@@ -63,6 +63,20 @@ $textarea-line-height: 1.5rem;
 $app-bar-elevation: 0;
 $toolbar-elevation: 0;
 
+// utils
+
+$utilities: (
+  "justify-self": (
+    responsive: true,
+    property: justify-self,
+    values: (
+      start: flex-start,
+      end: flex-end,
+      center: center
+    )
+  ),
+);
+
 
 // typography
 
