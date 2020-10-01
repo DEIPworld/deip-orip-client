@@ -57,43 +57,6 @@
               :attribute="{title: 'Authors'}"
             />
 
-<!--            <v-autocomplete-->
-<!--              v-model="authors"-->
-<!--              :items="research.members"-->
-<!--              :menu-props="{ closeOnContentClick: true }"-->
-<!--              hint="You can select multiple authors"-->
-<!--              persistent-hint-->
-<!--              outlined-->
-<!--              placeholder="Authors"-->
-<!--              class="mb-3"-->
-<!--              multiple-->
-<!--            >-->
-<!--              <template slot="selection" slot-scope="data">-->
-<!--                <div class="legacy-row-nowrap align-center c-pl-4">-->
-<!--                  <v-avatar size="30px">-->
-<!--                    <img v-if="data.item.profile" :src="data.item.profile | avatarSrc(60, 60, false)">-->
-<!--                    <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />-->
-<!--                  </v-avatar>-->
-<!--                  <span class="c-pl-3">{{ data.item | fullname }}</span>-->
-<!--                </div>-->
-<!--              </template>-->
-
-<!--              <template slot="item" slot-scope="data">-->
-<!--                <template>-->
-<!--                  <div-->
-<!--                    class="legacy-row-nowrap align-center author-item"-->
-<!--                    :class="{ 'selected-author-item': isAuthorSelected(data.item) }"-->
-<!--                  >-->
-<!--                    <v-avatar size="30px">-->
-<!--                      <img v-if="data.item.profile" :src="data.item.profile | avatarSrc(60, 60, false)">-->
-<!--                      <v-gravatar v-else :email="data.item.account.name + '@deip.world'" />-->
-<!--                    </v-avatar>-->
-<!--                    <span class="c-pl-3">{{ data.item | fullname }}</span>-->
-<!--                  </div>-->
-<!--                </template>-->
-<!--              </template>-->
-<!--            </v-autocomplete>-->
-
             <internal-references-picker
               :show-selected="true"
               :current-research="research"
@@ -196,7 +159,7 @@
       }),
 
       isCentralizedGroup() {
-        return this.research.research_group.is_centralized || this.research.research_group.is_personal;
+        return this.research.researchGroup.is_centralized || this.research.researchGroup.is_personal;
       },
       isDisabled() {
         return !this.title
@@ -233,7 +196,7 @@
         this.isOpen = false;
       },
       proposeContent() {
-        researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.title)
+        researchContentService.checkResearchContentExistenceByPermlink(this.research.externalId, this.title)
           .then((exists) => {
             this.isPermlinkVerifyed = !exists;
             if (this.isPermlinkVerifyed) {
@@ -250,7 +213,7 @@
         xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
         xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
         // TODO: add as formParam after upgrading back-end
-        xhr.setRequestHeader('Research-External-Id', this.research.external_id);
+        xhr.setRequestHeader('Research-External-Id', this.research.externalId);
         xhr.setRequestHeader('Research-ContentDetails-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
@@ -267,10 +230,10 @@
           throw new Error('File upload has failed');
         }
 
-        const isProposal = !this.research.research_group.is_personal;
+        const isProposal = !this.research.researchGroup.is_personal;
         researchContentService.createResearchContentViaOffchain(this.$currentUser.privKey, isProposal, {
-          researchExternalId: this.research.external_id,
-          researchGroup: this.research.research_group.external_id,
+          researchExternalId: this.research.externalId,
+          researchGroup: this.research.researchGroup.external_id,
           type: parseInt(this.type),
           title: this.title,
           content: hash,

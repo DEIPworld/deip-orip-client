@@ -29,7 +29,7 @@
         return {
           ...this.research,
           ...{
-            created_at: this.$options.filters.dateFormat(this.research.created_at, 'D MMM YYYY', true),
+            createdAt: this.$options.filters.dateFormat(this.research.createdAt, 'D MMM YYYY', true),
             researchRef: {
               attributes: researchAttributesToObject(this.research.researchRef.attributes)
             },
