@@ -60,7 +60,7 @@
             to: { name: 'admin.attributes' }
           },
           {
-            title: this.$t('adminRouting.sidebar.categories'),
+            title: this.$t('adminRouting.sidebar.layouts'),
             icon: 'mdi-view-dashboard-outline',
             badge: 'pre-alpha',
             to: { name: 'admin.layouts' }

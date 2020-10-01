@@ -4,7 +4,14 @@
       v-for="(item, index) of attribute.value"
       :key="index"
     >
-      <a :href="item.url" target="_blank" class="text--secondary text-caption">{{ item.label }}</a>
+      <template v-if="item.url">
+        <a :href="item.url" target="_blank" class="text--secondary text-caption">{{ item.label || item.url }}</a>
+      </template>
+
+      <template v-if="!item.url">
+        <span class="text--secondary text-caption">{{ item.label }}</span>
+      </template>
+
     </div>
   </d-stack>
 </template>

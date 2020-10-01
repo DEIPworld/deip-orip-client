@@ -142,8 +142,8 @@ export default {
     }
   },
   projects: {
-    title: 'Projects',
-    create: 'Create project',
+    title: 'Technologies',
+    create: 'Submit new technology',
     allTab: 'All projects',
     waitingTab: 'Waiting for approval',
     publicTable: {
@@ -185,9 +185,9 @@ export default {
   },
   sidebar: {
     members: 'Members',
-    projects: 'Projects',
+    projects: 'Technologies',
     criteria: 'Attributes',
-    categories: 'Layouts',
+    layouts: 'Layouts',
     model: 'Review model',
     faq: 'FAQ',
     settings: 'Settings'
