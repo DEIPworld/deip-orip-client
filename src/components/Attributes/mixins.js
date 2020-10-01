@@ -165,7 +165,7 @@ export const attributeRead = {
             maxLines: parseInt(this.clamped)
           },
           class: {
-            'hide-visual': this.attribute.isHidden
+            'visually-hidden': this.attribute.isHidden
           }
         }, this.attribute.value);
       }
@@ -238,7 +238,7 @@ export const attributeSet = {
         viewType: this.viewType
       },
       class: {
-        'hide-visual': this.attribute.isHidden
+        'visually-hidden': this.attribute.isHidden
       },
       on: {
         change(e) {

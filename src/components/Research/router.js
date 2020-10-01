@@ -53,7 +53,10 @@ export const researchRouting = [{
         {
           name: 'research.edit',
           path: 'edit',
-          component: ResearchEdit
+          component: ResearchEdit,
+          props: {
+            title: 'Edit technology'
+          }
         },
         {
           name: 'research.fundraising',

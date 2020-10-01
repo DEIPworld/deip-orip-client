@@ -8,14 +8,6 @@
     width: auto !important;
   }
 
-  .hide-visual {
-    display: none;
-    opacity: 0;
-    position: absolute;
-    top: -10000px;
-    pointer-events: none;
-  }
-
   .quillWrapper {
     .ql-snow {
       &.ql-toolbar {
@@ -70,13 +62,6 @@
         }
       }
     }
-  }
-
-  .pos-absolute {
-    position: absolute;
-  }
-  .pos-relative {
-    position: relative;
   }
 }
 

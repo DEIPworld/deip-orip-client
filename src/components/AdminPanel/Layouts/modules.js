@@ -308,7 +308,7 @@ export const modulesComponents = [
     name: 'Edit Button',
     component: 'VBtn',
     icon: 'mdi-circle-edit-outline',
-    class: 'justify-self-start mt-2',
+    class: 'justify-self-start mt-4',
     if: 'this.research.members.includes(this.$currentUserName)',
     ...setComponentProps({
       color: setAs(String)
