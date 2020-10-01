@@ -95,7 +95,7 @@
           {
             component: 'span',
             name: 'Creation date',
-            text: '@research.created_at',
+            text: '@research.createdAt',
             icon: 'mdi-calendar-text'
           },
           ...this.$tenantSettings.researchAttributes
