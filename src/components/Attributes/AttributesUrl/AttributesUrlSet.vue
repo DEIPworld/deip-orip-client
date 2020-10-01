@@ -63,11 +63,5 @@
     },
 
     mixins: [arrayModelAddFactory(attrModel()), attributeSet],
-
-    created() {
-      if (!this.internalValue) {
-        this.internalValue = [];
-      }
-    }
   };
 </script>

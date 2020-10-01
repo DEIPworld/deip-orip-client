@@ -6,11 +6,12 @@ export const arrayModelAddFactory = (model, target) => ({
   computed: {
     target$: {
       get() { return target ? this.internalValue[target] : this.internalValue; },
+
       set(val) {
         if (target) {
           this.internalValue[target] = val;
         } else {
-          this.internalValue = val
+          this.internalValue = [...val];
         }
       }
     }
@@ -22,23 +23,25 @@ export const arrayModelAddFactory = (model, target) => ({
         { ...model }
       );
     },
+    setInitialModel() {
+      this.target$ = [{ ...model }];
+    },
     removeFromModel(index) {
       this.$delete(this.target$, index);
     }
   },
 
-  // watch: {
-  //   value: {
-  //     deep: true,
-  //     handler(val) {
-  //       this.internalLazyValue = val;
-  //     }
-  //   }
-  // },
+  watch: {
+    target$(val) {
+      if (!val) {
+        this.setInitialModel();
+      }
+    }
+  },
 
   created() {
     if (!this.target$) {
-      this.target$ = [{ ...model }];
+      this.setInitialModel();
     }
     if (!this.target$.length) {
       this.appendModel();

@@ -34,7 +34,7 @@
     </v-menu>
     <div
       v-if="internalValue.length"
-      class="pt-1 ma-n1"
+      class="pt-2 ma-n1"
     >
       <v-chip
         v-for="id in sortedLabels"

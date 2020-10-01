@@ -60,6 +60,7 @@
       },
 
       genWysiwyg() {
+        const self = this;
         return this.$createElement('VueEditor', {
           props: {
             placeholder: this.placeholder,
@@ -70,8 +71,8 @@
             editorOptions: this.editorOptions
           },
           on: {
-            textChange(val) {
-              this.internalValue = val;
+            input(val) {
+              self.internalValue = val;
             }
           },
           ref: 'editor'

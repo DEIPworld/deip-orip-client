@@ -1,6 +1,8 @@
 <template>
   <d-layout-full-screen :title="title">
-<!--        <pre>{{JSON.stringify(formData, null, 2)}}</pre>-->
+<!--        <pre>{{JSON.stringify(formData.researchRef.attributes[2], null, 2)}}</pre>-->
+<!--        <pre>{{JSON.stringify(transformedFormData, null, 2)}}</pre>-->
+<!--        <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
         v-model="formData"
@@ -25,7 +27,7 @@
             color="primary"
             :disabled="processing || !isChanged"
           >
-            {{ formData.external_id ? 'Update research' : 'Create' }}
+            {{ formData.externalId ? 'Update research' : 'Create' }}
           </v-btn>
         </d-stack>
       </div>
@@ -118,11 +120,12 @@
       },
 
       isProposal() {
-        return this.transformedFormData.data.researchGroup !== null && this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
+        return this.transformedFormData.data.researchGroup !== null
+          && this.transformedFormData.data.researchGroup !== this.userGroup.external_id;
       },
 
       isChanged() {
-        return !compareModels(this.cachedFormData, this.formData);
+        return this.cachedFormData !== JSON.stringify(this.formData);
       },
 
       transformedFormData() {
@@ -134,9 +137,11 @@
             const value = this.formData.researchRef.attributes[attr._id];
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
+
               acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
                 ? [...acc[attr.blockchainFieldMeta.field], ...(Array.isArray(value) ? value : [value])]
                 : [...(Array.isArray(value) ? value : [value])];
+
             } else {
               acc[attr.blockchainFieldMeta.field] = value || null;
             }
@@ -146,7 +151,10 @@
         return {
           data: {
             ...this.formData,
-            ...chainFields
+            ...chainFields,
+            // ...{
+            //   researchGroup: this.formData.researchGroup // temp
+            // }
           },
           offchainMeta: { attributes }
         };
@@ -166,30 +174,26 @@
           .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
           .then(() => {
             const clone = _.cloneDeep(this.$store.getters['Research/data']);
-            // const transformed = camelizeObjectKeys({
+            console.log(clone)
             const transformed = {
               ...clone,
               ...{
-                externalId: clone.external_id,
                 disciplines: clone.disciplines.map((d) => d.external_id),
-                researchGroup: clone.research_group.external_id,
-                isPrivate: clone.is_private,
-                members: clone.research_group.is_personal ? undefined : clone.members,
+                researchGroup: clone.researchGroup.external_id,
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 },
                 // todo: check
-                image: this.$options.filters.researchBackgroundSrc(clone.external_id)
+                image: this.$options.filters.researchBackgroundSrc(clone.externalId)
               }
             };
-            // });
 
             this.formData = { ..._.cloneDeep(transformed) };
-            this.cachedFormData = { ..._.cloneDeep(transformed) };
+
+            this.$nextTick(() => {
+              this.cachedFormData = JSON.stringify(this.formData);
+            })
           });
-        // });
-      } else {
-        this.formData.researchGroup = null; // TODO: Extract default value from hidden atttribute or set it from non-hidden
       }
     },
     methods: {
@@ -215,11 +219,11 @@
       },
 
       goToResearch(research) {
-        if (research && research.external_id) { // if not proposal
+        if (research && research.externalId) { // if not proposal
           this.$router.push({
             name: 'research.details',
             params: {
-              researchExternalId: research.external_id
+              researchExternalId: research.externalId
             }
           });
         } else {
@@ -253,7 +257,6 @@
       },
 
       updateResearchData() {
-        console.log(this.transformedFormData.data);
         return researchService.updateResearchViaOffchain(
           this.$currentUser.privKey,
           this.isProposal,
