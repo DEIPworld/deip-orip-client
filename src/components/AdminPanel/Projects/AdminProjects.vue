@@ -17,27 +17,31 @@
         </template>
 
         <v-divider class="mb-6" />
-
-        <v-data-table
-          v-custom="'hover-row'"
-
-          :hide-default-footer="projects.length < 50"
-          :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
-          :items-per-page="50"
-
-          :headers="projectsHeaders"
-          :items="projects"
-          sort-by="created_at"
-          sort-desc
+        <v-skeleton-loader
+          type="table-thead, table-tbody"
+          :loading="!$ready"
         >
-          <template #item="{ item }">
-            <admin-projects-item-row
-              :research="item"
-              @click:delete="openActionDialog('delete', $event)"
-              @click:edit="goToResearchEdit($event)"
-            />
-          </template>
-        </v-data-table>
+          <v-data-table
+            v-custom="'hover-row'"
+
+            :hide-default-footer="projects.length < 50"
+            :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
+            :items-per-page="50"
+
+            :headers="projectsHeaders"
+            :items="projects"
+            sort-by="created_at"
+            sort-desc
+          >
+            <template #item="{ item }">
+              <admin-projects-item-row
+                :research="item"
+                @click:delete="openActionDialog('delete', $event)"
+                @click:edit="goToResearchEdit($event)"
+              />
+            </template>
+          </v-data-table>
+        </v-skeleton-loader>
       </d-block>
 
       <d-dialog

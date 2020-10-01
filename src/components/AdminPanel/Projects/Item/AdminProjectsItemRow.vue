@@ -25,6 +25,7 @@
           }
           row.children.push({
             component: 'td',
+            class: 'text-right',
             children: [
               {
                 component: 'CrudActions',
