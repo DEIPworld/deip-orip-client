@@ -196,7 +196,7 @@
       }),
 
       isCentralizedGroup() {
-        return this.research.research_group.is_centralized || this.research.research_group.is_personal;
+        return this.research.researchGroup.is_centralized || this.research.researchGroup.is_personal;
       },
       isDisabled() {
         return !this.title
@@ -267,10 +267,10 @@
           throw new Error('File upload has failed');
         }
 
-        const isProposal = !this.research.research_group.is_personal;
+        const isProposal = !this.research.researchGroup.is_personal;
         researchContentService.createResearchContentViaOffchain(this.$currentUser.privKey, isProposal, {
           researchExternalId: this.research.external_id,
-          researchGroup: this.research.research_group.external_id,
+          researchGroup: this.research.researchGroup.external_id,
           type: parseInt(this.type),
           title: this.title,
           content: hash,

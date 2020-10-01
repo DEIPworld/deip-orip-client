@@ -219,11 +219,11 @@
       },
 
       goToResearch(research) {
-        if (research && research.externalId) { // if not proposal
+        if (research && research.external_id) { // if not proposal
           this.$router.push({
             name: 'research.details',
             params: {
-              researchExternalId: research.externalId
+              researchExternalId: research.external_id
             }
           });
         } else {
