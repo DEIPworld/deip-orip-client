@@ -1,5 +1,5 @@
 <template>
-  <div v-if="attribute && attribute.value" class="d-flex align-center text-caption text--secondary">
+  <div v-if="attribute && attribute.value" class="d-flex flex-wrap align-center text-caption text--secondary">
     <template v-for="(item, index) of valueOptions">
       <router-link
         :key="`link-${index}`"

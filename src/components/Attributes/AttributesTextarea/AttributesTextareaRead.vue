@@ -8,7 +8,6 @@
     mixins: [attributeRead],
     methods: {
       genContent(h) {
-        console.log(this.attribute.value)
         if (this.clamped) {
           return h('v-clamp', {
             props: {
