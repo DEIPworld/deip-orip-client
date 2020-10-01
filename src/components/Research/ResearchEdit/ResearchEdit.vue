@@ -1,7 +1,7 @@
 <template>
-  <d-layout-full-screen :title="title">
+  <d-layout-full-screen :title="formTitle">
 <!--        <pre>{{JSON.stringify(formData.researchRef.attributes[2], null, 2)}}</pre>-->
-        <pre>{{JSON.stringify(transformedFormData.offchainMeta, null, 2)}}</pre>
+<!--        <pre>{{JSON.stringify(transformedFormData.offchainMeta, null, 2)}}</pre>-->
 <!--        <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
@@ -106,6 +106,10 @@
       ...mapGetters({
         userGroups: 'auth/userGroups'
       }),
+
+      formTitle() {
+        return this.title || this.transformedFormData.data.title || null
+      },
 
       layoutSchema() {
         return this.$tenantSettings.researchLayouts.projectEditForm.layout;

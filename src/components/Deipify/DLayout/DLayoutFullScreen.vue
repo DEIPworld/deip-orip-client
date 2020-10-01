@@ -24,7 +24,7 @@
           <v-icon>arrow_back</v-icon>
         </v-btn>
 
-        <v-toolbar-title v-if="title">
+        <v-toolbar-title v-if="title" class="text-truncate" style="max-width: 420px">
           {{ title }}
         </v-toolbar-title>
       </v-app-bar>
