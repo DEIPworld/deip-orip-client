@@ -89,6 +89,11 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(stepModel()), attributeSet]
+    mixins: [arrayModelAddFactory(stepModel()), attributeSet],
+    data() {
+      return {
+        defaultValue: []
+      };
+    }
   };
 </script>

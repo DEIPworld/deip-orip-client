@@ -8,16 +8,24 @@
     width: auto !important;
   }
 
+  .hide-visual {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    top: -10000px;
+    pointer-events: none;
+  }
+
   .quillWrapper {
     .ql-snow {
       &.ql-toolbar {
         display: flex;
-        padding: 0;
+        padding: 8px 4px;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
 
         .ql-formats {
-          margin: 8px;
+          margin: 0 16px 0 0;
           display: grid;
           grid-auto-flow: column;
 
@@ -52,9 +60,23 @@
 
         .ql-editor {
           font-size: 14px;
+          padding: 12px;
+
+          > * {
+            &:not(:first-child) {
+              margin-top: 12px;
+            }
+          }
         }
       }
     }
+  }
+
+  .pos-absolute {
+    position: absolute;
+  }
+  .pos-relative {
+    position: relative;
   }
 }
 

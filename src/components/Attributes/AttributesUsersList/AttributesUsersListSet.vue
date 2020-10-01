@@ -57,6 +57,11 @@
     name: 'AttributesUsersListSet',
     components: { DAutocomplete },
     mixins: [AttributesCommonUsersSet],
+    data() {
+      return {
+        defaultValue: []
+      };
+    },
     methods: {
       remove(item) {
         const idx = this.internalValue.indexOf(this.userId(item));

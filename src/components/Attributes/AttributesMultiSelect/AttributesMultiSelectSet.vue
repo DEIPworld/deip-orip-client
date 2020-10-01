@@ -40,6 +40,11 @@
   export default {
     name: 'AttributesMultiSelectSet',
     components: { DAutocomplete },
-    mixins: [attributeSetOption]
+    mixins: [attributeSetOption],
+    data() {
+      return {
+        defaultValue: []
+      };
+    }
   };
 </script>

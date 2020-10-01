@@ -70,7 +70,9 @@
         search: '',
         open: false,
         oldValue: [],
-        menuTop: false
+        menuTop: false,
+
+        defaultValue: []
       };
     },
     computed: {
@@ -124,15 +126,7 @@
 
     watch: {
       internalValue(val) {
-        if (!val) {
-          this.internalValue = [];
-        }
-      }
-    },
-
-    created() {
-      if (!this.internalValue) {
-        this.internalValue = [];
+        this.checkDefaultValue(val);
       }
     },
 

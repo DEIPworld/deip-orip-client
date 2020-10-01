@@ -21,10 +21,6 @@
       })
     },
     created() {
-      if (!this.internalValue) {
-        this.internalValue = [];
-      }
-
       if (this.users.length) {
         this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.users)
           .then(() => {

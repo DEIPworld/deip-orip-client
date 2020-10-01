@@ -69,20 +69,6 @@
       groups() {
         return this.$where(this.userGroups, { is_personal: false });
       }
-    },
-
-    watch: {
-      isPersonal(value) {
-        // if (value) {
-        //   this.internalValue = this.personalGroup.external_id;
-        // } else {
-          this.internalValue = null;
-        // }
-      }
-    },
-
-    created() {
-      // this.internalValue = this.personalGroup.external_id;
     }
   };
 </script>

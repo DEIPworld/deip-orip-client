@@ -32,15 +32,18 @@
 
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
     name: 'AttributesStepperSetFilter',
     components: {
       DListExpand,
-      DBlock
     },
-    mixins: [attributeSet]
+    mixins: [attributeSet],
+    data() {
+      return {
+        defaultValue: []
+      };
+    }
   };
 </script>

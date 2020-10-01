@@ -2,7 +2,9 @@
   <div>
     <template v-for="(category, index) of modules">
       <div :key="`ttl-${index}`">
-        <v-subheader class="text-overline">{{ category.name }}</v-subheader>
+        <v-subheader class="text-overline">
+          {{ category.name }}
+        </v-subheader>
         <draggable
           :key="`drg-${index}`"
           :list="category.modules"
@@ -17,12 +19,31 @@
             :key="module.moduleId"
             #default="{ hover }"
           >
-
             <v-sheet
-              class="text-center pa-2"
+              class="text-center pa-2 pos-relative"
               :color="`grey ${hover ? 'lighten-3' : 'lighten-4'}`"
               rounded
             >
+              <d-stack
+                v-if="module.isRequired || module.isHidden"
+                gap="2"
+                horizontal
+                class="pos-absolute"
+                style="top: 4px; right: 4px"
+              >
+                <v-avatar
+                  v-if="module.isHidden"
+                  size="4"
+                  color="info"
+                />
+
+                <v-avatar
+                  v-if="module.isRequired"
+                  size="4"
+                  color="error"
+                />
+              </d-stack>
+
               <v-icon>{{ module.icon }}</v-icon>
               <div class="text-caption text--secondary mt-1 text-truncate" style="line-height: 16px">
                 {{ module.name }}
@@ -32,10 +53,8 @@
         </draggable>
       </div>
       <v-divider />
-
     </template>
   </div>
-
 </template>
 
 <script>
@@ -51,10 +70,12 @@
     setComponentProps
   } from '@/components/AdminPanel/Layouts/modules';
   import { ATTR_TYPES_ICONS, LAYOUT_TYPES } from '@/variables';
+  import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
     name: 'AdminLayoutsModules',
     components: {
+      DStack,
       draggable
     },
     props: {
@@ -102,6 +123,8 @@
             .map((attr) => ({
               icon: ATTR_TYPES_ICONS[attr.type],
               name: attr.shortTitle || attr.title,
+              isRequired: attr.isRequired,
+              isHidden: attr.isHidden,
               ...extenders[this.layoutType](attr)
             }))
         ];

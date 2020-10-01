@@ -163,6 +163,9 @@ export const attributeRead = {
             autoresize: true,
             // eslint-disable-next-line radix
             maxLines: parseInt(this.clamped)
+          },
+          class: {
+            'hide-visual': this.attribute.isHidden
           }
         }, this.attribute.value);
       }
@@ -196,19 +199,35 @@ export const attributeSet = {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType
   },
+  data() {
+    return {
+      defaultValue: null
+    };
+  },
   computed: {
     attributeComponent() {
       console.warn('No attribute type/view specified!!!');
       return 'div';
     }
   },
+  methods: {
+    checkDefaultValue(val = this.internalValue) {
+      if (!val) {
+        this.internalValue = this.defaultValue;
+      }
+    }
+  },
   watch: {
     internalValue: {
       deep: true,
       handler(val) {
+        // this.checkDefaultValue(val);
         this.$emit('change', val);
       }
     }
+  },
+  created() {
+    this.checkDefaultValue();
   },
   render(h) {
     const self = this;
@@ -217,6 +236,9 @@ export const attributeSet = {
         value: this.internalValue,
         attribute: this.attribute,
         viewType: this.viewType
+      },
+      class: {
+        'hide-visual': this.attribute.isHidden
       },
       on: {
         change(e) {
@@ -251,6 +273,7 @@ export const attributeReadUsers = {
     const users = kindOf(this.attribute.value) === 'string'
       ? [this.attribute.value]
       : this.attribute.value;
+    console.log(users)
     this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
       .then(() => {
         this.$setReady();

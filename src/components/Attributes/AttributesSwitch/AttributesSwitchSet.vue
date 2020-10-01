@@ -11,6 +11,11 @@
 
   export default {
     name: 'AttributesSwitchSet',
-    mixins: [attributeSet]
+    mixins: [attributeSet],
+    data() {
+      return {
+        defaultValue: false
+      };
+    }
   };
 </script>

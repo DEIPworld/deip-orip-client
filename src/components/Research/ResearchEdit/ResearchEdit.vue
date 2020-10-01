@@ -1,7 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
 <!--        <pre>{{JSON.stringify(formData.researchRef.attributes[2], null, 2)}}</pre>-->
-<!--        <pre>{{JSON.stringify(transformedFormData, null, 2)}}</pre>-->
+        <pre>{{JSON.stringify(transformedFormData.offchainMeta, null, 2)}}</pre>
 <!--        <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit">
       <research-edit-renderer
@@ -130,8 +130,7 @@
 
       transformedFormData() {
         const attributes = compactResearchAttributes(this.formData.researchRef.attributes);
-
-        const chainFields = camelizeObjectKeys(this.$tenantSettings.researchAttributes
+        const chainFields = camelizeObjectKeys(this.  $tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
             const value = this.formData.researchRef.attributes[attr._id];
@@ -174,7 +173,6 @@
           .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
           .then(() => {
             const clone = _.cloneDeep(this.$store.getters['Research/data']);
-            console.log(clone)
             const transformed = {
               ...clone,
               ...{
@@ -204,17 +202,25 @@
       clearDraft() {},
 
       verifyPermlink() {
-        return researchService
-          .checkResearchExistenceByPermlink(
-            this.formData.researchGroup,
-            this.transformedFormData.data.title
-          )
+        if (this.transformedFormData.data.researchGroup) {
+          return researchService
+            .checkResearchExistenceByPermlink(
+              this.transformedFormData.data.researchGroup,
+              this.transformedFormData.data.title
+            )
+            .then((exists) => {
+              this.isPermlinkVerifyed = !exists;
+              return exists;
+            })
+            .catch(() => {
+              this.isPermlinkVerifyed = false;
+            });
+        }
+
+        return Promise.resolve(false)
           .then((exists) => {
             this.isPermlinkVerifyed = !exists;
             return exists;
-          })
-          .catch(() => {
-            this.isPermlinkVerifyed = false;
           });
       },
 
@@ -275,13 +281,13 @@
       },
 
       updateResearch(exists) {
-        if (this.cachedFormData.title !== this.transformedFormData.data.title) {
+        if (JSON.parse(this.cachedFormData).title !== this.transformedFormData.data.title) {
           this.isPermlinkVerifyed = !exists;
         } else {
           this.isPermlinkVerifyed = true;
         }
 
-        if (!exists) return false;
+        if (exists) return false;
 
         return Promise.all([
           this.updateResearchData()

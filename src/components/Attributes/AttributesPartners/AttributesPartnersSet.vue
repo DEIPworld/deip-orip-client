@@ -80,13 +80,9 @@
     mixins: [arrayModelAddFactory(partnerModel()), attributeSet],
     data() {
       return {
-        partnersInfo: researchPartners
+        partnersInfo: researchPartners,
+        defaultValue: []
       };
-    },
-    created() {
-      if (!this.internalValue) {
-        this.internalValue = [];
-      }
     }
   };
 </script>

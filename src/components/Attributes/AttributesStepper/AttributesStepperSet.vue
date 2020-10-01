@@ -22,11 +22,6 @@
       AttributesStepperSetDefault,
       AttributesStepperSetFilter
     },
-    mixins: [attributeSetOption, attributeViewTypeComponent],
-    data() {
-      return {
-        allowedViewTypes$: ['default', 'filter']
-      };
-    }
+    mixins: [attributeSetOption, attributeViewTypeComponent]
   };
 </script>

@@ -1,5 +1,23 @@
 <template>
   <div class="d-flex align-center">
+    <d-stack
+      v-if="node.isRequired || node.isHidden"
+      gap="2"
+      horizontal
+      class="ml-2"
+    >
+      <v-avatar
+        v-if="node.isHidden"
+        size="4"
+        color="info"
+      />
+
+      <v-avatar
+        v-if="node.isRequired"
+        size="4"
+        color="error"
+      />
+    </d-stack>
 
     <v-menu v-model="menuOpen" close-on-content-click>
       <template v-slot:activator="{ on }">
