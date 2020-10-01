@@ -29,6 +29,20 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item
+          v-if="/AttributesRead/.test(node.component)"
+          @click="copyAttrCondition()"
+        >
+          <v-list-item-icon class="mr-1">
+            <v-icon size="20">
+              mdi-clipboard-multiple-outline
+            </v-icon>
+          </v-list-item-icon>
+          <v-list-item-content class="text-body-2">
+            Copy attribute condition
+          </v-list-item-content>
+        </v-list-item>
+
         <v-dialog
           v-model="settingsOpen"
           :max-width="400"
@@ -290,6 +304,10 @@
       copyAttrId() {
         const id = this.node.props.attribute.split('.').slice(-1).pop();
         this.$clipboard(id);
+      },
+      copyAttrCondition() {
+        const id = this.node.props.attribute.split('.').slice(-1).pop();
+        this.$clipboard(`this.ifAttribute('${id}')`);
       },
       clickRemove() {
         this.$emit('click:remove', this.node.id$);
