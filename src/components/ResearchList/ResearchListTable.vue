@@ -44,7 +44,6 @@
         const row = _.cloneDeep(layout[0]);
 
         if (row) {
-          console.log(row)
           return row.children.map((cell) => ({
             text: cell.attrs && cell.attrs.title ? cell.attrs.title : '',
             class: cell.class || {},

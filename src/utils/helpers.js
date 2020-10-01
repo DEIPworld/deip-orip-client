@@ -77,7 +77,7 @@ export const excludeObjectKeys = (obj, keys = []) => {
 
 export const objectNotEmpty = (obj) => (obj && Object.keys(obj).length);
 
-export const routeView = { template: '<router-view />' };
+export const routerView = { template: '<router-view />' };
 
 export const routeNameGenerator = (namespace, parent) => ({
   get(name) {

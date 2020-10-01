@@ -3,9 +3,9 @@ import { store } from '@/store';
 import { loadPage } from '@/router/utils/loadPage';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
 import UserRegistration from '@/components/auth/UserRegistration';
-import AdminProjects from '@/components/AdminPanel/AdminProjects';
-import AdminAttributes from '@/components/AdminPanel/AdminAttributes/AdminAttributes';
-import AdminAttributesEdit from '@/components/AdminPanel/AdminAttributes/AdminAttributesEdit';
+import AdminProjects from '@/components/AdminPanel/Projects/AdminProjects';
+import AdminAttributes from '@/components/AdminPanel/Attributes/AdminAttributes';
+import AdminAttributesEdit from '@/components/AdminPanel/Attributes/AdminAttributesEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
@@ -15,11 +15,13 @@ import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 import AdminAttributesSettings
-  from '@/components/AdminPanel/AdminAttributes/AdminAttributesSettings';
+  from '@/components/AdminPanel/Attributes/AdminAttributesSettings';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
 
 import { i18n } from '@/plugins/i18n';
+import { routerView } from '@/utils/helpers';
+import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
 
 export const adminRouting = [
   {
@@ -50,8 +52,23 @@ export const adminRouting = [
       },
       {
         path: 'projects',
-        name: 'admin.projects',
-        component: AdminProjects
+        component: routerView,
+        children: [
+          {
+            path: '',
+            name: 'admin.projects',
+            component: AdminProjects
+          },
+
+          // {
+          //   name: 'admin.projects.create',
+          //   path: 'create',
+          //   component: ResearchEdit,
+          //   props: {
+          //     title: 'Add new technology'
+          //   }
+          // }
+        ]
       },
       {
         path: 'attributes',

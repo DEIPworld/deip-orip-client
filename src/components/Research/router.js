@@ -6,8 +6,7 @@ import { reviewRoutingFabric } from '@/components/Reviews/router';
 import { contentRoutingFabric } from '@/components/Contents/router';
 import Research from '@/components/Research/Research';
 import ResearchFoundraising from '@/components/Research/ResearchFoundraising/ResearchFoundraising';
-
-const routerView = { template: '<router-view />' };
+import { routerView } from '@/utils/helpers';
 
 export const researchRouting = [{
   path: '/p',

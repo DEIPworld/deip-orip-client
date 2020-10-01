@@ -12,7 +12,7 @@ export default {
   contributions: 'Contributions',
   citations: 'Citations',
   hIndex: 'H-index',
-  projects: 'Projects',
+  projects: 'Technologies',
   noProjects: 'No Projects found for specified criteria',
   yourDomain: 'Your domain',
   allDomain: 'All domain',

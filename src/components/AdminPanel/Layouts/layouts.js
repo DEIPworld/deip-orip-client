@@ -24,5 +24,11 @@ export const baseLayouts = () => ({
     icon: 'mdi-card-text-outline',
     type: LAYOUT_TYPES.READ,
     layout: []
+  },
+  AdminProjectListRow: {
+    name: 'Admin project list row',
+    icon: 'mdi-card-text-outline',
+    type: LAYOUT_TYPES.READ,
+    layout: []
   }
 });

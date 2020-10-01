@@ -143,6 +143,7 @@ export default {
   },
   projects: {
     title: 'Projects',
+    create: 'Create project',
     allTab: 'All projects',
     waitingTab: 'Waiting for approval',
     publicTable: {

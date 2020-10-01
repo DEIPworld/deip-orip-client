@@ -66,7 +66,7 @@ export default {
     }
   },
   researchFeed: {
-    title: 'Projects',
+    title: 'Technologies',
     startProjectBtn: 'Start a project',
     signInBtn: 'Sign in',
     signInText: 'After creating an account/log in you can add new projects or enjoy shared materials'

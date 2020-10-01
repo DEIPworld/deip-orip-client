@@ -13,7 +13,9 @@ import DBlock from '@/components/Deipify/DBlock/DBlock';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
-import { VDivider, VSheet, VIcon, VRow, VCol } from 'vuetify/lib/components';
+import CrudActions from '@/components/layout/CrudActions';
+
+import { VDivider, VSheet, VIcon, VBtn, VRow, VCol } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
@@ -24,6 +26,8 @@ const rendererCommon = {
     DLayoutSectionSidebar,
     DLayoutSectionSplit,
 
+    CrudActions,
+
     DStack,
     DBlock,
     DMetaItem,
@@ -32,6 +36,7 @@ const rendererCommon = {
     VDivider,
     VSheet,
     VIcon,
+    VBtn,
     VRow,
     VCol
   },
@@ -134,13 +139,14 @@ export const componentsRenderer = {
       const self = this;
 
       // eslint-disable-next-line no-eval
-      let condition = node.if ? eval(`${node.if}`) : true;
+      const condition = node.if ? eval(`${node.if}`) : true;
 
       const data = {
         ...(node.props ? { props: node.props } : {}),
         ...(node.attrs ? { attrs: node.attrs } : {}),
         ...(node.class ? { class: node.class } : {}),
-        ...(node.slot ? { slot: node.slot } : {})
+        ...(node.slot ? { slot: node.slot } : {}),
+        ...(node.on ? { on: node.on } : {})
       };
 
       let vModel = {};

@@ -1,14 +1,15 @@
 <template>
-  <d-layout-full-screen v-if="tenantAttributes.length"
+  <d-layout-full-screen
+    v-if="tenantAttributes.length"
     title="Attributes placement settings"
     full-width
     :style="{height: `calc(100vh - ${$vuetify.application.top}px)`}"
     class="d-flex flex-column"
     no-gutters
   >
-<!--    <pre>-->
-<!--      {{researchAttributesAreas}}-->
-<!--    </pre>-->
+    <!--    <pre>-->
+    <!--      {{researchAttributesAreas}}-->
+    <!--    </pre>-->
     <div class="flex-grow-1 flex-shrink-1 overflow-hidden d-flex">
       <v-sheet
         :width="320"
@@ -105,7 +106,7 @@
   import { tenantAttributes } from '@/mixins/platformAttributes';
   import { TenantService } from '@deip/tenant-service';
   import AdminAttributesSettingsItem
-    from '@/components/AdminPanel/AdminAttributes/_partials/AdminAttributesSettingsItem';
+    from '@/components/AdminPanel/Attributes/_partials/AdminAttributesSettingsItem';
 
   const tenantService = TenantService.getInstance();
 
