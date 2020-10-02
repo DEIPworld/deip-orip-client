@@ -63,10 +63,9 @@
           .finally(() => {
             setTimeout(() => {
               this.$router.push({
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  group_permlink: this.research.research_group.permlink,
-                  research_permlink: this.research.permlink
+                  researchExternalId: this.research.external_id
                 }
               });
             }, 1500);

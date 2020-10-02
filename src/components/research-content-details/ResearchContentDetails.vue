@@ -424,10 +424,9 @@
                       this.proposeContent.isLoading = false;
                       setTimeout(() => {
                         this.$router.push({
-                          name: 'ResearchDetails',
+                          name: 'research.details',
                           params: {
-                            research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                            research_permlink: encodeURIComponent(this.research.permlink)
+                            researchExternalId: this.research.external_id
                           }
                         });
                       }, 1500);

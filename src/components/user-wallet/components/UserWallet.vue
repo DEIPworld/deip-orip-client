@@ -72,10 +72,9 @@
           <router-link
             class="a text-subtitle-1 text-truncate"
             :to="{
-              name: 'ResearchDetails',
+              name: 'research.details',
               params: {
-                research_group_permlink: encodeURIComponent(investment.research.research_group.permlink),
-                research_permlink: encodeURIComponent(investment.research.permlink)
+                researchExternalId: investment.research.external_id
               }
             }"
           >

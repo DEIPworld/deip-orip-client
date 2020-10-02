@@ -96,10 +96,9 @@
             <router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
-                  research_permlink: encodeURIComponent(proposal.extension.research.permlink)
+                  researchExternalId: proposal.extension.research.external_id
                 }
               }"
             >
@@ -258,10 +257,9 @@
                 <span class="font-weight-bold">Research:</span>
                 <router-link
                   :to="{
-                    name: 'ResearchDetails',
+                    name: 'research.details',
                     params: {
-                      research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
-                      research_permlink: encodeURIComponent(proposal.extension.research.permlink)
+                      researchExternalId: proposal.extension.research.external_id
                     }
                   }"
                   class="a px-2"
@@ -345,10 +343,9 @@
                   <span class="font-weight-bold">Research:</span>
                   <router-link
                     :to="{
-                      name: 'ResearchDetails',
+                      name: 'research.details',
                       params: {
-                        research_group_permlink: encodeURIComponent(proposal.extension.research.research_group.permlink),
-                        research_permlink: encodeURIComponent(proposal.extension.research.permlink)
+                        researchExternalId: proposal.extension.research.external_id
                       }
                     }"
                     class="a px-2"

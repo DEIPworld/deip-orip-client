@@ -4,7 +4,7 @@ export default {
   overview: 'Overview',
   participants: 'Participants',
   portfolio: 'Portfolio',
-  wallet: 'Wallet',
+  wallet: 'Assets',
   signIn: 'signIn',
   signUp: 'signUp',
   profile: 'Profile',

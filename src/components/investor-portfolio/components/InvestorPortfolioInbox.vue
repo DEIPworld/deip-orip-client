@@ -69,11 +69,11 @@
               <router-link
                 class="a"
                 :to="{
-                  name: 'ResearchDetails',
+                  name: 'research.details',
                   params: {
-                    research_group_permlink: encodeURIComponent(investment.group.permlink),
-                    research_permlink: encodeURIComponent(investment.research.permlink)
-                  }}"
+                    researchExternalId: investment.research.external_id
+                  }
+                }"
               >
                 {{ investment.research.title }}
               </router-link>
@@ -118,11 +118,11 @@
             <router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(investment.group.permlink),
-                  research_permlink: encodeURIComponent(investment.research.permlink)
-                }}"
+                  researchExternalId: investment.research.external_id
+                }
+              }"
             >
               {{ investment.research.title }}
             </router-link>

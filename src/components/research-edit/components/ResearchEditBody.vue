@@ -273,10 +273,9 @@
                   this.$notifier.showSuccess(this.$t('researchEdit.successProp'));
                   if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {
                     this.$router.push({
-                      name: 'ResearchDetails',
+                      name: 'research.details',
                       params: {
-                        research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                        research_permlink: encodeURIComponent(this.research.permlink)
+                        researchExternalId: this.research.external_id
                       }
                     });
                   } else {
@@ -314,10 +313,9 @@
       cancel() {
         this.$refs.researchBackground.removeAllFiles();
         this.$router.push({
-          name: 'ResearchDetails',
+          name: 'research.details',
           params: {
-            research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-            research_permlink: encodeURIComponent(this.research.permlink)
+            researchExternalId: this.research.external_id
           }
         });
       },

@@ -20,10 +20,9 @@
           Fundraising campaign for the "<router-link
             class="a"
             :to="{
-              name: 'ResearchDetails',
+              name: 'research.details',
               params: {
-                research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                researchExternalId: log.metadata.research.external_id
               }
             }"
           >{{ log.metadata.research.title }}</router-link>" project was accepted by quorum
@@ -39,10 +38,9 @@
             scheduled fundraising campaign for the "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" project
@@ -51,10 +49,9 @@
             proposed to schedule fundraising campaign for the "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" project

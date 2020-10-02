@@ -45,7 +45,7 @@
       </template>
     </template>
 
-    <template #item.ref="{item}">
+    <!-- <template #item.ref="{item}">
       <d-simple-tooltip tooltip="Browse references">
         <v-btn
           icon
@@ -63,7 +63,7 @@
           </v-icon>
         </v-btn>
       </d-simple-tooltip>
-    </template>
+    </template> -->
 
     <template #item.comments="{ item }">
       <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
@@ -114,10 +114,10 @@
             value: 'title',
             width: '70%'
           },
-          {
-            value: 'ref',
-            width: '10%'
-          },
+          // {
+          //   value: 'ref',
+          //   width: '10%'
+          // },
           {
             value: 'comments',
             width: '10%'

@@ -262,10 +262,9 @@
 
             if (research) { // if not proposal
               this.$router.push({
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(research.research_group.permlink),
-                  research_permlink: encodeURIComponent(research.permlink)
+                  researchExternalId: research.external_id
                 }
               });
             } else {
