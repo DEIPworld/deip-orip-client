@@ -270,16 +270,20 @@
         }
 
         const isProposal = !this.research.research_group.is_personal;
-        researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-          researchExternalId: this.research.external_id,
-          researchGroup: this.research.research_group.external_id,
-          type: parseInt(this.type),
-          title: this.title,
-          content: hash,
-          authors: this.authors.map((a) => a.account.name),
-          references: this.references.map((ref) => ref.external_id),
-          extensions: []
-        })
+        researchContentService.createResearchContentViaOffchain(
+          { privKey: this.user.privKey, username: this.user.username }, 
+          false,
+          {
+            researchExternalId: this.research.external_id,
+            researchGroup: this.research.research_group.external_id,
+            type: parseInt(this.type),
+            title: this.title,
+            content: hash,
+            authors: this.authors.map((a) => a.account.name),
+            references: this.references.map((ref) => ref.external_id),
+            extensions: []
+          }
+        )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchDetails.contentFileDialog.success'));
           }, (err) => {

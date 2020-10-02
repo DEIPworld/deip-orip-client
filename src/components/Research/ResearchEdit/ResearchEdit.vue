@@ -247,8 +247,8 @@
         } : null;
 
         return researchService.createResearchViaOffchain(
-          this.$currentUser.privKey,
-          this.isProposal,
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
+          false,
           { ...this.transformedFormData.data, newResearchGroupMeta },
           this.transformedFormData.offchainMeta
         )
@@ -264,8 +264,8 @@
 
       updateResearchData() {
         return researchService.updateResearchViaOffchain(
-          this.$currentUser.privKey,
-          this.isProposal,
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
+          false,
           this.transformedFormData.data,
           this.transformedFormData.offchainMeta
         );
@@ -281,13 +281,13 @@
       },
 
       updateResearch(exists) {
-        if (JSON.parse(this.cachedFormData).title !== this.transformedFormData.data.title) {
-          this.isPermlinkVerifyed = !exists;
-        } else {
-          this.isPermlinkVerifyed = true;
-        }
+        // if (JSON.parse(this.cachedFormData).title !== this.transformedFormData.data.title) {
+        //   this.isPermlinkVerifyed = !exists;
+        // } else {
+        //   this.isPermlinkVerifyed = true;
+        // }
 
-        if (exists) return false;
+        // if (exists) return false;
 
         return Promise.all([
           this.updateResearchData()

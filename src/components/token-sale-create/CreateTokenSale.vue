@@ -38,16 +38,19 @@
         const isProposal = !this.research.research_group.is_personal;
         const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        researchService.createResearchTokenSaleViaOffchain(this.user.privKey, isProposal, {
-          researchGroup: this.research.research_group.external_id,
-          researchExternalId: this.research.external_id,
-          startTime: this.formData.startDate.toISOString().split('.')[0],
-          endTime: this.formData.endDate.toISOString().split('.')[0],
-          share: `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`,
-          softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
-          hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
-          extensions: []
-        })
+        researchService.createResearchTokenSaleViaOffchain(
+          { privKey: this.user.privKey, username: this.user.username }, 
+          false, 
+          {
+            researchGroup: this.research.research_group.external_id,
+            researchExternalId: this.research.external_id,
+            startTime: this.formData.startDate.toISOString().split('.')[0],
+            endTime: this.formData.endDate.toISOString().split('.')[0],
+            share: `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`,
+            softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
+            hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
+            extensions: []
+          })
           .then(() => {
             this.isLoading = false;
             this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!');

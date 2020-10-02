@@ -231,16 +231,20 @@
         }
 
         const isProposal = !this.research.researchGroup.is_personal;
-        researchContentService.createResearchContentViaOffchain(this.$currentUser.privKey, isProposal, {
-          researchExternalId: this.research.externalId,
-          researchGroup: this.research.researchGroup.external_id,
-          type: parseInt(this.type),
-          title: this.title,
-          content: hash,
-          authors: this.authors,
-          references: this.references.map((ref) => ref.external_id),
-          extensions: []
-        })
+        researchContentService.createResearchContentViaOffchain(
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
+          false, 
+          {
+            researchExternalId: this.research.externalId,
+            researchGroup: this.research.researchGroup.external_id,
+            type: parseInt(this.type),
+            title: this.title,
+            content: hash,
+            authors: this.authors,
+            references: this.references.map((ref) => ref.external_id),
+            extensions: []
+          }
+        )
           .then(() => {
             this.$notifier.showSuccess('New material has been uploaded successfully');
           }, (err) => {

@@ -363,18 +363,23 @@
               this.isLoading = true;
 
               const isProposal = !this.group.is_personal;
-              researchGroupService.updateResearchGroupAccountViaOffchain(this.user.privKey, isProposal, {
-                researchGroup: this.group.external_id,
-                accountOwnerAuth: undefined,
-                accountActiveAuth: undefined,
-                accountActiveAuthOverrides: [],
-                accountMemoPubKey: undefined,
-                accountJsonMetadata: undefined,
-                accountExtensions: []
-              }, {
-                researchGroupName: this.newResearchGroupName,
-                researchGroupDescription: this.newResearchGroupDescription
-              })
+              researchGroupService.updateResearchGroupAccountViaOffchain(
+                { privKey: this.user.privKey, username: this.user.username }, 
+                false, 
+                {
+                  researchGroup: this.group.external_id,
+                  accountOwnerAuth: undefined,
+                  accountActiveAuth: undefined,
+                  accountActiveAuthOverrides: undefined,
+                  accountMemoPubKey: undefined,
+                  accountJsonMetadata: undefined,
+                  accountExtensions: []
+                }, 
+                {
+                  researchGroupName: this.newResearchGroupName,
+                  researchGroupDescription: this.newResearchGroupDescription
+                }
+              )
                 .then(() => {
                   this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
                   this.cancel(true);

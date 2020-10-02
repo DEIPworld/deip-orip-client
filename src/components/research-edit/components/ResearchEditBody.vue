@@ -255,17 +255,20 @@
               });
 
               const isProposal = !this.research.research_group.is_personal;
-              researchService.updateResearchViaOffchain(this.user.privKey, isProposal, {
-                researchGroup: this.research.research_group.external_id,
-                externalId: this.research.external_id,
-                title: this.title,
-                abstract: this.description,
-                isPrivate: !this.isPublic,
-                reviewShare: undefined,
-                compensationShare: undefined,
-                members: undefined,
-                extensions: []
-              }, { attributes })
+              researchService.updateResearchViaOffchain(
+                { privKey: this.user.privKey, username: this.user.username }, 
+                false, 
+                {
+                  researchGroup: this.research.research_group.external_id,
+                  externalId: this.research.external_id,
+                  title: this.title,
+                  abstract: this.description,
+                  isPrivate: !this.isPublic,
+                  reviewShare: undefined,
+                  compensationShare: undefined,
+                  members: undefined,
+                  extensions: []
+                }, { attributes })
                 .then(() => {
                   this.$notifier.showSuccess(this.$t('researchEdit.successProp'));
                   if (this.researchGroup.is_centralized || this.researchGroup.is_personal) {

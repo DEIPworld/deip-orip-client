@@ -235,8 +235,8 @@
         const isProposal = !this.research.group.is_personal;
 
         return researchService.createResearchViaOffchain(
-          this.user.privKey,
-          isProposal,
+          { privKey: this.user.privKey, username: this.user.username },
+          false,
           {
             researchGroup: this.research.group.account.name,
             title: this.research.title,
