@@ -1,3 +1,5 @@
+@use '~vuetify/src/styles/tools/display' as *;
+
 .v-application {
   .reset-height {
     min-height: 0 !important;
@@ -7,6 +9,11 @@
     min-width: 0 !important;
     width: auto !important;
   }
+
+  .visually-hidden {
+    @include visually-hidden();
+  }
+
 
   .quillWrapper {
     .ql-snow {
