@@ -15,6 +15,7 @@ import researchGroupSettings from './components/researchGroupSettings';
 import createResearchGroup from './components/createResearchGroup';
 import researchEdit from './components/researchEdit';
 import topMenu from './components/topMenu';
+import contents from './components/contents';
 
 export default {
   $vuetify: en,
@@ -77,6 +78,7 @@ export default {
     signIn: 'Sign in'
   },
 
+  contents,
   topMenu,
   defaultNaming,
   notifications,
