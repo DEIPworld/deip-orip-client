@@ -8,6 +8,8 @@
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
   import kindOf from 'kind-of';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
+  import { isArray, isString, isBoolean } from '@/utils/helpers';
+  import RecursiveIterator from 'recursive-iterator';
 
   export default {
     name: 'ResearchDetailsRenderer',
@@ -31,20 +33,29 @@
     computed: {
       isMember() {
         return this.research.members.includes(this.$currentUserName);
-      },
+      }
     },
 
     methods: {
       ifAttribute(id) {
         const attr = this.research.researchRef.attributes[id];
 
-        if (attr) {
-          const arrayVal = kindOf(attr.value) === 'array' && attr.value.length;
-          const strVal = kindOf(attr.value) === 'string' && attr.value;
-          const boolVal = kindOf(attr.value) === 'boolean' && attr.value;
+        if (attr && !!attr.value) {
+          const vals = [];
 
-          return !!(arrayVal || strVal || boolVal);
+          if (isString(attr.value) || isBoolean(attr.value)) {
+            vals.push(!!attr.value);
+          } else {
+            for (const { node } of new RecursiveIterator(attr.value)) {
+              if (isString(node)) {
+                vals.push(!!node);
+              }
+            }
+          }
+
+          return vals.includes(true);
         }
+
         return false;
       }
     }

@@ -579,7 +579,8 @@ router.beforeEach((to, from, next) => {
     'ResearchDetailsPublic',
     'NoAccessPage',
     'FAQ',
-    'UserApplicationAccepted'
+    'UserApplicationAccepted',
+    'research.details'
   ];
 
   const loginPages = [

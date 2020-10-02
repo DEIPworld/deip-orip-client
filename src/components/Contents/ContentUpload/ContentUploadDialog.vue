@@ -23,7 +23,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h5">
-            Upload material for project
+            {{ $t('contents.contentUploadDialog.upload') }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="close()">
@@ -39,28 +39,32 @@
               v-model="title"
               outlined
               :rules="[rules.titleLength]"
-              label="Title"
-              :error-messages="isPermlinkVerifyed === false ? 'ContentDetails with the same name already exists' : ''"
+              :label="$t('contents.contentUploadDialog.titleField.label')"
+              :error-messages="isPermlinkVerifyed === false ?
+                $t('contents.contentUploadDialog.titleField.err') :
+                ''
+              "
             />
 
             <v-select
               v-model="type"
               :items="researchContentTypes"
               outlined
-              label="Content Type"
+              :label="$t('contents.contentUploadDialog.typeField')"
               item-value="id"
             />
 
             <attributes-users-list-set
               v-model="authors"
               :users="research.members"
-              :attribute="{title: 'Authors'}"
+              :attribute="{title: $t('contents.contentUploadDialog.authorsAttribute')}"
+              class="mb-4"
             />
 
             <internal-references-picker
               :show-selected="true"
               :current-research="research"
-              :preselected="[]"
+              :preselected="references"
               :all-references-list="allReferencesList"
               @referenceAdded="addReference"
               @referenceRemoved="removeReference"
@@ -77,7 +81,10 @@
                 :loading="isLoading"
                 @click="proposeContent()"
               >
-                {{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}
+                {{ !isCentralizedGroup ?
+                  $t('contents.contentUploadDialog.createProp') :
+                  $t('contents.contentUploadDialog.uploadMat')
+                }}
               </v-btn>
             </v-col>
             <v-col class="py-2" cols="12">
@@ -88,7 +95,7 @@
                 text
                 @click="close()"
               >
-                Cancel
+                {{ $t('contents.contentUploadDialog.cancel') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -136,7 +143,7 @@
         isLoading: false,
 
         rules: {
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
 
         dropzoneOptions: {
@@ -217,7 +224,7 @@
         xhr.setRequestHeader('Research-ContentDetails-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
-        this.$notifier.showError('Sorry, the file storage server is temporarily unavailable, please try again later');
+        this.$notifier.showError(this.$t('contents.contentUploadDialog.errFile'));
         this.close();
       },
       vdropzoneFileAdded(file) {
@@ -227,7 +234,7 @@
         const self = this;
         const { rm: { hash } } = res;
         if (!hash) {
-          throw new Error('File upload has failed');
+          throw new Error(this.$t('contents.contentUploadDialog.errFileUpload'));
         }
 
         const isProposal = !this.research.researchGroup.is_personal;
@@ -246,13 +253,13 @@
           }
         )
           .then(() => {
-            this.$notifier.showSuccess('New material has been uploaded successfully');
+            this.$notifier.showSuccess(this.$t('contents.contentUploadDialog.success'));
           }, (err) => {
             console.error(err);
             if (err.response && err.response.status == 409) {
-              alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
+              alert(this.$t('contents.contentUploadDialog.fileUploaded'));
             } else {
-              this.$notifier.showError('An error occurred while uploading content, please try again later');
+              this.$notifier.showError(this.$t('contents.contentUploadDialog.errUploadingContent'));
             }
           })
           .finally(() => {
@@ -262,6 +269,7 @@
       },
 
       addReference(ref) {
+        console.log(!this.references.some((r) => r.external_id == ref.external_id), 'asdsg')
         if (!this.references.some((r) => r.external_id == ref.external_id)) {
           this.references.push(ref);
         }
