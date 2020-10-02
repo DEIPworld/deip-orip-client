@@ -56,17 +56,26 @@
 
     created() {
       const q = this.$route.query.rFilter;
+      console.log(this.$ls.ttl(this.storageKey))
+
+      if (this.$ls.ttl(this.storageKey) === -1) {
+        this.applyFilter();
+      }
 
       if (q) {
+        console.log(1)
         this.filterModel = {
           ...this.filterModel,
           ...JSON.parse(q)
         };
+
         this.applyFilter();
+
         this.$nextTick(() => {
           this.$refs.filter.process();
           this.$router.replace({ query: {} });
         });
+
       } else if (this.$ls.get(this.storageKey)) {
         this.filterModel = this.$ls.get(this.storageKey);
       }
@@ -75,7 +84,7 @@
     methods: {
 
       applyFilter() {
-        this.$ls.set(this.storageKey, this.filterModel);
+        this.$ls.set(this.storageKey, this.filterModel, 1000 * 60 * 60 * 24);
       },
 
       resetFilter() {

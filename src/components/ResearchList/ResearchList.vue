@@ -7,7 +7,11 @@
 
     <template #titleAddon>
       <d-toggle-view :storage-key="storageViewModelKey" class="align-self-end" />
-      <research-list-filter v-if="withFilter" :storage-key="storageFilterModelKey" />
+
+      <research-list-filter
+        v-if="withFilter"
+        :storage-key="storageFilterModelKey"
+      />
       <slot name="addSome" />
     </template>
 
@@ -51,7 +55,7 @@
   import ResearchListTable from '@/components/ResearchList/ResearchListTable';
 
   import ResearchListFilter from '@/components/ResearchList/ResearchListFilter';
-  import { objectNotEmpty } from '@/utils/helpers';
+  import { compactResearchAttributes, isArray } from '@/utils/helpers';
 
   export default {
     name: 'ResearchList',
@@ -110,14 +114,17 @@
     },
 
     created() {
-      const q = this.$route.query.rFilter;
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
 
       if (this.withFilter) {
+        const q = !!this.$route.query.rFilter;
         this.storageFilterModelKey = `${this.namespace}__filter`;
 
-        this.$ls.on(this.storageFilterModelKey, this.applyFilter, !q);
+        this.$nextTick(() => {
+          this.$ls.on(this.storageFilterModelKey, this.applyFilter, !q);
+        });
+
       } else {
         this.$setReady();
       }
@@ -147,17 +154,30 @@
 
       applyFilter() {
         this.$setReady(false);
-        const filter = this.$ls.get(this.storageFilterModelKey);
+
+        const storeFilter = this.$ls.get(this.storageFilterModelKey);
+
+        const attributes = compactResearchAttributes(
+          storeFilter.researchAttributes,
+          'researchAttributeId',
+          'values'
+        )
+          .filter((attr) => (isArray(attr.values) ? !!(attr.values.length) : !!(attr.values)))
+          .map((attr) => ({
+            ...attr,
+            ...{ values: isArray(attr.values) ? attr.values : [attr.values] }
+          }));
+
+        const transformedFilter = {
+          ...storeFilter,
+          ...(storeFilter.researchAttributes ? {
+            researchAttributes: attributes
+          } : {})
+        };
+
 
         this.$store.dispatch('feed/loadResearchFeed', {
-          filter: {
-            ...filter,
-            ...(
-              objectNotEmpty(filter.researchAttributes) ? {
-                researchAttributes: Object.keys(filter.researchAttributes).filter((a) => filter.researchAttributes[a].length).map((a) => ({ researchAttributeId: a, values: Array.isArray(filter.researchAttributes[a]) ? filter.researchAttributes[a] : [filter.researchAttributes[a]] }))
-              } : {}
-            )
-          }
+          filter: transformedFilter
         })
           .then((items) => {
             this.itemsList = items;

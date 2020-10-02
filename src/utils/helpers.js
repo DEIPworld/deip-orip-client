@@ -7,11 +7,15 @@ import { getNestedValue } from 'vuetify/lib/util/helpers';
 
 // ATTRIBUTES
 
-export const compactResearchAttributes = (attrs) => {
+export const compactResearchAttributes = (
+  attrs,
+  idKey = 'researchAttributeId',
+  valueKey = 'value'
+) => {
   return Object.keys(attrs)
-    .map((researchAttributeId) => ({
-      researchAttributeId,
-      value: attrs[researchAttributeId]
+    .map((id) => ({
+      [idKey]: id,
+      [valueKey]: attrs[id]
     }));
 };
 
@@ -75,6 +79,14 @@ export const excludeObjectKeys = (obj, keys = []) => {
 };
 
 export const objectNotEmpty = (obj) => !!(obj && Object.keys(obj).length);
+
+// DATA TYPES
+
+export const isArray = (val) => kindOf(val) === 'array';
+export const isObject = (val) => kindOf(val) === 'object';
+export const isBoolean = (val) => kindOf(val) === 'boolean';
+export const isString = (val) => kindOf(val) === 'string';
+export const isNumber = (val) => kindOf(val) === 'number';
 
 // ROUTER
 

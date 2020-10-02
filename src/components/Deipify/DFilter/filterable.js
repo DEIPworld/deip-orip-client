@@ -61,6 +61,9 @@ export const Filterable = {
         if (kindOf(node) === 'string' && node && kindOf(parent) !== 'array') {
           count += 1;
         }
+        if (kindOf(node) === 'boolean' && node && kindOf(parent) !== 'array') {
+          count += 1;
+        }
       }
 
       this.filterCount = count;

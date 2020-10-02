@@ -273,7 +273,6 @@ export const attributeReadUsers = {
     const users = kindOf(this.attribute.value) === 'string'
       ? [this.attribute.value]
       : this.attribute.value;
-    console.log(users)
     this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
       .then(() => {
         this.$setReady();

@@ -14,7 +14,6 @@ const ACTIONS = {
   getUsersProfiles({ commit }, users) {
     return usersService.getEnrichedProfiles(users)
       .then((res) => {
-        console.log(res)
         commit('storeUsersProfiles', res);
       });
   },

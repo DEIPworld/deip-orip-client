@@ -99,9 +99,9 @@
       };
     },
 
-    created() {
-      this.$emit('apply');
-    },
+    // created() {
+    //   this.$emit('apply');
+    // },
 
     methods: {
       toggle() {
