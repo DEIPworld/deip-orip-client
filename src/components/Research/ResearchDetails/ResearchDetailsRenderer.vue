@@ -27,6 +27,13 @@
         default: () => ({})
       }
     },
+
+    computed: {
+      isMember() {
+        return this.research.members.includes(this.$currentUserName);
+      },
+    },
+
     methods: {
       ifAttribute(id) {
         const attr = this.research.researchRef.attributes[id];

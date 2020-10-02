@@ -169,7 +169,7 @@ export const attributeRead = {
           }
         }, this.attribute.value);
       }
-      return this._v(this.attribute.value);
+      return this.attribute.value ? this._v(this.attribute.value) : false;
     }
   },
   render(h) {

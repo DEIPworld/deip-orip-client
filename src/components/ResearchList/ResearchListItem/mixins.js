@@ -18,7 +18,7 @@ export const researchItem = {
       return {
         ...this.research,
         ...{
-          createdAt: this.$options.filters.dateFormat(this.research.created_at, 'D MMM YYYY', true),
+          created_at: this.$options.filters.dateFormat(this.research.created_at, 'D MMM YYYY', true),
           researchRef: {
             attributes: researchAttributesToObject(this.research.researchRef.attributes)
           },
