@@ -75,7 +75,7 @@
                   this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
 
                   const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
-                    this.user.privKey,
+                    { privKey: this.user.privKey, username: this.user.username },
                     {
                       researchGroup: res.external_id,
                       member: invitee.account,
@@ -85,7 +85,6 @@
                     },
                     {
                       notes: `${this.formData.name} invites you to join them`,
-                      approver: this.user.username
                     }
                   ));
 

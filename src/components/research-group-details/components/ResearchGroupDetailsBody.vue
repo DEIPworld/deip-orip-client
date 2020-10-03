@@ -203,15 +203,21 @@
     methods: {
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
-        researchGroupService.leftResearchGroupViaOffchain(this.user.privKey, {
-          member: member.item.owner,
-          researchGroup: this.group.external_id,
-          isExclusion: true,
-          extensions: []
-        }, {
-          notes: '',
-          approver: null
-        })
+        researchGroupService.leaveResearchGroupViaOffchain(
+          {
+            privKey: this.user.privKey,
+            username: this.user.username
+          },
+          {
+            member: member.item.owner,
+            researchGroup: this.group.external_id,
+            isExclusion: true,
+            extensions: []
+          }, 
+          {
+            notes: ""
+          }
+        )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchGroupDetails.successDrop'));
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });

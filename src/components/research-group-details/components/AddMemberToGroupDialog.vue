@@ -111,16 +111,19 @@
       sendProposal() {
         this.isLoading = true;
 
-        researchGroupService.createResearchGroupInviteViaOffchain(this.user.privKey, {
-          researchGroup: this.groupExternalId,
-          member: this.selectedUser.name,
-          rewardShare: '0.00 %',
-          researches: undefined, // all researches
-          extensions: []
-        }, {
-          notes: this.coverLetter,
-          approver: null
-        })
+        researchGroupService.createResearchGroupInviteViaOffchain(
+          { privKey: this.user.privKey, username: this.user.username },
+          {
+            researchGroup: this.groupExternalId,
+            member: this.selectedUser.name,
+            rewardShare: '0.00 %',
+            researches: undefined, // all researches
+            extensions: []
+          }, 
+          {
+            notes: this.coverLetter,
+          }
+        )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchGroupDetails.addMemberDialog.success'));
             this.$emit('onSuccess');
