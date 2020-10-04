@@ -9,7 +9,7 @@
     class="cursor-pointer"
   >
     <d-box-item
-      :avatar="member.profile | avatarSrc(32, 32, false)"
+      :avatar="member.profile | avatarSrc(64, 64, false)"
       :size="32"
     >
       <v-clamp

@@ -54,7 +54,7 @@
               }"
             >
               <d-box-item
-                :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
+                :avatar="group.external_id | researchGroupLogoSrc(64, 64)"
                 :size="32"
                 class="w-100 pa-4"
               >

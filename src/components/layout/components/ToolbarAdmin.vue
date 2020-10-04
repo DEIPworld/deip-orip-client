@@ -27,7 +27,7 @@
               <v-avatar size="32px" v-on="on">
                 <img
                   v-if="user.profile"
-                  :src="user.profile | avatarSrc(2 * 32, 2 * 32, false)"
+                  :src="user.profile | avatarSrc(64, 64, false)"
                 >
                 <v-gravatar
                   v-if="!user.profile && user.account"

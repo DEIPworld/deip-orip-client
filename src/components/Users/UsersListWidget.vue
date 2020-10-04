@@ -8,7 +8,7 @@
       :to="userDetailsRoute(user.account.name)"
     >
       <v-list-item-avatar>
-        <img :src="user.profile | avatarSrc(2 * 32, 2 * 32, false)" />
+        <img :src="user.profile | avatarSrc(64, 64, false)" />
       </v-list-item-avatar>
       <v-list-item-content>
         <div class="text-h6">

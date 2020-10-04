@@ -65,7 +65,7 @@
                 :key="'join-request-' + index"
               >
                 <d-box-item
-                  :avatar="join.user.profile | avatarSrc(40, 40, false)"
+                  :avatar="join.user.profile | avatarSrc(80, 80, false)"
                   :size="40"
                 >
                   <v-clamp
@@ -124,7 +124,7 @@
                 :key="'invite-request-' + index"
               >
                 <d-box-item
-                  :avatar="invite.user.profile | avatarSrc(40, 40, false)"
+                  :avatar="invite.user.profile | avatarSrc(80, 80, false)"
                   :size="40"
                 >
                   <v-clamp
