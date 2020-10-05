@@ -276,7 +276,7 @@ export const modulesComponents = [
     name: 'Materials',
     icon: 'mdi-file-document-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
     }
   },
   {
@@ -284,7 +284,7 @@ export const modulesComponents = [
     name: 'Drafts',
     icon: 'mdi-file-edit-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
     }
   },
   {
@@ -300,9 +300,19 @@ export const modulesComponents = [
     name: 'Reviews',
     icon: 'mdi-comment-processing-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
     }
   },
+  {
+    component: 'EciStats',
+    name: 'ECI stats',
+    icon: 'mdi-chart-areaspline',
+    props: {
+      researchId: 'research.externalId',
+      disciplines: 'research.disciplines'
+    }
+  },
+
 
   {
     name: 'Edit Button',

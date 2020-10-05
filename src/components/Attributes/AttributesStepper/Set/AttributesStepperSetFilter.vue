@@ -60,8 +60,6 @@
 
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
-  import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
