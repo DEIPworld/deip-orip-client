@@ -9,6 +9,10 @@
     min-width: 0 !important;
     width: auto !important;
   }
+  .fix-width {
+    max-width: 100%;
+    min-width: 0px;
+  }
 
   .visually-hidden {
     @include visually-hidden();

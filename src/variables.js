@@ -119,6 +119,13 @@ const ATTR_TYPES_ICONS = {
   [ATTR_TYPES.PARTNERS]: 'mdi-account-tie-outline',
 };
 
+// ===========================
+
+const PROJECTS_LIST_VIEW = createEnum({
+  GRID: 1,
+  TABLE: 2
+});
+
 const ATTR_AREAS = {
   MAIN: 'main',
   SIDEBAR: 'sidebar',
@@ -151,5 +158,7 @@ export {
 
   ATTR_AREAS,
 
-  ECI_STAT_PERIOD_STEP_TYPE
+  ECI_STAT_PERIOD_STEP_TYPE,
+
+  PROJECTS_LIST_VIEW
 };

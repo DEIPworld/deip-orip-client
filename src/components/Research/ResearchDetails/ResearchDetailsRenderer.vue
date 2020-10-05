@@ -6,10 +6,8 @@
   import ContentsList from '@/components/ContentsList/ContentsList';
   import DraftsList from '@/components/DraftsList/DraftsList';
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
-  import kindOf from 'kind-of';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
-  import { isArray, isString, isBoolean } from '@/utils/helpers';
-  import RecursiveIterator from 'recursive-iterator';
+  import { hasValue } from '@/utils/helpers';
 
   export default {
     name: 'ResearchDetailsRenderer',
@@ -40,23 +38,27 @@
       ifAttribute(id) {
         const attr = this.research.researchRef.attributes[id];
 
-        if (attr && !!attr.value) {
-          const vals = [];
+        if (!!attr || !!attr.value) return false;
 
-          if (isString(attr.value) || isBoolean(attr.value)) {
-            vals.push(!!attr.value);
-          } else {
-            for (const { node } of new RecursiveIterator(attr.value)) {
-              if (isString(node)) {
-                vals.push(!!node);
-              }
-            }
-          }
+        return hasValue(attr.value);
 
-          return vals.includes(true);
-        }
-
-        return false;
+        // if (attr && !!attr.value) {
+        //   const vals = [];
+        //
+        //   if (isString(attr.value) || isBoolean(attr.value)) {
+        //     vals.push(!!attr.value);
+        //   } else {
+        //     for (const { node } of new RecursiveIterator(attr.value)) {
+        //       if (isString(node)) {
+        //         vals.push(!!node);
+        //       }
+        //     }
+        //   }
+        //
+        //   return vals.includes(true);
+        // }
+        //
+        // return false;
       }
     }
   };
