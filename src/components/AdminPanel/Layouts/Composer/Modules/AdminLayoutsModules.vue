@@ -69,7 +69,7 @@
     setAs,
     setComponentProps
   } from '@/components/AdminPanel/Layouts/modules';
-  import { ATTR_TYPES_ICONS, LAYOUT_TYPES } from '@/variables';
+  import { ATTR_TYPES, ATTR_ICONS, LAYOUT_TYPES } from '@/variables';
   import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
@@ -89,6 +89,20 @@
     },
     computed: {
       attrModules() {
+
+
+        const propsForRead = {
+          [ATTR_TYPES.TEXT]: setComponentProps({
+            clamped: setAs(Number)
+          }),
+          [ATTR_TYPES.TEXTAREA]: setComponentProps({
+            clamped: setAs(Number)
+          }),
+          [ATTR_TYPES.STEPPER]: setComponentProps({
+            viewType: setAs(Array, ['default', 'small'])
+          })
+        };
+
         const extenders = {
           [LAYOUT_TYPES.SET]: (attr) => ({
             component: 'AttributesSet',
@@ -97,13 +111,10 @@
               attribute: `@attributes.${attr._id}`
             }
           }),
+
           [LAYOUT_TYPES.READ]: (attr) => ({
             component: 'AttributesRead',
-            ...(/text|textarea/.test(attr.type)
-              ? setComponentProps({
-                clamped: setAs(Number)
-              })
-              : {}),
+            ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
             ...{
               props: {
                 attribute: `@research.researchRef.attributes.${attr._id}`
@@ -121,7 +132,7 @@
           },
           ...this.$tenantSettings.researchAttributes
             .map((attr) => ({
-              icon: ATTR_TYPES_ICONS[attr.type],
+              icon: ATTR_ICONS[attr.type],
               name: attr.shortTitle || attr.title,
               isRequired: attr.isRequired,
               isHidden: attr.isHidden,

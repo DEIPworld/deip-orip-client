@@ -40,12 +40,19 @@
         v-for="id in sortedLabels"
         :key="id"
         outlined
-        close
-        close-icon="close"
         class="ma-1"
-        @click:close="removeItem(id)"
       >
-        {{ getItemObject(id).label }}
+        <div class="text-truncate">
+          {{ getItemObject(id).label }}
+        </div>
+        <v-btn
+          icon
+          x-small
+          class="mr-n2 ml-2"
+          @click="removeItem(id)"
+        >
+          <v-icon>clear</v-icon>
+        </v-btn>
       </v-chip>
     </div>
   </div>

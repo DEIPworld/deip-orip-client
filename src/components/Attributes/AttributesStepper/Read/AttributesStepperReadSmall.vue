@@ -26,7 +26,7 @@
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   export default {
-    name: 'AttributesStepperReadCard',
+    name: 'AttributesStepperReadSmall',
     components: { DSimpleTooltip },
     mixins: [attributeReadOption]
   };

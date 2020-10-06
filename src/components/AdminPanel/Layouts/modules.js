@@ -6,13 +6,13 @@ import { createRange } from 'vuetify/lib/util/helpers';
 // helpers
 
 export const setComponentProps = (availableProps, props = {}) => ({
-  ...{ availableProps },
-  ...{ props }
+  availableProps,
+  props
 });
 
 export const setComponentAttrs = (availableAttrs, attrs = {}) => ({
-  ...{ availableAttrs },
-  ...{ attrs }
+  availableAttrs,
+  attrs
 });
 
 export const extendModuleObject = (obj, ext = { type: 'common' }) => {
@@ -162,6 +162,7 @@ export const modulesUi = [
     name: 'Meta data',
     icon: 'mdi-tag-text-outline',
     type: 'typography',
+    text: '',
     ...setComponentProps({
       icon: setAs(String),
       title: setAs(String)
@@ -276,7 +277,7 @@ export const modulesComponents = [
     name: 'Materials',
     icon: 'mdi-file-document-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
     }
   },
   {
@@ -284,7 +285,7 @@ export const modulesComponents = [
     name: 'Drafts',
     icon: 'mdi-file-edit-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
     }
   },
   {
@@ -300,42 +301,34 @@ export const modulesComponents = [
     name: 'Reviews',
     icon: 'mdi-comment-processing-outline',
     props: {
-      researchId: '@research.external_id'
+      researchId: '@research.externalId'
+    }
+  },
+  {
+    component: 'EciStats',
+    name: 'ECI stats',
+    icon: 'mdi-chart-areaspline',
+    props: {
+      researchId: '@research.externalId',
+      disciplines: '@research.disciplines'
     }
   },
 
   {
     name: 'Edit Button',
-    component: 'VBtn',
+    component: 'ResearchDetailsEditCta',
     icon: 'mdi-circle-edit-outline',
-    class: 'justify-self-start mt-4',
-    if: 'this.research.members.includes(this.$currentUserName)',
-    ...setComponentProps({
-      color: setAs(String)
-    }, {
-      small: true,
-      outlined: true,
-      to: {
-        name: 'research.edit',
-        params: {
-          researchExternalId: '{{$route.params.researchExternalId}}'
-        }
-      }
-    }),
-    children: [
-      {
-        component: 'VIcon',
-        required: true,
-        props: {
-          left: true,
-          size: 18
-        },
-        text: 'mdi-pencil-outline'
-      },
-      {
-        component: 'span',
-        text: 'Edit'
-      }
-    ]
+    props: {
+      project: '@research',
+    }
+  },
+
+  {
+    name: 'Bookmark Button',
+    component: 'ResearchDetailsFollowCta',
+    icon: 'mdi-bookmark-multiple-outline',
+    props: {
+      project: '@research'
+    }
   }
 ];

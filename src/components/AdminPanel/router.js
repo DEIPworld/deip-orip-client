@@ -14,14 +14,11 @@ import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
-import AdminAttributesSettings
-  from '@/components/AdminPanel/Attributes/AdminAttributesSettings';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
 
 import { i18n } from '@/plugins/i18n';
 import { routerView } from '@/utils/helpers';
-import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
 
 export const adminRouting = [
   {
@@ -59,15 +56,6 @@ export const adminRouting = [
             name: 'admin.projects',
             component: AdminProjects
           },
-
-          // {
-          //   name: 'admin.projects.create',
-          //   path: 'create',
-          //   component: ResearchEdit,
-          //   props: {
-          //     title: 'Add new technology'
-          //   }
-          // }
         ]
       },
       {
@@ -86,11 +74,6 @@ export const adminRouting = [
             props: {
               title: i18n.t('adminRouting.attributes.attributesEdit.title')
             }
-          },
-          {
-            path: 'settings',
-            name: 'admin.attributes.settings',
-            component: AdminAttributesSettings
           }
         ]
       },

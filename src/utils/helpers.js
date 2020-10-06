@@ -3,7 +3,8 @@ import sortKeys from 'sort-keys';
 import crc32 from 'crc/crc32';
 import kindOf from 'kind-of';
 
-import { getNestedValue } from 'vuetify/lib/util/helpers';
+import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
+import RecursiveIterator from 'recursive-iterator';
 
 // ATTRIBUTES
 
@@ -80,13 +81,40 @@ export const excludeObjectKeys = (obj, keys = []) => {
 
 export const objectNotEmpty = (obj) => !!(obj && Object.keys(obj).length);
 
-// DATA TYPES
+// DATA
 
 export const isArray = (val) => kindOf(val) === 'array';
 export const isObject = (val) => kindOf(val) === 'object';
+
 export const isBoolean = (val) => kindOf(val) === 'boolean';
 export const isString = (val) => kindOf(val) === 'string';
 export const isNumber = (val) => kindOf(val) === 'number';
+
+export const isSimpleVal = (val) => ['boolean', 'string', 'number'].includes(kindOf(val));
+
+export const hasValue = (value) => {
+  if (!value) return false;
+
+  const res = [];
+
+  if (isSimpleVal(value)) {
+    res.push(!!value);
+  } else {
+    for (const { node } of new RecursiveIterator(value)) {
+      if (isSimpleVal(node)) {
+        res.push(!!node);
+      }
+    }
+  }
+
+  return res.includes(true);
+};
+
+export const hasOwnProperty = (prop, obj) => {
+  if (kindOf(obj) !== 'object') return false;
+
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
 
 // ROUTER
 
@@ -113,7 +141,7 @@ export const getActionMapKey = (payloadKey, defaultValue) => {
 };
 
 export const getActionTarget = (payload = {}) => {
-  if (payload.type) return payload.type;
+  if (payload.target) return payload.target;
   if (payload.userName) return 'user';
   if (payload.teamId) return 'team';
   return 'public';
@@ -121,13 +149,13 @@ export const getActionTarget = (payload = {}) => {
 
 export const getActionFrom = (map, getters) => {
   const getters$ = !getters ? [
-    getActionTarget,
+    getActionTarget
   ] : getters;
 
   return {
     get(payload = {}) {
       const path = getters$.map((getter) => getter(payload)).join('.');
-      return getNestedValue(map, path);
+      return getObjectValueByPath(map, path);
     }
   };
 };

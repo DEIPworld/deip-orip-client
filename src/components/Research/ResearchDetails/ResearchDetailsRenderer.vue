@@ -3,17 +3,24 @@
 
   import AttributesRead from '@/components/Attributes/AttributesRead';
 
+  import { hasValue } from '@/utils/helpers';
   import ContentsList from '@/components/ContentsList/ContentsList';
-  import DraftsList from '@/components/DraftsList/DraftsList';
-  import ReviewsList from '@/components/ReviewsList/ReviewsList';
-  import kindOf from 'kind-of';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
-  import { isArray, isString, isBoolean } from '@/utils/helpers';
-  import RecursiveIterator from 'recursive-iterator';
+  import DraftsList from '@/components/DraftsList/DraftsList';
+
+  import ReviewsList from '@/components/ReviewsList/ReviewsList';
+
+  import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+
+  import ResearchDetailsEditCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsEditCta';
+  import ResearchDetailsFollowCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsFollowCta';
 
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
+      ResearchDetailsFollowCta,
+      ResearchDetailsEditCta,
+      EciStats,
       AttributesRead,
 
       ReviewsList,
@@ -40,23 +47,9 @@
       ifAttribute(id) {
         const attr = this.research.researchRef.attributes[id];
 
-        if (attr && !!attr.value) {
-          const vals = [];
+        if (!attr || !attr.value) return false;
 
-          if (isString(attr.value) || isBoolean(attr.value)) {
-            vals.push(!!attr.value);
-          } else {
-            for (const { node } of new RecursiveIterator(attr.value)) {
-              if (isString(node)) {
-                vals.push(!!node);
-              }
-            }
-          }
-
-          return vals.includes(true);
-        }
-
-        return false;
+        return hasValue(attr.value);
       }
     }
   };

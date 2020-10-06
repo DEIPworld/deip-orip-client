@@ -1,5 +1,10 @@
 import { ResearchService } from '@deip/research-service';
-import { getActionFrom, getActionTarget, getActionMapKey } from '@/utils/helpers';
+import {
+  getActionFrom,
+  getActionTarget,
+  getActionMapKey,
+  camelizeObjectKeys
+} from '@/utils/helpers';
 
 const researchService = ResearchService.getInstance();
 
@@ -32,28 +37,28 @@ const actionsMap = {
 };
 
 const actionFor = getActionFrom(actionsMap, [
-  getActionMapKey('scope', 'projects').get,
+  getActionMapKey('type', 'projects').get,
   getActionTarget,
   getActionMapKey('status', 'approved').get
 ]).get;
 
 const STATE = {
-  list: []
+  projectsList: []
 };
 
 const GETTERS = {
-  list: (state) => state.list
+  projectsList: (state) => state.projectsList
 };
 
 const ACTIONS = {
 
-  getData({ dispatch }, payload) {
+  getProjectsData({ dispatch }, payload = {}) {
     return dispatch(actionFor(payload), payload);
   },
 
   // PROJECTS
 
-  getPublicProjects({ commit }, { filter }) {
+  getPublicProjects({ commit }, { filter = {} }) {
     return researchService.getPublicResearchListing(filter)
       .then((result) => {
         commit('storeProjectsData', result);
@@ -139,7 +144,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeProjectsData(state, payload) {
-    state.publicProjects = payload;
+    state.projectsList = payload.map((item) => (camelizeObjectKeys(item)));
   }
 };
 

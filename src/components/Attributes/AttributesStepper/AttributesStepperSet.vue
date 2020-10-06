@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="attributeViewTypeComponent"
+    :is="attributeComponent"
     v-model="internalValue"
     :attribute="attribute"
     :view-type="viewType"

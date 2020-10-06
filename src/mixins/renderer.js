@@ -1,5 +1,5 @@
 import kindOf from 'kind-of';
-import { getObjectValueByPath, mergeDeep } from 'vuetify/lib/util/helpers';
+import { getObjectValueByPath, mergeDeep, getSlotType } from 'vuetify/lib/util/helpers';
 import dotProp from 'dot-prop';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
@@ -85,9 +85,9 @@ export const nativeRenderer = {
   ],
 
   methods: {
-    getChildren(children = null, h) {
+    getChildren(children = null) {
       if (kindOf(children) === 'array') {
-        return children.map((n) => this.generateNode(n, h));
+        return children.map((n) => this.generateNode(n));
       }
 
       if (kindOf(children) === 'string') {
@@ -97,13 +97,13 @@ export const nativeRenderer = {
       throw new Error('Children must be an Array or String');
     },
 
-    generateNode(node, h) {
+    generateNode(node) {
       const data = { ...(node.data || {}) };
       const condition = Object.prototype.hasOwnProperty.call(node, 'if') ? node.if : true;
-      return condition !== 'false' ? h(
+      return condition !== 'false' ? this.$createElement(
         node.is,
         data,
-        this.getChildren(node.children, h)
+        this.getChildren(node.children, this.$createElement)
       ) : null;
     }
   },
@@ -123,10 +123,10 @@ export const componentsRenderer = {
   ],
   // props: ['value'],
   methods: {
-    getChildren(children = null, h) {
+    getChildren(children = null) {
       if (children) {
         if (kindOf(children) === 'array') {
-          return children.map((n) => this.generateNode(n, h));
+          return children.map((n) => this.generateNode(n));
         }
 
         throw new Error('Children must be an Array');
@@ -135,7 +135,7 @@ export const componentsRenderer = {
       return null;
     },
 
-    generateNode(node, h) {
+    generateNode(node) {
       const self = this;
 
       // eslint-disable-next-line no-eval
@@ -169,20 +169,29 @@ export const componentsRenderer = {
 
       const component = isStringNode ? node : node.component;
 
-      let content = this.getChildren(node.children, h);
+      let children = this.getChildren(node.children);
 
       if (node.text) {
-        content = node.text;
+        children = node.text;
       }
+
+      // SLOTS WORKAROUND // must be changed
+      if (node.slotName) {
+        const slotType = getSlotType(this, node.slotName);
+        children = slotType === 'scoped'
+          ? [this.$scopedSlots[node.slotName]()]
+          : this.$slots[node.slotName];
+      }
+
       if (isStringNode) {
-        content = null;
+        children = null;
       }
 
       if (condition) {
-        return h(
+        return this.$createElement(
           component,
           mergeDeep(data, vModel),
-          content
+          children
         );
       }
 

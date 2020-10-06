@@ -4,13 +4,6 @@
       <d-block :title="$t('adminRouting.attributes.title')">
 
         <template #titleAddon>
-          <v-btn outlined small color="primary" :to="{name: 'admin.attributes.settings'}">
-            <v-icon left>
-              widgets
-            </v-icon>
-            {{ $t('adminRouting.attributes.placementSettings') }}
-          </v-btn>
-
           <v-btn small color="primary" :to="{name: 'admin.attributes.edit'}">
             <v-icon left>
               extension
@@ -28,7 +21,7 @@
 
           <template #item.type="{ item }">
             <v-chip outlined small>
-              {{ ATTR_TYPES_LABELS[item.type] ? ATTR_TYPES_LABELS[item.type] : 'undefined' }}
+              {{ ATTR_LABELS[item.type] ? ATTR_LABELS[item.type] : 'undefined' }}
             </v-chip>
           </template>
 
@@ -77,7 +70,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
+  import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import CrudActions from '@/components/layout/CrudActions';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -98,7 +91,7 @@
     data() {
       return {
         ATTR_TYPES,
-        ATTR_TYPES_LABELS,
+        ATTR_LABELS,
 
         xxx: [],
 

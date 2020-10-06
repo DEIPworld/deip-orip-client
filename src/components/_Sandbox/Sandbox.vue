@@ -1,54 +1,17 @@
 <template>
   <d-layout-section>
     <d-layout-section-main>
+      <projects-list with-filter>
 
-      <d-autocomplete
-        label="label"
-        class="mb-12"
-        outlined
-        :items="[
-          'anim ad',
-          'ex incididunt',
-          'anim quis',
-          'aliqua eiusmod',
-          'magna enim',
-          'magna qui',
-          'ea aliqua',
-          'reprehenderit laborum',
-          'nulla ea',
-          'magna exercitation',
-          'aute et',
-          'magna tempor',
-          'do sunt',
-          'laborum consectetur',
-          'officia ex'
-        ]"
-      />
+<!--        <template #itemRowActions="{ project }">-->
+<!--          <v-btn small icon><v-icon>clear</v-icon></v-btn>-->
+<!--        </template>-->
 
-      <d-autocomplete
-        label="label"
-        outlined
-        multiple
-        chips
-        deletable-chips
-        :items="[
-          'anim ad',
-          'ex incididunt',
-          'anim quis',
-          'aliqua eiusmod',
-          'magna enim',
-          'magna qui',
-          'ea aliqua',
-          'reprehenderit laborum',
-          'nulla ea',
-          'magna exercitation',
-          'aute et',
-          'magna tempor',
-          'do sunt',
-          'laborum consectetur',
-          'officia ex'
-        ]"
-      />
+<!--        <template #itemCardActions="{ project }">-->
+<!--          <v-btn small>clear</v-btn>-->
+<!--        </template>-->
+
+      </projects-list>
 
     </d-layout-section-main>
   </d-layout-section>
@@ -58,13 +21,15 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import { VIEW_TYPES } from '@/variables';
 
   export default {
     name: 'Sandbox',
-    components: { DAutocomplete, DLayoutSectionMain, DLayoutSection },
+    components: { ProjectsList, DLayoutSectionMain, DLayoutSection },
     data() {
       return {
-        tab: undefined
+        VIEW_TYPES
       };
     }
   };
