@@ -3,16 +3,23 @@
 
   import AttributesRead from '@/components/Attributes/AttributesRead';
 
-  import ContentsList from '@/components/ContentsList/ContentsList';
-  import DraftsList from '@/components/DraftsList/DraftsList';
-  import ReviewsList from '@/components/ReviewsList/ReviewsList';
-  import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
   import { hasValue } from '@/utils/helpers';
+  import ContentsList from '@/components/ContentsList/ContentsList';
+  import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
+  import DraftsList from '@/components/DraftsList/DraftsList';
+
+  import ReviewsList from '@/components/ReviewsList/ReviewsList';
+
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+
+  import ResearchDetailsEditCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsEditCta';
+  import ResearchDetailsFollowCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsFollowCta';
 
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
+      ResearchDetailsFollowCta,
+      ResearchDetailsEditCta,
       EciStats,
       AttributesRead,
 
@@ -39,7 +46,7 @@
     methods: {
       ifAttribute(id) {
         const attr = this.research.researchRef.attributes[id];
-        
+
         if (!attr || !attr.value) return false;
 
         return hasValue(attr.value);

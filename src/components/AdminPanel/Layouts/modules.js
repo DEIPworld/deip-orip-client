@@ -308,44 +308,26 @@ export const modulesComponents = [
     name: 'ECI stats',
     icon: 'mdi-chart-areaspline',
     props: {
-      researchId: 'research.externalId',
-      disciplines: 'research.disciplines'
+      researchId: '@research.externalId',
+      disciplines: '@research.disciplines'
     }
   },
 
-
   {
     name: 'Edit Button',
-    component: 'VBtn',
+    component: 'ResearchDetailsEditCta',
     icon: 'mdi-circle-edit-outline',
-    class: 'justify-self-start mt-4',
-    if: 'this.research.members.includes(this.$currentUserName)',
-    ...setComponentProps({
-      color: setAs(String)
-    }, {
-      small: true,
-      outlined: true,
-      to: {
-        name: 'research.edit',
-        params: {
-          researchExternalId: '{{$route.params.researchExternalId}}'
-        }
-      }
-    }),
-    children: [
-      {
-        component: 'VIcon',
-        required: true,
-        props: {
-          left: true,
-          size: 18
-        },
-        text: 'mdi-pencil-outline'
-      },
-      {
-        component: 'span',
-        text: 'Edit'
-      }
-    ]
+    props: {
+      project: '@research',
+    }
+  },
+
+  {
+    name: 'Bookmark Button',
+    component: 'ResearchDetailsFollowCta',
+    icon: 'mdi-bookmark-multiple-outline',
+    props: {
+      project: '@research'
+    }
   }
 ];
