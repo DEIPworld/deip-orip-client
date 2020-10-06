@@ -5,6 +5,10 @@ export const projectsView = {
     projects: {
       type: Array,
       default: () => ([])
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

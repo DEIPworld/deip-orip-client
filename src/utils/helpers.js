@@ -135,7 +135,7 @@ export const getActionMapKey = (payloadKey, defaultValue) => {
 };
 
 export const getActionTarget = (payload = {}) => {
-  if (payload.type) return payload.type;
+  if (payload.target) return payload.target;
   if (payload.userName) return 'user';
   if (payload.teamId) return 'team';
   return 'public';
@@ -145,8 +145,6 @@ export const getActionFrom = (map, getters) => {
   const getters$ = !getters ? [
     getActionTarget
   ] : getters;
-
-
 
   return {
     get(payload = {}) {

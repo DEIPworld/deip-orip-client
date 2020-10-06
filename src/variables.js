@@ -29,7 +29,7 @@ const maxDescriptionLength = 2048;
 
 const VIEW_TYPES = createEnum({
   GRID: 1,
-  LIST: 2
+  TABLE: 2
 });
 
 const ATTR_TYPES = {
@@ -121,11 +121,6 @@ const ATTR_TYPES_ICONS = {
 
 // ===========================
 
-const PROJECTS_LIST_VIEW = createEnum({
-  GRID: 1,
-  TABLE: 2
-});
-
 const ATTR_AREAS = {
   MAIN: 'main',
   SIDEBAR: 'sidebar',
@@ -138,6 +133,13 @@ export const LAYOUT_TYPES = createEnum({
   READ: 2,
   EDIT: 3
 });
+
+const SKELETONS = {
+  card: 'heading, description@2, meta',
+  meta: 'text@3',
+  description: 'text@3',
+  grid: 'card@12'
+};
 
 export {
   PROPOSAL_TYPES,
@@ -160,5 +162,5 @@ export {
 
   ECI_STAT_PERIOD_STEP_TYPE,
 
-  PROJECTS_LIST_VIEW
+  SKELETONS
 };

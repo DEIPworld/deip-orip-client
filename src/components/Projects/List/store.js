@@ -37,7 +37,7 @@ const actionsMap = {
 };
 
 const actionFor = getActionFrom(actionsMap, [
-  getActionMapKey('scope', 'projects').get,
+  getActionMapKey('type', 'projects').get,
   getActionTarget,
   getActionMapKey('status', 'approved').get
 ]).get;
@@ -54,7 +54,6 @@ const ACTIONS = {
 
   getProjectsData({ dispatch }, payload = {}) {
     return dispatch(actionFor(payload), payload);
-    // return dispatch('getPublicProjects', payload);
   },
 
   // PROJECTS

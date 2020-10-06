@@ -1,6 +1,5 @@
 <template>
   <d-block ref="ProjectsList">
-
     <template #title>
       <v-badge
         :content="projects.length || '0'"
@@ -20,12 +19,18 @@
         class="align-self-end"
       />
 
+      <projects-list-filter
+        v-if="withFilter"
+        :storage-key="storageFilterKey"
+      />
+
       <slot name="addSome" />
     </template>
 
     <component
       :is="viewTypeComponent"
       :projects="projects"
+      :loading="!$ready"
       :row-layout-key="rowLayoutKey"
       :card-layout-key="cardLayoutKey"
     >
@@ -46,16 +51,24 @@
 <script>
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { projectsListStore } from '@/components/Projects/List/store';
-  import { PROJECTS_LIST_VIEW } from '@/variables';
+  import { VIEW_TYPES } from '@/variables';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
   import ProjectsListGrid from '@/components/Projects/List/Grid/ProjectsListGrid';
   import ProjectsListTable from '@/components/Projects/List/Table/ProjectsListTable';
   import { mapState } from 'vuex';
+  import ProjectsListFilter from '@/components/Projects/List/Filter/ProjectsListFilter';
+  import { compactResearchAttributes, isArray } from '@/utils/helpers';
 
   export default {
     name: 'ProjectsList',
-    components: { ProjectsListTable, ProjectsListGrid, DToggleView, DBlock },
+    components: {
+      ProjectsListFilter,
+      ProjectsListTable,
+      ProjectsListGrid,
+      DToggleView,
+      DBlock
+    },
     mixins: [
       componentStoreFactory(projectsListStore)
     ],
@@ -65,10 +78,12 @@
         type: Boolean,
         default: false
       },
+
       viewTypes: {
-        type: [Array, Number],
-        default: () => ([PROJECTS_LIST_VIEW.GRID, PROJECTS_LIST_VIEW.TABLE])
+        type: [Array],
+        default: () => ([VIEW_TYPES.GRID, VIEW_TYPES.TABLE])
       },
+
       rowLayoutKey: {
         type: String,
         default: 'projectListRow'
@@ -76,17 +91,34 @@
       cardLayoutKey: {
         type: String,
         default: 'projectListCard'
+      },
+
+      type: {
+        type: String,
+        default: 'projects'
+      },
+      userName: {
+        type: String,
+        default: null
+      },
+      teamId: {
+        type: String,
+        default: null
+      },
+      status: {
+        type: String,
+        default: 'approved'
       }
     },
 
     data() {
       return {
         viewTypeComponents: {
-          [PROJECTS_LIST_VIEW.TABLE]: 'ProjectsListTable',
-          [PROJECTS_LIST_VIEW.GRID]: 'ProjectsListGrid'
+          [VIEW_TYPES.TABLE]: 'ProjectsListTable',
+          [VIEW_TYPES.GRID]: 'ProjectsListGrid'
         },
 
-        currentViewType: PROJECTS_LIST_VIEW.GRID
+        currentViewType: null
       };
     },
 
@@ -97,17 +129,13 @@
       }),
 
       viewTypeComponent() {
-        if (this.multiView) {
-          return this.viewTypeComponents[this.currentViewType];
-        }
-
-        return this.viewTypes[this.viewType];
+        return this.viewTypeComponents[this.currentViewType];
       },
 
       multiView() { return this.viewTypes.length > 1; },
 
       storageViewTypeKey() { return `${this.storeNS}_view-type`; },
-      storageFilterKey() { return `${this.storeNS}_filter`; }
+      storageFilterKey() { return `${this.storeNS}_filter`; },
     },
 
     created() {
@@ -115,7 +143,18 @@
         this.$ls.on(this.storageViewTypeKey, this.changeViewType, true);
       });
 
-      this.getData();
+      this.changeViewType(this.viewTypes[0]);
+
+      if (this.withFilter) {
+        const hasQuery = !!this.$route.query.rFilter;
+
+        this.$nextTick(() => {
+          console.log(111)
+          this.$ls.on(this.storageFilterKey, this.getData, !hasQuery);
+        });
+      } else {
+        this.getData();
+      }
     },
 
     beforeDestroy() {
@@ -126,13 +165,46 @@
 
     methods: {
       getData() {
-        this.$store.dispatch(`${this.storeNS}/getProjectsData`)
+        this.$setReady(false);
+
+        const payload = {
+          type: this.type,
+          userName: this.userName,
+          // userName: 'alice',
+          teamId: this.teamId,
+          status: this.status,
+          ...(this.withFilter ? { filter: this.filterPayload() } : {})
+        };
+
+        this.$store.dispatch(`${this.storeNS}/getProjectsData`, payload)
           .then(() => {
             this.$setReady();
           })
           .catch((err) => {
             console.error(err);
           });
+      },
+
+      filterPayload() {
+        const storeFilter = this.$ls.get(this.storageFilterKey);
+
+        const attributes = compactResearchAttributes(
+          storeFilter.researchAttributes,
+          'researchAttributeId',
+          'values'
+        )
+          .filter((attr) => (isArray(attr.values) ? !!(attr.values.length) : !!(attr.values)))
+          .map((attr) => ({
+            ...attr,
+            ...{ values: isArray(attr.values) ? attr.values : [attr.values] }
+          }));
+
+        return {
+          ...storeFilter,
+          ...(storeFilter.researchAttributes ? {
+            researchAttributes: attributes
+          } : {})
+        };
       },
 
       onItemClick() {},

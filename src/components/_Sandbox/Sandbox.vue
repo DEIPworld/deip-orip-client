@@ -1,16 +1,15 @@
 <template>
   <d-layout-section>
     <d-layout-section-main>
+      <projects-list with-filter>
 
-      <projects-list>
+<!--        <template #itemRowActions="{ project }">-->
+<!--          <v-btn small icon><v-icon>clear</v-icon></v-btn>-->
+<!--        </template>-->
 
-        <template #itemRowActions="{project}">
-          <v-btn small icon><v-icon>clear</v-icon></v-btn>
-        </template>
-
-        <template #itemCardActions="{project}">
-          <v-btn small>clear</v-btn>
-        </template>
+<!--        <template #itemCardActions="{ project }">-->
+<!--          <v-btn small>clear</v-btn>-->
+<!--        </template>-->
 
       </projects-list>
 
@@ -23,13 +22,14 @@
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import { VIEW_TYPES } from '@/variables';
 
   export default {
     name: 'Sandbox',
     components: { ProjectsList, DLayoutSectionMain, DLayoutSection },
     data() {
       return {
-        tab: undefined
+        VIEW_TYPES
       };
     }
   };
