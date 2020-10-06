@@ -150,12 +150,10 @@
       }
     },
     created() {
-      if (this.researchId) {
-        this.$store.dispatch('FundraisingStats/loadResearchTokenSale', this.researchId)
-          .then(() => {
-            this.$setReady();
-          });
-      }
+      this.$store.dispatch('FundraisingStats/loadResearchTokenSale', this.researchId)
+        .then(() => {
+          this.$setReady();
+        });
     }
   };
 </script>
