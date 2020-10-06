@@ -1,11 +1,14 @@
-import { routerView } from '@/utils/helpers';
-import Research from '@/components/Research/Research';
 import ResearchDetails from '@/components/Research/ResearchDetails/ResearchDetails';
-import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
 import ResearchExpertise from '@/components/Research/ResearchExpertise/ResearchExpertise';
-import ResearchFoundraising from '@/components/Research/ResearchFoundraising/ResearchFoundraising';
-import { contentRoutingFabric } from '@/components/Contents/router';
+import ResearchEdit from '@/components/Research/ResearchEdit/ResearchEdit';
+import ContentDetails from '@/components/Contents/ContentDetails/ContentDetails';
+import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import { reviewRoutingFabric } from '@/components/Reviews/router';
+import { contentRoutingFabric } from '@/components/Contents/router';
+import Research from '@/components/Research/Research';
+import ResearchFoundraising from '@/components/Research/ResearchFoundraising/ResearchFoundraising';
+
+const routerView = { template: '<router-view />' };
 
 export const researchRouting = [{
   path: '/p',
@@ -34,15 +37,6 @@ export const researchRouting = [{
         },
 
         {
-          name: 'research.edit',
-          path: 'edit',
-          component: ResearchEdit,
-          props: {
-            title: 'Edit technology'
-          }
-        },
-
-        {
           name: 'research.expertise',
           path: 'expertise',
           component: ResearchExpertise
@@ -59,11 +53,21 @@ export const researchRouting = [{
         },
 
         {
+          name: 'research.edit',
+          path: 'edit',
+          component: ResearchEdit
+        },
+        {
           name: 'research.fundraising',
           path: 'fundraising',
           component: ResearchFoundraising
+        },
+        {
+          name: 'research.createTokenSale',
+          path: 'create-fundraise',
+          component: CreateTokenSale
         }
       ]
-    }
+    },
   ]
 }];

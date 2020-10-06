@@ -11,6 +11,7 @@
   import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+  import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
 
   import ResearchDetailsEditCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsEditCta';
   import ResearchDetailsFollowCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsFollowCta';
@@ -27,7 +28,8 @@
 
       ContentUpload,
       ContentsList,
-      DraftsList
+      DraftsList,
+      FundraisingStats
     },
     mixins: [componentsRenderer],
     props: {

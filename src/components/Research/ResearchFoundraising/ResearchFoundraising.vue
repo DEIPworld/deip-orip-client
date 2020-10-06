@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import Fundraising from '@/components/Fundraising/Fundraising';
+  import Fundraising from '@/components/Fundraising/FundraisingPage/Fundraising';
   import { mapGetters } from 'vuex';
 
   export default {
