@@ -138,6 +138,15 @@
           };
         }
 
+        if (this.$route.name === 'research.details') {
+          return {
+            name: 'research.expertise',
+            params: {
+              researchExternalId: this.$route.params.researchExternalId
+            }
+          };
+        }
+
         if (this.$route.name === 'ResearchContentDetails') {
           return {
             name: 'ResearchContentExpertise',
