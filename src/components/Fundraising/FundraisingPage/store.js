@@ -20,28 +20,36 @@ const ACTIONS = {
     return investmentsService.getCurrentTokenSaleByResearchId(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
-
-        if (tokenSale) {
-          return dispatch('loadTokenSaleContributors');
+        if (!tokenSale) {
+          return dispatch('loadLastResearchTokenSale', researchId);
         }
       }, (err) => { console.error(err); });
   },
 
-  loadTokenSaleContributors({ state, commit }) {
+  loadAllInvestors({ commit }, researchId) {
     const contributors = [];
-    return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(
-      state.tokenSale.id
-    )
+    return deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
       .then((contributions) => {
         contributors.push(...contributions);
-        return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
+        return usersService.getEnrichedProfiles(contributions.map((m) => m.account_name));
       })
       .then((users) => {
         for (let i = 0; i < contributors.length; i++) {
           const contributor = contributors[i];
-          contributor.user = users.find((user) => contributor.owner === user.account.name);
+          contributor.user = users.find((user) => contributor.account_name === user.account.name);
         }
         commit('setResearchTokenSaleContributionsList', contributors);
+      });
+  },
+  loadLastResearchTokenSale({ commit }, researchId) {
+    return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
+      .then((tokenSales) => {
+        const lastTokenSale = tokenSales.sort((a, b) => {
+          const dateA = new Date(a.end_time);
+          const dateB = new Date(b.end_time);
+          return dateB - dateA;
+        })[0];
+        commit('setResearchTokenSale', lastTokenSale);
       });
   }
 };

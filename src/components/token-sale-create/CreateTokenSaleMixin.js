@@ -1,5 +1,7 @@
 import { mapGetters } from 'vuex';
-import deipRpc from '@deip/rpc-client';
+import { ResearchService } from '@deip/research-service';
+
+const researchService = ResearchService.getInstance();
 
 export const CreateTokenSaleMixin = {
   computed: {
@@ -27,10 +29,7 @@ export const CreateTokenSaleMixin = {
   },
 
   created() {
-    deipRpc.api.getResearchByAbsolutePermlinkAsync(
-      decodeURIComponent(this.$route.params.research_group_permlink),
-      decodeURIComponent(this.$route.params.research_permlink)
-    )
+    researchService.getResearch(this.$route.params.researchExternalId)
       .then((research) => {
         this.group_permlink = research.research_group.permlink;
         this.research = research;
