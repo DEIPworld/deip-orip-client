@@ -28,7 +28,7 @@
               </d-stack>
               <div class="ml-4">
                 <v-chip outlined class="caption">
-                  {{ tokenSaleTimeLeft }} left
+                  {{ tokenSaleTimeLeft | timeLeft }} left
                 </v-chip>
               </div>
             </div>
@@ -113,13 +113,14 @@
               hide-details
               :suffix="tokenSale.soft_cap.split(' ')[1]"
               :rules="[rules.required, deipTokenValidator]"
-              :disabled="isInvesting"
+              :disabled="isInvesting || tokenSale.status === 2"
             />
             <v-checkbox
               v-model="formData.agreeFundraising"
               class="mt-3 mb-2"
               :rules="[rules.required]"
               hide-details
+              :disabled="tokenSale.status === 2"
               label="I agree to the Terms and Conditions listed below "
             />
             <a
@@ -134,7 +135,7 @@
               block
               small
               type="submit"
-              :disabled="isContributionToTokenSaleDisabled"
+              :disabled="isContributionToTokenSaleDisabled || tokenSale.status === 2"
             >
               Invest
             </v-btn>
@@ -189,12 +190,12 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DForm from '@/components/Deipify/DForm/DForm';
-  import FundraisingProgressNeedle from '@/components/Fundraising/components/FundraisingProgressNeedle';
+  import FundraisingProgressNeedle from '@/components/Fundraising/FundraisingPage/components/FundraisingProgressNeedle';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { chartGradient, switchColor } from '@/plugins/charts';
   import moment from 'moment';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { fundraisingStore } from '@/components/Fundraising/store';
+  import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
   import { ResearchService } from '@deip/research-service';
 
@@ -298,25 +299,7 @@
       tokenSaleTimeLeft() {
         if (!this.tokenSale) return null;
 
-        const time = this.hasInactiveTokenSale ? 'start_time' : 'end_time';
-
-        const now = moment.utc().local();
-        const start = moment.utc(this.tokenSale[time]).local();
-
-        const months = Math.floor(moment.duration(start.diff(now)).asMonths());
-        if (months > 1) return `${months} months`;
-
-        const days = Math.floor(moment.duration(start.diff(now)).asDays());
-        if (days > 1) return `${days} days`;
-
-        const hours = Math.floor(moment.duration(start.diff(now)).asHours());
-        if (hours > 1) return `${hours} hours`;
-
-        const minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
-        if (minutes > 1) return `${minutes} mins`;
-
-        const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
-        return `${seconds} secs`;
+        return this.hasInactiveTokenSale ? this.tokenSale.start_time : this.tokenSale.end_time;
       },
       // todo: transform to constant
       hasActiveTokenSale() {
@@ -331,16 +314,14 @@
           ['Researcher', 'AmountMoney'],
           ...this.contributionsList.reduce((arr, item) => {
             arr.push(
-              [this.$options.filters.fullname(item.user), this.fromAssetsToFloat(item.amount)]
+              [this.$options.filters.fullname(item.user), item.amount]
             );
             return arr;
           }, [])
         ];
       },
       currentCap() {
-        return this.contributionsList
-          .map((c) => this.fromAssetsToFloat(c.amount))
-          .reduce((acc, val) => acc + val, 0);
+        return this.fromAssetsToFloat(this.tokenSale.total_amount);
       },
       isContributionToTokenSaleDisabled() {
         if (!this.userBalances[this.tokenSale.soft_cap.split(' ')[1]]) return true;
@@ -383,10 +364,16 @@
       }
     },
     created() {
-      this.$store
-        .dispatch('Fundraising/loadResearchTokenSale', this.researchId)
+      Promise.all([
+        this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
+        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId)
+      ])
         .then(() => {
-          this.$setReady();
+          if (!this.tokenSale) {
+            this.$router.back();
+          } else {
+            this.$setReady();
+          }
         })
         .catch(() => this.$router.back());
     },

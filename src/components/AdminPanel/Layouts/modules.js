@@ -312,6 +312,16 @@ export const modulesComponents = [
       disciplines: '@research.disciplines'
     }
   },
+  {
+    component: 'FundraisingStats',
+    name: 'Fund stats',
+    icon: 'mdi-cash-refund',
+    props: {
+      researchId: '@research.id',
+      groupPemlink: '@research.researchGroup.permlink',
+      researchPemlink: '@research.permlink'
+    }
+  },
 
   {
     name: 'Edit Button',

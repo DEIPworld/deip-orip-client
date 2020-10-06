@@ -6,14 +6,12 @@
 
   import ContentsList from '@/components/ContentsList/ContentsList';
   import DraftsList from '@/components/DraftsList/DraftsList';
-  import ReviewsList from '@/components/ReviewsList/ReviewsList';
 
   export default {
     name: 'ResearchEditRenderer',
     components: {
       AttributesSet,
 
-      ReviewsList,
       ContentsList,
       DraftsList
     },

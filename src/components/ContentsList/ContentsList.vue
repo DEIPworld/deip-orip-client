@@ -45,16 +45,17 @@
       </template>
     </template>
 
-    <!-- <template #item.ref="{item}">
+    <template #item.ref="{item}">
       <d-simple-tooltip tooltip="Browse references">
         <v-btn
           icon
           small
           :to="{
-            name: 'research.content.details',
+            name: 'ResearchContentReferences',
             params: {
-              contentExternalId: item.external_id,
-              researchExternalId: researchId,
+              research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
+              content_permlink: item.permlink,
+              research_permlink: $store.getters['Research/data'].permlink,
             }
           }"
         >
@@ -63,7 +64,7 @@
           </v-icon>
         </v-btn>
       </d-simple-tooltip>
-    </template> -->
+    </template>
 
     <template #item.comments="{ item }">
       <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
@@ -114,10 +115,10 @@
             value: 'title',
             width: '70%'
           },
-          // {
-          //   value: 'ref',
-          //   width: '10%'
-          // },
+          {
+            value: 'ref',
+            width: '10%'
+          },
           {
             value: 'comments',
             width: '10%'
