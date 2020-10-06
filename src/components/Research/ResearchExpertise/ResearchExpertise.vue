@@ -19,7 +19,7 @@
     <d-layout-section>
       <d-layout-section-main>
         <eci-history-and-stats
-          :research-id="research.createdAt"
+          :research-id="research.externalId"
         />
       </d-layout-section-main>
     </d-layout-section>
