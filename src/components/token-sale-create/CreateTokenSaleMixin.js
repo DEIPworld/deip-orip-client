@@ -31,7 +31,6 @@ export const CreateTokenSaleMixin = {
   created() {
     researchService.getResearch(this.$route.params.researchExternalId)
       .then((research) => {
-        console.log(research)
         this.group_permlink = research.research_group.permlink;
         this.research = research;
       });
