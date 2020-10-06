@@ -16,6 +16,24 @@
       <!--        label="Header image"-->
       <!--      />-->
 
+      <div v-for="(item, idx) in [
+        {name: 'Commercial license', fee: '100.000 TESTS'},
+        {name: 'Super license', fee: '300.000 TESTS'},
+        {name: 'Mega license', fee: '500.000 TESTS'}]" 
+        :key="idx + '-attribute-attachment'">
+
+        <label :for="idx + '-attribute-file-attachment'">Attach {{item.name}}</label>
+        <input type="file" :id="idx + '-attribute-file-attachment'" @change="onAttributeFileAttachment($event, '6174747269627574655f6964', item)">
+      </div>
+
+      <div>
+        <div style="margin: 10px 0px 10px 0px">
+          <a class="a" target="_blank" :href="getResearchAttributeFileUrl('8d621c841ce45efa29182e5478758b560ee91d83', '6174747269627574655f6964', 'filename.png', true, false)">
+            Url to file
+          </a>
+        </div>
+      </div>
+
       <v-divider class="mt-8 mb-6" />
       <div class="d-flex justify-end align-center">
         <d-stack horizontal :gap="8">
@@ -96,8 +114,10 @@
             attributes: {}
           },
 
-          image: undefined
+          image: undefined,
         },
+
+        attributesWithFiles: {},
 
         isPermlinkVerifyed: true
       };
@@ -198,8 +218,21 @@
       storeDraft() {
         this.$ls.set('researchDraft', this.formData, 1000 * 60 * 60);
       },
+      onAttributeFileAttachment (event, attributeId, item) {
+        if (!this.attributesWithFiles[attributeId]) {
+          this.attributesWithFiles[attributeId] = [];
+        }
+        this.attributesWithFiles[attributeId].push({ 
+          ...item, 
+          file: event.target.files[0]
+        });
+      },
       readDraft() {},
       clearDraft() {},
+
+      getResearchAttributeFileUrl(researchExternalId, researchAttributeId, filename, isImage = false, download = false) {
+        return `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchAttributeId}/file/${filename}?download=${download}&image=${isImage}`;
+      },
 
       verifyPermlink() {
         if (this.transformedFormData.data.researchGroup) {
@@ -240,17 +273,42 @@
       createResearch(exists) {
         if (exists) return false;
 
-        const newResearchGroupMeta = this.transformedFormData.data.researchGroup === null ? {
-          creator: this.$currentUser.account.name,
-          memo: this.$currentUser.account.memo_key,
-          fee: this.toAssetUnits(0)
-        } : null;
+        const formData = new FormData();
+        const offchainMeta = this.transformedFormData.offchainMeta;
+        const onchainData = this.transformedFormData.data;
+        
+        let attributesWithFiles = Object.keys(this.attributesWithFiles);
+        for (let i = 0; i < attributesWithFiles.length; i++) {
+          let attributeId = attributesWithFiles[i];
+
+          for (let j = 0; j < this.attributesWithFiles[attributeId].length; j++) {
+            let item = this.attributesWithFiles[attributeId][j];
+            item.filename = item.file.name;
+            formData.append(attributeId, item.file, `${attributeId}-${item.file.name}`);
+          }
+
+          const attr = offchainMeta.attributes.find(attr => attr.researchAttributeId == attributeId);
+          if (attr) {
+            attr.value = this.attributesWithFiles[attributeId];
+          } else {
+            offchainMeta.attributes.push({ researchAttributeId: attributeId, value: this.attributesWithFiles[attributeId] });
+          }
+
+        }
+
+        if (onchainData.researchGroup === null) {
+          onchainData.creator = this.$currentUser.account.name;
+          onchainData.memo = this.$currentUser.account.memo_key;
+          onchainData.fee = this.toAssetUnits(0);
+        }
+
+        formData.append('onchainData', JSON.stringify(onchainData));
+        formData.append('offchainMeta', JSON.stringify(offchainMeta));
 
         return researchService.createResearchViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
           false,
-          { ...this.transformedFormData.data, newResearchGroupMeta },
-          this.transformedFormData.offchainMeta
+          formData
         )
           .then((research) => {
             this.$notifier.showSuccess(`Project "${this.transformedFormData.data.title}" has been created successfully`);
@@ -263,11 +321,37 @@
       },
 
       updateResearchData() {
+
+        const formData = new FormData();
+        const offchainMeta = this.transformedFormData.offchainMeta;
+        const onchainData = this.transformedFormData.data;
+        
+        let attributesWithFiles = Object.keys(this.attributesWithFiles);
+        for (let i = 0; i < attributesWithFiles.length; i++) {
+          let attributeId = attributesWithFiles[i];
+
+          for (let j = 0; j < this.attributesWithFiles[attributeId].length; j++) {
+            let item = this.attributesWithFiles[attributeId][j];
+            item.filename = item.file.name;
+            formData.append(attributeId, item.file, `${attributeId}-${item.file.name}`);
+          }
+
+          const attr = offchainMeta.attributes.find(attr => attr.researchAttributeId == attributeId);
+          if (attr) {
+            attr.value = this.attributesWithFiles[attributeId];
+          } else {
+            offchainMeta.attributes.push({ researchAttributeId: attributeId, value: this.attributesWithFiles[attributeId] });
+          }
+
+        }
+
+        formData.append('onchainData', JSON.stringify(onchainData));
+        formData.append('offchainMeta', JSON.stringify(offchainMeta));
+
         return researchService.updateResearchViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
           false,
-          this.transformedFormData.data,
-          this.transformedFormData.offchainMeta
+          formData
         );
       },
 
