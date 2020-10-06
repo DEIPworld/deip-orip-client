@@ -6,13 +6,13 @@ import { createRange } from 'vuetify/lib/util/helpers';
 // helpers
 
 export const setComponentProps = (availableProps, props = {}) => ({
-  ...{ availableProps },
-  ...{ props }
+  availableProps,
+  props
 });
 
 export const setComponentAttrs = (availableAttrs, attrs = {}) => ({
-  ...{ availableAttrs },
-  ...{ attrs }
+  availableAttrs,
+  attrs
 });
 
 export const extendModuleObject = (obj, ext = { type: 'common' }) => {
