@@ -60,10 +60,9 @@
       color="primary"
       class="mt-3"
       :to="{
-        name: 'CreateTokenSale',
+        name: 'research.createTokenSale',
         params: {
-          research_group_permlink: groupPemlink,
-          research_permlink: researchPemlink
+          researchExternalId: $route.params.researchExternalId
         }
       }"
     >
