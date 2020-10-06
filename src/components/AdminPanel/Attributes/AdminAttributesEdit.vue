@@ -53,7 +53,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import { ATTR_TYPES, ATTR_TYPES_LABELS } from '@/variables';
+  import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
 
   import { defaultAttributeModel } from '@/components/Attributes/mixins';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
@@ -76,7 +76,7 @@
     data() {
       return {
         ATTR_TYPES,
-        ATTR_TYPES_LABELS,
+        ATTR_LABELS,
 
         rules: { required: (value) => !!value || this.$t('defaultNaming.fieldRules.required') },
 
@@ -96,8 +96,8 @@
       }),
 
       attrsList() {
-        return Object.keys(this.ATTR_TYPES_LABELS)
-          .map((key) => ({ value: key, text: this.ATTR_TYPES_LABELS[key] }));
+        return Object.keys(this.ATTR_LABELS)
+          .map((key) => ({ value: key, text: this.ATTR_LABELS[key] }));
       }
     },
     created() {

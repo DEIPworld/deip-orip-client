@@ -162,6 +162,7 @@ export const modulesUi = [
     name: 'Meta data',
     icon: 'mdi-tag-text-outline',
     type: 'typography',
+    text: '',
     ...setComponentProps({
       icon: setAs(String),
       title: setAs(String)

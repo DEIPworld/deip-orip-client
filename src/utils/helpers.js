@@ -110,6 +110,12 @@ export const hasValue = (value) => {
   return res.includes(true);
 };
 
+export const hasOwnProperty = (prop, obj) => {
+  if (kindOf(obj) !== 'object') return false;
+
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
 // ROUTER
 
 export const routerView = { template: '<router-view />' };

@@ -33,33 +33,35 @@
       </template>
 
       <v-list nav dense>
-        <v-list-item
-          v-if="/AttributesRead|AttributesSet/.test(node.component)"
-          @click="copyAttrId()"
-        >
-          <v-list-item-icon class="mr-1">
-            <v-icon size="20">
-              mdi-clipboard-multiple-outline
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-content class="text-body-2">
-            Copy attribute ID
-          </v-list-item-content>
-        </v-list-item>
 
-        <v-list-item
-          v-if="/AttributesRead/.test(node.component)"
-          @click="copyAttrCondition()"
-        >
-          <v-list-item-icon class="mr-1">
-            <v-icon size="20">
-              mdi-clipboard-multiple-outline
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-content class="text-body-2">
-            Copy attribute condition
-          </v-list-item-content>
-        </v-list-item>
+        <template v-if="['AttributesRead', 'AttributesSet'].includes(node.component)">
+
+          <v-list-item @click="copyAttrId()">
+            <v-list-item-icon class="mr-1">
+              <v-icon size="20">
+                mdi-book-multiple-outline
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="text-body-2">
+              Copy attribute ID
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item
+            v-if="node.component === 'AttributesRead'"
+            @click="copyAttrCondition()"
+          >
+            <v-list-item-icon class="mr-1">
+              <v-icon size="20">
+                mdi-checkbox-multiple-marked-outline
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content class="text-body-2">
+              Copy attribute condition
+            </v-list-item-content>
+          </v-list-item>
+
+        </template>
 
         <v-dialog
           v-model="settingsOpen"
@@ -90,6 +92,15 @@
                 <d-icon-selector
                   v-if="node.component === 'VIcon'"
                   v-model="nodeSettings.text"
+                />
+
+                <v-text-field
+                  v-if="hasOwnProperty('text', node) && node.component !== 'VIcon'"
+                  v-model="nodeSettings.text"
+                  label="Text"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
                 />
 
                 <d-stack v-if="node.availableProps" :gap="16">
@@ -257,6 +268,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DIconSelector from '@/components/Deipify/DIconSelector/DIconSelector';
   import { filterObjectOnKeys } from 'vuetify/lib/util/helpers';
+  import { hasOwnProperty } from '@/utils/helpers';
 
   export default {
     name: 'AdminLayoutsComposerNodeSettings',
@@ -283,8 +295,15 @@
         }
       };
     },
+    computed: {
+      attrId() {
+        return this.node.props && this.node.props.attribute
+          ? this.node.props.attribute.split('.').slice(-1).pop()
+          : null;
+      }
+    },
     created() {
-      const model = filterObjectOnKeys(
+      const model = _.cloneDeep(filterObjectOnKeys(
         this.node,
         [
           'text',
@@ -296,7 +315,7 @@
           'class',
           'slot'
         ]
-      );
+      ));
 
       this.nodeSettings = {
         ...this.nodeSettings,
@@ -304,6 +323,10 @@
       };
     },
     methods: {
+      hasOwnProperty(prop, obj) {
+        return hasOwnProperty(prop, obj)
+      },
+
       openMenu() {
         this.menuOpen = true;
       },
@@ -319,14 +342,14 @@
         };
         this.settingsOpen = false;
       },
+
       copyAttrId() {
-        const id = this.node.props.attribute.split('.').slice(-1).pop();
-        this.$clipboard(id);
+        this.$clipboard(this.attrId);
       },
       copyAttrCondition() {
-        const id = this.node.props.attribute.split('.').slice(-1).pop();
-        this.$clipboard(`this.ifAttribute('${id}')`);
+        this.$clipboard(`this.ifAttribute('${this.attrId}')`);
       },
+
       clickRemove() {
         this.$emit('click:remove', this.node.id$);
       }

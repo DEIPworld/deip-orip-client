@@ -1,38 +1,4 @@
-import { createEnum } from '@deip/toolbox';
-
-import { PROPOSAL_TYPES } from '@deip/proposals-service';
-import {
-  EXPERTISE_CONTRIBUTION_TYPE,
-  ECI_STAT_PERIOD_STEP_TYPE
-} from '@deip/expertise-contributions-service';
-import { researchContentTypes } from '@deip/research-service';
-import {
-  AWARD_STATUS,
-  AWARD_RECIPIENT_STATUS,
-  AWARD_WITHDRAWAL_REQUEST_STATUS
-} from '@deip/grants-service';
-import { ASSESSMENT_CRITERIA_TYPE } from '@deip/research-content-reviews-service';
-
-const proposalTypesLabels = {
-  [PROPOSAL_TYPES.CREATE_RESEARCH]: 'Start new research project',
-  [PROPOSAL_TYPES.INVITE_MEMBER]: 'Invite new member to research group',
-  [PROPOSAL_TYPES.EXCLUDE_MEMBER]: 'Exclude member from research group',
-  [PROPOSAL_TYPES.TRANSFER]: 'Transfer research group funds',
-  [PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: 'Schedule research fundraising campaign',
-  [PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: 'Publish research project results',
-  [PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: 'Update group meta',
-  [PROPOSAL_TYPES.UPDATE_RESEARCH]: 'Update research meta'
-};
-
-const maxTitleLength = 255;
-const maxDescriptionLength = 2048;
-
-const VIEW_TYPES = createEnum({
-  GRID: 1,
-  TABLE: 2
-});
-
-const ATTR_TYPES = {
+export const ATTR_TYPES = {
   TEXT: 'text',
   TEXTAREA: 'textarea',
 
@@ -58,10 +24,14 @@ const ATTR_TYPES = {
   RESEARCH_GROUPS_LIST: 'research-groups-list',
 
   ROADMAP: 'roadmap',
-  PARTNERS: 'partners'
+  PARTNERS: 'partners',
+
+  EXPRESS_LICENSING: 'express-licensing',
+  IMAGE: 'image',
+  FILE: 'file'
 };
 
-const ATTR_TYPES_LABELS = {
+export const ATTR_LABELS = {
   [ATTR_TYPES.TEXT]: 'Text field',
   [ATTR_TYPES.TEXTAREA]: 'Text area',
 
@@ -88,9 +58,13 @@ const ATTR_TYPES_LABELS = {
 
   [ATTR_TYPES.ROADMAP]: 'Roadmap',
   [ATTR_TYPES.PARTNERS]: 'Partners',
+
+  [ATTR_TYPES.EXPRESS_LICENSING]: 'Express licensing',
+  [ATTR_TYPES.IMAGE]: 'Image upload',
+  [ATTR_TYPES.FILE]: 'File upload'
 };
 
-const ATTR_TYPES_ICONS = {
+export const ATTR_ICONS = {
   [ATTR_TYPES.TEXT]: 'mdi-form-textbox',
   [ATTR_TYPES.TEXTAREA]: 'mdi-form-textarea',
 
@@ -117,50 +91,8 @@ const ATTR_TYPES_ICONS = {
 
   [ATTR_TYPES.ROADMAP]: 'mdi-timeline-clock-outline',
   [ATTR_TYPES.PARTNERS]: 'mdi-account-tie-outline',
-};
 
-// ===========================
-
-const ATTR_AREAS = {
-  MAIN: 'main',
-  SIDEBAR: 'sidebar',
-  HEADER: 'header',
-  CARD: 'card'
-};
-
-export const LAYOUT_TYPES = createEnum({
-  SET: 1,
-  READ: 2,
-  EDIT: 3
-});
-
-const SKELETONS = {
-  card: 'heading, description@2, meta',
-  meta: 'text@3',
-  description: 'text@3',
-  grid: 'card@12'
-};
-
-export {
-  PROPOSAL_TYPES,
-  proposalTypesLabels,
-  researchContentTypes,
-  EXPERTISE_CONTRIBUTION_TYPE,
-  AWARD_STATUS,
-  AWARD_RECIPIENT_STATUS,
-  AWARD_WITHDRAWAL_REQUEST_STATUS,
-  ASSESSMENT_CRITERIA_TYPE,
-  maxTitleLength,
-  maxDescriptionLength,
-  VIEW_TYPES,
-
-  ATTR_TYPES,
-  ATTR_TYPES_LABELS,
-  ATTR_TYPES_ICONS,
-
-  ATTR_AREAS,
-
-  ECI_STAT_PERIOD_STEP_TYPE,
-
-  SKELETONS
+  [ATTR_TYPES.EXPRESS_LICENSING]: 'mdi-file-certificate-outline',
+  [ATTR_TYPES.IMAGE]: 'mdi-file-image-outline',
+  [ATTR_TYPES.FILE]: 'mdi-file-outline'
 };

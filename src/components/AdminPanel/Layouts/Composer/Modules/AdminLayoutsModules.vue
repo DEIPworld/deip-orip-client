@@ -69,7 +69,7 @@
     setAs,
     setComponentProps
   } from '@/components/AdminPanel/Layouts/modules';
-  import { ATTR_TYPES, ATTR_TYPES_ICONS, LAYOUT_TYPES } from '@/variables';
+  import { ATTR_TYPES, ATTR_ICONS, LAYOUT_TYPES } from '@/variables';
   import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
@@ -132,7 +132,7 @@
           },
           ...this.$tenantSettings.researchAttributes
             .map((attr) => ({
-              icon: ATTR_TYPES_ICONS[attr.type],
+              icon: ATTR_ICONS[attr.type],
               name: attr.shortTitle || attr.title,
               isRequired: attr.isRequired,
               isHidden: attr.isHidden,
