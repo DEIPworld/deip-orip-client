@@ -1,13 +1,13 @@
 <template>
   <d-layout-full-screen :title="title">
-    <pre>{{ JSON.stringify(formData.researchRef.attributes['5f58d4fa97f36d3938dde1ed'], null, 2) }}</pre>
+<!--    <pre>{{ JSON.stringify(formData.researchRef.attributes['5f58d4fa97f36d3938dde1ed'], null, 2) }}</pre>-->
     <pre>{{ JSON.stringify(formFiles, null, 2) }}</pre>
 <!--    <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
     <!--    <pre>{{ JSON.stringify(transformedFormData.filesData, null, 2) }}</pre>-->
     <!--        <pre>{{JSON.stringify(formData.researchRef.attributes[2], null, 2)}}</pre>-->
     <!--        <pre>{{JSON.stringify(transformedFormData.offchainMeta, null, 2)}}</pre>-->
     <!--        <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
-    <d-form :disabled="processing" @submit="onSubmit">
+    <d-form :disabled="processing" @submit="onSubmit" v-if="$ready">
 
       <research-edit-renderer
         v-model="formData"
@@ -46,7 +46,7 @@
     camelizeObjectKeys,
     expandResearchAttributes,
     tenantAttributesToObject,
-    isArray, hasValue, isObject,
+    isArray, hasValue, isFile,
     researchAttributeFileUrl
   } from '@/utils/helpers';
   import { debounce } from 'vuetify/lib/util/helpers';
@@ -57,6 +57,7 @@
   import { researchAttributes } from '@/mixins/platformAttributes';
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
   import { ATTR_TYPES } from '@/variables';
+  import { camelCase } from 'change-case'
 
   const researchService = ResearchService.getInstance();
 
@@ -140,20 +141,19 @@
 
       formFiles() {
         return this.filesAttrs.map((id) => {
-          const attr = this.formData.researchRef.attributes[id];
-          return isObject(attr) && hasValue(attr) ? [id, attr.file, `${id}-${attr.name}`] : null;
+          const file = this.formData.researchRef.attributes[id];
+          return isFile(file) ? [id, file, `${id}-${file.name}`] : null;
         })
           .filter((file) => !!file);
       },
 
       onchainData() {
-        const onchainFields = camelizeObjectKeys(this.$tenantSettings.researchAttributes
+        const onchainFields = this.$tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
             const value = this.formData.researchRef.attributes[attr._id];
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
-
               acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
                 ? [...acc[attr.blockchainFieldMeta.field], ...(Array.isArray(value) ? value : [value])]
                 : [...(isArray(value) ? value : [value])];
@@ -161,11 +161,11 @@
               acc[attr.blockchainFieldMeta.field] = value || null;
             }
             return acc;
-          }, {}));
+          }, {});
 
         return {
           ...this.formData,
-          ...onchainFields
+          ...camelizeObjectKeys(onchainFields)
         };
       },
 
@@ -174,7 +174,7 @@
           ...obj,
           ...(hasValue(this.formData.researchRef.attributes[attr])
             ? {
-              [attr]: `${attr}-${this.formData.researchRef.attributes[attr].name}`
+              [attr]: this.formData.researchRef.attributes[attr].name
             }
             : {}
           )
@@ -184,7 +184,8 @@
           attributes: compactResearchAttributes({
             ...this.formData.researchRef.attributes,
             ...filesAttrs
-          }).filter((attr) => hasValue(attr.value))
+          })
+            // .filter((attr) => hasValue(attr.value))
         };
       },
 
@@ -242,11 +243,14 @@
             };
 
             this.formData = { ..._.cloneDeep(transformed) };
+            this.$setReady();
 
             this.$nextTick(() => {
               this.cachedFormData = JSON.stringify(this.formData);
             });
           });
+      } else {
+        this.$setReady();
       }
     },
     methods: {
@@ -280,6 +284,7 @@
       },
 
       goToResearch(research) {
+        console.log(111, research)
         if (research && research.external_id) { // if not proposal
           this.$router.push({
             name: 'research.details',
@@ -345,12 +350,20 @@
         const { offchainMeta } = this.transformedFormData;
         const { onchainData } = this.transformedFormData;
 
+        // console.log(offchainMeta,this.formData)
+        // return false;
+
         formData.append('onchainData', JSON.stringify(onchainData));
         formData.append('offchainMeta', JSON.stringify(offchainMeta));
 
         for (const file of this.formFiles) {
           formData.append(...file);
         }
+
+        console.log({
+          privKey: this.$currentUser.privKey,
+          username: this.$currentUser.account.name
+        })
 
         return researchService.updateResearchViaOffchain(
           {

@@ -45,6 +45,9 @@ export const researchAttributeFileUrl = (
   isImage = false,
   download = false
 ) => {
+
+  console.log(filename)
+
   const parts = [
     window.env.DEIP_SERVER_URL,
     '/api',
@@ -110,6 +113,7 @@ export const objectNotEmpty = (obj) => !!(obj && Object.keys(obj).length);
 
 export const isArray = (val) => kindOf(val) === 'array';
 export const isObject = (val) => kindOf(val) === 'object';
+export const isFile = (val) => kindOf(val) === 'file';
 
 export const isBoolean = (val) => kindOf(val) === 'boolean';
 export const isString = (val) => kindOf(val) === 'string';
@@ -208,4 +212,12 @@ export const toBase64 = (url) => {
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     }));
+};
+
+export const fileNameFromUrl = (url) => {
+  var matches = url.match(/\/([^/?#]+)[^/]*$/);
+  if (matches.length > 1) {
+    return matches[1];
+  }
+  return null;
 };

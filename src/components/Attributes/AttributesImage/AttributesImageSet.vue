@@ -1,19 +1,10 @@
 <template>
-<!--  <d-input-image-->
-<!--    v-model="internalValue"-->
-<!--    :aspect-ratio="aspectRatio"-->
-<!--    :label="attribute.title"-->
-<!--    :initial-image="initialImage"-->
-<!--  />-->
-  <div>
-    <d-input-image
-      v-model="internalValue"
-      :aspect-ratio="aspectRatio"
-      :label="attribute.title"
-      :initial-image="initialImage"
-    />
-  </div>
-
+  <d-input-image
+    v-model="internalValue"
+    :aspect-ratio="aspectRatio"
+    :label="attribute.title"
+    :initial-image="initialImage"
+  />
 </template>
 
 <script>
@@ -33,33 +24,14 @@
     },
     data() {
       return {
-        initialImage: null,
-
-        defaultValue: {
-          name: null,
-          file: null
-        }
+        initialImage: null
       };
     },
-    // computed: {
-    //   initialImage() {
-    //     return null;
-    //   }
-    // },
-    watch: {
-      internalValue: {
-        deep: true,
-        handler(val) {
-          if (isString(val)) {
-            this.initialImage = val
-            this.checkDefaultValue(false);
-          }
-          this.$emit('change', val);
-        }
+    created() {
+      if (this.internalValue && isString(this.internalValue)) {
+        this.initialImage = this.internalValue;
+        // this.checkDefaultValue(false);
       }
-    },
-    mounted() {
-      console.log(111, this.internalValue)
     }
   };
 </script>

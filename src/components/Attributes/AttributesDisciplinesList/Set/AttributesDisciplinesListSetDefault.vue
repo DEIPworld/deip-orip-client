@@ -33,7 +33,7 @@
       </v-sheet>
     </v-menu>
     <div
-      v-if="internalValue.length"
+      v-if="internalValue && internalValue.length"
       class="pt-2 ma-n1"
     >
       <v-chip

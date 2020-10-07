@@ -116,7 +116,8 @@ export const attributeViewTypeComponent = {
 
       if (this.viewType) {
         const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
-        const requestedViewExist = Object.keys(this.$options.components).includes(requestedView);
+        const requestedViewExist = Object.keys(this.$options.components)
+          .includes(requestedView);
         return requestedViewExist ? requestedView : defaultView;
       }
       return defaultView;
@@ -232,7 +233,9 @@ export const attributeSet = {
     }
   },
   created() {
+    // this.$nextTick(() => {
     this.checkDefaultValue();
+    // });
   },
   render(h) {
     const self = this;
@@ -287,7 +290,10 @@ export const attributeReadUsers = {
     userDetailsRoute(name) {
       return this.$currentUserName === name
         ? { name: 'account.summary' }
-        : { name: 'UserDetails', params: { account_name: name } };
+        : {
+          name: 'UserDetails',
+          params: { account_name: name }
+        };
     }
   }
-}
+};
