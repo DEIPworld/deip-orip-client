@@ -45,9 +45,6 @@ export const researchAttributeFileUrl = (
   isImage = false,
   download = false
 ) => {
-
-  console.log(filename)
-
   const parts = [
     window.env.DEIP_SERVER_URL,
     '/api',

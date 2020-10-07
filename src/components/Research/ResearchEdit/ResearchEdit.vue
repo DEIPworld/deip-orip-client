@@ -50,7 +50,7 @@
   import { researchAttributes } from '@/mixins/platformAttributes';
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
   import { ATTR_TYPES } from '@/variables';
-  import { camelCase } from 'change-case'
+  import { camelCase } from 'change-case';
 
   const researchService = ResearchService.getInstance();
 
@@ -178,7 +178,7 @@
             ...this.formData.researchRef.attributes,
             ...filesAttrs
           })
-            // .filter((attr) => hasValue(attr.value))
+          // .filter((attr) => hasValue(attr.value))
         };
       },
 
@@ -218,18 +218,19 @@
                 researchGroup: clone.researchGroup.external_id,
                 researchRef: {
                   attributes: expandResearchAttributes(
-                    clone.researchRef.attributes.map((attr) => ({
-                      ...attr,
-                      ...{
-                        value: this.filesAttrs.includes(attr.researchAttributeId)
-                          ? researchAttributeFileUrl(
-                            this.$route.params.researchExternalId,
-                            attr.researchAttributeId,
-                            attr.value
-                          )
-                          : attr.value
-                      }
-                    }))
+                    clone.researchRef.attributes
+                      // .map((attr) => ({
+                      //   ...attr,
+                      //   ...{
+                      //     value: this.filesAttrs.includes(attr.researchAttributeId)
+                      //       ? researchAttributeFileUrl(
+                      //         this.$route.params.researchExternalId,
+                      //         attr.researchAttributeId,
+                      //         attr.value
+                      //       )
+                      //       : attr.value
+                      //   }
+                      // }))
                   )
                 }
               }
@@ -343,6 +344,7 @@
         const { onchainData } = this.transformedFormData;
 
         // console.log(this.formFiles)
+        // console.log(offchainMeta)
         // return false;
 
         formData.append('onchainData', JSON.stringify(onchainData));

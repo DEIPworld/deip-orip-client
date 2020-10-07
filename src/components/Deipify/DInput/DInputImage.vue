@@ -146,6 +146,7 @@
       },
 
       onFileChoose(file) {
+        console.log(1, file)
         this.chosedFile = file;
       },
 
@@ -158,6 +159,8 @@
       },
 
       onDraw() {
+        // console.log(this.croppa.outputWidth)
+        // console.log(this.croppa.naturalWidth)
         this.getBlob()
           .then((blob) => {
             this.internalValue = new File([blob], this.chosedFile.name);

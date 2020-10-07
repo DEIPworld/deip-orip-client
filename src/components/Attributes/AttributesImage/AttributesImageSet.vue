@@ -10,7 +10,7 @@
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
-  import { isString } from '@/utils/helpers';
+  import { isString, researchAttributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageSet',
@@ -48,8 +48,20 @@
     },
     created() {
       if (this.hasUploadedImage) {
-        this.initialImage = this.internalValue;
+        this.initialImage = this.imageUrl();
         this.valuePrepared = false;
+      }
+    },
+    methods: {
+      imageUrl() {
+        if (this.$route.params.researchExternalId) {
+          return researchAttributeFileUrl(
+            this.$route.params.researchExternalId,
+            this.attribute._id,
+            this.internalValue
+          );
+        }
+        return null;
       }
     }
   };
