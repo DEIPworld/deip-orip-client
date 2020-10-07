@@ -6,14 +6,14 @@
       'eci-widget': 'heading@3',
     }"
   >
+    <d-block small title="Fundraising">
+      <template #titleAddon>
+        <v-chip v-if="tokenSaleData" outlined :color="timeChipData.color" text-color="black">
+          {{ timeChipData.date | timeLeft }}
+        </v-chip>
+      </template>
+    </d-block>
     <template v-if="tokenSaleData">
-      <d-block small title="Fundraising">
-        <template #titleAddon>
-          <v-chip outlined :color="timeChipData.color" text-color="black">
-            {{ timeChipData.date | timeLeft }}
-          </v-chip>
-        </template>
-      </d-block>
       <template
         v-for="(item, index) of saleInfo"
       >
@@ -53,7 +53,7 @@
       {{ tokenSaleData ? 'More details' : 'Info' }}
     </v-btn>
     <v-btn
-      v-if="!tokenSaleData"
+      v-if="!tokenSaleData && isResearchGroupMember"
       block
       small
       outlined
@@ -86,14 +86,6 @@
     mixins: [componentStoreFactoryOnce(fundraisingWidgetStore)],
 
     props: {
-      groupPemlink: {
-        type: String,
-        default: ''
-      },
-      researchPemlink: {
-        type: String,
-        default: ''
-      },
       researchId: {
         type: [String, Number],
         default: ''
@@ -103,7 +95,8 @@
 
     computed: {
       ...mapGetters({
-        tokenSaleData: 'FundraisingStats/tokenSale'
+        tokenSaleData: 'FundraisingStats/tokenSale',
+        research: 'FundraisingStats/research'
       }),
       timeChipData() {
         if (this.tokenSaleData && this.tokenSaleData.status === 4) {
@@ -146,7 +139,14 @@
             value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.hard_cap))} ${this.token}`
           }
         ];
-      }
+      },
+      isResearchGroupMember() {
+        return this.research
+          ? this.$store.getters['auth/userIsResearchGroupMember'](
+            this.research.research_group_id
+          )
+          : false;
+      },
     },
     created() {
       this.$store.dispatch('FundraisingStats/loadResearchTokenSale', this.researchId)

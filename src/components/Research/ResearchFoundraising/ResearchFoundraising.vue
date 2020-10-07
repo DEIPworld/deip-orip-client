@@ -2,6 +2,8 @@
   <fundraising
     :research-id="research.id"
     :research-title="research.title"
+    :group-name="research.researchGroup.name"
+    :group-owned-tokens="research.ownedTokens"
   />
 </template>
 

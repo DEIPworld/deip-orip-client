@@ -168,6 +168,9 @@
           <template #item.contribution_time="{item}">
             {{ item.contribution_time | dateFormat('MMMM DD YYYY', true) }}
           </template>
+          <template #item.amount="{item}">
+            {{ convertToPercent(item.amount) }} %
+          </template>
         </v-data-table>
       </d-block>
 
@@ -226,6 +229,14 @@
       researchTitle: {
         type: String,
         default: ''
+      },
+      groupName: {
+        type: String,
+        default: ''
+      },
+      groupOwnedTokens: {
+        type: Number,
+        default: 0
       }
     },
     data() {
@@ -314,10 +325,11 @@
           ['Researcher', 'AmountMoney'],
           ...this.contributionsList.reduce((arr, item) => {
             arr.push(
-              [this.$options.filters.fullname(item.user), item.amount]
+              [this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]
             );
             return arr;
-          }, [])
+          }, []),
+          [this.groupName, this.convertToPercent(this.groupOwnedTokens)]
         ];
       },
       currentCap() {
