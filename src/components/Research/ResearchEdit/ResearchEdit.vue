@@ -40,7 +40,7 @@
     expandResearchAttributes,
     tenantAttributesToObject,
     isArray, hasValue, isFile,
-    researchAttributeFileUrl
+    researchAttributeFileUrl, extendAttrModules
   } from '@/utils/helpers';
   import { debounce } from 'vuetify/lib/util/helpers';
 
@@ -102,7 +102,16 @@
       }),
 
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.projectEditForm.layout;
+        const schema = this.$tenantSettings.researchLayouts.projectEditForm.layout;
+
+        if (this.$route.params.researchExternalId) {
+          return extendAttrModules(
+            schema,
+            { props: { projectId: this.$route.params.researchExternalId } }
+          );
+        }
+
+        return schema;
       },
 
       attributes$() {

@@ -8,7 +8,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import ResearchDetailsRenderer from '@/components/Research/ResearchDetails/ResearchDetailsRenderer';
-  import { researchAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchDetails',
@@ -23,7 +23,11 @@
       },
 
       layoutSchema() {
-        return this.$tenantSettings.researchLayouts.projectDetails.layout;
+        const schema = this.$tenantSettings.researchLayouts.projectDetails.layout;
+        return extendAttrModules(
+          schema,
+          { props: { projectId: this.research.externalId } }
+          );
       },
       research$() {
         return {

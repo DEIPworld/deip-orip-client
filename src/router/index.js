@@ -74,7 +74,7 @@ import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
-import { awaitStore } from '@/router/utils/awaitStore';
+import { awaitStore } from '@/utils/helpers';
 import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';

@@ -34,8 +34,7 @@ const extenders = {
     ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
     ...{
       props: {
-        attribute: `@research.researchRef.attributes.${attr._id}`,
-        projectId: '@research.externalId',
+        attribute: `@research.researchRef.attributes.${attr._id}`
       }
     }
   })

@@ -2,11 +2,6 @@
   <v-img
     :src="imageUrl"
   />
-<!--  <div>-->
-<!--    image:-->
-<!--    <br>-->
-<!--    {{imageUrl}}-->
-<!--  </div>-->
 </template>
 
 <script>

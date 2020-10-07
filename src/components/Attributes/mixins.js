@@ -204,7 +204,8 @@ export const attributeSet = {
   mixins: [Proxyable],
   props: {
     attribute: PROPS.attribute,
-    viewType: PROPS.viewType
+    viewType: PROPS.viewType,
+    projectId: PROPS.projectId
   },
   data() {
     return {
