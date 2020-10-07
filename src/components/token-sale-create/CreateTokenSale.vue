@@ -40,7 +40,7 @@
 
         researchService.createResearchTokenSaleViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          isProposal, {
+          false, {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,
             startTime: this.formData.startDate.toISOString().split('.')[0],
