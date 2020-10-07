@@ -47,7 +47,7 @@ export const modules = [
     name: 'Fund stats',
     icon: 'mdi-cash-refund',
     props: {
-      researchId: '@research.id',
+      researchId: '@research.externalId',
       groupPemlink: '@research.researchGroup.permlink',
       researchPemlink: '@research.permlink'
     }
