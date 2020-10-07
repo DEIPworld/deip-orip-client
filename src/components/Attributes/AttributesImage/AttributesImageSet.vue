@@ -1,6 +1,6 @@
 <template>
   <d-input-image
-    v-model="internalValue"
+    v-model="image"
     :aspect-ratio="aspectRatio"
     :label="attribute.title"
     :initial-image="initialImage"
@@ -24,13 +24,32 @@
     },
     data() {
       return {
-        initialImage: null
+        initialImage: null,
+        valuePrepared: true,
+
+        image: null
       };
     },
+    computed: {
+      hasUploadedImage() {
+        return this.internalValue && isString(this.internalValue);
+      }
+    },
+    watch: {
+      image(val) {
+        if (this.valuePrepared) {
+          this.internalValue = val;
+        }
+
+        if (!this.valuePrepared) {
+          this.valuePrepared = true;
+        }
+      }
+    },
     created() {
-      if (this.internalValue && isString(this.internalValue)) {
+      if (this.hasUploadedImage) {
         this.initialImage = this.internalValue;
-        // this.checkDefaultValue(false);
+        this.valuePrepared = false;
       }
     }
   };

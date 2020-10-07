@@ -361,7 +361,6 @@
           formData
         )
           .then((research) => {
-            console.log(1)
             this.$notifier.showSuccess('Info has been change successfully!');
             this.goToResearch(research);
           })
