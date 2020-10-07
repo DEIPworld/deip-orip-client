@@ -1,12 +1,5 @@
 <template>
   <d-layout-full-screen :title="title">
-<!--    <pre>{{ JSON.stringify(formData.researchRef.attributes['5f58d4fa97f36d3938dde1ed'], null, 2) }}</pre>-->
-    <pre>{{ JSON.stringify(formFiles, null, 2) }}</pre>
-<!--    <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
-    <!--    <pre>{{ JSON.stringify(transformedFormData.filesData, null, 2) }}</pre>-->
-    <!--        <pre>{{JSON.stringify(formData.researchRef.attributes[2], null, 2)}}</pre>-->
-    <!--        <pre>{{JSON.stringify(transformedFormData.offchainMeta, null, 2)}}</pre>-->
-    <!--        <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
     <d-form :disabled="processing" @submit="onSubmit" v-if="$ready">
 
       <research-edit-renderer
@@ -172,7 +165,7 @@
       offchainMeta() {
         const filesAttrs = this.filesAttrs.reduce((obj, attr) => ({
           ...obj,
-          ...(hasValue(this.formData.researchRef.attributes[attr])
+          ...(isFile(this.formData.researchRef.attributes[attr])
             ? {
               [attr]: this.formData.researchRef.attributes[attr].name
             }
@@ -284,7 +277,6 @@
       },
 
       goToResearch(research) {
-        console.log(111, research)
         if (research && research.external_id) { // if not proposal
           this.$router.push({
             name: 'research.details',
@@ -350,7 +342,7 @@
         const { offchainMeta } = this.transformedFormData;
         const { onchainData } = this.transformedFormData;
 
-        // console.log(offchainMeta,this.formData)
+        // console.log(this.formFiles)
         // return false;
 
         formData.append('onchainData', JSON.stringify(onchainData));
@@ -360,11 +352,6 @@
           formData.append(...file);
         }
 
-        console.log({
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUser.account.name
-        })
-
         return researchService.updateResearchViaOffchain(
           {
             privKey: this.$currentUser.privKey,
@@ -373,7 +360,8 @@
           false,
           formData
         )
-          .then(([research]) => {
+          .then((research) => {
+            console.log(1)
             this.$notifier.showSuccess('Info has been change successfully!');
             this.goToResearch(research);
           })
