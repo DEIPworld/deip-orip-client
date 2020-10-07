@@ -47,19 +47,33 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item
-            v-if="node.component === 'AttributesRead'"
-            @click="copyAttrCondition()"
-          >
-            <v-list-item-icon class="mr-1">
-              <v-icon size="20">
-                mdi-checkbox-multiple-marked-outline
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="text-body-2">
-              Copy attribute condition
-            </v-list-item-content>
-          </v-list-item>
+          <template v-if="node.component === 'AttributesRead'">
+            <v-list-item @click="copyAttrCondition()">
+              <v-list-item-icon class="mr-1">
+                <v-icon size="20">
+                  mdi-checkbox-multiple-marked-outline
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content class="text-body-2">
+                Copy attribute condition
+              </v-list-item-content>
+            </v-list-item>
+
+<!--            <v-list-item-->
+<!--              @click="$clipboard(`@attributeValue('${attrId}')`);"-->
+<!--            >-->
+<!--              <v-list-item-icon class="mr-1">-->
+<!--                <v-icon size="20">-->
+<!--                  mdi-checkbox-multiple-marked-outline-->
+<!--                </v-icon>-->
+<!--              </v-list-item-icon>-->
+<!--              <v-list-item-content class="text-body-2">-->
+<!--                Copy attribute value-->
+<!--              </v-list-item-content>-->
+<!--            </v-list-item>-->
+
+
+          </template>
 
         </template>
 

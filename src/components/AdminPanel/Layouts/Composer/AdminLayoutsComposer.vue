@@ -58,6 +58,7 @@
 
     [data-nodes="DLayoutSection"] {
       display: flex;
+      flex-wrap: wrap;
     }
 
     [data-node-host="DLayoutSectionMain"] {
@@ -68,6 +69,12 @@
       flex: 0 0 380px;
       max-width: 380px;
       margin-left: .5rem;
+    }
+
+    [data-node-host="DLayoutSectionCover"] {
+      width: 100%;
+      min-width: 100%;
+      margin-bottom: .5rem;
     }
 
     [data-nodes="tr"] {

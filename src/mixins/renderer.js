@@ -4,6 +4,7 @@ import dotProp from 'dot-prop';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
 import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+import DLayoutSectionCover from '@/components/Deipify/DLayout/DLayoutSectionCover';
 import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSplit';
@@ -22,6 +23,7 @@ const rendererCommon = {
   components: {
     DLayout,
     DLayoutSection,
+    DLayoutSectionCover,
     DLayoutSectionMain,
     DLayoutSectionSidebar,
     DLayoutSectionSplit,

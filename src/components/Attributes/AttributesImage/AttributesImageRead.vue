@@ -1,9 +1,12 @@
 <template>
-  <div>
-    image:
-    <br>
-    {{imageUrl}}
-  </div>
+  <v-img
+    :src="imageUrl"
+  />
+<!--  <div>-->
+<!--    image:-->
+<!--    <br>-->
+<!--    {{imageUrl}}-->
+<!--  </div>-->
 </template>
 
 <script>

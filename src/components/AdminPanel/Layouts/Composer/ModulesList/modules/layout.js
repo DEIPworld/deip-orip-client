@@ -33,6 +33,12 @@ const modules = [
     ]
   },
   {
+    component: 'DLayoutSectionCover',
+    name: 'Cover (Background)',
+    icon: 'mdi-format-color-fill',
+    children: []
+  },
+  {
     component: 'DLayoutSectionSidebar',
     name: 'Sidebar',
     icon: 'mdi-view-split-vertical',
