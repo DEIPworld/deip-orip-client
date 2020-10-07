@@ -17,7 +17,7 @@
           <v-hover
             v-for="module of category.modules"
             :key="module.moduleId"
-            #default="{ hover }"
+            v-slot="{ hover }"
           >
             <v-sheet
               class="text-center pa-2 pos-relative"
@@ -62,18 +62,12 @@
   import { genObjectId } from '@/utils/helpers';
   import RecursiveIterator from 'recursive-iterator';
   import kindOf from 'kind-of';
-  import {
-    extendModuleObject, modulesBasic, modulesComponents, modulesGrid,
-    modulesHelpers,
-    modulesLayout, modulesTable, modulesTypography, modulesUi,
-    setAs,
-    setComponentProps
-  } from '@/components/AdminPanel/Layouts/modules';
+  import { modulesFactory } from '@/components/AdminPanel/Layouts/Composer/ModulesList/modules';
   import { ATTR_TYPES, ATTR_ICONS, LAYOUT_TYPES } from '@/variables';
   import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
-    name: 'AdminLayoutsModules',
+    name: 'AdminLayoutsModulesList',
     components: {
       DStack,
       draggable
@@ -88,94 +82,61 @@
       return { };
     },
     computed: {
-      attrModules() {
-
-
-        const propsForRead = {
-          [ATTR_TYPES.TEXT]: setComponentProps({
-            clamped: setAs(Number)
-          }),
-          [ATTR_TYPES.TEXTAREA]: setComponentProps({
-            clamped: setAs(Number)
-          }),
-          [ATTR_TYPES.STEPPER]: setComponentProps({
-            viewType: setAs(Array, ['default', 'small'])
-          })
-        };
-
-        const extenders = {
-          [LAYOUT_TYPES.SET]: (attr) => ({
-            component: 'AttributesSet',
-            model: `researchRef.attributes.${attr._id}`,
-            props: {
-              attribute: `@attributes.${attr._id}`
-            }
-          }),
-
-          [LAYOUT_TYPES.READ]: (attr) => ({
-            component: 'AttributesRead',
-            ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
-            ...{
-              props: {
-                attribute: `@research.researchRef.attributes.${attr._id}`
-              }
-            }
-          })
-        };
-
-        return [
-          {
-            component: 'span',
-            name: 'Creation date',
-            text: '@research.createdAt',
-            icon: 'mdi-calendar-text'
-          },
-          ...this.$tenantSettings.researchAttributes
-            .map((attr) => ({
-              icon: ATTR_ICONS[attr.type],
-              name: attr.shortTitle || attr.title,
-              isRequired: attr.isRequired,
-              isHidden: attr.isHidden,
-              ...extenders[this.layoutType](attr)
-            }))
-        ];
-      },
+      // attrModules() {
+      //
+      //
+      //   const propsForRead = {
+      //     [ATTR_TYPES.TEXT]: setComponentProps({
+      //       clamped: setAs(Number)
+      //     }),
+      //     [ATTR_TYPES.TEXTAREA]: setComponentProps({
+      //       clamped: setAs(Number)
+      //     }),
+      //     [ATTR_TYPES.STEPPER]: setComponentProps({
+      //       viewType: setAs(Array, ['default', 'small'])
+      //     })
+      //   };
+      //
+      //   const extenders = {
+      //     [LAYOUT_TYPES.SET]: (attr) => ({
+      //       component: 'AttributesSet',
+      //       model: `researchRef.attributes.${attr._id}`,
+      //       props: {
+      //         attribute: `@attributes.${attr._id}`
+      //       }
+      //     }),
+      //
+      //     [LAYOUT_TYPES.READ]: (attr) => ({
+      //       component: 'AttributesRead',
+      //       ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
+      //       ...{
+      //         props: {
+      //           attribute: `@research.researchRef.attributes.${attr._id}`
+      //         }
+      //       }
+      //     })
+      //   };
+      //
+      //   return [
+      //     {
+      //       component: 'span',
+      //       name: 'Creation date',
+      //       text: '@research.createdAt',
+      //       icon: 'mdi-calendar-text'
+      //     },
+      //     ...this.$tenantSettings.researchAttributes
+      //       .map((attr) => ({
+      //         icon: ATTR_ICONS[attr.type],
+      //         name: attr.shortTitle || attr.title,
+      //         isRequired: attr.isRequired,
+      //         isHidden: attr.isHidden,
+      //         ...extenders[this.layoutType](attr)
+      //       }))
+      //   ];
+      // },
 
       modules() {
-        return [
-          {
-            name: 'Layout',
-            modules: extendModuleObject(modulesLayout)
-          },
-          {
-            name: 'Grid',
-            modules: extendModuleObject(modulesGrid)
-          },
-          {
-            name: 'Basic',
-            modules: extendModuleObject(modulesBasic)
-          },
-          {
-            name: 'UI components',
-            modules: extendModuleObject(modulesUi)
-          },
-          {
-            name: 'Table',
-            modules: extendModuleObject(modulesTable)
-          },
-          {
-            name: 'Typography',
-            modules: extendModuleObject(modulesTypography, { type: 'typography' })
-          },
-          {
-            name: 'Attributes',
-            modules: extendModuleObject(this.attrModules, { type: 'attribute' })
-          },
-          {
-            name: 'Components',
-            modules: extendModuleObject(modulesComponents, { type: 'staticComponent' })
-          }
-        ];
+        return modulesFactory(this);
       }
     },
     methods: {

@@ -117,7 +117,6 @@
     "eslint": "^7.8.1",
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vuetify": "^1.0.0-beta.7",
-    "fibers": "^5.0.0",
     "inquirer": "^7.0.6",
     "less": "^3.12.2",
     "less-loader": "^7.0.1",
@@ -126,7 +125,7 @@
     "postcss-nested": "^4.2.1",
     "postcss-scss": "^2.1.1",
     "postcss-url": "^8.0.0",
-    "sass": "^1.26.10",
+    "sass": "^1.26.12",
     "sass-loader": "^10.0.2",
     "symlink-dir": "^3.1.2",
     "vue-cli-plugin-i18n": "~1.0.1",
@@ -179,6 +178,7 @@
       "no-underscore-dangle": [
         "error",
         {
+          "allow": ["_id"],
           "allowAfterThis": true,
           "enforceInMethodNames": false
         }

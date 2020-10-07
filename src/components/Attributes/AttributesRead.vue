@@ -4,7 +4,10 @@
     v-if="Object.keys(attribute).length"
     :attribute="attribute"
     :view-type="viewType"
+
     :clamped="clamped"
+
+    :project-id="projectId"
   />
 </template>
 
@@ -26,6 +29,7 @@
   import AttributesUserRead from './AttributesUser/AttributesUserRead';
   import AttributesUsersListRead from './AttributesUsersList/AttributesUsersListRead';
   import AttributesVideoUrlRead from './AttributesVideoUrl/AttributesVideoUrlRead';
+  import AttributesImageRead from './AttributesImage/AttributesImageRead';
 
   export default {
     name: 'AttributesRead',
@@ -45,6 +49,7 @@
       AttributesUserRead,
       AttributesUsersListRead,
       AttributesVideoUrlRead,
+      AttributesImageRead
     },
     mixins: [attributeRead, attributeTypeComponent]
   };

@@ -33,7 +33,7 @@
             researchRef: {
               attributes: researchAttributesToObject(this.research.researchRef.attributes)
             },
-            cover: this.$options.filters.researchBackgroundSrc(this.research.externalId)
+            // cover: this.$options.filters.researchBackgroundSrc(this.research.externalId)
           }
         };
       }

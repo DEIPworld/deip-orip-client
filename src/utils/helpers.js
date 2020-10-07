@@ -38,6 +38,31 @@ export const tenantAttributesToObject = (attrs) => {
   }, {});
 };
 
+export const researchAttributeFileUrl = (
+  researchExternalId,
+  researchAttributeId,
+  filename,
+  isImage = false,
+  download = false
+) => {
+  const parts = [
+    window.env.DEIP_SERVER_URL,
+    '/api',
+    '/research/',
+    researchExternalId,
+    '/attribute/',
+    researchAttributeId,
+    '/file/',
+    filename,
+    '?download=',
+    download,
+    '&image=',
+    isImage
+  ];
+  return parts.join('');
+};
+
+
 // GENERATORS
 
 export const genObjectId = (obj, turns = 3) => {

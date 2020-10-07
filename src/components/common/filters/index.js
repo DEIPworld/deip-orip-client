@@ -103,6 +103,7 @@ Vue.filter('numDirClass', (value, type = 'foreground') => {
     ? 'success--text'
     : 'error--text';
 });
+
 Vue.filter('timeLeft', (value) => {
   const now = moment.utc().local();
   const start = moment.utc(value).local();
@@ -121,4 +122,4 @@ Vue.filter('timeLeft', (value) => {
 
   const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
   return `${seconds} secs`;
-})
+});

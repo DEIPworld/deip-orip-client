@@ -41,7 +41,7 @@
 <script>
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 
-  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/Composer/Modules/AdminLayoutsModules';
+  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesList';
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/Composer/AdminLayoutsComposer';
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/layouts';

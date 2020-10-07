@@ -15,6 +15,7 @@
   import AttributesUserSet from './AttributesUser/AttributesUserSet';
   import AttributesUsersListSet from './AttributesUsersList/AttributesUsersListSet';
   import AttributesVideoUrlSet from './AttributesVideoUrl/AttributesVideoUrlSet';
+  import AttributesImageSet from './AttributesImage/AttributesImageSet';
 
   export default {
     name: 'AttributesSet',
@@ -34,6 +35,7 @@
       AttributesUserSet,
       AttributesUsersListSet,
       AttributesVideoUrlSet,
+      AttributesImageSet
     },
 
     mixins: [attributeSet, attributeTypeComponent]

@@ -44,6 +44,11 @@ export const PROPS = {
     default: () => ({})
   },
 
+  projectId: {
+    type: [String, Object],
+    default: null
+  },
+
   viewType: {
     type: String,
     default: null
@@ -147,6 +152,7 @@ export const attributeRead = {
   props: {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType,
+    projectId: PROPS.projectId,
     clamped: PROPS.clamped
   },
   computed: {
@@ -221,7 +227,6 @@ export const attributeSet = {
     internalValue: {
       deep: true,
       handler(val) {
-        // this.checkDefaultValue(val);
         this.$emit('change', val);
       }
     }

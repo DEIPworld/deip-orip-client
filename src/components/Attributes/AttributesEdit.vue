@@ -23,6 +23,7 @@
   import AttributesUserEdit from './AttributesUser/AttributesUserEdit';
   import AttributesUsersListEdit from './AttributesUsersList/AttributesUsersListEdit';
   import AttributesVideoUrlEdit from './AttributesVideoUrl/AttributesVideoUrlEdit';
+  import AttributesImageEdit from './AttributesImage/AttributesImageEdit';
 
   export default {
     name: 'AttributesEdit',
@@ -42,6 +43,7 @@
       AttributesUserEdit,
       AttributesUsersListEdit,
       AttributesVideoUrlEdit,
+      AttributesImageEdit
     },
     mixins: [attributeEdit, attributeTypeComponent]
   };

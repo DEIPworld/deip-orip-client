@@ -23,11 +23,12 @@
           initial-position="center"
           auto-sizing
           :style="{width: '100%', height: '100%', display: 'block'}"
-          :initial-image="internalValue"
+          :initial-image="initialImage"
 
           @init="onInit"
 
           @new-image-drawn="onNewImage"
+          @draw="onDrawDebounce"
         />
         <!--@draw="debounceInternalValue"-->
       </v-responsive>
@@ -84,6 +85,7 @@
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import Croppa from 'vue-croppa/src/cropper';
+  import { debounce } from 'vuetify/lib/util/helpers';
   import 'vue-croppa/dist/vue-croppa.css';
 
   export default {
@@ -96,12 +98,12 @@
     mixins: [Proxyable],
 
     props: {
-      src: {
+      initialImage: {
         type: String,
         default: undefined
       },
       aspectRatio: {
-        type: [String, Number],
+        type: Number,
         default: 16 / 9
       },
       label: {
@@ -118,8 +120,14 @@
 
         sliderVal: 0,
         sliderMin: 0,
-        sliderMax: 0
+        sliderMax: 0,
+
+        onDrawDebounce: null
       };
+    },
+
+    created() {
+      this.onDrawDebounce = debounce(this.onDraw, 500);
     },
 
     methods: {
@@ -131,6 +139,24 @@
         this.sliderVal = this.croppa.scaleRatio;
         this.sliderMin = this.croppa.scaleRatio;
         this.sliderMax = this.croppa.scaleRatio * 4;
+      },
+
+      onDraw() {
+        this.getBlob()
+          .then((blob) => {
+            // this.internalValue = {
+            //   originalFile: this.croppa.getChosenFile(),
+            //   generatedBlob: blob
+            // };
+            // const name = '';
+            // const file = '';
+            // const fileName = '';
+
+            this.internalValue = {
+              name: this.croppa.getChosenFile().name,
+              file: blob
+            };
+          });
       },
 
       onSliderInput(e) {
