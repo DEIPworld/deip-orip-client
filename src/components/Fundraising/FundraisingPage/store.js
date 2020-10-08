@@ -23,7 +23,7 @@ const ACTIONS = {
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (tokenSale) {
-          return dispatch('loadCurrentTokenSaleContributors');
+          // return dispatch('loadCurrentTokenSaleContributors');
         } else {
           return dispatch('loadLastResearchTokenSale', researchId);
         }
@@ -61,23 +61,23 @@ const ACTIONS = {
         commit('setResearchTokenSaleContributionsList', contributors)
       });
   },
-  loadCurrentTokenSaleContributors({ state, commit }) {
-    const contributors = [];
-    return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(
-      state.tokenSale.id
-    )
-      .then((contributions) => {
-        contributors.push(...contributions);
-        return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
-      })
-      .then((users) => {
-        for (let i = 0; i < contributors.length; i++) {
-          const contributor = contributors[i];
-          contributor.user = users.find((user) => contributor.owner == user.account.name);
-        }
-        commit('setCurrentContributionsList', contributors);
-      });
-  },
+  // loadCurrentTokenSaleContributors({ state, commit }) {
+  //   const contributors = [];
+  //   return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(
+  //     state.tokenSale.id
+  //   )
+  //     .then((contributions) => {
+  //       contributors.push(...contributions);
+  //       return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
+  //     })
+  //     .then((users) => {
+  //       for (let i = 0; i < contributors.length; i++) {
+  //         const contributor = contributors[i];
+  //         contributor.user = users.find((user) => contributor.owner == user.account.name);
+  //       }
+  //       commit('setCurrentContributionsList', contributors);
+  //     });
+  // },
   loadLastResearchTokenSale({ commit }, researchId) {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
       .then((tokenSales) => {
