@@ -64,22 +64,16 @@
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 
   import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
-  import DStack from '@/components/Deipify/DStack/DStack';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
-
 
   export default {
     name: 'AttributesDisciplinesListSet',
-    components: { DBlock },
     mixins: [attributeSet],
     data() {
       return {
         search: '',
         open: false,
         oldValue: [],
-        menuTop: false,
-
-        defaultValue: []
+        menuTop: false
       };
     },
     computed: {
@@ -128,12 +122,6 @@
           return lhsi > rhsi ? 1 : lhsi < rhsi ? -1 : 0;
         });
         return sorted;
-      },
-    },
-
-    watch: {
-      internalValue(val) {
-        this.checkDefaultValue(val);
       }
     },
 

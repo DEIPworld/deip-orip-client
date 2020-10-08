@@ -207,37 +207,20 @@ export const attributeSet = {
     viewType: PROPS.viewType,
     projectId: PROPS.projectId
   },
-  data() {
-    return {
-      defaultValue: null
-    };
-  },
   computed: {
     attributeComponent() {
       console.warn('No attribute type/view specified!!!');
       return 'div';
     }
   },
-  methods: {
-    checkDefaultValue(val = this.internalValue) {
-      if (!val) {
-        this.internalValue = this.defaultValue;
-      }
-    }
-  },
-  watch: {
-    internalValue: {
-      deep: true,
-      handler(val) {
-        this.$emit('change', val);
-      }
-    }
-  },
-  created() {
-    // this.$nextTick(() => {
-    this.checkDefaultValue();
-    // });
-  },
+  // watch: {
+  //   internalValue: {
+  //     deep: true,
+  //     handler(val) {
+  //       this.$emit('change', val);
+  //     }
+  //   }
+  // },
   render(h) {
     const self = this;
     return h(this.attributeComponent, {

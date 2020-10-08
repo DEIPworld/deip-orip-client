@@ -12,11 +12,6 @@
 
   export default {
     name: 'AttributesCheckboxSet',
-    mixins: [attributeSet],
-    data() {
-      return {
-        defaultValue: false
-      };
-    }
+    mixins: [attributeSet]
   };
 </script>

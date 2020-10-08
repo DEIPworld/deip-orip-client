@@ -1,14 +1,11 @@
 <template>
   <d-stack>
-    <div>
-      {{internalValue}}
-    </div>
     <v-checkbox
       v-model="active"
       :label="attribute.title"
     />
 
-    <d-timeline>
+    <d-timeline v-if="active">
       <d-timeline-item
         v-for="(license, index) of internalValue"
         :key="`row-${index}`"
@@ -53,18 +50,18 @@
 
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DFileInput from '@/components/Deipify/DInput/DFileInput';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const licenseModel = () => ({
-    name: undefined,
+    name: '',
     fee: {},
-    file: undefined
+    file: null
   });
 
   export default {
@@ -77,12 +74,19 @@
       DTimeline,
       DStack
     },
-    mixins: [arrayModelAddFactory(licenseModel()), attributeSet],
+    mixins: [attributeSet, arrayModelAddFactory(licenseModel())],
     data() {
       return {
-        active: false,
-        defaultValue: []
+        active: false
       };
+    },
+    watch: {
+      active(val) {
+        if (!val) {
+          this.internalValue = [];
+          this.normalizeModel();
+        }
+      }
     }
   };
 </script>

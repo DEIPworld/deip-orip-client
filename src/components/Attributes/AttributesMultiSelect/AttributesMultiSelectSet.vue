@@ -36,15 +36,12 @@
 <script>
   import { attributeSetOption } from '@/components/Attributes/mixins';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
+  import { isArray } from '@/utils/helpers';
+  import { arrayedModel } from '@/mixins/extendModel';
 
   export default {
     name: 'AttributesMultiSelectSet',
     components: { DAutocomplete },
-    mixins: [attributeSetOption],
-    data() {
-      return {
-        defaultValue: []
-      };
-    }
+    mixins: [attributeSetOption, arrayedModel]
   };
 </script>

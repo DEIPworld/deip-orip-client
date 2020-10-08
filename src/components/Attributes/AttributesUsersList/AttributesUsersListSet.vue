@@ -52,16 +52,12 @@
 <script>
   import AttributesCommonUsersSet from '@/components/Attributes/_partials/Set/AttributesCommonUsersSet';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
+  import { arrayedModel } from '@/mixins/extendModel';
 
   export default {
     name: 'AttributesUsersListSet',
     components: { DAutocomplete },
-    mixins: [AttributesCommonUsersSet],
-    data() {
-      return {
-        defaultValue: []
-      };
-    },
+    mixins: [AttributesCommonUsersSet, arrayedModel],
     methods: {
       remove(item) {
         const idx = this.internalValue.indexOf(this.userId(item));

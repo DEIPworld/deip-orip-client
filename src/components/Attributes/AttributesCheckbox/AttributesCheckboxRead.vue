@@ -1,7 +1,6 @@
 <template>
   <div v-if="attribute.value">
     {{ attributeInfo.title }}
-<!--    {{ attributeInfo._id }}-->
   </div>
 </template>
 
