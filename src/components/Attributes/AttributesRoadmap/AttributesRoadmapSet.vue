@@ -61,13 +61,13 @@
 </template>
 
 <script>
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { attributeSet } from '@/components/Attributes/mixins';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const stepModel = () => ({
     goal: '',
@@ -89,11 +89,6 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(stepModel()), attributeSet],
-    data() {
-      return {
-        defaultValue: []
-      };
-    }
+    mixins: [attributeSet, arrayModelAddFactory(stepModel())]
   };
 </script>

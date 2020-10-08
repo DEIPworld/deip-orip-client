@@ -61,18 +61,14 @@
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
+  import { arrayedModel } from '@/mixins/extendModel';
 
   export default {
     name: 'AttributesStepperSetFilter',
     components: {
       DAutocomplete
     },
-    mixins: [attributeSet],
-    data() {
-      return {
-        defaultValue: []
-      };
-    },
+    mixins: [attributeSet, arrayedModel],
     methods: {
       getNum(id) {
         return this.attribute.valueOptions.findIndex(({ value }) => value === id) + 1;

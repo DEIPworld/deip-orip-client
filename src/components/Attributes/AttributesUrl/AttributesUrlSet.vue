@@ -40,12 +40,12 @@
 </template>
 
 <script>
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { attributeSet } from '@/components/Attributes/mixins';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const attrModel = () => ({
     label: '',
@@ -62,6 +62,6 @@
       DTimelineItem
     },
 
-    mixins: [arrayModelAddFactory(attrModel()), attributeSet],
+    mixins: [attributeSet, arrayModelAddFactory(attrModel())],
   };
 </script>

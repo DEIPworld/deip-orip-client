@@ -61,13 +61,13 @@
 </template>
 
 <script>
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
 
   import researchPartners from './researchPartners.json';
   import { attributeSet } from '@/components/Attributes/mixins';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const partnerModel = () => ({
     type: '',
@@ -77,11 +77,10 @@
   export default {
     name: 'AttributesPartnersSet',
     components: { DTimelineAdd, DTimelineItem, DBlock },
-    mixins: [arrayModelAddFactory(partnerModel()), attributeSet],
+    mixins: [attributeSet, arrayModelAddFactory(partnerModel())],
     data() {
       return {
-        partnersInfo: researchPartners,
-        defaultValue: []
+        partnersInfo: researchPartners
       };
     }
   };

@@ -1,6 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
     <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
+      <pre>{{ JSON.stringify(formModel.researchRef.attributes['5f7ec161fbb737001f1bacf1'], null, 2) }}</pre>
       <pre>{{ JSON.stringify(attachedFiles, null, 2) }}</pre>
       <research-edit-renderer
         v-model="formModel"
