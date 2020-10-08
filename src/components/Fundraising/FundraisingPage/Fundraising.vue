@@ -277,15 +277,21 @@
         userAssets: 'auth/userAssets',
         user: 'auth/user',
         assets: 'auth/assets',
-        contributionsList: 'Fundraising/contributionsList'
+        contributionsList: 'Fundraising/contributionsList',
+        currentContributionsList: 'Fundraising/currentContributionsList'
       }),
       transactionsData() {
         const data = this.contributionsList.map((item) => item.contributionsHistory.map((his) => ({
           amount: his.op[1].amount,
           date: his.timestamp,
           sender: item.user
-        }))).flat();
-        return data.sort((a, b) => {
+        })));
+        data.push(...this.currentContributionsList.map((item) => ({
+          amount: item.amount,
+          date: item.contribution_time,
+          sender: item.user
+        })));
+        return data.flat().sort((a, b) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
           return dateB - dateA;

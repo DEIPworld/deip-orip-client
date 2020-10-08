@@ -7,12 +7,14 @@ const usersService = UsersService.getInstance();
 
 const STATE = {
   tokenSale: undefined,
-  contributionsList: []
+  contributionsList: [],
+  currentContributionsList: []
 };
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
-  contributionsList: (state) => state.contributionsList
+  contributionsList: (state) => state.contributionsList,
+  currentContributionsList: (state) => state.currentContributionsList
 };
 
 const ACTIONS = {
@@ -20,7 +22,9 @@ const ACTIONS = {
     return investmentsService.getCurrentTokenSaleByResearchId(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
-        if (!tokenSale) {
+        if (tokenSale) {
+          dispatch('loadCurrentTokenSaleContributors');
+        } else {
           return dispatch('loadLastResearchTokenSale', researchId);
         }
       }, (err) => { console.error(err); });
@@ -55,7 +59,24 @@ const ACTIONS = {
           );
         }
         commit('setResearchTokenSaleContributionsList', contributors)
-      }) 
+      });
+  },
+  loadCurrentTokenSaleContributors({ state, commit }) {
+    const contributors = [];
+    return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(
+      state.tokenSale.id
+    )
+      .then((contributions) => {
+        contributors.push(...contributions);
+        return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
+      })
+      .then((users) => {
+        for (let i = 0; i < contributors.length; i++) {
+          const contributor = contributors[i];
+          contributor.user = users.find((user) => contributor.owner == user.account.name);
+        }
+        commit('setCurrentContributionsList', contributors);
+      });
   },
   loadLastResearchTokenSale({ commit }, researchId) {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
@@ -76,6 +97,9 @@ const MUTATIONS = {
   },
   setResearchTokenSaleContributionsList(state, contributions) {
     state.contributionsList = contributions;
+  },
+  setCurrentContributionsList(state, currentContributionsList) {
+    state.currentContributionsList = currentContributionsList;
   }
 };
 
