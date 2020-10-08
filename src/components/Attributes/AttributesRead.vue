@@ -30,6 +30,7 @@
   import AttributesUsersListRead from './AttributesUsersList/AttributesUsersListRead';
   import AttributesVideoUrlRead from './AttributesVideoUrl/AttributesVideoUrlRead';
   import AttributesImageRead from './AttributesImage/AttributesImageRead';
+  import AttributesExpressLicensingRead from './AttributesExpressLicensing/AttributesExpressLicensingRead';
 
   export default {
     name: 'AttributesRead',
@@ -49,7 +50,8 @@
       AttributesUserRead,
       AttributesUsersListRead,
       AttributesVideoUrlRead,
-      AttributesImageRead
+      AttributesImageRead,
+      AttributesExpressLicensingRead,
     },
     mixins: [attributeRead, attributeTypeComponent]
   };

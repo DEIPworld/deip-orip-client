@@ -42,7 +42,6 @@
     compactResearchAttributes,
     camelizeObjectKeys,
     expandResearchAttributes,
-    tenantAttributesToObject,
     isArray,
     extendAttrModules,
     extractFilesFromAttributes,

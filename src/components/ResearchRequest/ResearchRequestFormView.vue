@@ -108,7 +108,7 @@
 
     <d-form-block :title="$t('defaultNaming.forms.researchRequest.addInfBlock.title')">
       <v-col cols="12" md="6">
-        <d-input-file
+        <d-file-input
           v-model="formData.budgetAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           :label="$t('defaultNaming.forms.researchRequest.addInfBlock.budgetInfField')"
@@ -117,7 +117,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <d-input-file
+        <d-file-input
           v-model="formData.businessPlanAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           :label="$t('defaultNaming.forms.researchRequest.addInfBlock.planField')"
@@ -126,7 +126,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <d-input-file
+        <d-file-input
           v-model="formData.cvAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           :label="$t('defaultNaming.forms.researchRequest.addInfBlock.cvField')"
@@ -135,7 +135,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <d-input-file
+        <d-file-input
           v-model="formData.marketResearchAttachment"
           :x-props="{ disabled: fieldState.disabled || fieldState.readonly }"
           :label="$t('defaultNaming.forms.researchRequest.addInfBlock.documentField')"
@@ -171,7 +171,7 @@
 
 <script>
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import DInputFile from '@/components/Deipify/DInput/DInputFile';
+  import DFileInput from '@/components/Deipify/DInput/DFileInput';
   import { mapGetters } from 'vuex';
   import { FormMixin } from '@/utils/FormMixin';
   import { AccessService } from '@deip/access-service';
@@ -183,7 +183,7 @@
   export default {
     name: 'ResearchRequestFormView',
     components: {
-      DInputFile,
+      DFileInput,
       DFormBlock
     },
     mixins: [FormMixin],
