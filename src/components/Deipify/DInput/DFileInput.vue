@@ -1,36 +1,6 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <v-file-input-->
-<!--      :label="label"-->
-
-<!--      prepend-inner-icon="attach_file"-->
-<!--      :prepend-icon="false"-->
-<!--      outlined-->
-<!--      -->
-<!--    />-->
-<!--    <div v-if="!!exist" class="pl-4 pt-2">-->
-<!--      <a class="link" :href="exist" target="_blank">View file</a>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--  import Proxyable from 'vuetify/lib/mixins/proxyable';-->
-
-<!--  export default {-->
-<!--    name: 'DFileInput',-->
-<!--    mixins: [Proxyable],-->
-<!--    props: {-->
-<!--      label: {-->
-<!--        type: String,-->
-<!--        default: null-->
-<!--      }-->
-<!--    }-->
-<!--  };-->
-<!--</script>-->
-
 <script>
   import { VFileInput, VChip, VTextField } from 'vuetify/lib/components';
+  import { isFile, isArray } from '@/utils/helpers';
 
   export default {
     name: 'DFileInput',
@@ -64,6 +34,10 @@
         type: [Number, String],
         default: 40
       },
+      existsFiles: {
+        type: [String, Array],
+        default: undefined
+      }
     },
     computed: {
       classes() {

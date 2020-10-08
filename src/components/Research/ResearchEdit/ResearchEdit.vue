@@ -107,6 +107,10 @@
         const schema = this.$tenantSettings.researchLayouts.projectEditForm.layout;
 
         if (this.$route.params.researchExternalId) {
+          console.log(extendAttrModules(
+            schema,
+            { props: { projectId: this.$route.params.researchExternalId } }
+          ))
           return extendAttrModules(
             schema,
             { props: { projectId: this.$route.params.researchExternalId } }

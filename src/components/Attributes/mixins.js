@@ -6,11 +6,11 @@ import AttributesCommonEditMeta
 import { ATTR_TYPES } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
-import dotProp from 'dot-prop';
 import kindOf from 'kind-of';
 import { mapState } from 'vuex';
 import { componentStoreFactory } from '@/mixins/registerStore';
 import { usersStore } from '@/components/Users/store';
+import { hasValue } from '@/utils/helpers';
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
@@ -160,6 +160,9 @@ export const attributeRead = {
     attributeInfo() {
       const id = this.attribute._id || this.attribute.researchAttributeId;
       return this.tenantAttributes.find(({ _id }) => _id === id);
+    },
+    attrHasData() {
+      return this.attribute && hasValue(this.attribute.value)
     }
   },
   methods: {
@@ -176,11 +179,11 @@ export const attributeRead = {
           }
         }, this.attribute.value);
       }
-      return this.attribute.value ? this._v(this.attribute.value) : false;
+      return this._v(this.attribute.value);
     }
   },
   render(h) {
-    return this.genContent(h);
+    return this.attrHasData ? this.genContent(h) : false;
   }
 };
 
@@ -213,21 +216,15 @@ export const attributeSet = {
       return 'div';
     }
   },
-  // watch: {
-  //   internalValue: {
-  //     deep: true,
-  //     handler(val) {
-  //       this.$emit('change', val);
-  //     }
-  //   }
-  // },
   render(h) {
     const self = this;
     return h(this.attributeComponent, {
       props: {
         value: this.internalValue,
         attribute: this.attribute,
-        viewType: this.viewType
+        viewType: this.viewType,
+
+        projectId: this.projectId
       },
       class: {
         'visually-hidden': this.attribute.isHidden
