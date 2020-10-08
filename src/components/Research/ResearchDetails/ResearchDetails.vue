@@ -18,17 +18,14 @@
         research: 'Research/data'
       }),
 
-      isOwner() {
-        return this.research.members.includes(this.$currentUserName);
-      },
-
       layoutSchema() {
         const schema = this.$tenantSettings.researchLayouts.projectDetails.layout;
         return extendAttrModules(
           schema,
           { props: { projectId: this.research.externalId } }
-          );
+        );
       },
+
       research$() {
         return {
           ...this.research,

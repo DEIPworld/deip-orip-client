@@ -100,3 +100,15 @@ export const fileNameFromUrl = (url) => {
   }
   return null;
 };
+
+export const replaceFileWithName = (obj) => {
+  const clone = _.cloneDeep(obj);
+
+  for (const { node, parent, key } of new RecursiveIterator(clone)) {
+    if (isFile(node)) {
+      parent[key] = node.name;
+    }
+  }
+
+  return clone;
+};

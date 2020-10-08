@@ -149,7 +149,6 @@
         const hasQuery = !!this.$route.query.rFilter;
 
         this.$nextTick(() => {
-          console.log(111)
           this.$ls.on(this.storageFilterKey, this.getData, !hasQuery);
         });
       } else {

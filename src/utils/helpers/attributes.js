@@ -1,6 +1,6 @@
 import RecursiveIterator from 'recursive-iterator';
 import { mergeDeep } from 'vuetify/lib/util/helpers';
-import { isObject } from './data';
+import { isFile, isObject } from './data';
 
 export const compactResearchAttributes = (
   attrs,
@@ -64,4 +64,16 @@ export const extendAttrModules = (schema, obj = {}) => {
     }
   };
   return clone;
+};
+
+export const extractFilesFromAttributes = (obj) => {
+  const res = [];
+
+  for (const { node, key } of new RecursiveIterator(obj)) {
+    if (isFile(node)) {
+      res.push([key, node, `${key}-${node.name}`]);
+    }
+  }
+
+  return res;
 };

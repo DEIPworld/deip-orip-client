@@ -1,25 +1,29 @@
 <template>
   <d-layout-full-screen :title="title">
-    <d-form :disabled="processing" @submit="onSubmit" v-if="$ready">
-
+    <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
+      <pre>{{ JSON.stringify(attachedFiles, null, 2) }}</pre>
       <research-edit-renderer
-        v-model="formData"
+        v-model="formModel"
         :schema="layoutSchema"
-        :attributes="attributes$"
       />
 
       <v-divider class="mt-8 mb-6" />
       <div class="d-flex justify-end align-center">
         <d-stack horizontal :gap="8">
-          <v-btn text color="primary">
+          <v-btn
+            text
+            color="primary"
+            :disabled="processing"
+          >
             Cancel
           </v-btn>
           <v-btn
             type="submit"
             color="primary"
             :disabled="processing || !isChanged"
+            :loading="processing"
           >
-            {{ formData.externalId ? 'Update' : 'Create' }}
+            {{ formModel.externalId ? 'Update' : 'Create' }}
           </v-btn>
         </d-stack>
       </div>
@@ -39,8 +43,10 @@
     camelizeObjectKeys,
     expandResearchAttributes,
     tenantAttributesToObject,
-    isArray, hasValue, isFile,
-    researchAttributeFileUrl, extendAttrModules
+    isArray,
+    extendAttrModules,
+    extractFilesFromAttributes,
+    replaceFileWithName
   } from '@/utils/helpers';
   import { debounce } from 'vuetify/lib/util/helpers';
 
@@ -50,7 +56,6 @@
   import { researchAttributes } from '@/mixins/platformAttributes';
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
   import { ATTR_TYPES } from '@/variables';
-  import { camelCase } from 'change-case';
 
   const researchService = ResearchService.getInstance();
 
@@ -80,15 +85,12 @@
       return {
         processing: false,
 
-        cachedFormData: {},
+        cachedFormModel: {},
 
-        formData: {
-
+        formModel: {
           researchRef: {
             attributes: {}
           },
-
-          image: undefined
         },
 
         isPermlinkVerifyed: true,
@@ -114,21 +116,17 @@
         return schema;
       },
 
-      attributes$() {
-        return tenantAttributesToObject(this.$tenantSettings.researchAttributes);
-      },
-
       userGroup() {
         return this.$where(this.userGroups, { is_personal: true })[0];
       },
 
       isProposal() {
-        return this.transformedFormData.onchainData.researchGroup !== null
-          && this.transformedFormData.onchainData.researchGroup !== this.userGroup.external_id;
+        return this.onchainData.researchGroup !== null
+          && this.onchainData.researchGroup !== this.userGroup.external_id;
       },
 
       isChanged() {
-        return this.cachedFormData !== JSON.stringify(this.formData);
+        return this.cachedFormModel !== JSON.stringify(this.formModel);
       },
 
       filesAttrs() {
@@ -141,23 +139,19 @@
           .map((attr) => attr._id);
       },
 
-      formFiles() {
-        return this.filesAttrs.map((id) => {
-          const file = this.formData.researchRef.attributes[id];
-          return isFile(file) ? [id, file, `${id}-${file.name}`] : null;
-        })
-          .filter((file) => !!file);
+      attachedFiles() {
+        return extractFilesFromAttributes(this.formModel.researchRef.attributes);
       },
 
       onchainData() {
         const onchainFields = this.$tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
-            const value = this.formData.researchRef.attributes[attr._id];
+            const value = this.formModel.researchRef.attributes[attr._id];
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
               acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
-                ? [...acc[attr.blockchainFieldMeta.field], ...(Array.isArray(value) ? value : [value])]
+                ? [...acc[attr.blockchainFieldMeta.field], ...(isArray(value) ? value : [value])]
                 : [...(isArray(value) ? value : [value])];
             } else {
               acc[attr.blockchainFieldMeta.field] = value || null;
@@ -166,41 +160,43 @@
           }, {});
 
         return {
-          ...this.formData,
+          ...this.formModel,
           ...camelizeObjectKeys(onchainFields)
         };
       },
 
       offchainMeta() {
-        const filesAttrs = this.filesAttrs.reduce((obj, attr) => ({
-          ...obj,
-          ...(isFile(this.formData.researchRef.attributes[attr])
-            ? {
-              [attr]: this.formData.researchRef.attributes[attr].name
-            }
-            : {}
-          )
-        }), {});
-
         return {
-          attributes: compactResearchAttributes({
-            ...this.formData.researchRef.attributes,
-            ...filesAttrs
-          })
-          // .filter((attr) => hasValue(attr.value))
+          attributes: compactResearchAttributes(
+            replaceFileWithName(this.formModel.researchRef.attributes)
+          )
         };
       },
 
-      transformedFormData() {
-        return {
-          filesData: this.formFiles,
-          onchainData: this.onchainData,
-          offchainMeta: this.offchainMeta
-        };
+      formData() {
+        const formData = new FormData();
+
+        const offchainMeta = _.cloneDeep(this.offchainMeta);
+        const onchainData = _.cloneDeep(this.onchainData);
+
+        if (!onchainData.researchGroup) {
+          onchainData.creator = this.$currentUser.account.name;
+          onchainData.memo = this.$currentUser.account.memo_key;
+          onchainData.fee = this.toAssetUnits(0);
+        }
+
+        formData.append('onchainData', JSON.stringify(onchainData));
+        formData.append('offchainMeta', JSON.stringify(offchainMeta));
+
+        for (const file of this.attachedFiles) {
+          formData.append(...file);
+        }
+
+        return formData;
       }
     },
     watch: {
-      formData: {
+      formModel: {
         deep: true,
         handler() {
           if (!this.$route.params.researchExternalId) {
@@ -226,30 +222,16 @@
                 disciplines: clone.disciplines.map((d) => d.external_id),
                 researchGroup: clone.researchGroup.external_id,
                 researchRef: {
-                  attributes: expandResearchAttributes(
-                    clone.researchRef.attributes
-                      // .map((attr) => ({
-                      //   ...attr,
-                      //   ...{
-                      //     value: this.filesAttrs.includes(attr.researchAttributeId)
-                      //       ? researchAttributeFileUrl(
-                      //         this.$route.params.researchExternalId,
-                      //         attr.researchAttributeId,
-                      //         attr.value
-                      //       )
-                      //       : attr.value
-                      //   }
-                      // }))
-                  )
+                  attributes: expandResearchAttributes(clone.researchRef.attributes)
                 }
               }
             };
 
-            this.formData = { ..._.cloneDeep(transformed) };
+            this.formModel = { ..._.cloneDeep(transformed) };
             this.$setReady();
 
             this.$nextTick(() => {
-              this.cachedFormData = JSON.stringify(this.formData);
+              this.cachedFormModel = JSON.stringify(this.formModel);
             });
           });
       } else {
@@ -258,17 +240,17 @@
     },
     methods: {
       storeDraft() {
-        this.$ls.set('researchDraft', this.formData, 1000 * 60 * 60);
+        this.$ls.set('researchDraft', this.formModel, 1000 * 60 * 60);
       },
       readDraft() {},
       clearDraft() {},
 
       verifyPermlink() {
-        if (this.transformedFormData.onchainData.researchGroup) {
+        if (this.onchainData.researchGroup) {
           return researchService
             .checkResearchExistenceByPermlink(
-              this.transformedFormData.onchainData.researchGroup,
-              this.transformedFormData.onchainData.title
+              this.onchainData.researchGroup,
+              this.onchainData.title
             )
             .then((exists) => {
               this.isPermlinkVerifyed = !exists;
@@ -302,34 +284,16 @@
       createResearch(exists) {
         if (exists) return false;
 
-        const formData = new FormData();
-
-        const { offchainMeta } = this.transformedFormData;
-        const { onchainData } = this.transformedFormData;
-
-        if (!onchainData.researchGroup) {
-          onchainData.creator = this.$currentUser.account.name;
-          onchainData.memo = this.$currentUser.account.memo_key;
-          onchainData.fee = this.toAssetUnits(0);
-        }
-
-        formData.append('onchainData', JSON.stringify(onchainData));
-        formData.append('offchainMeta', JSON.stringify(offchainMeta));
-
-        for (const file of this.formFiles) {
-          formData.append(...file);
-        }
-
         return researchService.createResearchViaOffchain(
           {
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.account.name
           },
           false,
-          formData
+          this.formData
         )
           .then((research) => {
-            this.$notifier.showSuccess(`Project "${this.transformedFormData.onchainData.title}" has been created successfully`);
+            this.$notifier.showSuccess(`Project "${this.onchainData.title}" has been created successfully`);
             this.goToResearch(research);
           })
           .catch((err) => {
@@ -339,7 +303,7 @@
       },
 
       updateResearch(exists) {
-        // if (JSON.parse(this.cachedFormData).title !== this.transformedFormData.onchainData.title) {
+        // if (JSON.parse(this.cachedFormModel).title !== this.transformedFormData.onchainData.title) {
         //   this.isPermlinkVerifyed = !exists;
         // } else {
         //   this.isPermlinkVerifyed = true;
@@ -347,21 +311,9 @@
 
         // if (exists) return false;
 
-        const formData = new FormData();
-
-        const { offchainMeta } = this.transformedFormData;
-        const { onchainData } = this.transformedFormData;
-
         // console.log(this.formFiles)
         // console.log(offchainMeta)
         // return false;
-
-        formData.append('onchainData', JSON.stringify(onchainData));
-        formData.append('offchainMeta', JSON.stringify(offchainMeta));
-
-        for (const file of this.formFiles) {
-          formData.append(...file);
-        }
 
         return researchService.updateResearchViaOffchain(
           {
@@ -369,7 +321,7 @@
             username: this.$currentUser.account.name
           },
           false,
-          formData
+          this.formData
         )
           .then((research) => {
             this.$notifier.showSuccess('Info has been change successfully!');

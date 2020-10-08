@@ -146,7 +146,6 @@
       },
 
       onFileChoose(file) {
-        console.log(1, file)
         this.chosedFile = file;
       },
 

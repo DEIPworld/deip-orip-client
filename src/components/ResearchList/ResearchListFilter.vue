@@ -56,14 +56,12 @@
 
     created() {
       const q = this.$route.query.rFilter;
-      console.log(this.$ls.ttl(this.storageKey))
 
       if (this.$ls.ttl(this.storageKey) === -1) {
         this.applyFilter();
       }
 
       if (q) {
-        console.log(1)
         this.filterModel = {
           ...this.filterModel,
           ...JSON.parse(q)

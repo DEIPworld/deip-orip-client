@@ -6,6 +6,7 @@
 
   import ContentsList from '@/components/ContentsList/ContentsList';
   import DraftsList from '@/components/DraftsList/DraftsList';
+  import { tenantAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchEditRenderer',
@@ -16,14 +17,10 @@
       DraftsList
     },
     mixins: [componentsRenderer, Proxyable],
-    props: {
-      attributes: {
-        type: Object,
-        default: () => ({})
+    computed: {
+      attributes() {
+        return tenantAttributesToObject(this.$tenantSettings.researchAttributes);
       }
-    },
-    // created() {
-    //   console.log(this.attributes)
-    // }
+    }
   };
 </script>
