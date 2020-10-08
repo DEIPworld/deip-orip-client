@@ -286,11 +286,6 @@
           date: his.timestamp,
           sender: item.user
         })));
-        data.push(...this.currentContributionsList.map((item) => ({
-          amount: item.amount,
-          date: item.contribution_time,
-          sender: item.user
-        })));
         return data.flat().sort((a, b) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
