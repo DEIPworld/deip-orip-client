@@ -23,7 +23,7 @@ const ACTIONS = {
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (tokenSale) {
-          dispatch('loadCurrentTokenSaleContributors');
+          return dispatch('loadCurrentTokenSaleContributors');
         } else {
           return dispatch('loadLastResearchTokenSale', researchId);
         }
