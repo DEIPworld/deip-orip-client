@@ -38,6 +38,7 @@
       </template>
     </template>
     <v-btn
+      v-if="hasHistory || tokenSaleData"
       block
       small
       outlined
@@ -52,6 +53,9 @@
     >
       {{ tokenSaleData ? 'More details' : 'Info' }}
     </v-btn>
+    <div v-else class="caption">
+      Project has never fundraised before.
+    </div>
     <v-btn
       v-if="!tokenSaleData && isResearchGroupMember"
       block
@@ -96,7 +100,8 @@
     computed: {
       ...mapGetters({
         tokenSaleData: 'FundraisingStats/tokenSale',
-        research: 'FundraisingStats/research'
+        research: 'FundraisingStats/research',
+        hasHistory: 'FundraisingStats/hasHistory'
       }),
       timeChipData() {
         if (this.tokenSaleData && this.tokenSaleData.status === 4) {

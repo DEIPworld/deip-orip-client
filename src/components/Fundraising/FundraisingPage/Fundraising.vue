@@ -4,7 +4,7 @@
       <div class="text-h4 mb-8">
         Fundraising
       </div>
-      <v-row>
+      <v-row v-if="tokenSale">
         <v-col cols="12" md="7">
           <d-stack gap="32">
             <div class="text-h6">
@@ -113,14 +113,14 @@
               hide-details
               :suffix="tokenSale.soft_cap.split(' ')[1]"
               :rules="[rules.required, deipTokenValidator]"
-              :disabled="isInvesting || tokenSale.status === 2"
+              :disabled="isInvesting || !hasActiveTokenSale"
             />
             <v-checkbox
               v-model="formData.agreeFundraising"
               class="mt-3 mb-2"
               :rules="[rules.required]"
               hide-details
-              :disabled="tokenSale.status === 2"
+              :disabled="!hasActiveTokenSale"
               label="I agree to the Terms and Conditions listed below "
             />
             <a
@@ -135,7 +135,7 @@
               block
               small
               type="submit"
-              :disabled="isContributionToTokenSaleDisabled || tokenSale.status === 2"
+              :disabled="isContributionToTokenSaleDisabled || !hasActiveTokenSale"
             >
               Invest
             </v-btn>
@@ -146,13 +146,13 @@
       <d-block title="Transactions" class="mt-8">
         <v-divider />
         <v-data-table
-          :hide-default-footer="contributionsList.length < 50"
+          :hide-default-footer="transactionsData.length < 50"
           :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
           :items-per-page="50"
           disable-sort
 
           :headers="transactionsTableHeader"
-          :items="contributionsList"
+          :items="transactionsData"
         >
           <template #item.type="{item}">
             <v-chip
@@ -162,14 +162,11 @@
               Investment
             </v-chip>
           </template>
-          <template #item.user.profile.firstName="{item}">
-            {{ item.user | fullname }}
+          <template #item.sender.profile.firstName="{item}">
+            {{ item.sender | fullname }}
           </template>
-          <template #item.contribution_time="{item}">
-            {{ item.contribution_time | dateFormat('MMMM DD YYYY', true) }}
-          </template>
-          <template #item.amount="{item}">
-            {{ convertToPercent(item.amount) }} %
+          <template #item.date="{item}">
+            {{ item.date | dateFormat('MMMM DD YYYY', true) }}
           </template>
         </v-data-table>
       </d-block>
@@ -196,7 +193,6 @@
   import FundraisingProgressNeedle from '@/components/Fundraising/FundraisingPage/components/FundraisingProgressNeedle';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { chartGradient, switchColor } from '@/plugins/charts';
-  import moment from 'moment';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
@@ -257,12 +253,12 @@
           },
           {
             text: 'Sender',
-            value: 'user.profile.firstName',
+            value: 'sender.profile.firstName',
             align: 'center'
           },
           {
             text: 'Date',
-            value: 'contribution_time',
+            value: 'date',
             align: 'center'
           },
           {
@@ -283,6 +279,18 @@
         assets: 'auth/assets',
         contributionsList: 'Fundraising/contributionsList'
       }),
+      transactionsData() {
+        const data = this.contributionsList.map((item) => item.contributionsHistory.map((his) => ({
+          amount: his.op[1].amount,
+          date: his.timestamp,
+          sender: item.user
+        }))).flat();
+        return data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB - dateA;
+        });
+      },
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
           bg: color,
@@ -321,18 +329,25 @@
         return this.tokenSale && this.tokenSale.status === 4;
       },
       chartData() {
+        const investors = this.contributionsList.reduce((arr, item) => {
+          arr.push(
+            [this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]
+          );
+          return arr;
+        }, []);
+        const tokensOnSale = Math.round(100 - this.convertToPercent(this.groupOwnedTokens)
+          - this.contributionsList.reduce(
+            (sum, item) => sum + this.convertToPercent(item.amount), 0
+          ));
         return [
           ['Researcher', 'AmountMoney'],
-          ...this.contributionsList.reduce((arr, item) => {
-            arr.push(
-              [this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]
-            );
-            return arr;
-          }, []),
-          [this.groupName, this.convertToPercent(this.groupOwnedTokens)]
+          ...investors,
+          [this.groupName, this.convertToPercent(this.groupOwnedTokens)],
+          ['On Sale', tokensOnSale]
         ];
       },
       currentCap() {
+        if (!this.tokenSale) return 0;
         return this.fromAssetsToFloat(this.tokenSale.total_amount);
       },
       isContributionToTokenSaleDisabled() {
@@ -412,6 +427,7 @@
             Promise.all(
               [
                 this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
+                this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')
               ]

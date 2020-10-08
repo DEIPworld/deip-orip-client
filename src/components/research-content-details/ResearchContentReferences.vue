@@ -88,7 +88,7 @@
                       <span class="text-body-2">Authors:</span>
                     </v-col>
                     <v-col cols="8">
-                      <v-row align="center">
+                      <v-row align="center" no-gutters>
                         <div v-for="(author, i) in researchContentAuthorsList" :key="`author-${i}`">
                           <platform-avatar
                             :user="author"
@@ -110,14 +110,18 @@
                       <span class="text-body-2">Organization:</span>
                     </v-col>
                     <v-col cols="8">
-                      <v-row align="center">
-                        <img
-                          width="20px"
-                          height="20px"
-                          class="align-self-center"
-                          :src="$options.filters.researchGroupLogoSrc(researchGroup.external_id, 50, 50, true)"
-                        >
-                        <span class="pl-2">{{ researchGroup.name }}</span>
+                      <v-row no-gutters>
+                        <v-col cols="auto">
+                          <img
+                            width="20px"
+                            height="20px"
+                            class="align-self-center"
+                            :src="$options.filters.researchGroupLogoSrc(researchGroup.external_id, 50, 50, true)"
+                          >
+                        </v-col>
+                        <v-col>
+                          <span class="pl-2">{{ researchGroup.name }}</span>
+                        </v-col>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -234,11 +238,12 @@
             Usage by organization
           </div>
           <div class="py-12">
-            <GChart
-              type="PieChart"
-              :settings="{ packages: ['corechart'] }"
+            <d-chart-pie
               :data="outerReferencesByOrgChart.data"
-              :options="outerReferencesByOrgChart.options"
+              donut
+              :options="{
+                legend: { position: 'left' }
+              }"
             />
           </div>
         </v-row>
@@ -257,11 +262,12 @@
             Usage by data type
           </div>
           <div class="py-12">
-            <GChart
-              type="PieChart"
-              :settings="{ packages: ['corechart'] }"
+            <d-chart-pie
               :data="outerReferencesByContentTypeChart.data"
-              :options="outerReferencesByContentTypeChart.options"
+              donut
+              :options="{
+                legend: { position: 'left' }
+              }"
             />
           </div>
         </v-row>
@@ -279,11 +285,12 @@
             Usage by domain
           </div>
           <div class="py-12">
-            <GChart
-              type="PieChart"
-              :settings="{ packages: ['corechart'] }"
+            <d-chart-pie
               :data="referencesByDisciplinesChart.data"
-              :options="referencesByDisciplinesChart.options"
+              donut
+              :options="{
+                legend: { position: 'left' }
+              }"
             />
           </div>
         </v-row>
@@ -299,12 +306,13 @@
 
   import { ResearchService } from '@deip/research-service';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DChartPie from '@/components/Deipify/DChart/DChartPie';
 
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ResearchContentReferences',
-    components: { LayoutSection },
+    components: { LayoutSection, DChartPie },
     data() {
       return {
         activeTab: 'tab-file',
@@ -362,23 +370,7 @@
             ['Distribution', ''],
             ...Object.values(referencesByDiscipline)
               .map(({ text, count }) => [text, count / totalDisciplinesCount * 100])
-          ],
-
-          options: {
-            title: '',
-            legend: { position: 'left' },
-            colors: ['#C62828', '#AD1457', '#6A1B9A', '#37474F', '#283593', '#4E342E'],
-            chartArea: {
-              left: 0,
-              width: '80%',
-              height: '100%'
-            },
-            pieSliceTextStyle: {
-              color: '#000000',
-              fontSize: 10
-            },
-            pieHole: 0.6
-          }
+          ]
         };
       },
 
@@ -406,24 +398,7 @@
             ['Distribution', ''],
             ...Object.values(outerReferencesByContentType)
               .map(({ text, count }) => [text, count / totalInnerReferencesCount * 100])
-          ],
-
-          options: {
-            title: '',
-            legend: { position: 'left' },
-            colors: ['#FFAB91', '#FFCC80', '#FFE082', '#F48FB1', '#E6EE9C', '#EF9A9A'],
-            chartArea: {
-              left: 0,
-              width: '80%',
-              height: '100%'
-            },
-            pieSliceTextStyle: {
-              // color: "#ffffff",
-              color: '#000000',
-              fontSize: 10
-            },
-            pieHole: 0.6
-          }
+          ]
         };
       },
 

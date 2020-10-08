@@ -38,8 +38,24 @@ const ACTIONS = {
           const contributor = contributors[i];
           contributor.user = users.find((user) => contributor.account_name === user.account.name);
         }
-        commit('setResearchTokenSaleContributionsList', contributors);
-      });
+
+        return Promise.all(
+          contributors.map(
+            (item) => deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(
+              item.account_name, researchId
+            )
+          )
+        );
+      })
+      .then((res) => {
+        for (let i = 0; i < contributors.length; i++) {
+          const contributor = contributors[i];
+          contributor.contributionsHistory = res.find(
+            (operation) => contributor.account_name === operation[0].op[1].contributor
+          );
+        }
+        commit('setResearchTokenSaleContributionsList', contributors)
+      }) 
   },
   loadLastResearchTokenSale({ commit }, researchId) {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
