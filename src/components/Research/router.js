@@ -6,7 +6,7 @@ import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import { reviewRoutingFabric } from '@/components/Reviews/router';
 import { contentRoutingFabric } from '@/components/Contents/router';
 import Research from '@/components/Research/Research';
-import ResearchFoundraising from '@/components/Research/ResearchFoundraising/ResearchFoundraising';
+import ResearchFundraising from '@/components/Research/ResearchFundraising/ResearchFundraising';
 
 const routerView = { template: '<router-view />' };
 
@@ -63,7 +63,7 @@ export const researchRouting = [{
         {
           name: 'research.fundraising',
           path: 'fundraising',
-          component: ResearchFoundraising
+          component: ResearchFundraising
         },
         {
           name: 'research.createTokenSale',

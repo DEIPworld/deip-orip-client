@@ -8,13 +8,13 @@ const usersService = UsersService.getInstance();
 const STATE = {
   tokenSale: undefined,
   contributionsList: [],
-  currentContributionsList: []
+  transactionsHistory: []
 };
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
   contributionsList: (state) => state.contributionsList,
-  currentContributionsList: (state) => state.currentContributionsList
+  transactionsHistory: (state) => state.transactionsHistory
 };
 
 const ACTIONS = {
@@ -42,42 +42,28 @@ const ACTIONS = {
           const contributor = contributors[i];
           contributor.user = users.find((user) => contributor.account_name === user.account.name);
         }
-
-        return Promise.all(
-          contributors.map(
-            (item) => deipRpc.api.getContributionsHistoryByContributorAndResearchAsync(
-              item.account_name, researchId
-            )
-          )
-        );
-      })
-      .then((res) => {
-        for (let i = 0; i < contributors.length; i++) {
-          const contributor = contributors[i];
-          contributor.contributionsHistory = res.find(
-            (operation) => contributor.account_name === operation[0].op[1].contributor
-          );
-        }
-        commit('setResearchTokenSaleContributionsList', contributors)
+        commit('setResearchTokenSaleContributionsList', contributors);
       });
   },
-  // loadCurrentTokenSaleContributors({ state, commit }) {
-  //   const contributors = [];
-  //   return deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(
-  //     state.tokenSale.id
-  //   )
-  //     .then((contributions) => {
-  //       contributors.push(...contributions);
-  //       return usersService.getEnrichedProfiles(contributions.map((m) => m.owner));
-  //     })
-  //     .then((users) => {
-  //       for (let i = 0; i < contributors.length; i++) {
-  //         const contributor = contributors[i];
-  //         contributor.user = users.find((user) => contributor.owner == user.account.name);
-  //       }
-  //       commit('setCurrentContributionsList', contributors);
-  //     });
-  // },
+  loadTransactionsHistory({ commit }, researchId) {
+    const transactions = [];
+    return deipRpc.api.getContributionsHistoryByResearchAsync(
+      researchId
+    )
+      .then((transactionsList) => {
+        transactions.push(...transactionsList);
+        return usersService.getEnrichedProfiles(transactionsList.map((t) => t.op[1].contributor));
+      })
+      .then((users) => {
+        for (let i = 0; i < transactions.length; i++) {
+          const transaction = transactions[i];
+          transaction.sender = users.find(
+            (user) => transaction.op[1].contributor === user.account.name
+          );
+        }
+        commit('setTransactionsHistory', transactions);
+      });
+  },
   loadLastResearchTokenSale({ commit }, researchId) {
     return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
       .then((tokenSales) => {
@@ -98,8 +84,8 @@ const MUTATIONS = {
   setResearchTokenSaleContributionsList(state, contributions) {
     state.contributionsList = contributions;
   },
-  setCurrentContributionsList(state, currentContributionsList) {
-    state.currentContributionsList = currentContributionsList;
+  setTransactionsHistory(state, transactionsHistory) {
+    state.transactionsHistory = transactionsHistory;
   }
 };
 

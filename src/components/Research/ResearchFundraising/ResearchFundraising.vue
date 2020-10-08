@@ -12,7 +12,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchFoundraising',
+    name: 'ResearchFundraising',
     components: { Fundraising },
     computed: {
       ...mapGetters({

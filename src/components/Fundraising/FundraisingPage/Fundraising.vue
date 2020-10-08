@@ -128,7 +128,7 @@
               target="_blank"
               class="text--secondary caption ml-8 mb-2 d-block"
             >
-              Files
+              Terms and Conditions
             </a>
             <v-btn
               color="primary"
@@ -146,13 +146,14 @@
       <d-block title="Transactions" class="mt-8">
         <v-divider />
         <v-data-table
-          :hide-default-footer="transactionsData.length < 50"
+          :hide-default-footer="transactionsHistory.length < 50"
           :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
           :items-per-page="50"
-          disable-sort
+          sort-by="timestamp"
+          sort-desc
 
           :headers="transactionsTableHeader"
-          :items="transactionsData"
+          :items="transactionsHistory"
         >
           <template #item.type="{item}">
             <v-chip
@@ -163,10 +164,23 @@
             </v-chip>
           </template>
           <template #item.sender.profile.firstName="{item}">
-            {{ item.sender | fullname }}
+            <d-box-item
+              :avatar="item.sender.profile | avatarSrc(64, 64, false)"
+              :size="32"
+            >
+              <v-clamp
+                autoresize
+                :max-lines="1"
+              >
+                {{ item.sender | fullname }}
+              </v-clamp>
+            </d-box-item>
           </template>
-          <template #item.date="{item}">
-            {{ item.date | dateFormat('MMMM DD YYYY', true) }}
+          <template #item.timestamp="{item}">
+            {{ item.timestamp | dateFormat('MMMM DD YYYY', true) }}
+          </template>
+          <template #item.op[1].research_token_sale_id="{item}">
+            {{ mockSignature(item.op[1].research_token_sale_id) }}
           </template>
         </v-data-table>
       </d-block>
@@ -197,6 +211,8 @@
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
   import { ResearchService } from '@deip/research-service';
+  import crypto from '@deip/lib-crypto';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   const researchService = ResearchService.getInstance();
 
@@ -214,7 +230,8 @@
       DChartPie,
       DForm,
       DDialog,
-      FundraisingProgressNeedle
+      FundraisingProgressNeedle,
+      DBoxItem
     },
     mixins: [componentStoreFactoryOnce(fundraisingStore)],
     props: {
@@ -249,66 +266,42 @@
         isOpenFundraisingDialog: false,
         transactionsTableHeader: [
           {
-            value: 'type'
+            value: 'type',
+            sortable: false
           },
           {
             text: 'Sender',
             value: 'sender.profile.firstName',
-            align: 'center'
+            sortable: false
           },
           {
             text: 'Date',
-            value: 'date',
-            align: 'center'
+            value: 'timestamp',
+            sortable: false
+          },
+          {
+            text: 'Fundraising campaign id',
+            value: 'op[1].research_token_sale_id',
+            align: 'center',
+            sortable: false
           },
           {
             text: 'Amount',
-            value: 'amount',
-            align: 'end'
-          }
+            value: 'op[1].amount',
+            align: 'end',
+            sortable: false
+          },
         ]
       };
     },
     computed: {
       ...mapGetters({
         tokenSale: 'Fundraising/tokenSale',
-        research: 'Fundraising/research',
         userBalances: 'auth/userBalances',
         userAssets: 'auth/userAssets',
-        user: 'auth/user',
-        assets: 'auth/assets',
         contributionsList: 'Fundraising/contributionsList',
-        // currentContributionsList: 'Fundraising/currentContributionsList'
+        transactionsHistory: 'Fundraising/transactionsHistory'
       }),
-      transactionsData() {
-        const data = this.contributionsList.map((item) => item.contributionsHistory.map((his) => ({
-          amount: his.op[1].amount,
-          date: his.timestamp,
-          sender: item.user
-        })));
-        // data.push(...this.currentContributionsList.map((item) => ({
-        //   amount: item.amount,
-        //   date: item.contribution_time,
-        //   sender: item.user
-        // })));
-        // console.log(this.contributionsList.map((item) => item.contributionsHistory.map((his) => ({
-        //   amount: his.op[1].amount,
-        //   date: his.timestamp,
-        //   sender: item.user
-        // }))))
-        // console.log(...this.currentContributionsList.map((item) => ({
-        //   amount: item.amount,
-        //   date: item.contribution_time,
-        //   sender: item.user
-        // })))
-        // console.log(this.currentContributionsList)
-        // console.log(this.contributionsList)
-        return data.flat().sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB - dateA;
-        });
-      },
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
           bg: color,
@@ -411,7 +404,8 @@
     created() {
       Promise.all([
         this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
-        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId)
+        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
+        this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId)
       ])
         .then(() => {
           if (!this.tokenSale) {
@@ -423,6 +417,9 @@
         .catch(() => this.$router.back());
     },
     methods: {
+      mockSignature(id) {
+        return crypto.hexify(crypto.ripemd160(new TextEncoder('utf-8').encode(`${id}`).buffer)).slice(0, 8);
+      },
       openFundraisingDialog(value) {
         if (!value) return;
 
@@ -446,6 +443,7 @@
               [
                 this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
                 this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
+                this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')
               ]
