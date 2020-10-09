@@ -10,7 +10,7 @@
         :key="`row-${index}`"
         :dot-top="16"
       >
-        <v-row>
+        <v-row class="pb-4">
           <v-col cols="6">
             <v-text-field
               v-model="license.name"
@@ -28,14 +28,11 @@
           </v-col>
 
           <v-col cols="12">
-            <d-file-input
-              v-model="files[index]"
-              label="Upload an agreement"
-              :exists-files="getFileUrl(fileNames[index])"
+            <d-file-input-extended
+              v-model="license.file"
+              label="Upload an agreemen"
+              :url-builder="getFileUrl"
             />
-            <a :href="getFileUrl(fileNames[index])">
-              {{ fileNames[index] }}
-            </a>
           </v-col>
         </v-row>
 
@@ -56,24 +53,24 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import DFileInput from '@/components/Deipify/DInput/DFileInput';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
   import { researchAttributeFileUrl } from '@/utils/helpers';
+  import DFileInputExtended from '@/components/Deipify/DInput/DFileInputExtended';
 
   const licenseModel = () => ({
     name: '',
     fee: {},
-    file: null
+    file: undefined
   });
 
   export default {
     name: 'AttributesExpressLicensingSet',
     components: {
+      DFileInputExtended,
       DAssetInput,
       DTimelineAdd,
-      DFileInput,
       DTimelineItem,
       DTimeline,
       DStack
@@ -84,7 +81,7 @@
         active: false,
 
         files: {},
-        fileNames: {}
+        fileNames: {},
       };
     },
     watch: {
@@ -93,23 +90,10 @@
           this.internalValue = [];
           this.normalizeModel();
         }
-      },
-      files: {
-        deep: true,
-        handler(files) {
-          for (const [index, item] of this.internalValue.entries()) {
-            this.internalValue[index].file = files[index] || this.fileNames[index] || null;
-          }
-          this.$emit('change', this.internalValue);
-        }
       }
     },
     created() {
       if (this.internalValue) {
-        for (const [index, item] of this.internalValue.entries()) {
-          this.fileNames[index] = item.file;
-        }
-
         this.active = true;
       }
     },

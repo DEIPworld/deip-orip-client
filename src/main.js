@@ -25,6 +25,7 @@ import { getEnvConfig } from '@/plugins/getEnvConfig';
 import { vuetify } from '@/plugins/vuetify';
 import { ifEnabled } from '@/plugins/ifEnabled';
 import { filterWhere } from '@/plugins/filterWhere';
+import { VeConfirm } from '@/plugins/VuetifyExtended/VeDialog';
 
 import { dataReadyMixin } from '@/mixins/dataReadyMixin';
 import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
@@ -44,6 +45,8 @@ Vue.use(VueResize);
 Vue.use(Clipboard)
 Vue.use(PortalVue);
 Vue.use(VueTheMask);
+
+Vue.use(VeConfirm, { vuetify });
 
 Vue.use(VueCurrencyFilter, {
   symbol: '$',

@@ -30,7 +30,7 @@
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
-  import { assetsChore } from '@/mixins/assetsChore';
+  import { assetsChore } from '@/mixins/chores';
   import { consoleWarn } from 'vuetify/lib/util/console';
   import { isObject } from '@/utils/helpers';
 

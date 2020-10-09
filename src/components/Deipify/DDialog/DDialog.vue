@@ -2,7 +2,7 @@
   <v-dialog
     ref="dialog"
     persistent
-    :value="isOpen"
+    :value="isActive"
     :max-width="maxWidth"
     scrollable
     @click:outside="closeDialog"
@@ -35,23 +35,29 @@
       <v-card-actions v-if="!hideButtons">
         <v-spacer />
         <slot name="actions">
-          <v-btn
-            text
-            color="primary"
-            :disabled="loading || disabled"
-            @click="cancelButtonClick"
-          >
-            {{ cancelButtonTitle }}
-          </v-btn>
-          <v-btn
-            text
-            color="primary"
-            :disabled="disabled"
-            :loading="loading"
-            @click="confirmButtonClick"
-          >
-            {{ confirmButtonTitle }}
-          </v-btn>
+
+          <slot name="buttonCancel">
+            <v-btn
+              text
+              color="primary"
+              :disabled="loading || disabled"
+              @click="cancelButtonClick"
+            >
+              {{ cancelButtonTitle }}
+            </v-btn>
+          </slot>
+
+          <slot name="buttonConfirm">
+            <v-btn
+              text
+              color="primary"
+              :disabled="disabled"
+              :loading="loading"
+              @click="confirmButtonClick"
+            >
+              {{ confirmButtonTitle }}
+            </v-btn>
+          </slot>
         </slot>
       </v-card-actions>
     </v-card>
@@ -59,13 +65,12 @@
 </template>
 
 <script>
+  import Toggleable from 'vuetify/lib/mixins/toggleable'
+
   export default {
     name: 'DDialog',
+    mixins: [Toggleable],
     props: {
-      value: {
-        type: Boolean,
-        default: false
-      },
       maxWidth: {
         type: [String, Number],
         default: 420
@@ -106,19 +111,9 @@
         default: false
       }
     },
-    computed: {
-      isOpen: {
-        get() {
-          return this.value;
-        },
-        set(value) {
-          this.$emit('input', value);
-        }
-      }
-    },
     methods: {
       closeDialog(e) {
-        this.isOpen = false;
+        this.isActive = false;
         this.$emit('close', e);
       },
 
@@ -139,7 +134,3 @@
     }
   };
 </script>
-
-<style scoped>
-
-</style>

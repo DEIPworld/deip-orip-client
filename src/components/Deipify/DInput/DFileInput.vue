@@ -1,6 +1,5 @@
 <script>
   import { VFileInput, VChip, VTextField } from 'vuetify/lib/components';
-  import { isFile, isArray } from '@/utils/helpers';
 
   export default {
     name: 'DFileInput',
@@ -29,10 +28,6 @@
       appendIcon: {
         type: String,
         default: '$file'
-      },
-      truncateLength: {
-        type: [Number, String],
-        default: 40
       },
       existsFiles: {
         type: [String, Array],

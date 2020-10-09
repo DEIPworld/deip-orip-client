@@ -1,8 +1,8 @@
 <template>
   <d-layout-full-screen :title="title">
     <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
-      <pre>{{ JSON.stringify(formModel.researchRef.attributes['5f7ec161fbb737001f1bacf1'], null, 2) }}</pre>
-      <pre>{{ JSON.stringify(attachedFiles, null, 2) }}</pre>
+      <pre>{{ JSON.stringify(formModel.researchGroup, null, 2) }}</pre>
+      <pre>{{ JSON.stringify(onchainData.researchGroup, null, 2) }}</pre>
       <research-edit-renderer
         v-model="formModel"
         :schema="layoutSchema"
@@ -107,10 +107,6 @@
         const schema = this.$tenantSettings.researchLayouts.projectEditForm.layout;
 
         if (this.$route.params.researchExternalId) {
-          console.log(extendAttrModules(
-            schema,
-            { props: { projectId: this.$route.params.researchExternalId } }
-          ))
           return extendAttrModules(
             schema,
             { props: { projectId: this.$route.params.researchExternalId } }
@@ -151,7 +147,10 @@
         const onchainFields = this.$tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
+
+            // console.log(attr.title, attr._id, this.formModel.researchRef.attributes[attr._id])
             const value = this.formModel.researchRef.attributes[attr._id];
+
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
               acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
@@ -219,17 +218,19 @@
           .dispatch('Research/getResearchDetails', this.$route.params.researchExternalId)
           .then(() => {
             const clone = _.cloneDeep(this.$store.getters['Research/data']);
-
             const transformed = {
               ...clone,
               ...{
-                disciplines: clone.disciplines.map((d) => d.external_id),
-                researchGroup: clone.researchGroup.external_id,
+                // disciplines: clone.disciplines.map((d) => d.external_id),
+                // researchGroup: clone.researchGroup.external_id,
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 }
               }
             };
+
+            console.log(transformed)
+
 
             this.formModel = { ..._.cloneDeep(transformed) };
             this.$setReady();
