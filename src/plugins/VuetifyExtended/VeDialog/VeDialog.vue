@@ -37,6 +37,7 @@
           <v-btn
             v-if="Boolean(buttonFalseText)"
             v-bind="buttonFalseProps"
+            :disabled="disabled || cancelDisabled"
             @click="cancelButtonClick"
           >
             {{ buttonFalseText }}
@@ -44,6 +45,7 @@
           <v-btn
             v-if="Boolean(buttonTrueText)"
             v-bind="buttonTrueProps"
+            :disabled="disabled || trueDisabled"
             @click="confirmButtonClick"
           >
             {{ buttonTrueText }}
@@ -120,14 +122,16 @@
       persistent: Boolean,
       hideButtons: Boolean,
       disabled: Boolean,
+      cancelDisabled: Boolean,
+      trueDisabled: Boolean,
       loading: Boolean,
       confirm: Boolean,
     },
 
     data() {
-      return {
-        resultValue: false
-      };
+      // return {
+      //   resultValue: false
+      // };
     },
 
     // mounted() {
@@ -154,17 +158,24 @@
 
       cancelButtonClick(e) {
         this.call('click:cancel', e);
-        this.choose(false);
+
+        if (this.confirm) {
+          this.choose(false);
+        }
       },
 
       confirmButtonClick(e) {
         this.call('click:confirm', e);
-        this.choose(true);
+
+        if (this.confirm) {
+          this.choose(true);
+        }
       },
 
       choose(resultValue) {
         // this.resultValue = resultValue;
         this.$emit('result', resultValue);
+
         this.closeDialog();
       },
 

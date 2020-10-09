@@ -15,6 +15,10 @@ export const assetsChore = {
 
   methods: {
 
+    assetInfo(id) {
+      return this.assets.find((ass) => ass.id === id);
+    },
+
     toAssetUnits$(
       amount,
       precision = 3,
@@ -43,7 +47,7 @@ export const assetsChore = {
 
         if (!(amount && assetId)) return null;
 
-        const asset = this.assets.find((ass) => ass.id === assetId);
+        const asset = this.assetInfo(assetId);
 
         return this.toAssetUnits$(
           amount,
