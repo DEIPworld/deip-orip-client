@@ -47,6 +47,7 @@
       title="Send request"
       :max-width="540"
       :true-disabled="!dialogModel.confirm"
+      @click:confirm="() => false"
     >
       <d-stack>
         <div class="text-body-1">
@@ -89,8 +90,6 @@
             </a>
           </div>
         </d-stack>
-
-
       </d-stack>
     </ve-dialog>
   </d-stack>

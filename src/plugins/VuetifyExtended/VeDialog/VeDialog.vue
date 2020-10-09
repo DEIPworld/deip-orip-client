@@ -128,11 +128,11 @@
       confirm: Boolean,
     },
 
-    data() {
-      // return {
-      //   resultValue: false
-      // };
-    },
+    // data() {
+    //   return {
+    //     resultValue: false
+    //   };
+    // },
 
     // mounted() {
     //   document.addEventListener('keyup', this.onEnterPressed);
@@ -151,31 +151,22 @@
 
       call(eventName, e) {
         if (!this.$listeners[eventName]) {
-          this.closeDialog(e);
+          this.choose(e);
         }
         this.$emit(eventName, e);
       },
 
       cancelButtonClick(e) {
-        this.call('click:cancel', e);
-
-        if (this.confirm) {
-          this.choose(false);
-        }
+        this.call('click:cancel', false);
       },
 
       confirmButtonClick(e) {
-        this.call('click:confirm', e);
-
-        if (this.confirm) {
-          this.choose(true);
-        }
+        this.call('click:confirm', true);
       },
 
       choose(resultValue) {
         // this.resultValue = resultValue;
         this.$emit('result', resultValue);
-
         this.closeDialog();
       },
 
