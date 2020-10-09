@@ -1,6 +1,8 @@
 import { mapGetters } from 'vuex';
 import { BlockchainService } from '@deip/blockchain-service';
-import { fileNameFromUrl, isArray, isObject, isString } from '@/utils/helpers';
+import {
+  fileNameFromUrl, isArray, isObject, isString
+} from '@/utils/helpers';
 
 const blockchainService = BlockchainService.getInstance();
 
@@ -28,7 +30,7 @@ export const assetsChore = {
     toAssetString(val) {
       if (!val) return null;
 
-      if(isString(val)) {
+      if (isString(val)) {
         return this.toAssetUnits$(val);
       }
 
@@ -38,7 +40,6 @@ export const assetsChore = {
 
       if (isObject(val)) {
         const { amount, assetId } = val;
-        console.log(val, amount, assetId)
 
         if (!(amount && assetId)) return null;
 
@@ -65,7 +66,7 @@ export const filesChore = {
         { icon: 'mdi-file-excel-outline', ext: [] },
         { icon: 'mdi-file-table-outline', ext: [] },
         { icon: 'mdi-file-pdf-outline', ext: [] },
-        { icon: 'mdi-file-powerpoint-outline', ext: [] },
+        { icon: 'mdi-file-powerpoint-outline', ext: [] }
       ]
     };
   },

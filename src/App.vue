@@ -76,7 +76,9 @@
     },
 
     created() {
-      const preload = [];
+      const preload = [
+        this.$store.dispatch('auth/loadAssets')
+      ];
 
       if (accessService.isLoggedIn()) {
         preload.push(this.$store.dispatch('auth/loadUser'));

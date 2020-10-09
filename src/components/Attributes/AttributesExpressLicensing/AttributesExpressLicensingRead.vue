@@ -64,9 +64,9 @@
       };
     },
     created() {
-      this.$confirm('Do you really want to exit?', { title: 'Dialog window' }).then((res) => {
-        console.log(res)
-      })
+      // this.$confirm('Do you really want to exit?', { title: 'Dialog window' }).then((res) => {
+      //   console.log(res)
+      // })
     }
   };
 </script>

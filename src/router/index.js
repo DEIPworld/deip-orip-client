@@ -569,7 +569,8 @@ const authDataLoad = () => Promise.all([
   // ...[Object.keys(store.state.auth.user).map((key) => awaitStore('auth/user', key))],
   awaitStore('auth/loaded'),
   // awaitStore('auth/user', 'account'),
-  awaitStore('auth/tenant')
+  awaitStore('auth/tenant'),
+  awaitStore('auth/assets'),
 ]);
 
 router.beforeEach((to, from, next) => {
