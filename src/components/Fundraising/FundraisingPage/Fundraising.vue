@@ -63,6 +63,7 @@
               <div class="d-flex">
                 <fundraising-progress-needle
                   text="0"
+                  class="mr-1"
                 />
                 <fundraising-progress-needle
                   :tooltip="`${fromAssetsToFloat(tokenSale.soft_cap)}`"
@@ -394,11 +395,16 @@
         return `margin-left: calc(${percent}% - ${px}px)`;
       },
       marginMinCapPercent() {
-        const percent = this.tokenSale
+        let percent = this.tokenSale
           ? (this.fromAssetsToFloat(this.tokenSale.soft_cap) * 100)
             / this.fromAssetsToFloat(this.tokenSale.hard_cap)
           : 0;
-        return `margin-left: calc(${percent}% - 9px)`;
+        let mr6 = '0px';
+        if (percent >= 88) {
+          percent = 88;
+          mr6 = '24px';
+        }
+        return `margin-left: calc(${percent}% - 9px - ${mr6})`;
       }
     },
     created() {

@@ -107,9 +107,9 @@
               :to="{
                 name: 'ResearchContentReview',
                 params: {
-                  research_group_permlink: $store.getters['Research/data'].research_group.permlink,
+                  research_group_permlink: research.researchGroup.permlink,
                   content_permlink: review.researchContentPermlink,
-                  research_permlink: $store.getters['Research/data'].permlink,
+                  research_permlink: research.permlink,
                   review_id: review.id
                 }
               }"
@@ -160,6 +160,7 @@
       ...mapGetters({
         reviews: 'ResearchReviews/list',
         contents: 'ResearchContents/list', // temp
+        research: 'Research/data' //temp
       }),
 
       internalReviews() {
@@ -173,9 +174,10 @@
           });
 
           ///////// START TEMP SOLUTION (contentPermlink) /////////
-          const researchContentPermlink = this.$store.getters['ResearchContents/list'].find(
+          const contentPermlink = this.contents.find(
             ({ external_id }) => external_id === review.research_content_external_id
-          ).permlink;
+          );
+          const researchContentPermlink = contentPermlink ? contentPermlink.permlink : '';
           ///////// END TEMP SOLUTION (contentPermlink) /////////
 
           const model = {
