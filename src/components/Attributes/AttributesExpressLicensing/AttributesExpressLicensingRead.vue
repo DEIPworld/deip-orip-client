@@ -47,7 +47,7 @@
       title="Send request"
       :max-width="540"
       :true-disabled="!dialogModel.confirm"
-      @click:confirm="() => false"
+      @click:confirm="() => sendExpressLicensingRequest()"
     >
       <d-stack>
         <div class="text-body-1">
@@ -102,6 +102,11 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import { researchAttributeFileUrl } from '@/utils/helpers';
+  import { ExpressLicensingService } from '@deip/express-licensing-service';
+  import { ResearchService } from '@deip/research-service';
+
+  const researchService = ResearchService.getInstance();
+  const expressLicensingService = ExpressLicensingService.getInstance();
 
   export default {
     name: 'AttributesExpressLicensingRead',
@@ -144,6 +149,37 @@
           false,
           true
         );
+      },
+
+      sendExpressLicensingRequest() {
+        return researchService.getResearch(this.projectId)
+          .then((research) => {
+            return expressLicensingService.createExpressLicensingRequest({
+                privKey: this.$currentUser.privKey,
+                username: this.$currentUser.username,
+              }, {
+                requester: this.$currentUser.username,
+                researchGroup: research.research_group.external_id,
+                fee: this.toAssetString(this.selected.fee),
+                expirationDate: `${this.dialogModel.date}T00:00:00`
+              }, {
+                researchExternalId: research.external_id,
+                licencePlan: this.selected
+              })
+              .then((result) => {
+                this.$notifier.showSuccess('Request has been sent successfully!');
+              })
+              .catch((err) => {
+                console.error(err);
+                this.$notifier.showError();
+              })
+              .finally(() => {
+                this.dialogModel.confirm = false;
+                this.dialogModel.date = undefined;
+                this.dialogModel.time = undefined;
+                this.dialog = false;
+              })
+          })
       }
     }
   };

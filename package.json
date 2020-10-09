@@ -20,6 +20,7 @@
     "@deip/blockchain-service": "1.48.0",
     "@deip/disciplines-service": "1.48.0",
     "@deip/expertise-contributions-service": "1.36.0",
+    "@deip/express-licensing-service": "1.49.0",
     "@deip/grants-service": "1.36.0",
     "@deip/http-service": "1.36.0",
     "@deip/investments-service": "1.48.0",

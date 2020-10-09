@@ -44,9 +44,9 @@ export const assetsChore = {
 
       if (isObject(val)) {
         const { amount, assetId } = val;
-
-        if (!(amount && assetId)) return null;
-
+      
+        if (!(amount && (assetId || assetId === 0))) return null;
+        
         const asset = this.assetInfo(assetId);
 
         return this.toAssetUnits$(
