@@ -17,6 +17,22 @@ export const arrayedModel = {
   }
 };
 
+export const nulledModel = {
+  mixins: [Proxyable],
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? this.value
+        : null
+    };
+  },
+  created() {
+    if (this.value === undefined) {
+      this.$emit('change', this.internalValue);
+    }
+  }
+};
+
 export const arrayModelAddFactory = (defModel) => ({
   mixins: [arrayedModel],
 

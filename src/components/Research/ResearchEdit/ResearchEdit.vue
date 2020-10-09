@@ -1,8 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
     <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
-      <pre>{{ JSON.stringify(formModel.researchGroup, null, 2) }}</pre>
-      <pre>{{ JSON.stringify(onchainData.researchGroup, null, 2) }}</pre>
+      <pre>{{ JSON.stringify(formModel.researchRef.attributes['5f690af5cdaaa53a27af4a30'], null, 2) }}</pre>
       <research-edit-renderer
         v-model="formModel"
         :schema="layoutSchema"
@@ -229,9 +228,6 @@
               }
             };
 
-            console.log(transformed)
-
-
             this.formModel = { ..._.cloneDeep(transformed) };
             this.$setReady();
 
@@ -288,6 +284,8 @@
 
       createResearch(exists) {
         if (exists) return false;
+
+        // return false;
 
         return researchService.createResearchViaOffchain(
           {

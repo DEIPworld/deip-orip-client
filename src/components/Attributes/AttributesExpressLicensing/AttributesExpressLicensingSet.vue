@@ -56,7 +56,7 @@
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
-  import { researchAttributeFileUrl } from '@/utils/helpers';
+  import { hasValue, researchAttributeFileUrl } from '@/utils/helpers';
   import DFileInputExtended from '@/components/Deipify/DInput/DFileInputExtended';
 
   const licenseModel = () => ({
@@ -93,7 +93,7 @@
       }
     },
     created() {
-      if (this.internalValue) {
+      if (hasValue(this.internalValue)) {
         this.active = true;
       }
     },

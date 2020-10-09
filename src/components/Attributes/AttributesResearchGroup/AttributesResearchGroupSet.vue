@@ -46,11 +46,12 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { mapGetters } from 'vuex';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { nulledModel } from '@/mixins/extendModel';
 
   export default {
     name: 'AttributesResearchGroupSet',
     components: { DStack, DBlock },
-    mixins: [attributeSet],
+    mixins: [attributeSet, nulledModel],
     data() {
       return {
         isPersonal: true
@@ -69,6 +70,6 @@
       groups() {
         return this.$where(this.userGroups, { is_personal: false });
       }
-    }
+    },
   };
 </script>
