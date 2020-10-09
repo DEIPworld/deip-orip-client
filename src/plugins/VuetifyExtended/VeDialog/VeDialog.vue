@@ -128,11 +128,11 @@
       confirm: Boolean,
     },
 
-    // data() {
-    //   return {
-    //     resultValue: false
-    //   };
-    // },
+    data() {
+      return {
+        confirmValue: false
+      };
+    },
 
     // mounted() {
     //   document.addEventListener('keyup', this.onEnterPressed);
@@ -165,7 +165,7 @@
       },
 
       choose(resultValue) {
-        // this.resultValue = resultValue;
+        this.confirmValue = resultValue;
         this.$emit('result', resultValue);
         this.closeDialog();
       },

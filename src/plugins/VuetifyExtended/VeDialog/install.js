@@ -21,7 +21,7 @@ const Install = (Vue, options = {}) => {
         propsData: { ...Vue.prototype[property].options, ...opts },
         destroyed: () => {
           container.removeChild(cmp.$el);
-          resolve(cmp.value);
+          resolve(cmp.confirmValue);
         }
       });
       container.appendChild(cmp.$mount().$el);
