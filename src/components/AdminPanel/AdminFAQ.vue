@@ -33,6 +33,10 @@
           <v-btn icon @click="openActionDialog('delete', item._id)">
             <v-icon>delete</v-icon>
           </v-btn>
+
+          <!--          <v-btn icon @click="xFaqTest(item._id)">-->
+          <!--            <v-icon>settings</v-icon>-->
+          <!--          </v-btn>-->
         </div>
       </template>
     </side-actions-card>
@@ -84,6 +88,23 @@
     },
 
     methods: {
+      xFaqTest(id) {
+        this.$confirm(
+          'New dialog mega test message',
+          {
+            title: 'New dialog',
+            buttonTrueText: 'Kill all hummans'
+          }
+        )
+          .then((confirm) => {
+            if (confirm) {
+              console.log('process', id);
+            } else {
+              console.log('cancel', id);
+            }
+          });
+      },
+
       updateFAQ(FAQsArr) {
         const updatedProfile = _.cloneDeep(this.tenant.profile);
         updatedProfile.settings.faq = FAQsArr;
@@ -99,6 +120,7 @@
           })
           .finally(() => this.closeActionDialog());
       },
+
       openActionDialog(type, faqId) {
         const types = {
           publish: {
@@ -132,6 +154,7 @@
           this.actionDialog.data = {};
         }, 300);
       },
+
       publishFAQ(id) {
         const updatedFAQ = this.faqs.map((q) => {
           if (q._id === id) {
@@ -144,6 +167,7 @@
         });
         this.updateFAQ(updatedFAQ);
       },
+
       unpublishFAQ(id) {
         const updatedFAQ = this.faqs.map((q) => {
           if (q._id === id) {
@@ -156,6 +180,7 @@
         });
         this.updateFAQ(updatedFAQ);
       },
+
       deleteFAQ(id) {
         const updatedFAQ = this.faqs.filter(({ _id }) => _id !== id);
         this.updateFAQ(updatedFAQ);
