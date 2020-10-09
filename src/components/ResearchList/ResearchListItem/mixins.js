@@ -1,6 +1,6 @@
 import ResearchListItemRenderer
   from '@/components/ResearchList/ResearchListItem/ResearchListItemRenderer';
-import { researchAttributesToObject } from '@/utils/helpers';
+import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
 export const researchItem = {
   components: { ResearchListItemRenderer },
@@ -11,9 +11,19 @@ export const researchItem = {
     }
   },
   computed: {
-    layoutSchema() {
+    layoutSchemaOld() {
       return this.$tenantSettings.researchLayouts.projectListCard.layout;
     },
+
+    layoutSchema() {
+      const { layout } = this.$tenantSettings.researchLayouts.projectListCard;
+
+      return extendAttrModules(
+        layout,
+        { props: { projectId: this.research.external_id } }
+      );
+    },
+
     research$() {
       return {
         ...this.research,

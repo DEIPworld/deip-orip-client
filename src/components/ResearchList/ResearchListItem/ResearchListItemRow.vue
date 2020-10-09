@@ -9,6 +9,7 @@
 
 <script>
   import { researchItem } from '@/components/ResearchList/ResearchListItem/mixins';
+  import { extendAttrModules } from '@/utils/helpers';
 
   export default {
     name: 'ResearchListItemRow',
@@ -16,7 +17,13 @@
     computed: {
       layoutSchema() {
         const { layout } = this.$tenantSettings.researchLayouts.projectListRow;
-        const row = _.cloneDeep(layout[0]);
+
+        const extendedLayout = extendAttrModules(
+          layout,
+          { props: { projectId: this.research.external_id } }
+        );
+
+        const row = _.cloneDeep(extendedLayout[0]);
         if (row) {
           for (const cell of row.children) {
             delete cell.attrs.title;
