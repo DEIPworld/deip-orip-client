@@ -43,7 +43,13 @@
                 <v-icon>edit</v-icon>
               </v-btn>
 
-              <v-btn icon small :disabled="item.isRequired" class="ml-auto">
+              <v-btn 
+                icon 
+                small 
+                :disabled="item.isRequired" 
+                @click="openActionDialog('delete', item._id)" 
+                class="ml-auto"
+              >
                 <v-icon>{{ item.isRequired ? 'lock' : 'delete' }}</v-icon>
               </v-btn>
 
@@ -93,8 +99,6 @@
         ATTR_TYPES,
         ATTR_LABELS,
 
-        xxx: [],
-
         isDisabled: false,
 
         actionDialog: {
@@ -142,21 +146,21 @@
             title: this.$t('adminRouting.attributes.publishDialog.title'),
             description: this.$t('adminRouting.attributes.publishDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.publishDialog.submitBtn'),
-            action: () => { this.publishCriteria(researchAttributeId); }
+            action: () => { this.publishAttribute(researchAttributeId); }
 
           },
           unpublish: {
             title: this.$t('adminRouting.attributes.unpublishDialog.title'),
             description: this.$t('adminRouting.attributes.unpublishDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.unpublishDialog.submitBtn'),
-            action: () => { this.unpublishCriteria(researchAttributeId); }
+            action: () => { this.unpublishAttribute(researchAttributeId); }
 
           },
           delete: {
             title: this.$t('adminRouting.attributes.deleteDialog.title'),
             description: this.$t('adminRouting.attributes.deleteDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.deleteDialog.submitBtn'),
-            action: () => { this.deleteCriteria(researchAttributeId); }
+            action: () => { this.deleteAttribute(researchAttributeId); }
 
           }
         };
@@ -172,7 +176,7 @@
           this.actionDialog.data = {};
         }, 300);
       },
-      publishCriteria(id) {
+      publishAttribute(id) {
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
         tenantService.updateTenantResearchAttribute({
           ...researchAttribute,
@@ -189,7 +193,7 @@
           })
           .finally(() => this.closeActionDialog());
       },
-      unpublishCriteria(id) {
+      unpublishAttribute(id) {
         const researchAttribute = this.researchAttributes.find((step) => step._id === id);
         tenantService.updateTenantResearchAttribute({
           ...researchAttribute,
@@ -206,7 +210,7 @@
           })
           .finally(() => this.closeActionDialog());
       },
-      deleteCriteria(id) {
+      deleteAttribute(id) {
         tenantService.deleteTenantResearchAttribute(id)
           .then(() => {
             this.$notifier.showSuccess();
