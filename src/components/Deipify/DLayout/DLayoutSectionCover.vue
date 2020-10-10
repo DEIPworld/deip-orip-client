@@ -22,7 +22,7 @@
     created() {
       this.$nextTick(() => {
         for (const node of this.$children) {
-          if (node.$el.classList.contains('v-image')) {
+          if (node.$el.classList && node.$el.classList.contains('v-image')) {
             node.$el.setAttribute('data-image', true)
           }
         }
