@@ -34,9 +34,9 @@
             <v-icon>delete</v-icon>
           </v-btn>
 
-          <!--          <v-btn icon @click="xFaqTest(item._id)">-->
-          <!--            <v-icon>settings</v-icon>-->
-          <!--          </v-btn>-->
+                    <v-btn icon @click="xFaqTest(item._id)">
+                      <v-icon>settings</v-icon>
+                    </v-btn>
         </div>
       </template>
     </side-actions-card>

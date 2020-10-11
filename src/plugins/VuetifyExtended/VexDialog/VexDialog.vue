@@ -73,7 +73,7 @@
   } from 'vuetify/lib/components';
 
   export default {
-    name: 'VeDialog',
+    name: 'VexDialog',
     components: {
       VDialog,
       VCard,

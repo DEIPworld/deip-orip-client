@@ -41,7 +41,7 @@
       Buy a licence
     </v-btn>
 
-    <ve-dialog
+    <vex-dialog
       v-if="Boolean(selected) && $currentUser"
       v-model="dialog"
       title="Send request"
@@ -91,7 +91,7 @@
           </div>
         </d-stack>
       </d-stack>
-    </ve-dialog>
+    </vex-dialog>
   </d-stack>
 
 </template>

@@ -9,7 +9,7 @@ import lsWatcher from 'vue-storage-watcher';
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
-import VClamp from 'vue-clamp/Clamp.js';
+import VClamp from 'vue-clamp/Clamp';
 import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
@@ -25,7 +25,8 @@ import { getEnvConfig } from '@/plugins/getEnvConfig';
 import { vuetify } from '@/plugins/vuetify';
 import { ifEnabled } from '@/plugins/ifEnabled';
 import { filterWhere } from '@/plugins/filterWhere';
-import { VeConfirm } from '@/plugins/VuetifyExtended/VeDialog';
+
+import VuetifyExtended from '@/plugins/VuetifyExtended';
 
 import { dataReadyMixin } from '@/mixins/dataReadyMixin';
 import { contextHelpersMixin } from '@/mixins/contextHelpersMixin';
@@ -42,11 +43,11 @@ Vue.config.productionTip = false;
 
 Vue.use(VueGoogleCharts);
 Vue.use(VueResize);
-Vue.use(Clipboard)
+Vue.use(Clipboard);
 Vue.use(PortalVue);
 Vue.use(VueTheMask);
 
-Vue.use(VeConfirm, { vuetify });
+Vue.use(VuetifyExtended, { vuetify });
 
 Vue.use(VueCurrencyFilter, {
   symbol: '$',

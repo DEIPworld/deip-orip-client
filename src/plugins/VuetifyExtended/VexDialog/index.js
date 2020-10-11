@@ -1,17 +1,22 @@
-import VeDialog from './VeDialog';
+import VexDialog from './VexDialog';
 
-const Install = (Vue, options = {}) => {
+const install = (Vue, options = {}) => {
+
+  if (install.installed) return;
+  // eslint-disable-next-line no-unused-vars
+  install.installed = true;
+
   const property = options.property || '$confirm';
   const { vuetify } = options;
+
+  if (!vuetify) {
+    console.warn('Module ve-confirm needs vuetify instance. Use Vue.use(VeConfirm, { vuetify })');
+  }
 
   Vue.delete(options, 'property');
   Vue.delete(options, 'vuetify');
 
-  if (!vuetify) {
-    console.warn('Module ve-confirm needs vuetify instance. Use Vue.use(VuetifyConfirm, { vuetify })');
-  }
-
-  const Ctor = Vue.extend({ vuetify, ...VeDialog });
+  const Ctor = Vue.extend({ vuetify, ...VexDialog });
 
   function createDialogCmp(opts) {
     const container = document.querySelector('[data-app=true]') || document.body;
@@ -43,11 +48,16 @@ const Install = (Vue, options = {}) => {
   Vue.prototype[property] = show;
   Vue.prototype[property].options = options || {};
 
-  Vue.component('VeDialog', { vuetify, ...VeDialog });
+  Vue.component('VexDialog', { vuetify, ...VexDialog });
 };
 
-// if (typeof window !== 'undefined' && window.Vue) {
-//   window.Vue.use(Install);
-// }
+const VeDialogPlugin = {
+  install
+};
 
-export default Install;
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VeDialogPlugin)
+}
+
+export default VeDialogPlugin;
+export { VexDialog };
