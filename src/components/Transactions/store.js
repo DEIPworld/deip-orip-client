@@ -1,12 +1,15 @@
 import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { ExpressLicensingService } from '@deip/express-licensing-service';
 
 const expressLicensingService = ExpressLicensingService.getInstance();
 const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 
-const statuses = {
+const TX_STATUS = {
   approved: 'approved',
-  pending: 'pending'
+  pending: 'pending',
+  resolved: 'resolved'
 }
 
 const STATE = {
@@ -21,13 +24,13 @@ const GETTERS = {
 
 const ACTIONS = {
   loadApprovedRequests({ commit }) {
-    return expressLicensingService.getExpressLicensingRequestsByStatus(statuses.approved)
+    return userService.getUserTransactions(TX_STATUS.resolved)
       .then((approvedRequests) => {
         commit('setApprovedRequests', approvedRequests);
       }, (err) => { console.error(err); });
   },
   loadPendingRequests({ commit }) {
-    return expressLicensingService.getExpressLicensingRequestsByStatus(statuses.pending)
+    return userService.getUserTransactions(TX_STATUS.pending)
       .then((pendingRequests) => {
         commit('setPendingRequests', pendingRequests);
       }, (err) => { console.error(err); });

@@ -135,13 +135,6 @@
     methods: {
       approveExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
-        console.log({
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUser.username
-        }, {
-          requestId: request._id,
-          approver: request.researchGroupExternalId
-        })
         expressLicensingService.approveExpressLicensingRequest({
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username

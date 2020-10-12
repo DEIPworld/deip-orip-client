@@ -37,7 +37,7 @@
     "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.3",
     "@deip/tenant-service": "1.48.0",
     "@deip/toolbox": "1.1.0",
-    "@deip/user-service": "1.48.0",
+    "@deip/user-service": "1.50.0",
     "@deip/users-service": "1.48.0",
     "@mdi/font": "^5.5.55",
     "@mdi/js": "^5.6.55",
