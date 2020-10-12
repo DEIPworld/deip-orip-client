@@ -10,34 +10,42 @@ import { modulesAttributes } from '@/components/AdminPanel/Layouts/Composer/Modu
 export const modulesFactory = (ctx) => [
   {
     name: 'Layout',
+    icon: 'mdi-view-compact-outline',
     modules: modulesLayout
   },
   {
     name: 'Grid',
+    icon: 'mdi-view-grid-outline',
     modules: modulesGrid
   },
   {
     name: 'Basic',
+    icon: 'mdi-format-list-text',
     modules: modulesBasic
   },
   {
     name: 'UI components',
+    icon: 'mdi-checkbox-multiple-blank-outline',
     modules: modulesUi
   },
   {
     name: 'Table',
+    icon: 'mdi-table',
     modules: modulesTable
   },
   {
     name: 'Typography',
+    icon: 'mdi-text-subject',
     modules: modulesTypography
   },
   {
     name: 'Attributes',
+    icon: 'mdi-puzzle-outline',
     modules: modulesAttributes(ctx)
   },
   {
     name: 'Components',
+    icon: 'mdi-card-bulleted-settings-outline',
     modules: modulesComponents
   }
 ];

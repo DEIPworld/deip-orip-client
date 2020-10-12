@@ -4,7 +4,6 @@ import dotProp from 'dot-prop';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
 import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
-import DLayoutSectionCover from '@/components/Deipify/DLayout/DLayoutSectionCover';
 import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
 import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSplit';
@@ -23,7 +22,6 @@ const rendererCommon = {
   components: {
     DLayout,
     DLayoutSection,
-    DLayoutSectionCover,
     DLayoutSectionMain,
     DLayoutSectionSidebar,
     DLayoutSectionSplit,
@@ -59,14 +57,20 @@ const rendererCommon = {
 
       const stringPattern = /{{\s*(.*?)\s*}}/gm;
       const modelPattern = /^@([a-zA-Z0-9_.-]*)$/;
+      const methodPattern = /^@([a-zA-Z0-9_.-]*\(['"][a-zA-Z0-9_.-]*['"]\))$/;
 
       for (const { parent, node, key } of new RecursiveIterator(clone)) {
         if (kindOf(node) === 'string') {
           const stringMatches = [...node.matchAll(stringPattern)];
           const modelMatches = node.match(modelPattern);
+          const methodMatches = node.match(methodPattern);
 
           if (modelMatches && modelMatches.length) {
             parent[key] = getObjectValueByPath(this, modelMatches[1]);
+          }
+
+          if (methodMatches && methodMatches.length) {
+            parent[key] = eval(`this.${methodMatches[1]}`);
           }
 
           if (stringMatches && stringMatches.length) {

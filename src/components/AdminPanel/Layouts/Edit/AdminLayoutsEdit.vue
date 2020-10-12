@@ -2,7 +2,7 @@
   <d-layout-full-screen full-width color="grey lighten-4" :title="layoutData.name">
     <portal to="sidebar">
       <v-navigation-drawer
-        :width="280"
+        :width="280 + 56"
         app
         clipped
         permanent

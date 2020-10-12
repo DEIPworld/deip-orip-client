@@ -3,7 +3,7 @@
 
   import AttributesRead from '@/components/Attributes/AttributesRead';
 
-  import { hasValue } from '@/utils/helpers';
+  import { hasValue, researchAttributeFileUrl } from '@/utils/helpers';
   import ContentsList from '@/components/ContentsList/ContentsList';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
   import DraftsList from '@/components/DraftsList/DraftsList';
@@ -52,6 +52,19 @@
         if (!attr || !attr.value) return false;
 
         return hasValue(attr.value);
+      },
+
+      getImageUrl(id) {
+        const attr = this.research.researchRef.attributes[id];
+
+        if (!attr || !attr.value) return false;
+
+        return researchAttributeFileUrl(
+          this.research.externalId,
+          attr.researchAttributeId,
+          attr.value,
+          true
+        );
       }
     }
   };

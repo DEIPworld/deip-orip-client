@@ -1,23 +1,32 @@
 <template>
   <div class="d-flex align-center">
-    <d-stack
-      v-if="node.isRequired || node.isHidden"
-      gap="2"
-      horizontal
-      class="ml-2"
-    >
-      <v-avatar
-        v-if="node.isHidden"
-        size="4"
-        color="info"
-      />
 
-      <v-avatar
-        v-if="node.isRequired"
-        size="4"
-        color="error"
-      />
+    <d-stack horizontal gap-4 class="mr-1">
+      <div
+        v-for="(item, index) of markers"
+        :key="`marker-${index}`"
+        class="pos-relative"
+      >
+        <d-simple-tooltip
+          :tooltip="item.tooltip"
+          tag="div"
+          position="top"
+          max-width="160"
+        >
+          <div>
+            <v-icon size="14" class="ma-0 d-flex">
+              {{ item.icon }}
+            </v-icon>
+          </div>
+
+        </d-simple-tooltip>
+      </div>
     </d-stack>
+
+
+    <admin-layouts-modules-markers
+      :module="node"
+    />
 
     <v-menu v-model="menuOpen" close-on-content-click>
       <template v-slot:activator="{ on }">
@@ -33,50 +42,6 @@
       </template>
 
       <v-list nav dense>
-
-        <template v-if="['AttributesRead', 'AttributesSet'].includes(node.component)">
-
-          <v-list-item @click="copyAttrId()">
-            <v-list-item-icon class="mr-1">
-              <v-icon size="20">
-                mdi-book-multiple-outline
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="text-body-2">
-              Copy attribute ID
-            </v-list-item-content>
-          </v-list-item>
-
-          <template v-if="node.component === 'AttributesRead'">
-            <v-list-item @click="copyAttrCondition()">
-              <v-list-item-icon class="mr-1">
-                <v-icon size="20">
-                  mdi-checkbox-multiple-marked-outline
-                </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content class="text-body-2">
-                Copy attribute condition
-              </v-list-item-content>
-            </v-list-item>
-
-<!--            <v-list-item-->
-<!--              @click="$clipboard(`@attributeValue('${attrId}')`);"-->
-<!--            >-->
-<!--              <v-list-item-icon class="mr-1">-->
-<!--                <v-icon size="20">-->
-<!--                  mdi-checkbox-multiple-marked-outline-->
-<!--                </v-icon>-->
-<!--              </v-list-item-icon>-->
-<!--              <v-list-item-content class="text-body-2">-->
-<!--                Copy attribute value-->
-<!--              </v-list-item-content>-->
-<!--            </v-list-item>-->
-
-
-          </template>
-
-        </template>
-
         <v-dialog
           v-model="settingsOpen"
           :max-width="400"
@@ -283,10 +248,15 @@
   import DIconSelector from '@/components/Deipify/DIconSelector/DIconSelector';
   import { filterObjectOnKeys } from 'vuetify/lib/util/helpers';
   import { hasOwnProperty } from '@/utils/helpers';
+  import AdminLayoutsModulesMarkers
+    from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesMarkers';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   export default {
     name: 'AdminLayoutsComposerNodeSettings',
     components: {
+      DSimpleTooltip,
+      AdminLayoutsModulesMarkers,
       DIconSelector,
       DStack
     },
@@ -310,10 +280,20 @@
       };
     },
     computed: {
-      attrId() {
-        return this.node.props && this.node.props.attribute
-          ? this.node.props.attribute.split('.').slice(-1).pop()
-          : null;
+      markers() {
+        return [
+          ...(this.node.if
+            ? [{
+              icon: 'mdi-xml',
+              tooltip: 'Component has a condition'
+            }] : []),
+
+          ...(this.node.props && this.node.props.background
+            ? [{
+              icon: 'mdi-image-outline',
+              tooltip: 'Component has a background image'
+            }] : []),
+        ];
       }
     },
     created() {
@@ -355,13 +335,6 @@
           ...this.nodeSettings
         };
         this.settingsOpen = false;
-      },
-
-      copyAttrId() {
-        this.$clipboard(this.attrId);
-      },
-      copyAttrCondition() {
-        this.$clipboard(`this.ifAttribute('${this.attrId}')`);
       },
 
       clickRemove() {

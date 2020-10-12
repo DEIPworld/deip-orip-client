@@ -1,20 +1,33 @@
+<template>
+  <div
+    :class="componentData.class"
+    class="pos-relative"
+    :style="componentData.style"
+    v-on="componentData.on"
+  >
+    <v-img
+      v-if="background"
+      ref="image"
+      v-bind="bgProps"
+      :src="background"
+      class="pos-absolute fill-box"
+      :style="{zIndex: -1}"
+    />
+    <slot />
+  </div>
+</template>
+
 <script>
-  import { vSheetModify } from '@/mixins/vSheetModify';
-  import { VImg, VOverlay } from 'vuetify/lib/components';
+  // only for template logic
+
+  import { VSheet } from 'vuetify/lib/components';
+  import { colorChores } from '@/mixins/chores';
 
   export default {
-    name: 'DLayoutSection',
-    components: {
-      VImg,
-      VOverlay
-    },
-    mixins: [vSheetModify],
+    name: 'DLayoutSectionRe',
+    mixins: [VSheet, colorChores],
     props: {
       background: {
-        type: String,
-        default: null
-      },
-      backgroundOverlay: {
         type: String,
         default: null
       },
@@ -23,39 +36,70 @@
         default: 'stretch'
       }
     },
+    data() {
+      return {
+        bgDominant: undefined
+      };
+    },
     computed: {
-      additionalClasses() {
-        return {
-          'd-flex': true,
-          [`align-${this.alignContent}`]: true
-        };
-      },
-      additionalStyles() {
-        return {
-          position: 'relative',
-          zIndex: 1
-        };
-      },
-      additionalChildren() {
-        const img = ['v-img', {
-          props: {
-            src: this.background,
-            gradient: this.backgroundOverlay || null,
-            height: '100%',
-            maxHeight: '100%',
-            width: '100%',
-            maxWidth: '100%',
-            aspectRatio: 0,
+      componentData() {
+        const data = {
+          class: {
+            ...this.classes,
+            ...{
+              'd-flex': true,
+              [`align-${this.alignContent}`]: true
+            }
           },
           style: {
-            position: 'absolute',
-            zIndex: '-1'
-          }
-        }, null];
+            ...this.styles,
+            ...{
+              zIndex: 1
+            }
+          },
+          on: this.listeners$
+        };
 
-        return [
-          ...(this.background ? [img] : [])
-        ];
+        return this.setBackgroundColor(this.color, data); // method from VSheet
+      },
+
+      isDark() {
+        if (this.dark || this.sectionIsDark) {
+          return true;
+        }
+
+        if (this.light || !(this.sectionIsDark)) {
+          return false;
+        }
+
+        // inherit from parent, or default false if there is none
+        return this.theme.isDark;
+      },
+
+      sectionIsDark() {
+        return this.background ? this.isDarkColor(this.bgDominant) : this.theme.isDark;
+      },
+
+      bgProps() {
+        return {
+          ...(this.bgDominant ? { gradient: 'to top, rgba(0,0,0,.8), transparent' } : {})
+          // ...(this.bgDominant ? { gradient: `to top, ${this.bgDominant}, transparent` } : {})
+        };
+      },
+    },
+
+    created() {
+      if (this.background) {
+        this.getBgDominant();
+      }
+    },
+
+    methods: {
+      getBgDominant() {
+        this.getDominantColor(this.background)
+          .then((res) => {
+            this.bgDominant = this.rgbToHex(res);
+          });
       }
     }
   };
