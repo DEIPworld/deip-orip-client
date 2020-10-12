@@ -57,7 +57,7 @@
       getImageUrl(id) {
         const attr = this.research.researchRef.attributes[id];
 
-        if (!attr || !attr.value) return false;
+        if (!attr || !hasValue(attr.value)) return false;
 
         return researchAttributeFileUrl(
           this.research.externalId,
