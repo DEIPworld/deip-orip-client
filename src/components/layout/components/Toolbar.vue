@@ -150,6 +150,12 @@
                 name: 'UserWallet',
                 params: { account_name: this.user.username }
               }
+            },
+            {
+              label: this.$t('topMenu.transactions'),
+              to: {
+                name: 'transactions'
+              }
             }
           ];
         }

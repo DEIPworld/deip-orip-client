@@ -81,6 +81,7 @@ import { sandboxRouting } from '@/components/_Sandbox/router';
 import { researchRouting } from '@/components/Research/router';
 import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
+import { TransactionsRouting } from '@/components/Transactions/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -447,6 +448,7 @@ const router = new Router({
     ...ParticipantstRouting,
     ...overviewRouting,
     ...landingRouting,
+    ...TransactionsRouting,
 
   {
     path: '/user-wallet',

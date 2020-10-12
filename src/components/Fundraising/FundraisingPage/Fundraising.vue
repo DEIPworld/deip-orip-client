@@ -36,9 +36,9 @@
               donut
               :data="chartData"
               :options="{
-                legend: {alignment: 'center'}
+                legend: {alignment: 'left'}
               }"
-              style="width: 384px; height: 200px;"
+              style="height: 200px;"
             />
           </d-stack>
         </v-col>
@@ -281,7 +281,7 @@
             sortable: false
           },
           {
-            text: 'Fundraising campaign id',
+            text: 'Fundraising Phase',
             value: 'op[1].research_token_sale_id',
             align: 'center',
             sortable: false

@@ -5,6 +5,7 @@ export default {
   participants: 'Participants',
   portfolio: 'Portfolio',
   wallet: 'Assets',
+  transactions: 'transactions',
   signIn: 'Sign In',
   signUp: 'Sign Up',
   profile: 'Profile',
