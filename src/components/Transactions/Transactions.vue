@@ -17,7 +17,7 @@
         </v-tab>
       </v-tabs>
       <v-divider />
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="tab" class="mt-4">
         <v-tab-item :key="1">
           <pending-requests-table />
         </v-tab-item>
