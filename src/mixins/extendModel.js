@@ -38,7 +38,7 @@ export const arrayModelAddFactory = (defModel) => ({
 
   methods: {
     appendModel() {
-      this.internalValue.push({ ...defModel });
+      this.internalValue.push({ ..._.cloneDeep(defModel) });
       this.$emit('change', this.internalValue);
     },
     normalizeModel() {

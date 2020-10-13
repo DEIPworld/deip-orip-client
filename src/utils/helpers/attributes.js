@@ -58,7 +58,7 @@ export const researchAttributeFileUrl = (
 export const extendAttrModules = (schema, obj = {}) => {
   const clone = _.cloneDeep(schema);
 
-  for (const { node, parent, key } of new RecursiveIterator(clone)) {
+  for (const { node, parent, key } of new RecursiveIterator(clone, 1, true)) {
     if (isObject(node) && node.type === 'attribute') {
       parent[key] = mergeDeep(node, obj);
     }

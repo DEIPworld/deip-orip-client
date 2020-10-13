@@ -7,7 +7,7 @@
 
     :clamped="clamped"
 
-    :project-id="projectId"
+    :project="project"
   />
 </template>
 

@@ -14,7 +14,7 @@
     computed: {
       imageUrl() {
         return researchAttributeFileUrl(
-          this.projectId,
+          this.project.externalId,
           this.attribute.researchAttributeId,
           this.attribute.value,
           true

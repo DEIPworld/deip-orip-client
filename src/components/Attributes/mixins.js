@@ -44,9 +44,9 @@ export const PROPS = {
     default: () => ({})
   },
 
-  projectId: {
-    type: [String, Object],
-    default: null
+  project: {
+    type: Object,
+    default: () => ({})
   },
 
   viewType: {
@@ -153,8 +153,10 @@ export const attributeRead = {
   props: {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType,
-    projectId: PROPS.projectId,
-    clamped: PROPS.clamped
+
+    clamped: PROPS.clamped,
+
+    project: PROPS.project
   },
   computed: {
     attributeInfo() {
@@ -208,7 +210,6 @@ export const attributeSet = {
   props: {
     attribute: PROPS.attribute,
     viewType: PROPS.viewType,
-    projectId: PROPS.projectId
   },
   computed: {
     attributeComponent() {
@@ -223,8 +224,6 @@ export const attributeSet = {
         value: this.internalValue,
         attribute: this.attribute,
         viewType: this.viewType,
-
-        projectId: this.projectId
       },
       class: {
         'visually-hidden': this.attribute.isHidden

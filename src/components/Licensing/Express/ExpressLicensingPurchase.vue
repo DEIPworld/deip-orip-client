@@ -7,12 +7,12 @@
         hide-details="auto"
         mandatory
       >
-        <v-list v-if="licenses$.length" nav class="pa-0">
+        <v-list v-if="licenses.length" nav class="pa-0">
 
           <v-list-item
-            v-for="(item, index) of licenses$"
+            v-for="(item, index) of licenses"
             :key="`lic-${index}`"
-            class="mx-n2"
+            class="mx-n2 my-0"
             link
             @click="selected = item"
           >
@@ -20,7 +20,7 @@
               <v-radio :value="item" :disabled="!$currentUser" />
             </v-list-item-action>
 
-            <v-list-item-content class="text-caption">
+            <v-list-item-content class="text-caption py-0">
               {{ item.name }}
             </v-list-item-content>
 
@@ -123,24 +123,16 @@
     mixins: [assetsChore],
 
     props: {
-      licenses: { // for future
+      licenses: {
         type: Array,
         default: () => ([])
       },
 
-      attribute: {
+      project: {
         type: Object,
         default: () => ({})
       },
 
-      projectId: {
-        type: String,
-        default: null
-      },
-      groupId: {
-        type: String,
-        default: null
-      },
       attributeId: {
         type: String,
         default: null
@@ -157,10 +149,6 @@
     },
 
     computed: {
-      licenses$() {
-        return this.attribute.value;
-      },
-
       paymentSource() {
         if (!this.selected) return false;
 
@@ -181,8 +169,8 @@
         if (!file) return false;
 
         return researchAttributeFileUrl(
-          this.projectId,
-          this.attribute.researchAttributeId,
+          this.project.externalId,
+          this.attributeId,
           file,
           false,
           true
@@ -195,11 +183,11 @@
           username: this.$currentUser.username
         }, {
           requester: this.$currentUser.username,
-          researchGroup: this.groupId,
+          researchGroup: this.project.researcGroup.external_id,
           fee: this.toAssetString(this.selected.fee),
           expirationDate: `${this.dialogModel.date}T00:00:00`
         }, {
-          researchExternalId: this.projectId,
+          researchExternalId: this.project.externalId,
           licencePlan: this.selected
         })
           .then((result) => {

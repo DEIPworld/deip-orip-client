@@ -22,7 +22,12 @@
         const schema = this.$tenantSettings.researchLayouts.projectDetails.layout;
         return extendAttrModules(
           schema,
-          { props: { projectId: this.research.externalId } }
+          {
+            props: {
+              projectId: this.research$.externalId,
+              project: _.cloneDeep(this.research$), // global
+            }
+          }
         );
       },
 
@@ -32,8 +37,9 @@
           ...{
             createdAt: this.$options.filters.dateFormat(this.research.createdAt, 'D MMM YYYY', true),
             researchRef: {
+              ...this.research.researchRef,
               attributes: researchAttributesToObject(this.research.researchRef.attributes)
-            },
+            }
             // cover: this.$options.filters.researchBackgroundSrc(this.research.externalId)
           }
         };

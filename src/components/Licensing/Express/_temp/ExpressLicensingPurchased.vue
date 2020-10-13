@@ -24,7 +24,7 @@
 
 <script>
   import { componentStoreFactory } from '@/mixins/registerStore';
-  import { expressLicensingStore } from '@/components/Licensing/Express/store';
+  import { expressLicensingStore } from '@/components/Licensing/Express/_temp/store';
   import { mapState } from 'vuex';
   import { assetsChore } from '@/mixins/chores';
 

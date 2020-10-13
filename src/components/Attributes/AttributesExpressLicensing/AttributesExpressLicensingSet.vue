@@ -102,7 +102,7 @@
         if (!file) return false;
 
         return researchAttributeFileUrl(
-          this.projectId,
+          this.project.externalId,
           this.attribute._id,
           file,
           false,

@@ -85,9 +85,6 @@
           )
           : false;
       }
-    },
-    created() {
-      console.log(this.research)
     }
   };
 </script>

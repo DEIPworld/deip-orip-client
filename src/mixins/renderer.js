@@ -59,7 +59,7 @@ const rendererCommon = {
       const modelPattern = /^@([a-zA-Z0-9_.-]*)$/;
       const methodPattern = /^@([a-zA-Z0-9_.-]*\(['"][a-zA-Z0-9_.-]*['"]\))$/;
 
-      for (const { parent, node, key } of new RecursiveIterator(clone)) {
+      for (const { parent, node, key } of new RecursiveIterator(clone, 1, true)) {
         if (kindOf(node) === 'string') {
           const stringMatches = [...node.matchAll(stringPattern)];
           const modelMatches = node.match(modelPattern);

@@ -1,52 +1,36 @@
 <template>
-  <div>
-    <v-row
-      v-for="(item, index) of licensesList"
+  <d-dot-list>
+    <d-dot-list-item
+      v-for="(item, index) of licenses"
       :key="`ls-${index}`"
-      no-gutters
+      :label="item.licencePlan.name"
+      :value="toAssetString(item.licencePlan.fee)"
     >
-      <v-col class="text-caption" cols="auto">
-        {{ item.licencePlan.name }}
-      </v-col>
-      <v-divider class="dotted align-self-end mx-1" style="margin-bottom: 2px;" />
-      <v-col
-        class="text-caption font-weight-medium"
-        cols="auto"
-      >
-        {{ toAssetString(item.licencePlan.fee) }}
-      </v-col>
-      <v-col cols="12" class="text-caption">
-        {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
-      </v-col>
-    </v-row>
-  </div>
+      <template #secondRow>
+        <div class="text-caption">
+          {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}
+        </div>
+      </template>
+    </d-dot-list-item>
+  </d-dot-list>
 </template>
 
 <script>
-  import { componentStoreFactory } from '@/mixins/registerStore';
-  import { expressLicensingStore } from '@/components/Licensing/Express/store';
-  import { mapState } from 'vuex';
   import { assetsChore } from '@/mixins/chores';
+  import DDotList from '@/components/Deipify/DDotList/DDotList';
+  import DDotListItem from '@/components/Deipify/DDotList/DDotListItem';
 
   export default {
     name: 'ExpressLicensingPurchased',
+    components: { DDotListItem, DDotList },
     mixins: [
-      componentStoreFactory(expressLicensingStore),
       assetsChore
     ],
     props: {
-      projectId: {
-        type: String,
-        default: null
+      licenses: {
+        type: Array,
+        default: () => ([])
       }
-    },
-    computed: {
-      ...mapState({
-        licensesList(state, getters) { return getters[`${this.storeNS}/licensesListByUser`](this.projectId); }
-      })
-    },
-    created() {
-      this.$store.dispatch(`${this.storeNS}/getLicensesByUser`, this.$currentUserName);
     }
   };
 </script>

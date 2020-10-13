@@ -88,24 +88,23 @@ export const modules = [
   {
     title: 'Licensing',
     list: [
-      {
-        name: 'Purchase license',
-        component: 'ExpressLicensingPurchase',
-        icon: 'mdi-cash',
-        ...setComponentProps({
-          attribute: setAs(String)
-        }, {
-          projectId: '@research.externalId',
-          groupId: '@research.researchGroup.external_id'
-        })
-      },
+      // {
+      //   name: 'Purchase license',
+      //   component: 'ExpressLicensingPurchase',
+      //   icon: 'mdi-cash',
+      //   ...setComponentProps({
+      //     attribute: setAs(String)
+      //   }, {
+      //     projectId: '@research.externalId',
+      //     groupId: '@research.researchGroup.external_id'
+      //   })
+      // },
       {
         name: 'Purchased licenses',
         component: 'ExpressLicensingPurchased',
         icon: 'mdi-certificate-outline',
         props: {
-          projectId: '@research.externalId',
-          groupId: '@research.externalId'
+          licenses: '@research.researchRef.expressLicenses'
         }
       },
       {
@@ -113,8 +112,7 @@ export const modules = [
         component: 'ExpressLicensingLicensee',
         icon: 'mdi-certificate',
         props: {
-          projectId: '@research.externalId',
-          groupId: '@research.externalId'
+          licenses: '@research.researchRef.expressLicenses'
         }
       }
     ]

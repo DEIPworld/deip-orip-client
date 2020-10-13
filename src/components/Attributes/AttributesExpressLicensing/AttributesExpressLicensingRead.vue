@@ -1,184 +1,70 @@
 <template>
-  <d-stack :gap="16">
-    <v-radio-group
-      v-model="selected"
-      class="pa-0 ma-0"
-      hide-details="auto"
-      mandatory
-    >
-      <v-list v-if="attrHasData" nav class="pa-0">
+  <div>
 
-        <v-list-item
-          v-for="(item, index) of attribute.value"
-          :key="`lic-${index}`"
-          class="mx-n2"
-          link
-          @click="selected = item"
+    <template
+      v-if="project.members.includes($currentUserName) && project.researchRef.expressLicenses.length"
+    >
+      <d-block
+        title="Licensee"
+        widget
+      >
+        <express-licensing-licensee
+          :licenses="project.researchRef.expressLicenses"
+        />
+      </d-block>
+      <v-divider />
+    </template>
+
+
+    <template v-if="!project.members.includes($currentUserName)">
+
+      <template
+        v-if="userLicenses.length"
+      >
+        <d-block
+          title="Purchased licenses"
+          widget
         >
-          <v-list-item-action class="mr-4 my-2">
-            <v-radio :value="item" :disabled="!$currentUser" />
-          </v-list-item-action>
-
-          <v-list-item-content class="text-caption">
-            {{ item.name }}
-          </v-list-item-content>
-
-          <v-list-item-action-text class="text--primary font-weight-medium">
-            {{ toAssetString(item.fee) }}
-          </v-list-item-action-text>
-        </v-list-item>
-      </v-list>
-    </v-radio-group>
-    <v-btn
-      v-if="$currentUser"
-      block
-      small
-      outlined
-      color="primary"
-      :disabled="!selected"
-      @click="dialog = true"
-    >
-      Buy a licence
-    </v-btn>
-    <vex-dialog
-      v-if="Boolean(selected) && $currentUser"
-      v-model="dialog"
-      title="Send request"
-      :max-width="540"
-      :true-disabled="!dialogModel.confirm"
-      @click:confirm="() => sendExpressLicensingRequest()"
-    >
-      <d-stack>
-        <div class="text-body-1">
-          <span class="font-weight-medium">License type:</span> {{ selected.name }}<br>
-          <span class="font-weight-medium">License issue fee:</span> {{ toAssetString(selected.fee) }}<br>
-          <span class="font-weight-medium">Payment source:</span> {{ paymentSource }}
-        </div>
-
-        <v-row>
-          <v-col cols="6">
-            <d-input-date
-              v-model="dialogModel.date"
-              label="Request expiration date"
-            />
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-              v-model="dialogModel.time"
-              label="Request expiration time"
-              outlined
-            />
-          </v-col>
-        </v-row>
-
-        <d-stack :gap="4">
-          <v-checkbox
-            v-model="dialogModel.confirm"
-            class="ma-0 pa-0"
-            hide-details="auto"
-            label="I agree to the Terms and Conditions listed below"
+          <express-licensing-purchased
+            :licenses="userLicenses"
           />
-
-          <div class="pl-8">
-            <a
-              class="link text-caption text--secondary"
-              :href="getFileUrl(selected.file)"
-              @click.stop
-            >
-              {{ selected.file }}
-            </a>
-          </div>
-        </d-stack>
-      </d-stack>
-    </vex-dialog>
-  </d-stack>
+        </d-block>
+      </template>
+      <v-divider />
+      <d-block
+        :title="attributeInfo.title"
+        widget
+      >
+        <express-licensing-purchase
+          :attribute-id="attribute.researchAttributeId"
+          :licenses="attribute.value"
+          :project="project"
+        />
+      </d-block>
+    </template>
+  </div>
 </template>
 
 <script>
   import { attributeRead } from '@/components/Attributes/mixins';
-  import { assetsChore } from '@/mixins/chores';
-  import DStack from '@/components/Deipify/DStack/DStack';
-  import DInputDate from '@/components/Deipify/DInput/DInputDate';
-  import { researchAttributeFileUrl } from '@/utils/helpers';
-  import { ExpressLicensingService } from '@deip/express-licensing-service';
-  import { ResearchService } from '@deip/research-service';
-
-  const researchService = ResearchService.getInstance();
-  const expressLicensingService = ExpressLicensingService.getInstance();
+  import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
+  import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
+  import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'AttributesExpressLicensingRead',
-    components: { DInputDate, DStack },
-    mixins: [attributeRead, assetsChore],
-
-    data() {
-      return {
-        selected: null,
-        dialog: false,
-        dialogModel: {
-          confirm: false,
-          date: undefined,
-          time: undefined
-        }
-      };
+    components: {
+      DBlock,
+      ExpressLicensingPurchased,
+      ExpressLicensingLicensee,
+      ExpressLicensingPurchase
     },
+    mixins: [attributeRead],
+
     computed: {
-      paymentSource() {
-        if (!this.selected) return false;
-
-        const balance = this.$currentUser.balances
-          .find((b) => b.asset_id === this.selected.fee.assetId);
-
-        if (!balance) return 'No source';
-
-        const { amount } = balance;
-        const asset = this.assetInfo(this.selected.fee.assetId);
-
-        return [asset.string_symbol, amount].join(' / ');
-      }
-    },
-    methods: {
-      getFileUrl(file) {
-        if (!file) return false;
-
-        return researchAttributeFileUrl(
-          this.projectId,
-          this.attribute.researchAttributeId,
-          file,
-          false,
-          true
-        );
-      },
-
-      sendExpressLicensingRequest() {
-        return researchService.getResearch(this.projectId)
-          .then((research) => {
-            return expressLicensingService.createExpressLicensingRequest({
-                privKey: this.$currentUser.privKey,
-                username: this.$currentUser.username,
-              }, {
-                requester: this.$currentUser.username,
-                researchGroup: research.research_group.external_id,
-                fee: this.toAssetString(this.selected.fee),
-                expirationDate: `${this.dialogModel.date}T00:00:00`
-              }, {
-                researchExternalId: research.external_id,
-                licencePlan: this.selected
-              })
-              .then((result) => {
-                this.$notifier.showSuccess('Request has been sent successfully!');
-              })
-              .catch((err) => {
-                console.error(err);
-                this.$notifier.showError();
-              })
-              .finally(() => {
-                this.dialogModel.confirm = false;
-                this.dialogModel.date = undefined;
-                this.dialogModel.time = undefined;
-                this.dialog = false;
-              })
-          })
+      userLicenses() {
+        return this.$where(this.project.researchRef.expressLicenses, { owner: this.$currentUserName });
       }
     }
   };

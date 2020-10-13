@@ -28,7 +28,7 @@
     mixins: [VSheet, colorChores],
     props: {
       background: {
-        type: String,
+        type: [String, Boolean],
         default: null
       },
       alignContent: {
