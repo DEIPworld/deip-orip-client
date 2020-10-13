@@ -183,7 +183,7 @@
           username: this.$currentUser.username
         }, {
           requester: this.$currentUser.username,
-          researchGroup: this.project.researcGroup.external_id,
+          researchGroup: this.project.researchGroup.external_id,
           fee: this.toAssetString(this.selected.fee),
           expirationDate: `${this.dialogModel.date}T00:00:00`
         }, {
