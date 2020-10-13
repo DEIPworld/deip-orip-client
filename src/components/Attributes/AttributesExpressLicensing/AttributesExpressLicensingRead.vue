@@ -4,6 +4,7 @@
       v-model="selected"
       class="pa-0 ma-0"
       hide-details="auto"
+      mandatory
     >
       <v-list v-if="attrHasData" nav class="pa-0">
 
@@ -28,7 +29,6 @@
         </v-list-item>
       </v-list>
     </v-radio-group>
-
     <v-btn
       v-if="$currentUser"
       block
@@ -40,7 +40,6 @@
     >
       Buy a licence
     </v-btn>
-
     <vex-dialog
       v-if="Boolean(selected) && $currentUser"
       v-model="dialog"
@@ -93,7 +92,6 @@
       </d-stack>
     </vex-dialog>
   </d-stack>
-
 </template>
 
 <script>
@@ -112,6 +110,7 @@
     name: 'AttributesExpressLicensingRead',
     components: { DInputDate, DStack },
     mixins: [attributeRead, assetsChore],
+
     data() {
       return {
         selected: null,

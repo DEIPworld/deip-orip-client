@@ -43,18 +43,22 @@ const extenders = {
 export const modulesAttributes = (ctx) => {
   return extendModuleObject([
     {
-      component: 'span',
-      name: 'Creation date',
-      text: '@research.createdAt',
-      icon: 'mdi-calendar-text'
-    },
-    ...ctx.$tenantSettings.researchAttributes
-      .map((attr) => ({
-        icon: ATTR_ICONS[attr.type],
-        name: attr.shortTitle || attr.title,
-        isRequired: attr.isRequired,
-        isHidden: attr.isHidden,
-        ...extenders[ctx.layoutType](attr)
-      }))
+      list: [
+        {
+          component: 'span',
+          name: 'Creation date',
+          text: '@research.createdAt',
+          icon: 'mdi-calendar-text'
+        },
+        ...ctx.$tenantSettings.researchAttributes
+          .map((attr) => ({
+            icon: ATTR_ICONS[attr.type],
+            name: attr.shortTitle || attr.title,
+            isRequired: attr.isRequired,
+            isHidden: attr.isHidden,
+            ...extenders[ctx.layoutType](attr)
+          }))
+      ]
+    }
   ], { type: 'attribute' });
 };

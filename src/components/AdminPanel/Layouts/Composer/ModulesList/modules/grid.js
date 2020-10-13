@@ -16,24 +16,28 @@ const vCol = () => ({
 
 const modules = [
   {
-    component: 'DGrid',
-    name: 'Auto grid',
-    icon: 'mdi-view-module-outline',
-    ...setComponentProps({
-      itemMaxWidth: setAs(Number)
-    }),
-    children: []
-  },
-  {
-    component: 'VRow',
-    name: 'Grid row',
-    icon: 'mdi-view-grid-outline',
-    ...setComponentProps({
-      noGutters: setAs(Boolean)
-    }),
-    children: [vCol(), vCol()]
-  },
-  vCol()
+    list: [
+      {
+        component: 'DGrid',
+        name: 'Auto grid',
+        icon: 'mdi-view-module-outline',
+        ...setComponentProps({
+          itemMaxWidth: setAs(Number)
+        }),
+        children: []
+      },
+      {
+        component: 'VRow',
+        name: 'Grid row',
+        icon: 'mdi-view-grid-outline',
+        ...setComponentProps({
+          noGutters: setAs(Boolean)
+        }),
+        children: [vCol(), vCol()]
+      },
+      vCol()
+    ]
+  }
 ];
 
 export const modulesGrid = extendModuleObject(modules);

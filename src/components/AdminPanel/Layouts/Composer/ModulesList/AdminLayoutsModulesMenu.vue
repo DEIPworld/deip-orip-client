@@ -74,9 +74,21 @@
       menuList() {
         return [
           {
-            icon: 'mdi-book-multiple-outline',
+            icon: 'mdi-pound-box-outline',
             label: 'Copy attribute ID',
             action: () => { this.$clipboard(this.attrId); }
+          },
+
+          {
+            icon: 'mdi-text-box-multiple-outline',
+            label: 'Copy attribute value',
+            action: () => { this.$clipboard(`@attributeValue('${this.attrId}')`); }
+          },
+
+          {
+            icon: 'mdi-clipboard-text-multiple-outline',
+            label: 'Copy attribute data',
+            action: () => { this.$clipboard(`@getAttribute('${this.attrId}')`); }
           },
 
           ...(this.attrIsRead

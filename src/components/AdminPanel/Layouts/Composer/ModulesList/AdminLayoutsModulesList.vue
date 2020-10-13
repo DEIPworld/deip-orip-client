@@ -35,99 +35,73 @@
 
       </v-list>
     </v-navigation-drawer>
+
+
     <v-spacer class="overflow-x-auto fill-height" style="min-width: 0px">
 
-      <template v-for="(category, index) of modules">
-
-<!--        <v-list-->
-<!--          v-if="activeList === index"-->
-<!--          :key="`ttl-${index}`"-->
-<!--          nav-->
-<!--          dense-->
-<!--        >-->
-
-<!--          <draggable-->
-<!--            :key="`drg-${index}`"-->
-<!--            :list="category.modules"-->
-<!--            :group="{ name: 'nodes', pull: 'clone', put: false }"-->
-<!--            :sort="false"-->
-<!--            :clone="onClone"-->
-<!--            style="max-width: 100%; min-widht: 0px"-->
-<!--          >-->
-<!--            <v-list-item-->
-<!--              v-for="module of category.modules"-->
-<!--              :key="module.moduleId"-->
-<!--              link-->
-<!--            >-->
-<!--              <v-list-item-icon class="mr-2">-->
-<!--                <v-icon size="20">{{ module.icon }}</v-icon>-->
-<!--              </v-list-item-icon>-->
-<!--              <v-list-item-content>-->
-<!--                <v-list-item-title class="text-truncate text-caption font-weight-medium">-->
-<!--                  {{ module.name }}-->
-<!--                </v-list-item-title>-->
-<!--              </v-list-item-content>-->
-<!--              <v-list-item-action-text class="my-0">-->
-<!--                <admin-layouts-modules-markers-->
-<!--                  :module="module"-->
-<!--                />-->
-<!--              </v-list-item-action-text>-->
-<!--              <v-list-item-action class="my-0">-->
-<!--                <admin-layouts-modules-menu-->
-<!--                  :module="module"-->
-<!--                />-->
-<!--              </v-list-item-action>-->
-<!--            </v-list-item>-->
-
-<!--          </draggable>-->
-<!--        </v-list>-->
-
-
-        <div v-if="activeList === index" :key="`ttl-${index}`">
-          <draggable
-            :key="`drg-${index}`"
-            :list="category.modules"
-            :group="{ name: 'nodes', pull: 'clone', put: false }"
-            :sort="false"
-            :clone="onClone"
-            :class="$style.list"
-            class="pa-4"
+      <template v-for="(category, catIdx) of modules">
+        <div v-if="activeList === catIdx" :key="`category-${catIdx}`">
+          <div
+            v-for="(subcat, subcatIdx) of category.modules"
+            :key="`subcat-${subcatIdx}`"
           >
-            <v-hover
-              v-for="module of category.modules"
-              :key="module.moduleId"
-              v-slot="{ hover }"
+            <div
+              v-if="subcat.title"
+              class="d-flex align-center px-4"
             >
-              <v-sheet
-                class="text-center pa-2 pos-relative"
-                :color="`grey ${hover ? 'lighten-3' : 'lighten-4'}`"
-                rounded
-                style="cursor: move"
+              <div class="text-overline pr-2 text--secondary">{{ subcat.title }}</div>
+              <v-divider />
+
+            </div>
+
+            <draggable
+              :key="`drg-${subcatIdx}`"
+              :list="subcat.list"
+              :group="{ name: 'nodes', pull: 'clone', put: false }"
+              :sort="false"
+              :clone="onClone"
+              :class="$style.list"
+              class="pa-4"
+            >
+              <v-hover
+                v-for="module of subcat.list"
+                :key="module.moduleId"
+                v-slot="{ hover }"
               >
-                <admin-layouts-modules-markers
-                  :module="module"
-
-                  class="pos-absolute"
-                  style="top: 4px; left: 4px"
-                />
-
-                <admin-layouts-modules-menu
-                  :module="module"
-
-                  class="pos-absolute"
-                  style="top: 0px; right: 0px"
-                />
-
-                <v-icon>{{ module.icon }}</v-icon>
-                <div
-                  class="text-caption text--secondary mt-1 text-truncate"
-                  style="line-height: 16px"
+                <v-sheet
+                  class="text-center pa-2 pos-relative"
+                  :color="`grey ${hover ? 'lighten-3' : 'lighten-4'}`"
+                  rounded
+                  style="cursor: move"
                 >
-                  {{ module.name }}
-                </div>
-              </v-sheet>
-            </v-hover>
-          </draggable>
+                  <admin-layouts-modules-markers
+                    :module="module"
+
+                    class="pos-absolute"
+                    style="top: 4px; left: 4px"
+                  />
+
+                  <admin-layouts-modules-menu
+                    :module="module"
+
+                    class="pos-absolute"
+                    style="top: 0px; right: 0px"
+                  />
+
+                  <v-icon>{{ module.icon }}</v-icon>
+                  <div
+                    class="text-caption text--secondary mt-1 text-truncate"
+                    style="line-height: 16px"
+                  >
+                    {{ module.name }}
+                  </div>
+                </v-sheet>
+              </v-hover>
+            </draggable>
+
+          </div>
+
+
         </div>
 
 

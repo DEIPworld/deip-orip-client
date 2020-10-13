@@ -16,6 +16,10 @@
   import ResearchDetailsEditCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsEditCta';
   import ResearchDetailsFollowCta from '@/components/Research/ResearchDetails/_partials/ResearchDetailsFollowCta';
 
+  import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
+  import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
+  import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
+
   export default {
     name: 'ResearchDetailsRenderer',
     components: {
@@ -29,7 +33,12 @@
       ContentUpload,
       ContentsList,
       DraftsList,
-      FundraisingStats
+      FundraisingStats,
+
+      // Licensing
+      ExpressLicensingLicensee,
+      ExpressLicensingPurchase,
+      ExpressLicensingPurchased
     },
     mixins: [componentsRenderer],
     props: {
@@ -46,26 +55,39 @@
     },
 
     methods: {
+      getAttribute(id) {
+        const attr = this.research.researchRef.attributes[id];
+        if (!attr || !hasValue(attr.value)) return false;
+        return attr;
+      },
+
       ifAttribute(id) {
+        const attr = this.getAttribute(id);
+
+        return attr ? hasValue(attr.value) : false;
+      },
+
+      attributeValue(id) {
         const attr = this.research.researchRef.attributes[id];
 
-        if (!attr || !attr.value) return false;
-
-        return hasValue(attr.value);
+        return attr ? attr.value : false;
       },
 
       getImageUrl(id) {
-        const attr = this.research.researchRef.attributes[id];
+        const attr = this.getAttribute(id);
 
-        if (!attr || !hasValue(attr.value)) return false;
-
-        return researchAttributeFileUrl(
-          this.research.externalId,
-          attr.researchAttributeId,
-          attr.value,
-          true
-        );
+        return attr
+          ? researchAttributeFileUrl(
+            this.research.externalId,
+            attr.researchAttributeId,
+            attr.value,
+            true
+          )
+          : false;
       }
+    },
+    created() {
+      console.log(this.research)
     }
   };
 </script>
