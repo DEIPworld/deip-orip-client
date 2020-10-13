@@ -90,7 +90,13 @@
           this.internalValue = [];
           this.normalizeModel();
         }
-      }
+      },
+      // internalValue: {
+      //   deep: true,
+      //   handler(val) {
+      //     console.log(val)
+      //   }
+      // }
     },
     created() {
       if (hasValue(this.internalValue)) {

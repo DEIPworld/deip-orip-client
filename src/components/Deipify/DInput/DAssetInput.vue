@@ -6,7 +6,7 @@
       style="margin-right: -1px;"
     >
       <v-text-field
-        v-model="internalValue.amount"
+        v-model.number="internalValue.amount"
         class="rounded-br-0 rounded-tr-0"
         :label="label"
         outlined
