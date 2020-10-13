@@ -28,7 +28,7 @@
         return this.licenses.map((lic) => lic.owner);
       },
       totalFee() {
-        return this.licenses.map((lic) => lic.licencePlan.fee.amount).reduce((a, b) => a + b, 0);
+        return this.licenses.map((lic) => lic.licencePlan.fee.amount).reduce((a, b) => a + parseInt(b), 0);
       },
       list() {
         return [
