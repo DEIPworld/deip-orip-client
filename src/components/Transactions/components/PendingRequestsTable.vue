@@ -102,7 +102,7 @@
           <div>
             <span class="font-weight-medium">
               License issue fee:
-            </span> {{ item.licencePlan.fee.amount }}
+            </span> {{ toAssetString(item.licencePlan.fee) }}
           </div>
         </td>
         <td colspan="1" class="py-3">
@@ -171,6 +171,7 @@
   import { chartGradient, switchColor } from '@/plugins/charts';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { ExpressLicensingService } from '@deip/express-licensing-service';
+  import { assetsChore } from '@/mixins/chores';
 
   const expressLicensingService = ExpressLicensingService.getInstance();
 
@@ -192,6 +193,8 @@
 
   export default {
     name: 'PendingRequestsTable',
+
+    mixins: [assetsChore],
 
     components: {
       DBoxItem
