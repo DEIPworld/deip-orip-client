@@ -19,10 +19,10 @@
       <v-divider />
       <v-tabs-items v-model="tab" class="mt-4">
         <v-tab-item :key="1">
-          <pending-requests-table />
+          <transactions-table have-actions :data-table="pendingRequestsDataTable" />
         </v-tab-item>
         <v-tab-item :key="2">
-          <approved-requests-table />
+          <transactions-table :data-table="completedRequestsDataTable" />
         </v-tab-item>
       </v-tabs-items>
     </d-layout-section-main>
@@ -33,13 +33,9 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { transactionsStore } from '@/components/Transactions/store';
   import { mapGetters } from 'vuex';
-  import { ExpressLicensingService } from '@deip/express-licensing-service';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import PendingRequestsTable from '@/components/Transactions/components/PendingRequestsTable';
-  import ApprovedRequestsTable from '@/components/Transactions/components/ApprovedRequestsTable';
-
-  const expressLicensingService = ExpressLicensingService.getInstance();
+  import TransactionsTable from '@/components/Transactions/components/TransactionsTable';
 
   export default {
     name: 'Transactions',
@@ -47,8 +43,7 @@
     components: {
       DLayoutSection,
       DLayoutSectionMain,
-      PendingRequestsTable,
-      ApprovedRequestsTable
+      TransactionsTable
     },
 
     mixins: [componentStoreFactoryOnce(transactionsStore)],
@@ -62,7 +57,100 @@
       ...mapGetters({
         approvedRequests: 'Transactions/approvedRequests',
         pendingRequests: 'Transactions/pendingRequests'
-      })
+      }),
+      completedRequestsDataTable() {
+        const data = _.cloneDeep(this.approvedRequests);
+
+        const chainHistoryDataTable = (item) => (item.chainHistory
+          ? [
+            {
+              status: 'approved',
+              historys: item.extendedDetails.approvers.map((approver) => {
+                const id = approver.external_id || approver.account.name;
+
+                return {
+                  ...item.chainHistory[id],
+                  account: approver
+                };
+              })
+            },
+            {
+              status: 'rejected',
+              historys: item.extendedDetails.rejectors.map((rejector) => {
+                const id = rejector.external_id || rejector.account.name;
+
+                return {
+                  ...item.chainHistory[id],
+                  account: rejector
+                };
+              })
+            }
+          ] : []);
+        const accountData = (item) => (item.extendedDetails
+          ? [
+            {
+              status: 'approved',
+              accounts: item.extendedDetails.approvers
+            },
+            {
+              status: 'rejected',
+              accounts: item.extendedDetails.rejectors
+            }
+          ] : []);
+
+        return data.map((item) => ({
+          ...item,
+          accountsData: accountData(item),
+          chainHistoryDataTable: chainHistoryDataTable(item)
+        }
+        ));
+      },
+      pendingRequestsDataTable() {
+        const data = _.cloneDeep(this.pendingRequests);
+
+        const chainHistoryDataTable = (item) => (item.chainHistory
+          ? [
+            {
+              status: 'approved',
+              historys: item.extendedDetails.approvers.map((approver) => {
+                const id = approver.external_id || approver.account.name;
+
+                return {
+                  ...item.chainHistory[id],
+                  account: approver
+                };
+              })
+            },
+            {
+              status: 'pending',
+              historys: [
+                {
+                  ...item.chainHistory[item.extendedDetails.researchGroup.external_id],
+                  account: item.extendedDetails.researchGroup
+                }
+              ]
+            }
+          ] : []);
+
+        const accountData = (item) => (item.extendedDetails
+          ? [
+            {
+              status: 'approved',
+              accounts: item.extendedDetails.approvers
+            },
+            {
+              status: 'pending',
+              accounts: [item.extendedDetails.researchGroup]
+            }
+          ] : []);
+
+        return data.map((item) => ({
+          ...item,
+          accountsData: accountData(item),
+          chainHistoryDataTable: chainHistoryDataTable(item)
+        }
+        ));
+      }
     },
     created() {
       Promise.all([

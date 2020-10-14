@@ -77,6 +77,11 @@ export default {
     afterCreatingAcc: 'After creating an account/log in you can add new projects or enjoy shared materials',
     signIn: 'Sign in'
   },
+  transactionsPage: {
+    signed: 'signed',
+    pending: 'pending',
+    declined: 'declined'
+  },
 
   contents,
   topMenu,

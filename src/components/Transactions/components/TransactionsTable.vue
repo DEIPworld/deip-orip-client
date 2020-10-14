@@ -1,13 +1,13 @@
 <template>
   <div>
     <v-data-table
-      :headers="pendingRequestsHeader"
-      :items="pendingRequests"
+      :headers="tableHeader"
+      :items="dataTable"
       :expanded.sync="expanded"
       show-expand
       item-key="_id"
       disable-sort
-      :hide-default-footer="pendingRequests.length < 50"
+      :hide-default-footer="dataTable.length < 50"
       :footer-props="{itemsPerPageOptions: [5, 10, 20, 50, -1]}"
       :items-per-page="50"
     >
@@ -91,74 +91,95 @@
           {{ statusChipData.text[item.status] }}
         </v-chip>
       </template>
-      <template #expanded-item="{ item }">
-        <td colspan="5" class="text-caption text--secondary">
-          <div class="font-weight-medium">
-            Technology:
-          </div>
-          <div class="text-decoration-underline">
-            {{ item.licencePlan.name }}
-          </div>
-          <div>
-            <span class="font-weight-medium">
-              License issue fee:
-            </span> {{ toAssetString(item.licencePlan.fee) }}
-          </div>
-        </td>
-        <td colspan="1" class="py-3">
-          <d-box-item
-            :avatar="item.extendedDetails.requester.profile | avatarSrc(64, 64, false)"
-            :size="24"
-            class="mb-3"
-          >
-            <v-clamp
-              autoresize
-              :max-lines="1"
-            >
-              {{ item.extendedDetails.requester | fullname }}
-            </v-clamp>
-            <template #actionText>
-              <v-chip
-                :color="statusChipData.color[
-                  item.approvers.includes(item.extendedDetails.requester.account.name)
-                    ? 'approved'
-                    : 'pending'
-                ]"
+      <template #expanded-item="{ item, headers }">
+        <td :colspan="headers.length">
+          <v-row class="py-3">
+            <v-col cols="8" class="text-caption text--secondary">
+              <div>
+                <span class="font-weight-medium">
+                  Technology: 
+                </span>
+                <span class="text-decoration-underline">
+                   {{ item.extendedDetails.research.title }}
+                </span>
+              </div>
+              <div>
+                <span class="font-weight-medium">
+                  License type:
+                </span> {{ item.licencePlan.name }}
+              </div>
+              <div>
+                <span class="font-weight-medium">
+                  License issue fee:
+                </span> {{ toAssetString(item.licencePlan.fee) }}
+              </div>
+            </v-col>
+            <v-col class="mb-n3">
+              <v-sheet max-width="295">
+                <template v-for="(accountData, i) in item.accountsData">
+                  <d-box-item
+                    v-for="(account, j) in accountData.accounts"
+                    :key="`${i}-${j}-accounts`"
+                    :avatar="account.profile ?
+                      $options.filters.avatarSrc(account.profile, 64, 64, false)
+                      : $options.filters.researchGroupLogoSrc(account.external_id, 64, 64)"
+                    :size="24"
+                    class="mb-3"
+                  >
+                    <v-clamp
+                      autoresize
+                      :max-lines="1"
+                    >
+                      {{ account.profile ? $options.filters.fullname(account) : account.name }}
+                    </v-clamp>
+                    <template #actionText>
+                      <v-chip
+                        :color="statusChipData.color[accountData.status]"
+                      >
+                        {{ statusChipData.text[accountData.status] }}
+                      </v-chip>
+                    </template>
+                  </d-box-item>
+                </template>
+              </v-sheet>
+            </v-col>
+          </v-row>
+          <v-divider />
+          <div class="mt-6 mb-3">
+            <div class="text-caption mb-3">
+              Signee
+            </div>
+            <template v-for="(historyStatus, i) in item.chainHistoryDataTable">
+              <div
+                v-for="(history, j) in historyStatus.historys" :key="`${i}-${j}-history`"
+                class="mb-3 text--secondary d-flex align-center"
               >
-                {{ statusChipData.text[
-                  item.approvers.includes(item.extendedDetails.requester.account.name)
-                    ? 'approved'
-                    : 'pending'
-                ] }}
-              </v-chip>
+                <v-chip
+                  :color="statusChipData.color[historyStatus.status]"
+                  class="mr-1 flex-grow-0 flex-shrink-0"
+                >
+                {{ statusChipData.text[historyStatus.status] }}
+                </v-chip>
+                <div>
+                  <span class="text-decoration-underline">
+                    {{ history.account.name || $options.filters.fullname(history.account) || '—' }}
+                  </span>
+                  (<span class="font-weight-medium">
+                    ID:
+                  </span>
+                  {{ history.id || '—' }}
+                  <span class="font-weight-medium">
+                    Block:
+                  </span>
+                  {{ history.block_num || '—' }}
+                  <span class="font-weight-medium">
+                    Timestamp:
+                  </span>
+                  {{ history.timestamp ? $options.filters.dateFormat(history.timestamp, 'DD MMM YYYY, hh:mm', true) : '—' }})
+                </div>
+              </div>
             </template>
-          </d-box-item>
-          <d-box-item
-            :avatar="item.researchGroupExternalId | researchGroupLogoSrc(64, 64)"
-            :size="24"
-          >
-            <v-clamp
-              autoresize
-              :max-lines="1"
-            >
-              {{ item.extendedDetails.researchGroup.name }}
-            </v-clamp>
-            <template #actionText>
-              <v-chip
-                :color="statusChipData.color[
-                  item.approvers.includes(item.extendedDetails.researchGroup.external_id)
-                    ? 'approved'
-                    : 'pending'
-                ]"
-              >
-                {{ statusChipData.text[
-                  item.approvers.includes(item.extendedDetails.researchGroup.external_id)
-                    ? 'approved'
-                    : 'pending'
-                ] }}
-              </v-chip>
-            </template>
-          </d-box-item>
+          </div>
         </td>
       </template>
     </v-data-table>
@@ -179,12 +200,6 @@
     LICENSE: 1
   };
 
-  const txStatusChips = {
-    approved: 'signed',
-    pending: 'pending',
-    rejected: 'declined'
-  };
-
   const chipColors = {
     approved: 'success',
     pending: 'warning',
@@ -192,9 +207,20 @@
   };
 
   export default {
-    name: 'PendingRequestsTable',
+    name: 'TransactionsTable',
 
     mixins: [assetsChore],
+
+    props: {
+      dataTable: {
+        type: Array,
+        default:() => ([])
+      },
+      haveActions: {
+        type: Boolean,
+        default: false
+      }
+    },
 
     components: {
       DBoxItem
@@ -204,9 +230,17 @@
       return {
         expanded: [],
         transactionTypes,
-        txStatusChips,
         disableButtonsId: '',
-        pendingRequestsHeader: [
+        txStatusChips: {
+          approved: this.$t('transactionsPage.signed'),
+          pending: this.$t('transactionsPage.pending'),
+          rejected: this.$t('transactionsPage.declined')
+        }
+      };
+    },
+    computed: {
+      tableHeader() {
+        const header = [
           {
             text: 'Type',
             value: 'type',
@@ -235,10 +269,6 @@
             sortable: false
           },
           {
-            text: 'Actions',
-            value: 'actions'
-          },
-          {
             text: 'Status',
             value: 'status'
           },
@@ -247,14 +277,15 @@
             value: 'data-table-expand',
             align: 'start elevetion-0'
           }
-        ]
-      };
-    },
-    computed: {
-      ...mapGetters({
-        approvedRequests: 'Transactions/approvedRequests',
-        pendingRequests: 'Transactions/pendingRequests'
-      }),
+        ];
+        if(this.haveActions) {
+          header.splice(5, 0, {
+            text: 'Actions',
+            value: 'actions'
+          })
+        }
+        return header
+      },
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
           bg: color,
@@ -264,7 +295,7 @@
       statusChipData() {
         return {
           color: chipColors,
-          text: txStatusChips
+          text: this.txStatusChips
         };
       },
       isCurrentUserSigned() {
