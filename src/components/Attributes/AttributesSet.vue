@@ -2,8 +2,8 @@
   <component
     :is="attributeComponent"
     v-if="!attribute.isHidden"
+    v-model="internalValue"
     :attribute="attribute"
-    :view-type="viewType"
     v-bind="attrs$"
   />
 </template>

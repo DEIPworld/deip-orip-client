@@ -47,9 +47,6 @@
           true
         ) + this.query;
       }
-    },
-    created() {
-      console.log(this.project)
     }
   };
 </script>

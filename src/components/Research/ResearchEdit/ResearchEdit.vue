@@ -1,7 +1,9 @@
 <template>
   <d-layout-full-screen :title="title">
     <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
-      <pre>{{ JSON.stringify(formModel.researchRef.attributes['5f690af5cdaaa53a27af4a30'], null, 2) }}</pre>
+      <pre>{{ JSON.stringify(onchainData, null, 2) }}</pre>
+<!--      <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
+<!--      <pre>{{ JSON.stringify(layoutSchema, null, 2) }}</pre>-->
       <research-edit-renderer
         v-model="formModel"
         :schema="layoutSchema"
@@ -108,7 +110,7 @@
         if (this.$route.params.researchExternalId) {
           return extendAttrModules(
             schema,
-            { props: { projectId: this.$route.params.researchExternalId } }
+            { attrs: { projectId: this.$route.params.researchExternalId } }
           );
         }
 

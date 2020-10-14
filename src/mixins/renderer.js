@@ -70,6 +70,7 @@ const rendererCommon = {
           }
 
           if (methodMatches && methodMatches.length) {
+            // eslint-disable-next-line no-eval
             parent[key] = eval(`this.${methodMatches[1]}`);
           }
 
