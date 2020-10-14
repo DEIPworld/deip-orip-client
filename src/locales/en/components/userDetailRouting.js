@@ -36,8 +36,8 @@ export default {
     about: 'About'
   },
   sidebar: {
-    invites: 'Invites:',
-    invitedYou: 'invited you to join them with',
+    invites: 'Invites',
+    invitedYou: 'invited you to join them',
     viewBtn: 'View',
     acceptBtn: 'Accept',
     rejectBtn: 'Reject',

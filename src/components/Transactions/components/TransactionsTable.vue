@@ -92,94 +92,122 @@
         </v-chip>
       </template>
       <template #expanded-item="{ item, headers }">
-        <td :colspan="headers.length">
-          <v-row class="py-3">
-            <v-col cols="8" class="text-caption text--secondary">
-              <div>
-                <span class="font-weight-medium">
-                  Technology: 
-                </span>
-                <span class="text-decoration-underline">
-                   {{ item.extendedDetails.research.title }}
-                </span>
-              </div>
-              <div>
-                <span class="font-weight-medium">
-                  License type:
-                </span> {{ item.licencePlan.name }}
-              </div>
-              <div>
-                <span class="font-weight-medium">
-                  License issue fee:
-                </span> {{ toAssetString(item.licencePlan.fee) }}
-              </div>
-            </v-col>
-            <v-col class="mb-n3">
-              <v-sheet max-width="295">
-                <template v-for="(accountData, i) in item.accountsData">
-                  <d-box-item
-                    v-for="(account, j) in accountData.accounts"
-                    :key="`${i}-${j}-accounts`"
-                    :avatar="account.profile ?
-                      $options.filters.avatarSrc(account.profile, 64, 64, false)
-                      : $options.filters.researchGroupLogoSrc(account.external_id, 64, 64)"
-                    :size="24"
-                    class="mb-3"
-                  >
-                    <v-clamp
-                      autoresize
-                      :max-lines="1"
-                    >
-                      {{ account.profile ? $options.filters.fullname(account) : account.name }}
-                    </v-clamp>
-                    <template #actionText>
-                      <v-chip
-                        :color="statusChipData.color[accountData.status]"
+        <td :colspan="headers.length" class="pa-0">
+          <v-simple-table>
+            <thead style="visibility: collapse;">
+              <tr>
+                <th v-for="(item, i) in tableHeader" :key="`${i}-colHeader`" :width="item.width">
+                  {{ item.text }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td :colspan="tableHeader.length - 3" class="text-caption text--secondary">
+                  <div>
+                    <span class="font-weight-medium">
+                      Technology: 
+                    </span>
+                    <router-link :to="{
+                      name: 'research.details',
+                      params: {
+                        researchExternalId: item.extendedDetails.research.external_id
+                      }
+                    }" class="text-decoration-underline text--secondary">
+                      {{ item.extendedDetails.research.title }}
+                    </router-link>
+                  </div>
+                  <div>
+                    <span class="font-weight-medium">
+                      License type:
+                    </span> {{ item.licencePlan.name }}
+                  </div>
+                  <div>
+                    <span class="font-weight-medium">
+                      License issue fee:
+                    </span> {{ toAssetString(item.licencePlan.fee) }}
+                  </div>
+                </td>
+                <td colspan="2" class="mb-n3 px-0 pt-3">
+                    <template v-for="(accountData, i) in item.accountsData">
+                      <d-box-item
+                        v-for="(account, j) in accountData.accounts"
+                        :key="`${i}-${j}-accounts`"
+                        :avatar="account.profile ?
+                          $options.filters.avatarSrc(account.profile, 64, 64, false)
+                          : $options.filters.researchGroupLogoSrc(account.external_id, 64, 64)"
+                        :size="24"
+                        class="mb-3"
                       >
-                        {{ statusChipData.text[accountData.status] }}
-                      </v-chip>
+                        <router-link :to="account.profile ? 
+                          { name: 'UserDetails', params: { account_name: account.account.name } }
+                          : { name: 'ResearchGroupDetails', params: {
+                              research_group_permlink: encodeURIComponent(account.permlink)
+                            }}
+                          "
+                          class="text--secondary"
+                        >
+                          <v-clamp
+                            autoresize
+                            :max-lines="1"
+                          >
+                            {{ account.profile ? $options.filters.fullname(account) : account.name }}
+                          </v-clamp>
+                        </router-link>
+                        <template #actionText>
+                          <div style="width: 93px">
+                            <v-chip
+                              :color="statusChipData.color[accountData.status]"
+                            >
+                              {{ statusChipData.text[accountData.status] }}
+                            </v-chip>
+                          </div>
+                        </template>
+                      </d-box-item>
                     </template>
-                  </d-box-item>
-                </template>
-              </v-sheet>
-            </v-col>
-          </v-row>
-          <v-divider />
-          <div class="mt-6 mb-3">
-            <div class="text-caption mb-3">
-              Signee
-            </div>
-            <template v-for="(historyStatus, i) in item.chainHistoryDataTable">
-              <div
-                v-for="(history, j) in historyStatus.historys" :key="`${i}-${j}-history`"
-                class="mb-3 text--secondary d-flex align-center"
-              >
-                <v-chip
-                  :color="statusChipData.color[historyStatus.status]"
-                  class="mr-1 flex-grow-0 flex-shrink-0"
-                >
-                {{ statusChipData.text[historyStatus.status] }}
-                </v-chip>
-                <div>
-                  <span class="text-decoration-underline">
-                    {{ history.account.name || $options.filters.fullname(history.account) || '—' }}
-                  </span>
-                  (<span class="font-weight-medium">
-                    ID:
-                  </span>
-                  {{ history.id || '—' }}
-                  <span class="font-weight-medium">
-                    Block:
-                  </span>
-                  {{ history.block_num || '—' }}
-                  <span class="font-weight-medium">
-                    Timestamp:
-                  </span>
-                  {{ history.timestamp ? $options.filters.dateFormat(history.timestamp, 'DD MMM YYYY, hh:mm', true) : '—' }})
-                </div>
-              </div>
-            </template>
-          </div>
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td :colspan="tableHeader.length">
+                    <div class="my-3">
+                      <div class="text-caption mb-3">
+                        Signee
+                      </div>
+                      <template v-for="(historyStatus, i) in item.chainHistoryDataTable">
+                        <div
+                          v-for="(history, j) in historyStatus.historys" :key="`${i}-${j}-history`"
+                          class="mb-3 text--secondary d-flex align-center text-caption"
+                        >
+                          <v-chip
+                            :color="statusChipData.color[historyStatus.status]"
+                            class="mr-1 flex-grow-0 flex-shrink-0"
+                            small
+                          >
+                          {{ statusChipData.text[historyStatus.status] }}
+                          </v-chip>
+                          <div>
+                            {{ history.account.name || $options.filters.fullname(history.account) || '—' }}
+                            (<span class="font-weight-medium">
+                              Transaction ID:
+                            </span>
+                            <span class="mr-2">{{ history.id || '—' }}</span>
+                            <span class="font-weight-medium">
+                              Block:
+                            </span>
+                            <span class="mr-2">{{ history.block_num || '—' }}</span>
+                            <span class="font-weight-medium">
+                              Timestamp:
+                            </span>
+                            {{ history.timestamp ? $options.filters.dateFormat(history.timestamp, 'DD MMM YYYY, hh:mm', true) : '—' }} )
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </td>
+                </tr>
+            </tbody>
+          </v-simple-table>
         </td>
       </template>
     </v-data-table>
@@ -270,12 +298,14 @@
           },
           {
             text: 'Status',
-            value: 'status'
+            value: 'status',
+            width: '109px'
           },
           {
             text: '',
             value: 'data-table-expand',
-            align: 'start elevetion-0'
+            align: 'start elevetion-0',
+            width: '56px'
           }
         ];
         if(this.haveActions) {

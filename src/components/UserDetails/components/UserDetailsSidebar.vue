@@ -1,37 +1,80 @@
 <template>
   <div>
-    <d-block v-if="isOwner && hasInvites" widget>
-      <div id="invites" class="text-h6 font-weight-bold">
-        {{ $t('userDetailRouting.sidebar.invites') }} {{ invites.length }}
-      </div>
-      <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
-      <div
-        v-for="(invite, index) of invites"
-        :key="'invite-' + index"
-      >
-        <router-link
-          class="a full-width break-word font-weight-medium"
-          :to="{ name: 'ResearchGroupDetails', params: {
-            research_group_permlink: encodeURIComponent(invite.group.permlink),
-          }}"
-        >
-          {{ invite.group.name }}
-        </router-link>
-        <div class="py-2 caption font-weight-medium">
-          {{ $t('userDetailRouting.sidebar.invitedYou') }}
+    <d-block v-if="isOwner && hasInvites" class="pa-4">
+      <v-card outlined>
+        <div id="invites" class="text-h6 font-weight-medium px-4 py-3 ">
+          <v-badge
+            color="warning"
+            inline
+            :content="invites.length"
+          >
+            {{ $t('userDetailRouting.sidebar.invites') }}
+          </v-badge>
         </div>
-        <div class="text-right full-width">
+        <v-divider />
+        <v-carousel
+          v-model="invitesSlider"
+          hide-delimiters
+          :show-arrows="false"
+          light
+          height="auto"
+          class="pt-4 px-4"
+        >
+          <v-carousel-item
+            v-for="(invite, index) in invites"
+            :key="'invite-request-' + index"
+          >
+            <d-box-item
+              :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
+              :size="40"
+            >
+              <router-link
+                class="a full-width break-word font-weight-medium"
+                :to="{ name: 'ResearchGroupDetails', params: {
+                  research_group_permlink: encodeURIComponent(invite.group.permlink),
+                }}"
+              >
+                <v-clamp
+                  autoresize
+                  :max-lines="1"
+                  class="text-body-2 font-weight-medium"
+                >
+                  {{ invite.group.name }}
+                </v-clamp>
+              </router-link>
+              <div class="text-caption text--secondary">
+                {{ $t('userDetailRouting.sidebar.invitedYou') }}
+              </div>
+            </d-box-item>
+          </v-carousel-item>
+        </v-carousel>
+        <div class="d-flex justify-space-between align-center px-4 pb-4">
+          <div>
+            <v-icon
+              v-if="invites.length > 1"
+              class="mr-4"
+              @click="prevSlide()"
+            >
+              navigate_before
+            </v-icon>
+            <v-icon
+              v-if="invites.length > 1"
+              @click="nextSlide()"
+            >
+              navigate_next
+            </v-icon>
+          </div>
           <v-btn
-            small
-            color="primary"
-            dark
             text
-            @click="openInviteDetailsDialog(invite, index)"
+            small
+            class="ml-1"
+            color="primary"
+            @click="openInviteDetailsDialog(invites[invitesSlider], invitesSlider)"
           >
             {{ $t('userDetailRouting.sidebar.viewBtn') }}
           </v-btn>
         </div>
-      </div>
+      </v-card>
 
       <v-dialog
         v-if="inviteDetailsDialog.item"
@@ -159,6 +202,7 @@
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -176,11 +220,13 @@
     components: {
       EciStats,
       DBlock,
-      UserClaimExpertiseDialog
+      UserClaimExpertiseDialog,
+      DBoxItem
     },
 
     data() {
       return {
+        invitesSlider: 0,
         inviteDetailsDialog: {
           isShown: false,
           item: null,
@@ -227,6 +273,12 @@
     },
 
     methods: {
+      nextSlide() {
+        this.invitesSlider === invites.length - 1 ? this.invitesSlider = 0 : this.invitesSlider++;
+      },
+      prevSlide() {
+        this.invitesSlider === 0 ? this.invitesSlider = this.invites.length - 1 : this.invitesSlider--;
+      },
       openInviteDetailsDialog(invite, index) {
         this.inviteDetailsDialog.isShown = true;
         this.inviteDetailsDialog.item = invite;
