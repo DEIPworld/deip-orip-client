@@ -6,6 +6,12 @@
   export default {
     name: 'AttributesTextareaRead',
     mixins: [attributeRead],
+    props: {
+      clamped: {
+        type: [Number, String],
+        default: null
+      }
+    },
     methods: {
       genContent(h) {
         if (this.clamped) {

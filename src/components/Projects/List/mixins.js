@@ -1,4 +1,4 @@
-import { researchAttributesToObject } from '@/utils/helpers';
+import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
 export const projectsView = {
   props: {
@@ -40,7 +40,12 @@ export const projectItem = {
 
   computed: {
     layoutSchema() {
-      return this.$tenantSettings.researchLayouts[this.layoutKey].layout;
+      const { layout } = this.$tenantSettings.researchLayouts[this.layoutKey];
+
+      return extendAttrModules(
+        layout,
+        { attrs: { project: this.project } }
+      );
     },
 
     project$() {

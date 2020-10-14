@@ -37,7 +37,7 @@
       >
         <express-licensing-purchase
           :attribute-id="attribute.researchAttributeId"
-          :licenses="attribute.value"
+          :licenses="attribute.value || []"
           :project="project"
         />
       </d-block>
@@ -61,6 +61,13 @@
       ExpressLicensingPurchase
     },
     mixins: [attributeRead],
+
+    props: {
+      project: {
+        type: Object,
+        default: () => ({})
+      }
+    },
 
     computed: {
       userLicenses() {

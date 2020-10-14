@@ -1,6 +1,6 @@
 import ResearchListItemRenderer
   from '@/components/ResearchList/ResearchListItem/ResearchListItemRenderer';
-import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
+import { camelizeObjectKeys, extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
 export const researchItem = {
   components: { ResearchListItemRenderer },
@@ -20,7 +20,7 @@ export const researchItem = {
 
       return extendAttrModules(
         layout,
-        { props: { projectId: this.research.external_id } }
+        { attrs: { project: camelizeObjectKeys(this.research) } }
       );
     },
 

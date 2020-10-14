@@ -23,7 +23,7 @@
         return extendAttrModules(
           schema,
           {
-            props: {
+            attrs: {
               projectId: this.research$.externalId,
               project: _.cloneDeep(this.research$), // global
             }

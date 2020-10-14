@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-body-2 mb-1 text--secondary" v-if="label">
+    <div v-if="label" class="text-body-2 mb-1 text--secondary">
       {{ label }}
     </div>
     <v-sheet rounded class="overflow-hidden">
@@ -39,7 +39,6 @@
         <v-divider />
 
         <v-sheet color="grey lighten-4 pa-2 d-flex align-center">
-
           <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(1)">
             <v-icon>rotate_right</v-icon>
           </v-btn>
@@ -76,11 +75,9 @@
           <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.remove()">
             <v-icon>clear</v-icon>
           </v-btn>
-
         </v-sheet>
       </template>
     </v-sheet>
-
   </div>
 </template>
 
@@ -90,6 +87,7 @@
   import { debounce } from 'vuetify/lib/util/helpers';
   import { fileNameFromUrl } from '@/utils/helpers';
   import 'vue-croppa/dist/vue-croppa.css';
+  import mime from 'mime';
 
   export default {
     name: 'DInputImage',
@@ -170,12 +168,30 @@
         this.croppa.scaleRatio = +e;
       },
 
-      getDataUrl(mimeType = 'image/png', compressionRate = 1) {
-        return this.croppa.generateDataUrl(mimeType, compressionRate);
+      getMime(mimeType) {
+        if (mimeType) {
+          return mimeType;
+        }
+
+        if (!mimeType && this.chosedFile.name) {
+          return mime.getType(this.chosedFile.name);
+        }
+
+        return 'image/png';
       },
 
-      getBlob(mimeType = 'image/png', compressionRate = 1) {
-        return this.croppa.promisedBlob(mimeType, compressionRate);
+      getDataUrl(mimeType, compressionRate = 0.9) {
+        return this.croppa.generateDataUrl(
+          this.getMime(mimeType),
+          compressionRate
+        );
+      },
+
+      getBlob(mimeType, compressionRate = 0.9) {
+        return this.croppa.promisedBlob(
+          this.getMime(mimeType),
+          compressionRate
+        );
       }
     }
   };

@@ -1,4 +1,5 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
+
 import AttributesCommonEditOpts
   from '@/components/Attributes/_partials/Edit/AttributesCommonEditOpts';
 import AttributesCommonEditMeta
@@ -51,11 +52,6 @@ export const PROPS = {
 
   viewType: {
     type: String,
-    default: null
-  },
-
-  clamped: {
-    type: [Number, String],
     default: null
   },
 
@@ -152,11 +148,7 @@ export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
     attribute: PROPS.attribute,
-    viewType: PROPS.viewType,
-
-    clamped: PROPS.clamped,
-
-    project: PROPS.project
+    viewType: PROPS.viewType
   },
   computed: {
     attributeInfo() {
@@ -209,7 +201,7 @@ export const attributeSet = {
   mixins: [Proxyable],
   props: {
     attribute: PROPS.attribute,
-    viewType: PROPS.viewType,
+    viewType: PROPS.viewType
   },
   computed: {
     attributeComponent() {
@@ -223,7 +215,7 @@ export const attributeSet = {
       props: {
         value: this.internalValue,
         attribute: this.attribute,
-        viewType: this.viewType,
+        viewType: this.viewType
       },
       class: {
         'visually-hidden': this.attribute.isHidden

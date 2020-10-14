@@ -3,16 +3,14 @@
     :is="attributeComponent"
     v-if="Object.keys(attribute).length"
     :attribute="attribute"
-    :view-type="viewType"
 
-    :clamped="clamped"
-
-    :project="project"
+    v-bind="attrs$"
   />
 </template>
 
 <script>
-  import { attributeRead, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   import AttributesCheckboxRead from './AttributesCheckbox/AttributesCheckboxRead';
   import AttributesDisciplinesListRead from './AttributesDisciplinesList/AttributesDisciplinesListRead';
@@ -53,7 +51,9 @@
       AttributesImageRead,
       AttributesExpressLicensingRead,
     },
-    mixins: [attributeRead, attributeTypeComponent]
+    mixins: [attributeTypeComponent, BindsAttrs],
+    props: {
+      ...{ attribute: PROPS.attribute }
+    }
   };
 </script>
-

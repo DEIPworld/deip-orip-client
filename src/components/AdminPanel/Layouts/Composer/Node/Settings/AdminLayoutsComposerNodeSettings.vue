@@ -268,14 +268,10 @@
         menuOpen: false,
 
         nodeSettings: {
-          text: null,
 
           props: {},
           attrs: {},
 
-          if: null,
-          class: null,
-          slot: ''
         }
       };
     },

@@ -9,7 +9,7 @@
 
 <script>
   import { researchItem } from '@/components/ResearchList/ResearchListItem/mixins';
-  import { extendAttrModules } from '@/utils/helpers';
+  import { camelizeObjectKeys, extendAttrModules } from '@/utils/helpers';
 
   export default {
     name: 'ResearchListItemRow',
@@ -20,7 +20,7 @@
 
         const extendedLayout = extendAttrModules(
           layout,
-          { props: { projectId: this.research.external_id } }
+          { attrs: { project: camelizeObjectKeys(this.research) } }
         );
 
         const row = _.cloneDeep(extendedLayout[0]);

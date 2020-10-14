@@ -1,5 +1,17 @@
+<template>
+  <component
+    :is="attributeComponent"
+    v-if="!attribute.isHidden"
+    :attribute="attribute"
+    :view-type="viewType"
+    v-bind="attrs$"
+  />
+</template>
+
 <script>
   import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+
   import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
   import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
   import AttributesMultiSelectSet from './AttributesMultiSelect/AttributesMultiSelectSet';
@@ -40,6 +52,6 @@
       AttributesExpressLicensingSet,
     },
 
-    mixins: [attributeSet, attributeTypeComponent]
+    mixins: [attributeSet, attributeTypeComponent, BindsAttrs]
   };
 </script>

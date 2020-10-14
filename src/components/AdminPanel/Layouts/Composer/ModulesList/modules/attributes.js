@@ -1,18 +1,21 @@
 import { ATTR_ICONS, ATTR_TYPES, LAYOUT_TYPES } from '@/variables';
 import {
   extendModuleObject,
-  setAs,
-  setComponentProps
+  setAs, setComponentAttrs, setComponentProps
 } from '@/components/AdminPanel/Layouts/Composer/ModulesList/modules/_utils';
 
 const propsForRead = {
-  [ATTR_TYPES.TEXT]: setComponentProps({
+  [ATTR_TYPES.TEXT]: setComponentAttrs({
     clamped: setAs(Number)
   }),
-  [ATTR_TYPES.TEXTAREA]: setComponentProps({
+  [ATTR_TYPES.TEXTAREA]: setComponentAttrs({
     clamped: setAs(Number)
   }),
-  [ATTR_TYPES.STEPPER]: setComponentProps({
+  [ATTR_TYPES.IMAGE]: setComponentAttrs({
+    width: setAs(Number),
+    aspectRatio: setAs(Number)
+  }),
+  [ATTR_TYPES.STEPPER]: setComponentAttrs({
     viewType: setAs(Array, ['default', 'small'])
   })
 };
