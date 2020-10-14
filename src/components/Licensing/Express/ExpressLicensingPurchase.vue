@@ -53,8 +53,8 @@
       :loading="processing"
       @click:confirm="() => sendExpressLicensingRequest()"
     >
-      <d-stack>
-        <div class="text-body-1">
+      <d-stack gap="32">
+        <div class="text-body-2">
           <span class="font-weight-medium">License type:</span> {{ selected.name }}<br>
           <span class="font-weight-medium">License issue fee:</span> {{ toAssetString(selected.fee) }}<br>
           <span class="font-weight-medium">Payment source:</span> {{ paymentSource }}
@@ -70,7 +70,10 @@
           <v-col cols="6">
             <v-text-field
               v-model="dialogModel.time"
+              v-mask="'##:##'"
+              placeholder="00:00"
               label="Request expiration time"
+              hide-details="auto"
               outlined
             />
           </v-col>

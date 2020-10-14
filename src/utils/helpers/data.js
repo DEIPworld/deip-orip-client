@@ -97,3 +97,8 @@ export const replaceFileWithName = (obj) => {
 
   return clone;
 };
+
+export const padStart = (str, length, char = '0') => {
+  const str$ = `${str}`;
+  return char.repeat(Math.max(0, length - str$.length)) + str$;
+}

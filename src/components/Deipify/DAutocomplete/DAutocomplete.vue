@@ -12,11 +12,12 @@
       }
     },
     methods: {
-      genSelections() {
+      genSelectionsMod() {
         let { length } = this.selectedItems;
         const children = new Array(length);
 
         let genSelection;
+
         if (this.$scopedSlots.selection) {
           genSelection = this.genSlotSelection;
         } else if (this.hasChips) {
@@ -40,6 +41,12 @@
         return this.$createElement('div', {
           staticClass
         }, children);
+
+
+      },
+
+      genSelections() {
+        return this.hasSlot || this.multiple ? this.genSelectionsMod() : [];
       },
 
       genLegend() {
@@ -68,10 +75,13 @@
       genDefaultSlot() {
         const selections = this.multiple ? [] : this.genSelections();
         const input = this.genInput();
+        console.log(selections)
 
         if (Array.isArray(selections)) {
+          console.log(1)
           selections.push(input);
         } else {
+          console.log(2)
           selections.children = selections.children || [];
           // selections.children = [];
           selections.children.push(input);
