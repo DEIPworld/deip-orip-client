@@ -1,9 +1,9 @@
 <template>
   <component
     :is="attributeComponent"
-    v-if="!attribute.isHidden"
     v-model="internalValue"
     :attribute="attribute"
+    :class="{'visually-hidden': attribute.isHidden}"
     v-bind="attrs$"
   />
 </template>
