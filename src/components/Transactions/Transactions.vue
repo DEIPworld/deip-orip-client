@@ -101,7 +101,8 @@
         return data.map((item) => ({
           ...item,
           accountsData: accountData(item),
-          chainHistoryDataTable: chainHistoryDataTable(item)
+          chainHistoryDataTable: chainHistoryDataTable(item),
+          expand: 1
         }
         ));
       },
@@ -147,7 +148,8 @@
         return data.map((item) => ({
           ...item,
           accountsData: accountData(item),
-          chainHistoryDataTable: chainHistoryDataTable(item)
+          chainHistoryDataTable: chainHistoryDataTable(item),
+          expand: 1
         }
         ));
       }
