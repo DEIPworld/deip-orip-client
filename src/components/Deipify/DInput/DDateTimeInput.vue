@@ -1,12 +1,16 @@
 <template>
-  <v-sheet class="d-flex pa-6">
+  <v-sheet class="d-flex">
     <v-spacer
       style="margin-right: -1px;"
     >
-      <d-input-date v-model="date" :field-props="{class: 'rounded-br-0 rounded-tr-0'}" />
+      <d-input-date
+        v-model="date"
+        :label="label"
+        :field-props="{class: 'rounded-br-0 rounded-tr-0'}"
+      />
     </v-spacer>
     <v-sheet min-width="112px" width="30%">
-      <d-time-input v-model="time" class="rounded-bl-0 rounded-tl-0" />
+      <d-time-input v-model="time" placeholder="00:00" class="rounded-bl-0 rounded-tl-0" />
     </v-sheet>
   </v-sheet>
 </template>
@@ -21,10 +25,38 @@
     name: 'DDateTimeInput',
     components: { DTimeInput, DInputDate },
     mixins: [Proxyable],
+    props: {
+      label: {
+        type: String,
+        default: null
+      }
+    },
     data() {
       return {
         date: undefined,
         time: undefined
+      };
+    },
+    computed: {
+      dateTime() {
+        return `${this.date}T${this.time || '00:00'}:00`;
+      }
+    },
+    watch: {
+      dateTime(val) {
+        this.internalValue = val;
+      }
+    },
+    created() {
+      if (this.internalValue) {
+        this.setModel();
+      }
+    },
+    methods: {
+      setModel() {
+        const [date, time] = this.internalValue.split('T');
+        this.date = date;
+        this.type = time;
       }
     }
   };

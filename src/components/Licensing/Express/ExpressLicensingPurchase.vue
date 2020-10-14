@@ -60,24 +60,12 @@
           <span class="font-weight-medium">Payment source:</span> {{ paymentSource }}
         </div>
 
-        <v-row>
-          <v-col cols="6">
-            <d-input-date
-              v-model="dialogModel.date"
-              label="Request expiration date"
-            />
-          </v-col>
-          <v-col cols="6">
-            <v-text-field
-              v-model="dialogModel.time"
-              v-mask="'##:##'"
-              placeholder="00:00"
-              label="Request expiration time"
-              hide-details="auto"
-              outlined
-            />
-          </v-col>
-        </v-row>
+        <v-sheet max-width="380px">
+          <d-date-time-input
+            v-model="dialogModel.date"
+            label="Request expiration date"
+          />
+        </v-sheet>
 
         <d-stack :gap="4">
           <v-checkbox
@@ -104,23 +92,22 @@
 
 <script>
   import DStack from '@/components/Deipify/DStack/DStack';
-  import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import { assetsChore } from '@/mixins/chores';
   import { researchAttributeFileUrl } from '@/utils/helpers';
   import { ExpressLicensingService } from '@deip/express-licensing-service';
+  import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
 
   const expressLicensingService = ExpressLicensingService.getInstance();
 
   const dialogModel = () => ({
     confirm: false,
-    date: undefined,
-    time: undefined
+    date: undefined
   });
 
   export default {
     name: 'ExpressLicensingPurchase',
     components: {
-      DInputDate,
+      DDateTimeInput,
       DStack
     },
     mixins: [assetsChore],
@@ -188,7 +175,7 @@
           requester: this.$currentUser.username,
           researchGroup: this.project.researchGroup.external_id,
           fee: this.toAssetString(this.selected.fee),
-          expirationDate: `${this.dialogModel.date}T00:00:00`
+          expirationDate: this.dialogModel.date
         }, {
           researchExternalId: this.project.externalId,
           licencePlan: this.selected

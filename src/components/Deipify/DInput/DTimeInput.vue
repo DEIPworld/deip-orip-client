@@ -1,6 +1,8 @@
 <template>
   <d-autocomplete
     v-model="internalValue"
+    :labe="label"
+    :placeholder="placeholder"
     :items="list"
     outlined
     hide-details="auto"
@@ -21,6 +23,14 @@
       graduate: {
         type: Number,
         default: 5,
+      },
+      placeholder: {
+        type: String,
+        default: undefined
+      },
+      label: {
+        type: String,
+        default: undefined
       }
     },
     computed: {
