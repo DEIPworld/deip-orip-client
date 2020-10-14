@@ -76,6 +76,12 @@
       DStack
     },
     mixins: [attributeSet, arrayModelAddFactory(licenseModel())],
+    props: {
+      project: {
+        type: Object,
+        default: () => ({}),
+      }
+    },
     data() {
       return {
         active: false,

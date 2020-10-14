@@ -23,6 +23,9 @@ const modules = [
         component: 'DSimpleTooltip',
         name: 'Tooltip',
         icon: 'mdi-tooltip-text-outline',
+        ...setComponentProps({
+          tooltip: setAs(String)
+        }),
         children: []
       },
       {

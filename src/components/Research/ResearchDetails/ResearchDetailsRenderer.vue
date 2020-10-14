@@ -51,6 +51,12 @@
     computed: {
       isMember() {
         return this.research.members.includes(this.$currentUserName);
+      },
+
+      hasAccessToMaterials() {
+        const owners = this.research.researchRef.expressLicenses.map((lic) => lic.owner);
+        console.log(owners, this.research.members, this.$currentUserName)
+        return [...this.research.members, ...owners].includes(this.$currentUserName);
       }
     },
 

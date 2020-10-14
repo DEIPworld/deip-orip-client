@@ -8,7 +8,7 @@ export const abstractNode = {
   mixins: [ProxyableFactory('node')],
   computed: {
     title() {
-      const propTitle = this.node.props ? (this.node.props.title || this.node.props.label || null) : null;
+      const propTitle = this.node.props ? (this.node.props.title || this.node.props.label || this.node.props.tooltip || null) : null;
       const attrTitle = this.node.attrs ? (this.node.attrs.title || null) : null;
       return propTitle || attrTitle || null;
     },

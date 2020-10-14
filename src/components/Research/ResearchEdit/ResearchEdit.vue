@@ -110,7 +110,7 @@
         if (this.$route.params.researchExternalId) {
           return extendAttrModules(
             schema,
-            { attrs: { projectId: this.$route.params.researchExternalId } }
+            { attrs: { project: this.formModel } }
           );
         }
 

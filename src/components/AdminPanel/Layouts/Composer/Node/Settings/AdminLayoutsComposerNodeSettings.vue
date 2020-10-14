@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex align-center">
 
-    <d-stack horizontal gap-4 class="mr-1">
+    <d-stack horizontal gap-4 class="ml-2">
       <div
         v-for="(item, index) of markers"
         :key="`marker-${index}`"
