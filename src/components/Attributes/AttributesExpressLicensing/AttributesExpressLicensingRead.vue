@@ -1,6 +1,5 @@
 <template>
-  <div>
-
+  <div v-if="attrHasData">
     <template
       v-if="project.members.includes($currentUserName) && project.researchRef.expressLicenses.length"
     >
