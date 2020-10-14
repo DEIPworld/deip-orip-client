@@ -2,6 +2,7 @@
   <div>
     <d-file-input
       v-model="fileModel"
+      :label="label"
       v-bind="inputProps"
       hide-details="auto"
     />
