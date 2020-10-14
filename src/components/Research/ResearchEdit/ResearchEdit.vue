@@ -1,7 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
     <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
-      <pre>{{ JSON.stringify(onchainData, null, 2) }}</pre>
+<!--      <pre>{{ JSON.stringify(onchainData, null, 2) }}</pre>-->
 <!--      <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
 <!--      <pre>{{ JSON.stringify(layoutSchema, null, 2) }}</pre>-->
       <research-edit-renderer
