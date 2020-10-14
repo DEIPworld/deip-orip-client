@@ -42,6 +42,9 @@ export const arrayModelAddFactory = (defModel) => ({
       this.$emit('change', this.internalValue);
     },
     normalizeModel() {
+      if (!this.internalValue) {
+        this.internalValue = [];
+      }
       if (!this.internalValue.length) {
         this.appendModel();
       }
@@ -59,6 +62,9 @@ export const arrayModelAddFactory = (defModel) => ({
   },
 
   created() {
-    this.normalizeModel();
+    // this.$emit('change', this.internalLazyValue)
+    this.$nextTick(() => {
+      this.normalizeModel();
+    })
   }
 });

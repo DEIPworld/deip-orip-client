@@ -75,13 +75,10 @@
       genDefaultSlot() {
         const selections = this.multiple ? [] : this.genSelections();
         const input = this.genInput();
-        console.log(selections)
 
         if (Array.isArray(selections)) {
-          console.log(1)
           selections.push(input);
         } else {
-          console.log(2)
           selections.children = selections.children || [];
           // selections.children = [];
           selections.children.push(input);
