@@ -82,7 +82,9 @@
 
       bgProps() {
         return {
-          ...(this.bgDominant ? { gradient: 'to top, rgba(0,0,0,.8), transparent' } : {})
+          ...(this.bgDominant ? {
+            gradient: this.isDark ? 'to top, rgba(0,0,0,.8), transparent' : 'to top, rgba(255,255,255,.8), transparent'
+          } : {})
           // ...(this.bgDominant ? { gradient: `to top, ${this.bgDominant}, transparent` } : {})
         };
       },

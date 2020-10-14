@@ -47,9 +47,9 @@ export const assetsChore = {
 
       if (isObject(val)) {
         const { amount, assetId } = val;
-      
+
         if (!(amount && (assetId || assetId === 0))) return null;
-        
+
         const asset = this.assetInfo(assetId);
 
         return this.toAssetUnits$(
@@ -99,10 +99,10 @@ export const colorChores = {
     genTempImage(imageURL) {
       const img = new Image();
       img.crossOrigin = 'Anonymous';
-      // img.src = src;
 
       const googleProxyURL = 'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=';
-      img.src = googleProxyURL + encodeURIComponent(imageURL);
+      // img.src = googleProxyURL + encodeURIComponent(imageURL);
+      img.src = imageURL;
 
       return img;
     },
@@ -127,6 +127,7 @@ export const colorChores = {
     },
 
     isDarkColor(color = '#000') {
+      console.log(color, chroma(color).luminance())
       return chroma(color).luminance() < 0.5;
     }
   }
