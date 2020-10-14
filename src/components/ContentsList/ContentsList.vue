@@ -8,7 +8,9 @@
     hide-default-footer
   >
     <template #item.type="{item}">
-      {{ getResearchContentType(item.content_type).text }}
+      <div class="text-no-wrap">
+        {{ getResearchContentType(item.content_type).text }}
+      </div>
     </template>
 
     <template #item.title="{item}">
@@ -108,7 +110,6 @@
           {
             text: 'Type',
             value: 'type',
-            width: '0%'
           },
           {
             text: 'Title',

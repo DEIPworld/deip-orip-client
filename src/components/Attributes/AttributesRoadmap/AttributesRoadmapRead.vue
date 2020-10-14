@@ -6,7 +6,9 @@
           v-for="(item, index) of roadmap"
           :key="`tbc-${index}`"
         >
-          {{ item.description }}
+          <div class="text-body-2">
+            {{ item.description }}
+          </div>
         </v-tab-item>
       </v-tabs-items>
     </v-col>
