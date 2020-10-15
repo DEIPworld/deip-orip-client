@@ -1,6 +1,6 @@
 <template>
   <d-stack :gap="16">
-    <users-list-stack :users="users" />
+    <users-list-stack v-if="users.length" :users="users" />
     <d-dot-list :items="list" />
   </d-stack>
 </template>
@@ -28,12 +28,26 @@
         return this.licenses.map((lic) => lic.owner);
       },
       totalFee() {
-        return this.licenses.map((lic) => lic.licencePlan.fee.amount).reduce((a, b) => a + parseInt(b), 0);
+        return this.licenses
+          .map((lic) => lic.licencePlan.fee.amount)
+          .reduce((a, b) => a + parseInt(b), 0);
       },
       list() {
         return [
-          { label: 'Total licences fee', value: this.toAssetString({ assetId: 1, amount: this.totalFee }) },
-          { label: 'Average licences fee', value: this.toAssetString({ assetId: 1, amount: this.totalFee / this.licenses.length }) },
+          {
+            label: 'Total licences fee',
+            value: this.toAssetString({
+              assetId: 1,
+              amount: this.totalFee
+            })
+          },
+          {
+            label: 'Average licences fee',
+            value: this.toAssetString({
+              assetId: 1,
+              amount: this.totalFee / (this.licenses.length || 1)
+            })
+          },
         ];
       }
     }

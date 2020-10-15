@@ -1,7 +1,7 @@
 <template>
-  <div v-if="attrHasData">
+  <div>
     <template
-      v-if="project.members.includes($currentUserName) && project.researchRef.expressLicenses.length"
+      v-if="project.members.includes($currentUserName)"
     >
       <d-block
         title="Licensee"
@@ -15,7 +15,7 @@
     </template>
 
 
-    <template v-if="!project.members.includes($currentUserName)">
+    <template v-if="!project.members.includes($currentUserName) && attrHasData">
 
       <template
         v-if="userLicenses.length"

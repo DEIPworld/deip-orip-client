@@ -48,15 +48,15 @@ export const assetsChore = {
       if (isObject(val)) {
         const { amount, assetId } = val;
 
-        if (!(amount && (assetId || assetId === 0))) return null;
+        if (amount === undefined && assetId === undefined) return null;
 
         const asset = this.assetInfo(assetId);
 
-        return this.toAssetUnits$(
+        return asset ? this.toAssetUnits$(
           amount,
           asset.precision,
           asset.string_symbol
-        );
+        ) : null;
       }
 
       throw new Error('Unknown asset format');
