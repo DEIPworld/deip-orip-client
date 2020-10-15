@@ -7,6 +7,8 @@
     item-text="title"
     item-value="value"
     hide-details="auto"
+    offset-y
+    offset-overflow
     outlined
     multiple
   >

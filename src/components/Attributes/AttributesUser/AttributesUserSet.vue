@@ -8,6 +8,8 @@
     :item-value="userId"
     outlined
     hide-details="auto"
+    offset-y
+    offset-overflow
   >
     <template #item="{ item }">
       <v-list-item-avatar :size="24">

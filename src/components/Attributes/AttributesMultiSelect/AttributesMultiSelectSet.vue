@@ -11,6 +11,8 @@
     outlined-chips
     deletable-chips
     hide-details="auto"
+    offset-y
+    offset-overflow
   >
     <template #item="{item, attrs, parent}">
       <v-list-item-action class="mr-4">

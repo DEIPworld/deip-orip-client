@@ -7,6 +7,8 @@
     :item-text="userFullName"
     :item-value="userId"
     hide-details="auto"
+    offset-y
+    offset-overflow
     outlined
     multiple
   >
