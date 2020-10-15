@@ -30,7 +30,6 @@
           <!--        </template>-->
 
         </projects-list>
-
       </d-layout-section-main>
     </d-layout-section>
   </d-layout>

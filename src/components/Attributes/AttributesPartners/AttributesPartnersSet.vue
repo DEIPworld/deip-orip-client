@@ -49,39 +49,43 @@
       </v-row>
 
       <template #action>
-        <v-btn icon :disabled="!index" @click="removeFromModel(index)">
+        <v-btn icon :disabled="!index" @click="removeItem(partner)">
           <v-icon>delete</v-icon>
         </v-btn>
       </template>
     </d-timeline-item>
 
-    <d-timeline-add @click="appendModel()" />
+    <d-timeline-add @click="addItem()" />
 
   </d-block>
 </template>
 
 <script>
+  import { attributeSet } from '@/components/Attributes/mixins';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
+
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
 
   import researchPartners from './researchPartners.json';
-  import { attributeSet } from '@/components/Attributes/mixins';
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
 
-  const partnerModel = () => ({
-    type: '',
-    title: ''
+  const partnerModelFactory = () => ({
+    type: undefined,
+    title: undefined
   });
 
   export default {
     name: 'AttributesPartnersSet',
     components: { DTimelineAdd, DTimelineItem, DBlock },
-    mixins: [attributeSet, arrayModelAddFactory(partnerModel())],
+    mixins: [attributeSet, arrayModelAddFactory(partnerModelFactory)],
     data() {
       return {
         partnersInfo: researchPartners
       };
+    },
+    created() {
+      this.addStartItem();
     }
   };
 </script>

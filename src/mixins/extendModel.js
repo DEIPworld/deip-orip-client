@@ -1,5 +1,7 @@
-import { isArray } from '@/utils/helpers';
+import { hasValue, isArray } from '@/utils/helpers';
 import Proxyable from 'vuetify/lib/mixins/proxyable';
+
+// Array model setups
 
 export const arrayedModel = {
   mixins: [Proxyable],
@@ -17,6 +19,108 @@ export const arrayedModel = {
   }
 };
 
+export const arrayModelAddFactory = (modelFactory) => ({
+  mixins: [arrayedModel],
+
+  methods: {
+    // deprecated
+    appendModel() {
+      this.internalValue = [
+        ...this.internalValue,
+        ...[modelFactory()]
+      ];
+    },
+    removeFromModel(index) {
+      this.$delete(this.internalValue, index);
+      this.$emit('change', this.internalValue);
+    },
+
+    // /////////////////////////////////
+
+    addItem() {
+      this.internalValue = [
+        ...this.internalValue,
+        ...[modelFactory()]
+      ];
+    },
+
+    removeItem(item) {
+      const idx = this.internalValue.indexOf(item);
+      if (idx !== -1) {
+        this.internalValue.splice(idx, 1);
+        this.internalValue = [...new Set(this.internalValue)];
+
+        // this.internalValue = [...new Set(this.internalValue.splice(idx, 1))];
+      }
+    },
+
+    clearItems() {
+      this.internalValue = [];
+    },
+
+    addStartItem() {
+      if (!this.internalValue.length) {
+        this.addItem();
+      }
+    }
+  }
+});
+
+export const activatableArrayModelFactory = (modelFactory) => ({
+  mixins: [arrayModelAddFactory(modelFactory)],
+  data() {
+    return {
+      modelActive: false,
+    };
+  },
+
+  watch: {
+    modelActive(val) {
+      if (!val) {
+        this.clearItems();
+      }
+
+      if (val && !this.internalValue.length) {
+        this.addItem();
+      }
+    }
+  },
+
+  created() {
+    if (hasValue(this.internalValue)) {
+      this.modelActive = true;
+    }
+  }
+});
+
+// Object model setups
+
+export const objectedModel = {
+  mixins: [Proxyable],
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? this.value
+        : {}
+    };
+  },
+  watch: {
+    internalValue: {
+      deep: true,
+      handler(val) {
+        this.$emit('change', val);
+      }
+    }
+  },
+  created() {
+    if (!isArray(this.internalValue)) {
+      console.warn('Model must be bound to an Object.', this.$options.name);
+    }
+  }
+};
+
+// Null model setups
+
 export const nulledModel = {
   mixins: [Proxyable],
   data() {
@@ -32,39 +136,3 @@ export const nulledModel = {
     }
   }
 };
-
-export const arrayModelAddFactory = (defModel) => ({
-  mixins: [arrayedModel],
-
-  methods: {
-    appendModel() {
-      this.internalValue.push({ ..._.cloneDeep(defModel) });
-      this.$emit('change', this.internalValue);
-    },
-    normalizeModel() {
-      if (!this.internalValue) {
-        this.internalValue = [];
-      }
-      if (!this.internalValue.length) {
-        this.appendModel();
-      }
-    },
-    removeFromModel(index) {
-      this.$delete(this.internalValue, index);
-      this.$emit('change', this.internalValue);
-    },
-  },
-
-  watch: {
-    internalValue() {
-      this.normalizeModel();
-    }
-  },
-
-  created() {
-    // this.$emit('change', this.internalLazyValue)
-    this.$nextTick(() => {
-      this.normalizeModel();
-    })
-  }
-});

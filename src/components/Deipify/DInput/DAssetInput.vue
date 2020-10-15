@@ -31,37 +31,18 @@
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import { assetsChore } from '@/mixins/chores';
-  import { consoleWarn } from 'vuetify/lib/util/console';
-  import { isObject } from '@/utils/helpers';
-
-  // internalLazyValue: this.value !== undefined
-  //   ? this.value
-  //   : this.multiple ? [] : undefined,
-
-  // internalLazyValue: this.value || 0,
+  import { objectedModel } from '@/mixins/extendModel';
 
   // /\d+[.]{1}\d+\s[a-zA-Z0-9]+/ - для цифры-точка-цифры-пробел-буквы_с_цифрами
   // /\d+[.]{1}\d+\s[a-zA-Z]+/ - для цифры-точка-цифры-пробел-только_буквы
 
   export default {
     name: 'DAssetInput',
-    mixins: [Proxyable, assetsChore],
+    mixins: [Proxyable, objectedModel, assetsChore],
     props: {
       label: {
         type: String,
         default: null
-      }
-    },
-    data() {
-      return {
-        internalLazyValue: this.value
-          ? this.value
-          : { }
-      };
-    },
-    created() {
-      if (!isObject(this.internalValue)) {
-        consoleWarn('Model must be bound to an object.', this);
       }
     }
   };

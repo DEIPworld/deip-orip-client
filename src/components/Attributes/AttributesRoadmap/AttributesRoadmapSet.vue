@@ -49,13 +49,13 @@
         </v-row>
 
         <template #action>
-          <v-btn icon :disabled="!index" @click="removeFromModel(index)">
+          <v-btn icon :disabled="!index" @click="removeItem(item)">
             <v-icon>delete</v-icon>
           </v-btn>
         </template>
 
       </d-timeline-item>
-      <d-timeline-add @click="appendModel()" />
+      <d-timeline-add @click="addItem()" />
     </d-timeline>
   </d-block>
 </template>
@@ -69,13 +69,13 @@
   import { attributeSet } from '@/components/Attributes/mixins';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
 
-  const stepModel = () => ({
-    goal: '',
-    eta: '',
-    budget: '',
-    purpose: '',
-    details: '',
-    isActive: false
+  const stepModelFactory = () => ({
+    goal: undefined,
+    eta: undefined,
+    budget: undefined,
+    purpose: undefined,
+    details: undefined,
+    isActive: undefined
   });
 
   export default {
@@ -89,6 +89,9 @@
       DTimelineItem
     },
 
-    mixins: [attributeSet, arrayModelAddFactory(stepModel())]
+    mixins: [attributeSet, arrayModelAddFactory(stepModelFactory)],
+    created() {
+      this.addStartItem();
+    }
   };
 </script>

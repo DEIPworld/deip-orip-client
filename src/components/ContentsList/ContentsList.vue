@@ -1,83 +1,93 @@
 <template>
-  <v-data-table
-    v-if="researchContents.length"
-    :headers="tableHeaders"
-    :items="researchContents"
-    disable-sort
-    disable-pagination
-    hide-default-footer
+  <div
+    :class="limitAccessClasses"
+    v-bind="limitAccessProps"
   >
-    <template #item.type="{item}">
-      <div class="text-no-wrap">
-        {{ getResearchContentType(item.content_type).text }}
-      </div>
-    </template>
+    <v-data-table
+      v-if="researchContents.length"
+      :headers="tableHeaders"
+      :items="researchContents"
+      disable-sort
+      disable-pagination
+      hide-default-footer
+    >
+      <template #item.type="{item}">
+        <div class="text-no-wrap">
+          {{ getResearchContentType(item.content_type).text }}
+        </div>
+      </template>
 
-    <template #item.title="{item}">
-      <!-- START TEMP SOLUTION (query) -->
-      <router-link
-        v-if="$isLoggedIn"
-        class="a"
-        :to="{
-          name: 'ResearchContentDetails',
-          params: {
-            research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
-            content_permlink: item.permlink,
-            research_permlink: $store.getters['Research/data'].permlink,
-          }
-        }"
-      >
-        <!-- END TEMP SOLUTION (query) -->
-
-        <!-- <router-link
+      <template #item.title="{item}">
+        <!-- START TEMP SOLUTION (query) -->
+        <router-link
           v-if="$isLoggedIn"
           class="a"
-          :to="{
-            name: 'research.content.details',
-            params: {
-              contentExternalId: item.external_id,
-              researchExternalId: $route.params.researchExternalId,
-            }
-          }"
-        > -->
-        {{ item.title }}
-      </router-link>
-      <template v-else>
-        {{ item.title }}
-      </template>
-    </template>
-
-    <template #item.ref="{item}">
-      <d-simple-tooltip tooltip="Browse references">
-        <v-btn
-          icon
-          small
-          :to="{
-            name: 'ResearchContentReferences',
+          :to="routeAccessCheck({
+            name: 'ResearchContentDetails',
             params: {
               research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
               content_permlink: item.permlink,
               research_permlink: $store.getters['Research/data'].permlink,
             }
-          }"
+          })"
         >
-          <v-icon small>
-            device_hub
-          </v-icon>
-        </v-btn>
-      </d-simple-tooltip>
-    </template>
+          <!-- END TEMP SOLUTION (query) -->
 
-    <template #item.comments="{ item }">
-      <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
-        <span v-show="hasPositiveReviews(item)"
-              class="success--text font-weight-medium">{{ countContentReviews(item, true) }}</span>
-        <span v-show="hasPositiveReviews(item) && hasNegativeReviews(item)">/</span>
-        <span v-show="hasNegativeReviews(item)"
-              class="error--text font-weight-medium">{{ countContentReviews(item, false) }}</span>
-      </d-meta-item>
-    </template>
-  </v-data-table>
+          <!-- <router-link
+            v-if="$isLoggedIn"
+            class="a"
+            :to="routeAccessCheck({
+              name: 'research.content.details',
+              params: {
+                contentExternalId: item.external_id,
+                researchExternalId: $route.params.researchExternalId,
+              }
+            })"
+          > -->
+          {{ item.title }}
+        </router-link>
+        <template v-else>
+          {{ item.title }}
+        </template>
+      </template>
+
+      <template #item.ref="{item}">
+        <d-simple-tooltip tooltip="Browse references">
+          <v-btn
+            icon
+            small
+            :disabled="limitedAccess"
+            :to="routeAccessCheck({
+              name: 'ResearchContentReferences',
+              params: {
+                research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
+                content_permlink: item.permlink,
+                research_permlink: $store.getters['Research/data'].permlink,
+              }
+            })"
+          >
+            <v-icon small>
+              device_hub
+            </v-icon>
+          </v-btn>
+        </d-simple-tooltip>
+      </template>
+
+      <template #item.comments="{ item }">
+        <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
+          <span
+            v-show="hasPositiveReviews(item)"
+            class="success--text font-weight-medium"
+          >{{ countContentReviews(item, true) }}</span>
+          <span v-show="hasPositiveReviews(item) && hasNegativeReviews(item)">/</span>
+          <span
+            v-show="hasNegativeReviews(item)"
+            class="error--text font-weight-medium"
+          >{{ countContentReviews(item, false) }}</span>
+        </d-meta-item>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -87,6 +97,7 @@
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { ResearchService } from '@deip/research-service';
+  import { limitAccess } from '@/mixins/limitAccess';
 
   const researchService = ResearchService.getInstance();
 
@@ -94,9 +105,9 @@
     name: 'ContentsList',
     components: {
       DMetaItem,
-      DSimpleTooltip,
+      DSimpleTooltip
     },
-    mixins: [componentStoreFactoryOnce(contentListStore, 'ResearchContents')],
+    mixins: [componentStoreFactoryOnce(contentListStore, 'ResearchContents'), limitAccess],
     props: {
       researchId: {
         type: String,
@@ -109,7 +120,7 @@
         tableHeaders: [
           {
             text: 'Type',
-            value: 'type',
+            value: 'type'
           },
           {
             text: 'Title',
@@ -170,7 +181,7 @@
       countContentReviews(content, isPositive) {
         return content.reviews.reduce(
           (acc, review) => ((review.is_positive && isPositive)
-          || (!review.is_positive && !isPositive)
+            || (!review.is_positive && !isPositive)
             ? acc + 1
             : acc),
           0

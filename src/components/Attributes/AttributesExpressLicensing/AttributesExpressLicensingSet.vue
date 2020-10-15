@@ -1,10 +1,11 @@
 <template>
   <d-stack>
     <v-checkbox
-      v-model="active"
+      v-model="modelActive"
       :label="attribute.title"
+      hide-details="auto"
     />
-    <d-timeline v-if="active">
+    <d-timeline v-if="modelActive">
       <d-timeline-item
         v-for="(license, index) of internalValue"
         :key="`row-${index}`"
@@ -37,31 +38,33 @@
         </v-row>
 
         <template #action>
-          <v-btn icon :disabled="!index" @click="removeFromModel(index)">
+          <v-btn icon :disabled="!index" @click="removeItem(license)">
             <v-icon>delete</v-icon>
           </v-btn>
         </template>
       </d-timeline-item>
 
-      <d-timeline-add @click="appendModel()" />
+      <d-timeline-add @click="addItem()" />
     </d-timeline>
   </d-stack>
 </template>
 
 <script>
   import { attributeSet } from '@/components/Attributes/mixins';
+  import { activatableArrayModelFactory } from '@/mixins/extendModel';
+
+  import { researchAttributeFileUrl } from '@/utils/helpers';
+
   import DStack from '@/components/Deipify/DStack/DStack';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
-  import { arrayModelAddFactory } from '@/mixins/extendModel';
-  import { hasValue, researchAttributeFileUrl } from '@/utils/helpers';
   import DFileInputExtended from '@/components/Deipify/DInput/DFileInputExtended';
 
-  const licenseModel = () => ({
-    name: '',
-    fee: {},
+  const licenseModelFactory = () => ({
+    name: undefined,
+    fee: undefined,
     file: undefined
   });
 
@@ -75,40 +78,14 @@
       DTimeline,
       DStack
     },
-    mixins: [attributeSet, arrayModelAddFactory(licenseModel())],
+    mixins: [attributeSet, activatableArrayModelFactory(licenseModelFactory)],
     props: {
       project: {
         type: Object,
-        default: () => ({}),
+        default: () => ({})
       }
     },
-    data() {
-      return {
-        active: false,
 
-        files: {},
-        fileNames: {},
-      };
-    },
-    watch: {
-      active(val) {
-        if (!val) {
-          this.internalValue = [];
-          this.normalizeModel();
-        }
-      },
-      // internalValue: {
-      //   deep: true,
-      //   handler(val) {
-      //     console.log(val)
-      //   }
-      // }
-    },
-    created() {
-      if (hasValue(this.internalValue)) {
-        this.active = true;
-      }
-    },
     methods: {
       getFileUrl(file) {
         if (!file) return false;

@@ -34,7 +34,10 @@ export const modules = [
         name: 'Materials',
         icon: 'mdi-file-document-outline',
         props: {
-          researchId: '@research.externalId'
+          researchId: '@research.externalId',
+
+          accessMessage: 'Become available after licensing',
+          limitedAccess: '@limitedAccess'
         }
       },
       {
@@ -63,7 +66,10 @@ export const modules = [
         name: 'Reviews',
         icon: 'mdi-comment-processing-outline',
         props: {
-          researchId: '@research.externalId'
+          researchId: '@research.externalId',
+
+          accessMessage: 'Become available after licensing',
+          limitedAccess: '@limitedAccess'
         }
       },
       {
@@ -85,37 +91,37 @@ export const modules = [
       },
     ]
   },
-  {
-    title: 'Licensing',
-    list: [
-      // {
-      //   name: 'Purchase license',
-      //   component: 'ExpressLicensingPurchase',
-      //   icon: 'mdi-cash',
-      //   ...setComponentProps({
-      //     attribute: setAs(String)
-      //   }, {
-      //     projectId: '@research.externalId',
-      //     groupId: '@research.researchGroup.external_id'
-      //   })
-      // },
-      {
-        name: 'Purchased licenses',
-        component: 'ExpressLicensingPurchased',
-        icon: 'mdi-certificate-outline',
-        props: {
-          licenses: '@research.researchRef.expressLicenses'
-        }
-      },
-      {
-        name: 'Licensee list',
-        component: 'ExpressLicensingLicensee',
-        icon: 'mdi-certificate',
-        props: {
-          licenses: '@research.researchRef.expressLicenses'
-        }
-      }
-    ]
-  }
+  // {
+  //   title: 'Licensing',
+  //   list: [
+  //     // {
+  //     //   name: 'Purchase license',
+  //     //   component: 'ExpressLicensingPurchase',
+  //     //   icon: 'mdi-cash',
+  //     //   ...setComponentProps({
+  //     //     attribute: setAs(String)
+  //     //   }, {
+  //     //     projectId: '@research.externalId',
+  //     //     groupId: '@research.researchGroup.external_id'
+  //     //   })
+  //     // },
+  //     {
+  //       name: 'Purchased licenses',
+  //       component: 'ExpressLicensingPurchased',
+  //       icon: 'mdi-certificate-outline',
+  //       props: {
+  //         licenses: '@research.researchRef.expressLicenses'
+  //       }
+  //     },
+  //     {
+  //       name: 'Licensee list',
+  //       component: 'ExpressLicensingLicensee',
+  //       icon: 'mdi-certificate',
+  //       props: {
+  //         licenses: '@research.researchRef.expressLicenses'
+  //       }
+  //     }
+  //   ]
+  // }
 ];
 export const modulesComponents = extendModuleObject(modules, { type: 'staticComponent' });
