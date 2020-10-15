@@ -9,8 +9,9 @@
 </template>
 
 <script>
-  import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeSet, attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
   import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
@@ -52,6 +53,9 @@
       AttributesExpressLicensingSet,
     },
 
-    mixins: [attributeSet, attributeTypeComponent, BindsAttrs]
+    mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
+    props: {
+      ...{ attribute: PROPS.attribute }
+    }
   };
 </script>

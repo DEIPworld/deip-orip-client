@@ -64,10 +64,11 @@
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 
   import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
+  import { arrayedModel } from '@/mixins/extendModel';
 
   export default {
     name: 'AttributesDisciplinesListSet',
-    mixins: [attributeSet],
+    mixins: [attributeSet, arrayedModel],
     data() {
       return {
         search: '',
@@ -173,10 +174,12 @@
       },
 
       removeItem(item) {
-        const idx = this.internalValue.indexOf(item);
-        if (idx !== -1) {
-          this.internalValue.splice(idx, 1);
-          this.internalValue = [...new Set(this.internalValue)];
+        if (this.internalValue) {
+          const idx = this.internalValue.indexOf(item);
+          if (idx !== -1) {
+            this.internalValue.splice(idx, 1);
+            this.internalValue = [...new Set(this.internalValue)];
+          }
         }
       },
       addItem(id) {
