@@ -53,7 +53,7 @@
         };
 
         return {
-          name: 'ResearchFeed',
+          name: 'explore',
           query: {
             rFilter: JSON.stringify(q)
           }

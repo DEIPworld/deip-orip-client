@@ -137,7 +137,7 @@
 
               setTimeout(() => {
                 self.$router.push({
-                  name: 'ResearchFeed'
+                  name: 'explore'
                 });
               }, 1500);
             }).catch((err) => {

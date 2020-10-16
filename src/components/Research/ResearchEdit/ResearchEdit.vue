@@ -280,7 +280,7 @@
             }
           });
         } else {
-          this.$router.push({ name: 'ResearchFeed' });
+          this.$router.push({ name: 'explore' });
         }
       },
 

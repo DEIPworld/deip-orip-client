@@ -14,9 +14,15 @@
 
     <!-- ### START User Profile Research Section ### -->
     <div v-if="!$route.name.includes('account')" class="user-research-groups-container spinner-container mb-4">
+
       <!-- TODO: hotfix -->
       <div class="py-6">
-        <research-list :data="researchList" namespace="userDetails" />
+
+        <projects-list
+          :user-name="userInfo.account.name"
+          type="public"
+        />
+
       </div>
 
       <div v-if="commonGroups.length" class="py-6">
@@ -92,17 +98,17 @@
 <script>
   import { mapGetters } from 'vuex';
 
-  import ResearchList from '@/components/ResearchList/ResearchList';
   import UserDetailsEducation from '@/components/UserDetails/components/UserDetailsEducation';
   import UserDetailsEmployment from '@/components/UserDetails/components/UserDetailsEmployment';
   import UserDetailsProfileInfo from '@/components/UserDetails/components/UserDetailsProfileInfo';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   export default {
     name: 'UserDetailsBody',
 
     components: {
-      ResearchList,
+      ProjectsList,
       UserDetailsEducation,
       UserDetailsEmployment,
       UserDetailsProfileInfo,
@@ -113,7 +119,6 @@
         currentUser: 'auth/user',
         userInfo: 'userDetails/userInfo',
         groups: 'userDetails/groups',
-        researchList: 'userDetails/researchList'
       }),
 
       isOwner() {

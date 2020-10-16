@@ -4,7 +4,7 @@
       v-for="(item, index) of licenses"
       :key="`ls-${index}`"
       :label="item.licencePlan.name"
-      :value="toAssetString(item.licencePlan.fee)"
+      :value="$$toAssetUnits(item.licencePlan.fee)"
     >
       <template #secondRow>
         <div class="text-caption">

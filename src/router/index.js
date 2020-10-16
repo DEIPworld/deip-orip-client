@@ -26,7 +26,7 @@ import ResearchGroupDetails from '@/components/research-group-details/ResearchGr
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings';
 
-import ResearchFeed from '@/components/research-feed/ResearchFeed';
+// import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchExpertise from '@/components/ResearchExpertise/ResearchExpertise';
 import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
@@ -83,13 +83,19 @@ import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
 
+import { exploreRouter } from '@/components/Explore';
+
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
 
 Vue.use(Router);
 
 const router = new Router({
-  routes: [{
+  routes: [
+
+    ...exploreRouter,
+
+    {
     path: '/sign-in',
     name: 'SignIn',
     component: SignIn,
@@ -107,11 +113,13 @@ const router = new Router({
     meta: {
       withoutHeader: true
     }
-  }, {
+  },
+    {
     path: '/org-sign-in',
     name: 'TenantSignIn',
     component: TenantSignIn
-  }, {
+  },
+    {
     path: '/sign-up',
     name: 'SignUp',
     component: SignUp,
@@ -234,11 +242,12 @@ const router = new Router({
       });
       loadPage(loadPagePromise, next);
     }
-  }, {
-    path: '/research-feed',
-    name: 'ResearchFeed',
-    component: ResearchFeed
   },
+  // {
+  //   path: '/research-feed',
+  //   name: 'ResearchFeed',
+  //   component: ResearchFeed
+  // },
 
   {
     path: '/:research_group_permlink/research/:research_permlink',
@@ -577,8 +586,9 @@ const authDataLoad = () => Promise.all([
 
 router.beforeEach((to, from, next) => {
   const PUBLIC_PAGES_NAMES = [
-    'ResearchFeed',
     'landing',
+    'explore',
+
     'ResearchDetailsPublic',
     'NoAccessPage',
     'FAQ',

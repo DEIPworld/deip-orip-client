@@ -8,7 +8,7 @@
     toolbar-color="transparent"
   >
     <template #toolbarButton>
-      <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
+      <v-btn :to="{ name: 'explore' }" color="primary" text>
         <v-icon left>
           arrow_back
         </v-icon>

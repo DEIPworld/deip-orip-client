@@ -39,17 +39,17 @@
               {
                 icon: 'next_week',
                 title: this.$t('account.sidebar.projectsBlock.teamsPr'),
-                route: { name: 'account.projects' }
+                route: { name: 'account.teams.projects' }
               },
               {
                 icon: 'business_center',
                 title: this.$t('account.sidebar.projectsBlock.myPr'),
-                route: { name: 'account.personalProjects' }
+                route: { name: 'account.personal.projects' }
               },
               {
                 icon: 'bookmarks',
                 title: this.$t('account.sidebar.projectsBlock.follPr'),
-                route: { name: 'account.followingProjects' }
+                route: { name: 'account.following.projects' }
               }
               // {
               //   icon: 'mdi-file-replace',

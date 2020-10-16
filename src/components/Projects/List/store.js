@@ -5,19 +5,24 @@ import {
   getActionMapKey,
   camelizeObjectKeys
 } from '@/utils/helpers';
+import where from 'filter-where';
 
 const researchService = ResearchService.getInstance();
 
 const actionsMap = {
   projects: {
     public: {
-      approved: 'getPublicProjects'
+      all: 'getPublicProjects'
     },
     user: {
-      approved: 'getUserProjects'
+      all: 'getUserProjects',
+      following: 'getUserFollowingProjects',
+      public: 'getUserPublicProjects',
+      teams: 'getUserTeamsProjects',
+      personal: 'getUserPersonalProjects'
     },
     team: {
-      approved: 'getTeamProjects'
+      all: 'getTeamProjects'
     }
   },
   applications: {
@@ -37,9 +42,9 @@ const actionsMap = {
 };
 
 const actionFor = getActionFrom(actionsMap, [
-  getActionMapKey('type', 'projects').get,
+  getActionMapKey('scope', 'projects').get,
   getActionTarget,
-  getActionMapKey('status', 'approved').get
+  getActionMapKey('type', 'all').get
 ]).get;
 
 const STATE = {
@@ -58,6 +63,8 @@ const ACTIONS = {
 
   // PROJECTS
 
+  // global
+
   getPublicProjects({ commit }, { filter = {} }) {
     return researchService.getPublicResearchListing(filter)
       .then((result) => {
@@ -65,12 +72,49 @@ const ACTIONS = {
       });
   },
 
+  // user
+
   getUserProjects({ commit }, { userName }) {
     return researchService.getUserResearchListing(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
+
+  getUserPublicProjects({ commit }, { userName }) {
+    return researchService.getUserResearchListing(userName)
+      .then((result) => {
+        commit('storeProjectsData', result.filter(where({ is_private: false })));
+      });
+  },
+
+  getUserTeamsProjects({ commit }, { userName }) {
+    return researchService.getUserResearchListing(userName)
+      .then((result) => {
+        commit('storeProjectsData', result.filter(where({ research_group: { is_personal: false } })));
+      });
+  },
+
+  getUserPersonalProjects({ commit }, { userName }) {
+    return researchService.getUserResearchListing(userName)
+      .then((result) => {
+        commit('storeProjectsData', result.filter(where({ research_group: { is_personal: true } })));
+      });
+  },
+
+  getUserFollowingProjects(context) {
+    return Promise.all(
+      context
+        .rootGetters['auth/user']
+        .researchBookmarks.map(({ researchId }) => researchId)
+        .map((externalId) => researchService.getResearch(externalId))
+    )
+      .then((result) => {
+        context.commit('storeProjectsData', result);
+      });
+  },
+
+  // team
 
   getTeamProjects({ commit }, { teamId }) {
     return researchService.getResearchGroupResearchListing(teamId)

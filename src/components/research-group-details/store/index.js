@@ -20,7 +20,6 @@ const state = {
   proposals: [],
   group: undefined,
   groupShares: [],
-  researchList: [],
   members: [],
   joinRequests: [],
   invites: [],
@@ -63,7 +62,6 @@ const getters = {
   members: (state) => state.members,
   invites: (state) => state.invites,
   proposalListFilter: (state) => state.proposalListFilter,
-  researchList: (state, getters, rootState, rootGetters) => state.researchList,
   options: (state) => state.options,
   joinRequests: (state) => state.joinRequests,
   pendingJoinRequests: (state) => state.joinRequests.filter((r) => r.status == 'pending'),
@@ -91,13 +89,6 @@ const actions = {
           });
         });
 
-        const researchLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchList', {
-            externalId: state.group.external_id,
-            notify: resolve
-          });
-        });
-
         const membersLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupMembers', {
             groupId: state.group.id,
@@ -116,7 +107,6 @@ const actions = {
 
         return Promise.all([
           proposalsLoad,
-          researchLoad,
           membersLoad,
           joinRequestsLoad,
           groupInvitesPromise
@@ -135,16 +125,6 @@ const actions = {
       })
       .finally(() => {
         commit('SET_GROUP_PROPOSALS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
-  loadResearchList({ commit }, { externalId, notify }) {
-    researchService.getResearchGroupResearchListing(externalId)
-      .then((researches) => {
-        commit('SET_GROUP_RESEARCH_LIST', researches);
-      })
-      .finally(() => {
         if (notify) notify();
       });
   },
@@ -252,10 +232,6 @@ const mutations = {
 
   SET_GROUP_MEMBERS(state, members) {
     state.members = members;
-  },
-
-  SET_GROUP_RESEARCH_LIST(state, researchList) {
-    state.researchList = researchList;
   },
 
   CHANGE_PROPOSAL(state, payload) {

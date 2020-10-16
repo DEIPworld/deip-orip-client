@@ -27,7 +27,7 @@
                 small
                 class="px-1"
                 color="primary"
-                :to="{name: 'ResearchFeed'}"
+                :to="{name: 'explore'}"
               >
                 Advanced Search
               </v-btn>
@@ -76,7 +76,7 @@
     },
     methods: {
       goToSearch() {
-        const route = { name: 'ResearchFeed' };
+        const route = { name: 'explore' };
         const q = {
           searchTerm: this.searchTerm
         };
@@ -105,7 +105,7 @@
         };
 
         this.$router.push({
-          name: 'ResearchFeed',
+          name: 'explore',
           query: {
             rFilter: JSON.stringify(q)
           }

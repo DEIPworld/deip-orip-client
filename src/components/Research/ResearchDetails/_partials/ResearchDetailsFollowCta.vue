@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    v-if="isUser"
+    v-if="$isUser"
     small
     outlined
     :loading="loading"

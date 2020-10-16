@@ -8,11 +8,11 @@
 </template>
 
 <script>
-  import { researchItem } from '@/components/ResearchList/ResearchListItem/mixins';
+  import { projectItem } from '@/components/Projects/List/mixins';
 
   export default {
     name: 'AdminProjectsItemRow',
-    mixins: [researchItem],
+    mixins: [projectItem],
     computed: {
       layoutSchema() {
         const { layout } = this.$tenantSettings.researchLayouts.AdminProjectListRow;

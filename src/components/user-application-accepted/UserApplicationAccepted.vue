@@ -12,7 +12,7 @@
         </div>
       </v-col>
       <v-col cols="12">
-        <router-link class="a caption" :to="{ name: 'ResearchFeed' }">
+        <router-link class="a caption" :to="{ name: 'explore' }">
           {{ $t('userApplicationAccepted.browse') }}
         </router-link>
       </v-col>

@@ -39,6 +39,8 @@
 </template>
 
 <script>
+  // TODO: check
+
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';

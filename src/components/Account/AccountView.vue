@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$ready">
+  <div>
     <portal to="sidebar">
       <account-sidebar v-if="!$route.meta.hideSidebar" />
     </portal>
@@ -15,11 +15,11 @@
     components: { AccountSidebar },
 
     created() {
-      this.$store.dispatch('account/loadUserAccount', {
-        username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
-      }).then(() => {
-        this.$setReady();
-      });
+      // this.$store.dispatch('account/loadUserAccount', {
+      //   username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
+      // }).then(() => {
+      //   this.$setReady();
+      // });
     }
   };
 </script>

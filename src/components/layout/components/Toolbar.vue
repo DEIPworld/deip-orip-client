@@ -126,7 +126,7 @@
           return [
             {
               label: this.$t('topMenu.explore'),
-              to: { name: 'ResearchFeed' }
+              to: { name: 'explore' }
             },
             // {
             //   label: this.$t('topMenu.dashboard'),
@@ -182,7 +182,7 @@
         return [
           {
             label: this.$t('topMenu.explore'),
-            to: { name: 'ResearchFeed' }
+            to: { name: 'explore' }
           },
           {
             label: this.$t('topMenu.signIn'),

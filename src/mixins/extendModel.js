@@ -23,20 +23,6 @@ export const arrayModelAddFactory = (modelFactory) => ({
   mixins: [arrayedModel],
 
   methods: {
-    // deprecated
-    appendModel() {
-      this.internalValue = [
-        ...this.internalValue,
-        ...[modelFactory()]
-      ];
-    },
-    removeFromModel(index) {
-      this.$delete(this.internalValue, index);
-      this.$emit('change', this.internalValue);
-    },
-
-    // /////////////////////////////////
-
     addItem() {
       this.internalValue = [
         ...this.internalValue,

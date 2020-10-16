@@ -25,7 +25,7 @@
             </v-list-item-content>
 
             <v-list-item-action-text class="text--primary font-weight-medium">
-              {{ toAssetString(item.fee) }}
+              {{ $$toAssetUnits(item.fee) }}
             </v-list-item-action-text>
           </v-list-item>
         </v-list>
@@ -56,7 +56,7 @@
       <d-stack gap="32">
         <div class="text-body-2">
           <span class="font-weight-medium">License type:</span> {{ selected.name }}<br>
-          <span class="font-weight-medium">License issue fee:</span> {{ toAssetString(selected.fee) }}<br>
+          <span class="font-weight-medium">License issue fee:</span> {{ $$toAssetUnits(selected.fee) }}<br>
           <span class="font-weight-medium">Payment source:</span> {{ paymentSource }}
         </div>
 
@@ -148,7 +148,7 @@
         if (!balance) return 'No source';
 
         const { amount } = balance;
-        const asset = this.assetInfo(this.selected.fee.assetId);
+        const asset = this.$$assetInfo(this.selected.fee.assetId);
 
         return [asset.string_symbol, amount].join(' / ');
       }
@@ -174,7 +174,7 @@
         }, {
           requester: this.$currentUser.username,
           researchGroup: this.project.researchGroup.external_id,
-          fee: this.toAssetString(this.selected.fee),
+          fee: this.$$toAssetUnits(this.selected.fee),
           expirationDate: this.dialogModel.date
         }, {
           researchExternalId: this.project.externalId,

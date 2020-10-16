@@ -1,15 +1,23 @@
 export const dataReadyMixin = {
   data() {
     return {
-      $_dataReady: false
+      $lazyReady: false
     };
   },
   computed: {
-    $ready() { return this.$data.$_dataReady; }
+    $ready: {
+      get() {
+        return this.$data.$lazyReady
+      },
+      set(val) {
+        this.$data.$lazyReady = val;
+        this.$emit('data-ready', val)
+      }
+    }
   },
   methods: {
     $setReady(state = true) {
-      this.$data.$_dataReady = state;
+      this.$ready = state;
     }
   }
 };

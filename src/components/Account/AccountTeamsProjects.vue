@@ -4,7 +4,7 @@
       <d-layout-section-main>
         <projects-list
           :user-name="$currentUserName"
-          type="personal"
+          type="teams"
         />
       </d-layout-section-main>
     </d-layout-section>
@@ -12,18 +12,18 @@
 </template>
 
 <script>
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   export default {
-    name: 'AccountPersonalProjects',
+    name: 'AccountTeamsProjects',
     components: {
-      ProjectsList,
       DLayoutSectionMain,
       DLayoutSection,
-      DLayout
+      DLayout,
+      ProjectsList
     }
   };
 </script>

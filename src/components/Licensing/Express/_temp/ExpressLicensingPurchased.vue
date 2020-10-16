@@ -13,7 +13,7 @@
         class="text-caption font-weight-medium"
         cols="auto"
       >
-        {{ toAssetString(item.licencePlan.fee) }}
+        {{ $$toAssetUnits(item.licencePlan.fee) }}
       </v-col>
       <v-col cols="12" class="text-caption">
         {{ item.created_at | dateFormat('MMMM DD YYYY', true) }}

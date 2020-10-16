@@ -21,11 +21,11 @@
   // only for template logic
 
   import { VSheet } from 'vuetify/lib/components';
-  import { colorChores } from '@/mixins/chores';
+  import { colorChore } from '@/mixins/chores';
 
   export default {
-    name: 'DLayoutSectionRe',
-    mixins: [VSheet, colorChores],
+    name: 'DLayoutSection',
+    mixins: [VSheet, colorChore],
     props: {
       background: {
         type: [String, Boolean],

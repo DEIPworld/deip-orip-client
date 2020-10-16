@@ -93,10 +93,15 @@
         default: 'projectListCard'
       },
 
-      type: {
+      scope: {
         type: String,
         default: 'projects'
       },
+      type: {
+        type: String,
+        default: 'all'
+      },
+
       userName: {
         type: String,
         default: null
@@ -104,10 +109,6 @@
       teamId: {
         type: String,
         default: null
-      },
-      status: {
-        type: String,
-        default: 'approved'
       }
     },
 
@@ -167,17 +168,18 @@
         this.$setReady(false);
 
         const payload = {
+          scope: this.scope,
           type: this.type,
+
           userName: this.userName,
-          // userName: 'alice',
           teamId: this.teamId,
-          status: this.status,
           ...(this.withFilter ? { filter: this.filterPayload() } : {})
         };
 
         this.$store.dispatch(`${this.storeNS}/getProjectsData`, payload)
           .then(() => {
             this.$setReady();
+            this.$emit('loaded:length', this.projects.length);
           })
           .catch((err) => {
             console.error(err);

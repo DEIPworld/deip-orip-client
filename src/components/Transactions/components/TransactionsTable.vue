@@ -122,7 +122,7 @@
                   </div>
                   <div>
                     <span class="font-weight-medium"> License issue fee: </span>
-                    {{ toAssetString(item.licencePlan.fee) }}
+                    {{ $$toAssetUnits(item.licencePlan.fee) }}
                   </div>
                 </td>
                 <td colspan="2" class="mb-n3 px-0 pt-3">

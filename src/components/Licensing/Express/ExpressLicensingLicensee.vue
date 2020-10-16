@@ -36,14 +36,14 @@
         return [
           {
             label: 'Total licences fee',
-            value: this.toAssetString({
+            value: this.$$toAssetUnits({
               assetId: 1,
               amount: this.totalFee
             })
           },
           {
             label: 'Average licences fee',
-            value: this.toAssetString({
+            value: this.$$toAssetUnits({
               assetId: 1,
               amount: this.totalFee / (this.licenses.length || 1)
             })
