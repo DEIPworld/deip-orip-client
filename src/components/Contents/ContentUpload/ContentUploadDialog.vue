@@ -264,12 +264,12 @@
           })
           .finally(() => {
             this.$emit('onFinish');
+            this.references = [];
             this.close();
           });
       },
 
       addReference(ref) {
-        console.log(!this.references.some((r) => r.external_id == ref.external_id), 'asdsg')
         if (!this.references.some((r) => r.external_id == ref.external_id)) {
           this.references.push(ref);
         }

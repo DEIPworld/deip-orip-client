@@ -54,7 +54,8 @@ export default {
     browseBtn: 'Browse projects'
   },
   groups: {
-    teams: 'Teams'
+    teams: 'Teams',
+    addNewTeam: 'Add new team'
   },
   projectRequests: {
     waiting: 'Waiting for approval',

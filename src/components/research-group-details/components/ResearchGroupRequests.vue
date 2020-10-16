@@ -161,7 +161,7 @@
               color="primary"
               :to="{ name: 'UserDetails', params: { account_name: invites[invitesSlider].user.account.name } }"
             >
-              {{ $t('researchGroupDetails.groupReqs.wantJoin') }}
+              {{ $t('researchGroupDetails.groupReqs.view') }}
             </v-btn>
           </div>
         </v-tab-item>

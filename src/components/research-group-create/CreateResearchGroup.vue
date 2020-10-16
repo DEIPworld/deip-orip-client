@@ -90,7 +90,7 @@
 
                   return Promise.all([
                     Promise.all(invitesPromises),
-                    deipRpc.api.getResearchGroupAsync(res.rm._id),
+                    deipRpc.api.getResearchGroupAsync(res.external_id),
                     this.$store.dispatch('auth/loadGroups')
                   ]);
                 })
