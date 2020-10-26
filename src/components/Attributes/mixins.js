@@ -1,9 +1,5 @@
-import Proxyable from 'vuetify/lib/mixins/proxyable';
 
-import AttributesCommonEditOpts
-  from '@/components/Attributes/_partials/Edit/AttributesCommonEditOpts';
-import AttributesCommonEditMeta
-  from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
+
 import { ATTR_TYPES } from '@/variables';
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
@@ -12,6 +8,7 @@ import { mapState } from 'vuex';
 import { componentStoreFactory } from '@/mixins/registerStore';
 import { usersStore } from '@/components/Users/store';
 import { hasValue } from '@/utils/helpers';
+
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
@@ -23,9 +20,8 @@ export const defaultAttributeModel = () => ({
   defaultValue: null,
   valueOptions: [],
 
-  isPublished: true,
   isFilterable: false,
-  // isEditable: true,
+  isMultiple: false,
   isRequired: false,
   isHidden: false
 });
@@ -123,27 +119,6 @@ export const attributeViewTypeComponent = {
 
 // //////////////////////////////////////////////
 
-export const attributeEdit = {
-  components: {
-    AttributesCommonEditOpts,
-    AttributesCommonEditMeta
-  },
-  mixins: [Proxyable],
-  props: {
-    type: PROPS.type
-  },
-  created() {
-    if (!this.internalValue._id) {
-      this.internalValue = {
-        ...this.internalValue,
-        ...defaultAttributeModel()
-      };
-    }
-  }
-};
-
-// //////////////////////////////////////////////
-
 export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
@@ -197,50 +172,6 @@ export const attributeReadOption = {
 
 // //////////////////////////////////////////////
 
-export const attributeSet = {
-  mixins: [Proxyable],
-  props: {
-    attribute: PROPS.attribute,
-    viewType: PROPS.viewType
-  },
-  computed: {
-    attributeComponent() {
-      console.warn('No attribute type/view specified!!!');
-      return 'div';
-    }
-  },
-  render(h) {
-    const self = this;
-    return h(this.attributeComponent, {
-      props: {
-        value: this.internalValue,
-        attribute: this.attribute,
-        viewType: this.viewType
-      },
-      class: {
-        'visually-hidden': this.attribute.isHidden
-      },
-      on: {
-        change(e) {
-          self.$emit('change', e);
-        }
-      }
-    }, null);
-  }
-};
-
-export const attributeSetOption = {
-  mixins: [attributeSet],
-  methods: {
-    remove(item) {
-      const idx = this.internalValue.indexOf(item);
-      if (idx !== -1) {
-        this.internalValue.splice(idx, 1);
-        this.internalValue = [...new Set(this.internalValue)];
-      }
-    }
-  }
-};
 
 export const attributeReadUsers = {
   mixins: [attributeRead, componentStoreFactory(usersStore, 'attribute.value')],

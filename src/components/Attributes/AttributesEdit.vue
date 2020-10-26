@@ -2,15 +2,19 @@
   <component
     :is="attributeComponent"
     v-model="internalValue"
+
+    v-bind="attrs$"
   />
 </template>
 
 <script>
-  import { attributeEdit, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import AttributesCheckboxEdit from './AttributesCheckbox/AttributesCheckboxEdit';
   import AttributesDisciplinesListEdit from './AttributesDisciplinesList/AttributesDisciplinesListEdit';
-  import AttributesMultiSelectEdit from './AttributesMultiSelect/AttributesMultiSelectEdit';
   import AttributesPartnersEdit from './AttributesPartners/AttributesPartnersEdit';
   import AttributesResearchGroupEdit from './AttributesResearchGroup/AttributesResearchGroupEdit';
   import AttributesRoadmapEdit from './AttributesRoadmap/AttributesRoadmapEdit';
@@ -31,7 +35,6 @@
     components: {
       AttributesCheckboxEdit,
       AttributesDisciplinesListEdit,
-      AttributesMultiSelectEdit,
       AttributesPartnersEdit,
       AttributesResearchGroupEdit,
       AttributesRoadmapEdit,
@@ -47,6 +50,9 @@
       AttributesImageEdit,
       AttributesExpressLicensingEdit,
     },
-    mixins: [attributeEdit, attributeTypeComponent]
+    mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
+    props: {
+      ...{ type: PROPS.type }
+    }
   };
 </script>

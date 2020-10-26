@@ -44,7 +44,7 @@
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const attrModelFactory = () => ({

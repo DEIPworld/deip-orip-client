@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { mapGetters } from 'vuex';
   import DStack from '@/components/Deipify/DStack/DStack';

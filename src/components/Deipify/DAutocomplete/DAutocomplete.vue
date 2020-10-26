@@ -1,5 +1,5 @@
 <script>
-  import { VAutocomplete } from 'vuetify/lib/components';
+  import { VAutocomplete, VChip, VBtn, VIcon } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
 
   export default {
@@ -41,8 +41,6 @@
         return this.$createElement('div', {
           staticClass
         }, children);
-
-
       },
 
       genSelections() {
@@ -101,6 +99,56 @@
           this.genMenu(),
           this.genProgress()
         ];
+      },
+
+      genChipSelection(item, index) {
+        const isDisabled = !this.isInteractive || this.getDisabled(item);
+
+        const closeBtn = this.$createElement(VBtn, {
+          staticClass: 'mr-n2 ml-2',
+          props: {
+            disabled: isDisabled,
+            icon: true,
+            xSmall: true
+          },
+          on: {
+            click: (e) => {
+              e.stopPropagation();
+              this.onChipInput(item);
+            }
+          }
+        }, [
+          this.$createElement(VIcon, 'clear')
+        ]);
+
+        return this.$createElement(VChip, {
+          staticClass: 'v-chip--select',
+          attrs: {
+            tabindex: -1
+          },
+          props: {
+            disabled: isDisabled,
+            inputValue: index === this.selectedIndex,
+            small: this.smallChips,
+            outlined: true,
+          },
+          on: {
+            click: (e) => {
+              if (isDisabled) return;
+              e.stopPropagation();
+              this.selectedIndex = index;
+            },
+            'click:close': () => this.onChipInput(item)
+          },
+          key: JSON.stringify(this.getValue(item))
+        }, [
+          this.$createElement('span', {
+            staticClass: 'd-block text-truncate'
+          }, this.getText(item)),
+          ...(this.deletableChips && !isDisabled
+            ? [closeBtn]
+            : [])
+        ]);
       }
     }
   };

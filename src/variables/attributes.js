@@ -3,7 +3,7 @@ export const ATTR_TYPES = {
   TEXTAREA: 'textarea',
 
   SELECT: 'select',
-  MULTI_SELECT: 'multi-select',
+  // MULTI_SELECT: 'multi-select',
 
   SWITCH: 'switch',
   CHECKBOX: 'checkbox',
@@ -35,8 +35,8 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.TEXT]: 'Text field',
   [ATTR_TYPES.TEXTAREA]: 'Text area',
 
-  [ATTR_TYPES.SELECT]: 'Dropdown select',
-  [ATTR_TYPES.MULTI_SELECT]: 'Multiple select',
+  [ATTR_TYPES.SELECT]: 'Select list',
+  // [ATTR_TYPES.MULTI_SELECT]: 'Multiple select',
 
   [ATTR_TYPES.SWITCH]: 'Switch',
   [ATTR_TYPES.CHECKBOX]: 'Checkbox',
@@ -69,7 +69,7 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.TEXTAREA]: 'mdi-form-textarea',
 
   [ATTR_TYPES.SELECT]: 'mdi-form-select',
-  [ATTR_TYPES.MULTI_SELECT]: 'mdi-format-list-checkbox',
+  // [ATTR_TYPES.MULTI_SELECT]: 'mdi-format-list-checkbox',
 
   [ATTR_TYPES.SWITCH]: 'mdi-toggle-switch-outline',
   [ATTR_TYPES.CHECKBOX]: 'mdi-check-box-outline',

@@ -1,8 +1,8 @@
 <script>
-  import AttributesCommonOptionsEdit from '@/components/Attributes/_partials/Edit/AttributesCommonOptionsEdit';
+  import AttributeEditExtendable from '@/components/Attributes/mixins/edit/AttributeEditExtendable';
 
   export default {
     name: 'AttributesSelectEdit',
-    mixins: [AttributesCommonOptionsEdit]
+    mixins: [AttributeEditExtendable]
   };
 </script>

@@ -1,5 +1,6 @@
 import { hasValue, isArray } from '@/utils/helpers';
 import Proxyable from 'vuetify/lib/mixins/proxyable';
+import { wrapInArray } from 'vuetify/lib/util/helpers';
 
 // Array model setups
 

@@ -9,13 +9,13 @@
 </template>
 
 <script>
-  import { attributeSet, attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+  import { attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
   import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
-  import AttributesMultiSelectSet from './AttributesMultiSelect/AttributesMultiSelectSet';
   import AttributesPartnersSet from './AttributesPartners/AttributesPartnersSet';
   import AttributesResearchGroupSet from './AttributesResearchGroup/AttributesResearchGroupSet';
   import AttributesRoadmapSet from './AttributesRoadmap/AttributesRoadmapSet';
@@ -36,7 +36,6 @@
     components: {
       AttributesCheckboxSet,
       AttributesDisciplinesListSet,
-      AttributesMultiSelectSet,
       AttributesPartnersSet,
       AttributesResearchGroupSet,
       AttributesRoadmapSet,

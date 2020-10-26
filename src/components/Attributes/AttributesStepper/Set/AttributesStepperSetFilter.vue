@@ -61,7 +61,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import { arrayedModel } from '@/mixins/extendModel';
 

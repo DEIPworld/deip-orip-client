@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 

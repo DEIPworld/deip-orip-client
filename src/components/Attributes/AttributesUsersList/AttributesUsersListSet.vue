@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import AttributesCommonUsersSet from '@/components/Attributes/_partials/Set/AttributesCommonUsersSet';
+  import AttributesCommonUsersSet from '@/components/Attributes/AttributesCommonUsersSet';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import { arrayedModel } from '@/mixins/extendModel';
 

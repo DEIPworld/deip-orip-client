@@ -3,7 +3,7 @@
 <script>
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { usersStore } from '@/components/Users/store';
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { mapState } from 'vuex';
 
   export default {

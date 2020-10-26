@@ -162,6 +162,24 @@
     }
 
   }
+
+  .v-autocomplete {
+    &__content {
+      .v-select-list {
+        .v-list-item__action {
+          margin-right: 16px !important;
+        }
+      }
+    }
+  }
+
+  .v-chip {
+    max-width: 240px;
+
+    //&__close {
+    //  color: rgba(26, 27, 34, 0.54) !important;
+    //}
+  }
 }
 
 .v-main {

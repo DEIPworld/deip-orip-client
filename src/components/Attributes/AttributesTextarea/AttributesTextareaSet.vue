@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import DWysiwyg from '@/components/Deipify/DWysiwyg/DWysiwyg';
 
   export default {

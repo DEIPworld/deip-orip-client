@@ -33,7 +33,7 @@
 
 <script>
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
-  import AttributesCommonUsersSet from '@/components/Attributes/_partials/Set/AttributesCommonUsersSet';
+  import AttributesCommonUsersSet from '@/components/Attributes/AttributesCommonUsersSet';
 
   export default {
     name: 'AttributesUserSet',

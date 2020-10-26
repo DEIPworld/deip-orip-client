@@ -1,51 +1,58 @@
 <template>
-  <d-block small :title="label" class="mt-6">
+  <d-block small :title="label">
     <d-timeline>
       <d-timeline-item
-        v-for="(option, index) of internalValue.valueOptions"
+        v-for="(item, index) of internalValue"
         :key="`row-${index}`"
         :dot-top="16"
         :ctrl-height="48"
       >
         <template #dot>
-          <slot name="dot" :option="option" :index="index" />
+          <slot name="dot" :option="item" :index="index" />
         </template>
 
-        <attributes-common-edit-meta
-          v-model="internalValue.valueOptions[index]"
+        <attribute-edit-meta
+          v-model="internalValue[index]"
           :field-label-key="fieldLabelKey"
-          :class="{ 'mb-6': index + 1 < internalValue.valueOptions.length }"
+          :class="{ 'mb-6': index + 1 < internalValue.length }"
         />
 
         <template #action>
-          <v-btn icon @click="removeOption(index)">
+          <v-btn icon :disabled="!index" @click="removeItem(item)">
             <v-icon>delete</v-icon>
           </v-btn>
         </template>
       </d-timeline-item>
-      <d-timeline-add @click="addOption()" />
+      <d-timeline-add @click="addItem()" />
     </d-timeline>
   </d-block>
 </template>
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import { arrayModelAddFactory } from '@/mixins/extendModel';
+
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
-  import AttributesCommonEditMeta from '@/components/Attributes/_partials/Edit/AttributesCommonEditMeta';
+  import AttributeEditMeta from '@/components/Attributes/mixins/edit/_partials/AttributeEditMeta';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
 
+  const optModelFactory = () => ({
+    label: undefined,
+    url: undefined
+  });
+
   export default {
-    name: 'AttributesCommonEditOpts',
+    name: 'AttributeEditOptions',
     components: {
       DTimeline,
-      AttributesCommonEditMeta,
+      AttributeEditMeta,
       DTimelineItem,
       DTimelineAdd,
       DBlock
     },
-    mixins: [Proxyable],
+    mixins: [Proxyable, arrayModelAddFactory(optModelFactory)],
     props: {
       label: {
         type: String,
@@ -57,23 +64,9 @@
       }
     },
     created() {
-      if (!this.internalValue.valueOptions.length) {
-        this.addOption();
+      if (!this.internalValue.length) {
+        this.addItem();
       }
     },
-    methods: {
-      addOption() {
-        this.internalValue.valueOptions.push(
-          {
-            title: '',
-            shortTitle: '',
-            description: ''
-          }
-        );
-      },
-      removeOption(index) {
-        this.$delete(this.internalValue.valueOptions, index);
-      }
-    }
   };
 </script>

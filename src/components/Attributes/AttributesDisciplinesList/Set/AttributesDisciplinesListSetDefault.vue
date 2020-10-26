@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { find as deepFind } from 'find-keypath';
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 

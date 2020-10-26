@@ -61,7 +61,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   import DBlock from '@/components/Deipify/DBlock/DBlock';

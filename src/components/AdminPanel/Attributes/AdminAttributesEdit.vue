@@ -1,6 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
     <v-form ref="form">
+<!--      <template>-->
       <template v-if="!formData._id">
         <v-select
           v-model="formData.type"
@@ -17,14 +18,6 @@
       <v-divider class="my-6" />
 
       <v-row no-gutters class="align-center">
-        <v-col cols="auto">
-          <v-checkbox
-            v-model="formData.isPublished"
-            class="ma-0 pa-0"
-            hide-details
-            :label="$t('adminRouting.attributes.attributesEdit.publishField')"
-          />
-        </v-col>
         <v-spacer />
         <v-col cols="auto">
           <v-btn
@@ -55,7 +48,7 @@
   import { TenantService } from '@deip/tenant-service';
   import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
 
-  import { defaultAttributeModel } from '@/components/Attributes/mixins';
+  import { defaultAttributeModel } from '@/components/Attributes/mixins/edit';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 

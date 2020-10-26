@@ -66,7 +66,7 @@
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
 
   const stepModelFactory = () => ({

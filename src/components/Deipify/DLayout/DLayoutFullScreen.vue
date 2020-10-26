@@ -1,9 +1,9 @@
 <template>
   <v-sheet
-    class="flex-shrink-1 flex-grow-1"
     :class="contentClasses"
     :style="contentStyles"
     v-bind="contentAttrs"
+    width="100%"
   >
     <portal to="sidebar">
       <div class="d-none">
@@ -69,6 +69,7 @@
         return {
           'mx-auto': !this.fullWidth,
           'pa-12': !this.noGutters,
+          spacer: true,
           ...(this.setBackgroundColor(this.color).class || {})
         };
       },

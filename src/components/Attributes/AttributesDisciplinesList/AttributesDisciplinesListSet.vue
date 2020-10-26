@@ -1,5 +1,6 @@
 <script>
-  import { attributeSet, attributeViewTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeViewTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { arrayedModel } from '@/mixins/extendModel';
 
   import AttributesDisciplinesListSetDefault from './Set/AttributesDisciplinesListSetDefault';

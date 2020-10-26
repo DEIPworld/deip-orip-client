@@ -50,7 +50,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import { activatableArrayModelFactory } from '@/mixins/extendModel';
 
   import { researchAttributeFileUrl } from '@/utils/helpers';

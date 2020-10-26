@@ -1,10 +1,10 @@
 <template>
   <div>
-    <attributes-common-edit-meta v-model="internalValue" />
-    <attributes-common-edit-props v-model="internalValue" />
+    <attribute-edit-meta v-model="internalValue" />
+    <attribute-edit-props v-model="internalValue" />
     <v-divider />
-    <attributes-common-edit-opts
-      v-model="internalValue"
+    <attribute-edit-options
+      v-model="internalValue.valueOptions"
       label="Levels"
       field-label-key="Level"
     >
@@ -13,17 +13,15 @@
           {{ index + 1 }}
         </div>
       </template>
-    </attributes-common-edit-opts>
+    </attribute-edit-options>
   </div>
 </template>
 
 <script>
-  import { attributeEdit } from '@/components/Attributes/mixins';
-  import AttributesCommonEditProps from '@/components/Attributes/_partials/Edit/AttributesCommonEditProps';
+  import AttributeEditExtendable from '@/components/Attributes/mixins/edit/AttributeEditExtendable';
 
   export default {
     name: 'AttributesStepperEdit',
-    components: { AttributesCommonEditProps },
-    mixins: [attributeEdit]
+    mixins: [AttributeEditExtendable]
   };
 </script>

@@ -10,11 +10,11 @@
 
 <script>
   import { attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   import AttributesCheckboxRead from './AttributesCheckbox/AttributesCheckboxRead';
   import AttributesDisciplinesListRead from './AttributesDisciplinesList/AttributesDisciplinesListRead';
-  import AttributesMultiSelectRead from './AttributesMultiSelect/AttributesMultiSelectRead';
   import AttributesPartnersRead from './AttributesPartners/AttributesPartnersRead';
   import AttributesResearchGroupRead from './AttributesResearchGroup/AttributesResearchGroupRead';
   import AttributesRoadmapRead from './AttributesRoadmap/AttributesRoadmapRead';
@@ -35,7 +35,6 @@
     components: {
       AttributesCheckboxRead,
       AttributesDisciplinesListRead,
-      AttributesMultiSelectRead,
       AttributesPartnersRead,
       AttributesResearchGroupRead,
       AttributesRoadmapRead,

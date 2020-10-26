@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/mixins';
+  import { attributeSet } from '@/components/Attributes/mixins/set';
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
   import { isString, researchAttributeFileUrl } from '@/utils/helpers';
 

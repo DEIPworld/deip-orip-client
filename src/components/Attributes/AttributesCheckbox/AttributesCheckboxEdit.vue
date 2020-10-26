@@ -1,8 +1,8 @@
 <script>
-  import AttributesCommonEdit from '@/components/Attributes/_partials/Edit/AttributesCommonEdit';
+  import { AttributeEditBase } from '@/components/Attributes/mixins/edit';
 
   export default {
     name: 'AttributesCheckboxEdit',
-    mixins: [AttributesCommonEdit]
+    mixins: [AttributeEditBase]
   };
 </script>
