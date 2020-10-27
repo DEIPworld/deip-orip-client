@@ -172,12 +172,13 @@
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username
         }, {
-          requester: this.$currentUser.username,
-          researchGroup: this.project.researchGroup.external_id,
+          researchExternalId: this.project.externalId,
+          licensee: this.$currentUser.username,
+          licenser: this.project.researchGroup.external_id,
+          terms: this.selected.name,
           fee: this.$$toAssetUnits(this.selected.fee),
           expirationDate: this.dialogModel.date
         }, {
-          researchExternalId: this.project.externalId,
           licencePlan: this.selected
         })
           .then((result) => {
