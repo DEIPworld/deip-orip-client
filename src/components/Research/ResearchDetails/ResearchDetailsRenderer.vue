@@ -53,6 +53,14 @@
         return this.research.members.includes(this.$currentUserName);
       },
 
+      hasMaterials() {
+        return !!this.research.numberOfResearchContents || !this.limitedAccess;
+      },
+
+      hasReviews() {
+        return !!(this.research.numberOfPositiveReviews + this.research.numberOfNegativeReviews);
+      },
+
       limitedAccess() {
         const owners = this.research.researchRef.expressLicenses.map((lic) => lic.owner);
         return ![...this.research.members, ...owners].includes(this.$currentUserName);
