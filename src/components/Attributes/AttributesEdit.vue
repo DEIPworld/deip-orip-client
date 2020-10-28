@@ -8,27 +8,27 @@
 </template>
 
 <script>
-  import { attributeTypeComponent, PROPS } from '@/components/Attributes/mixins';
+  import { attributeTypeComponent } from '@/components/Attributes/_mixins';
 
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
-  import AttributesCheckboxEdit from './AttributesCheckbox/AttributesCheckboxEdit';
-  import AttributesDisciplinesListEdit from './AttributesDisciplinesList/AttributesDisciplinesListEdit';
-  import AttributesPartnersEdit from './AttributesPartners/AttributesPartnersEdit';
-  import AttributesResearchGroupEdit from './AttributesResearchGroup/AttributesResearchGroupEdit';
-  import AttributesRoadmapEdit from './AttributesRoadmap/AttributesRoadmapEdit';
-  import AttributesSelectEdit from './AttributesSelect/AttributesSelectEdit';
-  import AttributesStepperEdit from './AttributesStepper/AttributesStepperEdit';
-  import AttributesSwitchEdit from './AttributesSwitch/AttributesSwitchEdit';
-  import AttributesTextEdit from './AttributesText/AttributesTextEdit';
-  import AttributesTextareaEdit from './AttributesTextarea/AttributesTextareaEdit';
-  import AttributesUrlEdit from './AttributesUrl/AttributesUrlEdit';
-  import AttributesUserEdit from './AttributesUser/AttributesUserEdit';
-  import AttributesUsersListEdit from './AttributesUsersList/AttributesUsersListEdit';
-  import AttributesVideoUrlEdit from './AttributesVideoUrl/AttributesVideoUrlEdit';
-  import AttributesImageEdit from './AttributesImage/AttributesImageEdit';
-  import AttributesExpressLicensingEdit from './AttributesExpressLicensing/AttributesExpressLicensingEdit';
+  import { AttributesDisciplinesListEdit } from '@/components/Attributes/DisciplinesList';
+  import { AttributesPartnersEdit } from '@/components/Attributes/Partners';
+  import { AttributesResearchGroupEdit } from '@/components/Attributes/ResearchGroup';
+  import { AttributesRoadmapEdit } from '@/components/Attributes/Roadmap';
+  import { AttributesSelectEdit } from '@/components/Attributes/Select';
+  import { AttributesStepperEdit } from '@/components/Attributes/Stepper';
+  import { AttributesSwitchEdit } from '@/components/Attributes/Switch';
+  import { AttributesTextEdit } from '@/components/Attributes/Text';
+  import { AttributesTextareaEdit } from '@/components/Attributes/Textarea';
+  import { AttributesUrlEdit } from '@/components/Attributes/Url';
+  import { AttributesUserEdit } from '@/components/Attributes/User';
+  import { AttributesVideoUrlEdit } from '@/components/Attributes/VideoUrl';
+  import { AttributesImageEdit } from '@/components/Attributes/Image';
+  import { AttributesExpressLicensingEdit } from '@/components/Attributes/ExpressLicensing';
+  import { AttributesCheckboxEdit } from '@/components/Attributes/Checkbox';
+  import { ATTR_TYPES } from '@/variables';
 
   export default {
     name: 'AttributesEdit',
@@ -45,14 +45,20 @@
       AttributesTextareaEdit,
       AttributesUrlEdit,
       AttributesUserEdit,
-      AttributesUsersListEdit,
       AttributesVideoUrlEdit,
       AttributesImageEdit,
-      AttributesExpressLicensingEdit,
+      AttributesExpressLicensingEdit
     },
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
     props: {
-      ...{ type: PROPS.type }
+      type: {
+        type: String,
+        default: ATTR_TYPES.TEXT,
+        validator(val) {
+          return Object.values(ATTR_TYPES)
+            .indexOf(val) !== -1;
+        }
+      }
     }
   };
 </script>

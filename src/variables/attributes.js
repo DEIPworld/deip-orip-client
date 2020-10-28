@@ -15,7 +15,7 @@ export const ATTR_TYPES = {
   STEPPER: 'stepper',
 
   USER: 'user',
-  USERS_LIST: 'users-list',
+  // USERS_LIST: 'users-list',
 
   DISCIPLINE: 'discipline',
   DISCIPLINES_LIST: 'disciplines-list',
@@ -48,7 +48,7 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.STEPPER]: 'Level select',
 
   [ATTR_TYPES.USER]: 'User select',
-  [ATTR_TYPES.USERS_LIST]: 'Multiple users select',
+  // [ATTR_TYPES.USERS_LIST]: 'Multiple users select',
 
   [ATTR_TYPES.DISCIPLINE]: 'Discipline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
@@ -81,7 +81,7 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.STEPPER]: 'mdi-format-list-numbered',
 
   [ATTR_TYPES.USER]: 'mdi-account-outline',
-  [ATTR_TYPES.USERS_LIST]: 'mdi-account-multiple-outline',
+  // [ATTR_TYPES.USERS_LIST]: 'mdi-account-multiple-outline',
 
   [ATTR_TYPES.DISCIPLINE]: 'mdi-flask-empty-outline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'mdi-flask-empty-plus-outline',

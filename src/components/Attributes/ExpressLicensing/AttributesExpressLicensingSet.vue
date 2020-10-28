@@ -1,0 +1,103 @@
+<template>
+  <d-stack>
+    <v-checkbox
+      v-model="modelActive"
+      :label="attribute.title"
+      hide-details="auto"
+    />
+    <d-timeline v-if="modelActive">
+      <d-timeline-item
+        v-for="(license, index) of internalValue"
+        :key="`row-${index}`"
+        :dot-top="16"
+      >
+        <v-row class="pb-4">
+          <v-col cols="6">
+            <v-text-field
+              v-model="license.name"
+              label="Set type"
+              outlined
+              hide-details="auto"
+            />
+          </v-col>
+
+          <v-col cols="6">
+            <d-asset-input
+              v-model="license.fee"
+              label="Set license issue fee"
+            />
+          </v-col>
+
+          <v-col cols="12">
+            <d-file-input-extended
+              v-model="license.file"
+              label="Upload an agreemen"
+              :url-builder="getFileUrl"
+            />
+          </v-col>
+        </v-row>
+
+        <template #action>
+          <v-btn icon :disabled="!index" @click="removeItem(license)">
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </template>
+      </d-timeline-item>
+
+      <d-timeline-add @click="addItem()" />
+    </d-timeline>
+  </d-stack>
+</template>
+
+<script>
+  import { attributeSet } from '@/components/Attributes/_mixins';
+  import { activatableArrayModelFactory } from '@/mixins/extendModel';
+
+  import { researchAttributeFileUrl } from '@/utils/helpers';
+
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
+  import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
+  import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
+  import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
+  import DFileInputExtended from '@/components/Deipify/DInput/DFileInputExtended';
+
+  const licenseModelFactory = () => ({
+    name: undefined,
+    fee: undefined,
+    file: undefined
+  });
+
+  export default {
+    name: 'AttributesExpressLicensingSet',
+    components: {
+      DFileInputExtended,
+      DAssetInput,
+      DTimelineAdd,
+      DTimelineItem,
+      DTimeline,
+      DStack
+    },
+    mixins: [attributeSet, activatableArrayModelFactory(licenseModelFactory)],
+    props: {
+      project: {
+        type: Object,
+        default: () => ({})
+      }
+    },
+
+    methods: {
+      getFileUrl(file) {
+        if (!file) return false;
+
+        return researchAttributeFileUrl(
+          this.project.externalId,
+          this.attribute._id,
+          file,
+          false,
+          true
+        );
+      }
+    }
+  };
+</script>

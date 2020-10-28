@@ -50,9 +50,29 @@ Vue.filter('employmentOrEducation', (enrichedProfile) => {
   return `${education ? education.educationalInstitution : ''}${education && employment ? ', ' : ''}${employment ? employment.company : ''}`;
 });
 
-Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => (profile
-  ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${profile._id}/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`
-  : `${window.env.DEIP_SERVER_URL}/api/user/avatar/initdelegate/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`));
+Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => {
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+  const profileId = profile ? profile._id : 'initdelegate';
+
+  const pathArray = [
+    window.env.DEIP_SERVER_URL,
+    '/api/user/avatar/',
+    profileId,
+    '/?authorization=',
+    accessService.getAccessToken(),
+    '&width=',
+    internalWidth,
+    '&height=',
+    internalHeight,
+    '&round=',
+    isRound,
+    '&noCache=',
+    noCache
+  ];
+
+  return pathArray.join('');
+});
 
 Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 

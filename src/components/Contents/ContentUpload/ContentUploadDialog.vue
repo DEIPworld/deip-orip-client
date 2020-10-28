@@ -54,10 +54,11 @@
               item-value="id"
             />
 
-            <attributes-users-list-set
+            <attributes-user-set
               v-model="authors"
               :users="research.members"
               :attribute="{title: $t('contents.contentUploadDialog.authorsAttribute')}"
+              multiple
               class="mb-4"
             />
 
@@ -114,7 +115,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentService } from '@deip/research-content-service';
   import { SearchService } from '@deip/search-service';
-  import AttributesUsersListSet from '@/components/Attributes/AttributesUsersList/AttributesUsersListSet';
+  import AttributesUserSet from '@/components/Attributes/User/AttributesUserSet';
 
   const searchService = SearchService.getInstance();
   const accessService = AccessService.getInstance();
@@ -125,7 +126,7 @@
     name: 'ContentUploadDialog',
 
     components: {
-      AttributesUsersListSet,
+      AttributesUserSet,
       vueDropzone
     },
 
@@ -240,7 +241,7 @@
         const isProposal = !this.research.researchGroup.is_personal;
         researchContentService.createResearchContentViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          false, 
+          false,
           {
             researchExternalId: this.research.externalId,
             researchGroup: this.research.researchGroup.external_id,

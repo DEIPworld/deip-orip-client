@@ -48,7 +48,7 @@
   import { TenantService } from '@deip/tenant-service';
   import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
 
-  import { defaultAttributeModel } from '@/components/Attributes/mixins/edit';
+  import { defaultAttributeModel } from '@/components/Attributes/_mixins/edit';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 

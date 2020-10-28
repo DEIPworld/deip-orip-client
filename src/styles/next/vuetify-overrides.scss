@@ -175,10 +175,25 @@
 
   .v-chip {
     max-width: 240px;
+  }
 
-    //&__close {
-    //  color: rgba(26, 27, 34, 0.54) !important;
-    //}
+  .v-treeview {
+
+    &--without-children {
+      .v-treeview-node__level {
+        display: none;
+      }
+    }
+
+    &-node__checkbox {
+      margin-right: 16px;
+    }
+
+    &--hoverable {
+      .v-treeview-node__root {
+        cursor: pointer;
+      }
+    }
   }
 }
 
