@@ -1,5 +1,3 @@
-
-
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
 

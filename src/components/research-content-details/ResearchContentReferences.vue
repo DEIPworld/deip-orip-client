@@ -38,7 +38,7 @@
               <span class="text-subtitle-1 capitalize">File Info</span>
             </v-tab>
             <v-tab href="#tab-references">
-              <span class="text-subtitle-1 capitalize">References <span v-if="outerReferences.length">({{ outerReferences.length }})</span></span>
+              <span class="text-subtitle-1 capitalize">Data users <span v-if="outerReferences.length">({{ outerReferences.length }})</span></span>
             </v-tab>
 
             <v-tabs-items v-model="activeTab" class="tab-content overflow-x-hidden">
@@ -214,7 +214,7 @@
                   align="center"
                 >
                   <div class="py-6">
-                    There are no references to this material
+                    Shared material is not by anyone yet
                   </div>
                 </v-row>
               </v-tab-item>
