@@ -7,13 +7,13 @@
 </template>
 
 <script>
-  import { attributeReadOption } from '@/components/Attributes/_mixins';
   import {
     attributeViewTypeComponent
   } from '@/components/Attributes/_mixins';
 
   import AttributesStepperReadDefault from '@/components/Attributes/Stepper/Read/AttributesStepperReadDefault';
   import AttributesStepperReadSmall from '@/components/Attributes/Stepper/Read/AttributesStepperReadSmall';
+  import { commonProps } from '@/variables/props';
 
   export default {
     name: 'AttributesStepperRead',
@@ -21,6 +21,10 @@
       AttributesStepperReadDefault,
       AttributesStepperReadSmall
     },
-    mixins: [attributeReadOption, attributeViewTypeComponent]
+    mixins: [attributeViewTypeComponent],
+    props: {
+      ...commonProps.attribute,
+      ...commonProps.viewType
+    }
   };
 </script>

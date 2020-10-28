@@ -8,6 +8,11 @@ const props = {
     type: Object,
     default: () => ({})
   },
+
+  viewType: {
+    type: String,
+    default: undefined
+  }
 };
 
 export const commonProps = (() => {

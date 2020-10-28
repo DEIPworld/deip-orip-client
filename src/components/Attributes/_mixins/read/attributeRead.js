@@ -6,10 +6,7 @@ export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
     ...commonProps.attribute,
-    viewType: {
-      type: String,
-      default: undefined
-    }
+    ...commonProps.viewType
   },
   computed: {
     attributeInfo() {
