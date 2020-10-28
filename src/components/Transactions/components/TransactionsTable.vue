@@ -60,7 +60,9 @@
             :loading="disableButtonsId === item._id"
             @click="approveExpressLicensingRequest(item)"
           >
-            <v-icon left> done </v-icon>
+            <v-icon left>
+              done
+            </v-icon>
             Сonfirm
           </v-btn>
           <v-btn
@@ -71,7 +73,9 @@
             :loading="disableButtonsId === item._id"
             @click="rejectExpressLicensingRequest(item)"
           >
-            <v-icon left> clear </v-icon>
+            <v-icon left>
+              clear
+            </v-icon>
             Decline
           </v-btn>
         </template>
@@ -133,16 +137,16 @@
                       :avatar="
                         account.profile
                           ? $options.filters.avatarSrc(
-                              account.profile,
-                              64,
-                              64,
-                              false
-                            )
+                            account.profile,
+                            64,
+                            64,
+                            false
+                          )
                           : $options.filters.researchGroupLogoSrc(
-                              account.external_id,
-                              64,
-                              64
-                            )
+                            account.external_id,
+                            64,
+                            64
+                          )
                       "
                       :size="24"
                       class="mb-3 ml-auto"
@@ -152,17 +156,17 @@
                         :to="
                           account.profile
                             ? {
-                                name: 'UserDetails',
-                                params: { account_name: account.account.name },
-                              }
+                              name: 'UserDetails',
+                              params: { account_name: account.account.name },
+                            }
                             : {
-                                name: 'ResearchGroupDetails',
-                                params: {
-                                  research_group_permlink: encodeURIComponent(
-                                    account.permlink
-                                  ),
-                                },
-                              }
+                              name: 'ResearchGroupDetails',
+                              params: {
+                                research_group_permlink: encodeURIComponent(
+                                  account.permlink
+                                ),
+                              },
+                            }
                         "
                         class="text--secondary text-caption"
                       >
@@ -202,7 +206,9 @@
                     <v-expansion-panel class="pa-0">
                       <v-expansion-panel-content class="pa-0">
                         <div class="mx-n6 mt-3 mb-n1">
-                          <div class="text-caption mb-3">Signee</div>
+                          <div class="text-caption mb-3">
+                            Signee
+                          </div>
                           <template
                             v-for="(historyStatus, i) in item.chainHistoryDataTable"
                           >
@@ -221,8 +227,8 @@
                               <div>
                                 {{
                                   history.account.name ||
-                                  $options.filters.fullname(history.account) ||
-                                  '—'
+                                    $options.filters.fullname(history.account) ||
+                                    '—'
                                 }}
                                 (<span class="font-weight-medium">
                                   Transaction ID:
@@ -236,10 +242,10 @@
                                 {{
                                   history.timestamp
                                     ? $options.filters.dateFormat(
-                                        history.timestamp,
-                                        'DD MMM YYYY, hh:mm',
-                                        true
-                                      )
+                                      history.timestamp,
+                                      'DD MMM YYYY, hh:mm',
+                                      true
+                                    )
                                     : '—'
                                 }}
                                 )
@@ -271,37 +277,33 @@
   const expressLicensingService = ExpressLicensingService.getInstance();
 
   const transactionTypes = {
-    LICENSE: 1,
+    LICENSE: 1
   };
 
   const chipColors = {
     approved: 'success',
     pending: 'warning',
-    rejected: 'error',
+    rejected: 'error'
   };
 
   export default {
     name: 'TransactionsTable',
+
+    components: {
+      DBoxItem
+    },
 
     mixins: [assetsChore],
 
     props: {
       dataTable: {
         type: Array,
-        default: () => [],
+        default: () => []
       },
       haveActions: {
         type: Boolean,
-        default: false,
-      },
-    },
-
-    components: {
-      DBoxItem,
-    },
-
-    created() {
-      console.log(this.dataTable)
+        default: false
+      }
     },
 
     data() {
@@ -312,8 +314,8 @@
         txStatusChips: {
           approved: this.$t('transactionsPage.signed'),
           pending: this.$t('transactionsPage.pending'),
-          rejected: this.$t('transactionsPage.declined'),
-        },
+          rejected: this.$t('transactionsPage.declined')
+        }
       };
     },
     computed: {
@@ -322,46 +324,46 @@
           {
             text: 'Type',
             value: 'type',
-            sortable: false,
+            sortable: false
           },
           {
             text: 'Sender',
             value: 'requester',
-            sortable: false,
+            sortable: false
           },
           {
             text: 'Target',
             value: 'researchGroupExternalId',
-            sortable: false,
+            sortable: false
           },
           {
             text: 'Date of receipt',
             value: 'created_at',
             align: 'end',
-            sortable: false,
+            sortable: false
           },
           {
             text: 'Expiration date',
             value: 'expirationDate',
             align: 'center',
-            sortable: false,
+            sortable: false
           },
           {
             text: 'Status',
             value: 'status',
-            width: '109px',
+            width: '109px'
           },
           {
             text: '',
             value: 'data-table-expand',
             align: 'start elevetion-0',
-            width: '56px',
-          },
+            width: '56px'
+          }
         ];
         if (this.haveActions) {
           header.splice(5, 0, {
             text: 'Actions',
-            value: 'actions',
+            value: 'actions'
           });
         }
         return header;
@@ -370,21 +372,25 @@
         return chartGradient(Object.keys(transactionTypes).length + 1).map(
           (color) => ({
             bg: color,
-            textColor: switchColor(color),
+            textColor: switchColor(color)
           })
         );
       },
       statusChipData() {
         return {
           color: chipColors,
-          text: this.txStatusChips,
+          text: this.txStatusChips
         };
       },
       isCurrentUserSigned() {
         return this.pendingRequests.approvers.includes(
           (item) => item === this.$currentUser.username
         );
-      },
+      }
+    },
+
+    created() {
+      // console.log(this.dataTable);
     },
     methods: {
       approveExpressLicensingRequest(request) {
@@ -393,19 +399,19 @@
           .approveExpressLicensingRequest(
             {
               privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username,
+              username: this.$currentUser.username
             },
             {
               requestId: request._id,
-              approver: request.researchGroupExternalId,
+              approver: request.researchGroupExternalId
             }
           )
           .then(() => {
             Promise.all([
               this.$store.dispatch('Transactions/loadApprovedRequests'),
-              this.$store.dispatch('Transactions/loadPendingRequests'),
+              this.$store.dispatch('Transactions/loadPendingRequests')
             ]);
-            this.$notifier.showSuccess('Approve successfully !');
+            this.$notifier.showSuccess('Approved successfully !');
           })
           .catch((err) => {
             console.error(err);
@@ -424,19 +430,19 @@
           .rejectExpressLicensingRequest(
             {
               privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username,
+              username: this.$currentUser.username
             },
             {
               requestId: request._id,
-              rejector: request.researchGroupExternalId,
+              rejector: request.researchGroupExternalId
             }
           )
           .then(() => {
             Promise.all([
               this.$store.dispatch('Transactions/loadApprovedRequests'),
-              this.$store.dispatch('Transactions/loadPendingRequests'),
+              this.$store.dispatch('Transactions/loadPendingRequests')
             ]);
-            this.$notifier.showSuccess('Approve successfully !');
+            this.$notifier.showSuccess('Declined successfully !');
           })
           .catch((err) => {
             console.error(err);
@@ -447,8 +453,8 @@
           .finally(() => {
             this.disableButtonsId = '';
           });
-      },
-    },
+      }
+    }
   };
 </script>
 
