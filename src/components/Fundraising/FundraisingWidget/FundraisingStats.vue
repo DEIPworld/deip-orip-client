@@ -6,13 +6,13 @@
       'eci-widget': 'heading@3',
     }"
   >
-    <d-block small title="Fundraising">
+    <d-block-widget title="Fundraising" class="ma-n6">
       <template #titleAddon>
         <v-chip v-if="tokenSaleData" outlined :color="timeChipData.color" text-color="black">
           {{ timeChipData.date | timeLeft }}
         </v-chip>
       </template>
-    </d-block>
+    </d-block-widget>
     <template v-if="tokenSaleData">
       <template
         v-for="(item, index) of saleInfo"
@@ -76,15 +76,15 @@
 </template>
 
 <script>
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingWidgetStore } from '@/components/Fundraising/FundraisingWidget/store';
   import { mapGetters } from 'vuex';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'FundraisingStats',
     components: {
-      DBlock
+      DBlockWidget,
     },
 
     mixins: [componentStoreFactoryOnce(fundraisingWidgetStore)],

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-block widget>
+    <d-block-widget>
       <div class="text-h6">
         <router-link
           class="link"
@@ -16,13 +16,13 @@
           {{ content.title }}
         </router-link>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget separated>
+    <d-block-widget>
       <review-assessment v-model="review.scores" :research-content-type="content.content_type" />
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="review.author.account.name !== user.username" widget separated>
+    <d-block-widget v-if="review.author.account.name !== user.username">
       <div>
         <v-btn
           block
@@ -51,13 +51,11 @@
           Review can be supported once
         </div>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block
+    <d-block-widget
       v-if="reviewSupporters.length"
       :title="` Supporters: ${reviewSupporters.length }`"
-      widget
-      separated
     >
       <div
         v-for="(vote, i) in reviewSupporters"
@@ -74,9 +72,9 @@
           />
         </div>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget separated>
+    <d-block-widget>
       <v-row>
         <v-col>
           <div class="text-body-2 font-weight-medium">Date Added:</div>
@@ -85,7 +83,7 @@
           <d-meta-item :meta="{icon: 'event', label: moment(review.created_at).format('D MMM YYYY')}" />
         </v-col>
       </v-row>
-    </d-block>
+    </d-block-widget>
   </div>
 </template>
 
@@ -96,12 +94,13 @@
   import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentReviewSidebar',
-    components: { DMetaItem, DBlock },
+    components: { DBlockWidget, DMetaItem, DBlock },
     data() {
       return {
         isReviewVoting: false,

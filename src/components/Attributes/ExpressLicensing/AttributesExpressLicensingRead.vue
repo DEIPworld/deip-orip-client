@@ -1,16 +1,15 @@
 <template>
-  <div>
+  <div class="ma-n6">
     <template
       v-if="project.members.includes($currentUserName)"
     >
-      <d-block
+      <d-block-widget
         title="Licensee"
-        widget
       >
         <express-licensing-licensee
           :licenses="project.researchRef.expressLicenses"
         />
-      </d-block>
+      </d-block-widget>
       <v-divider />
     </template>
 
@@ -20,26 +19,25 @@
       <template
         v-if="userLicenses.length"
       >
-        <d-block
+        <d-block-widget
           title="Purchased licenses"
           widget
         >
           <express-licensing-purchased
             :licenses="userLicenses"
           />
-        </d-block>
+        </d-block-widget>
       </template>
-      <v-divider />
-      <d-block
+
+      <d-block-widget
         :title="attributeInfo.title"
-        widget
       >
         <express-licensing-purchase
           :attribute-id="attribute.researchAttributeId"
           :licenses="attribute.value"
           :project="project"
         />
-      </d-block>
+      </d-block-widget>
     </template>
   </div>
 </template>
@@ -49,12 +47,12 @@
   import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
   import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
   import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'AttributesExpressLicensingRead',
     components: {
-      DBlock,
+      DBlockWidget,
       ExpressLicensingPurchased,
       ExpressLicensingLicensee,
       ExpressLicensingPurchase

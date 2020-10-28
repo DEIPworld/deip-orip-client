@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-block widget>
+    <d-block-widget>
       <template #title>
         <router-link
           class="research-group-link"
@@ -117,20 +117,16 @@
           {{ $t('researchDetails.sidebar.joinResGroup') }}
         </div>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block
-      widget
-      separated
-      :title="$t('researchDetails.sidebar.eciBlock')"
-    >
+    <d-block-widget :title="$t('researchDetails.sidebar.eciBlock')">
       <eci-stats
         :research-id="research.external_id"
         :disciplines="research.disciplines"
       />
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget separated>
+    <d-block-widget>
 <!--      <pre>-->
 <!--        {{ $where(researchRef.extendedAttributes, { attribute: { '!type': ['partners', 'roadmap'] } }) }}-->
 <!--      </pre>-->
@@ -142,9 +138,9 @@
         :attribute-id="attribute.attribute._id"
       />
 
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="isResearchGroupMember" widget separated>
+    <d-block-widget v-if="isResearchGroupMember">
       <div v-if="research.is_private" class="text-subtitle-1">
         <v-icon class="mr-2" small color="black">
           lock
@@ -157,11 +153,11 @@
         </v-icon>
         {{ $t('researchDetails.sidebar.public') }}
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="researchRef.partners.length" widget separated>
+    <d-block-widget v-if="researchRef.partners.length">
       <research-partners is-read-only :partners="researchRef.partners" />
-    </d-block>
+    </d-block-widget>
 
 <!--    <d-block v-if="contentList.length" widget separated :title="$t('researchDetails.sidebar.expertBlock.title')">-->
 <!--      <v-dialog-->
@@ -255,6 +251,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import AttributesRead from '@/components/Attributes/AttributesRead';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -263,6 +260,7 @@
     name: 'ResearchDetailsSidebar',
 
     components: {
+      DBlockWidget,
       AttributesRead,
       EciStats,
       DBlock

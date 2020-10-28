@@ -6,14 +6,14 @@
     @apply="applyFilter"
     @reset="resetFilter"
   >
-    <d-block widget>
+    <d-block-widget>
       <v-text-field
         v-model="filterModel.searchTerm"
         label="Search text..."
         outlined
         hide-details="auto"
       />
-    </d-block>
+    </d-block-widget>
 
     <d-filter-term-components v-model="filterModel.researchAttributes" class="mb-6" />
   </d-filter-sidebar>
@@ -23,6 +23,7 @@
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const defaultFilter = () => ({
     searchTerm: '',
@@ -35,6 +36,7 @@
     name: 'ProjectsListFilter',
 
     components: {
+      DBlockWidget,
       DBlock,
       DFilterTermComponents,
       DFilterSidebar

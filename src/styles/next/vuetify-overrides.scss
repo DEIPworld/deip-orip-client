@@ -1,12 +1,25 @@
+//@import '~vuetify/src/styles/styles';
+
 @use '~vuetify/src/styles/tools/display' as *;
+//@use '~vuetify/src/styles/tools/theme' as *;
 
 .v-application {
+
+  //@include theme(xxx) {
+  //  border: 1px solid red;
+  //}
+
+  //.xxx {
+  //  content: $material;
+  //}
+
   .reset-height {
     min-height: 0 !important;
     height: auto !important;
   }
   .reset-width {
     min-width: 0 !important;
+    max-width: none !important;
     width: auto !important;
   }
   .fix-width {

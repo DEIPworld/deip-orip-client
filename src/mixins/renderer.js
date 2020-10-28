@@ -10,6 +10,7 @@ import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSpli
 
 import DStack from '@/components/Deipify/DStack/DStack';
 import DBlock from '@/components/Deipify/DBlock/DBlock';
+import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
@@ -30,6 +31,7 @@ const rendererCommon = {
 
     DStack,
     DBlock,
+    DBlockWidget,
     DMetaItem,
     DSimpleTooltip,
 

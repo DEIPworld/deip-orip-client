@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-block v-if="isJoinRequestsSectionAvailable" widget>
+    <d-block-widget v-if="isJoinRequestsSectionAvailable">
       <template #title>
         {{ $t('researchGroupDetails.sidebar.joinReq') }} {{ pendingJoinRequests.length }}
       </template>
@@ -31,7 +31,7 @@
         </v-row>
         <v-divider v-if="index !== pendingJoinRequests.length - 1" class="ma-2" />
       </v-row>
-    </d-block>
+    </d-block-widget>
 
     <handle-join-request-dialog
       v-if="selectedJoinRequest"
@@ -42,15 +42,15 @@
     />
 
     <!-- ### START Research Group Details Section ### -->
-    <d-block widget separated title="Group expertise tokens">
+    <d-block-widget title="Group expertise tokens">
       <div v-for="(item, i) in groupExpertise" :key="i">
         <span class="font-weight-medium">{{ item.disciplineName }}</span>
         <span class="float-right">{{ item.value }}</span>
       </div>
-    </d-block>
+    </d-block-widget>
     <!-- ### END Research Group Details Section ### -->
 
-    <d-block v-if="isResearchGroupMember" widget separated>
+    <d-block-widget v-if="isResearchGroupMember">
       <template #title>
         <router-link
           class="a"
@@ -72,7 +72,7 @@
       >
         {{ $t('researchGroupDetails.sidebar.Transfer') }}
       </v-btn>
-    </d-block>
+    </d-block-widget>
 
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
@@ -88,10 +88,11 @@
   import _ from 'lodash';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import HandleJoinRequestDialog from '@/components/research-group-details/components/HandleJoinRequestDialog';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
-    components: { HandleJoinRequestDialog, DBlock },
+    components: { DBlockWidget, HandleJoinRequestDialog, DBlock },
     data() {
       return {
         isApprovingJoinRequest: false,

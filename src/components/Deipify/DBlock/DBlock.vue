@@ -1,51 +1,45 @@
 <template>
-  <v-sheet>
-    <v-divider v-if="separated" />
+  <d-stack :gap="stackGap">
 
-    <div :class="contentClassList">
+    <div v-if="hasHeader" :class="headerClassList">
+      <slot name="titleLeft" />
 
-      <div v-if="hasHeader" :class="headerClassList">
-        <slot name="titleLeft" />
-
-        <div class="spacer">
-          <div
-            v-if="hasTitle"
-            :class="titleClassList"
-          >
-            {{ title }}
-            <slot name="title" />
-          </div>
-
-          <div
-            v-if="hasSubtitle"
-            :class="subtitleClassList"
-          >
-            {{ subtitle }}
-            <slot name="subtitle" />
-          </div>
+      <div class="spacer">
+        <div
+          v-if="hasTitle"
+          :class="titleClassList"
+        >
+          {{ title }}
+          <slot name="title" />
         </div>
-        <div v-if="$hasSlot('titleAddon')" :class="$style.actions">
-          <slot name="titleAddon" />
+
+        <div
+          v-if="hasSubtitle"
+          :class="subtitleClassList"
+        >
+          {{ subtitle }}
+          <slot name="subtitle" />
         </div>
       </div>
-
-
-      <slot />
+      <div v-if="$hasSlot('titleAddon')" :class="$style.actions">
+        <slot name="titleAddon" />
+      </div>
     </div>
-  </v-sheet>
+
+    <slot />
+  </d-stack>
 </template>
 
 <script>
+  import DStack from '@/components/Deipify/DStack/DStack';
+
   export default {
     name: 'DBlock',
+    components: { DStack },
     props: {
 
-      small: {
+      compact: {
         type: Boolean,
-        default: false
-      },
-      widget: {
-        type: [Boolean, String],
         default: false
       },
 
@@ -56,11 +50,6 @@
       subtitle: {
         type: String,
         default: null
-      },
-
-      separated: {
-        type: Boolean,
-        default: false
       }
     },
     computed: {
@@ -70,28 +59,25 @@
 
       titleClassList() {
         return {
-          'text-h6': this.small || this.widget,
-          'text-h5': !(this.small || this.widget)
+          'text-h6': this.compact,
+          'text-h5': !this.compact
         };
       },
       headerClassList() {
         return {
           'd-flex': true,
           'align-center': true,
-          'mb-4': this.small || this.widget,
-          'mb-6': !(this.small || this.widget)
         };
       },
+
+      stackGap() {
+        return this.compact ? 16 : 24
+      },
+
       subtitleClassList() {
         return {
           'text-body-2': true,
           'text--secondary': true
-        };
-      },
-      contentClassList() {
-        return {
-          'px-6 py-4': this.widget && this.widget === 'compact',
-          'pa-6': this.widget && this.widget !== 'compact'
         };
       }
     }

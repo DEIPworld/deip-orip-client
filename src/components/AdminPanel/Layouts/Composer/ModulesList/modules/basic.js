@@ -1,6 +1,6 @@
 import {
   extendModuleObject,
-  setAs,
+  setAs, setComponentAttrs,
   setComponentProps
 } from '@/components/AdminPanel/Layouts/Composer/ModulesList/modules/_utils';
 
@@ -33,9 +33,16 @@ const modules = [
         name: 'Block',
         icon: 'mdi-card-text-outline',
         ...setComponentProps({
-          title: setAs(String),
-          small: setAs(Boolean),
-          widget: setAs(Boolean)
+          title: setAs(String)
+        }),
+        children: []
+      },
+      {
+        component: 'DBlockWidget',
+        name: 'Widget',
+        icon: 'mdi-subtitles-outline',
+        ...setComponentAttrs({
+          title: setAs(String)
         }),
         children: []
       }

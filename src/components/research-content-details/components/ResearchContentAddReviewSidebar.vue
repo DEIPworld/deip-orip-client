@@ -1,6 +1,6 @@
 <template>
   <div>
-    <d-block v-if="research" widget>
+    <d-block-widget v-if="research">
       <router-link
         class="a title"
         :to="{
@@ -14,17 +14,17 @@
       >
         {{ content.title }}
       </router-link>
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget :separated="!!research">
+    <d-block-widget v-if="!!research">
       <review-assessment
         v-model="assessmentCriteria"
         :research-content-type="content.content_type"
         :readonly="false"
       />
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget separated>
+    <d-block-widget>
       <v-btn
         color="primary"
         block
@@ -40,7 +40,7 @@
           for your contribution to this project
         </div>
       </div>
-    </d-block>
+    </d-block-widget>
   </div>
 </template>
 
@@ -50,13 +50,14 @@
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { AccessService } from '@deip/access-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
-    components: { DBlock },
+    components: { DBlockWidget, DBlock },
     data() {
       return {
         isLoading: false,

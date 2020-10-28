@@ -1,6 +1,8 @@
 <template>
   <div>
-    <d-block v-if="isOwner && hasInvites" class="pa-4">
+
+
+    <d-block-widget v-if="isOwner && hasInvites">
       <v-card outlined>
         <div id="invites" class="text-h6 font-weight-medium px-4 py-3 ">
           <v-badge
@@ -127,9 +129,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="isOwner && hasReviewRequests" widget separated>
+    <d-block-widget v-if="isOwner && hasReviewRequests">
       <div id="review-requests" class="text-h6 font-weight-bold pa-4">
         {{ $t('userDetailRouting.sidebar.reviewReq') }} {{ reviewRequests.length }}
       </div>
@@ -171,20 +173,18 @@
         </div>
         <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
       </div>
-    </d-block>
+    </d-block-widget>
 
     <!--  TODO: need user disciplines  -->
-    <d-block
-      widget
+    <d-block-widget
       title="Expertise Contribution Index"
-      :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
     >
       <eci-stats
         :account-name="userInfo.account.name"
         :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
         :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
       />
-    </d-block>
+    </d-block-widget>
 
     <user-claim-expertise-dialog
       :is-shown="isClaimExpertiseDialogShown"
@@ -208,6 +208,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import * as bankCardsService from '../../../utils/bankCard';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -218,6 +219,7 @@
     name: 'UserDetailsSidebar',
 
     components: {
+      DBlockWidget,
       EciStats,
       DBlock,
       UserClaimExpertiseDialog,
