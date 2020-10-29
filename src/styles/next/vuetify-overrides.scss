@@ -1,17 +1,41 @@
-//@import '~vuetify/src/styles/styles';
+@use 'sass:map';
 
-@use '~vuetify/src/styles/tools/display' as *;
-//@use '~vuetify/src/styles/tools/theme' as *;
+@use '~vuetify/src/styles/tools';
+@use '~vuetify/src/styles/settings' with (
+  $shades: (
+    'black': #1A1B22
+  )
+);
+
+@mixin theme($component: false) {
+  @if $component {
+    .theme--light.#{$component} {
+      @content(settings.$material-light)
+    }
+
+    .theme--dark.#{$component} {
+      @content(settings.$material-dark)
+    }
+  }
+  @else {
+    .theme--light {
+      @content(settings.$material-light)
+    }
+
+    .theme--dark {
+      @content(settings.$material-dark)
+    }
+  }
+};
+
+@include theme() using ($material) {
+  --color-divider: #{map.get($material, 'dividers')};
+  --color-text-primary: #{tools.map-deep-get($material, text, primary)};
+  --color-text-secondary: #{tools.map-deep-get($material, text, secondary)};
+  --color-text-disabled: #{tools.map-deep-get($material, text, disabled)};
+}
 
 .v-application {
-
-  //@include theme(xxx) {
-  //  border: 1px solid red;
-  //}
-
-  //.xxx {
-  //  content: $material;
-  //}
 
   .reset-height {
     min-height: 0 !important;
@@ -35,7 +59,7 @@
   }
 
   .visually-hidden {
-    @include visually-hidden();
+    @include tools.visually-hidden();
   }
 
   .limit-access {
