@@ -19,6 +19,7 @@
   import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
   import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
   import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
+  import { ATTR_TYPES } from '@/variables';
 
   export default {
     name: 'ResearchDetailsRenderer',
@@ -54,7 +55,7 @@
       },
 
       hasMaterials() {
-        return !!this.research.numberOfResearchContents || !this.limitedAccess;
+        return !!this.research.numberOfResearchContents || this.isMember;
       },
 
       hasReviews() {
@@ -62,7 +63,18 @@
       },
 
       limitedAccess() {
+        console.log(this.research)
+        const expressLicensingId = this.$tenantSettings.researchAttributes
+          .find((attr) => attr.type === ATTR_TYPES.EXPRESS_LICENSING)
+          ._id;
+        const hasExpressLicensing = this.ifAttribute(expressLicensingId);
+
+        if (!hasExpressLicensing) {
+          return false;
+        }
+
         const owners = this.research.researchRef.expressLicenses.map((lic) => lic.owner);
+
         return ![...this.research.members, ...owners].includes(this.$currentUserName);
       }
     },
