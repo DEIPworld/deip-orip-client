@@ -75,7 +75,7 @@
             value: 'name'
           },
           {
-            text: 'Tokenized actives',
+            text: 'Assets',
             value: 'tokenizedActives'
           },
           {
