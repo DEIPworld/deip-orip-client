@@ -78,9 +78,9 @@ export default {
     signIn: 'Sign in'
   },
   transactionsPage: {
-    signed: 'signed',
-    pending: 'pending',
-    declined: 'declined'
+    signed: 'Signed',
+    pending: 'Pending',
+    declined: 'Declined'
   },
 
   contents,

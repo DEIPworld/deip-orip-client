@@ -78,57 +78,18 @@
         </div>
       </v-card>
 
-      <v-dialog
-        v-if="inviteDetailsDialog.item"
+      <d-dialog
         v-model="inviteDetailsDialog.isShown"
-        persistent
-        max-width="600px"
+        :loading="inviteDetailsDialog.proccess"
+        :disabled="inviteDetailsDialog.proccess"
+        :confirm-button-title="$t('userDetailRouting.sidebar.acceptBtn')"
+        :cancel-button-title="$t('userDetailRouting.sidebar.rejectBtn')"
+        :title="inviteDetailsDialog.groupName"
+        @click:confirm="approveInvite"
+        @click:cancel="rejectInvite"
       >
-        <v-card class="pa-6">
-          <v-card-title>
-            <div class="text-h5">
-              {{ inviteDetailsDialog.item.group.name }}
-            </div>
-            <div class="right-top-angle">
-              <v-btn icon class="pa-0 ma-0" @click="closeInviteDetailsDialog()">
-                <v-icon color="black">
-                  close
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">
-              {{ inviteDetailsDialog.item.notes }}
-            </div>
-          </v-card-text>
-          <v-card-actions class="flex-wrap px-6">
-            <div class="w-100 py-2">
-              <v-btn
-                color="primary"
-                block
-                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                :loading="inviteDetailsDialog.isApprovingInvite"
-                @click="approveInvite()"
-              >
-                {{ $t('userDetailRouting.sidebar.acceptBtn') }}
-              </v-btn>
-            </div>
-            <div class="w-100 py-2">
-              <v-btn
-                color="primary"
-                block
-                text
-                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                :loading="inviteDetailsDialog.isRejectingInvite"
-                @click="rejectInvite()"
-              >
-                {{ $t('userDetailRouting.sidebar.rejectBtn') }}
-              </v-btn>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+        {{ inviteDetailsDialog.groupName }} {{ $t('userDetailRouting.sidebar.invitedYou') }}
+      </d-dialog>
     </d-block-widget>
 
     <d-block-widget v-if="isOwner && hasReviewRequests">
@@ -202,13 +163,14 @@
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import * as bankCardsService from '../../../utils/bankCard';
-  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const expertiseContributionsService = ExpertiseContributionsService.getInstance();
   const userService = UserService.getInstance();
@@ -219,11 +181,12 @@
     name: 'UserDetailsSidebar',
 
     components: {
-      DBlockWidget,
       EciStats,
       DBlock,
       UserClaimExpertiseDialog,
-      DBoxItem
+      DBoxItem,
+      DDialog,
+      DBlockWidget
     },
 
     data() {
@@ -232,9 +195,8 @@
         inviteDetailsDialog: {
           isShown: false,
           item: null,
-          isApprovingInvite: false,
-          isRejectingInvite: false,
-          index: null
+          groupName: '',
+          proccess: false
         }
       };
     },
@@ -281,23 +243,22 @@
       prevSlide() {
         this.invitesSlider === 0 ? this.invitesSlider = this.invites.length - 1 : this.invitesSlider--;
       },
-      openInviteDetailsDialog(invite, index) {
-        this.inviteDetailsDialog.isShown = true;
+      openInviteDetailsDialog(invite) {
         this.inviteDetailsDialog.item = invite;
-        this.inviteDetailsDialog.index = index;
+        this.inviteDetailsDialog.groupName = invite.group.name;
+        this.inviteDetailsDialog.isShown = true;
       },
 
-      closeInviteDetailsDialog(invite, index) {
-        this.inviteDetailsDialog.isShown = false;
+      closeInviteDetailsDialog() {
         this.inviteDetailsDialog.item = null;
-        this.inviteDetailsDialog.isApprovingInvite = false;
-        this.inviteDetailsDialog.isRejectingInvite = false;
+        this.inviteDetailsDialog.groupName = '';
+        this.inviteDetailsDialog.proccess = false;
       },
 
       approveInvite() {
         const invite = this.inviteDetailsDialog.item;
         const proposalId = invite._id;
-        this.inviteDetailsDialog.isApprovingInvite = true;
+        this.inviteDetailsDialog.proccess = true;
 
         researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
           inviteId: proposalId,
@@ -320,7 +281,7 @@
       rejectInvite() {
         const invite = this.inviteDetailsDialog.item;
         const proposalId = invite._id;
-        this.inviteDetailsDialog.isRejectingInvite = true;
+        this.inviteDetailsDialog.proccess = true;
 
         researchGroupService.rejectResearchGroupInviteViaOffChain(this.currentUser.privKey, {
           inviteId: proposalId,

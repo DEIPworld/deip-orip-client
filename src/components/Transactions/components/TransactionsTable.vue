@@ -1,25 +1,25 @@
 <template>
   <div>
     <v-data-table
+      hide-default-header
       :headers="tableHeader"
       :items="dataTable"
       :expanded.sync="expanded"
       show-expand
       item-key="_id"
       sort-by="updated_at"
+      class="black--text"
       sort-desc
       :hide-default-footer="dataTable.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
     >
       <template #item.type="{ item }">
-        <v-chip
-          class="my-3"
-          :color="chipColors[transactionTypes['LICENSE']].bg"
-          :text-color="chipColors[transactionTypes['LICENSE']].textColor"
-        >
-          License
-        </v-chip>
+        <div class="d-flex">
+          <v-icon size="20" left color="black">
+            {{ transactionTypes['LICENSE'].icon }}
+          </v-icon>{{ transactionTypes['LICENSE'].text }}
+        </div>
       </template>
       <template #item.requester="{ item }">
         <d-box-item
@@ -34,20 +34,20 @@
         </d-box-item>
       </template>
       <template #item.researchGroupExternalId="{ item }">
-        <d-box-item
-          :avatar="item.researchGroupExternalId | researchGroupLogoSrc(64, 64)"
-          :size="24"
-        >
-          <v-clamp autoresize :max-lines="1">
-            {{ item.extendedDetails.researchGroup.name }}
-          </v-clamp>
-        </d-box-item>
-      </template>
-      <template #item.created_at="{ item }">
-        {{ item.created_at | dateFormat('DD MMM YYYY, hh:mm', true) }}
+        <v-clamp autoresize :max-lines="2">
+          {{ item.extendedDetails.researchGroup.name }}
+          ( {{ $$toAssetUnits(item.licencePlan.fee) }} )
+        </v-clamp>
       </template>
       <template #item.expirationDate="{ item }">
-        {{ item.expirationDate | dateFormat('DD MMM YYYY, hh:mm', true) }}
+        <div class="white-space-nowrap">
+          <div v-if="item.status === txStatus.pending">
+            Expires in {{ item.expirationDate | timeLeft }}
+          </div>
+          <div v-else>
+            {{ item.created_at | dateFormat('DD MMM YYYY, hh:mm', true) }}
+          </div>
+        </div>
       </template>
       <template #item.actions="{ item }">
         <template v-if="!item.approvers.includes($currentUser.username)">
@@ -81,186 +81,160 @@
         </template>
       </template>
       <template #item.status="{ item }">
-        <v-chip class="my-3" :color="statusChipData.color[item.status]">
+        <div class="d-flex">
+          <v-icon :color="statusChipData.color[item.status]" size="13" class="mr-1">
+            {{ statusChipData.icon[item.status] }}
+          </v-icon>
           {{ statusChipData.text[item.status] }}
-        </v-chip>
+        </div>
       </template>
       <template #expanded-item="{ item, headers }">
-        <td :colspan="headers.length" class="pa-0">
-          <v-simple-table>
-            <thead style="visibility: collapse">
-              <tr>
-                <th
-                  v-for="(item, i) in tableHeader"
-                  :key="`${i}-colHeader`"
-                  :width="item.width"
-                >
-                  {{ item.text }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td
-                  :colspan="tableHeader.length - 3"
-                  class="text-caption text--secondary"
-                >
-                  <div>
-                    <span class="font-weight-medium"> Technology: </span>
-                    <router-link
-                      :to="{
-                        name: 'research.details',
-                        params: {
-                          researchExternalId:
-                            item.extendedDetails.research.external_id,
-                        },
-                      }"
-                      class="text-decoration-underline text--secondary"
-                    >
-                      {{ item.extendedDetails.research.title }}
-                    </router-link>
-                  </div>
-                  <div>
-                    <span class="font-weight-medium"> License type: </span>
-                    {{ item.licencePlan.name }}
-                  </div>
-                  <div>
-                    <span class="font-weight-medium"> License issue fee: </span>
-                    {{ $$toAssetUnits(item.licencePlan.fee) }}
-                  </div>
-                </td>
-                <td colspan="2" class="mb-n3 px-0 pt-3">
-                  <template v-for="(accountData, i) in item.accountsData">
-                    <d-box-item
-                      v-for="(account, j) in accountData.accounts"
-                      :key="`${i}-${j}-accounts`"
-                      :avatar="
-                        account.profile
-                          ? $options.filters.avatarSrc(
-                            account.profile,
-                            64,
-                            64,
-                            false
-                          )
-                          : $options.filters.researchGroupLogoSrc(
-                            account.external_id,
-                            64,
-                            64
-                          )
-                      "
-                      :size="24"
-                      class="mb-3 ml-auto"
-                      style="max-width: 270px"
-                    >
-                      <router-link
-                        :to="
-                          account.profile
-                            ? {
-                              name: 'UserDetails',
-                              params: { account_name: account.account.name },
-                            }
-                            : {
-                              name: 'ResearchGroupDetails',
-                              params: {
-                                research_group_permlink: encodeURIComponent(
-                                  account.permlink
-                                ),
-                              },
-                            }
-                        "
-                        class="text--secondary text-caption"
-                      >
-                        <v-clamp autoresize :max-lines="1">
-                          {{
-                            account.profile
-                              ? $options.filters.fullname(account)
-                              : account.name
-                          }}
-                        </v-clamp>
-                      </router-link>
-                      <template #actionText>
-                        <div style="width: 93px">
-                          <v-chip
-                            small
-                            :color="statusChipData.color[accountData.status]"
-                          >
-                            {{ statusChipData.text[accountData.status] }}
-                          </v-chip>
-                        </div>
-                      </template>
-                    </d-box-item>
-                  </template>
-                </td>
-                <td>
-                  <v-icon
-                    :class="{'expand-icon--active': item.expand}"
-                    @click="item.expand ? item.expand-- : item.expand++"
+        <td />
+        <td class="pa-4 text--secondary">
+          <div class="mb-6">
+            <div>
+              <span class="font-weight-medium"> License type: </span>
+              {{ item.licencePlan.name }}
+            </div>
+            <div>
+              <span class="font-weight-medium"> Receipt: </span>
+              {{ item.created_at | dateFormat('DD MMM YYYY, hh:mm', true) }}
+            </div>
+            <div>
+              <span class="font-weight-medium"> Expiration: </span>
+              {{ item.expirationDate | dateFormat('DD MMM YYYY, hh:mm', true) }}
+            </div>
+          </div>
+          <div class="mb-4">
+            Signees:
+          </div>
+          <v-expansion-panels
+            flat
+            multiple
+            readonly
+            :value="item.expand"
+          >
+            <template v-for="(accountData, i) in item.accountsData">
+              <v-expansion-panel
+                v-for="(account, j) in accountData.accounts"
+                :key="`${i}-${j}-accounts`"
+                class="pa-0"
+                :class="{'mb-8': !item.expand.length}"
+              >
+                <v-expansion-panel-header class="pa-0" hide-actions>
+                  <d-box-item
+                    :avatar="
+                      account.profile
+                        ? $options.filters.avatarSrc(
+                          account.profile,
+                          64,
+                          64,
+                          false
+                        )
+                        : $options.filters.researchGroupLogoSrc(
+                          account.external_id,
+                          64,
+                          64
+                        )
+                    "
+                    :size="40"
+                    class="mb-3"
+                    style="max-width: 300px"
                   >
-                    mdi-chevron-up
-                  </v-icon>
-                </td>
-              </tr>
-              <tr :hidden="!!item.expand">
-                <td :colspan="tableHeader.length">
-                  <v-expansion-panels accordion flat :value="item.expand">
-                    <v-expansion-panel class="pa-0">
-                      <v-expansion-panel-content class="pa-0">
-                        <div class="mx-n6 mt-3 mb-n1">
-                          <div class="text-caption mb-3">
-                            Signee
-                          </div>
-                          <template
-                            v-for="(historyStatus, i) in item.chainHistoryDataTable"
+                    <router-link
+                      :to="
+                        account.profile
+                          ? {
+                            name: 'UserDetails',
+                            params: { account_name: account.account.name },
+                          }
+                          : {
+                            name: 'ResearchGroupDetails',
+                            params: {
+                              research_group_permlink: encodeURIComponent(
+                                account.permlink
+                              ),
+                            },
+                          }
+                      "
+                      class="text--secondary text-caption text-decoration-none"
+                    >
+                      <v-clamp autoresize :max-lines="1" class="text-h6">
+                        {{
+                          account.profile
+                            ? $options.filters.fullname(account)
+                            : account.name
+                        }}
+                      </v-clamp>
+                    </router-link>
+                    <template #actionText>
+                      <div style="width: 93px">
+                        <div class="d-flex black--text text-body-2">
+                          <v-icon
+                            :color="statusChipData.color[accountData.status]"
+                            size="13"
+                            class="mr-1"
                           >
-                            <div
-                              v-for="(history, j) in historyStatus.historys"
-                              :key="`${i}-${j}-history`"
-                              class="mb-3 text--secondary d-flex align-center text-caption"
-                            >
-                              <v-chip
-                                :color="statusChipData.color[historyStatus.status]"
-                                class="mr-1 flex-grow-0 flex-shrink-0"
-                                small
-                              >
-                                {{ statusChipData.text[historyStatus.status] }}
-                              </v-chip>
-                              <div>
-                                {{
-                                  history.account.name ||
-                                    $options.filters.fullname(history.account) ||
-                                    '—'
-                                }}
-                                (<span class="font-weight-medium">
-                                  Transaction ID:
-                                </span>
-                                <span class="mr-2">{{ history.id || '—' }}</span>
-                                <span class="font-weight-medium"> Block: </span>
-                                <span class="mr-2">{{
-                                  history.block_num || '—'
-                                }}</span>
-                                <span class="font-weight-medium"> Timestamp: </span>
-                                {{
-                                  history.timestamp
-                                    ? $options.filters.dateFormat(
-                                      history.timestamp,
-                                      'DD MMM YYYY, hh:mm',
-                                      true
-                                    )
-                                    : '—'
-                                }}
-                                )
-                              </div>
-                            </div>
-                          </template>
+                            {{ statusChipData.icon[accountData.status] }}
+                          </v-icon>
+                          {{ statusChipData.text[accountData.status] }}
                         </div>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                </td>
-              </tr>
-            </tbody>
-          </v-simple-table>
+                      </div>
+                    </template>
+                  </d-box-item>
+                </v-expansion-panel-header>
+                <v-expansion-panel-content class="pa-0">
+                  <template
+                    v-for="(historyStatus, i) in item.chainHistoryDataTable"
+                  >
+                    <template v-for="(history, j) in historyStatus.historys">
+                      <div
+                        v-if="history.account.account.name === account.account.name || history.account.external_id === account.account.name"
+                        :key="`${i}-${j}-history`"
+                        class="mb-8 text--secondary text-caption"
+                      >
+                        <div>
+                          <span class="font-weight-medium">
+                            Transaction ID:
+                          </span>
+                          <span class="mr-2">{{ history.id || '—' }}</span>
+                        </div>
+                        <div>
+                          <span class="font-weight-medium"> Block: </span>
+                          <span class="mr-2">{{
+                            history.block_num || '—'
+                          }}</span>
+                        </div>
+                        <div>
+                          <span class="font-weight-medium"> Timestamp: </span>
+                          {{
+                            history.timestamp
+                              ? $options.filters.dateFormat(
+                                history.timestamp,
+                                'DD MMM YYYY, hh:mm',
+                                true
+                              )
+                              : '—'
+                          }}
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </template>
+          </v-expansion-panels>
+          <v-btn
+            text
+            color="primary"
+            small
+            class="text-caption font-weight-bold"
+            @click="showDetails(item)"
+          >
+            {{ !item.expand.length ? 'Show transactions details' : 'Hide transactions details' }}
+          </v-btn>
         </td>
+        <td :colspan="headers.length - 2" />
       </template>
     </v-data-table>
     <v-divider />
@@ -277,7 +251,17 @@
   const expressLicensingService = ExpressLicensingService.getInstance();
 
   const transactionTypes = {
-    LICENSE: 1
+    LICENSE: {
+      id: 1,
+      icon: 'work',
+      text: 'Licensing'
+    }
+  };
+
+  const txStatus = {
+    approved: 'approved',
+    pending: 'pending',
+    resolved: 'resolved'
   };
 
   const chipColors = {
@@ -310,11 +294,17 @@
       return {
         expanded: [],
         transactionTypes,
+        txStatus,
         disableButtonsId: '',
         txStatusChips: {
-          approved: this.$t('transactionsPage.signed'),
-          pending: this.$t('transactionsPage.pending'),
-          rejected: this.$t('transactionsPage.declined')
+          [txStatus.approved]: this.$t('transactionsPage.signed'),
+          [txStatus.pending]: this.$t('transactionsPage.pending'),
+          [txStatus.rejected]: this.$t('transactionsPage.declined')
+        },
+        txStatusChipIcons: {
+          [txStatus.approved]: 'check_circle',
+          [txStatus.pending]: 'mdi-clock-time-three',
+          [txStatus.rejected]: 'mdi-minus-circle'
         }
       };
     },
@@ -327,20 +317,14 @@
             sortable: false
           },
           {
-            text: 'Sender',
-            value: 'requester',
-            sortable: false
-          },
-          {
             text: 'Target',
             value: 'researchGroupExternalId',
-            sortable: false
+            sortable: false,
+            width: '45%'
           },
           {
-            text: 'Date of receipt',
-            value: 'created_at',
-            align: 'end',
-            sortable: false
+            text: 'Status',
+            value: 'status'
           },
           {
             text: 'Expiration date',
@@ -349,19 +333,13 @@
             sortable: false
           },
           {
-            text: 'Status',
-            value: 'status',
-            width: '109px'
-          },
-          {
             text: '',
             value: 'data-table-expand',
-            align: 'start elevetion-0',
-            width: '56px'
+            align: 'start elevetion-0'
           }
         ];
         if (this.haveActions) {
-          header.splice(5, 0, {
+          header.splice(4, 0, {
             text: 'Actions',
             value: 'actions'
           });
@@ -379,7 +357,8 @@
       statusChipData() {
         return {
           color: chipColors,
-          text: this.txStatusChips
+          text: this.txStatusChips,
+          icon: this.txStatusChipIcons
         };
       },
       isCurrentUserSigned() {
@@ -389,10 +368,13 @@
       }
     },
 
-    created() {
-      // console.log(this.dataTable);
-    },
     methods: {
+      showDetails(item) {
+        const expandData = item.accountsData.flat();
+        !item.expand.length
+          ? item.expand = expandData.map((item, i) => i)
+          : item.expand = [];
+      },
       approveExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
         expressLicensingService
@@ -411,7 +393,7 @@
               this.$store.dispatch('Transactions/loadApprovedRequests'),
               this.$store.dispatch('Transactions/loadPendingRequests')
             ]);
-            this.$notifier.showSuccess('Approved successfully !');
+            this.$notifier.showSuccess('Approve successfully !');
           })
           .catch((err) => {
             console.error(err);
@@ -442,7 +424,7 @@
               this.$store.dispatch('Transactions/loadApprovedRequests'),
               this.$store.dispatch('Transactions/loadPendingRequests')
             ]);
-            this.$notifier.showSuccess('Declined successfully !');
+            this.$notifier.showSuccess('Approve successfully !');
           })
           .catch((err) => {
             console.error(err);

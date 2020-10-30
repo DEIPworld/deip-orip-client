@@ -4,7 +4,9 @@
       <v-badge
         :content="projects.length || '0'"
       >
-        {{ $t('defaultNaming.projects') }}
+        <slot name="title">
+          {{ $t('defaultNaming.projects') }}
+        </slot>
       </v-badge>
     </template>
 

@@ -84,6 +84,7 @@ import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
 
 import { exploreRouter } from '@/components/Explore';
+import { WalletRouting } from '@/components/Wallet/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -221,18 +222,20 @@ const router = new Router({
     path: '/:account_name/create-research-group',
     name: 'CreateResearchGroup',
     component: CreateResearchGroup
-  }, {
-    path: '/:research_group_permlink/wallet',
-    name: 'ResearchGroupWallet',
-    component: preliminaryDataLoader(ResearchGroupWallet, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-          permlink: decodeURIComponent(to.params.research_group_permlink)
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
+  },
+  //  {
+  //   path: '/:research_group_permlink/wallet',
+  //   name: 'ResearchGroupWallet',
+  //   component: preliminaryDataLoader(ResearchGroupWallet, {
+  //     beforeEnter: (to, from, next) => {
+  //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
+  //         permlink: decodeURIComponent(to.params.research_group_permlink)
+  //       });
+  //       loadPage(loadPagePromise, next);
+  //     }
+  //   })
+  // },
+   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
@@ -458,6 +461,7 @@ const router = new Router({
     ...overviewRouting,
     ...landingRouting,
     ...TransactionsRouting,
+    ...WalletRouting,
 
   {
     path: '/user-wallet',

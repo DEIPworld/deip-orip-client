@@ -147,8 +147,8 @@
             {
               label: this.$t('topMenu.wallet'),
               to: {
-                name: 'UserWallet',
-                params: { account_name: this.user.username }
+                name: 'userWallet',
+                params: { account: this.user.username }
               }
             },
             {
@@ -172,8 +172,8 @@
             {
               label: this.$t('topMenu.wallet'),
               to: {
-                name: 'UserWallet',
-                params: { account_name: this.user.username }
+                name: 'userWallet',
+                params: { account: this.user.username }
               }
             }
           ];

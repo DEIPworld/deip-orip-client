@@ -7,12 +7,12 @@
       <v-tabs v-model="tab">
         <v-tab :key="1">
           <v-badge color="primary" inline :content="`${pendingRequests.length}`">
-            Incomplete
+            Pending
           </v-badge>
         </v-tab>
         <v-tab :key="2">
           <v-badge color="primary" inline :content="`${approvedRequests.length}`">
-            Completed
+            History
           </v-badge>
         </v-tab>
       </v-tabs>
@@ -102,7 +102,7 @@
           ...item,
           accountsData: accountData(item),
           chainHistoryDataTable: chainHistoryDataTable(item),
-          expand: 1
+          expand: []
         }
         ));
       },
@@ -149,7 +149,7 @@
           ...item,
           accountsData: accountData(item),
           chainHistoryDataTable: chainHistoryDataTable(item),
-          expand: 1
+          expand: []
         }
         ));
       }

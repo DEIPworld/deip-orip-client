@@ -91,6 +91,8 @@ const getters = {
 
   userIsResearchGroupMember: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.id),
 
+  userIsResearchGroupMemberExId: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.external_id),
+
   userCoworkers: (state, getters) => state.user.coworkers,
 
   userJoinRequests: (state, getters) => state.user.joinRequests,

@@ -411,7 +411,7 @@
             <v-text-field
               v-model="sendResearchTokensDialog.form.amount"
               v-mask="'##'"
-              :label="$t('userWallet.sendResearchTokensDialog.share')"
+              :label="$t('userWallet.sendResearchTokensDialog.shareField')"
               outlined
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
@@ -522,6 +522,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </layout-section>
 </template>
 
@@ -532,6 +533,9 @@
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import * as bankCardsStorage from '../../../utils/bankCard';
+  import { InvestmentsService } from '@deip/investments-service';
+  
+  const investmentsService = InvestmentsService.getInstance();
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
@@ -873,9 +877,20 @@
     },
 
     created() {
+      // getSecurityTokenBalancesByOwner //Что бы отразить в кошельке в таблице какими security tokens обладает аккаунт
+      // getAccountRevenueHistoryBySecurityToken //Что бы отразить график с историей ревенью
+      investmentsService.getSecurityTokenBalance("d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2", "33419d85f774d882aa1e2d416de78e0b73675c9e")
+        .then((res) => console.log(res, 'getSecurityTokenBalance'))
+      // investmentsService.getSecurityTokenBalancesByResearch('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
+      //   .then((res) => console.log(res, 'getSecurityTokenBalancesByResearch'))
+      investmentsService.getSecurityTokenBalancesByOwner('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
+        .then((res) => console.log(res, 'getSecurityTokenBalancesByOwner'))
+      investmentsService.getAccountRevenueHistoryBySecurityToken('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2', '33419d85f774d882aa1e2d416de78e0b73675c9e')
+        .then((res) => console.log(res, 'getAccountRevenueHistoryBySecurityToken'))
       this.$store.dispatch('userWallet/loadWallet', {
         username: decodeURIComponent(this.username)
-      }).then(() => { this.$setReady(); });
+      }).then(() => { console.log(this.investments, 'this.investments'); this.$setReady(); });
+      console.log(this.$route)
     },
 
     methods: {

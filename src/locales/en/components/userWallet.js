@@ -1,6 +1,7 @@
 export default {
   balance: 'Balance',
   portfolio: 'Portfolio',
+  groups: 'Groups',
   transfer: 'Transfer',
   deposit: 'Deposit',
   withdraw: 'Withdraw',
@@ -42,14 +43,14 @@ export default {
     transfer: 'Transfer Research Share',
     receiverField: 'Receiver',
     shareField: 'Share',
-    submitBtn: 'Send'
+    submitBtn: 'Transfer'
   },
   sendTokensDialog: {
     transfer: 'Transfer',
     toField: 'To',
     amount: 'Amount',
     memoField: 'Memo - optional',
-    submitBtn: 'Send'
+    submitBtn: 'Transfer'
   },
   translations: {
     name: {

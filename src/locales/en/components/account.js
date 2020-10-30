@@ -3,6 +3,7 @@ export default {
     projectsBlock: {
       title: 'Projects',
       teamsPr: 'Team\'s projects',
+      pr: 'Projects',
       myPr: 'My projects',
       follPr: 'Following projects',
       prReq: 'Project requests'
@@ -48,10 +49,13 @@ export default {
       submitBtn: 'Update Info'
     }
   },
-  followingProjects: {
+  projects: {
     notFollPr: 'You’re not following any project yet',
     aLotOfPr: 'We have a lot of incredible projects on our platform. Take a look',
-    browseBtn: 'Browse projects'
+    browseBtn: 'Browse projects',
+    teamsTech: 'Team\'s Technologies',
+    myTech: 'My Technologies',
+    follTech: 'Following Technologies'
   },
   groups: {
     teams: 'Teams',

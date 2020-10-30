@@ -13,17 +13,17 @@
           <v-col cols="auto" class="text-center">
             <img width="64px" class="mb-3" src="/assets/img/follow-project.png">
             <div class="text-h5 mb-3">
-              {{ $t('account.followingProjects.notFollPr') }}
+              <!-- {{ $t('account.projects.notFollPr') }} -->
             </div>
             <div class="text-body-1 mb-12">
-              {{ $t('account.followingProjects.aLotOfPr') }}
+              <!-- {{ $t('account.projects.aLotOfPr') }} -->
             </div>
             <div>
               <v-btn
                 :to="{ name: 'explore' }"
                 color="primary"
               >
-                {{ $t('account.followingProjects.browseBtn') }}
+                <!-- {{ $t('account.projects.browseBtn') }} -->
               </v-btn>
             </div>
           </v-col>
