@@ -203,8 +203,8 @@
         expanded: [],
         tableHeader: [
           {
-            text: 'Team',
-            value: 'research.research_group.name'
+            text: 'Asset',
+            value: 'research.title'
           },
           {
             text: 'Tokens and share',
