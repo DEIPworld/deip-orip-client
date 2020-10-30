@@ -1,7 +1,7 @@
 export default {
   balance: 'Currencies',
   portfolio: 'Shares',
-  groups: 'Groups',
+  groups: 'Teams',
   transfer: 'Transfer',
   deposit: 'Deposit',
   withdraw: 'Withdraw',
