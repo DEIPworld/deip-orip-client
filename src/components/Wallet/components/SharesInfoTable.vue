@@ -15,7 +15,7 @@
       :expanded.sync="expanded"
     >
       <template #item.research.research_group.name="{ item }">
-        <span class="text-body-1">{{ item.research.research_group.name }}</span>
+        <span class="text-body-1">{{ item.research.title }}</span>
       </template>
       <template #item.myShare.amount="{ item }">
         <div class="text-body-1">

@@ -277,7 +277,6 @@
     </v-dialog>
 
     <d-dialog
-      v-if="$ready"
       v-model="sendTokensDialog.isOpened"
       title="Transfer asset"
       max-width="570px"
@@ -631,9 +630,6 @@
             .then(() => { this.$setReady(); });
         }
       },
-      closeSendTokensDialog() {
-        this.sendTokensDialog.isOpened = false;
-      },
       closeWithdrawDialog() {
         this.withdrawDialog.isOpened = false;
       },
@@ -645,6 +641,8 @@
       },
       openSendTokensDialog(balance) {
         this.sendTokensDialog.isOpened = true;
+
+        console.log(1)
 
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
 
