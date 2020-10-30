@@ -88,23 +88,5 @@ const getVimeoEmbedUrlFromVideoUrl = (url) => {
   return null;
 };
 
-const getYoutubeEmbedUrlFromVideoUrl = (url) => {
-  const getUrlFromVideoId = (id) => `https://www.youtube.com/embed/${id}`;
-
-  const _url = new URL(url);
-  if (_url.hostname.indexOf('youtube.com') > -1) {
-    return getUrlFromVideoId(_url.searchParams.get('v'));
-  }
-
-  if (_url.hostname === 'youtu.be') {
-    return getUrlFromVideoId(_url.pathname.split('/')[1]);
-  }
-
-  return null;
-};
-
-Vue.prototype.getEmbedVideoUrl = (url) => getVimeoEmbedUrlFromVideoUrl(url)
-    || getYoutubeEmbedUrlFromVideoUrl(url)
-    || url;
 Vue.prototype.MASTER_PASSWORD_MIN_LENGTH = 10;
 Vue.prototype.MASTER_PASSWORD_MAX_LENGTH = 100;

@@ -1,12 +1,3 @@
-<template>
-  <component
-    :is="attributeComponent"
-    v-model="internalValue"
-    :attribute="attribute"
-    :view-type="viewType"
-  />
-</template>
-
 <script>
   import {
     attributeViewTypeComponent,
@@ -22,6 +13,6 @@
       AttributesStepperSetDefault,
       AttributesStepperSetFilter
     },
-    mixins: [attributeSet, attributeViewTypeComponent]
+    mixins: [attributeViewTypeComponent]
   };
 </script>

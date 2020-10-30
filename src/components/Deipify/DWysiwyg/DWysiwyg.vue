@@ -110,9 +110,78 @@
 </script>
 
 <style lang="scss">
+  // TODO: make own theme
+
   .d-wysiwyg {
+    --d-wysiwyg-border-color: var(--color-divider);
+
+    .error--text & {
+      --d-wysiwyg-border-color: var(--v-error-base);
+    }
+
     .v-label {
       font-size: 12px;
+    }
+
+    .quillWrapper {
+
+
+
+      .ql-snow {
+        &.ql-toolbar {
+          display: flex;
+          padding: 8px 4px;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
+          border-color: var(--d-wysiwyg-border-color);
+
+          .ql-formats {
+            margin: 0 16px 0 0;
+            display: grid;
+            grid-auto-flow: column;
+
+            &:after {
+              display: none;
+            }
+          }
+
+          button {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+
+            color: var(--color-text-secondary);
+            transition: all .2s;
+
+            &.ql-active {
+              color: var(--v-primary-base);
+            }
+
+            &:hover {
+              background-color: rgba(#1A1B22, .04);
+            }
+          }
+        }
+
+        &.ql-container {
+          font-family: "Roboto", sans-serif;
+          border-bottom-left-radius: 4px;
+          border-bottom-right-radius: 4px;
+          border-color: var(--d-wysiwyg-border-color);
+
+          .ql-editor {
+            font-size: 14px;
+            padding: 12px;
+
+            > * {
+              &:not(:first-child) {
+                margin-top: 12px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 </style>

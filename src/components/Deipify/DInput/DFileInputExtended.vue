@@ -3,7 +3,7 @@
     <d-file-input
       v-model="fileModel"
       :label="label"
-      v-bind="inputProps"
+      v-bind="attrs$"
       hide-details="auto"
     />
     <slot name="existList" :files="existsFiles">
@@ -30,43 +30,34 @@
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
-  import DFileInput from '@/components/Deipify/DInput/DFileInput';
-  import { wrapInArray } from 'vuetify/lib/util/helpers';
-  import DStack from '@/components/Deipify/DStack/DStack';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+
   import { filesChore } from '@/mixins/chores';
+
+  import { wrapInArray } from 'vuetify/lib/util/helpers';
+
+  import DFileInput from '@/components/Deipify/DInput/DFileInput';
+  import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
     name: 'DFileInputExtended',
     components: { DStack, DFileInput },
-    mixins: [Proxyable, filesChore],
+    mixins: [Proxyable, BindsAttrs, filesChore],
     props: {
       urlBuilder: {
         type: Function,
         default: (val) => val
       },
-      multiple: {
-        type: Boolean,
-        default: false
-      },
       label: {
         type: String,
         default: undefined
-      }
+      },
     },
     data() {
       return {
         fileModel: undefined,
         existsFiles: undefined
       };
-    },
-    computed: {
-      inputProps() {
-        return {
-          // In file input 'multiple' not prop but attr.
-          // true/false not affect
-          ...(this.multiple ? { multiple: true } : {})
-        };
-      },
     },
     watch: {
       fileModel(files) {

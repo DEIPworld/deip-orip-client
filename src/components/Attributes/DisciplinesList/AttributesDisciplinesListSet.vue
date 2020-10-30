@@ -1,5 +1,5 @@
 <script>
-  import { attributeViewTypeComponent, attributeSet } from '@/components/Attributes/_mixins';
+  import { attributeViewTypeComponent } from '@/components/Attributes/_mixins';
   import { arrayedModel } from '@/mixins/extendModel';
 
   import AttributesDisciplinesListSetDefault from './Set/AttributesDisciplinesListSetDefault';
@@ -9,7 +9,7 @@
     components: {
       AttributesDisciplinesListSetDefault
     },
-    mixins: [attributeSet, attributeViewTypeComponent, arrayedModel],
+    mixins: [attributeViewTypeComponent, arrayedModel],
     watch: {
       internalValue(val) {
         if (!val) {

@@ -1,31 +1,42 @@
 <template>
-  <v-select
-    v-model="internalValue"
-    :label="attribute.title"
-    :items="attribute.valueOptions"
-    hide-details="auto"
-    item-text="title"
-    item-value="value"
-    outlined
+  <validation-provider
+    v-slot="{ errors }"
+    :name="attribute.title"
+    :rules="$$veeRules"
   >
-    <template #selection="{ item }">
-      <div class="d-flex align-center" style="max-width: 100%">
-        <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
-          {{ attribute.valueOptions.indexOf(item) + 1 }}
-        </v-avatar>
-        <div class="text-body-2 text-truncate">{{ item.title }}</div>
-      </div>
-    </template>
+    <v-select
+      v-model="internalValue"
 
-    <template #item="{ item, on }">
-      <div class="d-flex align-center" v-on="on">
-        <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
-          {{ attribute.valueOptions.indexOf(item) + 1 }}
-        </v-avatar>
-        <div class="text-body-2 text-truncate">{{ item.title }}</div>
-      </div>
-    </template>
-  </v-select>
+      :label="attribute.title"
+      :items="attribute.valueOptions"
+
+      item-text="title"
+      item-value="value"
+
+      hide-details="auto"
+      :error-messages="errors"
+
+      outlined
+    >
+      <template #selection="{ item }">
+        <div class="d-flex align-center" style="max-width: 100%">
+          <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
+            {{ attribute.valueOptions.indexOf(item) + 1 }}
+          </v-avatar>
+          <div class="text-body-2 text-truncate">{{ item.title }}</div>
+        </div>
+      </template>
+
+      <template #item="{ item, on }">
+        <div class="d-flex align-center" v-on="on">
+          <v-avatar :size="20" color="primary" class="white--text text-body-2 font-weight-medium mr-2">
+            {{ attribute.valueOptions.indexOf(item) + 1 }}
+          </v-avatar>
+          <div class="text-body-2 text-truncate">{{ item.title }}</div>
+        </div>
+      </template>
+    </v-select>
+  </validation-provider>
 </template>
 
 <script>
@@ -37,7 +48,10 @@
     methods: {
       // TODO: check
       onChange(key, value) {
-        this.$emit('change', { researchAttributeId: key, value })
+        this.$emit('change', {
+          researchAttributeId: key,
+          value
+        });
       }
     }
   };

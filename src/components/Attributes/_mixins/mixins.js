@@ -1,8 +1,35 @@
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
+import { commonProps } from '@/variables/props';
+
+const componentTypeRender = {
+  name: 'componentTypeRender',
+  methods: {
+    genComponent() {
+      const self = this;
+
+      return this.$createElement(this.attributeComponent, {
+        props: {
+          value: this.internalValue,
+          attribute: this.attribute,
+          viewType: this.viewType
+        },
+        class: {
+          'visually-hidden': this.attribute.isHidden
+        },
+        on: {
+          change(e) {
+            self.$emit('change', e);
+          }
+        }
+      }, null);
+    }
+  }
+};
 
 export const attributeTypeComponent = {
-  mixins: [tenantAttributes],
+  mixins: [tenantAttributes, componentTypeRender],
+
   computed: {
     attributeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
@@ -26,20 +53,14 @@ export const attributeTypeComponent = {
 };
 
 export const attributeViewTypeComponent = {
-  data() {
-    return {
-      allowedViewTypes$: ['default'],
-      defaultViewType$: 'default'
-    };
-  },
-  computed: {
-    attributeViewTypeComponent() {
-      const viewType = this.viewType && this.allowedViewTypes$.includes(this.viewType)
-        ? this.viewType
-        : this.defaultViewType$;
-      return `${this.$options.name}${pascalCase(viewType)}`;
-    },
+  mixins: [componentTypeRender],
 
+  props: {
+    ...commonProps.attribute,
+    ...commonProps.viewType
+  },
+
+  computed: {
     attributeComponent() {
       const defaultView = `${this.$options.name}${pascalCase('default')}`;
 
@@ -51,5 +72,8 @@ export const attributeViewTypeComponent = {
       }
       return defaultView;
     }
+  },
+  render() {
+    return this.genComponent();
   }
 };

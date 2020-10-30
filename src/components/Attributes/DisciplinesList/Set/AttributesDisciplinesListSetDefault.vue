@@ -8,41 +8,53 @@
       max-height="560"
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-text-field
-          v-model="search"
-          :label="attribute.title"
-          outlined
-          hide-details="auto"
-          v-bind="attrs"
-          v-on="on"
-        />
+        <div>
+          <v-text-field
+            v-model="search"
+            :label="attribute.title"
+            :error-messages="$refs.validator ? $refs.validator.errors : []"
+            outlined
+            hide-details="auto"
+            v-bind="attrs"
+            v-on="on"
+          />
+        </div>
       </template>
 
       <v-sheet>
-        <v-treeview
-          :value="internalValue"
-          :active="internalValue"
+        <validation-provider
+          ref="validator"
+          v-slot="{ errors, validate }"
+          :detect-input="false"
+          :name="attribute.title"
+          rules="required"
+        >
+          <v-treeview
+            :value="internalValue"
+            :active="internalValue"
 
-          hoverable
+            hoverable
 
-          activatable
-          multiple-active
+            activatable
+            multiple-active
 
-          selectable
-          selection-type="independent"
+            selectable
+            selection-type="independent"
 
-          :items="disciplinesTree"
-          item-key="id"
-          item-text="label"
+            :items="disciplinesTree"
+            item-key="id"
+            item-text="label"
 
-          :search="search"
+            :search="search"
 
-          class="py-2"
-          :class="{'v-treeview--without-children': withoutAnyChildren}"
+            class="py-2"
+            :class="{'v-treeview--without-children': withoutAnyChildren}"
 
-          @input="onInput"
-          @update:active="onInput"
-        />
+            @input="onInput($event); validate($event);"
+            @update:active="onInput"
+          />
+
+        </validation-provider>
       </v-sheet>
     </v-menu>
     <div
@@ -79,6 +91,16 @@
   import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
   import { arrayedModel } from '@/mixins/extendModel';
 
+  import { extend } from 'vee-validate';
+
+  extend('required', {
+    validate(value) {
+      console.log(value, !!value.length)
+      return !!value.length;
+    },
+    message: '{_field_} is required'
+  });
+
   export default {
     name: 'AttributesDisciplinesListSet',
     mixins: [attributeSet, arrayedModel],
@@ -87,7 +109,9 @@
         search: '',
         open: false,
         oldValue: [],
-        menuTop: false
+        menuTop: false,
+
+        validationErrors: []
       };
     },
     computed: {
@@ -99,7 +123,7 @@
               t.children = transform(t.children);
             } else {
               delete t.children;
-            };
+            }
           }
           return Object.values(obj);
         }
@@ -141,15 +165,15 @@
           return lhsi > rhsi ? 1 : lhsi < rhsi ? -1 : 0;
         });
         return sorted;
-      }
+      },
     },
 
     methods: {
-      onInput(value) {
+      onInput(value, validate) {
         const removed = this.oldValue.length > value.length;
         const changedId = (removed
-            ? arrayDiff(value, this.oldValue)
-            : arrayDiff(this.oldValue, value)
+          ? arrayDiff(value, this.oldValue)
+          : arrayDiff(this.oldValue, value)
         )[0];
 
         if (removed) {
@@ -159,6 +183,10 @@
         }
 
         this.oldValue = [...value];
+
+        // this.$refs.validator.validate(this.internalValue).then((ctx) => {
+        //   this.validationErrors = ctx.errors;
+        // });
       },
 
       getItemPath(id) {

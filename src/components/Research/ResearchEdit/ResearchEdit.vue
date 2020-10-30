@@ -1,35 +1,34 @@
 <template>
   <d-layout-full-screen :title="title">
-    <d-form v-if="$ready" :disabled="processing" @submit="onSubmit">
-<!--      <pre>{{ JSON.stringify(onchainData, null, 2) }}</pre>-->
-<!--      <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
-<!--      <pre>{{ JSON.stringify(layoutSchema, null, 2) }}</pre>-->
-      <research-edit-renderer
-        v-model="formModel"
-        :schema="layoutSchema"
-      />
+    <validation-observer v-slot="{ invalid, handleSubmit }">
+      <v-form v-if="$ready" :disabled="processing" @submit.prevent="handleSubmit(onSubmit)">
+        <research-edit-renderer
+          v-model="formModel"
+          :schema="layoutSchema"
+        />
 
-      <v-divider class="mt-8 mb-6" />
-      <div class="d-flex justify-end align-center">
-        <d-stack horizontal :gap="8">
-          <v-btn
-            text
-            color="primary"
-            :disabled="processing"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            type="submit"
-            color="primary"
-            :disabled="processing || !isChanged"
-            :loading="processing"
-          >
-            {{ formModel.externalId ? 'Update' : 'Create' }}
-          </v-btn>
-        </d-stack>
-      </div>
-    </d-form>
+        <v-divider class="mt-8 mb-6" />
+        <div class="d-flex justify-end align-center">
+          <d-stack horizontal :gap="8">
+            <v-btn
+              text
+              color="primary"
+              :disabled="processing"
+            >
+              Cancel
+            </v-btn>
+            <v-btn
+              type="submit"
+              color="primary"
+              :disabled="processing || !isChanged || invalid"
+              :loading="processing"
+            >
+              {{ formModel.externalId ? 'Update' : 'Create' }}
+            </v-btn>
+          </d-stack>
+        </div>
+      </v-form>
+    </validation-observer>
   </d-layout-full-screen>
 </template>
 
@@ -58,6 +57,10 @@
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
   import { ATTR_TYPES } from '@/variables';
 
+  import { ValidationObserver, setInteractionMode } from 'vee-validate';
+
+  setInteractionMode('eager');
+
   const researchService = ResearchService.getInstance();
 
   export default {
@@ -66,7 +69,9 @@
       DStack,
       ResearchEditRenderer,
       DForm,
-      DLayoutFullScreen
+      DLayoutFullScreen,
+
+      ValidationObserver
     },
     mixins: [
       componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
@@ -91,7 +96,7 @@
         formModel: {
           researchRef: {
             attributes: {}
-          },
+          }
         },
 
         isPermlinkVerifyed: true,
@@ -339,17 +344,17 @@
       },
 
       onSubmit(valid) {
-        if (valid) {
-          this.processing = true;
+        // if (valid) {
+        this.processing = true;
 
-          this.verifyPermlink()
-            .then((exists) => (this.$route.params.researchExternalId
-              ? this.updateResearch(exists)
-              : this.createResearch(exists)))
-            .finally(() => {
-              this.processing = false;
-            });
-        }
+        this.verifyPermlink()
+          .then((exists) => (this.$route.params.researchExternalId
+            ? this.updateResearch(exists)
+            : this.createResearch(exists)))
+          .finally(() => {
+            this.processing = false;
+          });
+        // }
       }
     }
   };

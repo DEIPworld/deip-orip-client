@@ -13,26 +13,35 @@
       >
         <v-row class="pb-4">
           <v-col cols="6">
-            <v-text-field
-              v-model="license.name"
-              label="Set type"
-              outlined
-              hide-details="auto"
-            />
+            <validation-provider
+              v-slot="{ errors }"
+              name="Type"
+              rules="required"
+            >
+              <v-text-field
+                v-model="license.name"
+                label="Set type"
+                outlined
+                hide-details="auto"
+                :error-messages="errors"
+              />
+            </validation-provider>
           </v-col>
 
           <v-col cols="6">
             <d-asset-input
               v-model="license.fee"
               label="Set license issue fee"
+              required
             />
           </v-col>
 
           <v-col cols="12">
             <d-file-input-extended
               v-model="license.file"
-              label="Upload an agreemen"
+              label="Upload an agreement"
               :url-builder="getFileUrl"
+              required
             />
           </v-col>
         </v-row>
@@ -62,6 +71,14 @@
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
   import DFileInputExtended from '@/components/Deipify/DInput/DFileInputExtended';
 
+  import { extend, ValidationProvider } from 'vee-validate';
+  import { required } from 'vee-validate/dist/rules';
+
+  extend('required', {
+    ...required,
+    message: '{_field_} can not be empty'
+  });
+
   const licenseModelFactory = () => ({
     name: undefined,
     fee: undefined,
@@ -76,7 +93,9 @@
       DTimelineAdd,
       DTimelineItem,
       DTimeline,
-      DStack
+      DStack,
+
+      ValidationProvider
     },
     mixins: [attributeSet, activatableArrayModelFactory(licenseModelFactory)],
     props: {

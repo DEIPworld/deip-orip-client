@@ -36,5 +36,9 @@
     display: grid;
     grid-gap: var(--layout-split-stack-gap);
     grid-template-columns: var(--layout-split-template);
+
+    [class*='align-bottom'] & {
+      align-items: end;
+    }
   }
 </style>

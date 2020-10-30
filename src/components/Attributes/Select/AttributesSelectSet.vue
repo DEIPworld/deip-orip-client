@@ -1,18 +1,26 @@
 <template>
-  <d-autocomplete
-    v-model="internalValue"
+  <validation-provider
+    v-slot="{ errors }"
+    :name="attribute.title"
+    :rules="$$veeRules"
+  >
+    <d-autocomplete
+      v-model="internalValue"
 
-    :label="attribute.title"
-    :items="attribute.valueOptions"
+      :label="attribute.title"
+      :items="attribute.valueOptions"
 
-    hide-details="auto"
-    item-text="title"
-    item-value="value"
+      item-text="title"
+      item-value="value"
 
-    outlined
+      hide-details="auto"
+      :error-messages="errors"
 
-    v-bind="isMultipleProps"
-  />
+      outlined
+
+      v-bind="isMultipleProps"
+    />
+  </validation-provider>
 </template>
 
 <script>

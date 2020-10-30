@@ -37,11 +37,8 @@
         <toggle-text class="py-4" :text="research.abstract" />
       </v-col>
       <v-col v-if="researchRef.videoSrc" cols="auto" class="ml-auto">
-        <iframe
-          class="presentation-video"
-          :src="getEmbedVideoUrl(researchRef.videoSrc)"
-          frameborder="0"
-          allowfullscreen
+        <d-video-embed
+          :src="researchRef.videoSrc"
         />
       </v-col>
     </v-row>
@@ -51,10 +48,11 @@
 <script>
   import { mapGetters } from 'vuex';
   import LayoutHeader from '@/components/layout/components/LayoutHeader';
+  import DVideoEmbed from '@/components/Deipify/DVideoEmbed/DVideoEmbed';
 
   export default {
     name: 'ResearchDetailsHeader',
-    components: { LayoutHeader },
+    components: { DVideoEmbed, LayoutHeader },
 
     computed: {
       ...mapGetters({

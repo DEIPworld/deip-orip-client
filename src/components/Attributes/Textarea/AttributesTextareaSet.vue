@@ -1,9 +1,17 @@
 <template>
-  <d-wysiwyg
-    v-model="internalValue"
-    :label="attribute.title"
-    hide-details="auto"
-  />
+  <validation-provider
+    v-slot="{ errors, validate }"
+    :name="attribute.title"
+    :rules="$$veeRules"
+  >
+    <d-wysiwyg
+      v-model="internalValue"
+      :label="attribute.title"
+      :error-messages="errors"
+      hide-details="auto"
+      @input="validate"
+    />
+  </validation-provider>
 </template>
 
 <script>
@@ -13,6 +21,11 @@
   export default {
     name: 'AttributesTextareaSet',
     components: { DWysiwyg },
-    mixins: [attributeSet]
+    mixins: [attributeSet],
+    methods: {
+      onChange(val) {
+        console.log(val)
+      }
+    }
   };
 </script>

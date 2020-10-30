@@ -4,15 +4,17 @@ import { BlockchainService } from '@deip/blockchain-service';
 
 const blockchainService = BlockchainService.getInstance();
 
-const toAssetUnits = (
+function toAssetUnits(
   amount,
   precision = 3,
   asset = this.$env.ASSET_UNIT
-) => blockchainService.toAssetUnits(
-  amount,
-  precision,
-  asset
-);
+) {
+  return blockchainService.toAssetUnits(
+    amount,
+    precision,
+    asset
+  );
+}
 
 export const assetsChore = {
   computed: {

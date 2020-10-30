@@ -1,9 +1,15 @@
+import { ValidationProvider } from 'vee-validate';
+import { VeeFieldValidatable } from '@/mixins/veeFieldValidatable';
+
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
 import { commonProps } from '@/variables/props';
 
 export const attributeSet = {
-  mixins: [Proxyable],
+  components: { ValidationProvider },
+
+  mixins: [Proxyable, VeeFieldValidatable],
+
   props: {
     ...commonProps.attribute,
     viewType: {
@@ -11,15 +17,16 @@ export const attributeSet = {
       default: undefined
     }
   },
+
   computed: {
-    attributeComponent() {
-      console.warn('No attribute type/view specified!!!');
-      return 'div';
+    $$isRequired() {
+      return this.attribute.isRequired;
     }
   },
+
   render(h) {
     const self = this;
-    return h(this.attributeComponent, {
+    return h('div', {
       props: {
         value: this.internalValue,
         attribute: this.attribute,

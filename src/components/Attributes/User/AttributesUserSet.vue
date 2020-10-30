@@ -1,68 +1,75 @@
 <template>
-  <d-autocomplete
-    v-if="$ready"
-    v-model="internalValue"
-
-    :label="attribute.title"
-    :items="usersList"
-
-    :item-text="userFullName"
-    :item-value="userId"
-
-    hide-details="auto"
-
-    offset-y
-    offset-overflow
-
-    outlined
-
-    v-bind="isMultipleProps"
+  <validation-provider
+    v-slot="{ errors }"
+    :name="attribute.title"
+    :rules="$$veeRules"
   >
+    <d-autocomplete
+      v-if="$ready"
+      v-model="internalValue"
 
-    <template #item="{ item }">
-      <v-list-item-avatar :size="24">
-        <img :src="item.profile | avatarSrc(24)" />
-      </v-list-item-avatar>
-      <v-list-item-content class="ttext-body-2">
-        {{ item | fullname }}
-      </v-list-item-content>
-    </template>
+      :label="attribute.title"
+      :items="usersList"
+
+      :item-text="userFullName"
+      :item-value="userId"
+
+      hide-details="auto"
+      :error-messages="errors"
+
+      offset-y
+      offset-overflow
+
+      outlined
+
+      v-bind="isMultipleProps"
+    >
+
+      <template #item="{ item }">
+        <v-list-item-avatar :size="24">
+          <img :src="item.profile | avatarSrc(24)" />
+        </v-list-item-avatar>
+        <v-list-item-content class="ttext-body-2">
+          {{ item | fullname }}
+        </v-list-item-content>
+      </template>
 
 
-    <template #selection="{ item }">
+      <template #selection="{ item }">
 
-      <v-chip
-        v-if="isMultiple"
-        outlined
-      >
-        <v-avatar left class="mr-2 ml-n2">
-          <img :src="item.profile | avatarSrc(24)" alt="">
-        </v-avatar>
+        <v-chip
+          v-if="isMultiple"
+          outlined
+        >
+          <v-avatar left class="mr-2 ml-n2">
+            <img :src="item.profile | avatarSrc(24)" alt="">
+          </v-avatar>
 
-        <div class="text-truncate spacer">
+          <div class="text-truncate spacer">
+            {{ item | fullname }}
+          </div>
+
+          <v-btn
+            icon
+            x-small
+            class="mr-n2 ml-2"
+            @click="remove(item)"
+          >
+            <v-icon>clear</v-icon>
+          </v-btn>
+        </v-chip>
+
+        <div v-else class="d-inline-flex mr-4 align-center">
+          <v-avatar size="24" class="mr-2">
+            <img :src="item.profile | avatarSrc(24)" alt="">
+          </v-avatar>
           {{ item | fullname }}
         </div>
 
-        <v-btn
-          icon
-          x-small
-          class="mr-n2 ml-2"
-          @click="remove(item)"
-        >
-          <v-icon>clear</v-icon>
-        </v-btn>
-      </v-chip>
+      </template>
 
-      <div v-else class="d-inline-flex mr-4 align-center">
-        <v-avatar size="24" class="mr-2">
-          <img :src="item.profile | avatarSrc(24)" alt="">
-        </v-avatar>
-        {{ item | fullname }}
-      </div>
-
-    </template>
-
-  </d-autocomplete>
+    </d-autocomplete>
+  </validation-provider>
 </template>
 
 <script>
@@ -121,7 +128,7 @@
 
     methods: {
       userFullName(e) {
-        return e.profile ? this.$options.filters.fullname(e) : 'undefined'
+        return e.profile ? this.$options.filters.fullname(e) : 'undefined';
       },
 
       userId(e) {
