@@ -1,6 +1,6 @@
 export default {
-  balance: 'Balance',
-  portfolio: 'Portfolio',
+  balance: 'Currencies',
+  portfolio: 'Shares',
   groups: 'Groups',
   transfer: 'Transfer',
   deposit: 'Deposit',

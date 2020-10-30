@@ -38,7 +38,7 @@
             <v-text-field
               v-model="formData.firstName"
               outlined
-              :label="$t('signUp.free.form.firstNameFiled.label')"
+              :label="$t('signUp.free.form.firstNameFiled')"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
             />
@@ -46,7 +46,7 @@
             <v-text-field
               v-model="formData.lastName"
               outlined
-              :label="$t('signUp.free.form.lastNameFiled.label')"
+              :label="$t('signUp.free.form.lastNameFiled')"
               :rules="[rules.required, rules.nameChars]"
               :disabled="isSaving"
             />

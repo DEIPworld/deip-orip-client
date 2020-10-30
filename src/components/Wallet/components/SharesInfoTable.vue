@@ -54,11 +54,13 @@
         </v-btn>
       </template>
       <template #expanded-item="{ item, headers }">
-        <td :colspan="headers.length">
+        <td :colspan="headers.length" class="pa-0">
+          <div class="font-weight-bold mt-4">Revenue per token</div>
           <d-chart-column
             v-if="item.revenueHistoryChartData.length"
             :data="[['Date', 'Revenue'], ...item.revenueHistoryChartData]"
             :options="{
+              chartArea: {width: '100%'},
               vAxis: {format: '##$'},
               legend: 'none'
             }"

@@ -1,8 +1,5 @@
 <template>
-  <v-skeleton-loader
-    type="table-thead, table-tbody"
-    :loading="!$ready"
-  >
+  <div>
     <v-data-table
       :items="accountData.balances"
       :headers="tableHeaders"
@@ -405,7 +402,7 @@
         />
       </v-form>
     </d-dialog>
-  </v-skeleton-loader>
+  </div>
 </template>
 
 <script>
@@ -617,19 +614,6 @@
           return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.groupData.account.name);
         }
         return false;
-      }
-    },
-
-    created() {
-      if (this.$route.name === 'userWallet' && this.$currentUserName !== this.$route.params.account) {
-        this.$router.back();
-      }
-      if (this.$route.name === 'userWallet') {
-        this.$store.dispatch('Wallet/loadAssetsInfo', this.$currentUser)
-          .then(() => { this.$setReady(); });
-      } else if (this.$route.name === 'groupWallet') {
-        this.$store.dispatch('Wallet/loadBalanceData', this.$route.params.account)
-          .then(() => { this.$setReady(); });
       }
     },
 

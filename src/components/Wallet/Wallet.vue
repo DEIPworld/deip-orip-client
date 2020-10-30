@@ -1,22 +1,30 @@
 <template>
   <layout-section>
-    <content-block
-      :title="$t('userWallet.balance')"
+    <v-skeleton-loader
+      type="table-thead, table-tbody"
+      :loading="!$ready"
     >
-      <currencies-info-table :all-accounts="allAccounts" />
-    </content-block>
+      <div class="text-h4 mb-6">
+        {{ pageTitle }}
+      </div>
+      <content-block
+        :title="$t('userWallet.balance')"
+      >
+        <currencies-info-table :all-accounts="allAccounts" />
+      </content-block>
 
-    <content-block
-      :title="$t('userWallet.portfolio')"
-    >
-      <shares-info-table :all-accounts="allAccounts" />
-    </content-block>
-    <content-block
-      v-if="$route.name === 'userWallet'"
-      :title="$t('userWallet.groups')"
-    >
-      <groups-info-table />
-    </content-block>
+      <content-block
+        :title="$t('userWallet.portfolio')"
+      >
+        <shares-info-table :all-accounts="allAccounts" />
+      </content-block>
+      <content-block
+        v-if="$route.name === 'userWallet'"
+        :title="$t('userWallet.groups')"
+      >
+        <groups-info-table />
+      </content-block>
+    </v-skeleton-loader>
   </layout-section>
 </template>
 
@@ -55,8 +63,30 @@
 
     computed: {
       ...mapGetters({
-        investments: 'Wallet/investments'
-      })
+        groupData: 'Wallet/groupData'
+      }),
+      pageTitle() {
+        if (this.$route.name === 'userWallet') {
+          return 'My Assets';
+        }
+        if (this.$route.name === 'groupWallet') {
+          return `Assets of ${this.groupData.name}`;
+        }
+        return 'Assets';
+      }
+    },
+
+    created() {
+      if (this.$route.name === 'userWallet' && this.$currentUserName !== this.$route.params.account) {
+        this.$router.back();
+      }
+      if (this.$route.name === 'userWallet') {
+        this.$store.dispatch('Wallet/loadAssetsInfo', this.$currentUser)
+          .then(() => { this.$setReady(); });
+      } else if (this.$route.name === 'groupWallet') {
+        this.$store.dispatch('Wallet/loadBalanceData', this.$route.params.account)
+          .then(() => { this.$setReady(); });
+      }
     },
 
     mounted() {
