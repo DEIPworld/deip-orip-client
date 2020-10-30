@@ -31,15 +31,10 @@ const getters = {
   allGroups: (state) => state.allGroups,
 
   assetsInfo: (state) => state.assetsInfo,
-  balances: (state, getters, rootState, rootGetters) => state.balances.map((item) => {
-    const user = rootGetters['auth/user'];
+  balances: (state) => state.balances.map((item) => {
     const revenueHistoryChartData = [...item.revenueHistory];
-    const myShare = item.shareHolders.find(
-      (s) => s.account_name === user.account.name
-    );
     return {
       ...item,
-      myShare,
       revenueHistoryChartData: revenueHistoryChartData.sort((a, b) => {
         const dateA = new Date(a.timestamp);
         const dateB = new Date(b.timestamp);
@@ -79,20 +74,6 @@ const actions = {
           ...b,
           revenueHistory: history.find(
             (r) => r[0] && r[0].account === b.research.research_group.external_id
-          ) || []
-        }));
-
-        return Promise.all(
-          balances.map((b) => deipRpc.api.getResearchTokensByResearchIdAsync(
-            b.research.id
-          ))
-        );
-      })
-      .then((shareHolders) => {
-        balances = balances.map((b) => ({
-          ...b,
-          shareHolders: shareHolders.find(
-            (s) => s[0] && s[0].research_external_id === b.research.research_group.external_id
           ) || []
         }));
 

@@ -642,8 +642,6 @@
       openSendTokensDialog(balance) {
         this.sendTokensDialog.isOpened = true;
 
-        console.log(1)
-
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
 
         this.sendTokensDialog.form.asset = balance;

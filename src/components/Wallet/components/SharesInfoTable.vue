@@ -19,10 +19,10 @@
       </template>
       <template #item.myShare.amount="{ item }">
         <div class="text-body-1">
-          {{ item.shareHolders.length }}
+          {{ item.amount }}
         </div>
-        <div v-if="item.myShare" class="text-body-2 text--secondary">
-          {{ convertToPercent(item.myShare.amount) }} %
+        <div class="text-body-2 text--secondary">
+          {{ sharePercent(item) }} %
         </div>
       </template>
       <template #item.group.account.balances="{ item }">
@@ -276,6 +276,12 @@
         loadUserBalances: 'auth/loadBalances',
         loadWallet: ('Wallet/loadWallet')
       }),
+      sharePercent(item) {
+        const tokenValue = item.research.security_tokens.find(
+          (rst) => rst[0] === item.security_token_external_id
+        )[1];
+        return item.amount*100/tokenValue;
+      },
       openSendResearchTokensDialog(item) {
         this.sendResearchTokensDialog.isOpened = true;
         setTimeout(() => {
