@@ -6,9 +6,14 @@
   >
     <d-wysiwyg
       v-model="internalValue"
+
       :label="attribute.title"
+
       :error-messages="errors"
       hide-details="auto"
+
+      :disabled="!$$isEditable"
+
       @input="validate"
     />
   </validation-provider>

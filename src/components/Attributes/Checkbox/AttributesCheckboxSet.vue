@@ -12,6 +12,8 @@
       hide-details="auto"
       :error-messages="errors"
 
+      :disabled="!$$isEditable"
+
       class="ma-0"
     />
   </validation-provider>

@@ -7,8 +7,12 @@
     <v-text-field
       v-model="internalValue"
       :label="attribute.title"
+
       hide-details="auto"
       :error-messages="errors"
+
+      :disabled="!$$isEditable"
+
       outlined
     />
   </validation-provider>

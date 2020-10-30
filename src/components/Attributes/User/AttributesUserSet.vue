@@ -20,6 +20,8 @@
       offset-y
       offset-overflow
 
+      :disabled="!$$isEditable"
+
       outlined
 
       v-bind="isMultipleProps"
@@ -39,6 +41,7 @@
 
         <v-chip
           v-if="isMultiple"
+          :disabled="!$$isEditable"
           outlined
         >
           <v-avatar left class="mr-2 ml-n2">

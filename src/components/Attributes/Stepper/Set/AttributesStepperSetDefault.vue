@@ -16,6 +16,8 @@
       hide-details="auto"
       :error-messages="errors"
 
+      :disabled="!$$isEditable"
+
       outlined
     >
       <template #selection="{ item }">

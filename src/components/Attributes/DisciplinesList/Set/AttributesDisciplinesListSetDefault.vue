@@ -11,10 +11,16 @@
         <div>
           <v-text-field
             v-model="search"
+
             :label="attribute.title"
-            :error-messages="$refs.validator ? $refs.validator.errors : []"
-            outlined
+
             hide-details="auto"
+            :error-messages="$refs.validator ? $refs.validator.errors : []"
+
+            :disabled="!$$isEditable"
+
+            outlined
+
             v-bind="attrs"
             v-on="on"
           />
@@ -66,6 +72,7 @@
         :key="id"
         outlined
         class="ma-1"
+        :disabled="!$$isEditable"
       >
         <div class="text-truncate">
           {{ getItemObject(id).label }}

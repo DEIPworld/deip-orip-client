@@ -2,8 +2,12 @@
   <d-stack>
     <v-checkbox
       v-model="modelActive"
+
       :label="attribute.title"
+
       hide-details="auto"
+
+      :disabled="!$$isEditable"
     />
     <d-timeline v-if="modelActive">
       <d-timeline-item

@@ -1,6 +1,6 @@
 <script>
   import { attributeViewTypeComponent } from '@/components/Attributes/_mixins';
-  import { arrayedModel } from '@/mixins/extendModel';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import AttributesDisciplinesListSetDefault from './Set/AttributesDisciplinesListSetDefault';
 
@@ -9,7 +9,7 @@
     components: {
       AttributesDisciplinesListSetDefault
     },
-    mixins: [attributeViewTypeComponent, arrayedModel],
+    mixins: [attributeViewTypeComponent, Proxyable],
     watch: {
       internalValue(val) {
         if (!val) {

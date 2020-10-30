@@ -21,6 +21,16 @@ export const attributeSet = {
   computed: {
     $$isRequired() {
       return this.attribute.isRequired;
+    },
+
+    $$isEditable() {
+      const editState = !!this.$route.params.researchExternalId;
+
+      if (editState) {
+        return this.attribute.isEditable;
+      }
+
+      return true;
     }
   },
 

@@ -1,9 +1,13 @@
 <template>
   <d-input-image
     v-model="image"
-    :aspect-ratio="aspectRatio"
+
     :label="attribute.title"
+
+    :aspect-ratio="aspectRatio"
     :initial-image="initialImage"
+
+    :disabled="!$$isEditable"
   />
 </template>
 
