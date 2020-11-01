@@ -1,8 +1,8 @@
 <template>
   <div>
-    <d-block v-if="isJoinRequestsSectionAvailable" widget>
+    <d-block-widget v-if="isJoinRequestsSectionAvailable">
       <template #title>
-        Join requests: {{ pendingJoinRequests.length }}
+        {{ $t('researchGroupDetails.sidebar.joinReq') }} {{ pendingJoinRequests.length }}
       </template>
 
       <v-row
@@ -14,7 +14,7 @@
         <v-row no-gutters class="flex-column">
           <platform-avatar :user="join.user" link-to-profile :size="40" />
           <div class="py-2 caption font-weight-medium">
-            wants to join your group
+            {{ $t('researchGroupDetails.sidebar.wantToJoin') }}
           </div>
           <div class="text-right full-width">
             <v-btn
@@ -25,13 +25,13 @@
               outlined
               @click="openJoinRequestDetails(join)"
             >
-              View
+              {{ $t('researchGroupDetails.sidebar.view') }}
             </v-btn>
           </div>
         </v-row>
         <v-divider v-if="index !== pendingJoinRequests.length - 1" class="ma-2" />
       </v-row>
-    </d-block>
+    </d-block-widget>
 
     <handle-join-request-dialog
       v-if="selectedJoinRequest"
@@ -42,15 +42,15 @@
     />
 
     <!-- ### START Research Group Details Section ### -->
-    <d-block widget separated title="Group expertise tokens">
+    <d-block-widget title="Group expertise tokens">
       <div v-for="(item, i) in groupExpertise" :key="i">
         <span class="font-weight-medium">{{ item.disciplineName }}</span>
         <span class="float-right">{{ item.value }}</span>
       </div>
-    </d-block>
+    </d-block-widget>
     <!-- ### END Research Group Details Section ### -->
 
-    <d-block v-if="isResearchGroupMember" widget separated>
+    <d-block-widget v-if="isResearchGroupMember">
       <template #title>
         <router-link
           class="a"
@@ -59,7 +59,7 @@
             params: { research_group_permlink: group.permlink }
           }"
         >
-          Group Wallet
+          {{ $t('researchGroupDetails.sidebar.wallet') }}
         </router-link>
       </template>
 
@@ -70,9 +70,9 @@
         block
         @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
       >
-        Transfer
+        {{ $t('researchGroupDetails.sidebar.Transfer') }}
       </v-btn>
-    </d-block>
+    </d-block-widget>
 
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
@@ -88,10 +88,11 @@
   import _ from 'lodash';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import HandleJoinRequestDialog from '@/components/research-group-details/components/HandleJoinRequestDialog';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'ResearchGroupDetailsSidebar',
-    components: { HandleJoinRequestDialog, DBlock },
+    components: { DBlockWidget, HandleJoinRequestDialog, DBlock },
     data() {
       return {
         isApprovingJoinRequest: false,

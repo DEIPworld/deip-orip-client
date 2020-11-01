@@ -3,9 +3,9 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ label: 'All', value: '' }, ...contributions]"
+      :items="[{ label: $t('defaultNaming.all'), value: '' }, ...contributions]"
       outlined
-      label="Contribution type"
+      :label="$t('defaultNaming.filters.contributionType')"
       item-text="label"
       item-value="value"
       hide-details
@@ -13,7 +13,7 @@
 
     <d-block
       v-if="!singleChoice"
-      title="Contribution type"
+      :title="$t('defaultNaming.filters.contributionType')"
       widget="compact"
     >
       <d-list-expand :active="contributions.length > 4">

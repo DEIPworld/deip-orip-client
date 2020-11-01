@@ -50,11 +50,31 @@ Vue.filter('employmentOrEducation', (enrichedProfile) => {
   return `${education ? education.educationalInstitution : ''}${education && employment ? ', ' : ''}${employment ? employment.company : ''}`;
 });
 
-Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => (profile
-  ? `${window.env.DEIP_SERVER_URL}/api/user/avatar/${profile._id}/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`
-  : `${window.env.DEIP_SERVER_URL}/api/user/avatar/initdelegate/?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`));
+Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => {
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+  const profileId = profile ? profile._id : 'initdelegate';
 
-Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/background/${researchExternalId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
+  const pathArray = [
+    window.env.DEIP_SERVER_URL,
+    '/api/user/avatar/',
+    profileId,
+    '/?authorization=',
+    accessService.getAccessToken(),
+    '&width=',
+    internalWidth,
+    '&height=',
+    internalHeight,
+    '&round=',
+    isRound,
+    '&noCache=',
+    noCache
+  ];
+
+  return pathArray.join('');
+});
+
+Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
 Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupExternalId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
@@ -102,4 +122,24 @@ Vue.filter('numDirClass', (value, type = 'foreground') => {
   return parseFloat(value) > 0
     ? 'success--text'
     : 'error--text';
+});
+
+Vue.filter('timeLeft', (value) => {
+  const now = moment.utc().local();
+  const start = moment.utc(value).local();
+
+  const months = Math.floor(moment.duration(start.diff(now)).asMonths());
+  if (months > 1) return `${months} months`;
+
+  const days = Math.floor(moment.duration(start.diff(now)).asDays());
+  if (days > 1) return `${days} days`;
+
+  const hours = Math.floor(moment.duration(start.diff(now)).asHours());
+  if (hours > 1) return `${hours} hours`;
+
+  const minutes = Math.floor(moment.duration(start.diff(now)).asMinutes());
+  if (minutes > 1) return `${minutes} mins`;
+
+  const seconds = Math.floor(moment.duration(start.diff(now)).asSeconds());
+  return `${seconds} secs`;
 });

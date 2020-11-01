@@ -30,10 +30,9 @@
             approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research
@@ -42,10 +41,9 @@
             approved fundraising campaign for "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research

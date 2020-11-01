@@ -1,4 +1,4 @@
-import { routeView, routeNameGenerator } from '@/utils/helpers';
+import { routerView, routeNameGenerator } from '@/utils/helpers';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
 
@@ -7,7 +7,7 @@ export const layoutsRoutingFabric = (parent) => {
 
   return {
     path: 'layouts',
-    component: routeView,
+    component: routerView,
     children: [
       {
         path: '',

@@ -6,21 +6,21 @@
   >
     <template v-if="isAutoAccepted">
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      invited
+      {{ $t('notifications.invited') }}
       <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
-      to
+      {{ $t('notifications.to') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      invited
+      {{ $t('notifications.invited') }}
       <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      proposed to invite
+      {{ $t('notifications.propInvite') }}
       <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
-      to
+      {{ $t('notifications.to') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
   </user-notifications-list-item>

@@ -1,8 +1,20 @@
 <template>
   <layout-section v-if="$ready">
-    <d-block>
-      <template #title>
-        Teams
+    <d-block :title="$t('account.groups.teams')">
+      <template #titleAddon>
+        <v-btn
+          color="primary"
+          small
+          :to="{
+            name: 'CreateResearchGroup',
+            params: {
+              account_name: $currentUser.username
+            }
+          }"
+          outlined
+        >
+          {{ $t('account.groups.addNewTeam') }}
+        </v-btn>
       </template>
       <v-row>
         <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
@@ -16,7 +28,7 @@
             }"
           >
             <d-box-item
-              :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
+              :avatar="group.external_id | researchGroupLogoSrc(64, 64)"
               :size="32"
               class="w-100 pa-4"
             >

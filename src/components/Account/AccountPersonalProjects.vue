@@ -1,31 +1,29 @@
 <template>
-  <layout-section v-if="$ready">
-    <research-list :data="personalResearchers" namespace="account" />
-  </layout-section>
+  <d-layout>
+    <d-layout-section>
+      <d-layout-section-main>
+        <projects-list
+          :user-name="$currentUserName"
+          type="personal"
+        />
+      </d-layout-section-main>
+    </d-layout-section>
+  </d-layout>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import LayoutSection from '@/components/layout/components/LayoutSection';
-  import ResearchList from '@/components/ResearchList/ResearchList';
+  import DLayout from '@/components/Deipify/DLayout/DLayout';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   export default {
     name: 'AccountPersonalProjects',
-    components: { ResearchList, LayoutSection },
-    computed: {
-      ...mapGetters({
-        researchList: 'userDetails/researchList'
-      }),
-      personalResearchers() {
-        return this.researchList.filter(({ research_group: { is_personal } }) => is_personal);
-      }
-    },
-    created() {
-      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      this.$store.dispatch('userDetails/loadUserDetailsPage', { username })
-        .then(() => {
-          this.$setReady();
-        });
+    components: {
+      ProjectsList,
+      DLayoutSectionMain,
+      DLayoutSection,
+      DLayout
     }
   };
 </script>

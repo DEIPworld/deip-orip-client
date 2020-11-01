@@ -51,7 +51,7 @@
     data() {
       return {
         rules: {
-          required: (v) => !!v || 'This field is required'
+          required: (v) => !!v || this.$t('defaultNaming.fieldRules.required')
         }
       };
     },

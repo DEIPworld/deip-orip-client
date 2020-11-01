@@ -1,94 +1,100 @@
 <template>
   <div>
-    <d-block v-if="isOwner && hasInvites" widget>
-      <div id="invites" class="text-h6 font-weight-bold">
-        Invites: {{ invites.length }}
-      </div>
-      <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
-      <div
-        v-for="(invite, index) of invites"
-        :key="'invite-' + index"
-      >
-        <router-link
-          class="a full-width break-word font-weight-medium"
-          :to="{ name: 'ResearchGroupDetails', params: {
-            research_group_permlink: encodeURIComponent(invite.group.permlink),
-          }}"
-        >
-          {{ invite.group.name }}
-        </router-link>
-        <div class="py-2 caption font-weight-medium">
-          invited you to join them with
-        </div>
-        <div class="text-right full-width">
-          <v-btn
-            small
-            color="primary"
-            dark
-            text
-            @click="openInviteDetailsDialog(invite, index)"
+
+
+    <d-block-widget v-if="isOwner && hasInvites">
+      <v-card outlined>
+        <div id="invites" class="text-h6 font-weight-medium px-4 py-3 ">
+          <v-badge
+            color="warning"
+            inline
+            :content="invites.length"
           >
-            View
+            {{ $t('userDetailRouting.sidebar.invites') }}
+          </v-badge>
+        </div>
+        <v-divider />
+        <v-carousel
+          v-model="invitesSlider"
+          hide-delimiters
+          :show-arrows="false"
+          light
+          height="auto"
+          class="pt-4 px-4"
+        >
+          <v-carousel-item
+            v-for="(invite, index) in invites"
+            :key="'invite-request-' + index"
+          >
+            <d-box-item
+              :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
+              :size="40"
+            >
+              <router-link
+                class="a full-width break-word font-weight-medium"
+                :to="{ name: 'ResearchGroupDetails', params: {
+                  research_group_permlink: encodeURIComponent(invite.group.permlink),
+                }}"
+              >
+                <v-clamp
+                  autoresize
+                  :max-lines="1"
+                  class="text-body-2 font-weight-medium"
+                >
+                  {{ invite.group.name }}
+                </v-clamp>
+              </router-link>
+              <div class="text-caption text--secondary">
+                {{ $t('userDetailRouting.sidebar.invitedYou') }}
+              </div>
+            </d-box-item>
+          </v-carousel-item>
+        </v-carousel>
+        <div class="d-flex justify-space-between align-center px-4 pb-4">
+          <div>
+            <v-icon
+              v-if="invites.length > 1"
+              class="mr-4"
+              @click="prevSlide()"
+            >
+              navigate_before
+            </v-icon>
+            <v-icon
+              v-if="invites.length > 1"
+              @click="nextSlide()"
+            >
+              navigate_next
+            </v-icon>
+          </div>
+          <v-btn
+            text
+            small
+            class="ml-1"
+            color="primary"
+            @click="openInviteDetailsDialog(invites[invitesSlider], invitesSlider)"
+          >
+            {{ $t('userDetailRouting.sidebar.viewBtn') }}
           </v-btn>
         </div>
-      </div>
+      </v-card>
 
-      <v-dialog
-        v-if="inviteDetailsDialog.item"
+      <d-dialog
         v-model="inviteDetailsDialog.isShown"
-        persistent
-        max-width="600px"
+        :loading="inviteDetailsDialog.proccess"
+        :disabled="inviteDetailsDialog.proccess"
+        :confirm-button-title="$t('userDetailRouting.sidebar.acceptBtn')"
+        :cancel-button-title="$t('userDetailRouting.sidebar.rejectBtn')"
+        :title="inviteDetailsDialog.groupName"
+        @click:confirm="approveInvite"
+        @click:cancel="rejectInvite"
       >
-        <v-card class="pa-6">
-          <v-card-title>
-            <div class="text-h5">
-              {{ inviteDetailsDialog.item.group.name }}
-            </div>
-            <div class="right-top-angle">
-              <v-btn icon class="pa-0 ma-0" @click="closeInviteDetailsDialog()">
-                <v-icon color="black">
-                  close
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <div class="text-subtitle-1 pt-6 font-weight-medium black--text">
-              {{ inviteDetailsDialog.item.notes }}
-            </div>
-          </v-card-text>
-          <v-card-actions class="flex-wrap px-6">
-            <div class="w-100 py-2">
-              <v-btn
-                color="primary"
-                block
-                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                :loading="inviteDetailsDialog.isApprovingInvite"
-                @click="approveInvite()"
-              >
-                Accept
-              </v-btn>
-            </div>
-            <div class="w-100 py-2">
-              <v-btn
-                color="primary"
-                block
-                text
-                :disabled="inviteDetailsDialog.isApprovingInvite || inviteDetailsDialog.isRejectingInvite"
-                :loading="inviteDetailsDialog.isRejectingInvite"
-                @click="rejectInvite()"
-              >
-                Reject
-              </v-btn>
-            </div>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </d-block>
+        {{ inviteDetailsDialog.groupName }} {{ $t('userDetailRouting.sidebar.invitedYou') }}
+      </d-dialog>
+    </d-block-widget>
 
-    <d-block v-if="isOwner && hasReviewRequests" widget separated>
+    <d-block-widget v-if="isOwner && hasReviewRequests">
       <div id="review-requests" class="text-h6 font-weight-bold pa-4">
-        Review Requests: {{ reviewRequests.length }}
+        {{ $t('userDetailRouting.sidebar.reviewReq') }} {{ reviewRequests.length }}
       </div>
       <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
       <div
@@ -98,8 +104,7 @@
       >
         <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
         <div class="py-2 caption font-weight-medium">
-          requests your review for "{{ reviewRequest.research.title }}"
-          research
+          {{ $t('userDetailRouting.sidebar.reqYouReview', { title:reviewRequest.research.title }) }}
         </div>
 
         <div class="pt-2 full-width display-flex justify-space-between">
@@ -114,7 +119,7 @@
               content_permlink: encodeURIComponent(reviewRequest.content.permlink)
             }}"
           >
-            Proceed
+            {{ $t('userDetailRouting.sidebar.proceedBtn') }}
           </v-btn>
           <v-btn
             color="red"
@@ -124,25 +129,23 @@
             :loading="reviewRequest.isDenying"
             @click="denyReviewRequest(reviewRequest._id)"
           >
-            Reject
+            {{ $t('userDetailRouting.sidebar.rejectBtn') }}
           </v-btn>
         </div>
         <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
       </div>
-    </d-block>
+    </d-block-widget>
 
     <!--  TODO: need user disciplines  -->
-    <d-block
-      widget
+    <d-block-widget
       title="Expertise Contribution Index"
-      :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
     >
       <eci-stats
         :account-name="userInfo.account.name"
         :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
         :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
       />
-    </d-block>
+    </d-block-widget>
 
     <user-claim-expertise-dialog
       :is-shown="isClaimExpertiseDialogShown"
@@ -160,6 +163,9 @@
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
@@ -177,17 +183,20 @@
     components: {
       EciStats,
       DBlock,
-      UserClaimExpertiseDialog
+      UserClaimExpertiseDialog,
+      DBoxItem,
+      DDialog,
+      DBlockWidget
     },
 
     data() {
       return {
+        invitesSlider: 0,
         inviteDetailsDialog: {
           isShown: false,
           item: null,
-          isApprovingInvite: false,
-          isRejectingInvite: false,
-          index: null
+          groupName: '',
+          proccess: false
         }
       };
     },
@@ -228,23 +237,28 @@
     },
 
     methods: {
-      openInviteDetailsDialog(invite, index) {
-        this.inviteDetailsDialog.isShown = true;
+      nextSlide() {
+        this.invitesSlider === invites.length - 1 ? this.invitesSlider = 0 : this.invitesSlider++;
+      },
+      prevSlide() {
+        this.invitesSlider === 0 ? this.invitesSlider = this.invites.length - 1 : this.invitesSlider--;
+      },
+      openInviteDetailsDialog(invite) {
         this.inviteDetailsDialog.item = invite;
-        this.inviteDetailsDialog.index = index;
+        this.inviteDetailsDialog.groupName = invite.group.name;
+        this.inviteDetailsDialog.isShown = true;
       },
 
-      closeInviteDetailsDialog(invite, index) {
-        this.inviteDetailsDialog.isShown = false;
+      closeInviteDetailsDialog() {
         this.inviteDetailsDialog.item = null;
-        this.inviteDetailsDialog.isApprovingInvite = false;
-        this.inviteDetailsDialog.isRejectingInvite = false;
+        this.inviteDetailsDialog.groupName = '';
+        this.inviteDetailsDialog.proccess = false;
       },
 
       approveInvite() {
         const invite = this.inviteDetailsDialog.item;
         const proposalId = invite._id;
-        this.inviteDetailsDialog.isApprovingInvite = true;
+        this.inviteDetailsDialog.proccess = true;
 
         researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
           inviteId: proposalId,
@@ -267,7 +281,7 @@
       rejectInvite() {
         const invite = this.inviteDetailsDialog.item;
         const proposalId = invite._id;
-        this.inviteDetailsDialog.isRejectingInvite = true;
+        this.inviteDetailsDialog.proccess = true;
 
         researchGroupService.rejectResearchGroupInviteViaOffChain(this.currentUser.privKey, {
           inviteId: proposalId,

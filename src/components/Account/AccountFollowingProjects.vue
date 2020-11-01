@@ -1,53 +1,55 @@
 <template>
-  <layout-section v-if="$ready">
-    <research-list
-      v-if="researches.length"
-      namespace="dashboard"
-      :data="researches"
-      no-filter
-    />
+  <d-layout>
+    <d-layout-section>
+      <d-layout-section-main>
 
-    <v-row v-else justify="center">
-      <v-col cols="auto" class="text-center">
-        <img width="64px" class="mb-3" src="/assets/img/follow-project.png">
-        <div class="text-h5 mb-3">
-          You’re not following any project yet
-        </div>
-        <div class="text-body-1 mb-12">
-          We have a lot of incredible projects on our platform. Take a look
-        </div>
-        <div>
-          <v-btn
-            :to="{ name: 'ResearchFeed' }"
-            color="primary"
-          >
-            Browse projects
-          </v-btn>
-        </div>
-      </v-col>
-    </v-row>
-  </layout-section>
+        <projects-list
+          v-if="$currentUser.researchBookmarks.length"
+          :user-name="$currentUserName"
+          type="following"
+        />
+
+        <v-row v-else justify="center">
+          <v-col cols="auto" class="text-center">
+            <img width="64px" class="mb-3" src="/assets/img/follow-project.png">
+            <div class="text-h5 mb-3">
+              <!-- {{ $t('account.projects.notFollPr') }} -->
+            </div>
+            <div class="text-body-1 mb-12">
+              <!-- {{ $t('account.projects.aLotOfPr') }} -->
+            </div>
+            <div>
+              <v-btn
+                :to="{ name: 'explore' }"
+                color="primary"
+              >
+                <!-- {{ $t('account.projects.browseBtn') }} -->
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+
+      </d-layout-section-main>
+    </d-layout-section>
+  </d-layout>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import ResearchList from '@/components/ResearchList/ResearchList';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import DLayout from '@/components/Deipify/DLayout/DLayout';
+  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
+  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
 
   export default {
     name: 'AccountFollowingProjects',
 
-    components: { ResearchList, LayoutSection },
+    components: { DLayoutSectionMain, DLayoutSection, DLayout, ProjectsList, LayoutSection },
     computed: {
       ...mapGetters({
         researches: 'account/followingProjects'
       })
     },
-    created() {
-      this.$store.dispatch('account/getFollowingProjects')
-        .then(() => {
-          this.$setReady();
-        });
-    }
   };
 </script>

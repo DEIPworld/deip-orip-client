@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="!isResearchGroupMember || !isEditMode" widget title="Quorum threshold" separated>
+  <d-block-widget v-if="!isResearchGroupMember || !isEditMode" title="Quorum threshold">
     <div
       v-for="(proposalBlock, i) in proposalOrderMap"
       :key="`proposalBlock-${i}`"
@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-  </d-block>
+  </d-block-widget>
 </template>
 
 <script>
@@ -24,11 +24,11 @@
   import deipRpc from '@deip/rpc-client';
 
   import { PROPOSAL_TYPES, proposalTypesLabels } from '@/variables';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'QuorumSizeSidebarSection',
-    components: { DBlock },
+    components: { DBlockWidget },
     data() {
       return {
         isEditMode: false,

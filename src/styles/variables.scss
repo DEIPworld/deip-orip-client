@@ -39,10 +39,6 @@ $text-field-filled-full-width-outlined-slot-min-height: 48px;
 $text-field-enclosed-prepend-append-margin-top: 12px;
 $text-field-outlined-label-position-x: 14px;
 $text-field-outlined-label-position-y: -22px;
-//$text-field-outlined-full-width-outlined-slot-min-height: 3rem;
-//$text-field-outlined-margin-top: 16px;
-//$text-field-outlined-label-position-x: 14px;
-//$text-field-enclosed-prepend-append-margin-top: 13px;
 
 //
 
@@ -56,12 +52,34 @@ $card-subtitle-padding: 1.5rem;
 
 $text-field-details-margin-bottom: 0;
 $input-slot-margin-bottom: 4px;
-//$text-field-details-min-height: 14px
 $messages-line-height: 14px;
 $textarea-line-height: 1.5rem;
 
 $app-bar-elevation: 0;
 $toolbar-elevation: 0;
+
+$treeview-node-margin: 0;
+$treeview-node-padding: 16px;
+
+// utils
+
+$utilities: (
+  "justify-self": (
+    responsive: true,
+    property: justify-self,
+    values: (
+      start: flex-start,
+      end: flex-end,
+      center: center
+    )
+  ),
+  "position": (
+    responsive: true,
+    property: position,
+    class: pos,
+    values: absolute relative fixed static
+  ),
+);
 
 
 // typography

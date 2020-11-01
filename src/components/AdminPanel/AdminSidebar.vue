@@ -45,22 +45,22 @@
       return {
         menu: [
           {
-            title: 'Members',
+            title: this.$t('adminRouting.sidebar.members'),
             icon: 'group',
             to: { name: 'admin.members' }
           },
           {
-            title: 'Projects',
+            title: this.$t('adminRouting.sidebar.projects'),
             icon: 'file_copy',
             to: { name: 'admin.projects' }
           },
           {
-            title: 'Attributes',
+            title: this.$t('adminRouting.sidebar.criteria'),
             icon: 'extension',
             to: { name: 'admin.attributes' }
           },
           {
-            title: 'Layouts',
+            title: this.$t('adminRouting.sidebar.layouts'),
             icon: 'mdi-view-dashboard-outline',
             badge: 'pre-alpha',
             to: { name: 'admin.layouts' }
@@ -72,17 +72,17 @@
           //   to: { name: 'admin.categories' }
           // },
           {
-            title: 'Review model',
+            title: this.$t('adminRouting.sidebar.model'),
             icon: 'rate_review',
             to: { name: 'admin.reviewModel' }
           },
           {
-            title: 'FAQ',
+            title: this.$t('adminRouting.sidebar.faq'),
             icon: 'forum',
             to: { name: 'admin.faq' }
           },
           {
-            title: 'Settings',
+            title: this.$t('adminRouting.sidebar.settings'),
             icon: 'settings',
             to: { name: 'admin.settings' }
           }

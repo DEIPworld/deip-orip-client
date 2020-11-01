@@ -34,51 +34,51 @@
       return {
         menu: [
           {
-            subheader: 'Projects',
+            subheader: this.$t('account.sidebar.projectsBlock.title'),
             items: [
               {
                 icon: 'next_week',
-                title: 'Team\'s projects',
-                route: { name: 'account.projects' }
+                title: this.$t('account.sidebar.projectsBlock.pr'),
+                route: { name: 'account.teams.projects' }
               },
-              {
-                icon: 'business_center',
-                title: 'My projects',
-                route: { name: 'account.personalProjects' }
-              },
-              {
-                icon: 'bookmarks',
-                title: 'Following projects',
-                route: { name: 'account.followingProjects' }
-              }
+              // {
+              //   icon: 'business_center',
+              //   title: this.$t('account.sidebar.projectsBlock.myPr'),
+              //   route: { name: 'account.personal.projects' }
+              // },
+              // {
+              //   icon: 'bookmarks',
+              //   title: this.$t('account.sidebar.projectsBlock.follPr'),
+              //   route: { name: 'account.following.projects' }
+              // }
               // {
               //   icon: 'mdi-file-replace',
-              //   title: 'Project requests',
+              //   title: this.$t('account.sidebar.projectsBlock.prReq'),
               //   route: { name: 'account.projectRequests' }
               // }
             ]
           },
           {
-            subheader: 'Groups',
+            subheader: this.$t('account.sidebar.groupsBlock.title'),
             items: [
               {
                 icon: 'reduce_capacity',
-                title: 'Teams',
+                title: this.$t('account.sidebar.groupsBlock.teams'),
                 route: { name: 'account.groups' }
               }
             ]
           },
           {
-            subheader: 'Security',
+            subheader: this.$t('account.sidebar.securityBlock.title'),
             items: [
               {
                 icon: 'lock',
-                title: 'Change password',
+                title: this.$t('account.sidebar.securityBlock.password'),
                 route: { name: 'account.password' }
               },
               {
                 icon: 'vpn_key',
-                title: 'Private key',
+                title: this.$t('account.sidebar.securityBlock.privateKey'),
                 route: { name: 'account.privateKey' }
               }
             ]

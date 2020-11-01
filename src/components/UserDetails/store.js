@@ -19,7 +19,6 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 const state = {
   account: undefined,
   profile: undefined,
-  researchList: [],
   groups: [],
   expertise: [],
   invites: [],
@@ -44,11 +43,6 @@ const state = {
 // getters
 const getters = {
   userInfo: (state, getters) => ({ account: state.account, profile: state.profile }),
-  researchList: (state, getters, rootState, rootGetters) => state.researchList.map((research) => {
-    const group = state.groups.find(({ id }) => id === research.research_group_id);
-    // return { research: { ...research }, group };
-    return { ...research };
-  }),
 
   groups: (state) => state.groups,
   expertise: (state) => state.expertise,
@@ -95,18 +89,13 @@ const actions = {
       dispatch('loadGroups', { username, notify: resolve });
     });
 
-    const researchesLoad = new Promise((resolve, reject) => {
-      dispatch('loadResearchList', { username, notify: resolve });
-    });
-
     return Promise.all([
       accountLoad,
       profileLoad,
       expertiseLoad,
       invitesLoad,
       reviewRequestsLoad,
-      groupsLoad,
-      researchesLoad
+      groupsLoad
     ]);
   },
 
@@ -157,16 +146,6 @@ const actions = {
       })
       .finally(() => {
         commit('SET_USER_GROUPS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
-  loadResearchList({ commit, state }, { username, notify } = {}) {
-    return researchService.getUserResearchListing(username)
-      .then((researches) => {
-        commit('SET_RESEARCH_LIST', researches);
-      })
-      .finally(() => {
         if (notify) notify();
       });
   },
@@ -314,10 +293,6 @@ const mutations = {
 
   SET_USER_ACCOUNT(state, account) {
     state.account = account;
-  },
-
-  SET_RESEARCH_LIST(state, researchList) {
-    state.researchList = researchList;
   },
 
   SET_RESEARCH_GROUPS(state, groups) {

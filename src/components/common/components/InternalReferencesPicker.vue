@@ -1,6 +1,6 @@
 <template>
   <div class="full-width">
-    <div v-if="showSelected">
+    <div v-if="showSelected" class="mb-4">
       <div v-show="selected.length" class="text-subtitle-1 py-2">
         Selected References:
       </div>
@@ -29,7 +29,7 @@
       </v-row>
     </div>
 
-    <v-divider v-if="showSelected && selected.length" class="my-2" />
+    <!-- <v-divider v-if="showSelected && selected.length" class="my-2" /> -->
 
     <v-row
       v-for="(ref, i) in list"
@@ -105,13 +105,13 @@
         return this.searchable.filter((ref) => !this.isReferenceSelected(ref));
       },
       selected() {
-        return this.allReferencesList.filter((r) => this.preselected.some((id) => r.external_id === id));
+        return this.allReferencesList.filter((r) => this.preselected.some((p) => r.external_id === p.external_id));
       }
     },
     methods: {
       addReference(ref) {
         if (!this.selected.some((r) => r.external_id === ref.external_id)) {
-          this.selected.push(ref);
+          // this.selected.push(ref);
           this.term = '';
           this.searchable = [];
           this.$emit('referenceAdded', ref);
@@ -120,7 +120,7 @@
       },
       removeReference(ref) {
         if (this.selected.some((r) => r.external_id === ref.external_id)) {
-          this.selected = this.selected.filter((r) => r.external_id !== ref.external_id);
+          // this.selected = this.selected.filter((r) => r.external_id !== ref.external_id);
           this.$emit('referenceRemoved', ref);
         }
       },

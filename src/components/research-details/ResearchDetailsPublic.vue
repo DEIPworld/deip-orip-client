@@ -7,9 +7,9 @@
         <research-details-materials :is-details-available="false" />
       </d-layout-section-main>
       <d-layout-section-sidebar>
-        <d-block widget title="You are not logged in">
+        <d-block-widget :title="$t('researchDetailsPublic.notLogged')">
           <div class="my-2 text-body-2">
-            After creating an account/log in you can add new projects or enjoy shared materials
+            {{ $t('researchDetailsPublic.afterCreatingAcc') }}
           </div>
           <v-btn
             :to="{
@@ -19,17 +19,15 @@
             color="primary"
             class="pa-2"
           >
-            Sign in
+            {{ $t('researchDetailsPublic.signIn') }}
           </v-btn>
-        </d-block>
+        </d-block-widget>
 
-        <d-block widget separated :title="group.name">
+        <d-block-widget :title="group.name">
           <div
             v-for="(member, i) in researchMembersList"
             :key="member.account.id"
             class="mt-4"
-            justify="space-between"
-            align-center
           >
             <div>
               <platform-avatar
@@ -45,9 +43,9 @@
               </platform-avatar>
             </div>
           </div>
-        </d-block>
+        </d-block-widget>
 
-        <d-block widget separated>
+        <d-block-widget>
           <div v-for="(item, i) in researchRef.extendedAttributes" :key="`${i}-tenantCriteria`">
             <div v-if="item.attribute.type == 'stepper'"
                  :class="{'mb-2': i + 1 < researchRef.extendedAttributes.length}">
@@ -64,11 +62,11 @@
               </div>
             </div>
           </div>
-        </d-block>
+        </d-block-widget>
 
-        <d-block v-if="researchRef.partners.length" widget separated title="Partners">
+        <d-block-widget v-if="researchRef.partners.length" title="Partners">
           <research-partners class="mt-4" is-read-only :partners="researchRef.partners" />
-        </d-block>
+        </d-block-widget>
 
       </d-layout-section-sidebar>
     </d-layout-section>
@@ -88,6 +86,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const researchService = ResearchService.getInstance();
 
@@ -95,6 +94,7 @@
     name: 'ResearchDetailsPublic',
 
     components: {
+      DBlockWidget,
       DLayoutSectionSidebar,
       DLayoutSectionMain,
       DBlock,

@@ -1,21 +1,20 @@
 <template>
   <div>
-    <d-block widget>
+    <d-block-widget>
       <router-link
         class="title link"
         :to="{
-          name: 'ResearchDetails',
+          name: 'research.details',
           params: {
-            research_group_permlink: encodeURIComponent(research.research_group.permlink),
-            research_permlink: encodeURIComponent(research.permlink)
+            researchExternalId: research.external_id
           }
         }"
       >
         {{ research.title }}
       </router-link>
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)" widget separated>
+    <d-block-widget v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)">
       <div v-if="isProposed" class="text-body-1">
         Draft is
         <router-link
@@ -40,21 +39,19 @@
           Unlock Draft
         </v-btn>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block
-      widget
-      separated
+    <d-block-widget
+      v-if="$route.params.content_permlink !== '!draft'"
       title="Expertise Contribution Index"
     >
       <eci-stats
-        v-if="$route.params.content_permlink !== '!draft'"
         :content-id="content.external_id"
         :disciplines="disciplinesList"
       />
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="isPublished" widget separated>
+    <d-block-widget v-if="isPublished">
       <v-dialog
         v-model="requestExpertReviewDialog.isShown"
         persistent
@@ -119,9 +116,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </d-block>
+    </d-block-widget>
 
-    <d-block widget separated title="Authors">
+    <d-block-widget title="Authors">
       <template v-if="isPublished">
         <div
           v-for="(author, index) in contentAuthorsList"
@@ -164,9 +161,9 @@
           </div>
         </div>
       </template>
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="researchTableOfContent.length" widget separated title="Project table of content">
+    <d-block-widget v-if="researchTableOfContent.length" title="Project table of content">
       <ol class="text-body-2">
         <li
           v-for="(item, index) in researchTableOfContent"
@@ -210,9 +207,9 @@
           References
         </router-link>
       </div>
-    </d-block>
+    </d-block-widget>
 
-    <d-block v-if="isPublished" widget separated>
+    <d-block-widget v-if="isPublished">
       <v-btn
         block
         color="primary"
@@ -227,7 +224,7 @@
       >
         Blockchain Metadata
       </v-btn>
-    </d-block>
+    </d-block-widget>
   </div>
 </template>
 
@@ -239,6 +236,7 @@
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
@@ -247,6 +245,7 @@
     name: 'ResearchContentDetailsSidebar',
 
     components: {
+      DBlockWidget,
       EciStats,
       DBlock
     },
@@ -414,7 +413,7 @@
           expert: this.requestExpertReviewDialog.selectedExpert.account.name
         })
           .then(() => {
-            this.$notifier.showError('Request for the review has been sent successfully');
+            this.$notifier.showSuccess('Request for the review has been sent successfully');
           })
           .catch((err) => {
             let errMsg = 'An error occurred while requesting the review. Please try again later';

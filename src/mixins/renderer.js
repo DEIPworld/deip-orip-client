@@ -1,5 +1,5 @@
 import kindOf from 'kind-of';
-import { getObjectValueByPath, mergeDeep } from 'vuetify/lib/util/helpers';
+import { getObjectValueByPath, mergeDeep, getSlotType } from 'vuetify/lib/util/helpers';
 import dotProp from 'dot-prop';
 
 import DLayout from '@/components/Deipify/DLayout/DLayout';
@@ -10,10 +10,13 @@ import DLayoutSectionSplit from '@/components/Deipify/DLayout/DLayoutSectionSpli
 
 import DStack from '@/components/Deipify/DStack/DStack';
 import DBlock from '@/components/Deipify/DBlock/DBlock';
+import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
-import { VDivider, VSheet, VIcon, VRow, VCol } from 'vuetify/lib/components';
+import CrudActions from '@/components/layout/CrudActions';
+
+import { VDivider, VSheet, VIcon, VBtn, VRow, VCol } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {
@@ -24,14 +27,18 @@ const rendererCommon = {
     DLayoutSectionSidebar,
     DLayoutSectionSplit,
 
+    CrudActions,
+
     DStack,
     DBlock,
+    DBlockWidget,
     DMetaItem,
     DSimpleTooltip,
 
     VDivider,
     VSheet,
     VIcon,
+    VBtn,
     VRow,
     VCol
   },
@@ -52,14 +59,21 @@ const rendererCommon = {
 
       const stringPattern = /{{\s*(.*?)\s*}}/gm;
       const modelPattern = /^@([a-zA-Z0-9_.-]*)$/;
+      const methodPattern = /^@([a-zA-Z0-9_.-]*\(['"][a-zA-Z0-9_.-]*['"]\))$/;
 
-      for (const { parent, node, key } of new RecursiveIterator(clone)) {
+      for (const { parent, node, key } of new RecursiveIterator(clone, 1, true)) {
         if (kindOf(node) === 'string') {
           const stringMatches = [...node.matchAll(stringPattern)];
           const modelMatches = node.match(modelPattern);
+          const methodMatches = node.match(methodPattern);
 
           if (modelMatches && modelMatches.length) {
             parent[key] = getObjectValueByPath(this, modelMatches[1]);
+          }
+
+          if (methodMatches && methodMatches.length) {
+            // eslint-disable-next-line no-eval
+            parent[key] = eval(`this.${methodMatches[1]}`);
           }
 
           if (stringMatches && stringMatches.length) {
@@ -80,9 +94,9 @@ export const nativeRenderer = {
   ],
 
   methods: {
-    getChildren(children = null, h) {
+    getChildren(children = null) {
       if (kindOf(children) === 'array') {
-        return children.map((n) => this.generateNode(n, h));
+        return children.map((n) => this.generateNode(n));
       }
 
       if (kindOf(children) === 'string') {
@@ -92,13 +106,13 @@ export const nativeRenderer = {
       throw new Error('Children must be an Array or String');
     },
 
-    generateNode(node, h) {
+    generateNode(node) {
       const data = { ...(node.data || {}) };
       const condition = Object.prototype.hasOwnProperty.call(node, 'if') ? node.if : true;
-      return condition !== 'false' ? h(
+      return condition !== 'false' ? this.$createElement(
         node.is,
         data,
-        this.getChildren(node.children, h)
+        this.getChildren(node.children, this.$createElement)
       ) : null;
     }
   },
@@ -118,10 +132,10 @@ export const componentsRenderer = {
   ],
   // props: ['value'],
   methods: {
-    getChildren(children = null, h) {
+    getChildren(children = null) {
       if (children) {
         if (kindOf(children) === 'array') {
-          return children.map((n) => this.generateNode(n, h));
+          return children.map((n) => this.generateNode(n));
         }
 
         throw new Error('Children must be an Array');
@@ -130,17 +144,18 @@ export const componentsRenderer = {
       return null;
     },
 
-    generateNode(node, h) {
+    generateNode(node) {
       const self = this;
 
       // eslint-disable-next-line no-eval
-      let condition = node.if ? eval(`${node.if}`) : true;
+      const condition = node.if ? eval(`${node.if}`) : true;
 
       const data = {
         ...(node.props ? { props: node.props } : {}),
         ...(node.attrs ? { attrs: node.attrs } : {}),
         ...(node.class ? { class: node.class } : {}),
-        ...(node.slot ? { slot: node.slot } : {})
+        ...(node.slot ? { slot: node.slot } : {}),
+        ...(node.on ? { on: node.on } : {})
       };
 
       let vModel = {};
@@ -163,20 +178,29 @@ export const componentsRenderer = {
 
       const component = isStringNode ? node : node.component;
 
-      let content = this.getChildren(node.children, h);
+      let children = this.getChildren(node.children);
 
       if (node.text) {
-        content = node.text;
+        children = node.text;
       }
+
+      // SLOTS WORKAROUND // must be changed
+      if (node.slotName) {
+        const slotType = getSlotType(this, node.slotName);
+        children = slotType === 'scoped'
+          ? [this.$scopedSlots[node.slotName]()]
+          : this.$slots[node.slotName];
+      }
+
       if (isStringNode) {
-        content = null;
+        children = null;
       }
 
       if (condition) {
-        return h(
+        return this.$createElement(
           component,
           mergeDeep(data, vModel),
-          content
+          children
         );
       }
 

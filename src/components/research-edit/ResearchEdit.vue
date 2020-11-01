@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Edit project">
+  <full-screen-view :title="$t('researchEdit.title')">
     <research-edit-body />
   </full-screen-view>
 </template>

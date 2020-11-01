@@ -4,10 +4,10 @@
       <div class="display-flex full-height pos-relative overflow-hidden">
         <div class="c-m-auto text-align-center">
           <div class="text-h2 bold">
-            Sorry
+            {{ $t('noAccessPage.sorry') }}
           </div>
           <div class="text-h5">
-            You have no access to this page
+            {{ $t('noAccessPage.noAccess') }}
           </div>
         </div>
 

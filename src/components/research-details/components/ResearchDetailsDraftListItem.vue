@@ -3,13 +3,15 @@
     <v-expansion-panel-header>
       <v-row align="center" @click.stop>
         <v-col cols="2" class="text-capitalize bold">
-          Draft {{ index + 1 }}
+          {{ $t('researchDetails.draft') }} {{ index + 1 }}
         </v-col>
         <v-col cols="10">
           <span class="bold">
             <a class="a" @click="openDarDraft(draft)">{{ draft.title || draft._id }}</a>
           </span>
-          <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">(proposed)</span>
+          <span v-if="isDraftProposed(draft)" class="ml-2 orange--text">
+            ({{ $t('researchDetails.proposed') }})
+          </span>
         </v-col>
       </v-row>
     </v-expansion-panel-header>
@@ -39,7 +41,7 @@
                 color="primary"
                 @click="deleteDraft(draft)"
               >
-                Delete
+                {{ $t('researchDetails.delete') }}
               </v-btn>
               <v-btn
                 small
@@ -48,7 +50,7 @@
                 color="primary lighten-1"
                 @click="openDarDraft(draft)"
               >
-                View
+                {{ $t('researchDetails.view') }}
               </v-btn>
             </div>
           </v-row>
@@ -85,7 +87,11 @@
     },
     computed: {
       draftTypeTitle() {
-        return this.draft.type === 'dar' ? 'Created on platform content' : this.draft.type === 'package' ? 'Uploaded content' : this.draft.type;
+        return this.draft.type === 'dar'
+          ? this.$t('researchDetails.createdCont')
+          : this.draft.type === 'package'
+            ? this.$t('researchDetails.uploadedCont')
+            : this.draft.type;
       }
     },
     methods: {

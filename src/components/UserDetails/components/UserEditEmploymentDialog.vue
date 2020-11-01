@@ -1,23 +1,23 @@
 <template>
-  <full-screen-view title="Employment">
+  <full-screen-view :title="$t('userDetailRouting.employmentDialog.title')">
     <v-form ref="form" v-model="isFormValid">
-      <d-form-block title="Company">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.companyBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.company"
             outlined
-            label="Company"
+            :label="$t('userDetailRouting.employmentDialog.companyBlock.companyField')"
             :rules="[rules.required]"
           />
         </v-col>
       </d-form-block>
 
-      <d-form-block title="Location">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.locationBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.location.city"
             outlined
-            label="City"
+            :label="$t('userDetailRouting.employmentDialog.locationBlock.cityField')"
             :rules="[rules.required]"
           />
         </v-col>
@@ -25,13 +25,13 @@
           <v-text-field
             v-model="formData.location.country"
             outlined
-            label="Country"
+            :label="$t('userDetailRouting.employmentDialog.locationBlock.countryField')"
             :rules="[rules.required]"
           />
         </v-col>
       </d-form-block>
 
-      <d-form-block title="Period">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.periodBlock.title')">
         <v-col cols="5">
           <v-menu
             v-model="dateFromMenu"
@@ -45,7 +45,7 @@
                 ref="dateFromInput"
                 v-model="formData.period.from"
                 outlined
-                label="From"
+                :label="$t('userDetailRouting.employmentDialog.periodBlock.fromField')"
                 append-icon="event"
                 :rules="[
                   rules.required,
@@ -72,7 +72,7 @@
                 ref="dateToInput"
                 v-model="formData.period.to"
                 outlined
-                label="To"
+                :label="$t('userDetailRouting.employmentDialog.periodBlock.toField')"
                 append-icon="event"
                 :disabled="formData.isActive"
                 :rules="[
@@ -91,32 +91,32 @@
           <v-checkbox
             v-model="formData.isActive"
             class="ma-0 pa-0"
-            label="Is present"
+            :label="$t('userDetailRouting.employmentDialog.periodBlock.isPresentField')"
             hide-details
             style="max-width: 125px"
           />
         </v-col>
       </d-form-block>
 
-      <d-form-block title="Position">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.positionBlock.title')">
         <v-col cols="5">
           <v-text-field
             v-model="formData.position"
             outlined
-            label="Position"
+            :label="$t('userDetailRouting.employmentDialog.positionBlock.positionField')"
             :rules="[rules.required]"
           />
         </v-col>
       </d-form-block>
 
-      <d-form-block title="Description (optional)">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.descriptionBlock.title')">
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
             outlined
             :rows="6"
             auto-grow
-            label="Description"
+            :label="$t('userDetailRouting.employmentDialog.descriptionBlock.descriptionField')"
           />
         </v-col>
       </d-form-block>
@@ -130,7 +130,7 @@
             text
             @click.native="$router.back()"
           >
-            Cancel
+            {{ $t('userDetailRouting.employmentDialog.cancel') }}
           </v-btn>
           <v-btn
             class="ma-0"
@@ -139,7 +139,7 @@
             :loading="isProcessing"
             @click="save()"
           >
-            Save
+            {{ $t('userDetailRouting.employmentDialog.submitBtn') }}
           </v-btn>
         </slot>
       </div>
@@ -186,21 +186,21 @@
         isFormValid: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
-          requiredDateTo: (value) => this.formData.isActive || !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          requiredDateTo: (value) => this.formData.isActive || !!value || this.$t('defaultNaming.fieldRules.required'),
           startDateValidation: (value) => {
             if (!value || !this.formData.period.to) {
               return true;
             }
 
-            return Date.parse(value) < Date.parse(this.formData.period.to) ? true : 'Start date should be smaller than end date';
+            return Date.parse(value) < Date.parse(this.formData.period.to) ? true : this.$t('defaultNaming.fieldRules.startDate');
           },
           endDateValidation: (value) => {
             if (!value || !this.formData.period.from) {
               return true;
             }
 
-            return Date.parse(value) > Date.parse(this.formData.period.from) ? true : 'End date should be greater than start date';
+            return Date.parse(value) > Date.parse(this.formData.period.from) ? true : this.$t('defaultNaming.fieldRules.endDate');
           }
         }
       };

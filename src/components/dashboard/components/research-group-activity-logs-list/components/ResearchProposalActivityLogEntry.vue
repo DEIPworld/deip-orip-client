@@ -21,10 +21,9 @@
             New "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
@@ -41,10 +40,9 @@
             started "<router-link
               class="a"
               :to="{
-                name: 'ResearchDetails',
+                name: 'research.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink)
+                  researchExternalId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research

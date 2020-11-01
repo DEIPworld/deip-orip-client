@@ -257,7 +257,7 @@
     data() {
       return {
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           unique: (value) => (!!value && this.isUsernameVerifyed !== false)
             || 'Username should be unique in system',
           nameChars: (value) => value.match(/^[a-z][a-z ,.'-]*$/i) !== null || 'Incorrect value',
@@ -271,10 +271,10 @@
           },
           masterPassword: (value) => {
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-              return 'Master password should be at least 10 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMinLength');
             }
             if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-              return 'Master password max length is 100 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMaxLength');
             }
 
             return true;

@@ -26,7 +26,7 @@ import ResearchGroupDetails from '@/components/research-group-details/ResearchGr
 import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings';
 
-import ResearchFeed from '@/components/research-feed/ResearchFeed';
+// import ResearchFeed from '@/components/research-feed/ResearchFeed';
 import ResearchDetails from '@/components/research-details/ResearchDetails';
 import ResearchExpertise from '@/components/ResearchExpertise/ResearchExpertise';
 import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
@@ -74,13 +74,17 @@ import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
-import { awaitStore } from '@/router/utils/awaitStore';
+import { awaitStore } from '@/utils/helpers';
 import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
 import { researchRouting } from '@/components/Research/router';
 import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
+import { TransactionsRouting } from '@/components/Transactions/router';
+
+import { exploreRouter } from '@/components/Explore';
+import { WalletRouting } from '@/components/Wallet/router';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -88,7 +92,11 @@ const usersService = UsersService.getInstance();
 Vue.use(Router);
 
 const router = new Router({
-  routes: [{
+  routes: [
+
+    ...exploreRouter,
+
+    {
     path: '/sign-in',
     name: 'SignIn',
     component: SignIn,
@@ -106,11 +114,13 @@ const router = new Router({
     meta: {
       withoutHeader: true
     }
-  }, {
+  },
+    {
     path: '/org-sign-in',
     name: 'TenantSignIn',
     component: TenantSignIn
-  }, {
+  },
+    {
     path: '/sign-up',
     name: 'SignUp',
     component: SignUp,
@@ -212,18 +222,20 @@ const router = new Router({
     path: '/:account_name/create-research-group',
     name: 'CreateResearchGroup',
     component: CreateResearchGroup
-  }, {
-    path: '/:research_group_permlink/wallet',
-    name: 'ResearchGroupWallet',
-    component: preliminaryDataLoader(ResearchGroupWallet, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-          permlink: decodeURIComponent(to.params.research_group_permlink)
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
+  },
+  //  {
+  //   path: '/:research_group_permlink/wallet',
+  //   name: 'ResearchGroupWallet',
+  //   component: preliminaryDataLoader(ResearchGroupWallet, {
+  //     beforeEnter: (to, from, next) => {
+  //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
+  //         permlink: decodeURIComponent(to.params.research_group_permlink)
+  //       });
+  //       loadPage(loadPagePromise, next);
+  //     }
+  //   })
+  // },
+   {
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
@@ -233,16 +245,12 @@ const router = new Router({
       });
       loadPage(loadPagePromise, next);
     }
-  }, {
-    path: '/research-feed',
-    name: 'ResearchFeed',
-    component: preliminaryDataLoader(ResearchFeed, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('feed/loadResearchFeed', {});
-        loadPage(loadPagePromise, next);
-      }
-    })
   },
+  // {
+  //   path: '/research-feed',
+  //   name: 'ResearchFeed',
+  //   component: ResearchFeed
+  // },
 
   {
     path: '/:research_group_permlink/research/:research_permlink',
@@ -452,6 +460,8 @@ const router = new Router({
     ...ParticipantstRouting,
     ...overviewRouting,
     ...landingRouting,
+    ...TransactionsRouting,
+    ...WalletRouting,
 
   {
     path: '/user-wallet',
@@ -574,17 +584,20 @@ const authDataLoad = () => Promise.all([
   // ...[Object.keys(store.state.auth.user).map((key) => awaitStore('auth/user', key))],
   awaitStore('auth/loaded'),
   // awaitStore('auth/user', 'account'),
-  awaitStore('auth/tenant')
+  awaitStore('auth/tenant'),
+  awaitStore('auth/assets'),
 ]);
 
 router.beforeEach((to, from, next) => {
   const PUBLIC_PAGES_NAMES = [
-    'ResearchFeed',
     'landing',
+    'explore',
+
     'ResearchDetailsPublic',
     'NoAccessPage',
     'FAQ',
-    'UserApplicationAccepted'
+    'UserApplicationAccepted',
+    'research.details'
   ];
 
   const loginPages = [

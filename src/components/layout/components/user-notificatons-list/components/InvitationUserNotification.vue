@@ -5,7 +5,7 @@
     @click="clickNotification(notification)"
   >
     "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-    invited you to join them
+    {{ $t('notifications.invitedToJoin') }}
   </user-notifications-list-item>
 </template>
 

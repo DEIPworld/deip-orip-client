@@ -8,10 +8,12 @@
     <div class="px-6 full-width">
       <router-link
         class="text-subtitle-1 half-bold investment-title"
-        :to="{ name: 'ResearchDetails', params: {
-          research_group_permlink: encodeURIComponent(selectedInvestment.group.permlink),
-          research_permlink: encodeURIComponent(selectedInvestment.research.permlink)
-        }}"
+        :to="{
+          name: 'research.details',
+          params: {
+            researchExternalId: selectedInvestment.research.external_id
+          }
+        }"
       >
         {{ selectedInvestment.research.title }}
       </router-link>

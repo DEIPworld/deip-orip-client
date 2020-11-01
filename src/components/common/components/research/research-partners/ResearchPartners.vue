@@ -104,7 +104,7 @@
       return {
         partnersInfo: researchPartners,
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           partner: (v) => !!v || 'Partner is required'
         }
       };

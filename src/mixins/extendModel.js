@@ -1,47 +1,125 @@
+import { hasValue, isArray } from '@/utils/helpers';
 import Proxyable from 'vuetify/lib/mixins/proxyable';
+import { wrapInArray } from 'vuetify/lib/util/helpers';
 
-export const arrayModelAddFactory = (model, target) => ({
+// Array model setups
+
+export const arrayedModel = {
   mixins: [Proxyable],
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? this.value
+        : []
+    };
+  },
+  created() {
+    if (!isArray(this.internalValue)) {
+      console.warn('Model must be bound to an Array.', this.$options.name);
+    }
+  }
+};
 
-  computed: {
-    target$: {
-      get() { return target ? this.internalValue[target] : this.internalValue; },
-      set(val) {
-        if (target) {
-          this.internalValue[target] = val;
-        } else {
-          this.internalValue = val
-        }
+export const arrayModelAddFactory = (modelFactory) => ({
+  mixins: [arrayedModel],
+
+  methods: {
+    addItem() {
+      this.internalValue = [
+        ...this.internalValue,
+        ...[modelFactory()]
+      ];
+    },
+
+    removeItem(item) {
+      const idx = this.internalValue.indexOf(item);
+      if (idx !== -1) {
+        this.internalValue.splice(idx, 1);
+        this.internalValue = [...new Set(this.internalValue)];
+
+        // this.internalValue = [...new Set(this.internalValue.splice(idx, 1))];
+      }
+    },
+
+    clearItems() {
+      this.internalValue = [];
+    },
+
+    addStartItem() {
+      if (!this.internalValue.length) {
+        this.addItem();
+      }
+    }
+  }
+});
+
+export const activatableArrayModelFactory = (modelFactory) => ({
+  mixins: [arrayModelAddFactory(modelFactory)],
+  data() {
+    return {
+      modelActive: false,
+    };
+  },
+
+  watch: {
+    modelActive(val) {
+      if (!val) {
+        this.clearItems();
+      }
+
+      if (val && !this.internalValue.length) {
+        this.addItem();
       }
     }
   },
 
-  methods: {
-    appendModel() {
-      this.target$.push(
-        { ...model }
-      );
-    },
-    removeFromModel(index) {
-      this.$delete(this.target$, index);
-    }
-  },
-
-  // watch: {
-  //   value: {
-  //     deep: true,
-  //     handler(val) {
-  //       this.internalLazyValue = val;
-  //     }
-  //   }
-  // },
-
   created() {
-    if (!this.target$) {
-      this.target$ = [{ ...model }];
+    if (hasValue(this.internalValue)) {
+      this.modelActive = true;
     }
-    if (!this.target$.length) {
-      this.appendModel();
+  }
+});
+
+// Object model setups
+
+export const objectedModel = {
+  mixins: [Proxyable],
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? this.value
+        : {}
+    };
+  },
+  watch: {
+    internalValue: {
+      deep: true,
+      handler(val) {
+        this.$emit('change', val);
+      }
     }
   },
-});
+  created() {
+    if (!isArray(this.internalValue)) {
+      console.warn('Model must be bound to an Object.', this.$options.name);
+    }
+  }
+};
+
+// Null model setups
+
+export const nulledModel = {
+  mixins: [Proxyable],
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? this.value
+        : null
+    };
+  },
+  created() {
+    if (this.value === undefined) {
+      this.$emit('change', this.internalValue);
+    }
+  }
+};

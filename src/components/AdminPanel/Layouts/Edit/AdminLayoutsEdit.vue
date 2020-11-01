@@ -2,7 +2,7 @@
   <d-layout-full-screen full-width color="grey lighten-4" :title="layoutData.name">
     <portal to="sidebar">
       <v-navigation-drawer
-        :width="280"
+        :width="280 + 56"
         app
         clipped
         permanent
@@ -41,7 +41,7 @@
 <script>
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 
-  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/Composer/Modules/AdminLayoutsModules';
+  import AdminLayoutsModules from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesList';
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/Composer/AdminLayoutsComposer';
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/layouts';

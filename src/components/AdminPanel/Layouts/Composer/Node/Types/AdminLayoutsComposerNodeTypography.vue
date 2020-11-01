@@ -22,6 +22,10 @@
 
     <v-divider vertical class="dashed" />
 
+    <div v-if="node.text" class="py-2 px-3 text-body-2 font-weight-medium align-self-center text--secondary">
+      {{ node.text }}
+    </div>
+
     <admin-layouts-composer-nodes
       v-if="node.children"
       v-model="node.children"

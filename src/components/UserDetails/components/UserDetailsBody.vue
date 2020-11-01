@@ -14,15 +14,21 @@
 
     <!-- ### START User Profile Research Section ### -->
     <div v-if="!$route.name.includes('account')" class="user-research-groups-container spinner-container mb-4">
+
       <!-- TODO: hotfix -->
       <div class="py-6">
-        <research-list :data="researchList" namespace="userDetails" />
+
+        <projects-list
+          :user-name="userInfo.account.name"
+          type="public"
+        />
+
       </div>
 
       <div v-if="commonGroups.length" class="py-6">
         <div class="d-flex mb-6">
           <div class="text-h5">
-            Teams
+            {{ $t('userDetailRouting.teams') }}
             <v-badge offset-y="-8" offset-x="4" :content="commonGroups.length || '0'" />
           </div>
           <v-spacer v-if="isOwner" />
@@ -33,7 +39,7 @@
               color="primary"
               :to="{ name: 'CreateResearchGroup', params: {account_name: currentUser.username} }"
             >
-              Add group
+              {{ $t('userDetailRouting.addGroup') }}
               <v-icon small>
                 add
               </v-icon>
@@ -54,7 +60,7 @@
               }"
             >
               <d-box-item
-                :avatar="group.external_id | researchGroupLogoSrc(32, 32)"
+                :avatar="group.external_id | researchGroupLogoSrc(64, 64)"
                 :size="32"
                 class="w-100 pa-4"
               >
@@ -92,17 +98,17 @@
 <script>
   import { mapGetters } from 'vuex';
 
-  import ResearchList from '@/components/ResearchList/ResearchList';
   import UserDetailsEducation from '@/components/UserDetails/components/UserDetailsEducation';
   import UserDetailsEmployment from '@/components/UserDetails/components/UserDetailsEmployment';
   import UserDetailsProfileInfo from '@/components/UserDetails/components/UserDetailsProfileInfo';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   export default {
     name: 'UserDetailsBody',
 
     components: {
-      ResearchList,
+      ProjectsList,
       UserDetailsEducation,
       UserDetailsEmployment,
       UserDetailsProfileInfo,
@@ -113,7 +119,6 @@
         currentUser: 'auth/user',
         userInfo: 'userDetails/userInfo',
         groups: 'userDetails/groups',
-        researchList: 'userDetails/researchList'
       }),
 
       isOwner() {

@@ -4,8 +4,8 @@
       <v-row>
         <v-col cols="4">
           <d-block
-            title="Expertise contribution index value"
-            subtitle="Updated today"
+            :title="$t('overviewRouting.eciValue')"
+            :subtitle="$t('overviewRouting.subtitle')"
           >
             <v-skeleton-loader
               :loading="!$ready"
@@ -27,8 +27,8 @@
 
         <v-col cols="8">
           <d-block
-            title="Expertise contribution index overview"
-            subtitle="Updated today"
+            :title="$t('overviewRouting.eciOverview')"
+            :subtitle="$t('overviewRouting.subtitle')"
           >
             <v-skeleton-loader
               :loading="!$ready"
@@ -68,8 +68,8 @@
 
       <d-block
         class="mt-12"
-        title="Distribution impact"
-        subtitle="Updated today"
+        :title="$t('overviewRouting.distributionImpact.title')"
+        :subtitle="$t('overviewRouting.subtitle')"
       >
         <d-filter-block
           v-model="distributionDiscipline"
@@ -80,10 +80,10 @@
           <v-select
             v-model="distributionDiscipline"
             outlined
-            :items="[{label: 'All', external_id: ''}, ...disciplines]"
+            :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
             item-text="label"
             item-value="external_id"
-            label="Domain"
+            :label="$t('overviewRouting.distributionImpact.domainField')"
           />
         </d-filter-block>
 
@@ -156,7 +156,7 @@
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
           allowBlank: true,
-          blankLabel: 'All'
+          blankLabel: this.$t('defaultNaming.all')
         }),
 
         distributionChartData: []

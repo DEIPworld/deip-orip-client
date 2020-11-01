@@ -8,7 +8,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import ResearchDetailsRenderer from '@/components/Research/ResearchDetails/ResearchDetailsRenderer';
-  import { researchAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchDetails',
@@ -18,22 +18,29 @@
         research: 'Research/data'
       }),
 
-      isOwner() {
-        return this.research.members.includes(this.$currentUserName);
+      layoutSchema() {
+        const schema = this.$tenantSettings.researchLayouts.projectDetails.layout;
+        return extendAttrModules(
+          schema,
+          {
+            attrs: {
+              projectId: this.research$.externalId,
+              project: _.cloneDeep(this.research$), // global
+            }
+          }
+        );
       },
 
-      layoutSchema() {
-        return this.$tenantSettings.researchLayouts.projectDetails.layout;
-      },
       research$() {
         return {
           ...this.research,
           ...{
-            created_at: this.$options.filters.dateFormat(this.research.created_at, 'D MMM YYYY', true),
+            createdAt: this.$options.filters.dateFormat(this.research.createdAt, 'D MMM YYYY', true),
             researchRef: {
+              ...this.research.researchRef,
               attributes: researchAttributesToObject(this.research.researchRef.attributes)
-            },
-            cover: this.$options.filters.researchBackgroundSrc(this.research.external_id)
+            }
+            // cover: this.$options.filters.researchBackgroundSrc(this.research.externalId)
           }
         };
       }

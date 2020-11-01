@@ -1,13 +1,24 @@
 <template>
-  <v-btn
-    class="mt-1"
-    icon
-    color="primary"
-    outlined
-    @click="handleClick"
-  >
-    <v-icon>{{ icon }}</v-icon>
-  </v-btn>
+  <v-hover v-slot="{hover}">
+    <button
+      type="button"
+      style="outline: 0"
+      class="mt-1 d-inline-flex align-center"
+      @click="handleClick"
+    >
+      <span :class="$style.icon" class="d-flex align-center justify-center">
+        <v-icon small color="primary">
+          {{ icon }}
+        </v-icon>
+      </span>
+      <span
+        class="text-caption font-weight-medium ml-4"
+        :class="hover ? 'primary--text' : 'text--secondary'"
+      >
+        {{ label }}
+      </span>
+    </button>
+  </v-hover>
 </template>
 
 <script>
@@ -18,6 +29,10 @@
         type: String,
         default: 'add'
       },
+      label: {
+        type: String,
+        default: 'Add item'
+      }
     },
     methods: {
       handleClick() {
@@ -27,6 +42,11 @@
   };
 </script>
 
-<style scoped>
-
+<style module lang="scss">
+  .icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--v-primary-base);
+  }
 </style>

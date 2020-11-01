@@ -1,6 +1,33 @@
 <template>
   <div class="d-flex align-center">
 
+    <d-stack horizontal gap-4 class="ml-2">
+      <div
+        v-for="(item, index) of markers"
+        :key="`marker-${index}`"
+        class="pos-relative"
+      >
+        <d-simple-tooltip
+          :tooltip="item.tooltip"
+          tag="div"
+          position="top"
+          max-width="160"
+        >
+          <div>
+            <v-icon size="14" class="ma-0 d-flex">
+              {{ item.icon }}
+            </v-icon>
+          </div>
+
+        </d-simple-tooltip>
+      </div>
+    </d-stack>
+
+
+    <admin-layouts-modules-markers
+      :module="node"
+    />
+
     <v-menu v-model="menuOpen" close-on-content-click>
       <template v-slot:activator="{ on }">
         <v-btn
@@ -15,20 +42,6 @@
       </template>
 
       <v-list nav dense>
-        <v-list-item
-          v-if="/AttributesRead|AttributesSet/.test(node.component)"
-          @click="copyAttrId()"
-        >
-          <v-list-item-icon class="mr-1">
-            <v-icon size="20">
-              mdi-clipboard-multiple-outline
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-content class="text-body-2">
-            Copy attribute ID
-          </v-list-item-content>
-        </v-list-item>
-
         <v-dialog
           v-model="settingsOpen"
           :max-width="400"
@@ -58,6 +71,15 @@
                 <d-icon-selector
                   v-if="node.component === 'VIcon'"
                   v-model="nodeSettings.text"
+                />
+
+                <v-text-field
+                  v-if="hasOwnProperty('text', node) && node.component !== 'VIcon'"
+                  v-model="nodeSettings.text"
+                  label="Text"
+                  outlined
+                  hide-details="auto"
+                  class="ma-0"
                 />
 
                 <d-stack v-if="node.availableProps" :gap="16">
@@ -225,10 +247,16 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DIconSelector from '@/components/Deipify/DIconSelector/DIconSelector';
   import { filterObjectOnKeys } from 'vuetify/lib/util/helpers';
+  import { hasOwnProperty } from '@/utils/helpers';
+  import AdminLayoutsModulesMarkers
+    from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesMarkers';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   export default {
     name: 'AdminLayoutsComposerNodeSettings',
     components: {
+      DSimpleTooltip,
+      AdminLayoutsModulesMarkers,
       DIconSelector,
       DStack
     },
@@ -240,19 +268,32 @@
         menuOpen: false,
 
         nodeSettings: {
-          text: null,
 
           props: {},
           attrs: {},
 
-          if: null,
-          class: null,
-          slot: ''
         }
       };
     },
+    computed: {
+      markers() {
+        return [
+          ...(this.node.if
+            ? [{
+              icon: 'mdi-xml',
+              tooltip: 'Component has a condition'
+            }] : []),
+
+          ...(this.node.props && this.node.props.background
+            ? [{
+              icon: 'mdi-image-outline',
+              tooltip: 'Component has a background image'
+            }] : []),
+        ];
+      }
+    },
     created() {
-      const model = filterObjectOnKeys(
+      const model = _.cloneDeep(filterObjectOnKeys(
         this.node,
         [
           'text',
@@ -264,7 +305,7 @@
           'class',
           'slot'
         ]
-      );
+      ));
 
       this.nodeSettings = {
         ...this.nodeSettings,
@@ -272,6 +313,10 @@
       };
     },
     methods: {
+      hasOwnProperty(prop, obj) {
+        return hasOwnProperty(prop, obj)
+      },
+
       openMenu() {
         this.menuOpen = true;
       },
@@ -287,10 +332,7 @@
         };
         this.settingsOpen = false;
       },
-      copyAttrId() {
-        const id = this.node.props.attribute.split('.').slice(-1).pop();
-        this.$clipboard(id);
-      },
+
       clickRemove() {
         this.$emit('click:remove', this.node.id$);
       }

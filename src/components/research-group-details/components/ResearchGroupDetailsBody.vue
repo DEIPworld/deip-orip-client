@@ -22,15 +22,15 @@
         </div>
         <div class="text-body-2">
           {{ group ? group.description : '' }}
-          <v-btn
-            v-if="isJoinBtnAvailable"
-            class="mt-4"
-            color="primary"
-            outlined
-          >
-            Join team
-          </v-btn>
         </div>
+        <v-btn
+          v-if="isJoinBtnAvailable"
+          class="mt-4"
+          color="primary"
+          outlined
+        >
+          {{ $t('researchGroupDetails.join') }}
+        </v-btn>
       </v-col>
       <v-col v-if="(isJoinRequestsSectionAvailable || invites.length) && isResearchGroupMember" cols="auto">
         <research-group-requests />
@@ -64,13 +64,16 @@
           small
           @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
         >
-          Invite member
+          {{ $t('researchGroupDetails.invite') }}
         </v-btn>
       </template>
     </member-list>
 
     <!-- ### START Research Group Research List Section ### -->
-    <research-list namespace="groupDetails" :data="researchWithGroupInfoList">
+
+    <projects-list
+      :team-id="group.external_id"
+    >
       <template #addSome>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
@@ -79,10 +82,10 @@
           :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'research.create' } : { name: 'CreateResearchProposal' }"
           outlined
         >
-          Start a project
+          {{ $t('researchGroupDetails.start') }}
         </v-btn>
       </template>
-    </research-list>
+    </projects-list>
 
     <add-member-to-group-dialog
       v-if="group"
@@ -101,9 +104,9 @@
 
   import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
-  import ResearchList from '@/components/ResearchList/ResearchList';
   import MemberList from '@/components/MemberList/MemberList';
   import ResearchGroupRequests from '@/components/research-group-details/components/ResearchGroupRequests';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();
@@ -111,7 +114,7 @@
   export default {
     name: 'ResearchGroupDetailsBody',
     components: {
-      ResearchList,
+      ProjectsList,
       MemberList,
       ResearchGroupRequests
     },
@@ -138,7 +141,6 @@
         user: 'auth/user',
         userGroups: 'auth/userGroups',
         group: 'researchGroup/group',
-        researchList: 'researchGroup/researchList',
         members: 'researchGroup/members',
         invites: 'researchGroup/invites',
         isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
@@ -159,9 +161,6 @@
       },
       isGroupMembersActionsColumnAvailable() {
         return !this.isPersonalGroup && this.isResearchGroupMember && (this.group.is_dao || (!this.group.is_dao && this.user.username == this.group.creator));
-      },
-      researchWithGroupInfoList() {
-        return this.researchList.map((research) => research);
       },
       isJoinRequestsSectionAvailable() {
         const hasPendingJoinRequests = this.pendingJoinRequests && this.pendingJoinRequests.length;
@@ -203,21 +202,27 @@
     methods: {
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
-        researchGroupService.leftResearchGroupViaOffchain(this.user.privKey, {
-          member: member.item.owner,
-          researchGroup: this.group.external_id,
-          isExclusion: true,
-          extensions: []
-        }, {
-          notes: '',
-          approver: null
-        })
+        researchGroupService.leaveResearchGroupViaOffchain(
+          {
+            privKey: this.user.privKey,
+            username: this.user.username
+          },
+          {
+            member: member.item.owner,
+            researchGroup: this.group.external_id,
+            isExclusion: true,
+            extensions: []
+          },
+          {
+            notes: ""
+          }
+        )
           .then(() => {
-            this.$notifier.showSuccess('Dropout Proposal has been created successfully!');
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.successDrop'));
             this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
           })
           .catch((err) => {
-            this.$notifier.showError('An error occurred while creating proposal, please try again later');
+            this.$notifier.showError(this.$t('researchGroupDetails.errDrop'));
             console.error(err);
           })
           .finally(() => {

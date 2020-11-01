@@ -44,6 +44,7 @@
 
     &--vertical {
       grid-auto-flow: row;
+      //justify-items: left;
     }
   }
 </style>

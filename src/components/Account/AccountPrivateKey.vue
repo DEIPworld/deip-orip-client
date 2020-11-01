@@ -2,7 +2,7 @@
   <layout-section>
     <content-block
       :max-width="800"
-      title="Download private key"
+      :title="$t('account.privateKey.title')"
       centered
     >
       <v-form
@@ -13,7 +13,7 @@
         <v-text-field
           v-model="masterPassword"
           :rules="[rules.required, rules.masterPassword]"
-          label="Password / Private Key"
+          :label="$t('account.privateKey.passwordField')"
           outlined
           :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
           :type="isHiddenPassword ? 'password' : 'text'"
@@ -26,7 +26,7 @@
           :disabled="!isConfirmPasswordFormValid"
           @click="downloadPrivateKey()"
         >
-          Download Private Key (PDF)
+          {{ $t('account.privateKey.downloadBtn') }}
         </v-btn>
       </v-form>
     </content-block>
@@ -50,14 +50,14 @@
         isHiddenPassword: true,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           masterPassword: (value) => {
             if (!value) return false;
 
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
               return 'Master password is at least 10 symbols';
             } if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-              return 'Master password max length is 100 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMaxLength');
             }
 
             return true;

@@ -64,34 +64,34 @@
       return {
         tableHeaders: [
           {
-            text: 'Type',
+            text: this.$t('defaultNaming.tables.type'),
             align: 'left',
             value: 'type',
             sortable: false,
             width: '1%'
           },
           {
-            text: 'Title',
+            text: this.$t('defaultNaming.tables.title'),
             align: 'left',
             value: 'title',
             sortable: false
           },
           {
-            text: 'Date',
+            text: this.$t('defaultNaming.tables.date'),
             align: 'center',
             value: 'date',
             sortable: false,
             class: 'white-space-nowrap'
           },
           {
-            text: 'Reward ECI',
+            text: this.$t('defaultNaming.tables.rewardEci'),
             align: 'center',
             sortable: false,
             value: 'delta',
             class: 'white-space-nowrap'
           },
           {
-            text: 'Total ECI',
+            text: this.$t('defaultNaming.tables.totalEci'),
             align: 'center',
             sortable: false,
             value: 'eci',

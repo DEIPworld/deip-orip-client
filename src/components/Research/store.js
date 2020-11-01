@@ -1,4 +1,5 @@
 import { ResearchService } from '@deip/research-service';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
 const researchService = ResearchService.getInstance();
 
@@ -21,7 +22,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeResearchDetails(state, research) {
-    state.data = research;
+    state.data = camelizeObjectKeys(research);
   }
 };
 

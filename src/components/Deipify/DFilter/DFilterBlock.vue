@@ -16,7 +16,7 @@
           :loading="loading"
           @click="onApply()"
         >
-          Apply
+          {{ $t('defaultNaming.apply') }}
         </v-btn>
         <v-btn
           v-if="resetVisible"
@@ -25,7 +25,7 @@
           :disabled="loading"
           @click="onReset()"
         >
-          Clear
+          {{ $t('defaultNaming.clear') }}
         </v-btn>
       </slot>
     </div>

@@ -5,9 +5,9 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ notification.metadata.approver | fullname }}</span>
-    approved application for
+    {{ $t('notifications.approvedAppl') }}
     "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-    research
+    {{ $t('notifications.project') }}
   </user-notifications-list-item>
 </template>
 
@@ -33,10 +33,9 @@
     methods: {
       clickNotification() {
         this.$router.push({
-          name: 'ResearchDetails',
+          name: 'research.details',
           params: {
-            research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-            research_permlink: encodeURIComponent(this.notification.metadata.research.permlink)
+            researchExternalId: this.notification.metadata.research.external_id
           }
         });
         this.markAsRead();

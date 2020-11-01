@@ -86,7 +86,7 @@
       return {
         pendingMembersHeaders: [
           {
-            text: 'Researcher',
+            text: 'Member',
             value: 'researcher'
           },
           {

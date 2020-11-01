@@ -2,7 +2,7 @@
   <d-block>
     <template #title>
       <div class="text-h5">
-        Proposals
+        {{ $t('researchGroupDetails.proposalsTable.title') }}
         <v-badge offset-y="-8" offset-x="4" :content="filteredProposals.length || '0'" />
       </div>
     </template>
@@ -24,29 +24,35 @@
         <d-simple-tooltip v-if="item.fail_reason">
           <v-chip outlined color="error">
             <div class="text-caption">
-              Failure
+              {{ $t('researchGroupDetails.proposalsTable.failure') }}
             </div>
           </v-chip>
           <template #tooltip>
             <div>
-              <div>Next attempt: {{ moment(item.expiration_time).format('MM/DD/YYYY HH:mm') }}</div>
-              <div>Reason: {{ item.fail_reason }}</div>
+              <div>
+                {{ $t('researchGroupDetails.proposalsTable.next') }}
+                {{ moment(item.expiration_time).format('MM/DD/YYYY HH:mm') }}
+              </div>
+              <div>
+                {{ $t('researchGroupDetails.proposalsTable.reason') }} {{ item.fail_reason }}
+              </div>
             </div>
           </template>
         </d-simple-tooltip>
         <d-simple-tooltip v-else>
           <v-chip outlined>
             <div class="text-caption">
-              Pending
+              {{ $t('researchGroupDetails.proposalsTable.pending') }}
             </div>
           </v-chip>
           <template #tooltip>
             <div>
               <div v-if="item.voted_accounts.length">
-                Approved by: {{ item.voted_accounts.join(', ') }}
+                {{ $t('researchGroupDetails.proposalsTable.approved') }}
+                {{ item.voted_accounts.join(', ') }}
               </div>
               <div v-else>
-                No approvals yet
+                {{ $t('researchGroupDetails.proposalsTable.noApproval') }}
               </div>
             </div>
           </template>
@@ -114,30 +120,30 @@
         PROPOSAL_TYPES,
         proposalsHeader: [
           {
-            text: 'Status',
+            text: this.$t('researchGroupDetails.proposalsTable.header.status'),
             value: 'fail_reason',
             align: 'center'
           },
           {
-            text: 'Proposal',
+            text: this.$t('researchGroupDetails.proposalsTable.header.proposal'),
             value: 'proposal'
           },
           {
-            text: 'Created by',
+            text: this.$t('researchGroupDetails.proposalsTable.header.created'),
             value: 'creator'
           },
           {
-            text: 'Signatures',
+            text: this.$t('researchGroupDetails.proposalsTable.header.signatures'),
             value: 'voted_accounts.length',
             align: 'right'
           },
           {
-            text: 'Data',
+            text: this.$t('researchGroupDetails.proposalsTable.header.data'),
             value: 'creation_time',
             align: 'right'
           },
           {
-            text: 'Exp. data',
+            text: this.$t('researchGroupDetails.proposalsTable.header.expData'),
             value: 'expiration_time',
             align: 'right'
           },
@@ -228,7 +234,7 @@
           } else {
             this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
           }
-          this.$notifier.showSuccess('You have voted for the proposal successfully!');
+          this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
         })
           .catch((err) => {
             alert(err.message);

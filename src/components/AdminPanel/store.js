@@ -73,12 +73,12 @@ const actions = {
 
   // =====================
 
-  getPendingProjects(context) {
-    return researchService.getPendingResearchApplications()
-      .then((result) => {
-        context.commit('getPendingProjects', result);
-      });
-  },
+  // getPendingProjects(context) {
+  //   return researchService.getPendingResearchApplications()
+  //     .then((result) => {
+  //       context.commit('getPendingProjects', result);
+  //     });
+  // },
 
   getPublicProjects(context) {
     return researchService.getPublicResearchListing({})
@@ -89,7 +89,7 @@ const actions = {
 
   getAllProjects(context) {
     return Promise.all([
-      context.dispatch('getPendingProjects'),
+      // context.dispatch('getPendingProjects'),
       context.dispatch('getPublicProjects')
     ]);
   }

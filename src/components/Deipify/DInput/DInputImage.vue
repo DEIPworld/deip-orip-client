@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-body-2 mb-1 text--secondary" v-if="label">
+    <div v-if="label" class="text-body-2 mb-1 text--secondary">
       {{ label }}
     </div>
     <v-sheet rounded class="overflow-hidden">
@@ -23,11 +23,14 @@
           initial-position="center"
           auto-sizing
           :style="{width: '100%', height: '100%', display: 'block'}"
-          :initial-image="internalValue"
+          :initial-image="initialImage"
 
           @init="onInit"
 
           @new-image-drawn="onNewImage"
+          @draw="onDrawDebounce"
+          @file-choose="onFileChoose"
+          @initial-image-loaded="onInitialImageLoaded"
         />
         <!--@draw="debounceInternalValue"-->
       </v-responsive>
@@ -36,7 +39,6 @@
         <v-divider />
 
         <v-sheet color="grey lighten-4 pa-2 d-flex align-center">
-
           <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(1)">
             <v-icon>rotate_right</v-icon>
           </v-btn>
@@ -73,18 +75,19 @@
           <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.remove()">
             <v-icon>clear</v-icon>
           </v-btn>
-
         </v-sheet>
       </template>
     </v-sheet>
-
   </div>
 </template>
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import Croppa from 'vue-croppa/src/cropper';
+  import { debounce } from 'vuetify/lib/util/helpers';
+  import { fileNameFromUrl } from '@/utils/helpers';
   import 'vue-croppa/dist/vue-croppa.css';
+  import mime from 'mime';
 
   export default {
     name: 'DInputImage',
@@ -96,12 +99,12 @@
     mixins: [Proxyable],
 
     props: {
-      src: {
+      initialImage: {
         type: String,
-        default: undefined
+        default: null
       },
       aspectRatio: {
-        type: [String, Number],
+        type: Number,
         default: 16 / 9
       },
       label: {
@@ -118,8 +121,15 @@
 
         sliderVal: 0,
         sliderMin: 0,
-        sliderMax: 0
+        sliderMax: 0,
+
+        onDrawDebounce: null,
+        chosedFile: null
       };
+    },
+
+    created() {
+      this.onDrawDebounce = debounce(this.onDraw, 500);
     },
 
     methods: {
@@ -133,16 +143,55 @@
         this.sliderMax = this.croppa.scaleRatio * 4;
       },
 
+      onFileChoose(file) {
+        this.chosedFile = file;
+      },
+
+      onInitialImageLoaded() {
+        if (!this.chosedFile) {
+          this.chosedFile = {
+            name: fileNameFromUrl(this.initialImage)
+          };
+        }
+      },
+
+      onDraw() {
+        // console.log(this.croppa.outputWidth)
+        // console.log(this.croppa.naturalWidth)
+        this.getBlob()
+          .then((blob) => {
+            this.internalValue = new File([blob], this.chosedFile.name);
+          });
+      },
+
       onSliderInput(e) {
         this.croppa.scaleRatio = +e;
       },
 
-      getDataUrl(mimeType = 'image/png', compressionRate = 1) {
-        return this.croppa.generateDataUrl(mimeType, compressionRate);
+      getMime(mimeType) {
+        if (mimeType) {
+          return mimeType;
+        }
+
+        if (!mimeType && this.chosedFile.name) {
+          return mime.getType(this.chosedFile.name);
+        }
+
+        return 'image/png';
       },
 
-      getBlob(mimeType = 'image/png', compressionRate = 1) {
-        return this.croppa.promisedBlob(mimeType, compressionRate);
+      getDataUrl(mimeType, compressionRate = 0.9) {
+        return this.croppa.generateDataUrl(
+          this.getMime(mimeType),
+          compressionRate
+        );
+      },
+
+      getBlob(mimeType, compressionRate = 0.9) {
+        return this.croppa.promisedBlob(
+          this.getMime(mimeType),
+          compressionRate
+        );
       }
     }
   };

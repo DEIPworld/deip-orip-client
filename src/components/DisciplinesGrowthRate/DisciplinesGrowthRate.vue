@@ -1,5 +1,5 @@
 <template>
-  <d-block v-if="$ready" title="Growth rate overview">
+  <d-block v-if="$ready" :title="$t('defaultNaming.growthRateOver')">
     <d-filter-block
       v-model="filterModel"
       :reset-model="resetFilterModel"
@@ -11,15 +11,15 @@
         v-model="filterModel.discipline"
         outlined
         hide-details
-        :items="[{label: 'All', external_id: ''}, ...disciplines]"
+        :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
         item-text="label"
         item-value="external_id"
-        label="Domain"
+        :label="$t('defaultNaming.filters.domainField')"
       />
 
       <d-input-date
         v-model="filterModel.date"
-        label="Period"
+        :label="$t('defaultNaming.filters.periodField')"
         :picker-props="{
           min: moment('2020-01-01').format('YYYY-MM-DD'),
           range: true

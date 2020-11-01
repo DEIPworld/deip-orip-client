@@ -17,7 +17,7 @@
         </v-btn>
       </v-item>
       <v-divider vertical />
-      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.LIST">
+      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.TABLE">
         <v-btn tile icon small @click="toggle">
           <v-icon :color="active ? 'primary' : 'grey'">
             view_list

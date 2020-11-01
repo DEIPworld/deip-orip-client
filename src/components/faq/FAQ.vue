@@ -2,12 +2,12 @@
   <div>
     <layout-section>
       <div class="text-h4 font-weight-bold mb-4">
-        Frequently Asked Questions
+        {{ $t('faq.title') }}
       </div>
       <div class="mb-6 text-body-2">
-        Didn’t find what you were looking for?
+        {{ $t('faq.notFind') }}
         <router-link :to="'#'" class="a ml-1">
-          Get in touch.
+          {{ $t('faq.get') }}
         </router-link>
       </div>
       <div

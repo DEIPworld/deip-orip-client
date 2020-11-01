@@ -24,7 +24,7 @@
                 v-model="username"
                 name="username"
                 outlined
-                label="Username"
+                :label="$t('tenantSignIn.form.usernameField')"
                 :disabled="isChecking"
                 :rules="[rules.required]"
               />
@@ -33,7 +33,7 @@
                 v-model="password"
                 name="password"
                 outlined
-                label="Password / Private Key"
+                :label="$t('tenantSignIn.form.passwordField')"
                 :rules="[rules.required]"
                 :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
                 :type="isHiddenPassword ? 'password' : 'text'"
@@ -50,7 +50,7 @@
                 :disabled="isChecking"
                 @click="login()"
               >
-                Login
+                {{ $t('tenantSignIn.form.submitBtn') }}
               </v-btn>
             </v-form>
           </div>
@@ -96,7 +96,7 @@
         isHiddenPassword: true,
         isChecking: false,
         rules: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
         }
       };
     },
@@ -121,7 +121,7 @@
         return deipRpc.api.getAccountsAsync([this.username])
           .then(([account]) => {
             if (!account) {
-              throw new Error('Invalid account name');
+              throw new Error(this.$t('tenantSignIn.form.rules.invalidOrg'));
             }
 
             if (
@@ -143,7 +143,7 @@
             } catch (err) {
               accessService.clearAccessToken();
               this.isChecking = false;
-              this.$notifier.showError('Invalid private key format');
+              this.$notifier.showError(this.$t('tenantSignIn.form.rules.invalidKey'));
               return;
             }
 

@@ -13,11 +13,13 @@ const state = {
   researchTokens: [],
   researchTokensHolders: [],
   researchGroups: [],
-  assetsInfo: []
+  assetsInfo: [],
+  allGroups: []
 };
 
 // getters
 const getters = {
+  allGroups: (state) => state.allGroups,
   investments: (state, getters, rootState, rootGetters) => state.researches.map((research) => {
     const user = rootGetters['auth/user'];
     const myShare = state.researchTokens.find((rt) => rt.account_name == user.account.name && rt.research_id == research.id);
@@ -74,6 +76,7 @@ const actions = {
         return Promise.all(state.researches.map((research) => deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)));
       })
       .then((groups) => {
+        console.log(groups, 'groups')
         commit('SET_RESEARCH_GROUPS', groups);
       });
   },
@@ -92,7 +95,28 @@ const actions = {
         commit('SET_ASSETS_INFO', assetsInfo);
       })
       .catch((err) => console.error(err));
-  }
+  },
+
+  loadAllGroups({ commit }, user) {
+    return deipRpc.api.getResearchGroupTokensByAccountAsync(user)
+      .then((data) => {
+        const groupsInfo = Promise.all(
+          data.map((groupToken) => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id))
+        );
+
+        const groupsShares = Promise.all(
+          data.map((groupToken) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupToken.research_group_id))
+        );
+
+        return Promise.all([groupsInfo, groupsShares]);
+      })
+      .then(([groupsInfo, groupsShares]) => _.each(groupsInfo, (item, i) => {
+        item.shares = groupsShares[i];
+      }))
+      .then((groups) => {
+        commit('SET_ALL_RESEARCH_GROUPS', groups);
+      });
+  },
 };
 
 // mutations
@@ -115,6 +139,10 @@ const mutations = {
 
   SET_RESEARCH_GROUPS(state, list) {
     state.researchGroups = list;
+  },
+
+  SET_ALL_RESEARCH_GROUPS(state, allGroups) {
+    state.allGroups = allGroups;
   },
 
   SET_ASSETS_INFO(state, list) {

@@ -1,27 +1,41 @@
+<template>
+  <component
+    :is="attributeComponent"
+    v-model="internalValue"
+    :attribute="attribute"
+    :class="{'visually-hidden': attribute.isHidden}"
+    v-bind="attrs$"
+  />
+</template>
+
 <script>
-  import { attributeSet, attributeTypeComponent } from '@/components/Attributes/mixins';
-  import AttributesCheckboxSet from './AttributesCheckbox/AttributesCheckboxSet';
-  import AttributesDisciplinesListSet from './AttributesDisciplinesList/AttributesDisciplinesListSet';
-  import AttributesMultiSelectSet from './AttributesMultiSelect/AttributesMultiSelectSet';
-  import AttributesPartnersSet from './AttributesPartners/AttributesPartnersSet';
-  import AttributesResearchGroupSet from './AttributesResearchGroup/AttributesResearchGroupSet';
-  import AttributesRoadmapSet from './AttributesRoadmap/AttributesRoadmapSet';
-  import AttributesSelectSet from './AttributesSelect/AttributesSelectSet';
-  import AttributesStepperSet from './AttributesStepper/AttributesStepperSet';
-  import AttributesSwitchSet from './AttributesSwitch/AttributesSwitchSet';
-  import AttributesTextSet from './AttributesText/AttributesTextSet';
-  import AttributesTextareaSet from './AttributesTextarea/AttributesTextareaSet';
-  import AttributesUrlSet from './AttributesUrl/AttributesUrlSet';
-  import AttributesUserSet from './AttributesUser/AttributesUserSet';
-  import AttributesUsersListSet from './AttributesUsersList/AttributesUsersListSet';
-  import AttributesVideoUrlSet from './AttributesVideoUrl/AttributesVideoUrlSet';
+  import { attributeTypeComponent } from '@/components/Attributes/_mixins';
+
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+  import Proxyable from 'vuetify/lib/mixins/proxyable';
+
+  import { AttributesCheckboxSet } from '@/components/Attributes/Checkbox';
+  import { AttributesDisciplinesListSet } from '@/components/Attributes/DisciplinesList';
+  import { AttributesPartnersSet } from '@/components/Attributes/Partners';
+  import { AttributesResearchGroupSet } from '@/components/Attributes/ResearchGroup';
+  import { AttributesRoadmapSet } from '@/components/Attributes/Roadmap';
+  import { AttributesSelectSet } from '@/components/Attributes/Select';
+  import { AttributesStepperSet } from '@/components/Attributes/Stepper';
+  import { AttributesSwitchSet } from '@/components/Attributes/Switch';
+  import { AttributesTextSet } from '@/components/Attributes/Text';
+  import { AttributesTextareaSet } from '@/components/Attributes/Textarea';
+  import { AttributesUrlSet } from '@/components/Attributes/Url';
+  import { AttributesUserSet } from '@/components/Attributes/User';
+  import { AttributesVideoUrlSet } from '@/components/Attributes/VideoUrl';
+  import { AttributesImageSet } from '@/components/Attributes/Image';
+  import { AttributesExpressLicensingSet } from '@/components/Attributes/ExpressLicensing';
+  import { commonProps } from '@/variables/props';
 
   export default {
     name: 'AttributesSet',
     components: {
       AttributesCheckboxSet,
       AttributesDisciplinesListSet,
-      AttributesMultiSelectSet,
       AttributesPartnersSet,
       AttributesResearchGroupSet,
       AttributesRoadmapSet,
@@ -32,10 +46,14 @@
       AttributesTextareaSet,
       AttributesUrlSet,
       AttributesUserSet,
-      AttributesUsersListSet,
       AttributesVideoUrlSet,
+      AttributesImageSet,
+      AttributesExpressLicensingSet,
     },
 
-    mixins: [attributeSet, attributeTypeComponent]
+    mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
+    props: {
+      ...commonProps.attribute
+    }
   };
 </script>

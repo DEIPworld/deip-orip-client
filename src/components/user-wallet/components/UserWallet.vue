@@ -2,7 +2,7 @@
   <layout-section v-if="$ready">
     <content-block
       icon="mdi-cash-usd-outline"
-      title="Balance"
+      :title="$t('userWallet.balance')"
     >
       <v-data-table
         :items="user.balances"
@@ -42,19 +42,19 @@
 
             <v-list nav dense>
               <v-list-item @click="openSendTokensDialog(item)">
-                <v-list-item-title>Transfer</v-list-item-title>
+                <v-list-item-title>{{ $t('userWallet.transfer') }}</v-list-item-title>
               </v-list-item>
               <v-list-item
                 v-if="isDepositAvailable(item.asset_id)"
                 @click="openDepositDialog(item.asset_id)"
               >
-                <v-list-item-title>Deposit</v-list-item-title>
+                <v-list-item-title>{{ $t('userWallet.deposit') }}</v-list-item-title>
               </v-list-item>
               <v-list-item
                 v-if="isWithdrawAvailable(item.asset_id)"
                 @click="openWithdrawDialog(item.asset_id)"
               >
-                <v-list-item-title>Withdraw</v-list-item-title>
+                <v-list-item-title>{{ $t('userWallet.withdraw') }}</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
@@ -65,17 +65,16 @@
     <content-block
       v-if="investments.length"
       icon="mdi-account-box"
-      title="Portfolio"
+      :title="$t('userWallet.portfolio')"
     >
       <div v-for="(investment, index) of investments" :key="'investment-' + index" class="my-6">
         <div class="text-h4">
           <router-link
             class="a text-subtitle-1 text-truncate"
             :to="{
-              name: 'ResearchDetails',
+              name: 'research.details',
               params: {
-                research_group_permlink: encodeURIComponent(investment.research.research_group.permlink),
-                research_permlink: encodeURIComponent(investment.research.permlink)
+                researchExternalId: investment.research.external_id
               }
             }"
           >
@@ -89,7 +88,7 @@
               {{ convertToPercent(investment.myShare.amount) }} %
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Your ownership share
+              {{ $t('userWallet.ownershipShare') }}
             </div>
           </v-col>
           <v-col>
@@ -97,7 +96,7 @@
               {{ mockTokenPrice(investment.research.id, 1) | currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Price per token
+              {{ $t('userWallet.pricePerToken') }}
             </div>
           </v-col>
           <v-col>
@@ -105,7 +104,7 @@
               {{ mockTokenPrice(investment.research.id, investment.myShare.amount) | currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Your ownership value
+              {{ $t('userWallet.ownershipValue') }}
             </div>
           </v-col>
           <v-col>
@@ -113,7 +112,7 @@
               {{ mockTokenPrice(investment.research.id, DEIP_100_PERCENT)| currency }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Total value
+              {{ $t('userWallet.totalValue') }}
             </div>
           </v-col>
           <v-col>
@@ -121,7 +120,7 @@
               +{{ mockPriceChange(investment.research.id).toFixed(2) }}%
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              Price change
+              {{ $t('userWallet.priceChange') }}
             </div>
           </v-col>
           <v-col>
@@ -129,7 +128,7 @@
               {{ investment.shareHolders.length + 1 }}
             </div>
             <div class="mt-1 caption text-uppercase grey--text">
-              # of token holders
+              {{ $t('userWallet.tokenHolders') }}
             </div>
           </v-col>
           <v-col>
@@ -155,7 +154,7 @@
           <v-row>
             <v-col class="xs">
               <div class="text-h6">
-                Share price
+                {{ $t('userWallet.sharePrice') }}
               </div>
               <div class="mt-6">
                 <GChart
@@ -168,7 +167,7 @@
             </v-col>
             <v-col class="xs">
               <div class="text-h6">
-                Share holders
+                {{ $t('userWallet.shareHolders') }}
               </div>
               <div class="mt-6">
                 <GChart
@@ -187,7 +186,7 @@
             class="py-0 ma-0"
             @click="openSendResearchTokensDialog()"
           >
-            Transfer share
+            {{ $t('userWallet.transferShare') }}
           </v-btn>
         </v-sheet>
       </div>
@@ -197,7 +196,7 @@
       <v-card class="pa-6">
         <v-card-title class="">
           <div class="text-subtitle-1 font-weight-bold">
-            Deposit funds
+            {{ $t('userWallet.depositDialog.depositFunds') }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeDepositDialog()">
@@ -210,23 +209,27 @@
         <v-card-text class="pa-0">
           <v-row>
             <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
-              <v-credit-card v-if="depositDialog.isOpened" @change="creditInfoChanged" />
+              <v-credit-card
+                v-if="depositDialog.isOpened"
+                :trans="translations"
+                @change="creditInfoChanged"
+              />
             </v-col>
             <v-col cols="6">
               <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
                 <div class="balance-form-input">
-                  <label class="balance-form-input__label">Amount</label>
+                  <label class="balance-form-input__label">{{ $t('userWallet.depositDialog.amountField.label') }}</label>
                   <input
                     v-model="depositDialog.amount"
                     class="balance-form-input__field"
                     type="text"
-                    placehoder="Amount"
+                    :placehoder="$t('userWallet.depositDialog.amountField.placeholder')"
                   >
                 </div>
                 <div class="my-4">
                   <v-checkbox
                     v-model="depositDialog.termsConfirmed"
-                    label="I confirm that I am qualified investor"
+                    :label="$t('userWallet.depositDialog.confirmQualifiedField')"
                     hide-details
                   />
                 </div>
@@ -238,7 +241,7 @@
                     :loading="depositDialog.isDepositing"
                     @click="deposit()"
                   >
-                    Deposit funds
+                    {{ $t('userWallet.depositDialog.depositFunds') }}
                   </v-btn>
                 </div>
                 <div class="mb-6">
@@ -250,7 +253,7 @@
                     :disabled="depositDialog.isDepositing"
                     @click="closeDepositDialog()"
                   >
-                    Cancel
+                    {{ $t('userWallet.cancel') }}
                   </v-btn>
                 </div>
               </div>
@@ -263,7 +266,7 @@
       <v-card class="pa-6">
         <v-card-title class="">
           <div class="text-subtitle-1 font-weight-bold">
-            Withdraw funds
+            {{ $t('userWallet.withdrawDialog.withdrawFunds') }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeWithdrawDialog()">
@@ -277,7 +280,7 @@
           <v-row>
             <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
               <div class="balance-form-input mx-4 mt-2">
-                <label class="balance-form-input__label">Full name (Beneficiary)</label>
+                <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.nameField') }}</label>
                 <input
                   v-model="withdrawDialog.name"
                   class="balance-form-input__field"
@@ -286,13 +289,13 @@
               </div>
               <div class="balance-form-input mx-4 mt-4">
                 <label class="balance-form-input__label">
-                  IBAN
+                  {{ $t('userWallet.withdrawDialog.idanField.label') }}
                   <v-tooltip right>
                     <template v-slot:activator="{ on }">
                       <v-icon small v-on="on">help</v-icon>
                     </template>
 
-                    <span>International Bank Account Number. From 16 to 34 alphanumeric characters</span>
+                    <span>{{ $t('userWallet.withdrawDialog.idanField.tooltip') }}</span>
                   </v-tooltip>
                 </label>
                 <input
@@ -304,13 +307,13 @@
               </div>
               <div class="balance-form-input mx-4 mt-4">
                 <label class="balance-form-input__label">
-                  Reference number
+                  {{ $t('userWallet.withdrawDialog.referenceField.label') }}
                   <v-tooltip right>
                     <template v-slot:activator="{ on }">
                       <v-icon small v-on="on">help</v-icon>
                     </template>
 
-                    <span>Most reference numbers will be found at the top of the application submission</span>
+                    <span>{{ $t('userWallet.withdrawDialog.referenceField.tooltip') }}</span>
                   </v-tooltip>
                 </label>
                 <input
@@ -320,7 +323,7 @@
                 >
               </div>
               <div class="balance-form-input mx-4 mt-4">
-                <label class="balance-form-input__label">Message to Beneficiary</label>
+                <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.beneficiaryField') }}</label>
                 <textarea
                   v-model="withdrawDialog.messageText"
                   class="balance-form-input__field"
@@ -333,7 +336,7 @@
             <v-col cols="6" class="pl-4">
               <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
                 <div class="balance-form-input">
-                  <label class="balance-form-input__label">Amount</label>
+                  <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.amountField') }}</label>
                   <input
                     v-model="withdrawDialog.amount"
                     class="balance-form-input__field"
@@ -343,7 +346,7 @@
                 <div class="my-4">
                   <v-checkbox
                     v-model="withdrawDialog.termsConfirmed"
-                    label="I confirm that I am qualified investor"
+                    :label="$t('userWallet.withdrawDialog.confirmQualifiedField')"
                     hide-details
                   />
                 </div>
@@ -355,7 +358,7 @@
                     :loading="withdrawDialog.isWithdrawing"
                     @click="withdraw()"
                   >
-                    Withdraw funds
+                    {{ $t('userWallet.withdrawDialog.withdrawFunds') }}
                   </v-btn>
                 </div>
                 <div class="mb-6">
@@ -367,7 +370,7 @@
                     :disabled="withdrawDialog.isWithdrawing"
                     @click="closeWithdrawDialog()"
                   >
-                    Cancel
+                    {{ $t('userWallet.cancel') }}
                   </v-btn>
                 </div>
               </div>
@@ -380,7 +383,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h6">
-            Transfer Research Share
+            {{ $t('userWallet.sendResearchTokensDialog.transfer') }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeSendResearchTokensDialog()">
@@ -400,7 +403,7 @@
             />
             <v-text-field
               v-model="sendResearchTokensDialog.form.to"
-              label="Receiver"
+              :label="$t('userWallet.sendResearchTokensDialog.receiverField')"
               outlined
               :rules="sendResearchTokensDialog.form.rules.username"
               :disabled="sendResearchTokensDialog.isSending"
@@ -408,7 +411,7 @@
             <v-text-field
               v-model="sendResearchTokensDialog.form.amount"
               v-mask="'##'"
-              label="Share"
+              :label="$t('userWallet.sendResearchTokensDialog.shareField')"
               outlined
               :rules="sendResearchTokensDialog.form.rules.amount"
               :disabled="sendResearchTokensDialog.isSending"
@@ -427,7 +430,7 @@
                 :loading="sendResearchTokensDialog.isSending"
                 @click="sendResearchTokens()"
               >
-                Send
+                {{ $t('userWallet.sendResearchTokensDialog.submitBtn') }}
               </v-btn>
             </v-col>
             <v-col cols="12" class="py-2">
@@ -438,7 +441,7 @@
                 :disabled="sendResearchTokensDialog.isSending"
                 @click="closeSendResearchTokensDialog()"
               >
-                Cancel
+                {{ $t('userWallet.cancel') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -449,7 +452,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h6">
-            Transfer - {{ sendTokensDialog.currency.title }}
+            {{ $t('userWallet.sendTokensDialog.transfer') }} - {{ sendTokensDialog.currency.title }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="closeSendTokensDialog()">
@@ -464,14 +467,14 @@
           <v-form ref="sendTokensForm" v-model="sendTokensDialog.form.valid">
             <v-text-field
               v-model="sendTokensDialog.form.to"
-              label="To"
+              :label="$t('userWallet.sendTokensDialog.toField')"
               outlined
               :rules="sendTokensDialog.form.rules.username"
               :disabled="sendTokensDialog.isSending"
             />
             <v-text-field
               v-model="sendTokensDialog.form.amount"
-              label="Amount"
+              :label="$t('userWallet.sendTokensDialog.amount')"
               outlined
               :suffix="sendTokensDialog.currency.title"
               :rules="sendTokensDialog.form.rules.amount"
@@ -479,7 +482,7 @@
             />
             <v-textarea
               v-model="sendTokensDialog.form.memo"
-              label="Memo - optional"
+              :label="$t('userWallet.sendTokensDialog.memoField')"
               rows="1"
               auto-grow
               outlined
@@ -501,7 +504,7 @@
                 :loading="sendTokensDialog.isSending"
                 @click="sendTokens()"
               >
-                Send
+                {{ $t('userWallet.sendTokensDialog.submitBtn') }}
               </v-btn>
             </v-col>
             <v-col cols="12" class="py-2">
@@ -512,13 +515,14 @@
                 :disabled="sendTokensDialog.isSending"
                 @click="closeSendTokensDialog()"
               >
-                Cancel
+                {{ $t('userWallet.cancel') }}
               </v-btn>
             </v-col>
           </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </layout-section>
 </template>
 
@@ -529,6 +533,9 @@
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import * as bankCardsStorage from '../../../utils/bankCard';
+  import { InvestmentsService } from '@deip/investments-service';
+  
+  const investmentsService = InvestmentsService.getInstance();
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
@@ -551,6 +558,23 @@
       };
 
       return {
+        translations: {
+          name: {
+            label: this.$t('userWallet.translations.name.label'),
+            placeholder: this.$t('userWallet.translations.name.placeholder')
+          },
+          card: {
+            label: this.$t('userWallet.translations.card.label'),
+            placeholder: this.$t('userWallet.translations.card.placeholder')
+          },
+          expiration: {
+            label: this.$t('userWallet.translations.expiration.label')
+          },
+          security: {
+            label: this.$t('userWallet.translations.security.label'),
+            placeholder: this.$t('userWallet.translations.security.placeholder')
+          }
+        },
         tableHeaders: [
           {
             text: '',
@@ -853,9 +877,20 @@
     },
 
     created() {
+      // getSecurityTokenBalancesByOwner //Что бы отразить в кошельке в таблице какими security tokens обладает аккаунт
+      // getAccountRevenueHistoryBySecurityToken //Что бы отразить график с историей ревенью
+      investmentsService.getSecurityTokenBalance("d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2", "33419d85f774d882aa1e2d416de78e0b73675c9e")
+        .then((res) => console.log(res, 'getSecurityTokenBalance'))
+      // investmentsService.getSecurityTokenBalancesByResearch('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
+      //   .then((res) => console.log(res, 'getSecurityTokenBalancesByResearch'))
+      investmentsService.getSecurityTokenBalancesByOwner('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
+        .then((res) => console.log(res, 'getSecurityTokenBalancesByOwner'))
+      investmentsService.getAccountRevenueHistoryBySecurityToken('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2', '33419d85f774d882aa1e2d416de78e0b73675c9e')
+        .then((res) => console.log(res, 'getAccountRevenueHistoryBySecurityToken'))
       this.$store.dispatch('userWallet/loadWallet', {
         username: decodeURIComponent(this.username)
-      }).then(() => { this.$setReady(); });
+      }).then(() => { console.log(this.investments, 'this.investments'); this.$setReady(); });
+      console.log(this.$route)
     },
 
     methods: {

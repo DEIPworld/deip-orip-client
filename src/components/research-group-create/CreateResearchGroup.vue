@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Create team">
+  <full-screen-view :title="$t('createResearchGroup.title')">
     <create-research-group-form
       v-model="formData"
       :disabled="formProcessing"
@@ -72,10 +72,10 @@
                 .then((res) => {
                   this.formProcessing = false;
                   this.$store.dispatch('auth/loadGroups'); // reload user groups
-                  this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`);
+                  this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
 
                   const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
-                    this.user.privKey,
+                    { privKey: this.user.privKey, username: this.user.username },
                     {
                       researchGroup: res.external_id,
                       member: invitee.account,
@@ -85,13 +85,12 @@
                     },
                     {
                       notes: `${this.formData.name} invites you to join them`,
-                      approver: this.user.username
                     }
                   ));
 
                   return Promise.all([
                     Promise.all(invitesPromises),
-                    deipRpc.api.getResearchGroupAsync(res.rm._id),
+                    deipRpc.api.getResearchGroupAsync(res.external_id),
                     this.$store.dispatch('auth/loadGroups')
                   ]);
                 })
@@ -115,7 +114,7 @@
                 .catch((err) => {
                   console.error(err);
                   this.isLoading = false;
-                  this.$notifier.showError('An error occurred while creating Research Group, please try again later');
+                  this.$notifier.showError(this.$t('createResearchGroup.errCreate'));
                 });
             }
           })

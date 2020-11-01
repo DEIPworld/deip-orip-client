@@ -8,7 +8,7 @@ import UserEditEducationDialog from '@/components/UserDetails/components/UserEdi
 import UserEditEmploymentDialog from '@/components/UserDetails/components/UserEditEmploymentDialog';
 import { store } from '@/store';
 import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
-import AccountProjects from '@/components/Account/AccountProjects';
+import AccountTeamsProjects from '@/components/Account/AccountTeamsProjects';
 import AccountPersonalProjects from '@/components/Account/AccountPersonalProjects';
 import AccountFollowingProjects from '@/components/Account/AccountFollowingProjects';
 import AccountGroups from '@/components/Account/AccountGroups';
@@ -66,17 +66,17 @@ export const accountRouting = [{
     },
     {
       path: 'projects',
-      name: 'account.projects',
-      component: AccountProjects
+      name: 'account.teams.projects',
+      component: AccountTeamsProjects
     },
     {
       path: 'personal-projects',
-      name: 'account.personalProjects',
+      name: 'account.personal.projects',
       component: AccountPersonalProjects
     },
     {
       path: 'following-projects',
-      name: 'account.followingProjects',
+      name: 'account.following.projects',
       component: AccountFollowingProjects
     },
     {

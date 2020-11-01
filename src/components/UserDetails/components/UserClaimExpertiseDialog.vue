@@ -10,13 +10,13 @@
         <v-btn icon dark @click="$emit('close')">
           <v-icon>close</v-icon>
         </v-btn>
-        <v-toolbar-title>Claim for Expertise Tokens</v-toolbar-title>
+        <v-toolbar-title>{{ $t('userDetailRouting.claimExpertiseDialog.title') }}</v-toolbar-title>
         <v-spacer />
       </v-toolbar>
 
       <div class="fill-height pa-12 xs12">
         <div class="text-h5 text-align-center font-weight-medium">
-          Select your discipline
+          {{ $t('userDetailRouting.claimExpertiseDialog.selectDiscipline') }}
         </div>
 
         <div class="discipline-picker mt-6">
@@ -32,14 +32,14 @@
           <v-icon color="red">
             warning
           </v-icon>
-          Please be accurate, you will need the community assistance to change the disciplines
+          {{ $t('userDetailRouting.claimExpertiseDialog.beAccurate') }}
         </div>
 
         <v-form ref="form">
           <div class="pt-6">
             <v-textarea
               v-model="coverLetter"
-              label="Provide a cover letter"
+              :label="$t('userDetailRouting.claimExpertiseDialog.letterField')"
               auto-grow
               outlined
               rows="2"
@@ -48,7 +48,7 @@
           </div>
 
           <div class="text-h6 font-weight-bold pt-6">
-            Add links to your relevant publications in this discipline
+            {{ $t('userDetailRouting.claimExpertiseDialog.addLinks') }}
           </div>
 
           <v-card class="mt-6">
@@ -62,7 +62,7 @@
 
                 <v-text-field
                   v-model="publication.value"
-                  label="Link to publication"
+                  :label="$t('userDetailRouting.claimExpertiseDialog.linkField')"
                   outlined
                   :rules="[required, urlRule]"
                 />
@@ -92,7 +92,7 @@
                 </v-icon>
               </v-btn>
 
-              <span class="pl-2">Add a link to a publication</span>
+              <span class="pl-2">{{ $t('userDetailRouting.claimExpertiseDialog.addLink') }}</span>
             </div>
           </v-card>
 
@@ -103,7 +103,7 @@
               :loading="isLoading"
               @click="claimExpertise"
             >
-              Claim Expertise Tokens
+              {{ $t('userDetailRouting.claimExpertiseDialog.submitBtn') }}
             </v-btn>
           </div>
         </v-form>
@@ -132,8 +132,8 @@
       return {
         URL_REGEX: /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/,
 
-        required: (value) => !!value || 'This field is required',
-        urlRule: (value) => (value && value.match(this.URL_REGEX) === null ? 'Incorrect url format' : true),
+        required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+        urlRule: (value) => (value && value.match(this.URL_REGEX) === null ? this.$t('userDetailRouting.claimExpertiseDialog.incorrectUrl') : true),
 
         discipline: undefined,
         coverLetter: '',

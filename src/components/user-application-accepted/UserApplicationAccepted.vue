@@ -8,12 +8,12 @@
       </v-col>
       <v-col cols="12">
         <div class="text-subtitle-1">
-          Thank you for your registration, we will notify you as soon as your request will be approved.
+          {{ $t('userApplicationAccepted.thank') }}
         </div>
       </v-col>
       <v-col cols="12">
-        <router-link class="a caption" :to="{ name: 'ResearchFeed' }">
-          Browse projects
+        <router-link class="a caption" :to="{ name: 'explore' }">
+          {{ $t('userApplicationAccepted.browse') }}
         </router-link>
       </v-col>
     </v-row>

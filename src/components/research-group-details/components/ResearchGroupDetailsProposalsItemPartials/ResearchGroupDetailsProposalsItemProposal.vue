@@ -38,7 +38,7 @@
       money_off
     </v-icon>
     <div class="a">
-      Transfer tokens
+      {{ $t('researchGroupDetails.proposal.transfer') }}
     </div>
   </div>
   <div
@@ -49,7 +49,7 @@
       attach_money
     </v-icon>
     <div class="text-body-2">
-      {{ item.payload.share }} fundraise
+      {{ item.payload.share }} {{ $t('researchGroupDetails.proposal.fundraise') }}
     </div>
   </div>
 
@@ -61,7 +61,7 @@
       settings
     </v-icon>
     <div class="text-body-2">
-      Update group meta
+      {{ $t('researchGroupDetails.proposal.updateGrMeta') }}
     </div>
   </div>
   <div
@@ -72,7 +72,7 @@
       model_training
     </v-icon>
     <div class="text-body-2">
-      Update research meta
+      {{ $t('researchGroupDetails.proposal.updatePrMeta') }}
     </div>
   </div>
   <div
@@ -85,10 +85,9 @@
     <router-link
       class="a"
       :to="{
-        name: 'ResearchDetails',
+        name: 'research.details',
         params: {
-          research_group_permlink: encodeURIComponent(item.extension.research.research_group.permlink),
-          research_permlink: encodeURIComponent(item.extension.research.permlink)
+          researchExternalId: item.extension.research.external_id
         }
       }"
     >

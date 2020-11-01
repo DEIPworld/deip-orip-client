@@ -1,5 +1,5 @@
 import ContentDetails from '@/components/Contents/ContentDetails/ContentDetails';
-import { routeView, routeNameGenerator } from '@/utils/helpers';
+import { routerView, routeNameGenerator } from '@/utils/helpers';
 
 export const contentRoutingFabric = (parent) => {
   const routeName = (n) => [
@@ -10,18 +10,18 @@ export const contentRoutingFabric = (parent) => {
 
   return {
     path: 'c',
-    component: routeView,
+    component: routerView,
 
     children: [
       {
         name: routeName('create'),
         path: 'create',
-        component: routeView
+        component: routerView
       },
 
       {
         path: ':contentExternalId',
-        component: routeView,
+        component: routerView,
         children: [
           {
             name: routeName('details'),
@@ -31,7 +31,7 @@ export const contentRoutingFabric = (parent) => {
           {
             name: routeName('edit'),
             path: 'edit',
-            component: routeView
+            component: routerView
           }
         ]
       }

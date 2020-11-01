@@ -8,7 +8,7 @@
     <v-card class="pa-6">
       <v-card-title>
         <div class="text-h5">
-          Transfer from Group balance
+          {{ $t('researchGroupDetails.transferDialog.transfer') }}
         </div>
         <div class="right-top-angle">
           <v-btn icon class="pa-0 ma-0" @click="close()">
@@ -29,7 +29,7 @@
           <v-text-field
             ref="toUsername"
             v-model="form.to"
-            label="To"
+            :label="$t('researchGroupDetails.transferDialog.toLabel')"
             outlined
             :rules="[
               rules.required,
@@ -41,7 +41,7 @@
 
           <v-text-field
             v-model="form.amount"
-            label="Amount"
+            :label="$t('researchGroupDetails.transferDialog.amountLabel')"
             outlined
             :rules="[
               rules.required,
@@ -62,7 +62,10 @@
               :disabled="!form.amount || deipTokenBalance < form.amount || isSending"
               @click="sendTokens()"
             >
-              {{ group.is_dao ? 'Create proposal' : 'Send' }}
+              {{ group.is_dao ?
+                $t('researchGroupDetails.transferDialog.create') :
+                $t('researchGroupDetails.transferDialog.send')
+              }}
             </v-btn>
           </v-col>
           <v-col class="py-2" cols="12">
@@ -73,7 +76,7 @@
               :disabled="isSending"
               @click="close()"
             >
-              Cancel
+              {{ $t('researchGroupDetails.transferDialog.cancel') }}
             </v-btn>
           </v-col>
         </v-row>
@@ -117,15 +120,15 @@
         isFormValid: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
-          isExist: (value) => this.isUsernameExist !== false || 'No user with such name',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
+          isExist: (value) => this.isUsernameExist !== false || this.$t('researchGroupDetails.transferDialog.existRule'),
           amount: (value) => {
             const formatValidationResult = this.deipTokenValidator(value);
 
             if (formatValidationResult !== true) {
               return formatValidationResult;
             } if (parseFloat(value) > this.deipTokenBalance) {
-              return 'Amount is greater than group balance';
+              return this.$t('researchGroupDetails.transferDialog.amountRule');
             }
 
             return true;
@@ -176,7 +179,7 @@
             funds: this.toAssetUnits(this.form.amount)
           })
             .then((data) => {
-              this.$notifier.showSuccess('Proposal was successfully created');
+              this.$notifier.showSuccess(this.$t('researchGroupDetails.transferDialog.success'));
 
               this.clearForm();
               this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id });
@@ -184,7 +187,7 @@
               setTimeout(() => this.close(), 1500);
             })
             .catch((err) => {
-              this.$notifier.showError('Proposal was failed');
+              this.$notifier.showError(this.$t('researchGroupDetails.transferDialog.err'));
             })
             .finally(() => {
               this.isSending = false;

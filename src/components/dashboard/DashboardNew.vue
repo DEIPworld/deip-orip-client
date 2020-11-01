@@ -6,10 +6,10 @@
         v-bind="themeSettings.tabs"
       >
         <v-tab key="my-projects">
-          My projects: {{ myResearches.length }}
+          My projects: {{ projectsLength }}
         </v-tab>
         <v-tab key="following-projects">
-          Following projects: {{ followingResearches.length }}
+          Following projects: {{ followingProjectsLength }}
         </v-tab>
       </v-tabs>
     </layout-toolbar>
@@ -25,11 +25,10 @@
             </v-btn>
           </div>
 
-          <research-list
-            v-if="myResearches.length"
-            namespace="dashboard"
-            :data="myResearches"
-            no-filter
+          <projects-list
+            v-if="hasProjects"
+            :user-name="$currentUserName"
+            @loaded:length="setProjectsLength"
           />
 
           <v-row v-else justify="center">
@@ -54,11 +53,12 @@
         </v-tab-item>
 
         <v-tab-item key="following-projects">
-          <research-list
-            v-if="followingResearches.length"
-            namespace="dashboard"
-            :data="followingResearches"
-            no-filter
+
+          <projects-list
+            v-if="hasProjects"
+            :user-name="$currentUserName"
+            type="following"
+            @loaded:length="setFollowingProjectsLength"
           />
 
           <v-row v-else justify="center">
@@ -72,7 +72,7 @@
               </div>
               <div>
                 <v-btn
-                  :to="{ name: 'ResearchFeed' }"
+                  :to="{ name: 'explore' }"
                   color="primary"
                 >
                   Browse projects
@@ -87,22 +87,26 @@
 </template>
 
 <script>
+  // TODO: huge refactoring
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
-  import moment from 'moment';
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import ResearchList from '@/components/ResearchList/ResearchList';
+  import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   export default {
     name: 'Dashboard',
     components: {
-      ResearchList, LayoutSection, LayoutToolbar, AppLayout
+      ProjectsList,
+      LayoutSection,
+      LayoutToolbar,
+      AppLayout
     },
     data() {
       return {
-        activeTab: null
+        activeTab: null,
+        projectsLength: true,
+        followingProjectsLength: true,
       };
     },
 
@@ -129,7 +133,14 @@
       }
     },
 
-    methods: {}
+    methods: {
+      setProjectsLength(hasProjects) {
+        this.projectsLength = hasProjects;
+      },
+      setFollowingProjectsLength(hasProjects) {
+        this.followingProjectsLength = hasProjects;
+      }
+    }
   };
 </script>
 

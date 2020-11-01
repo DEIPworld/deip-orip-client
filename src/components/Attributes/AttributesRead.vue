@@ -3,36 +3,38 @@
     :is="attributeComponent"
     v-if="Object.keys(attribute).length"
     :attribute="attribute"
-    :view-type="viewType"
-    :clamped="clamped"
+
+    v-bind="attrs$"
   />
 </template>
 
 <script>
-  import { attributeRead, attributeTypeComponent } from '@/components/Attributes/mixins';
+  import { attributeTypeComponent } from '@/components/Attributes/_mixins';
 
-  import AttributesCheckboxRead from './AttributesCheckbox/AttributesCheckboxRead';
-  import AttributesDisciplinesListRead from './AttributesDisciplinesList/AttributesDisciplinesListRead';
-  import AttributesMultiSelectRead from './AttributesMultiSelect/AttributesMultiSelectRead';
-  import AttributesPartnersRead from './AttributesPartners/AttributesPartnersRead';
-  import AttributesResearchGroupRead from './AttributesResearchGroup/AttributesResearchGroupRead';
-  import AttributesRoadmapRead from './AttributesRoadmap/AttributesRoadmapRead';
-  import AttributesSelectRead from './AttributesSelect/AttributesSelectRead';
-  import AttributesStepperRead from './AttributesStepper/AttributesStepperRead';
-  import AttributesSwitchRead from './AttributesSwitch/AttributesSwitchRead';
-  import AttributesTextRead from './AttributesText/AttributesTextRead';
-  import AttributesTextareaRead from './AttributesTextarea/AttributesTextareaRead';
-  import AttributesUrlRead from './AttributesUrl/AttributesUrlRead';
-  import AttributesUserRead from './AttributesUser/AttributesUserRead';
-  import AttributesUsersListRead from './AttributesUsersList/AttributesUsersListRead';
-  import AttributesVideoUrlRead from './AttributesVideoUrl/AttributesVideoUrlRead';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+
+  import { AttributesCheckboxRead } from '@/components/Attributes/Checkbox';
+  import { AttributesDisciplinesListRead } from '@/components/Attributes/DisciplinesList';
+  import { AttributesPartnersRead } from '@/components/Attributes/Partners';
+  import { AttributesResearchGroupRead } from '@/components/Attributes/ResearchGroup';
+  import { AttributesRoadmapRead } from '@/components/Attributes/Roadmap';
+  import { AttributesSelectRead } from '@/components/Attributes/Select';
+  import { AttributesStepperRead } from '@/components/Attributes/Stepper';
+  import { AttributesSwitchRead } from '@/components/Attributes/Switch';
+  import { AttributesTextRead } from '@/components/Attributes/Text';
+  import { AttributesTextareaRead } from '@/components/Attributes/Textarea';
+  import { AttributesUrlRead } from '@/components/Attributes/Url';
+  import { AttributesUserRead } from '@/components/Attributes/User';
+  import { AttributesVideoUrlRead } from '@/components/Attributes/VideoUrl';
+  import { AttributesImageRead } from '@/components/Attributes/Image';
+  import { AttributesExpressLicensingRead } from '@/components/Attributes/ExpressLicensing';
+  import { commonProps } from '@/variables/props';
 
   export default {
     name: 'AttributesRead',
     components: {
       AttributesCheckboxRead,
       AttributesDisciplinesListRead,
-      AttributesMultiSelectRead,
       AttributesPartnersRead,
       AttributesResearchGroupRead,
       AttributesRoadmapRead,
@@ -43,10 +45,13 @@
       AttributesTextareaRead,
       AttributesUrlRead,
       AttributesUserRead,
-      AttributesUsersListRead,
       AttributesVideoUrlRead,
+      AttributesImageRead,
+      AttributesExpressLicensingRead
     },
-    mixins: [attributeRead, attributeTypeComponent]
+    mixins: [attributeTypeComponent, BindsAttrs],
+    props: {
+      ...commonProps.attribute
+    }
   };
 </script>
-

@@ -295,7 +295,7 @@
         isSavingDraft: false,
         isPermlinkVerifyed: true,
         rules: {
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
         allReferencesList: [],
         proposeContent: {
@@ -395,16 +395,20 @@
               saveDocument()
                 .then((contentRef) => {
                   const isProposal = !this.research.research_group.is_personal;
-                  researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-                    researchExternalId: this.research.external_id,
-                    researchGroup: this.research.research_group.external_id,
-                    type: parseInt(this.proposeContent.type),
-                    title: this.proposeContent.title || contentRef.title,
-                    content: contentRef.hash,
-                    authors: this.proposeContent.authors.map((a) => a.account.name),
-                    references: [...this.contentRef.references],
-                    extensions: []
-                  })
+                  researchContentService.createResearchContentViaOffchain(
+                    { privKey: this.user.privKey, username: this.user.username }, 
+                    false, 
+                    {
+                      researchExternalId: this.research.external_id,
+                      researchGroup: this.research.research_group.external_id,
+                      type: parseInt(this.proposeContent.type),
+                      title: this.proposeContent.title || contentRef.title,
+                      content: contentRef.hash,
+                      authors: this.proposeContent.authors.map((a) => a.account.name),
+                      references: [...this.contentRef.references],
+                      extensions: []
+                    }
+                  )
                     .then(() => {
                       this.$notifier.showSuccess('New material has been uploaded successfully');
                     }, (err) => {
@@ -420,10 +424,9 @@
                       this.proposeContent.isLoading = false;
                       setTimeout(() => {
                         this.$router.push({
-                          name: 'ResearchDetails',
+                          name: 'research.details',
                           params: {
-                            research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                            research_permlink: encodeURIComponent(this.research.permlink)
+                            researchExternalId: this.research.external_id
                           }
                         });
                       }, 1500);

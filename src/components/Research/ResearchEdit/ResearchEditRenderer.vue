@@ -4,26 +4,23 @@
 
   import AttributesSet from '@/components/Attributes/AttributesSet';
 
-  import ContentList from '@/components/ContentsList/ContentsList';
-  import ReviewsList from '@/components/ReviewsList/ReviewsList';
+  import ContentsList from '@/components/ContentsList/ContentsList';
+  import DraftsList from '@/components/DraftsList/DraftsList';
+  import { tenantAttributesToObject } from '@/utils/helpers';
 
   export default {
     name: 'ResearchEditRenderer',
     components: {
       AttributesSet,
 
-      ReviewsList,
-      ContentList
+      ContentsList,
+      DraftsList
     },
     mixins: [componentsRenderer, Proxyable],
-    props: {
-      attributes: {
-        type: Object,
-        default: () => ({})
+    computed: {
+      attributes() {
+        return tenantAttributesToObject(this.$tenantSettings.researchAttributes);
       }
-    },
-    // created() {
-    //   console.log(this.attributes)
-    // }
+    }
   };
 </script>

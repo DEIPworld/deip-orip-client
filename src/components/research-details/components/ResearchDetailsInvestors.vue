@@ -7,7 +7,7 @@
         </v-icon>
       </v-col>
       <v-col class="rd-block-header align-self-center">
-        Investors: {{ investors.length }}
+        {{ $t('researchDetails.investors') }} {{ investors.length }}
       </v-col>
     </v-row>
 
@@ -19,19 +19,28 @@
         no-gutters
       >
         <v-col cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ investmentsAmount }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
+          <span class="rd-investment-info__value">
+            {{ investmentsAmount }}
+            {{ tokenSale.soft_cap.split(' ')[1] }}
+          </span>
           <br>
-          <span class="rd-investment-info__value-text">Total investments</span>
+          <span class="rd-investment-info__value-text">{{ $t('researchDetails.totalInv') }}</span>
         </v-col>
         <v-col cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ averageInvestmentAmount }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
+          <span class="rd-investment-info__value">
+            {{ averageInvestmentAmount }}
+            {{ tokenSale.soft_cap.split(' ')[1] }}
+          </span>
           <br>
-          <span class="rd-investment-info__value-text">Average investment</span>
+          <span class="rd-investment-info__value-text">{{ $t('researchDetails.averageInv') }}</span>
         </v-col>
         <v-col v-if="!isResearchGroupMember" cols="auto" class="rd-investment-info">
-          <span class="rd-investment-info__value">{{ userInvestment }} {{ tokenSale.soft_cap.split(' ')[1] }}</span>
+          <span class="rd-investment-info__value">
+            {{ userInvestment }}
+            {{ tokenSale.soft_cap.split(' ')[1] }}
+          </span>
           <br>
-          <span class="rd-investment-info__value-text">Your investment</span>
+          <span class="rd-investment-info__value-text">{{ $t('researchDetails.yourInv') }}</span>
         </v-col>
       </v-row>
 

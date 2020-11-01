@@ -6,21 +6,21 @@
   >
     <template v-if="isAutoAccepted">
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      scheduled fundraising campaign for
+      {{ $t('notifications.scheduledFundraising') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project
+      {{ $t('notifications.project') }}
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
-      scheduled fundraising campaign for
+      {{ $t('notifications.scheduledFundraising') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project
+      {{ $t('notifications.project') }}
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
-      proposed to schedule fundraising campaign for
+      {{ $t('notifications.propSchedule') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      project in
+      {{ $t('notifications.projectIn') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
   </user-notifications-list-item>
@@ -64,10 +64,9 @@
       clickNotification() {
         if (this.isAcceptedByQuorum || this.isAutoAccepted) {
           this.$router.push({
-            name: 'ResearchDetails',
+            name: 'research.details',
             params: {
-              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-              research_permlink: encodeURIComponent(this.notification.metadata.research.permlink)
+              researchExternalId: this.notification.metadata.research.external_id
             }
           });
         } else {

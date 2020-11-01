@@ -1,5 +1,5 @@
 <script>
-  import { VAutocomplete } from 'vuetify/lib/components';
+  import { VAutocomplete, VChip, VBtn, VIcon } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
 
   export default {
@@ -12,11 +12,12 @@
       }
     },
     methods: {
-      genSelections() {
+      genSelectionsMod() {
         let { length } = this.selectedItems;
         const children = new Array(length);
 
         let genSelection;
+
         if (this.$scopedSlots.selection) {
           genSelection = this.genSlotSelection;
         } else if (this.hasChips) {
@@ -33,9 +34,17 @@
           );
         }
 
+        let staticClass = 'v-select__selections';
+        staticClass += this.multiple ? ' py-0 reset-height' : '';
+        staticClass += this.multiple && children.length ? ' pt-1' : '';
+
         return this.$createElement('div', {
-          staticClass: this.multiple ? 'v-select__selections pb-0 pt-1 reset-height' : 'v-select__selections'
+          staticClass
         }, children);
+      },
+
+      genSelections() {
+        return this.hasSlot || this.multiple ? this.genSelectionsMod() : [];
       },
 
       genLegend() {
@@ -68,8 +77,8 @@
         if (Array.isArray(selections)) {
           selections.push(input);
         } else {
-          // selections.children = selections.children || [];
-          selections.children = [];
+          selections.children = selections.children || [];
+          // selections.children = [];
           selections.children.push(input);
         }
 
@@ -90,6 +99,56 @@
           this.genMenu(),
           this.genProgress()
         ];
+      },
+
+      genChipSelection(item, index) {
+        const isDisabled = !this.isInteractive || this.getDisabled(item);
+
+        const closeBtn = this.$createElement(VBtn, {
+          staticClass: 'mr-n2 ml-2',
+          props: {
+            disabled: isDisabled,
+            icon: true,
+            xSmall: true
+          },
+          on: {
+            click: (e) => {
+              e.stopPropagation();
+              this.onChipInput(item);
+            }
+          }
+        }, [
+          this.$createElement(VIcon, 'clear')
+        ]);
+
+        return this.$createElement(VChip, {
+          staticClass: 'v-chip--select',
+          attrs: {
+            tabindex: -1
+          },
+          props: {
+            disabled: isDisabled,
+            inputValue: index === this.selectedIndex,
+            small: this.smallChips,
+            outlined: true,
+          },
+          on: {
+            click: (e) => {
+              if (isDisabled) return;
+              e.stopPropagation();
+              this.selectedIndex = index;
+            },
+            'click:close': () => this.onChipInput(item)
+          },
+          key: JSON.stringify(this.getValue(item))
+        }, [
+          this.$createElement('span', {
+            staticClass: 'd-block text-truncate'
+          }, this.getText(item)),
+          ...(this.deletableChips && !isDisabled
+            ? [closeBtn]
+            : [])
+        ]);
       }
     }
   };

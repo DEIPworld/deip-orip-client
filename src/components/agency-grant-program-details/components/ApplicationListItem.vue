@@ -9,10 +9,9 @@
             class="text-subtitle-1"
             style="text-decoration: none"
             :to="{
-              name: 'ResearchDetails',
+              name: 'research.details',
               params: {
-                research_group_permlink: encodeURIComponent(application.research.research_group.permlink),
-                research_permlink: encodeURIComponent(application.research.permlink)
+                researchExternalId: application.research.external_id
               }
             }"
           >

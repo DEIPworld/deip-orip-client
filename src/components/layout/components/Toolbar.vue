@@ -22,6 +22,7 @@
         class="main-nav"
         v-bind="themeSettings.appBar.tabs"
         right
+        optional
       >
         <v-tab
           v-for="(item, index) of mainMenu"
@@ -46,7 +47,7 @@
             <v-avatar size="32px" v-on="on">
               <img
                 v-if="user.profile"
-                :src="user.profile | avatarSrc(2 * 32, 2 * 32, false)"
+                :src="user.profile | avatarSrc(64, 64, false)"
               >
               <v-gravatar
                 v-if="!user.profile && user.account"
@@ -83,7 +84,7 @@
             <v-list-item-icon>
               <v-icon>exit_to_app</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Sign Out</v-list-item-title>
+            <v-list-item-title>{{ $t('topMenu.signOut') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -124,30 +125,36 @@
         if (this.$isLoggedIn && !this.isGrantsTransparencyDemo) {
           return [
             {
-              label: 'Explore',
-              to: { name: 'ResearchFeed' }
+              label: this.$t('topMenu.explore'),
+              to: { name: 'explore' }
             },
             // {
-            //   label: 'Dashboard',
+            //   label: this.$t('topMenu.dashboard'),
             //   to: { name: 'Dashboard' }
             // },
             {
-              label: 'Overview',
+              label: this.$t('topMenu.overview'),
               to: { name: 'overview' }
             },
             {
-              label: 'Participants',
+              label: this.$t('topMenu.participants'),
               to: { name: 'participants' }
             },
             // {
-            //   label: 'Portfolio',
+            //   label: this.$t('topMenu.portfolio'),
             //   to: { name: 'InvestorPortfolio' }
             // },
             {
-              label: 'Wallet',
+              label: this.$t('topMenu.wallet'),
               to: {
-                name: 'UserWallet',
-                params: { account_name: this.user.username }
+                name: 'userWallet',
+                params: { account: this.user.username }
+              }
+            },
+            {
+              label: this.$t('topMenu.transactions'),
+              to: {
+                name: 'transactions'
               }
             }
           ];
@@ -156,17 +163,17 @@
         if (this.$isLoggedIn && this.isGrantsTransparencyDemo) {
           return [
             {
-              label: 'Dashboard',
+              label: this.$t('topMenu.dashboard'),
               to: {
                 name: 'GrantProgramsAwardsDashboard',
                 params: { agency: 'the-national-science-foundation' }
               }
             },
             {
-              label: 'Wallet',
+              label: this.$t('topMenu.wallet'),
               to: {
-                name: 'UserWallet',
-                params: { account_name: this.user.username }
+                name: 'userWallet',
+                params: { account: this.user.username }
               }
             }
           ];
@@ -174,15 +181,15 @@
 
         return [
           {
-            label: 'Explore',
-            to: { name: 'ResearchFeed' }
+            label: this.$t('topMenu.explore'),
+            to: { name: 'explore' }
           },
           {
-            label: 'Sign In',
+            label: this.$t('topMenu.signIn'),
             to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
           },
           {
-            label: 'Sign Up',
+            label: this.$t('topMenu.signUp'),
             to: { name: 'SignUp' }
           }
         ];
@@ -192,19 +199,19 @@
         if (this.isGrantsTransparencyDemo) {
           return [
             {
-              label: 'Profile',
+              label: this.$t('topMenu.profile'),
               to: { name: 'UserDetails', params: { account_name: user.username } }
             },
             {
-              label: 'Account Settings',
+              label: this.$t('topMenu.accSettings'),
               to: { name: 'AccountSettings' }
             },
             {
-              label: 'Create Grant Program',
+              label: this.$t('topMenu.createGrantProgram'),
               to: { name: 'CreateGrantProgram' }
             },
             {
-              label: 'Grant Programs',
+              label: this.$t('topMenu.grantPrograms'),
               to: { name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }
             }
           ];
@@ -212,7 +219,7 @@
 
         return [
           {
-            label: 'Account',
+            label: this.$t('topMenu.account'),
             icon: 'person',
             to: { name: 'account.summary' }
           }

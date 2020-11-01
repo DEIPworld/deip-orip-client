@@ -8,7 +8,6 @@ import { userDetailsStore } from '@/components/UserDetails/store';
 import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
-import { feedStore } from '../components/research-feed/store';
 import { researchGroupStore } from '../components/research-group-details/store';
 import { rgWalletStore } from '../components/research-group-wallet/store';
 import { rdStore } from '../components/research-details/store';
@@ -43,7 +42,6 @@ export const store = new Vuex.Store({
     auth: authStore,
     account: accountStore,
 
-    feed: feedStore,
     researchGroup: researchGroupStore,
     rgWallet: rgWalletStore,
     rd: rdStore,

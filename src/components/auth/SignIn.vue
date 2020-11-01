@@ -8,11 +8,11 @@
     toolbar-color="transparent"
   >
     <template #toolbarButton>
-      <v-btn :to="{ name: 'ResearchFeed' }" color="primary" text>
+      <v-btn :to="{ name: 'explore' }" color="primary" text>
         <v-icon left>
           arrow_back
         </v-icon>
-        Explorer
+        {{ $t('signIn.toolbarButton') }}
       </v-btn>
     </template>
 
@@ -21,8 +21,8 @@
         <v-sheet max-width="800" class="pa-12 mx-auto">
           <login-form
             :show-sign-up="!adminLogin"
-            logo="DEIP"
-            :title="adminLogin ? 'Sign in to your admin account' : 'Sign in to your account'"
+            :logo="$t('signIn.form.logo')"
+            :title="adminLogin ? $t('signIn.form.titleAdmin') : $t('signIn.form.title')"
             :is-admin="adminLogin"
           />
         </v-sheet>
@@ -38,31 +38,31 @@
           style="background: linear-gradient(138.37deg, rgba(40, 56, 139, 0.5) 0%, rgba(10, 29, 43, 0.5) 100%), url(/assets/img/signin.png) center center / cover no-repeat;"
         >
           <div class="text-h2 font-weight-bold">
-            Open Research and Innovation Platform
+            {{ $t('signIn.title') }}
           </div>
           <div class="text-subtitle-1 mt-12">
             <v-icon small>
               mdi-message-reply-text
             </v-icon>
-            <span class="ml-4">Collaboration</span>
+            <span class="ml-4">{{ $t('signIn.collaboration') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-lightbulb-on
             </v-icon>
-            <span class="ml-4">Project tokenization</span>
+            <span class="ml-4">{{ $t('signIn.tokenization') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-shield-check
             </v-icon>
-            <span class="ml-4">Licensing of intellectual property</span>
+            <span class="ml-4">{{ $t('signIn.licensing') }}</span>
           </div>
           <div class="text-subtitle-1 mt-2">
             <v-icon small>
               mdi-account-multiple-plus
             </v-icon>
-            <span class="ml-4">Crowd investing</span>
+            <span class="ml-4">{{ $t('signIn.investing') }}</span>
           </div>
         </v-sheet>
       </v-col>
@@ -85,20 +85,6 @@
         type: Boolean,
         default: false
       }
-    },
-    data() {
-      return {
-        toolbarButton: {
-          title: 'Explorer',
-          onClick: () => { this.$router.push({ name: 'ResearchFeed' }); },
-          props: {
-            icon: false,
-            text: true,
-            color: 'primary',
-            class: 'ml-n3'
-          }
-        }
-      };
     }
   };
 </script>

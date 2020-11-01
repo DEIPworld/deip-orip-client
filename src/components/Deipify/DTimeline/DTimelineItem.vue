@@ -3,7 +3,7 @@
     class="pa-0 reset-height rounded overflow-hidden"
     v-on="$listeners"
   >
-    <v-sheet class="d-flex align-self-stretch flex-column align-center flex-shrink-0" :width="40" :min-height="40">
+    <v-sheet class="d-flex align-self-stretch flex-column align-center flex-shrink-0" :width="24" :min-height="40">
       <div :style="topLineStyle" class="mb-1" />
       <v-avatar
         :size="dotSize"
@@ -20,7 +20,7 @@
       <div :style="bottomLineStyle" class="mt-1 flex-grow-1 flex-shrink-1" />
     </v-sheet>
 
-    <v-list-item-content class="py-2 ml-2">
+    <v-list-item-content class="py-2 ml-4">
       <slot />
     </v-list-item-content>
 

@@ -2,7 +2,7 @@
   <layout-section>
     <content-block
       :max-width="800"
-      title="Change password"
+      :title="$t('account.password.title')"
       centered
     >
       <v-form
@@ -13,7 +13,7 @@
         <v-text-field
           v-model="oldPassword"
           :rules="[rules.required]"
-          label="Old password / Private Key"
+          :label="$t('account.password.oldPasswordField')"
           outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenOldPassword ? 'visibility_off' : 'visibility'"
@@ -23,7 +23,7 @@
         <v-text-field
           v-model="newPassword"
           :rules="[rules.required, rules.masterPassword]"
-          label="New password"
+          :label="$t('account.password.newPasswordField')"
           outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenNewPassword ? 'visibility_off' : 'visibility'"
@@ -35,7 +35,7 @@
           ref="reEnterNewPassword"
           v-model="reEnterNewPassword"
           :rules="[rules.required, rules.reEnterMasterPassword]"
-          label="Re-Enter New password"
+          :label="$t('account.password.reEnterPasswordField')"
           outlined
           :disabled="isPasswordChanging"
           :append-icon="isHiddenReEnterNewPassword ? 'visibility_off' : 'visibility'"
@@ -50,7 +50,7 @@
           :loading="isPasswordChanging"
           @click="updateMasterPassword()"
         >
-          Change Password
+          {{ $t('account.password.submitBtn') }}
         </v-btn>
       </v-form>
     </content-block>
@@ -84,19 +84,19 @@
         isPasswordChanging: false,
 
         rules: {
-          required: (value) => !!value || 'This field is required',
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           masterPassword: (value) => {
             if (!value) return false;
 
             if (value.length < this.MASTER_PASSWORD_MIN_LENGTH) {
-              return 'Master password should be at least 10 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMinLength');
             } if (value.length > this.MASTER_PASSWORD_MAX_LENGTH) {
-              return 'Master password max length is 100 symbols';
+              return this.$t('defaultNaming.fieldRules.masterPasswordMaxLength');
             }
 
             return true;
           },
-          reEnterMasterPassword: (value) => value === this.newPassword || 'Password doesn\'t match'
+          reEnterMasterPassword: (value) => value === this.newPassword || this.$t('defaultNaming.fieldRules.reEnterMasterPassword')
         }
       };
     },

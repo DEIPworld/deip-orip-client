@@ -3,9 +3,9 @@ import { store } from '@/store';
 import { loadPage } from '@/router/utils/loadPage';
 import AdminMembers from '@/components/AdminPanel/AdminMembers';
 import UserRegistration from '@/components/auth/UserRegistration';
-import AdminProjects from '@/components/AdminPanel/AdminProjects';
-import AdminAttributes from '@/components/AdminPanel/AdminAttributes/AdminAttributes';
-import AdminAttributesEdit from '@/components/AdminPanel/AdminAttributes/AdminAttributesEdit';
+import AdminProjects from '@/components/AdminPanel/Projects/AdminProjects';
+import AdminAttributes from '@/components/AdminPanel/Attributes/AdminAttributes';
+import AdminAttributesEdit from '@/components/AdminPanel/Attributes/AdminAttributesEdit';
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
@@ -14,10 +14,11 @@ import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
-import AdminAttributesSettings
-  from '@/components/AdminPanel/AdminAttributes/AdminAttributesSettings';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
+
+import { i18n } from '@/plugins/i18n';
+import { routerView } from '@/utils/helpers';
 
 export const adminRouting = [
   {
@@ -39,7 +40,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new member',
+                title: i18n.t('adminRouting.members.addMembertitle'),
                 modal: true
               }
             }
@@ -48,8 +49,14 @@ export const adminRouting = [
       },
       {
         path: 'projects',
-        name: 'admin.projects',
-        component: AdminProjects
+        component: routerView,
+        children: [
+          {
+            path: '',
+            name: 'admin.projects',
+            component: AdminProjects
+          },
+        ]
       },
       {
         path: 'attributes',
@@ -65,13 +72,8 @@ export const adminRouting = [
             name: 'admin.attributes.edit',
             component: AdminAttributesEdit,
             props: {
-              title: 'Add new attribute'
+              title: i18n.t('adminRouting.attributes.attributesEdit.title')
             }
-          },
-          {
-            path: 'settings',
-            name: 'admin.attributes.settings',
-            component: AdminAttributesSettings
           }
         ]
       },
@@ -104,7 +106,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new category'
+                title: i18n.t('adminRouting.categories.categoryEdit.title')
               }
             }
           }
@@ -128,7 +130,7 @@ export const adminRouting = [
             },
             props: {
               dialog: {
-                title: 'Add new question'
+                title: i18n.t('adminRouting.faq.faqEdit.title')
               }
             }
           }

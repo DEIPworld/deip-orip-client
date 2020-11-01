@@ -23,7 +23,7 @@
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h5">
-            Upload material for project
+            {{ $t('researchDetails.contentFileDialog.upload') }}
           </div>
           <div class="right-top-angle">
             <v-btn icon class="pa-0 ma-0" @click="close()">
@@ -39,15 +39,18 @@
               v-model="title"
               outlined
               :rules="[rules.titleLength]"
-              label="Title"
-              :error-messages="isPermlinkVerifyed === false ? 'ContentDetails with the same name already exists' : ''"
+              :label="$t('researchDetails.contentFileDialog.titleField.label')"
+              :error-messages="isPermlinkVerifyed === false ?
+                $t('researchDetails.contentFileDialog.titleField.err') :
+                ''
+              "
             />
 
             <v-select
               v-model="type"
               :items="researchContentTypes"
               outlined
-              label="Content Type"
+              :label="$t('researchDetails.contentFileDialog.typeField')"
               item-value="id"
             />
 
@@ -55,10 +58,10 @@
               v-model="authors"
               :items="researchMembersList"
               :menu-props="{ closeOnContentClick: true }"
-              hint="You can select multiple authors"
+              :hint="$t('researchDetails.contentFileDialog.authorsField.hint')"
               persistent-hint
               outlined
-              placeholder="Authors"
+              :placeholder="$t('researchDetails.contentFileDialog.authorsField.placeholder')"
               class="mb-3"
               multiple
             >
@@ -108,7 +111,10 @@
                 :loading="isLoading"
                 @click="proposeContent()"
               >
-                {{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}
+                {{ !isCentralizedGroup ?
+                  $t('researchDetails.contentFileDialog.createProp') :
+                  $t('researchDetails.contentFileDialog.uploadMat')
+                }}
               </v-btn>
             </v-col>
             <v-col class="py-2" cols="12">
@@ -119,7 +125,7 @@
                 text
                 @click="close()"
               >
-                Cancel
+                {{ $t('researchDetails.contentFileDialog.cancel') }}
               </v-btn>
             </v-col>
           </v-row>
@@ -165,7 +171,7 @@
         isLoading: false,
 
         rules: {
-          titleLength: (value) => value.length <= maxTitleLength || `Title max length is ${maxTitleLength} symbols`
+          titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
 
         dropzoneOptions: {
@@ -250,7 +256,7 @@
         xhr.setRequestHeader('Research-ContentDetails-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
-        this.$notifier.showError('Sorry, the file storage server is temporarily unavailable, please try again later');
+        this.$notifier.showError(this.$t('researchDetails.contentFileDialog.errFile'));
         this.close();
       },
       vdropzoneFileAdded(file) {
@@ -260,28 +266,32 @@
         const self = this;
         const { rm: { hash } } = res;
         if (!hash) {
-          throw new Error('File upload has failed');
+          throw new Error(this.$t('researchDetails.contentFileDialog.errFileUpload'));
         }
 
         const isProposal = !this.research.research_group.is_personal;
-        researchContentService.createResearchContentViaOffchain(this.user.privKey, isProposal, {
-          researchExternalId: this.research.external_id,
-          researchGroup: this.research.research_group.external_id,
-          type: parseInt(this.type),
-          title: this.title,
-          content: hash,
-          authors: this.authors.map((a) => a.account.name),
-          references: this.references.map((ref) => ref.external_id),
-          extensions: []
-        })
+        researchContentService.createResearchContentViaOffchain(
+          { privKey: this.user.privKey, username: this.user.username }, 
+          false,
+          {
+            researchExternalId: this.research.external_id,
+            researchGroup: this.research.research_group.external_id,
+            type: parseInt(this.type),
+            title: this.title,
+            content: hash,
+            authors: this.authors.map((a) => a.account.name),
+            references: this.references.map((ref) => ref.external_id),
+            extensions: []
+          }
+        )
           .then(() => {
-            this.$notifier.showSuccess('New material has been uploaded successfully');
+            this.$notifier.showSuccess(this.$t('researchDetails.contentFileDialog.success'));
           }, (err) => {
             console.error(err);
             if (err.response && err.response.status == 409) {
-              alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
+              alert(this.$t('researchDetails.contentFileDialog.fileUploaded'));
             } else {
-              this.$notifier.showError('An error occurred while uploading content, please try again later');
+              this.$notifier.showError(this.$t('researchDetails.contentFileDialog.errUploadingContent'));
             }
           })
           .finally(() => {
