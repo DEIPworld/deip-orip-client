@@ -243,6 +243,14 @@
   & tbody &__expanded__content {
     box-shadow: none !important;
   }
+
+  &--expanded__row-border-0 {
+    tbody > tr#{$this}__expanded {
+      &__row > td{
+        border-bottom: 0 !important;
+      }
+    }
+  }
 }
 
 .v-btn.v-btn--icon.v-size--default {

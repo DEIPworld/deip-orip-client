@@ -64,7 +64,7 @@ const actions = {
 
         return Promise.all(
           balances.map((b) => investmentsService.getAccountRevenueHistoryBySecurityToken(
-            b.research.research_group.external_id,
+            b.owner,
             b.security_token_external_id
           ))
         );
@@ -73,7 +73,21 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
-            (r) => r[0] && r[0].account === b.research.research_group.external_id
+            (r) => r[0] && r[0].account === b.owner
+          ) || []
+        }));
+
+        return Promise.all(
+          balances.map((b) => investmentsService.getSecurityTokenRevenueHistory(
+            b.security_token_external_id
+          ))
+        );
+      })
+      .then((securityTokenHistory) => {
+        balances = balances.map((b) => ({
+          ...b,
+          securityTokenHistory: securityTokenHistory.find(
+            (s) => s[0] && s[0].security_token.external_id === b.security_token_external_id
           ) || []
         }));
 
@@ -153,8 +167,29 @@ const actions = {
         groupList.forEach((g) => {
           const revenueHistoryList = revenueHistory.filter(
             (r) => r[0] && r[0].account === g.external_id
-          )[0];
+          );
           g.revenueHistory = revenueHistoryList;
+        });
+        return Promise.all(groupList.reduce(
+          (finalArr, item) => {
+            if (item.researchList) {
+              item.researchList.reduce((arr, r) => {
+                r.security_tokens.forEach((rst) => arr.push(rst[0]));
+                return arr;
+              }, []).forEach((id) => finalArr.push(
+                investmentsService.getSecurityTokenBalance(item.external_id, id)
+              ));
+            }
+            return finalArr;
+          }, []
+        ));
+      })
+      .then((result) => {
+        groupList.forEach((g) => {
+          const accountSecurityTokenBalances = result.filter(
+            (r) => g.external_id === r.owner
+          );
+          g.accountSecurityTokenBalances = accountSecurityTokenBalances;
         });
         commit('SET_ALL_RESEARCH_GROUPS', groupList);
       })
