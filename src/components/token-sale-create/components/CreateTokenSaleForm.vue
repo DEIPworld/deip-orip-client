@@ -6,7 +6,7 @@
           v-model="amount"
           v-mask="'#####'"
           outlined
-          suffix="Units"
+          suffix="UNITS"
           :hint="(securityTokenOnSaleBalance - (amount || 0)) + ' left'"
           :rules="[rules.amountToSellRules]"
         />
