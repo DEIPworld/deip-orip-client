@@ -756,7 +756,8 @@
                 this.$options.filters.fullname(shareHolder),
                 this.convertToPercent(shareHolder.share.amount)
               ]),
-              [investment.group.name, this.convertToPercent(investment.research.owned_tokens)]
+              // TODO: delete this page
+              // [investment.group.name, this.convertToPercent(investment.research.security_tokens)]
             ],
 
             options: {

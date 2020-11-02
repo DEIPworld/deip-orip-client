@@ -71,7 +71,7 @@
             lg="9"
             class="pl-2"
           >
-            {{ convertToPercent(tokenSale.balance_tokens) }}%
+            {{ tokenSale.security_tokens_on_sale[0][1] }}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
@@ -83,7 +83,7 @@
             lg="9"
             class="pl-2"
           >
-            {{ convertToPercent(research.owned_tokens) }}%
+            {{ 10000 - tokenSale.security_tokens_on_sale[0][1] }}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
@@ -218,8 +218,10 @@
   import moment from 'moment';
   import deipRpc from '@deip/rpc-client';
   import { ResearchService } from '@deip/research-service';
+  import { InvestmentsService } from '@deip/investments-service';
 
   const researchService = ResearchService.getInstance();
+  const investmentsService = InvestmentsService.getInstance();
 
   export default {
     name: 'ResearchDetailsFundraising',
@@ -352,15 +354,15 @@
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol == symbol);
 
-        researchService.contributeToResearchTokenSaleViaOffchain(this.user.privKey, {
-          researchExternalId: this.research.external_id,
+        investmentsService.contributeToResearchTokenSaleViaOffchain({ privKey: this.user.privKey, username: this.user.username }, {
+          tokenSaleExternalId: this.tokenSale.external_id,
           contributor: this.user.username,
           amount: this.toAssetUnits(this.amountToContribute, asset.precision, asset.string_symbol),
           extensions: []
         })
           .then((data) => {
             this.$store.dispatch('rd/loadResearchTokenSale', {
-              researchId: this.research.id
+              researchId: this.research.external_id
             });
             this.$store.dispatch('rd/loadResearchTokenSales', {
               researchId: this.research.id

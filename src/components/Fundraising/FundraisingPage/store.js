@@ -1,25 +1,28 @@
 import deipRpc from '@deip/rpc-client';
 import { InvestmentsService } from '@deip/investments-service';
 import { UsersService } from '@deip/users-service';
+import { ResearchService } from '@deip/research-service';
 
 const investmentsService = InvestmentsService.getInstance();
 const usersService = UsersService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const STATE = {
   tokenSale: undefined,
-  contributionsList: [],
+  securityTokenBalances: [],
   transactionsHistory: []
 };
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
-  contributionsList: (state) => state.contributionsList,
+  securityTokenBalances: (state) => state.securityTokenBalances,
   transactionsHistory: (state) => state.transactionsHistory
 };
 
 const ACTIONS = {
   loadResearchTokenSale({ dispatch, commit }, researchId) {
-    return investmentsService.getCurrentTokenSaleByResearchId(researchId)
+    // TODO: load research token sale by id
+    return investmentsService.getCurrentTokenSaleByResearch(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (tokenSale) {
@@ -30,26 +33,30 @@ const ACTIONS = {
       }, (err) => { console.error(err); });
   },
 
-  loadAllInvestors({ commit }, researchId) {
-    const contributors = [];
-    return deipRpc.api.getResearchTokensByResearchIdAsync(researchId)
-      .then((contributions) => {
-        contributors.push(...contributions);
-        return usersService.getEnrichedProfiles(contributions.map((m) => m.account_name));
+  loadSecurityTokenHolders({ commit }, securityTokenId) {
+    const securityTokenHolders = [];
+    return investmentsService.getSecurityTokenBalances(securityTokenId)
+      .then((balances) => {
+        securityTokenHolders.push(...balances);
+        return usersService.getEnrichedProfiles(balances.map((m) => m.owner));
       })
       .then((users) => {
-        for (let i = 0; i < contributors.length; i++) {
-          const contributor = contributors[i];
-          contributor.user = users.find((user) => contributor.account_name === user.account.name);
+        // TODO: Fix this for group accounts
+        for (let i = 0; i < securityTokenHolders.length; i++) {
+          const balance = securityTokenHolders[i]; 
+          balance.user = users.find((user) => balance.owner === user.account.name);
         }
-        commit('setResearchTokenSaleContributionsList', contributors);
+        commit('setSecurityTokenBalancesList', securityTokenHolders);
       });
   },
+
   loadTransactionsHistory({ commit }, researchId) {
+    // TODO: load history by specific security token
     const transactions = [];
-    return deipRpc.api.getContributionsHistoryByResearchAsync(
-      researchId
-    )
+    return researchService.getResearch(researchId)
+      .then((research) => {
+        return deipRpc.api.getContributionsHistoryByResearchAsync(research.id)
+      })
       .then((transactionsList) => {
         transactions.push(...transactionsList);
         return usersService.getEnrichedProfiles(transactionsList.map((t) => t.op[1].contributor));
@@ -65,7 +72,7 @@ const ACTIONS = {
       });
   },
   loadLastResearchTokenSale({ commit }, researchId) {
-    return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
+    return deipRpc.api.getResearchTokenSalesByResearchAsync(researchId)
       .then((tokenSales) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);
@@ -81,8 +88,8 @@ const MUTATIONS = {
   setResearchTokenSale(state, tokenSale) {
     state.tokenSale = tokenSale;
   },
-  setResearchTokenSaleContributionsList(state, contributions) {
-    state.contributionsList = contributions;
+  setSecurityTokenBalancesList(state, securityTokenBalances) {
+    state.securityTokenBalances = securityTokenBalances;
   },
   setTransactionsHistory(state, transactionsHistory) {
     state.transactionsHistory = transactionsHistory;

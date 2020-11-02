@@ -1,9 +1,10 @@
 <template>
   <fundraising
-    :research-id="research.id"
+    :security-token-id="research.securityTokens[0][0]"
+    :research-id="research.externalId"
     :research-title="research.title"
-    :group-name="research.researchGroup.name"
-    :group-owned-tokens="research.ownedTokens"
+    :research-group-id="research.researchGroup.external_id"
+    :research-group-name="research.researchGroup.name"
   />
 </template>
 

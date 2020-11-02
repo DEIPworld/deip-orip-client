@@ -103,9 +103,7 @@
 
                   <!-- <div class="width-7 list-body-cell text-align-center half-bold">10</div> -->
 
-                  <div class="width-5 list-body-cell text-align-center half-bold">
-                    {{ convertToPercent(research.owned_tokens) }}%
-                  </div>
+
                 </div>
 
                 <v-divider />

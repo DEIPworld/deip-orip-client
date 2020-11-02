@@ -1,13 +1,13 @@
 <template>
   <v-form ref="form" @submit="onSubmit">
-    <d-form-block title="Determine the % of project for share">
+    <d-form-block title="Determine the number of security token units">
       <v-col cols="12">
         <v-text-field
           v-model="amount"
-          v-mask="'##.##'"
+          v-mask="'#####'"
           outlined
-          suffix="%"
-          :hint="(ownedAmount / 100) - getAmountNumber(amount || 0) + '% left'"
+          suffix="UNITS"
+          :hint="(securityTokenOnSaleBalance - (amount || 0)) + ' left'"
           :rules="[rules.amountToSellRules]"
         />
       </v-col>
@@ -138,12 +138,18 @@
     },
 
     props: {
+
       formData: {
         type: Object,
         required: true
       },
 
-      ownedAmount: {
+      securityTokenOnSale: {
+        type: String,
+        default: ""
+      },
+
+      securityTokenOnSaleBalance: {
         type: Number,
         default: 0
       },
@@ -186,10 +192,10 @@
 
       amount: {
         get() {
-          return this.formData.amountToSell ? this.formData.amountToSell / 100 : this.formData.amountToSell;
+          return this.formData.amountToSell;
         },
         set(val) {
-          this.formData.amountToSell = val * 100;
+          this.formData.amountToSell = parseInt(val || 0);
         }
       }
     },
@@ -203,7 +209,7 @@
 
         rules: {
           amountToSellRules: (v) => this.verifyAmountRange(v)
-            || `Amount should be from 0% to ${this.ownedAmount / 100}%`,
+            || `Amount should be from 0 to ${this.securityTokenOnSaleBalance}`,
 
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
@@ -255,8 +261,7 @@
     },
     methods: {
       verifyAmountRange(value) {
-        const amountNumber = this.getAmountNumber(value) * 100;
-        return amountNumber > 0 && amountNumber <= this.ownedAmount;
+        return value > 0 && value <= this.securityTokenOnSaleBalance;
       },
       getAmountNumber(value) {
         return value === '' ? 0 : parseFloat(value);
