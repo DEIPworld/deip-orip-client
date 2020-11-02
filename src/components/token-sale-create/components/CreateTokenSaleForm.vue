@@ -125,6 +125,8 @@
   import { FormMixin } from '@/utils/FormMixin';
   import moment from 'moment';
 
+  const MIN_TOKEN_UNITS_TO_SELL = 100;
+
   export default {
     name: 'CreateTokenSaleForm',
     components: {
@@ -209,7 +211,7 @@
 
         rules: {
           amountToSellRules: (v) => this.verifyAmountRange(v)
-            || `Amount should be from 0 to ${this.securityTokenOnSaleBalance}`,
+            || `Amount should be from ${MIN_TOKEN_UNITS_TO_SELL} to ${this.securityTokenOnSaleBalance}`,
 
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
@@ -261,10 +263,7 @@
     },
     methods: {
       verifyAmountRange(value) {
-        return value > 0 && value <= this.securityTokenOnSaleBalance;
-      },
-      getAmountNumber(value) {
-        return value === '' ? 0 : parseFloat(value);
+        return value >= MIN_TOKEN_UNITS_TO_SELL && value <= this.securityTokenOnSaleBalance;
       },
       setStartDate(value) {
         this.startDate = value;
