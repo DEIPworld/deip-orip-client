@@ -212,10 +212,12 @@
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
   import { ResearchService } from '@deip/research-service';
+  import { InvestmentsService } from '@deip/investments-service';
   import crypto from '@deip/lib-crypto';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   const researchService = ResearchService.getInstance();
+  const investmentsService = InvestmentsService.getInstance();
 
   const transactionTypes = {
     TRANS: 1
@@ -236,21 +238,25 @@
     },
     mixins: [componentStoreFactoryOnce(fundraisingStore)],
     props: {
+      securityTokenId: {
+        type: String,
+        default: ''
+      },
       researchId: {
-        type: [Number, String],
-        default: 0
+        type: String,
+        default: ''
       },
       researchTitle: {
         type: String,
         default: ''
       },
-      groupName: {
+      researchGroupId: {
         type: String,
         default: ''
       },
-      groupOwnedTokens: {
-        type: Number,
-        default: 0
+      researchGroupName: {
+        type: String,
+        default: ''
       }
     },
     data() {
@@ -300,7 +306,7 @@
         tokenSale: 'Fundraising/tokenSale',
         userBalances: 'auth/userBalances',
         userAssets: 'auth/userAssets',
-        contributionsList: 'Fundraising/contributionsList',
+        securityTokenBalances: 'Fundraising/securityTokenBalances',
         transactionsHistory: 'Fundraising/transactionsHistory'
       }),
       chipColors() {
@@ -341,22 +347,25 @@
         return this.tokenSale && this.tokenSale.status === 4;
       },
       chartData() {
-        const investors = this.contributionsList.reduce((arr, item) => {
-          arr.push(
-            [this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]
-          );
+        const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
+          if (item.owner === this.researchGroupId) { // TODO: resolve this for all group accounts in store
+            arr.push([this.researchGroupName, this.convertToPercent(item.amount)]);
+          } else {
+            arr.push([this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]);
+          }
           return arr;
         }, []);
-        const tokensOnSale = Math.round(100 - this.convertToPercent(this.groupOwnedTokens)
-          - this.contributionsList.reduce(
-            (sum, item) => sum + this.convertToPercent(item.amount), 0
-          ));
-        return [
+
+        const data = [
           ['Researcher', 'AmountMoney'],
-          ...investors,
-          [this.groupName, this.convertToPercent(this.groupOwnedTokens)],
-          ['On Sale', tokensOnSale]
+          ...securityTokenHolders,
         ];
+
+        if (this.hasActiveTokenSale || this.hasInactiveTokenSale) {
+          data.push(['On Sale', this.convertToPercent(this.tokenSale.security_tokens_on_sale[0][1])]);
+        }
+        
+        return data;
       },
       currentCap() {
         if (!this.tokenSale) return 0;
@@ -409,7 +418,7 @@
     },
     created() {
       Promise.all([
-        this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
+        this.$store.dispatch('Fundraising/loadSecurityTokenHolders', this.securityTokenId),
         this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
         this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId)
       ])
@@ -435,20 +444,18 @@
         this.isInvesting = true;
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
-
-        researchService.contributeToResearchTokenSaleViaOffchain(this.$currentUser.privKey, {
-          researchExternalId: this.$route.params.researchExternalId,
-          contributor: this.$currentUserName,
-          amount: this.toAssetUnits(
-            this.formData.amountToContribute, asset.precision, asset.string_symbol
-          ),
+        
+        investmentsService.contributeToResearchTokenSaleViaOffchain({ privKey: this.$currentUser.privKey, username: this.$currentUser.account.name }, {
+          tokenSaleExternalId: this.tokenSale.external_id,
+          contributor: this.$currentUser.account.name,
+          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),
           extensions: []
         })
           .then(() => {
             Promise.all(
               [
                 this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
-                this.$store.dispatch('Fundraising/loadAllInvestors', this.researchId),
+                this.$store.dispatch('Fundraising/loadSecurityTokenHolders', this.securityTokenId),
                 this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')

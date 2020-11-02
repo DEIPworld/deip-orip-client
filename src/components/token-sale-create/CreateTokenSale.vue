@@ -2,7 +2,8 @@
   <full-screen-view title="Create fundraising">
     <create-token-sale-form
       v-model="formData"
-      :owned-amount="research.owned_tokens"
+      :security-token-on-sale="securityTokenOnSale ? securityTokenOnSale.external_id : null"
+      :security-token-on-sale-balance="securityTokenOnSaleBalance ? securityTokenOnSaleBalance.amount : 0"
       :disabled="formProcessing"
       :loading="formProcessing"
       @submit="finish"
@@ -13,11 +14,13 @@
 <script>
   import { CreateTokenSaleMixin } from '@/components/token-sale-create/CreateTokenSaleMixin';
   import { ResearchService } from '@deip/research-service';
+  import { InvestmentsService } from '@deip/investments-service';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import { mapGetters } from 'vuex';
   import CreateTokenSaleForm from './components/CreateTokenSaleForm';
 
   const researchService = ResearchService.getInstance();
+  const investmentsService = InvestmentsService.getInstance();
 
   export default {
     name: 'CreateTokenSale',
@@ -38,14 +41,15 @@
         const isProposal = !this.research.research_group.is_personal;
         const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        researchService.createResearchTokenSaleViaOffchain(
+        investmentsService.createResearchTokenSaleViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          false, {
+          false, 
+          {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,
             startTime: this.formData.startDate.toISOString().split('.')[0],
             endTime: this.formData.endDate.toISOString().split('.')[0],
-            share: `${((this.formData.amountToSell / this.DEIP_100_PERCENT) * 100).toFixed(2)} %`,
+            securityTokensOnSale: [[this.securityTokenOnSale.external_id, this.formData.amountToSell]],
             softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
             hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
             extensions: []

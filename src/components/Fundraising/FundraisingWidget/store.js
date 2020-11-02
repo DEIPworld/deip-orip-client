@@ -20,19 +20,20 @@ const GETTERS = {
 const ACTIONS = {
   loadResearchTokenSale({ dispatch, commit }, researchId) {
     return researchService.getResearch(researchId)
-      .then((res) => {
-        commit('setResearch', res);
-        return investmentsService.getCurrentTokenSaleByResearchId(res.id)
+      .then((research) => {
+        commit('setResearch', research);
+
+        return investmentsService.getCurrentTokenSaleByResearch(research.external_id)
           .then((tokenSale) => {
             commit('setResearchTokenSale', tokenSale);
             if (!tokenSale) {
-              return dispatch('loadHistoryResearchTokenSale', res.id);
+              return dispatch('loadHistoryResearchTokenSale', research.external_id);
             }
           });
       }, (err) => { console.error(err); });
   },
   loadHistoryResearchTokenSale({ commit }, researchId) {
-    return deipRpc.api.getResearchTokenSalesByResearchIdAsync(researchId)
+    return deipRpc.api.getResearchTokenSalesByResearchAsync(researchId)
       .then((tokenSales) => {
         commit('setHistoryResearchTokenSale', tokenSales);
       });

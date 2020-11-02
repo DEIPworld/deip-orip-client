@@ -206,7 +206,7 @@ const actions = {
 
         const tokenSaleLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchTokenSale', {
-            researchId: state.research.id,
+            researchExternalId: state.research.external_id,
             notify: resolve
           });
         });
@@ -403,10 +403,9 @@ const actions = {
       });
   },
 
-  loadResearchTokenSale({ state, dispatch, commit }, { researchId, notify }) {
+  loadResearchTokenSale({ state, dispatch, commit }, { researchExternalId, notify }) {
     commit('SET_RESEARCH_TOKEN_SALE_LOADING_STATE', true);
-
-    return investmentsService.getCurrentTokenSaleByResearchId(researchId)
+    return investmentsService.getCurrentTokenSaleByResearch(researchExternalId)
       .then((tokenSale) => {
         commit('SET_RESEARCH_TOKEN_SALE', tokenSale);
 
