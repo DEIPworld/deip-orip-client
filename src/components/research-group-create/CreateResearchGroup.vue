@@ -80,7 +80,7 @@
                       researchGroup: res.external_id,
                       member: invitee.account,
                       rewardShare: '0.00 %',
-                      researches: undefined, // all researches
+                      researches: [],
                       extensions: []
                     },
                     {

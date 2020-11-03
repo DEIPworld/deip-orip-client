@@ -164,7 +164,9 @@
                 ? [...acc[attr.blockchainFieldMeta.field], ...(isArray(value) ? value : [value])]
                 : [...(isArray(value) ? value : [value])];
             } else {
-              acc[attr.blockchainFieldMeta.field] = value || null;
+              acc[attr.blockchainFieldMeta.field] = attr.isMultiple 
+                ? isArray(value) ? value : [value]
+                : isArray(value) ? (value[0] || null) : (value || null);
             }
             return acc;
           }, {});

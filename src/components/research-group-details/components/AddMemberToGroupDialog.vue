@@ -117,7 +117,7 @@
             researchGroup: this.groupExternalId,
             member: this.selectedUser.name,
             rewardShare: '0.00 %',
-            researches: undefined, // all researches
+            researches: [],
             extensions: []
           }, 
           {

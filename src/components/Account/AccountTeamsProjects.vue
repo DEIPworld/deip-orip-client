@@ -13,18 +13,18 @@
           </projects-list>
           <projects-list
             :user-name="$currentUserName"
-            type="following"
-          >
-            <template #title>
-              {{ $t('account.projects.follTech') }}
-            </template>
-          </projects-list>
-          <projects-list
-            :user-name="$currentUserName"
             type="personal"
           >
             <template #title>
               {{ $t('account.projects.myTech') }}
+            </template>
+          </projects-list>
+          <projects-list
+            :user-name="$currentUserName"
+            type="following"
+          >
+            <template #title>
+              {{ $t('account.projects.follTech') }}
             </template>
           </projects-list>
         </d-stack>
