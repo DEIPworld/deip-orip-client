@@ -64,13 +64,13 @@
           <v-list nav dense>
             <v-list-item
               v-if="isDepositAvailable(item.asset_id)"
-              @click="openDepositDialog(item.asset_id)"
+              @click="openDepositDialog(item)"
             >
               <v-list-item-title>{{ $t('userWallet.deposit') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
               v-if="isWithdrawAvailable(item.asset_id)"
-              @click="openWithdrawDialog(item.asset_id)"
+              @click="openWithdrawDialog(item)"
             >
               <v-list-item-title>{{ $t('userWallet.withdraw') }}</v-list-item-title>
             </v-list-item>
@@ -78,201 +78,131 @@
         </v-menu>
       </template>
     </v-data-table>
-    <v-dialog
+    <d-dialog
       v-model="depositDialog.isOpened"
-      persistent
       max-width="800px"
+      :title="$t('userWallet.depositDialog.depositFunds')"
+      :disabled="depositDialog.isDepositing"
+      :loading="depositDialog.isDepositing"
+      :confirm-button-title="$t('userWallet.depositDialog.depositFunds')"
+      :cancel-button-title="$t('userWallet.cancel')"
+      @click:confirm="deposit()"
     >
-      <v-card class="pa-6">
-        <v-card-title class="">
-          <div class="text-subtitle-1 font-weight-bold">
-            {{ $t('userWallet.depositDialog.depositFunds') }}
-          </div>
-          <div class="right-top-angle">
-            <v-btn icon class="pa-0 ma-0" @click="closeDepositDialog()">
-              <v-icon color="black">
-                close
-              </v-icon>
-            </v-btn>
-          </div>
-        </v-card-title>
-        <v-card-text class="pa-0">
-          <v-row>
-            <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
-              <v-credit-card
-                v-if="depositDialog.isOpened"
-                :trans="translations"
-                @change="creditInfoChanged"
+      <v-row>
+        <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
+          <v-credit-card
+            v-if="depositDialog.isOpened"
+            :trans="translations"
+            @change="creditInfoChanged"
+          />
+        </v-col>
+        <v-col cols="6">
+          <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
+            <div>
+              <label class="text-body-2">
+                {{ $t('userWallet.depositDialog.amountField.label') }}
+              </label>
+              <v-text-field
+                v-model="depositDialog.amount"
+                outlined
+                :placehoder="$t('userWallet.depositDialog.amountField.placeholder')"
               />
-            </v-col>
-            <v-col cols="6">
-              <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
-                <div class="balance-form-input">
-                  <label class="balance-form-input__label">{{ $t('userWallet.depositDialog.amountField.label') }}</label>
-                  <input
-                    v-model="depositDialog.amount"
-                    class="balance-form-input__field"
-                    type="text"
-                    :placehoder="$t('userWallet.depositDialog.amountField.placeholder')"
-                  >
-                </div>
-                <div class="my-4">
-                  <v-checkbox
-                    v-model="depositDialog.termsConfirmed"
-                    :label="$t('userWallet.depositDialog.confirmQualifiedField')"
-                    hide-details
-                  />
-                </div>
-                <div class="my-4">
-                  <v-btn
-                    color="primary"
-                    block
-                    :disabled="isDepositingDisabled || depositDialog.isDepositing"
-                    :loading="depositDialog.isDepositing"
-                    @click="deposit()"
-                  >
-                    {{ $t('userWallet.depositDialog.depositFunds') }}
-                  </v-btn>
-                </div>
-                <div class="mb-6">
-                  <v-btn
-                    color="primary"
-                    class="pa-0"
-                    text
-                    block
-                    :disabled="depositDialog.isDepositing"
-                    @click="closeDepositDialog()"
-                  >
-                    {{ $t('userWallet.cancel') }}
-                  </v-btn>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-    <v-dialog
+            </div>
+            <div class="my-4">
+              <v-checkbox
+                v-model="depositDialog.termsConfirmed"
+                :label="$t('userWallet.depositDialog.confirmQualifiedField')"
+                hide-details
+              />
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </d-dialog>
+    <d-dialog
       v-model="withdrawDialog.isOpened"
-      persistent
       max-width="800px"
+      :title="$t('userWallet.withdrawDialog.withdrawFunds')"
+      :disabled="withdrawDialog.isWithdrawing"
+      :loading="withdrawDialog.isWithdrawing"
+      :confirm-button-title="$t('userWallet.withdrawDialog.withdrawFunds')"
+      :cancel-button-title="$t('userWallet.cancel')"
+      @click:confirm="withdraw()"
     >
-      <v-card class="pa-6">
-        <v-card-title class="">
-          <div class="text-subtitle-1 font-weight-bold">
-            {{ $t('userWallet.withdrawDialog.withdrawFunds') }}
+      <v-row>
+        <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
+          <div class="mx-4 mt-2">
+            <label class="text-body-2">{{ $t('userWallet.withdrawDialog.nameField') }}</label>
+            <v-text-field
+              v-model="withdrawDialog.name"
+              outlined
+            />
           </div>
-          <div class="right-top-angle">
-            <v-btn icon class="pa-0 ma-0" @click="closeWithdrawDialog()">
-              <v-icon color="black">
-                close
-              </v-icon>
-            </v-btn>
+          <div class="mx-4 mt-4">
+            <label class="text-body-2">
+              {{ $t('userWallet.withdrawDialog.idanField.label') }}
+              <v-tooltip right>
+                <template v-slot:activator="{ on }">
+                  <v-icon small v-on="on">help</v-icon>
+                </template>
+
+                <span>{{ $t('userWallet.withdrawDialog.idanField.tooltip') }}</span>
+              </v-tooltip>
+            </label>
+            <v-text-field
+              v-model="withdrawDialog.iban"
+              outlined
+              counter="34"
+            />
           </div>
-        </v-card-title>
-        <v-card-text class="pa-0">
-          <v-row>
-            <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
-              <div class="balance-form-input mx-4 mt-2">
-                <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.nameField') }}</label>
-                <input
-                  v-model="withdrawDialog.name"
-                  class="balance-form-input__field"
-                  type="text"
-                >
-              </div>
-              <div class="balance-form-input mx-4 mt-4">
-                <label class="balance-form-input__label">
-                  {{ $t('userWallet.withdrawDialog.idanField.label') }}
-                  <v-tooltip right>
-                    <template v-slot:activator="{ on }">
-                      <v-icon small v-on="on">help</v-icon>
-                    </template>
+          <div class="mx-4 mt-4">
+            <label class="text-body-2">
+              {{ $t('userWallet.withdrawDialog.referenceField.label') }}
+              <v-tooltip right>
+                <template v-slot:activator="{ on }">
+                  <v-icon small v-on="on">help</v-icon>
+                </template>
 
-                    <span>{{ $t('userWallet.withdrawDialog.idanField.tooltip') }}</span>
-                  </v-tooltip>
-                </label>
-                <input
-                  v-model="withdrawDialog.iban"
-                  class="balance-form-input__field"
-                  type="text"
-                  maxlength="34"
-                >
-              </div>
-              <div class="balance-form-input mx-4 mt-4">
-                <label class="balance-form-input__label">
-                  {{ $t('userWallet.withdrawDialog.referenceField.label') }}
-                  <v-tooltip right>
-                    <template v-slot:activator="{ on }">
-                      <v-icon small v-on="on">help</v-icon>
-                    </template>
-
-                    <span>{{ $t('userWallet.withdrawDialog.referenceField.tooltip') }}</span>
-                  </v-tooltip>
-                </label>
-                <input
-                  v-model="withdrawDialog.refNum"
-                  class="balance-form-input__field"
-                  type="text"
-                >
-              </div>
-              <div class="balance-form-input mx-4 mt-4">
-                <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.beneficiaryField') }}</label>
-                <textarea
-                  v-model="withdrawDialog.messageText"
-                  class="balance-form-input__field"
-                  type="text"
-                  rows="9"
-                  style="resize: none"
-                />
-              </div>
-            </v-col>
-            <v-col cols="6" class="pl-4">
-              <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
-                <div class="balance-form-input">
-                  <label class="balance-form-input__label">{{ $t('userWallet.withdrawDialog.amountField') }}</label>
-                  <input
-                    v-model="withdrawDialog.amount"
-                    class="balance-form-input__field"
-                    type="text"
-                  >
-                </div>
-                <div class="my-4">
-                  <v-checkbox
-                    v-model="withdrawDialog.termsConfirmed"
-                    :label="$t('userWallet.withdrawDialog.confirmQualifiedField')"
-                    hide-details
-                  />
-                </div>
-                <div class="my-4">
-                  <v-btn
-                    color="primary"
-                    block
-                    :disabled="isWithdrawDisabled || withdrawDialog.isWithdrawing"
-                    :loading="withdrawDialog.isWithdrawing"
-                    @click="withdraw()"
-                  >
-                    {{ $t('userWallet.withdrawDialog.withdrawFunds') }}
-                  </v-btn>
-                </div>
-                <div class="mb-6">
-                  <v-btn
-                    color="primary"
-                    class="pa-0"
-                    text
-                    block
-                    :disabled="withdrawDialog.isWithdrawing"
-                    @click="closeWithdrawDialog()"
-                  >
-                    {{ $t('userWallet.cancel') }}
-                  </v-btn>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+                <span>{{ $t('userWallet.withdrawDialog.referenceField.tooltip') }}</span>
+              </v-tooltip>
+            </label>
+            <v-text-field
+              v-model="withdrawDialog.refNum"
+              outlined
+            />
+          </div>
+          <div class="mx-4 mt-4">
+            <label class="text-body-2">
+              {{ $t('userWallet.withdrawDialog.beneficiaryField') }}
+            </label>
+            <v-textarea
+              v-model="withdrawDialog.messageText"
+              outlined
+              rows="9"
+              no-resize
+            />
+          </div>
+        </v-col>
+        <v-col cols="6" class="pl-4">
+          <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
+            <div>
+              <label class="text-body-2">{{ $t('userWallet.withdrawDialog.amountField') }}</label>
+              <v-text-field
+                v-model="withdrawDialog.amount"
+                outlined
+              />
+            </div>
+            <div class="my-4">
+              <v-checkbox
+                v-model="withdrawDialog.termsConfirmed"
+                :label="$t('userWallet.withdrawDialog.confirmQualifiedField')"
+                hide-details
+              />
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </d-dialog>
 
     <d-dialog
       v-model="sendTokensDialog.isOpened"
@@ -643,16 +573,18 @@
 
         this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
 
+        this.sendTokensDialog.form.receiver = {};
         this.sendTokensDialog.form.asset = balance;
         this.sendTokensDialog.form.valid = false;
         this.sendTokensDialog.form.to = '';
         this.sendTokensDialog.form.amount = '';
         this.sendTokensDialog.form.memo = '';
       },
-      openDepositDialog(assetId) {
+      openDepositDialog(item) {
+        this.depositDialog.owner = item.owner;
         this.depositDialog.amount = 0;
-        this.depositDialog.precision = this.assetsInfo[assetId].precision;
-        this.depositDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
+        this.depositDialog.precision = this.assetsInfo[item.asset_id].precision;
+        this.depositDialog.selectedCurrency = this.assetsInfo[item.asset_id].string_symbol;
         this.depositDialog.cardData.name = '';
         this.depositDialog.cardData.cardNumber = '';
         this.depositDialog.cardData.expiration = '';
@@ -668,10 +600,11 @@
         const symbol = this.assetsInfo[assetId].string_symbol;
         return fiatAssetBackedTokens.some((s) => s == symbol);
       },
-      openWithdrawDialog(assetId) {
+      openWithdrawDialog(item) {
+        this.depositDialog.owner = item.owner;
         this.withdrawDialog.amount = 0;
-        this.withdrawDialog.precision = this.assetsInfo[assetId].precision;
-        this.withdrawDialog.selectedCurrency = this.assetsInfo[assetId].string_symbol;
+        this.withdrawDialog.precision = this.assetsInfo[item.asset_id].precision;
+        this.withdrawDialog.selectedCurrency = this.assetsInfo[item.asset_id].string_symbol;
         this.withdrawDialog.name = '';
         this.withdrawDialog.iban = '';
         this.withdrawDialog.refNum = '';
@@ -683,15 +616,14 @@
         this.withdrawDialog.isWithdrawing = true;
         return deipRpc.broadcast.transferAsync(
           this.$currentUser.privKey,
-          this.$currentUser.username,
+          this.depositDialog.owner,
           'kim',
           this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
-          `withdraw for ${this.$currentUser.username}`,
+          `withdraw for ${this.depositDialog.owner}`,
           []
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been withdrawn successfully!');
-            this.closeWithdrawDialog();
           })
           .catch((err) => {
             console.error(err);
@@ -699,6 +631,7 @@
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;
+            this.withdrawDialog.isOpened = false;
             return this.updateBalances();
           });
       },
@@ -707,14 +640,13 @@
         return deipRpc.broadcast.transferAsync(
           '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa',
           'kim',
-          this.$currentUser.username,
+          this.depositDialog.owner,
           this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
-          `deposit for ${this.$currentUser.username}`,
+          `deposit for ${this.depositDialog.owner}`,
           []
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been deposited successfully!');
-            this.closeDepositDialog();
           })
           .catch((err) => {
             console.error(err);
@@ -722,6 +654,7 @@
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;
+            this.depositDialog.isOpened = false;
             return this.updateBalances();
           });
       },
@@ -761,24 +694,3 @@
     }
   };
 </script>
-
-<style lang="less" scoped>
-  .balance-form-input { // same as vue-credit card inputs
-    color: #707070;
-
-    &__label {
-      padding-bottom: 5px;
-      font-size: 13px;
-    }
-
-    &__field {
-      box-sizing: border-box;
-      margin-top: 3px;
-      padding: 15px;
-      font-size: 16px;
-      width: 100%;
-      border-radius: 3px;
-      border: 1px solid #dcdcdc;
-    }
-  }
-</style>

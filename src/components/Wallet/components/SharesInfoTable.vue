@@ -9,7 +9,7 @@
       :hide-default-footer="balances.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
-      item-key="group.external_id"
+      item-key="security_token_external_id"
       disable-sort
       show-expand
       :expanded.sync="expanded"
@@ -89,7 +89,18 @@
         ref="sendResearchTokensForm"
         v-model="sendResearchTokensDialog.form.valid"
       >
-        <!-- <v-select></v-select> -->
+        <v-select
+          v-model="sendResearchTokensDialog.form.account"
+          label="Asset"
+          :items="balances"
+          outlined
+          return-object
+          item-text="research.title"
+          item-value="research.external_id"
+          :menu-props="{
+            maxWidth: 525
+          }"
+        />
         <v-text-field
           v-model.number="sendResearchTokensDialog.form.amount"
           label="Amount"
@@ -244,14 +255,13 @@
         expandedInvestmentIdx: -1,
 
         sendResearchTokensDialog: {
-          research: null,
           form: {
             sender: '',
-            receiver: '',
-            securityTokenExternalId: '',
+            receiver: {},
             amount: 0,
             valid: false,
             memo: '',
+            account: {},
             rules: {
               username: [rules.username],
               amount: [
@@ -295,13 +305,10 @@
       },
       openSendResearchTokensDialog(item) {
         this.sendResearchTokensDialog.isOpened = true;
-        setTimeout(() => {
-          this.$refs.sendResearchTokensForm.reset();
-        });
 
-        this.sendResearchTokensDialog.securityTokenExternalId = item.security_token_external_id;
         this.sendResearchTokensDialog.form.valid = false;
-        this.sendResearchTokensDialog.form.amount = 0;
+        this.sendResearchTokensDialog.form.amount = '';
+        this.sendResearchTokensDialog.form.account = item;
       },
 
       sendResearchTokens() {
@@ -312,8 +319,10 @@
             { privKey: this.$currentUser.privKey, username: this.$currentUserName },
             {
               sender: this.$route.params.account,
-              receiver: this.sendResearchTokensDialog.form.receiver.account.name,
-              securityTokenExternalId: this.sendResearchTokensDialog.securityTokenExternalId,
+              receiver:
+                this.sendResearchTokensDialog.form.account.research.research_group.external_id,
+              securityTokenExternalId:
+                this.sendResearchTokensDialog.form.account.security_token_external_id,
               amount: this.sendResearchTokensDialog.form.amount
             }
           )

@@ -63,7 +63,6 @@
       },
 
       limitedAccess() {
-        console.log(this.research)
         const expressLicensingId = this.$tenantSettings.researchAttributes
           .find((attr) => attr.type === ATTR_TYPES.EXPRESS_LICENSING)
           ._id;

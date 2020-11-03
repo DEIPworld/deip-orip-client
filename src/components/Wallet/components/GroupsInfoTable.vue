@@ -119,9 +119,9 @@
         ), 0);
         const revHisTotalRevenue = item.revenueHistory.reduce((v, i) => {
           const val = i.reduce((vv, ii) => (vv + this.fromAssetsToFloat(ii.revenue)), 0);
-          const research = item.researchList.find(
+          const research = item.researchList ? item.researchList.find(
             (r) => r.external_id === i[0].security_token.research_external_id
-          );
+          ) : false;
           const securityTokenAmount = research ? research.security_tokens.find(
             (st) => st[0] === i[0].security_token.external_id
           )[1] : 1;

@@ -1,20 +1,5 @@
 import { mapGetters } from 'vuex';
 import { isArray, isObject, isString } from '@/utils/helpers';
-import { BlockchainService } from '@deip/blockchain-service';
-
-const blockchainService = BlockchainService.getInstance();
-
-function toAssetUnits(
-  amount,
-  precision = 3,
-  asset = this.$env.ASSET_UNIT
-) {
-  return blockchainService.toAssetUnits(
-    amount,
-    precision,
-    asset
-  );
-}
 
 export const assetsChore = {
   computed: {
@@ -24,19 +9,43 @@ export const assetsChore = {
   },
 
   methods: {
-    $$assetInfo(id) {
-      return this.assets.find((ass) => ass.id === id);
+    $$assetInfo(assetId) {
+      // return this.assets.find((ass) => ass.string_symbol);
+      return this.assets.find((ass) => (ass.string_symbol === assetId || ass.id === assetId));
     },
 
-    $$toAssetUnits(val) {
+    $$fromAssetUnits(val) {
+      // /\d+[.]{1}\d+\s[a-zA-Z0-9]+/ - для цифры-точка-цифры-пробел-буквы_с_цифрами
+      // /\d+[.]{1}\d+\s[a-zA-Z]+/ - для цифры-точка-цифры-пробел-только_буквы
+
+      const matches = val.match(/(\d+)[.]{1}(\d+)\s([a-zA-Z]+)/);
+    },
+
+    $$toAssetUnits(val, formatted = true) {
       if (!val) return null;
 
+      const formatOptions = {
+        fractionCount: 3,
+        symbol: this.$env.ASSET_UNIT,
+
+        thousandsSeparator: formatted ? ',' : '',
+        symbolPosition: false,
+        symbolSpacing: true
+      };
+
       if (isString(val)) {
-        return toAssetUnits.call(this, val);
+        return this.$options.filters.currency(val, formatOptions);
       }
 
       if (isArray(val)) {
-        return toAssetUnits.call(this, ...val);
+        // amount, precision, asset,
+        return this.$options.filters.currency(val[0], {
+          ...formatOptions,
+          ...{
+            fractionCount: val[2],
+            symbol: val[1]
+          }
+        });
       }
 
       if (isObject(val)) {
@@ -46,12 +55,13 @@ export const assetsChore = {
 
         const asset = this.$$assetInfo(assetId);
 
-        return asset ? toAssetUnits.call(
-          this,
-          amount,
-          asset.precision,
-          asset.string_symbol
-        ) : null;
+        return asset ? this.$options.filters.currency(amount, {
+          ...formatOptions,
+          ...{
+            fractionCount: asset.precision,
+            symbol: asset.string_symbol
+          }
+        }) : null;
       }
 
       throw new Error('Unknown asset format');

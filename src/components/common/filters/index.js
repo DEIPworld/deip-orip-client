@@ -1,4 +1,4 @@
-import Vue from 'vue';
+  import Vue from 'vue';
 import moment from 'moment';
 import where from 'filter-where';
 import { AccessService } from '@deip/access-service';

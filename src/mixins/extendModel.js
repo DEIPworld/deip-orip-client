@@ -1,4 +1,4 @@
-import { hasValue, isArray } from '@/utils/helpers';
+import { hasValue, isArray, isObject } from '@/utils/helpers';
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
 
@@ -100,7 +100,7 @@ export const objectedModel = {
     }
   },
   created() {
-    if (!isArray(this.internalValue)) {
+    if (!isObject(this.internalValue)) {
       console.warn('Model must be bound to an Object.', this.$options.name);
     }
   }

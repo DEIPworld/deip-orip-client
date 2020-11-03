@@ -6,6 +6,7 @@ import VueCurrencyFilter from 'vue-currency-filter';
 import VueGoogleCharts from 'vue-google-charts';
 import PortalVue from 'portal-vue';
 import lsWatcher from 'vue-storage-watcher';
+// import VueCommonFilters from 'vue-common-filters'
 
 import './components/index'; // TODO: need refactoring and remove
 import './globals/index'; // TODO: need refactoring and remove
@@ -46,6 +47,7 @@ Vue.use(VueResize);
 Vue.use(Clipboard);
 Vue.use(PortalVue);
 Vue.use(VueTheMask);
+// Vue.use(VueCommonFilters);
 
 Vue.use(VuetifyExtended, { vuetify });
 
