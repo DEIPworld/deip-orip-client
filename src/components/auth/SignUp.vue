@@ -99,7 +99,7 @@
             <v-checkbox
               v-model="formData.isMasterPasswordSaved"
               class="my-2 pa-0"
-              :label="$t('signUp.free.form.savedKeyCheckbox.label')"
+              :label="$t('signUp.free.form.savedKeyCheckbox')"
               :disabled="isSaving"
               hide-details
             />

@@ -107,7 +107,7 @@
       </template>
       <template #item.status="{ item }">
         <div class="d-flex mt-4">
-          <v-icon :color="statusChipData.color[item.status]" size="13" class="mr-1">
+          <v-icon :color="statusChipData.color[item.status]" size="16" class="mr-1">
             {{ statusChipData.icon[item.status] }}
           </v-icon>
           {{ statusChipData.text[item.status] }}
@@ -198,7 +198,7 @@
                         <div class="d-flex black--text text-body-2">
                           <v-icon
                             :color="statusChipData.color[accountData.status]"
-                            size="13"
+                            size="16"
                             class="mr-1"
                           >
                             {{ statusChipData.icon[accountData.status] }}

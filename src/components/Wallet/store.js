@@ -53,7 +53,8 @@ const actions = {
       .then((balancesList) => {
         balances.push(...balancesList);
         return Promise.all(balances.map(
-          (b) => researchService.getResearch(b.research_external_id)
+          // (b) => researchService.getResearch(b.research_external_id)
+          (b) => deipRpc.api.getResearchAsync(b.research_external_id)
         ));
       })
       .then((researches) => {
@@ -73,7 +74,7 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
-            (r) => r[0] && r[0].account === b.owner
+            (r) => r[0] && r[0].security_token.external_id === b.security_token_external_id
           ) || []
         }));
 
