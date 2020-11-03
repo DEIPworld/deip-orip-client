@@ -3,7 +3,7 @@
     <d-layout-section-main>
       <d-block :title="$t('adminRouting.attributes.title')">
 
-        <template #titleAddon>
+        <template #title-append>
           <v-btn small color="primary" :to="{name: 'admin.attributes.edit'}">
             <v-icon left>
               extension
@@ -12,7 +12,8 @@
           </v-btn>
         </template>
 
-        <v-divider class="mb-6" />
+        <v-divider />
+
         <v-data-table
           :headers="attributesTable"
           :items="researchAttributes"
@@ -43,11 +44,11 @@
                 <v-icon>edit</v-icon>
               </v-btn>
 
-              <v-btn 
-                icon 
-                small 
-                :disabled="item.isRequired" 
-                @click="openActionDialog('delete', item._id)" 
+              <v-btn
+                icon
+                small
+                :disabled="item.isRequired"
+                @click="openActionDialog('delete', item._id)"
                 class="ml-auto"
               >
                 <v-icon>{{ item.isRequired ? 'lock' : 'delete' }}</v-icon>

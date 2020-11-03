@@ -10,12 +10,12 @@
     }"
   >
 
-    <slot name="itemCardActions" :project="project$" />
+    <slot name="itemCardActions" :project="$$projectExtended" />
 
     <project-list-item-renderer
       class="d-flex flex-column flex-shrink-1 flex-grow-1"
       :schema="layoutSchema"
-      :project="project$"
+      :project="$$projectExtended"
     />
   </v-card>
 </template>

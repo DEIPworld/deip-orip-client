@@ -1,22 +1,28 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="projects"
-    v-bind="iteratorProps"
-    @update:page="onUpdatePage"
+  <v-skeleton-loader
+    type="table-tbody"
+    :loading="loading"
+    transition="fade-transition"
   >
-    <template #item="{ item }">
-      <projects-list-table-row
-        :key="item.externalId"
-        :project="item"
-        :layout-key="rowLayoutKey"
-      >
-        <template #itemRowActions="{ project }">
-          <slot name="itemRowActions" :project="project" />
-        </template>
-      </projects-list-table-row>
-    </template>
-  </v-data-table>
+    <v-data-table
+      :headers="headers"
+      :items="projects"
+      v-bind="iteratorProps"
+      @update:page="onUpdatePage"
+    >
+      <template #item="{ item }">
+        <projects-list-table-row
+          :key="item.externalId"
+          :project="item"
+          :layout-key="rowLayoutKey"
+        >
+          <template #itemRowActions="{ project }">
+            <slot name="itemRowActions" :project="project" />
+          </template>
+        </projects-list-table-row>
+      </template>
+    </v-data-table>
+  </v-skeleton-loader>
 </template>
 
 <script>
@@ -42,7 +48,7 @@
           return [
             ...row.children.map((cell) => ({
               text: cell.attrs && cell.attrs.title ? cell.attrs.title : '',
-              ...cell.attrs,
+              ...cell.attrs
             })),
             ...(this.$scopedSlots.itemRowActions ? [{}] : [])
           ];

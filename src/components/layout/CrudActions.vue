@@ -37,6 +37,8 @@
       display: inline-grid;
       opacity: 0;
       transition: 0.2s ease-in-out;
+      justify-items: end;
+      grid-auto-flow: column;
     }
 
     .v-data-table tr:hover & {

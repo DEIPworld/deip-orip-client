@@ -6,7 +6,7 @@
 
       <slot name="titleLeft" />
       <slot name="title" />
-      <slot name="titleAddon" />
+      <slot name="title-append" />
       <slot />
 
     </d-block>

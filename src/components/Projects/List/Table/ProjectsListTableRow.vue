@@ -1,11 +1,11 @@
 <template>
   <project-list-item-renderer
-    :schema="layoutSchema$"
-    :project="project$"
+    :schema="layoutSchemaExtended"
+    :project="$$projectExtended"
     tag="tr"
   >
     <template #itemRowActions>
-      <slot name="itemRowActions" :project="project$" />
+      <slot name="itemRowActions" :project="$$projectExtended" />
     </template>
 
   </project-list-item-renderer>
@@ -28,7 +28,7 @@
       }
     },
     computed: {
-      layoutSchema$() {
+      layoutSchemaExtended() {
         const layout = this.layoutSchema;
 
         const row = _.cloneDeep(layout[0]);

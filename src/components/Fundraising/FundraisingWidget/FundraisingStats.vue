@@ -7,7 +7,7 @@
     }"
   >
     <d-block-widget title="Fundraising" class="ma-n6">
-      <template #titleAddon>
+      <template #title-append>
         <v-chip v-if="tokenSaleData" outlined :color="timeChipData.color" text-color="black">
           {{ timeChipData.date | timeLeft }}
         </v-chip>

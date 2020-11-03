@@ -55,7 +55,7 @@
 
             class="py-2"
             :class="{'v-treeview--without-children': withoutAnyChildren}"
-            
+
             @input="onInput($event); validate($event);"
             @update:active="onInput"
           />

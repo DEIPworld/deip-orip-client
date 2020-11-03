@@ -55,7 +55,7 @@
     <!-- ### END Research Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
-      <template #addSome>
+      <template #title-append-after>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
@@ -74,7 +74,7 @@
     <projects-list
       :team-id="group.external_id"
     >
-      <template #addSome>
+      <template #title-append-after>
         <v-btn
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"

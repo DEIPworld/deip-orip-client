@@ -48,15 +48,14 @@ export const projectItem = {
       );
     },
 
-    project$() {
+    $$projectExtended() {
       return {
         ...this.project,
         ...{
-          created_at: this.$options.filters.dateFormat(this.project.created_at, 'D MMM YYYY', true),
+          createdAt: this.$options.filters.dateFormat(this.project.createdAt, 'D MMM YYYY', true),
           researchRef: {
             attributes: researchAttributesToObject(this.project.researchRef.attributes)
-          },
-          cover: this.$options.filters.researchBackgroundSrc(this.project.external_id)
+          }
         }
       };
     }

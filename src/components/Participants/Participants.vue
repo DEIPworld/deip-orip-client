@@ -2,7 +2,7 @@
   <app-layout>
     <layout-section>
       <d-block :title="$t('participantstRouting.title')">
-        <template #titleAddon>
+        <template #title-append>
           <d-filter-sidebar
             v-model="filterModel"
             @apply="applyFilter"

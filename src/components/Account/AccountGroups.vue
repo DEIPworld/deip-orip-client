@@ -1,7 +1,7 @@
 <template>
   <layout-section v-if="$ready">
     <d-block :title="$t('account.groups.teams')">
-      <template #titleAddon>
+      <template #title-append>
         <v-btn
           color="primary"
           small

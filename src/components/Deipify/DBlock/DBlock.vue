@@ -21,8 +21,8 @@
           <slot name="subtitle" />
         </div>
       </div>
-      <div v-if="$hasSlot('titleAddon')" :class="$style.actions">
-        <slot name="titleAddon" />
+      <div v-if="$hasSlot('title-append')" :class="$style.actions">
+        <slot name="title-append" />
       </div>
     </div>
 

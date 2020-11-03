@@ -14,7 +14,7 @@
       <slot name="subtitle" />
     </template>
 
-    <template #titleAddon>
+    <template #title-append>
       <d-toggle-view
         v-if="multiView"
         :storage-key="storageViewTypeKey"
@@ -26,8 +26,10 @@
         :storage-key="storageFilterKey"
       />
 
-      <slot name="addSome" />
+      <slot name="title-append-after" />
     </template>
+
+    <slot name="contentPrepend" />
 
     <component
       :is="viewTypeComponent"

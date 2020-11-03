@@ -1,19 +1,12 @@
-import Vue from 'vue';
-import deipRpc from '@deip/rpc-client';
-
 import { UsersService } from '@deip/users-service';
 import { TenantService } from '@deip/tenant-service';
-import { ResearchService } from '@deip/research-service';
 
 const usersService = UsersService.getInstance();
 const tenantService = TenantService.getInstance();
-const researchService = ResearchService.getInstance();
 
 const state = {
   registeredMembers: [],
   waitingMembers: [],
-  pendingProjects: [],
-  publicProjects: []
 };
 
 // getters
@@ -26,9 +19,6 @@ const getters = {
   categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories,
 
   researchAttributes: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchAttributes,
-
-  pendingProjects: (state) => state.pendingProjects,
-  publicProjects: (state) => state.publicProjects
 };
 
 // actions
@@ -70,29 +60,6 @@ const actions = {
 
     return Promise.all([registeredMembersLoad, waitingMembersLoad]);
   },
-
-  // =====================
-
-  // getPendingProjects(context) {
-  //   return researchService.getPendingResearchApplications()
-  //     .then((result) => {
-  //       context.commit('getPendingProjects', result);
-  //     });
-  // },
-
-  getPublicProjects(context) {
-    return researchService.getPublicResearchListing({})
-      .then((result) => {
-        context.commit('getPublicProjects', result);
-      });
-  },
-
-  getAllProjects(context) {
-    return Promise.all([
-      // context.dispatch('getPendingProjects'),
-      context.dispatch('getPublicProjects')
-    ]);
-  }
 };
 
 // mutations
@@ -103,16 +70,6 @@ const mutations = {
   SET_WAITING_MEMBERS(state, list) {
     state.waitingMembers = list;
   },
-
-  //= ==============
-
-  getPendingProjects(state, payload) {
-    state.pendingProjects = payload;
-  },
-
-  getPublicProjects(state, payload) {
-    state.publicProjects = payload;
-  }
 };
 
 const namespaced = true;

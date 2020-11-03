@@ -5,9 +5,9 @@
       <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
     </template>
 
-    <template #titleAddon>
+    <template #title-append>
       <d-toggle-view :storage-key="storageViewModelKey" class="align-self-end" />
-      <slot name="addSome" />
+      <slot name="title-append-after" />
     </template>
 
     <template #subtitle>
