@@ -36,7 +36,7 @@
           <v-col>
             <d-box-item
               :avatar="
-                item.extendedDetails.requester.profile | avatarSrc(32, 32, false)
+                item.extendedDetails.requester.profile | avatarSrc(64, 64, false)
               "
               :size="32"
             >
@@ -48,12 +48,12 @@
           <v-col class="d-flex ml-2 align-center">
             <v-avatar :size="32">
               <v-img
-                :src="item.extendedDetails.requester.profile | avatarSrc(32, 32, false)"
+                :src="item.extendedDetails.requester.profile | avatarSrc(64, 64, false)"
               />
             </v-avatar>
             <v-avatar :size="32" class="ml-n2 mr-3">
               <v-img
-                :src="item.extendedDetails.researchGroup.external_id | researchGroupLogoSrc(32, 32)"
+                :src="item.extendedDetails.researchGroup.external_id | researchGroupLogoSrc(64, 64)"
               />
             </v-avatar>
             <v-clamp autoresize :max-lines="1">
@@ -153,14 +153,14 @@
                       account.profile
                         ? $options.filters.avatarSrc(
                           account.profile,
-                          64,
-                          64,
+                          80,
+                          80,
                           false
                         )
                         : $options.filters.researchGroupLogoSrc(
                           account.external_id,
-                          64,
-                          64
+                          80,
+                          80
                         )
                     "
                     :size="40"
