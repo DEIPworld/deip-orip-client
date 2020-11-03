@@ -35,7 +35,7 @@
       </template>
       <template #item.tokenizedActives="{ item }">
         <span class="text-body-1">
-          {{ item.researchList ? countActives(item.researchList) : 0 | currency }}
+          {{ item.researchList ? countTokenizedResearches(item.researchList) : 0 }}
         </span>
       </template>
       <template #item.account.balances="{ item }">
@@ -103,7 +103,7 @@
         .then(() => { this.$setReady(); });
     },
     methods: {
-      countActives(arr) {
+      countTokenizedResearches(arr) {
         return arr.reduce(
           (val, p) => (val + p.security_tokens ? p.security_tokens.length : 0), 0
         );
