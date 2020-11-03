@@ -355,7 +355,8 @@
           ? this.totalRevenue(item.securityTokenHistory) / totalTokenAmount : 0;
       },
       tokensPrice(item) {
-        return this.revenuePerToken(item) * item.amount;
+        const valuationFactor = 1.5;
+        return this.revenuePerToken(item) * item.amount * valuationFactor;
       }
     }
   };

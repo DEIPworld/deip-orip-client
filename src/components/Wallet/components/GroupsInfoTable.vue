@@ -114,6 +114,7 @@
         ), 0);
       },
       tokensPrice(item) {
+        const valuationFactor = 1.5;
         const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => (
           v + i.amount
         ), 0);
@@ -128,7 +129,7 @@
           v += val / securityTokenAmount;
           return v;
         }, 0);
-        return totalAmount * revHisTotalRevenue;
+        return totalAmount * revHisTotalRevenue * valuationFactor;
       }
     }
   };
