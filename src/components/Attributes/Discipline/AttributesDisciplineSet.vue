@@ -2,12 +2,12 @@
   import { attributeViewTypeComponent } from '@/components/Attributes/_mixins';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
-  import AttributesDisciplinesListSetDefault from './Set/AttributesDisciplinesListSetDefault';
+  import AttributesDisciplineSetDefault from './Set/AttributesDisciplineSetDefault';
 
   export default {
-    name: 'AttributesDisciplinesListSet',
+    name: 'AttributesDisciplineSet',
     components: {
-      AttributesDisciplinesListSetDefault
+      AttributesDisciplineSetDefault
     },
     mixins: [attributeViewTypeComponent, Proxyable],
     watch: {

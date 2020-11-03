@@ -1,5 +1,6 @@
 <template>
   <d-layout-full-screen :title="title">
+<!--    <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
     <validation-observer v-slot="{ invalid, handleSubmit }">
       <v-form v-if="$ready" :disabled="processing" @submit.prevent="handleSubmit(onSubmit)">
         <research-edit-renderer

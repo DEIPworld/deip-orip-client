@@ -26,7 +26,7 @@
   import { find as deepFind } from 'find-keypath';
 
   export default {
-    name: 'AttributesDisciplinesListRead',
+    name: 'AttributesDisciplineRead',
     mixins: [attributeRead],
     computed: {
       disciplines() {

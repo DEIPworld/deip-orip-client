@@ -41,11 +41,11 @@
 
             hoverable
 
-            activatable
-            multiple-active
-
             selectable
             selection-type="independent"
+
+            activatable
+            multiple-active
 
             :items="disciplinesTree"
             item-key="id"
@@ -55,7 +55,7 @@
 
             class="py-2"
             :class="{'v-treeview--without-children': withoutAnyChildren}"
-
+            
             @input="onInput($event); validate($event);"
             @update:active="onInput"
           />
@@ -91,7 +91,7 @@
 </template>
 
 <script>
-  import { attributeSet } from '@/components/Attributes/_mixins';
+  import { attributeSet, attributeSetForceArray } from '@/components/Attributes/_mixins';
   import { find as deepFind } from 'find-keypath';
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 
@@ -99,18 +99,19 @@
   import { arrayedModel } from '@/mixins/extendModel';
 
   import { extend } from 'vee-validate';
+  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   extend('required', {
     validate(value) {
-      console.log(value, !!value.length)
       return !!value.length;
     },
     message: '{_field_} is required'
   });
 
   export default {
-    name: 'AttributesDisciplinesListSet',
-    mixins: [attributeSet, arrayedModel],
+    name: 'AttributesDisciplineSetDefault',
+    components: { DAutocomplete },
+    mixins: [attributeSet, attributeSetForceArray],
     data() {
       return {
         search: '',
@@ -122,6 +123,14 @@
       };
     },
     computed: {
+      // isMultipleProps() {
+      //   return !this.attribute.isMultiple ? {
+      //     multipleActive: true,
+      //     selectable: true,
+      //     selectionType: 'independent'
+      //   } : {};
+      // },
+
       disciplinesTree() {
         function transform(obj) {
           for (const item of Object.keys(obj)) {
@@ -137,19 +146,16 @@
         return transform(disciplineTreeService.disciplineTree.children);
       },
 
-      withoutAnyChildren() {
-        return !this.disciplinesTree
-          .filter((node) => (node.children && node.children.length))
-          .length;
-      },
-
-      disciplinesListIds() {
+      disciplinesList() {
         const disciplines = [];
 
         function transform(tree) {
           for (const item of tree) {
             const { children } = item;
-            disciplines.push(item.id);
+            disciplines.push({
+              id: item.id,
+              label: item.label
+            });
             if (children) {
               transform(children);
             }
@@ -159,6 +165,16 @@
         transform(this.disciplinesTree);
 
         return disciplines;
+      },
+
+      disciplinesListIds() {
+        return this.disciplinesList.map((d) => d.value);
+      },
+
+      withoutAnyChildren() {
+        return !this.disciplinesTree
+          .filter((node) => (node.children && node.children.length))
+          .length;
       },
 
       sortedLabels() {

@@ -14,7 +14,7 @@
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   import { AttributesCheckboxRead } from '@/components/Attributes/Checkbox';
-  import { AttributesDisciplinesListRead } from '@/components/Attributes/DisciplinesList';
+  import { AttributesDisciplineRead } from '@/components/Attributes/Discipline';
   import { AttributesPartnersRead } from '@/components/Attributes/Partners';
   import { AttributesResearchGroupRead } from '@/components/Attributes/ResearchGroup';
   import { AttributesRoadmapRead } from '@/components/Attributes/Roadmap';
@@ -34,7 +34,7 @@
     name: 'AttributesRead',
     components: {
       AttributesCheckboxRead,
-      AttributesDisciplinesListRead,
+      AttributesDisciplineRead,
       AttributesPartnersRead,
       AttributesResearchGroupRead,
       AttributesRoadmapRead,

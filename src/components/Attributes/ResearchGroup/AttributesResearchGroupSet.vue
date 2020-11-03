@@ -7,7 +7,7 @@
       </d-stack>
     </v-radio-group>
 
-    <v-autocomplete
+    <d-autocomplete
       v-model="internalValue"
       label="Select research group"
       :items="groups"
@@ -15,6 +15,7 @@
       item-value="external_id"
       :disabled="isPersonal"
       outlined
+      v-bind="isMultipleProps"
     >
       <template #append-item>
         <div>
@@ -37,7 +38,7 @@
           </div>
         </div>
       </template>
-    </v-autocomplete>
+    </d-autocomplete>
   </d-block>
 </template>
 
@@ -47,10 +48,11 @@
   import { mapGetters } from 'vuex';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { nulledModel } from '@/mixins/extendModel';
+  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
     name: 'AttributesResearchGroupSet',
-    components: { DStack, DBlock },
+    components: { DAutocomplete, DStack, DBlock },
     mixins: [attributeSet, nulledModel],
     data() {
       return {
@@ -63,6 +65,14 @@
         userCoworkers: 'auth/userCoworkers'
       }),
 
+      isMultipleProps() {
+        return this.attribute.isMultiple ? {
+          multiple: true,
+          chips: true,
+          deletableChips: true
+        } : {};
+      },
+
       personalGroup() {
         return this.$where(this.userGroups, { is_personal: true })[0];
       },
@@ -71,5 +81,16 @@
         return this.$where(this.userGroups, { is_personal: false });
       }
     },
+    watch: {
+      isPersonal: {
+        handler(val) {
+          if (val) {
+            this.internalValue = null;
+          } else {
+            this.internalValue = undefined;
+          }
+        }
+      }
+    }
   };
 </script>

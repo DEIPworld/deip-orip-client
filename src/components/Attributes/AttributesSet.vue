@@ -15,10 +15,10 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import { AttributesCheckboxSet } from '@/components/Attributes/Checkbox';
-  import { AttributesDisciplinesListSet } from '@/components/Attributes/DisciplinesList';
+  import { AttributesDisciplineSet } from '@/components/Attributes/Discipline';
   import { AttributesPartnersSet } from '@/components/Attributes/Partners';
-  import { AttributesResearchGroupSet } from '@/components/Attributes/ResearchGroup';
   import { AttributesRoadmapSet } from '@/components/Attributes/Roadmap';
+  import { AttributesResearchGroupSet } from '@/components/Attributes/ResearchGroup';
   import { AttributesSelectSet } from '@/components/Attributes/Select';
   import { AttributesStepperSet } from '@/components/Attributes/Stepper';
   import { AttributesSwitchSet } from '@/components/Attributes/Switch';
@@ -35,7 +35,7 @@
     name: 'AttributesSet',
     components: {
       AttributesCheckboxSet,
-      AttributesDisciplinesListSet,
+      AttributesDisciplineSet,
       AttributesPartnersSet,
       AttributesResearchGroupSet,
       AttributesRoadmapSet,
