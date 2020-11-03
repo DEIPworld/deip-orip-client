@@ -3,6 +3,7 @@
     :schema="layoutSchemaExtended"
     :project="$$projectExtended"
     tag="tr"
+    @click.native="goToProject()"
   >
     <template #itemRowActions>
       <slot name="itemRowActions" :project="$$projectExtended" />
@@ -50,5 +51,15 @@
         return layout;
       }
     },
+    methods: {
+      goToProject() {
+        this.$router.push({
+          name: 'research.details',
+          params: {
+            researchExternalId: this.$$projectExtended.externalId
+          }
+        });
+      }
+    }
   };
 </script>

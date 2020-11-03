@@ -11,26 +11,28 @@ module.exports = {
     }
   },
 
-  chainWebpack: (config) => {
-    // ['vue-modules', 'vue', 'normal-modules', 'normal'].forEach(match => {
-    //   config.module
-    //     .rule('sass')
-    //     .oneOf(match)
-    //     .use('sass-loader')
-    //     .tap(opt => {
-    //       return {
-    //         ...opt,
-    //         ...{
-    //           prependData: ({ resourcePath }) => (
-    //             resourcePath.includes('vuetify') && resourcePath.includes('node_modules')
-    //               ? '@import "~@/styles/next/core/_vuetify-settings.scss"'
-    //               : ''
-    //           )
-    //         }
-    //       };
-    //     });
-    // });
-  },
+  // chainWebpack: (config) => {
+  //   ['vue-modules', 'vue', 'normal-modules', 'normal'].forEach(match => {
+  //     config.module
+  //       .rule('sass')
+  //       .oneOf(match)
+  //       .use('sass-loader')
+  //       .tap(opt => {
+  //         return {
+  //           ...opt,
+  //           ...{
+  //             additionalData(content, loaderContext) {
+  //               const { resourcePath, rootContext } = loaderContext;
+  //               console.log('@@@@@@@@@@', resourcePath);
+  //             }
+  //               // resourcePath.includes('vuetify') && resourcePath.includes('node_modules')
+  //               //   ? '@import "~@/styles/next/core/_vuetify-settings.scss"'
+  //               //   : ''
+  //           }
+  //         };
+  //       });
+  //   });
+  // },
 
   devServer: {
     setup(app) {

@@ -25,11 +25,9 @@
       <v-select
         v-model="assetModel.assetId"
         class="rounded-bl-0 rounded-tl-0"
-        outlined
-        :items="assets"
-        item-text="string_symbol"
-        item-value="id"
+        :items="assetsList"
         :hide-details="true"
+        outlined
       />
     </v-col>
   </v-row>
@@ -58,9 +56,6 @@
     message: '{_field_} must be valid number'
   });
 
-  // /\d+[.]{1}\d+\s[a-zA-Z0-9]+/ - для цифры-точка-цифры-пробел-буквы_с_цифрами
-  // /\d+[.]{1}\d+\s[a-zA-Z]+/ - для цифры-точка-цифры-пробел-только_буквы
-
   export default {
     name: 'DAssetInput',
     components: {
@@ -85,6 +80,11 @@
         }
       };
     },
+    computed: {
+      assetsList() {
+        return this.assets.map((ass) => ass.string_symbol);
+      }
+    },
     watch: {
       assetModel: {
         deep: true,
@@ -101,7 +101,11 @@
     },
     created() {
       if (!(this.internalValue && this.internalValue.assetId)) {
-        this.internalValue.assetId = this.assets[0].id;
+        this.assetModel = {
+          ...{
+            assetId: this.assetsList[0]
+          }
+        };
       }
     }
   };
