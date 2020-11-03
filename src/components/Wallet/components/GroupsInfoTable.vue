@@ -35,17 +35,17 @@
       </template>
       <template #item.tokenizedActives="{ item }">
         <span class="text-body-1">
-          {{ item.researchList ? countActives(item.researchList) : 0 }}
+          {{ item.researchList ? countActives(item.researchList) : 0 | currency }}
         </span>
       </template>
       <template #item.account.balances="{ item }">
         <span class="text-body-1">
-          {{ mockTokenPrice(item.id, DEIP_100_PERCENT)| currency }}
+          {{ tokensPrice(item) | currency }}
         </span>
       </template>
       <template #item.revenueHistory="{ item }">
         <span class="text-body-1">
-          {{ item.revenueHistory ? `$ ${totalRevenue(item.revenueHistory)}` : '$ 0' }}
+          {{ item.revenueHistory ? `${totalRevenue(item.revenueHistory)}` : '0' | currency }}
         </span>
       </template>
       <template #item.action>
@@ -79,7 +79,7 @@
             value: 'tokenizedActives'
           },
           {
-            text: 'Tokens value ',
+            text: 'Tokens price',
             value: 'account.balances'
           },
           {
@@ -109,7 +109,26 @@
         );
       },
       totalRevenue(arr) {
-        return arr.reduce((val, { revenue }) => (val + this.fromAssetsToFloat(revenue)), 0);
+        return arr.reduce((val, r) => (
+          val + r.reduce((v, { revenue }) => (v + this.fromAssetsToFloat(revenue)), 0)
+        ), 0);
+      },
+      tokensPrice(item) {
+        const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => (
+          v + i.amount
+        ), 0);
+        const revHisTotalRevenue = item.revenueHistory.reduce((v, i) => {
+          const val = i.reduce((vv, ii) => (vv + this.fromAssetsToFloat(ii.revenue)), 0);
+          const research = item.researchList.find(
+            (r) => r.external_id === i[0].security_token.research_external_id
+          );
+          const securityTokenAmount = research ? research.security_tokens.find(
+            (st) => st[0] === i[0].security_token.external_id
+          )[1] : 1;
+          v += val / securityTokenAmount;
+          return v;
+        }, 0);
+        return totalAmount * revHisTotalRevenue;
       }
     }
   };

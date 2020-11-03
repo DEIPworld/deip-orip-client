@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      v-custom="'expanded__row-border-0'"
       hide-default-header
       :headers="tableHeader"
       :items="dataTable"
@@ -15,32 +16,56 @@
       :items-per-page="50"
     >
       <template #item.type="{ item }">
-        <div class="d-flex">
+        <div class="d-flex mt-4">
           <v-icon size="20" left color="black">
             {{ transactionTypes['LICENSE'].icon }}
           </v-icon>{{ transactionTypes['LICENSE'].text }}
         </div>
       </template>
-      <template #item.requester="{ item }">
-        <d-box-item
-          :avatar="
-            item.extendedDetails.requester.profile | avatarSrc(64, 64, false)
-          "
-          :size="24"
-        >
-          <v-clamp autoresize :max-lines="1">
-            {{ item.extendedDetails.requester | fullname }}
-          </v-clamp>
-        </d-box-item>
-      </template>
       <template #item.researchGroupExternalId="{ item }">
-        <v-clamp autoresize :max-lines="2">
+        <v-clamp autoresize :max-lines="2" class="mt-4">
           {{ item.extendedDetails.researchGroup.name }}
           ( {{ $$toAssetUnits(item.licencePlan.fee) }} )
         </v-clamp>
+        <v-row
+          v-if="!isShowAccountsBlock(item)"
+          no-gutters
+          justify="space-between"
+          class="mt-4 mb-6"
+        >
+          <v-col>
+            <d-box-item
+              :avatar="
+                item.extendedDetails.requester.profile | avatarSrc(32, 32, false)
+              "
+              :size="32"
+            >
+              <v-clamp autoresize :max-lines="1">
+                {{ item.extendedDetails.requester | fullname }}
+              </v-clamp>
+            </d-box-item>
+          </v-col>
+          <v-col class="d-flex ml-2 align-center">
+            <v-avatar :size="32">
+              <v-img
+                :src="item.extendedDetails.requester.profile | avatarSrc(32, 32, false)"
+              />
+            </v-avatar>
+            <v-avatar :size="32" class="ml-n2 mr-3">
+              <v-img
+                :src="item.extendedDetails.researchGroup.external_id | researchGroupLogoSrc(32, 32)"
+              />
+            </v-avatar>
+            <v-clamp autoresize :max-lines="1">
+              {{
+                item.extendedDetails.researchGroup.name
+              }}
+            </v-clamp>
+          </v-col>
+        </v-row>
       </template>
       <template #item.expirationDate="{ item }">
-        <div class="white-space-nowrap">
+        <div class="white-space-nowrap mt-4">
           <div v-if="item.status === txStatus.pending">
             Expires in {{ item.expirationDate | timeLeft }}
           </div>
@@ -50,7 +75,7 @@
         </div>
       </template>
       <template #item.actions="{ item }">
-        <template v-if="!item.approvers.includes($currentUser.username)">
+        <div v-if="!item.approvers.includes($currentUser.username)" class="d-flex mt-4">
           <v-btn
             outlined
             x-small
@@ -78,10 +103,10 @@
             </v-icon>
             Decline
           </v-btn>
-        </template>
+        </div>
       </template>
       <template #item.status="{ item }">
-        <div class="d-flex">
+        <div class="d-flex mt-4">
           <v-icon :color="statusChipData.color[item.status]" size="13" class="mr-1">
             {{ statusChipData.icon[item.status] }}
           </v-icon>
@@ -105,7 +130,7 @@
               {{ item.expirationDate | dateFormat('DD MMM YYYY, hh:mm', true) }}
             </div>
           </div>
-          <div class="mb-4">
+          <div class="mb-4 font-weight-medium">
             Signees:
           </div>
           <v-expansion-panels
@@ -113,13 +138,14 @@
             multiple
             readonly
             :value="item.expand"
+            :class="{'mt-n6': !item.expand.length}"
           >
             <template v-for="(accountData, i) in item.accountsData">
               <v-expansion-panel
                 v-for="(account, j) in accountData.accounts"
                 :key="`${i}-${j}-accounts`"
                 class="pa-0"
-                :class="{'mb-8': !item.expand.length}"
+                :class="{'mt-6': !item.expand.length}"
               >
                 <v-expansion-panel-header class="pa-0" hide-actions>
                   <d-box-item
@@ -138,10 +164,10 @@
                         )
                     "
                     :size="40"
-                    class="mb-3"
                     style="max-width: 300px"
                   >
                     <router-link
+                      tag="div"
                       :to="
                         account.profile
                           ? {
@@ -157,7 +183,7 @@
                             },
                           }
                       "
-                      class="text--secondary text-caption text-decoration-none"
+                      class="text-caption text-decoration-none"
                     >
                       <v-clamp autoresize :max-lines="1" class="text-h6">
                         {{
@@ -185,23 +211,23 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content class="pa-0">
                   <template
-                    v-for="(historyStatus, i) in item.chainHistoryDataTable"
+                    v-for="(historyStatus, k) in item.chainHistoryDataTable"
                   >
-                    <template v-for="(history, j) in historyStatus.historys">
+                    <template v-for="(history, l) in historyStatus.historys">
                       <div
-                        v-if="history.account.account.name === account.account.name || history.account.external_id === account.account.name"
-                        :key="`${i}-${j}-history`"
-                        class="mb-8 text--secondary text-caption"
+                        v-if="history.account.account.name === account.account.name"
+                        :key="`${k}-${l}-history`"
+                        class="text--secondary text-caption ml-7"
                       >
                         <div>
                           <span class="font-weight-medium">
                             Transaction ID:
                           </span>
-                          <span class="mr-2">{{ history.id || '—' }}</span>
+                          <span>{{ history.id || '—' }}</span>
                         </div>
                         <div>
                           <span class="font-weight-medium"> Block: </span>
-                          <span class="mr-2">{{
+                          <span>{{
                             history.block_num || '—'
                           }}</span>
                         </div>
@@ -228,7 +254,7 @@
             text
             color="primary"
             small
-            class="text-caption font-weight-bold"
+            class="text-caption font-weight-bold pa-0 mt-8"
             @click="showDetails(item)"
           >
             {{ !item.expand.length ? 'Show transactions details' : 'Hide transactions details' }}
@@ -261,7 +287,7 @@
   const txStatus = {
     approved: 'approved',
     pending: 'pending',
-    resolved: 'resolved'
+    rejected: 'rejected'
   };
 
   const chipColors = {
@@ -314,46 +340,50 @@
           {
             text: 'Type',
             value: 'type',
+            align: 'center vertical-top',
             sortable: false
           },
           {
             text: 'Target',
             value: 'researchGroupExternalId',
             sortable: false,
+            align: 'start vertical-top',
             width: '45%'
           },
           {
             text: 'Status',
-            value: 'status'
+            value: 'status',
+            align: 'center vertical-top'
           },
           {
             text: 'Expiration date',
             value: 'expirationDate',
-            align: 'center',
+            align: 'center vertical-top',
             sortable: false
           },
           {
             text: '',
             value: 'data-table-expand',
-            align: 'start elevetion-0'
+            align: 'center'
           }
         ];
         if (this.haveActions) {
           header.splice(4, 0, {
             text: 'Actions',
-            value: 'actions'
+            value: 'actions',
+            align: 'center vertical-top'
           });
         }
         return header;
       },
-      chipColors() {
-        return chartGradient(Object.keys(transactionTypes).length + 1).map(
-          (color) => ({
-            bg: color,
-            textColor: switchColor(color)
-          })
-        );
-      },
+      // chipColors() {
+      //   return chartGradient(Object.keys(transactionTypes).length + 1).map(
+      //     (color) => ({
+      //       bg: color,
+      //       textColor: switchColor(color)
+      //     })
+      //   );
+      // },
       statusChipData() {
         return {
           color: chipColors,
@@ -369,8 +399,14 @@
     },
 
     methods: {
+      isShowAccountsBlock(item) {
+        return this.expanded.find((e) => e._id === item._id);
+      },
       showDetails(item) {
-        const expandData = item.accountsData.flat();
+        const expandData = item.accountsData.reduce((v, i) => {
+          i.accounts.forEach((a) => v.push(a));
+          return v;
+        }, []);
         !item.expand.length
           ? item.expand = expandData.map((item, i) => i)
           : item.expand = [];

@@ -79,7 +79,6 @@
       </template>
     </v-data-table>
     <v-dialog
-      v-if="$ready"
       v-model="depositDialog.isOpened"
       persistent
       max-width="800px"
@@ -154,7 +153,6 @@
       </v-card>
     </v-dialog>
     <v-dialog
-      v-if="$ready"
       v-model="withdrawDialog.isOpened"
       persistent
       max-width="800px"
@@ -365,7 +363,7 @@
               "
               :size="24"
             >
-              <v-clamp :max-lines="1" class="text-h6">
+              <v-clamp :max-lines="1" class="text-body-2">
                 {{ item.fullName }}
               </v-clamp>
             </d-box-item>
@@ -387,13 +385,14 @@
               "
               :size="24"
             >
-              <v-clamp :max-lines="1" class="text-h6">
+              <v-clamp :max-lines="1" class="text-body-2">
                 {{ item.fullName }}
               </v-clamp>
             </d-box-item>
           </template>
         </v-autocomplete>
         <v-textarea
+          v-model="sendTokensDialog.form.memo"
           outlined
           label="Notes"
           no-resize
@@ -743,7 +742,6 @@
         )
           .then(() => {
             this.$notifier.showSuccess('Transfer was successfull');
-            this.closeSendTokensDialog();
           })
           .catch((err) => {
             console.error(err);
@@ -751,6 +749,7 @@
           })
           .finally(() => {
             this.sendTokensDialog.isSending = false;
+            this.sendTokensDialog.isOpened = false;
             return this.updateBalances();
           });
       },
@@ -762,3 +761,24 @@
     }
   };
 </script>
+
+<style lang="less" scoped>
+  .balance-form-input { // same as vue-credit card inputs
+    color: #707070;
+
+    &__label {
+      padding-bottom: 5px;
+      font-size: 13px;
+    }
+
+    &__field {
+      box-sizing: border-box;
+      margin-top: 3px;
+      padding: 15px;
+      font-size: 16px;
+      width: 100%;
+      border-radius: 3px;
+      border: 1px solid #dcdcdc;
+    }
+  }
+</style>

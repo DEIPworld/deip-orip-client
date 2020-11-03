@@ -14,7 +14,7 @@
       show-expand
       :expanded.sync="expanded"
     >
-      <template #item.research.research_group.name="{ item }">
+      <template #item.research.title="{ item }">
         <span class="text-body-1">{{ item.research.title }}</span>
       </template>
       <template #item.myShare.amount="{ item }">
@@ -26,15 +26,16 @@
         </div>
       </template>
       <template #item.group.account.balances="{ item }">
-        {{ mockTokenPrice(item.research.id, DEIP_100_PERCENT) | currency }}
+        <span class="text-body-1">
+          {{ tokensPrice(item) | currency }}
+        </span>
       </template>
       <template #item.revenueHistory="{ item }">
         <div class="text-body-1 mt-4">
-          $ {{ totalRevenue(item.revenueHistory) }}
+          {{ totalRevenue(item.revenueHistory) | currency }}
         </div>
         <div class="text-body-2 text--secondary mb-4">
-          {{ `${item.revenueHistory && item.revenueHistory.length ?
-            `$ ${fromAssetsToFloat(item.revenueHistory[0].revenue)} per token` : '$ 0'}` }}
+          {{ revenuePerToken(item) | currency }} per token
         </div>
       </template>
       <template #item.actions="{ item }">
@@ -55,7 +56,9 @@
       </template>
       <template #expanded-item="{ item, headers }">
         <td :colspan="headers.length" class="pa-0">
-          <div class="font-weight-bold mt-4">Revenue per token</div>
+          <div class="font-weight-bold mt-4">
+            Revenue per token
+          </div>
           <d-chart-column
             v-if="item.revenueHistoryChartData.length"
             :data="[['Date', 'Revenue'], ...item.revenueHistoryChartData]"
@@ -86,6 +89,7 @@
         ref="sendResearchTokensForm"
         v-model="sendResearchTokensDialog.form.valid"
       >
+        <!-- <v-select></v-select> -->
         <v-text-field
           v-model.number="sendResearchTokensDialog.form.amount"
           label="Amount"
@@ -123,7 +127,7 @@
               "
               :size="24"
             >
-              <v-clamp :max-lines="1" class="text-h6">
+              <v-clamp :max-lines="1" class="text-body-2">
                 {{ item.fullName }}
               </v-clamp>
             </d-box-item>
@@ -145,12 +149,19 @@
               "
               :size="24"
             >
-              <v-clamp :max-lines="1" class="text-h6">
+              <v-clamp :max-lines="1" class="text-body-2">
                 {{ item.fullName }}
               </v-clamp>
             </d-box-item>
           </template>
         </v-autocomplete>
+        <v-textarea
+          v-model="sendResearchTokensDialog.form.memo"
+          outlined
+          label="Notes"
+          no-resize
+          rows="8"
+        />
       </v-form>
     </d-dialog>
   </v-skeleton-loader>
@@ -169,7 +180,6 @@
 
   export default {
     name: 'SharesInfoTable',
-
 
     components: {
       DChartColumn,
@@ -241,6 +251,7 @@
             securityTokenExternalId: '',
             amount: 0,
             valid: false,
+            memo: '',
             rules: {
               username: [rules.username],
               amount: [
@@ -280,7 +291,7 @@
         const tokenValue = item.research.security_tokens.find(
           (rst) => rst[0] === item.security_token_external_id
         )[1];
-        return item.amount*100/tokenValue;
+        return item.amount * 100 / tokenValue;
       },
       openSendResearchTokensDialog(item) {
         this.sendResearchTokensDialog.isOpened = true;
@@ -291,10 +302,6 @@
         this.sendResearchTokensDialog.securityTokenExternalId = item.security_token_external_id;
         this.sendResearchTokensDialog.form.valid = false;
         this.sendResearchTokensDialog.form.amount = 0;
-      },
-
-      closeSendResearchTokensDialog() {
-        this.sendResearchTokensDialog.isOpened = false;
       },
 
       sendResearchTokens() {
@@ -312,7 +319,6 @@
           )
             .then(() => {
               this.$notifier.showSuccess('Research tokens successfully sent');
-              this.closeSendResearchTokensDialog();
             })
             .catch((err) => {
               this.$notifier.showError('Transaction was failed');
@@ -320,6 +326,7 @@
             })
             .finally(() => {
               this.sendResearchTokensDialog.isSending = false;
+              this.sendResearchTokensDialog.isOpened = false;
               return this.$store.dispatch('Wallet/loadBalances', this.$route.params.account);
             });
         }
@@ -330,6 +337,16 @@
       },
       totalRevenue(arr) {
         return arr.reduce((val, { revenue }) => (val + this.fromAssetsToFloat(revenue)), 0);
+      },
+      revenuePerToken(item) {
+        const totalTokenAmount = item.research.security_tokens.find(
+          ([externalId]) => externalId === item.security_token_external_id
+        )[1];
+        return totalTokenAmount
+          ? this.totalRevenue(item.securityTokenHistory) / totalTokenAmount : 0;
+      },
+      tokensPrice(item) {
+        return this.revenuePerToken(item) * item.amount;
       }
     }
   };

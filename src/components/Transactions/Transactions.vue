@@ -17,7 +17,7 @@
         </v-tab>
       </v-tabs>
       <v-divider />
-      <v-tabs-items v-model="tab" class="mt-4">
+      <v-tabs-items v-model="tab">
         <v-tab-item :key="1">
           <transactions-table have-actions :data-table="pendingRequestsDataTable" />
         </v-tab-item>
