@@ -164,7 +164,7 @@
                         )
                     "
                     :size="40"
-                    style="max-width: 300px"
+                    style="max-width: 400px"
                   >
                     <router-link
                       tag="div"
