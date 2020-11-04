@@ -143,7 +143,10 @@
         if (!this.selected) return false;
 
         const balance = this.$currentUser.balances
-          .find((b) => b.asset_id === this.selected.fee.assetId);
+          .find((b) => (
+            b.asset_id === this.selected.fee.assetId
+            || this.$$fromAssetUnits(b.amount).symbol === this.selected.fee.assetId)
+          );
 
         if (!balance) return 'No source';
 
@@ -176,7 +179,7 @@
           licensee: this.$currentUser.username,
           licenser: this.project.researchGroup.external_id,
           terms: this.selected.name,
-          fee: this.$$toAssetUnits(this.selected.fee),
+          fee: this.$$toAssetUnits(this.selected.fee, false),
           expirationDate: this.dialogModel.date
         }, {
           licencePlan: this.selected

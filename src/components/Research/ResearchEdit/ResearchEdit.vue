@@ -51,6 +51,7 @@
   import { debounce } from 'vuetify/lib/util/helpers';
 
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
+  import { changeable } from '@/mixins/changeable';
   import { researchStore } from '@/components/Research/store';
 
   import { researchAttributes } from '@/mixins/platformAttributes';
@@ -72,7 +73,8 @@
     },
     mixins: [
       componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
-      researchAttributes
+      researchAttributes,
+      changeable
     ],
     props: {
       preset: {
@@ -87,8 +89,6 @@
     data() {
       return {
         processing: false,
-
-        cachedFormModel: {},
 
         formModel: {
           researchRef: {
@@ -129,7 +129,7 @@
       },
 
       isChanged() {
-        return this.cachedFormModel !== JSON.stringify(this.formModel);
+        return this.$$isChanged(this.formModel);
       },
 
       filesAttrs() {
@@ -226,8 +226,6 @@
             const transformed = {
               ...clone,
               ...{
-                // disciplines: clone.disciplines.map((d) => d.external_id),
-                // researchGroup: clone.researchGroup.external_id,
                 researchRef: {
                   attributes: expandResearchAttributes(clone.researchRef.attributes)
                 }
@@ -235,11 +233,10 @@
             };
 
             this.formModel = { ..._.cloneDeep(transformed) };
+
             this.$setReady();
 
-            // this.$nextTick(() => {
-              this.cachedFormModel = JSON.stringify(this.formModel);
-            // });
+            this.$$storeCache(this.formModel);
           });
       } else {
         this.$setReady();

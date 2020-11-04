@@ -18,7 +18,13 @@ export const assetsChore = {
       // /\d+[.]{1}\d+\s[a-zA-Z0-9]+/ - для цифры-точка-цифры-пробел-буквы_с_цифрами
       // /\d+[.]{1}\d+\s[a-zA-Z]+/ - для цифры-точка-цифры-пробел-только_буквы
 
-      const matches = val.match(/(\d+)[.]{1}(\d+)\s([a-zA-Z]+)/);
+      const matches = val.match(/^(\d+\.\d+)\s([a-zA-Z]+)/);
+
+      return {
+        amount: parseFloat(matches[1]),
+        precision: matches[1].split('.')[1].length,
+        symbol: matches[2]
+      };
     },
 
     $$toAssetUnits(val, formatted = true) {
