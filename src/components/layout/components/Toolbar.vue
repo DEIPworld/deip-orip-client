@@ -66,7 +66,9 @@
           <v-list-item
             v-for="(item, index) of userMenu"
             :key="'nav-tab-' + index"
+            :href="item.href"
             :to="item.to"
+            :target="item.target"
           >
             <v-list-item-icon>
               <v-icon v-if="item.icon">
@@ -222,6 +224,12 @@
             label: this.$t('topMenu.account'),
             icon: 'person',
             to: { name: 'account.summary' }
+          },
+          {
+            label: this.$t('topMenu.blockchainExplorer'),
+            icon: 'link',
+            href: window.env.DEIP_CHAIN_EXPLORER_URL,
+            target: '_blank'
           }
         ];
       }

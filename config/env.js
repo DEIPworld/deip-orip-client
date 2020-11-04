@@ -11,6 +11,7 @@ const config = {
     DEIP_CLIENT_URL: process.env.DEIP_CLIENT_URL,
     DEIP_SERVER_URL: process.env.DEIP_SERVER_URL,
     DEIP_FULL_NODE_URL: process.env.DEIP_FULL_NODE_URL,
+    DEIP_CHAIN_EXPLORER_URL: process.env.DEIP_CHAIN_EXPLORER_URL,
     SIG_SEED: process.env.SIG_SEED,
     CHAIN_ID: process.env.CHAIN_ID,
     ASSET_UNIT: process.env.ASSET_UNIT,

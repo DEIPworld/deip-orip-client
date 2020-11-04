@@ -253,6 +253,7 @@
         this.inviteDetailsDialog.item = null;
         this.inviteDetailsDialog.groupName = '';
         this.inviteDetailsDialog.proccess = false;
+        this.inviteDetailsDialog.isShown = false;
       },
 
       approveInvite() {

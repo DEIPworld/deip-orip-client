@@ -3,12 +3,16 @@
     <v-divider :class="$style.divider" class="mx-n6 reset-width" />
 
     <d-block class="pa-6" v-bind="attrs$" compact>
-
-      <slot name="titleLeft" />
-      <slot name="title" />
-      <slot name="title-append" />
+      <template #titleLeft>
+        <slot name="titleLeft" />
+      </template>
+      <template #title>
+        <slot name="title" />
+      </template>
+      <template #title-append>
+        <slot name="title-append" />
+      </template>
       <slot />
-
     </d-block>
   </div>
 </template>

@@ -36,9 +36,9 @@
               donut
               :data="chartData"
               :options="{
-                legend: {alignment: 'left'}
+                legend: {alignment: 'center'},
               }"
-              style="height: 200px;"
+              style="height: 200px; max-width: 600px;"
             />
           </d-stack>
         </v-col>
@@ -82,12 +82,12 @@
           <d-stack gap="12" class="caption text--secondary mb-6">
             <d-stack horizontal gap="6" class="text--secondary">
               <span class="font-weight-bold">Already collected investments:</span>
-              <span>{{ currentCap }}</span>
+              <span>{{ toAsset(tokenSale.total_amount) }}</span>
             </d-stack>
             <div class="d-flex align-center">
               <d-stack horizontal gap="6" class="text--secondary mr-3">
                 <span class="font-weight-bold">Min Goal:</span>
-                <span>{{ fromAssetsToFloat(tokenSale.soft_cap) }}</span>
+                <span>{{ toAsset(tokenSale.soft_cap) }}</span>
               </d-stack>
               <v-chip
                 outlined
@@ -102,7 +102,7 @@
             </div>
             <d-stack horizontal gap="6" class="text--secondary">
               <span class="font-weight-bold">Max Goal:</span>
-              <span>{{ fromAssetsToFloat(tokenSale.hard_cap) }}</span>
+              <span>{{ toAsset(tokenSale.hard_cap) }}</span>
             </d-stack>
           </d-stack>
           <d-form @submit="openFundraisingDialog">
@@ -183,6 +183,9 @@
           <template #item.op[1].research_token_sale_id="{item}">
             {{ mockSignature(item.op[1].research_token_sale_id) }}
           </template>
+          <template #item.op[1].amount="{ item }">
+            {{ toAsset(item.op[1].amount) }}
+          </template>
         </v-data-table>
       </d-block>
 
@@ -215,6 +218,7 @@
   import { InvestmentsService } from '@deip/investments-service';
   import crypto from '@deip/lib-crypto';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import { assetsChore } from '@/mixins/chores';
 
   const researchService = ResearchService.getInstance();
   const investmentsService = InvestmentsService.getInstance();
@@ -236,7 +240,7 @@
       FundraisingProgressNeedle,
       DBoxItem
     },
-    mixins: [componentStoreFactoryOnce(fundraisingStore)],
+    mixins: [componentStoreFactoryOnce(fundraisingStore), assetsChore],
     props: {
       securityTokenId: {
         type: String,
@@ -473,6 +477,12 @@
             this.isInvesting = false;
             this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
           });
+      },
+      toAsset(val) {
+        return this.$$toAssetUnits({
+          amount: this.fromAssetsToFloat(val),
+          assetId: val.split(' ')[1]
+        });
       }
     }
   };

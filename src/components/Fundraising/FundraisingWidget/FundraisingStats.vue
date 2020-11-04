@@ -6,72 +6,74 @@
       'eci-widget': 'heading@3',
     }"
   >
-    <d-block-widget title="Fundraising" class="ma-n6">
+    <d-block title="Fundraising" compact class="mt-n4">
       <template #title-append>
         <v-chip v-if="tokenSaleData" outlined :color="timeChipData.color" text-color="black">
           {{ timeChipData.date | timeLeft }}
         </v-chip>
       </template>
-    </d-block-widget>
-    <template v-if="tokenSaleData">
-      <template
-        v-for="(item, index) of saleInfo"
-      >
-        <v-row
-          v-if="!item.hide"
-          :key="`ls-${index}`"
-          :class="{'mb-2': index + 1 < saleInfo.length}"
-          no-gutters
-        >
-          <v-col class="text-caption" cols="auto">
-            {{ item.label }}
-          </v-col>
-          <v-divider class="dotted align-self-end mx-1" style="margin-bottom: 2px;" />
-          <v-col
-            class="text-caption font-weight-medium"
-            :class="item.classList"
-            cols="auto"
+      <div>
+        <template v-if="tokenSaleData">
+          <template
+            v-for="(item, index) of saleInfo"
           >
-            {{ item.value }}
-          </v-col>
-        </v-row>
-      </template>
-    </template>
-    <v-btn
-      v-if="hasHistory || tokenSaleData"
-      block
-      small
-      outlined
-      color="primary"
-      class="mt-3"
-      :to="{
-        name: 'research.fundraising',
-        params: {
-          researchExternalId: $route.params.researchExternalId
-        }
-      }"
-    >
-      {{ tokenSaleData ? 'More details' : 'Info' }}
-    </v-btn>
-    <div v-else class="caption">
-      Project has never fundraised before.
-    </div>
-    <v-btn
-      v-if="!tokenSaleData && isResearchGroupMember"
-      block
-      small
-      outlined
-      color="primary"
-      class="mt-3"
-      :to="{
-        name: 'research.createTokenSale',
-        params: {
-          researchExternalId: $route.params.researchExternalId
-        }
-      }"
-    >
-      Start new fundraise
-    </v-btn>
+            <v-row
+              v-if="!item.hide"
+              :key="`ls-${index}`"
+              :class="{'mb-2': index + 1 < saleInfo.length}"
+              no-gutters
+            >
+              <v-col class="text-caption" cols="auto">
+                {{ item.label }}
+              </v-col>
+              <v-divider class="dotted align-self-end mx-1" style="margin-bottom: 2px;" />
+              <v-col
+                class="text-caption font-weight-medium"
+                :class="item.classList"
+                cols="auto"
+              >
+                {{ item.value }}
+              </v-col>
+            </v-row>
+          </template>
+        </template>
+        <v-btn
+          v-if="hasHistory || tokenSaleData"
+          block
+          small
+          outlined
+          color="primary"
+          class="mt-3"
+          :to="{
+            name: 'research.fundraising',
+            params: {
+              researchExternalId: $route.params.researchExternalId
+            }
+          }"
+        >
+          {{ tokenSaleData ? 'More details' : 'Info' }}
+        </v-btn>
+        <div v-else class="caption">
+          Project has never fundraised before.
+        </div>
+        <v-btn
+          v-if="!tokenSaleData && isResearchGroupMember"
+          block
+          small
+          outlined
+          color="primary"
+          class="mt-3"
+          :to="{
+            name: 'research.createTokenSale',
+            params: {
+              researchExternalId: $route.params.researchExternalId
+            }
+          }"
+        >
+          Start new fundraise
+        </v-btn>
+      </div>
+    </d-block>
   </v-skeleton-loader>
 </template>
 
@@ -79,12 +81,12 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingWidgetStore } from '@/components/Fundraising/FundraisingWidget/store';
   import { mapGetters } from 'vuex';
-  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
     name: 'FundraisingStats',
     components: {
-      DBlockWidget,
+      DBlock
     },
 
     mixins: [componentStoreFactoryOnce(fundraisingWidgetStore)],
