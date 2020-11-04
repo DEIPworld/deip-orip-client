@@ -74,7 +74,7 @@
     },
     data() {
       return {
-        assetModel: {
+        assetModel: this.value ? this.value : {
           amount: undefined,
           assetId: undefined
         }
@@ -100,7 +100,7 @@
       }
     },
     created() {
-      if (!(this.internalValue && this.internalValue.assetId)) {
+      if (!(this.value && this.value.assetId)) {
         this.assetModel = {
           ...{
             assetId: this.assetsList[0]

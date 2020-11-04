@@ -1,7 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
 <!--    <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
-    <validation-observer v-slot="{ invalid, handleSubmit }">
+    <validation-observer v-slot="{ valid, handleSubmit }">
       <v-form v-if="$ready" :disabled="processing" @submit.prevent="handleSubmit(onSubmit)">
         <research-edit-renderer
           v-model="formModel"
@@ -21,7 +21,7 @@
             <v-btn
               type="submit"
               color="primary"
-              :disabled="processing || !isChanged || invalid"
+              :disabled="processing || !isChanged || !valid"
               :loading="processing"
             >
               {{ formModel.externalId ? 'Update' : 'Create' }}
@@ -38,7 +38,6 @@
 
   import DStack from '@/components/Deipify/DStack/DStack';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
-  import DForm from '@/components/Deipify/DForm/DForm';
   import { mapGetters } from 'vuex';
   import {
     compactResearchAttributes,
@@ -58,9 +57,7 @@
   import ResearchEditRenderer from '@/components/Research/ResearchEdit/ResearchEditRenderer';
   import { ATTR_TYPES } from '@/variables';
 
-  import { ValidationObserver, setInteractionMode } from 'vee-validate';
-
-  setInteractionMode('eager');
+  import { ValidationObserver } from 'vee-validate';
 
   const researchService = ResearchService.getInstance();
 
@@ -69,7 +66,6 @@
     components: {
       DStack,
       ResearchEditRenderer,
-      DForm,
       DLayoutFullScreen,
 
       ValidationObserver
@@ -164,7 +160,7 @@
                 ? [...acc[attr.blockchainFieldMeta.field], ...(isArray(value) ? value : [value])]
                 : [...(isArray(value) ? value : [value])];
             } else {
-              acc[attr.blockchainFieldMeta.field] = attr.isMultiple 
+              acc[attr.blockchainFieldMeta.field] = attr.isMultiple
                 ? isArray(value) ? value : [value]
                 : isArray(value) ? (value[0] || null) : (value || null);
             }
