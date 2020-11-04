@@ -57,6 +57,14 @@ export const attributeSet = {
 export const attributeSetForceArray = {
   mixins: [attributeSet],
 
+  data() {
+    return {
+      internalLazyValue: this.value !== undefined
+        ? wrapInArray(this.value)
+        : []
+    };
+  },
+
   computed: {
     internalValue: {
       get() {
