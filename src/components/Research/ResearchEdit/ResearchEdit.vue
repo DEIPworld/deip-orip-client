@@ -1,7 +1,7 @@
 <template>
   <d-layout-full-screen :title="title">
-<!--    <pre>{{ JSON.stringify(offchainMeta, null, 2) }}</pre>-->
-    <validation-observer v-slot="{ valid, handleSubmit }">
+<!--    <pre>{{ JSON.stringify(cachedFormModel, null, 2) }}</pre>-->
+    <validation-observer v-slot="{ invalid, valid, handleSubmit }">
       <v-form v-if="$ready" :disabled="processing" @submit.prevent="handleSubmit(onSubmit)">
         <research-edit-renderer
           v-model="formModel"
@@ -21,7 +21,7 @@
             <v-btn
               type="submit"
               color="primary"
-              :disabled="processing || !isChanged || !valid"
+              :disabled="processing || !isChanged || invalid"
               :loading="processing"
             >
               {{ formModel.externalId ? 'Update' : 'Create' }}
@@ -237,9 +237,9 @@
             this.formModel = { ..._.cloneDeep(transformed) };
             this.$setReady();
 
-            this.$nextTick(() => {
+            // this.$nextTick(() => {
               this.cachedFormModel = JSON.stringify(this.formModel);
-            });
+            // });
           });
       } else {
         this.$setReady();

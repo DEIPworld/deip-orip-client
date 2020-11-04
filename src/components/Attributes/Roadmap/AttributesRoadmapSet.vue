@@ -1,13 +1,12 @@
 <template>
   <d-block :title="attribute.title">
-    <d-timeline>
+    <d-timeline v-if="$ready">
       <d-timeline-item
         v-for="(item, index) of internalValue"
         :key="`row-${index}`"
         :dot-top="16"
         :ctrl-height="48"
       >
-
         <v-row>
           <v-col cols="6">
             <v-text-field
@@ -24,11 +23,10 @@
             />
           </v-col>
           <v-col cols="6">
-            <v-text-field
+            <d-asset-input
               v-model="item.budget"
               label="Estimated budget"
-              outlined
-              hide-details="auto"
+              return-string
             />
           </v-col>
           <v-col cols="6">
@@ -53,7 +51,6 @@
             <v-icon>delete</v-icon>
           </v-btn>
         </template>
-
       </d-timeline-item>
       <d-timeline-add @click="addItem()" />
     </d-timeline>
@@ -68,6 +65,8 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import { attributeSet } from '@/components/Attributes/_mixins/';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
+  import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
+  import { isString } from '@/utils/helpers';
 
   const stepModelFactory = () => ({
     goal: undefined,
@@ -82,6 +81,7 @@
     name: 'AttributesRoadmapSet',
 
     components: {
+      DAssetInput,
       DBlock,
       DTimelineAdd,
       DInputDate,
@@ -92,6 +92,21 @@
     mixins: [attributeSet, arrayModelAddFactory(stepModelFactory)],
     created() {
       this.addStartItem();
+
+      if (this.value && this.value.some((step) => isString(step.budget))) {
+        this.internalValue = [
+          ...this.internalValue.map((step) => ({
+            ...step,
+            ...(
+                isString(step.budget)
+                  ? { budget: { amount: parseFloat(step.budget.replace(/^\D+/g, '')) } }
+                  : { budget: step.budget }
+              )
+          }))
+        ];
+      }
+
+      this.$setReady();
     }
   };
 </script>

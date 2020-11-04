@@ -74,10 +74,17 @@
     },
     data() {
       return {
-        assetModel: this.value ? this.value : {
-          amount: undefined,
-          assetId: undefined
-        }
+        assetModel: this.value
+          ? {
+            ...{
+                amount: undefined,
+                assetId: undefined
+              },
+            ...this.value
+          } : {
+            amount: undefined,
+            assetId: undefined
+          }
       };
     },
     computed: {
@@ -100,10 +107,11 @@
       }
     },
     created() {
-      if (!(this.value && this.value.assetId)) {
+      if (!this.assetModel.assetId) {
         this.assetModel = {
+          ...this.assetModel,
           ...{
-            assetId: this.assetsList[0]
+            assetId: this.$env.ASSET_UNIT
           }
         };
       }

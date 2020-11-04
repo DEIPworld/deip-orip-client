@@ -39,7 +39,8 @@
               </div>
 
               <div class="text-caption text--secondary mt-1 pb-4">
-                {{ item.budget }} {{ item.purpose }}
+                {{ item.budget }}
+                {{ item.purpose }}
               </div>
             </d-timeline-item>
           </v-item>
@@ -55,18 +56,18 @@
   import { attributeRead } from '@/components/Attributes/_mixins';
   import moment from 'moment';
   import { chartGradient } from '@/plugins/charts';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import { isString } from '@/utils/helpers';
+  import { assetsChore } from '@/mixins/chores';
 
   export default {
     name: 'AttributesRoadmapRead',
 
     components: {
-      DBlock,
       DTimelineItem,
       DTimeline
     },
 
-    mixins: [attributeRead],
+    mixins: [attributeRead, assetsChore],
 
     data() {
       return {
@@ -88,7 +89,12 @@
             .format('MMM DD, YYYY'),
           label: milestone.goal,
           description: milestone.details,
-          budget: milestone.budget,
+          // for old string-budgets
+          budget: this.$$toAssetUnits(
+            isString(milestone.budget)
+              ? milestone.budget.replace(/^\D+/g, '')
+              : milestone.budget
+          ),
           purpose: milestone.purpose
         }));
         return roadmap;
