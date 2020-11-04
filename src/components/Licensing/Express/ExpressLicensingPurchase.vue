@@ -20,8 +20,13 @@
               <v-radio :value="item" :disabled="!$currentUser" />
             </v-list-item-action>
 
-            <v-list-item-content class="text-caption py-0">
-              {{ item.name }}
+            <v-list-item-content class="text-caption py-1 pr-2">
+              <v-clamp
+                autoresize
+                :max-lines="2"
+              >
+                {{ item.name }}
+              </v-clamp>
             </v-list-item-content>
 
             <v-list-item-action-text class="text--primary font-weight-medium">
