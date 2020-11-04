@@ -149,7 +149,8 @@ const actions = {
     return Promise.all([
       assetsService.getAssetBySymbol('USD'),
       assetsService.getAssetBySymbol('EUR'),
-      assetsService.getAssetBySymbol('TESTS')
+      assetsService.getAssetBySymbol('TESTS'),
+      assetsService.getAssetBySymbol('NGT')
     ]).then((res) => {
       commit('storeAssets', res);
     });

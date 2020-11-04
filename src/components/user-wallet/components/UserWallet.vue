@@ -534,7 +534,7 @@
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import * as bankCardsStorage from '../../../utils/bankCard';
   import { InvestmentsService } from '@deip/investments-service';
-  
+
   const investmentsService = InvestmentsService.getInstance();
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];

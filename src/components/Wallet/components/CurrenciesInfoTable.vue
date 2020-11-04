@@ -11,16 +11,15 @@
           outlined
         >
           <v-icon left color="primary">
-            {{ assetsIcons[assetsInfo[item.asset_id].string_symbol] || assetsIcons.default }}
+            {{ assetsIcons[$$fromAssetUnits(item.amount).assetId] || assetsIcons.default }}
           </v-icon>
-          {{ assetsInfo[item.asset_id].string_symbol }}
+          {{ $$fromAssetUnits(item.amount).assetId }}
         </v-chip>
       </template>
 
       <template v-slot:item.amountValue="{ item }">
         <span class="text-body-2">
-          {{ getAvailableCurrencyAmount(item.amount) |
-            currency({symbol:'',fractionCount:assetsInfo[item.asset_id].precision}) }}
+          {{ $$toAssetUnits($$fromAssetUnits(item.amount), true, {symbol: ''}) }}<br>
         </span>
       </template>
 
@@ -339,6 +338,7 @@
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { AssetsService } from '@deip/assets-service';
+  import { assetsChore } from '@/mixins/chores';
 
   const assetsService = AssetsService.getInstance();
   const fiatAssetBackedTokens = ['EUR', 'USD'];
@@ -350,6 +350,8 @@
       DDialog,
       DBoxItem
     },
+
+    mixins: [assetsChore],
 
     props: {
       allAccounts: {

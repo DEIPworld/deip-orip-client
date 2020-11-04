@@ -145,7 +145,7 @@
         const balance = this.$currentUser.balances
           .find((b) => (
             b.asset_id === this.selected.fee.assetId
-            || this.$$fromAssetUnits(b.amount).symbol === this.selected.fee.assetId)
+            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId)
           );
 
         if (!balance) return 'No source';

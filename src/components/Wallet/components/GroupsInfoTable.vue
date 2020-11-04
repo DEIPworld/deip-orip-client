@@ -40,12 +40,12 @@
       </template>
       <template #item.account.balances="{ item }">
         <span class="text-body-1">
-          {{ tokensPrice(item) | currency }}
+          {{ toAsset(tokensPrice(item)) }}
         </span>
       </template>
       <template #item.revenueHistory="{ item }">
         <span class="text-body-1">
-          {{ item.revenueHistory ? `${totalRevenue(item.revenueHistory)}` : '0' | currency }}
+          {{ toAsset(item.revenueHistory ? `${totalRevenue(item.revenueHistory)}` : '0') }}
         </span>
       </template>
       <template #item.action>
@@ -60,6 +60,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import { assetsChore } from '@/mixins/chores';
 
   export default {
     name: 'GroupsInfoTable',
@@ -67,6 +68,8 @@
     components: {
       DBoxItem
     },
+
+    mixins: [assetsChore],
 
     data() {
       return {
@@ -130,6 +133,13 @@
           return v;
         }, 0);
         return totalAmount * revHisTotalRevenue * valuationFactor;
+      },
+
+      toAsset(val) {
+        return this.$$toAssetUnits({
+          amount: val,
+          assetId: 'USD'
+        })
       }
     }
   };

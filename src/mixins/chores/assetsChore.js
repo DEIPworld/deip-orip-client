@@ -21,19 +21,36 @@ export const assetsChore = {
       const matches = val.match(/^(\d+\.\d+)\s([a-zA-Z]+)/);
 
       const stringAmount = matches[1];
-
       const amount = stringAmount ? parseFloat(stringAmount) : 0;
       const precision = stringAmount ? stringAmount.split('.')[1].length : 3;
-      const symbol = matches[2] || this.$env.ASSET_UNIT;
+      const assetId = matches[2] || this.$env.ASSET_UNIT;
 
       return {
+        stringAmount,
         amount,
         precision,
-        symbol
+        assetId
       };
     },
 
-    $$toAssetUnits(val, formatted = true) {
+    $$formatOpts(obj = {}, options = {}, formatted = true) {
+      const formatOptions = {
+        fractionCount: 3,
+        symbol: this.$env.ASSET_UNIT,
+
+        thousandsSeparator: formatted ? ',' : '',
+        symbolPosition: false,
+        symbolSpacing: true
+      };
+
+      return {
+        ...formatOptions,
+        ...obj,
+        ...options
+      };
+    },
+
+    $$toAssetUnits(val, formatted = true, options = {}) {
       if (!val) return null;
 
       const formatOptions = {
@@ -46,18 +63,17 @@ export const assetsChore = {
       };
 
       if (isString(val)) {
-        return this.$options.filters.currency(val, formatOptions);
+        return this.$options.filters
+          .currency(val, this.$$formatOpts({}, options, formatted));
       }
 
       if (isArray(val)) {
         // amount, precision, asset,
-        return this.$options.filters.currency(val[0], {
-          ...formatOptions,
-          ...{
+        return this.$options.filters
+          .currency(val[0], this.$$formatOpts({
             fractionCount: val[2],
             symbol: val[1]
-          }
-        });
+          }, options, formatted));
       }
 
       if (isObject(val)) {
@@ -67,13 +83,13 @@ export const assetsChore = {
 
         const asset = this.$$assetInfo(assetId);
 
-        return asset ? this.$options.filters.currency(amount, {
-          ...formatOptions,
-          ...{
-            fractionCount: asset.precision,
-            symbol: asset.string_symbol
-          }
-        }) : null;
+        return asset
+          ? this.$options.filters
+            .currency(amount, this.$$formatOpts({
+              fractionCount: asset.precision,
+              symbol: asset.string_symbol
+            }, options, formatted))
+          : null;
       }
 
       throw new Error('Unknown asset format');

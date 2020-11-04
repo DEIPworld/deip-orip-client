@@ -27,15 +27,15 @@
       </template>
       <template #item.group.account.balances="{ item }">
         <span class="text-body-1">
-          {{ tokensPrice(item) | currency }}
+          {{ toAsset(tokensPrice(item)) }}
         </span>
       </template>
       <template #item.revenueHistory="{ item }">
         <div class="text-body-1 mt-4">
-          {{ totalRevenue(item.revenueHistory) | currency }}
+          {{ toAsset(totalRevenue(item.revenueHistory)) }}
         </div>
         <div class="text-body-2 text--secondary mb-4">
-          {{ revenuePerToken(item) | currency }} per token
+          {{ toAsset(revenuePerToken(item)) }} per token
         </div>
       </template>
       <template #item.actions="{ item }">
@@ -186,6 +186,7 @@
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { InvestmentsService } from '@deip/investments-service';
+  import { assetsChore } from '@/mixins/chores';
 
   const investmentsService = InvestmentsService.getInstance();
 
@@ -197,6 +198,8 @@
       DDialog,
       DBoxItem
     },
+
+    mixins: [assetsChore],
 
     props: {
       allAccounts: {
@@ -314,7 +317,7 @@
       sendResearchTokens() {
         if (this.sendResearchTokensDialog.form.valid) {
           this.sendResearchTokensDialog.isSending = true;
-          
+
           investmentsService.transferSecurityToken(
             { privKey: this.$currentUser.privKey, username: this.$currentUserName },
             {
@@ -356,6 +359,13 @@
       tokensPrice(item) {
         const valuationFactor = 1.5;
         return this.revenuePerToken(item) * item.amount * valuationFactor;
+      },
+
+      toAsset(val) {
+        return this.$$toAssetUnits({
+          amount: val,
+          assetId: 'USD'
+        })
       }
     }
   };
