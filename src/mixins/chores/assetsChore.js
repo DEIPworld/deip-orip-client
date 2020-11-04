@@ -20,10 +20,16 @@ export const assetsChore = {
 
       const matches = val.match(/^(\d+\.\d+)\s([a-zA-Z]+)/);
 
+      const stringAmount = matches[1];
+
+      const amount = stringAmount ? parseFloat(stringAmount) : 0;
+      const precision = stringAmount ? stringAmount.split('.')[1].length : 3;
+      const symbol = matches[2] || this.$env.ASSET_UNIT;
+
       return {
-        amount: parseFloat(matches[1]),
-        precision: matches[1].split('.')[1].length,
-        symbol: matches[2]
+        amount,
+        precision,
+        symbol
       };
     },
 
