@@ -149,12 +149,12 @@
                 item.account.is_research_group
                   ? $options.filters.researchGroupLogoSrc(
                     item.external_id,
-                    24,
-                    24
+                    48,
+                    48
                   ) : $options.filters.avatarSrc(
                     item.profile,
-                    24,
-                    24,
+                    48,
+                    48,
                     false
                   )
               "
@@ -314,16 +314,15 @@
       sendResearchTokens() {
         if (this.sendResearchTokensDialog.form.valid) {
           this.sendResearchTokensDialog.isSending = true;
-
+          
           investmentsService.transferSecurityToken(
             { privKey: this.$currentUser.privKey, username: this.$currentUserName },
             {
-              sender: this.$route.params.account,
-              receiver:
-                this.sendResearchTokensDialog.form.account.research.research_group.external_id,
-              securityTokenExternalId:
-                this.sendResearchTokensDialog.form.account.security_token_external_id,
-              amount: this.sendResearchTokensDialog.form.amount
+              sender: this.sendResearchTokensDialog.form.account.owner,
+              receiver: this.sendResearchTokensDialog.form.receiver.account.name,
+              securityTokenExternalId: this.sendResearchTokensDialog.form.account.security_token_external_id,
+              amount: this.sendResearchTokensDialog.form.amount,
+              memo: this.sendResearchTokensDialog.form.memo
             }
           )
             .then(() => {
