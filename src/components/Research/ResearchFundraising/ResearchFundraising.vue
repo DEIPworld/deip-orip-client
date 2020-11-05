@@ -1,6 +1,6 @@
 <template>
   <fundraising
-    :security-token-id="research.securityTokens[0][0]"
+    :security-token="research.securityTokens[0]"
     :research-id="research.externalId"
     :research-title="research.title"
     :research-group-id="research.researchGroup.external_id"

@@ -1,11 +1,13 @@
 import deipRpc from '@deip/rpc-client';
 import { InvestmentsService } from '@deip/investments-service';
+import { AssetsService } from '@deip/assets-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 
 const investmentsService = InvestmentsService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
+const assetsService = AssetsService.getInstance();
 
 const STATE = {
   tokenSale: undefined,
@@ -35,10 +37,10 @@ const ACTIONS = {
 
   loadSecurityTokenHolders({ commit }, securityTokenId) {
     const securityTokenHolders = [];
-    return investmentsService.getSecurityTokenBalances(securityTokenId)
-      .then((balances) => {
-        securityTokenHolders.push(...balances);
-        return usersService.getEnrichedProfiles(balances.map((m) => m.owner));
+    return assetsService.getAccountsAssetBalancesByAsset(securityTokenId)
+      .then((securityTokens) => {
+        securityTokenHolders.push(...securityTokens);
+        return usersService.getEnrichedProfiles(securityTokens.map((m) => m.owner));
       })
       .then((users) => {
         // TODO: Fix this for group accounts

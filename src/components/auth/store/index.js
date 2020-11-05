@@ -210,10 +210,11 @@ const actions = {
 
   loadBalances({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
-    return assetsService.getAccountBalancesByOwner(user.username)
+    return assetsService.getAccountAssetsBalancesByOwner(user.username)
       .then((balances) => {
-        commit('SET_USER_BALANCES', balances);
-        return Promise.all(balances.map((b) => assetsService.getAssetById(b.asset_id)));
+        const currencies = balances.filter(b => !b.tokenized_research);
+        commit('SET_USER_BALANCES', currencies);
+        return Promise.all(currencies.map((b) => assetsService.getAssetBySymbol(b.asset_symbol)));
       })
       .then((assets) => {
         commit('SET_USER_ASSETS', assets);

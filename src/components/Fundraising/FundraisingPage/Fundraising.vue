@@ -242,7 +242,7 @@
     },
     mixins: [componentStoreFactoryOnce(fundraisingStore), assetsChore],
     props: {
-      securityTokenId: {
+      securityToken: {
         type: String,
         default: ''
       },
@@ -366,7 +366,8 @@
         ];
 
         if (this.hasActiveTokenSale || this.hasInactiveTokenSale) {
-          data.push(['On Sale', this.convertToPercent(this.tokenSale.security_tokens_on_sale[0][1])]);
+          const { amount } = this.$$fromAssetUnits(this.tokenSale.security_tokens_on_sale[0]);
+          data.push(['On Sale', this.convertToPercent(amount)]);
         }
         
         return data;
@@ -421,8 +422,9 @@
       }
     },
     created() {
+      const { assetId } = this.$$fromAssetUnits(this.securityToken);
       Promise.all([
-        this.$store.dispatch('Fundraising/loadSecurityTokenHolders', this.securityTokenId),
+        this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
         this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
         this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId)
       ])
@@ -433,7 +435,10 @@
             this.$setReady();
           }
         })
-        .catch(() => this.$router.back());
+        .catch((err) => {
+          console.log(err);
+          this.$router.back();
+        });
     },
     methods: {
       mockSignature(id) {
@@ -456,10 +461,11 @@
           extensions: []
         })
           .then(() => {
+            const { assetId } = this.$$fromAssetUnits(this.securityToken);
             Promise.all(
               [
                 this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
-                this.$store.dispatch('Fundraising/loadSecurityTokenHolders', this.securityTokenId),
+                this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
                 this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')

@@ -534,8 +534,10 @@
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import * as bankCardsStorage from '../../../utils/bankCard';
   import { InvestmentsService } from '@deip/investments-service';
+  import { AssetsService } from '@deip/assets-service';
 
   const investmentsService = InvestmentsService.getInstance();
+  const assetsService = AssetsService.getInstance();
 
   const fiatAssetBackedTokens = ['EUR', 'USD'];
 
@@ -756,8 +758,6 @@
                 this.$options.filters.fullname(shareHolder),
                 this.convertToPercent(shareHolder.share.amount)
               ]),
-              // TODO: delete this page
-              // [investment.group.name, this.convertToPercent(investment.research.security_tokens)]
             ],
 
             options: {
@@ -878,20 +878,9 @@
     },
 
     created() {
-      // getSecurityTokenBalancesByOwner //Что бы отразить в кошельке в таблице какими security tokens обладает аккаунт
-      // getAccountRevenueHistoryBySecurityToken //Что бы отразить график с историей ревенью
-      investmentsService.getSecurityTokenBalance("d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2", "33419d85f774d882aa1e2d416de78e0b73675c9e")
-        .then((res) => console.log(res, 'getSecurityTokenBalance'))
-      // investmentsService.getSecurityTokenBalancesByResearch('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
-      //   .then((res) => console.log(res, 'getSecurityTokenBalancesByResearch'))
-      investmentsService.getSecurityTokenBalancesByOwner('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2')
-        .then((res) => console.log(res, 'getSecurityTokenBalancesByOwner'))
-      investmentsService.getAccountRevenueHistoryBySecurityToken('d2c4bd2c0a8486f4bd24be5717df3aa6f2bb2fa2', '33419d85f774d882aa1e2d416de78e0b73675c9e')
-        .then((res) => console.log(res, 'getAccountRevenueHistoryBySecurityToken'))
       this.$store.dispatch('userWallet/loadWallet', {
         username: decodeURIComponent(this.username)
       }).then(() => { console.log(this.investments, 'this.investments'); this.$setReady(); });
-      console.log(this.$route)
     },
 
     methods: {
@@ -995,14 +984,15 @@
       sendTokens() {
         this.sendTokensDialog.isSending = true;
 
-        return deipRpc.broadcast.transferAsync(
-          this.user.privKey,
-          this.user.username,
-          this.sendTokensDialog.form.to,
-          this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
-          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
-          []
-        )
+        return assetsService.transferAsset(
+          { privKey: this.user.privKey, username: this.user.username }, 
+          {
+            from: this.user.username,
+            to: this.sendTokensDialog.form.to,
+            amount: this.toAssetUnits(this.sendTokensDialog.form.amount, this.sendTokensDialog.precision, this.sendTokensDialog.currency.currencyName),
+            memo: this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
+            extensions: []
+          })
           .then((data) => {
             this.$notifier.showSuccess('Transfer was successfull');
             this.closeSendTokensDialog();
@@ -1047,13 +1037,15 @@
 
       deposit() {
         this.depositDialog.isDepositing = true;
-        return deipRpc.broadcast.transferAsync(
-          '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa',
-          'kim',
-          this.user.username,
-          this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
-          `deposit for ${this.user.username}`,
-          []
+        return assetsService.transferAsset(
+          { privKey: "5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa", username: "kim" }, 
+          {
+            from: 'kim',
+            to: this.user.username,
+            amount: this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
+            memo: `deposit for ${this.user.username}`,
+            extensions: []
+          }
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been deposited successfully!');
@@ -1071,13 +1063,15 @@
 
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-        return deipRpc.broadcast.transferAsync(
-          this.user.privKey,
-          this.user.username,
-          'kim',
-          this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
-          `withdraw for ${this.user.username}`,
-          []
+        return assetsService.transferAsset(
+          { privKey:  this.user.privKey, username: this.user.username }, 
+          {
+            from: this.user.username,
+            to: 'kim',
+            amount: this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
+            memo: `withdraw for ${this.user.username}`,
+            extensions: []
+          }
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been withdrawn successfully!');

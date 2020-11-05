@@ -127,12 +127,12 @@
                 item.account.is_research_group
                   ? $options.filters.researchGroupLogoSrc(
                     item.external_id,
-                    24,
-                    24
+                    48,
+                    48
                   ) : $options.filters.avatarSrc(
                     item.profile,
-                    24,
-                    24,
+                    48,
+                    48,
                     false
                   )
               "
@@ -186,9 +186,11 @@
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { InvestmentsService } from '@deip/investments-service';
+  import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
 
   const investmentsService = InvestmentsService.getInstance();
+  const assetsService = AssetsService.getInstance();
 
   export default {
     name: 'SharesInfoTable',
@@ -301,10 +303,15 @@
         loadWallet: ('Wallet/loadWallet')
       }),
       sharePercent(item) {
-        const tokenValue = item.research.security_tokens.find(
-          (rst) => rst[0] === item.security_token_external_id
-        )[1];
-        return item.amount * 100 / tokenValue;
+        const token = item.research.security_tokens.find(
+          (rst) => { 
+            const { assetId } = this.$$fromAssetUnits(rst);
+            return assetId === item.asset_symbol;
+          }
+        );
+        const { amount: tokenValue } = this.$$fromAssetUnits(token);
+        const { amount } = this.$$fromAssetUnits(item.amount);
+        return amount * 100 / tokenValue;
       },
       openSendResearchTokensDialog(item) {
         this.sendResearchTokensDialog.isOpened = true;
@@ -318,14 +325,17 @@
         if (this.sendResearchTokensDialog.form.valid) {
           this.sendResearchTokensDialog.isSending = true;
 
-          investmentsService.transferSecurityToken(
+          const { assetId, precision } = this.$$fromAssetUnits(this.sendResearchTokensDialog.form.account.amount);
+          const amountToTransfer = this.$$toAssetUnits(this.sendResearchTokensDialog.form.amount.toString() || '0', false, { symbol: assetId, fractionCount: precision });
+          
+          assetsService.transferAsset(
             { privKey: this.$currentUser.privKey, username: this.$currentUserName },
             {
-              sender: this.sendResearchTokensDialog.form.account.owner,
-              receiver: this.sendResearchTokensDialog.form.receiver.account.name,
-              securityTokenExternalId: this.sendResearchTokensDialog.form.account.security_token_external_id,
-              amount: this.sendResearchTokensDialog.form.amount,
-              memo: this.sendResearchTokensDialog.form.memo
+              from: this.sendResearchTokensDialog.form.account.owner,
+              to: this.sendResearchTokensDialog.form.receiver.account.name,
+              amount: amountToTransfer,
+              memo: this.sendResearchTokensDialog.form.memo,
+              extensions: []
             }
           )
             .then(() => {
@@ -347,18 +357,25 @@
         return rtId * 0.3;
       },
       totalRevenue(arr) {
-        return arr.reduce((val, { revenue }) => (val + this.fromAssetsToFloat(revenue)), 0);
+        return arr.reduce((val, { revenue }) => {
+          const { amount } = this.$$fromAssetUnits(revenue);
+          return val + amount;
+        }, 0);
       },
       revenuePerToken(item) {
-        const totalTokenAmount = item.research.security_tokens.find(
-          ([externalId]) => externalId === item.security_token_external_id
-        )[1];
-        return totalTokenAmount
-          ? this.totalRevenue(item.securityTokenHistory) / totalTokenAmount : 0;
+        const securityToken = item.research.security_tokens.find(
+          (securityToken) => {
+            const { assetId } = this.$$fromAssetUnits(securityToken);
+            return item.asset_symbol === assetId;
+          }
+        );
+        const { amount: totalTokenAmount } = this.$$fromAssetUnits(securityToken);
+        return totalTokenAmount ? this.totalRevenue(item.securityTokenHistory) / totalTokenAmount : 0;
       },
       tokensPrice(item) {
         const valuationFactor = 1.5;
-        return this.revenuePerToken(item) * item.amount * valuationFactor;
+        const { amount } = this.$$fromAssetUnits(item.amount);
+        return this.revenuePerToken(item) * amount * valuationFactor;
       },
 
       toAsset(val) {

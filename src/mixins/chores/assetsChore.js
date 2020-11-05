@@ -18,19 +18,34 @@ export const assetsChore = {
       // /\d+[.]{1}\d+\s[a-zA-Z0-9]+/ - для цифры-точка-цифры-пробел-буквы_с_цифрами
       // /\d+[.]{1}\d+\s[a-zA-Z]+/ - для цифры-точка-цифры-пробел-только_буквы
 
-      const matches = val.match(/^(\d+\.\d+)\s([a-zA-Z]+)/);
+      if (val.indexOf('.') === -1) {
+        
+        const [stringAmount, assetId] = val.split(' ');
+        const amount = parseInt(stringAmount);
+        const precision = 0
 
-      const stringAmount = matches[1];
-      const amount = stringAmount ? parseFloat(stringAmount) : 0;
-      const precision = stringAmount ? stringAmount.split('.')[1].length : 3;
-      const assetId = matches[2] || this.$env.ASSET_UNIT;
+        return {
+          stringAmount,
+          amount,
+          precision,
+          assetId
+        };
 
-      return {
-        stringAmount,
-        amount,
-        precision,
-        assetId
-      };
+      } else {
+
+        const matches = val.match(/^(\d+\.\d+)\s([a-zA-Z]+)/);
+        const stringAmount = matches[1];
+        const amount = stringAmount ? parseFloat(stringAmount) : 0;
+        const precision = stringAmount ? stringAmount.split('.')[1].length : 3;
+        const assetId = matches[2] || this.$env.ASSET_UNIT;
+
+        return {
+          stringAmount,
+          amount,
+          precision,
+          assetId
+        };
+      } 
     },
 
     $$formatOpts(obj = {}, options = {}, formatted = true) {

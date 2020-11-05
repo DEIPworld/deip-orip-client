@@ -317,9 +317,6 @@
                 this.$options.filters.fullname(shareHolder),
                 this.convertToPercent(shareHolder.share.amount)
               ]),
-              // Fix this
-              // [this.selectedInvestment.group.name, this.convertToPercent(this.selectedInvestment.research.security_tokens)]
-              // ['Microsoft', 15]
             ],
 
             options: {

@@ -3,11 +3,11 @@
     <d-form-block title="Determine the number of security token units">
       <v-col cols="12">
         <v-text-field
-          v-model="amount"
+          v-model="amountToSell"
           v-mask="'#####'"
           outlined
-          suffix="Shares"
-          :hint="(securityTokenOnSaleBalance - (amount || 0)) + ' left'"
+          :suffix="amountToSellSuffix"
+          :hint="amountToSellHint"
           :rules="[rules.amountToSellRules]"
         />
       </v-col>
@@ -124,6 +124,7 @@
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import { FormMixin } from '@/utils/FormMixin';
   import moment from 'moment';
+  import { assetsChore } from '@/mixins/chores';
 
   const MIN_TOKEN_UNITS_TO_SELL = 100;
 
@@ -133,7 +134,7 @@
       DFormBlock
     },
 
-    mixins: [FormMixin],
+    mixins: [FormMixin, assetsChore],
 
     model: {
       prop: 'formData'
@@ -152,8 +153,8 @@
       },
 
       securityTokenOnSaleBalance: {
-        type: Number,
-        default: 0
+        type: Object,
+        required: true
       },
 
       hideButtons: {
@@ -192,13 +193,36 @@
           : false;
       },
 
-      amount: {
+      availableBalance() {
+        if (this.securityTokenOnSaleBalance && this.securityTokenOnSaleBalance.amount) {
+           return this.$$fromAssetUnits(this.securityTokenOnSaleBalance.amount);
+        } else {
+          return null;
+        }
+      },
+
+      amountToSell: {
         get() {
           return this.formData.amountToSell;
         },
         set(val) {
-          this.formData.amountToSell = parseInt(val || 0);
+          const { assetId, precision } = this.availableBalance;
+          const amountToSell = this.$$toAssetUnits(val || '0', false, { symbol: assetId, fractionCount: 0 });
+          this.formData.amountToSell = amountToSell;
         }
+      },
+
+      amountToSellHint() {
+        if (!this.amountToSell || !this.availableBalance) return '';
+        const { amount: availableAmount } = this.availableBalance;
+        const { amount: sellingAmount } = this.$$fromAssetUnits(this.amountToSell);
+        return availableAmount - sellingAmount + ' left';
+      },
+
+      amountToSellSuffix() {
+        if (!this.availableBalance) return '';
+        const { assetId } = this.availableBalance;
+        return assetId;
       }
     },
 
@@ -208,10 +232,10 @@
         endDate: undefined,
         group_permlink: null,
         isFormValid: false,
-
+        
         rules: {
           amountToSellRules: (v) => this.verifyAmountRange(v)
-            || `Amount should be from ${MIN_TOKEN_UNITS_TO_SELL} to ${this.securityTokenOnSaleBalance}`,
+            || `Amount should be from ${MIN_TOKEN_UNITS_TO_SELL} to ${this.availableBalance.amount}`,
 
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be in the future',
@@ -263,7 +287,9 @@
     },
     methods: {
       verifyAmountRange(value) {
-        return value >= MIN_TOKEN_UNITS_TO_SELL && value <= this.securityTokenOnSaleBalance;
+        if (!this.availableBalance) return true;
+        const { amount } = this.availableBalance;
+        return value >= MIN_TOKEN_UNITS_TO_SELL && value <= amount;
       },
       setStartDate(value) {
         this.startDate = value;

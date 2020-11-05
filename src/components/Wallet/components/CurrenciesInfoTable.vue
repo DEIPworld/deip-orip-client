@@ -616,13 +616,15 @@
       },
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-        return deipRpc.broadcast.transferAsync(
-          this.$currentUser.privKey,
-          this.depositDialog.owner,
-          'kim',
-          this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
-          `withdraw for ${this.depositDialog.owner}`,
-          []
+        return assetsService.transferAsset(
+          { privKey: this.$currentUser.privKey, username: this.depositDialog.owner },
+          {
+            from: this.depositDialog.owner,
+            to: 'kim',
+            amount: this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
+            memo: `withdraw for ${this.depositDialog.owner}`,
+            extensions: []
+          } 
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been withdrawn successfully!');
@@ -639,13 +641,15 @@
       },
       deposit() {
         this.depositDialog.isDepositing = true;
-        return deipRpc.broadcast.transferAsync(
-          '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa',
-          'kim',
-          this.depositDialog.owner,
-          this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
-          `deposit for ${this.depositDialog.owner}`,
-          []
+        return assetsService.transferAsset(
+          { privKey: '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa', username: 'kim' },
+          {
+            from: "kim", 
+            to: this.depositDialog.owner,
+            amount:  this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
+            memo: `deposit for ${this.depositDialog.owner}`,
+            extensions: []
+          }
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been deposited successfully!');
@@ -663,17 +667,19 @@
       sendTokens() {
         this.sendTokensDialog.isSending = true;
 
-        return deipRpc.broadcast.transferAsync(
-          this.$currentUser.privKey,
-          this.accountData.account.name,
-          this.sendTokensDialog.form.receiver.account.name,
-          this.toAssetUnits(
-            this.sendTokensDialog.form.amount,
-            this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].precision,
-            this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].string_symbol
-          ),
-          this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
-          []
+        return assetsService.transferAsset(
+          { privKey: this.$currentUser.privKey, username: this.accountData.account.name },
+          {
+            from: this.accountData.account.name,
+            to: this.sendTokensDialog.form.receiver.account.name,
+            amount: this.toAssetUnits(
+              this.sendTokensDialog.form.amount,
+              this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].precision,
+              this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].string_symbol
+            ),
+            memo: this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
+            extensions: []
+          }
         )
           .then(() => {
             this.$notifier.showSuccess('Transfer was successfull');

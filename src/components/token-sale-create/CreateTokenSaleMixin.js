@@ -1,11 +1,13 @@
 import { mapGetters } from 'vuex';
 import { ResearchService } from '@deip/research-service';
-import { InvestmentsService } from '@deip/investments-service';
+import { AssetsService } from '@deip/assets-service';
+import { assetsChore } from '@/mixins/chores';
 
 const researchService = ResearchService.getInstance();
-const investmentsService = InvestmentsService.getInstance();
+const assetsService = AssetsService.getInstance();
 
 export const CreateTokenSaleMixin = {
+  mixins: [assetsChore],
   computed: {
     ...mapGetters({
       user: 'auth/user'
@@ -37,11 +39,12 @@ export const CreateTokenSaleMixin = {
       .then((research) => {
         this.group_permlink = research.research_group.permlink;
         this.research = research;
-        return investmentsService.getSecurityToken(this.research.security_tokens[0][0]);
+        const { assetId } = this.$$fromAssetUnits(this.research.security_tokens[0]);
+        return assetsService.getAssetBySymbol(assetId);
       })
       .then((securityToken) => {
         this.securityTokenOnSale = securityToken;
-        return investmentsService.getSecurityTokenBalance(this.research.research_group.external_id, this.securityTokenOnSale.external_id);
+        return assetsService.getAccountAssetBalance(this.research.research_group.external_id, this.securityTokenOnSale.string_symbol);
       })
       .then((balance) => {
         this.securityTokenOnSaleBalance = balance || null;

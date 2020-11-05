@@ -137,13 +137,15 @@
         if (this.$refs.form.validate()) {
           this.isSending = true;
 
-          deipRpc.broadcast.transferAsync(
-            this.user.privKey,
-            this.user.username,
-            this.form.to,
-            this.toAssetUnits(this.form.amount),
-            this.form.memo,
-            []
+          assetsService.transferAsset(
+            { privKey: this.user.privKey, username: this.user.username }, 
+            {
+              from: this.user.username,
+              to: this.form.to,
+              amount: this.toAssetUnits(this.form.amount),
+              memo: this.form.memo,
+              extensions: []
+            }
           ).then((data) => {
             this.$emit('deipTokensTransfered');
             this.clearForm();

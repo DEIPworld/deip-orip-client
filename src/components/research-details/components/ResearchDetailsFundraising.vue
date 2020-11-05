@@ -71,7 +71,7 @@
             lg="9"
             class="pl-2"
           >
-            {{ tokenSale.security_tokens_on_sale[0][1] }}
+            {{ tokenSale.security_tokens_on_sale[0] }}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">
@@ -83,7 +83,7 @@
             lg="9"
             class="pl-2"
           >
-            {{ 10000 - tokenSale.security_tokens_on_sale[0][1] }}
+            {{ 10000 - tokenSale.security_tokens_on_sale[0] }}
           </v-col>
         </v-row>
         <v-row no-gutters class="pt-4">

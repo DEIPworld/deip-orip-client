@@ -113,23 +113,41 @@
       },
       totalRevenue(arr) {
         return arr.reduce((val, r) => (
-          val + r.reduce((v, { revenue }) => (v + this.fromAssetsToFloat(revenue)), 0)
+          val + r.reduce((v, { revenue }) => {
+            const { amount } = this.$$fromAssetUnits(revenue);
+            return v + amount;
+          }, 0)
         ), 0);
       },
       tokensPrice(item) {
         const valuationFactor = 1.5;
-        const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => (
-          v + i.amount
-        ), 0);
+        
+        const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => {
+          const { amount } = this.$$fromAssetUnits(i.amount);
+          return v + amount;
+        }, 0);
+
         const revHisTotalRevenue = item.revenueHistory.reduce((v, i) => {
-          const val = i.reduce((vv, ii) => (vv + this.fromAssetsToFloat(ii.revenue)), 0);
+          const val = i.reduce((vv, ii) => {
+            const { amount } = this.$$fromAssetUnits(ii.revenue);
+            return vv + amount;
+          }, 0);
+
           const research = item.researchList ? item.researchList.find(
-            (r) => r.external_id === i[0].security_token.research_external_id
+            (r) => {
+              return r.external_id === i[0].security_token.tokenized_research;
+            }
           ) : false;
+
           const securityTokenAmount = research ? research.security_tokens.find(
-            (st) => st[0] === i[0].security_token.external_id
-          )[1] : 1;
-          v += val / securityTokenAmount;
+            (st) => {
+              const { assetId } = this.$$fromAssetUnits(st);
+              return assetId === i[0].security_token.string_symbol;
+            }
+          ) : "1 TOKEN";
+
+          const { amount } = this.$$fromAssetUnits(securityTokenAmount);
+          v += val / amount;
           return v;
         }, 0);
         return totalAmount * revHisTotalRevenue * valuationFactor;

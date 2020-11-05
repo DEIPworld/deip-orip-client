@@ -2,8 +2,8 @@
   <full-screen-view title="Create fundraising">
     <create-token-sale-form
       v-model="formData"
-      :security-token-on-sale="securityTokenOnSale ? securityTokenOnSale.external_id : null"
-      :security-token-on-sale-balance="securityTokenOnSaleBalance ? securityTokenOnSaleBalance.amount : 0"
+      :security-token-on-sale="securityTokenOnSale ? securityTokenOnSale.external_id : ''"
+      :security-token-on-sale-balance="securityTokenOnSaleBalance ? securityTokenOnSaleBalance : {}"
       :disabled="formProcessing"
       :loading="formProcessing"
       @submit="finish"
@@ -49,7 +49,7 @@
             researchExternalId: this.research.external_id,
             startTime: this.formData.startDate.toISOString().split('.')[0],
             endTime: this.formData.endDate.toISOString().split('.')[0],
-            securityTokensOnSale: [[this.securityTokenOnSale.external_id, this.formData.amountToSell]],
+            securityTokensOnSale: [this.formData.amountToSell],
             softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
             hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
             extensions: []

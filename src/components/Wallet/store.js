@@ -49,24 +49,25 @@ const getters = {
 const actions = {
   loadBalances({ state, commit }, account) {
     let balances = [];
-    return investmentsService.getSecurityTokenBalancesByOwner(account)
-      .then((balancesList) => {
-        balances.push(...balancesList);
+    return assetsService.getAccountAssetsBalancesByOwner(account)
+      .then((assetsBalances) => {
+        const securityTokens = assetsBalances.filter(b => !!b.tokenized_research)
+        balances.push(...securityTokens);
         return Promise.all(balances.map(
-          // (b) => researchService.getResearch(b.research_external_id)
-          (b) => deipRpc.api.getResearchAsync(b.research_external_id)
+          // (b) => researchService.getResearch(b.tokenized_research)
+          (b) => deipRpc.api.getResearchAsync(b.tokenized_research)
         ));
       })
       .then((researches) => {
         balances = balances.map((b) => ({
           ...b,
-          research: researches.find((r) => r.external_id === b.research_external_id)
+          research: researches.find((r) => r.external_id === b.tokenized_research)
         }));
 
         return Promise.all(
-          balances.map((b) => investmentsService.getAccountRevenueHistoryBySecurityToken(
+          balances.map((b) => investmentsService.getAccountRevenueHistoryByAsset(
             b.owner,
-            b.security_token_external_id
+            b.asset_symbol
           ))
         );
       })
@@ -74,13 +75,13 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
-            (r) => r[0] && r[0].security_token.external_id === b.security_token_external_id
+            (r) => r[0] && r[0].security_token.string_symbol === b.asset_symbol
           ) || []
         }));
 
         return Promise.all(
-          balances.map((b) => investmentsService.getSecurityTokenRevenueHistory(
-            b.security_token_external_id
+          balances.map((b) => investmentsService.getAssetRevenueHistory(
+            b.asset_symbol
           ))
         );
       })
@@ -88,7 +89,7 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           securityTokenHistory: securityTokenHistory.find(
-            (s) => s[0] && s[0].security_token.external_id === b.security_token_external_id
+            (s) => s[0] && s[0].security_token.string_symbol === b.asset_symbol
           ) || []
         }));
 
@@ -111,10 +112,11 @@ const actions = {
     return researchGroupService.getResearchGroup(account)
       .then((group) => {
         groupData = group;
-        return assetsService.getAccountBalancesByOwner(groupData.external_id);
+        return assetsService.getAccountAssetsBalancesByOwner(groupData.external_id);
       })
-      .then((balanceData) => {
-        groupData.balances = balanceData;
+      .then((assetsBalances) => {
+        const currencies = assetsBalances.filter(b => !b.tokenized_research);
+        groupData.balances = currencies;
         commit('setGroupData', groupData);
         return dispatch('loadAssetsInfo', groupData);
       })
@@ -175,11 +177,11 @@ const actions = {
           (finalArr, item) => {
             if (item.researchList) {
               item.researchList.reduce((arr, r) => {
-                r.security_tokens.forEach((rst) => arr.push(rst[0]));
+                r.security_tokens.forEach((rst) => arr.push(rst.split(' ')[1]));
                 return arr;
-              }, []).forEach((id) => finalArr.push(
-                investmentsService.getSecurityTokenBalance(item.external_id, id)
-              ));
+              }, []).forEach((symbol) => { 
+                finalArr.push(assetsService.getAccountAssetBalance(item.external_id, symbol))}
+            );
             }
             return finalArr;
           }, []
