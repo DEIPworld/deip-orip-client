@@ -84,6 +84,10 @@ export const assetsChore = {
       }
 
       throw new Error('Unknown asset format');
+    },
+
+    $$formatAssetUnits(val) {
+      return this.$$toAssetUnits(this.$$fromAssetUnits(val))
     }
   }
 };
