@@ -1,8 +1,7 @@
 <template>
   <d-stack :gap="stackGap">
-
     <div v-if="hasHeader" :class="headerClassList">
-      <slot name="titleLeft" />
+      <slot name="title-prepend" />
 
       <div class="spacer">
         <div
