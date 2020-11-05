@@ -90,7 +90,7 @@
   });
 
   export default {
-    name: 'AttributesExpressLicensingSet',
+    name: 'AttributesExpressLicensingSetDefault',
     components: {
       DFileInputExtended,
       DAssetInput,

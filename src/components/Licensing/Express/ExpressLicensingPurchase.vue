@@ -158,7 +158,7 @@
         const { amount } = balance;
         const asset = this.$$assetInfo(this.selected.fee.assetId);
 
-        return [asset.string_symbol, amount].join(' / ');
+        return [asset.string_symbol, this.$$formatAssetUnits(amount)].join(' / ');
       }
     },
 

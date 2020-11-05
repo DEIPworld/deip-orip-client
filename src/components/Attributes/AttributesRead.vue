@@ -28,7 +28,6 @@
   import { AttributesVideoUrlRead } from '@/components/Attributes/VideoUrl';
   import { AttributesImageRead } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingRead } from '@/components/Attributes/ExpressLicensing';
-  import { commonProps } from '@/variables/props';
 
   export default {
     name: 'AttributesRead',
@@ -51,7 +50,10 @@
     },
     mixins: [attributeTypeComponent, BindsAttrs],
     props: {
-      ...commonProps.attribute
+      attribute: {
+        type: Object,
+        default: () => ({})
+      },
     }
   };
 </script>

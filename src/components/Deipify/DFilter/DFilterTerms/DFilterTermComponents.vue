@@ -1,17 +1,8 @@
 <template>
   <d-stack :gap="24" class="px-6">
-    <!--    <d-block-->
-    <!--      v-for="(attribute, index) of researchAttributes"-->
-    <!--      :key="`${index}-attr`"-->
-    <!--      widget="compact"-->
-    <!--      :title="attribute.title"-->
-    <!--    >-->
-    <!--      <attributes-set-->
-    <!--        v-model="internalValue[attribute._id]"-->
-    <!--        :attribute="attribute"-->
-    <!--        view-type="filter"-->
-    <!--      />-->
-    <!--    </d-block>-->
+<!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
+<!--    <pre>{{JSON.stringify(researchAttributes, null, 2)}}</pre>-->
+
     <attributes-set
       v-for="(attribute, index) of researchAttributes"
       :key="`${index}-attr`"
@@ -25,7 +16,6 @@
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import AttributesSet from '@/components/Attributes/AttributesSet';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
@@ -33,7 +23,6 @@
 
     components: {
       DStack,
-      DBlock,
       AttributesSet
     },
 
@@ -48,7 +37,7 @@
     created() {
       this.researchAttributes = this.$where(
         this.$tenantSettings.researchAttributes,
-        (attr) => attr.isFilterable && attr.isPublished
+        (attr) => attr.isFilterable
       );
     }
   };

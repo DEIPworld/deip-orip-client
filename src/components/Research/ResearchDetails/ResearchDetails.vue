@@ -1,7 +1,7 @@
 <template>
   <research-details-renderer
     :schema="layoutSchema"
-    :research="research$"
+    :research="researchExtended"
   />
 </template>
 
@@ -24,14 +24,14 @@
           schema,
           {
             attrs: {
-              projectId: this.research$.externalId,
-              project: _.cloneDeep(this.research$), // global
+              projectId: this.researchExtended.externalId,
+              project: _.cloneDeep(this.researchExtended), // global
             }
           }
         );
       },
 
-      research$() {
+      researchExtended() {
         return {
           ...this.research,
           ...{

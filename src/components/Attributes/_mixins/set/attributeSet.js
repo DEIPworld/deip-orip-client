@@ -3,7 +3,6 @@ import { VeeFieldValidatable } from '@/mixins/veeFieldValidatable';
 
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
-import { commonProps } from '@/variables/props';
 
 export const attributeSet = {
   components: { ValidationProvider },
@@ -11,7 +10,11 @@ export const attributeSet = {
   mixins: [Proxyable, VeeFieldValidatable],
 
   props: {
-    ...commonProps.attribute,
+    attribute: {
+      type: Object,
+      default: () => ({})
+    },
+
     viewType: {
       type: String,
       default: undefined

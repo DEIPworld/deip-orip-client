@@ -63,6 +63,7 @@
   import { mapState } from 'vuex';
   import ProjectsListFilter from '@/components/Projects/List/Filter/ProjectsListFilter';
   import { compactResearchAttributes, isArray } from '@/utils/helpers';
+  import { wrapInArray } from 'vuetify/lib/util/helpers';
 
   export default {
     name: 'ProjectsList',
@@ -84,7 +85,7 @@
       },
 
       viewTypes: {
-        type: [Array],
+        type: [Array, String],
         default: () => ([VIEW_TYPES.GRID, VIEW_TYPES.TABLE])
       },
 
@@ -137,18 +138,17 @@
         return this.viewTypeComponents[this.currentViewType];
       },
 
-      multiView() { return this.viewTypes.length > 1; },
+      multiView() { return this.internalViewTypes.length > 1; },
 
       storageViewTypeKey() { return `${this.storeNS}_view-type`; },
       storageFilterKey() { return `${this.storeNS}_filter`; },
+      internalViewTypes() { return wrapInArray(this.viewTypes); }
     },
 
     created() {
       this.isMultiView(() => {
         this.$ls.on(this.storageViewTypeKey, this.changeViewType, true);
       });
-
-      this.changeViewType(this.viewTypes[0]);
 
       if (this.withFilter) {
         const hasQuery = !!this.$route.query.rFilter;
@@ -198,10 +198,10 @@
           'researchAttributeId',
           'values'
         )
-          .filter((attr) => (isArray(attr.values) ? !!(attr.values.length) : !!(attr.values)))
+          .filter((attr) => !!wrapInArray(attr.values).length)
           .map((attr) => ({
             ...attr,
-            ...{ values: isArray(attr.values) ? attr.values : [attr.values] }
+            ...{ values: wrapInArray(attr.values) }
           }));
 
         return {
@@ -215,7 +215,7 @@
       onItemClick() {},
 
       changeViewType(viewType) {
-        this.currentViewType = viewType;
+        this.currentViewType = viewType || this.internalViewTypes[0];
       },
 
       isMultiView(cb) {

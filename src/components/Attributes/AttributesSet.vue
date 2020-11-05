@@ -29,7 +29,6 @@
   import { AttributesVideoUrlSet } from '@/components/Attributes/VideoUrl';
   import { AttributesImageSet } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingSet } from '@/components/Attributes/ExpressLicensing';
-  import { commonProps } from '@/variables/props';
 
   export default {
     name: 'AttributesSet',
@@ -53,7 +52,10 @@
 
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
     props: {
-      ...commonProps.attribute
+      attribute: {
+        type: Object,
+        default: () => ({})
+      },
     }
   };
 </script>

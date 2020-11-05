@@ -68,15 +68,6 @@ export const assetsChore = {
     $$toAssetUnits(val, formatted = true, options = {}) {
       if (!val) return null;
 
-      const formatOptions = {
-        fractionCount: 3,
-        symbol: this.$env.ASSET_UNIT,
-
-        thousandsSeparator: formatted ? ',' : '',
-        symbolPosition: false,
-        symbolSpacing: true
-      };
-
       if (isString(val)) {
         return this.$options.filters
           .currency(val, this.$$formatOpts({}, options, formatted));
@@ -94,9 +85,9 @@ export const assetsChore = {
       if (isObject(val)) {
         const { amount, assetId } = val;
 
-        if (amount === undefined && assetId === undefined) return null;
+        if (!amount) return null;
 
-        const asset = this.$$assetInfo(assetId);
+        const asset = this.$$assetInfo(assetId || this.$env.ASSET_UNIT);
 
         return asset
           ? this.$options.filters
@@ -108,6 +99,10 @@ export const assetsChore = {
       }
 
       throw new Error('Unknown asset format');
+    },
+
+    $$formatAssetUnits(val) {
+      return this.$$toAssetUnits(this.$$fromAssetUnits(val))
     }
   }
 };

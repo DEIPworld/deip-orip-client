@@ -1,8 +1,10 @@
 <template>
-  <d-stack horizontal gap="0">
-
+  <div
+    v-if="users.length"
+    class="d-flex"
+  >
     <v-avatar
-      v-for="user of usersList"
+      v-for="user of users"
       :key="user.profile.name"
       color="white"
       size="52"
@@ -14,20 +16,18 @@
         class="d-block"
       >
         <v-avatar>
-          <img :src="user.profile | avatarSrc(64, 64, false)" />
+          <v-img :src="user.profile | avatarSrc(64, 64, false)" />
         </v-avatar>
       </router-link>
     </v-avatar>
-  </d-stack>
+  </div>
 </template>
 
 <script>
-  import { userListCommon } from '@/components/Users/mixins';
-  import DStack from '@/components/Deipify/DStack/DStack';
+  import { usersList } from '@/features/Users/mixins';
 
   export default {
     name: 'UsersListStack',
-    components: { DStack },
-    mixins: [userListCommon]
+    mixins: [usersList]
   };
 </script>
