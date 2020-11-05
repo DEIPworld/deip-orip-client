@@ -6,6 +6,7 @@
     @apply="applyFilter"
     @reset="resetFilter"
   >
+    {{filterModel}}
     <d-block-widget>
       <v-text-field
         v-model="filterModel.searchTerm"

@@ -9,7 +9,7 @@
           overlap
           bordered
           color="warning"
-          :value="!attrs$.project.members.includes(user.account.name)"
+          :value="pendingUser(user.account.name) && userRelatedToProject"
         >
           <template #badge>
             <v-avatar>
@@ -46,12 +46,31 @@
 
 <script>
   import { attributeRead } from '@/components/Attributes/_mixins';
-  import UsersList from '@/components/Users/List/UsersList';
+  import UsersList from '@/features/Users/components/List/UsersList';
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   export default {
     name: 'AttributesUserRead',
     components: { UsersList },
-    mixins: [BindsAttrs, attributeRead]
+    mixins: [BindsAttrs, attributeRead],
+    props: {
+      project: {
+        type: Object,
+        default: () => ({})
+      }
+    },
+    computed: {
+      userRelatedToProject() {
+        return [
+          ...this.project.members,
+          ...this.project.researchRef.expressLicenses.map((lic) => lic.owner)
+        ].includes(this.$currentUserName);
+      }
+    },
+    methods: {
+      pendingUser(userName) {
+        return !this.project.members.includes(userName);
+      }
+    }
   };
 </script>

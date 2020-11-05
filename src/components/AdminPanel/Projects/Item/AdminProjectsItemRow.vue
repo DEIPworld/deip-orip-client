@@ -1,7 +1,7 @@
 <template>
   <research-list-item-renderer
     :schema="layoutSchema"
-    :research="research$"
+    :research="researchExtended"
     tag="tr"
     @click.native="goToResearch()"
   />
@@ -50,7 +50,7 @@
         this.$router.push({
           name: 'research.details',
           params: {
-            researchExternalId: this.research$.external_id
+            researchExternalId: this.researchExtended.external_id
           }
         });
       },
@@ -66,7 +66,7 @@
           on: {
             click(e) {
               e.stopPropagation();
-              self.$emit(event, self.research$.external_id);
+              self.$emit(event, self.researchExtended.external_id);
             }
           },
           children: [

@@ -1,12 +1,18 @@
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { hasValue } from '@/utils/helpers';
-import { commonProps } from '@/variables/props';
 
 export const attributeRead = {
   mixins: [tenantAttributes],
   props: {
-    ...commonProps.attribute,
-    ...commonProps.viewType
+    attribute: {
+      type: Object,
+      default: () => ({})
+    },
+
+    viewType: {
+      type: String,
+      default: undefined
+    }
   },
   computed: {
     attributeInfo() {

@@ -10,7 +10,6 @@
           :licenses="project.researchRef.expressLicenses"
         />
       </d-block-widget>
-      <v-divider />
     </template>
 
 

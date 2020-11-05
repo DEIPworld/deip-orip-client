@@ -31,7 +31,7 @@ const MUTATIONS = {
   }
 };
 
-export const usersStore = {
+export const usersListStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

@@ -4,7 +4,8 @@
     class="mx-n3 py-0"
   >
     <v-list-item
-      v-for="(user, index) in users" :key="`user-${index}`"
+      v-for="(user, index) in users"
+      :key="`user-${index}`"
       class="px-3 py-2 rounded overflow-hidden reset-height"
       :to="userDetailsRoute(user.account.name)"
     >
@@ -35,24 +36,10 @@
 </template>
 
 <script>
+  import { usersList } from '@/features/Users/mixins';
+
   export default {
     name: 'UsersListDefault',
-    props: {
-      users: {
-        type: [Array, String],
-        default: () => ([])
-      }
-    },
-
-    methods: {
-      userDetailsRoute(name) {
-        return this.$currentUserName === name
-          ? { name: 'account.summary' }
-          : {
-            name: 'UserDetails',
-            params: { account_name: name }
-          };
-      }
-    }
+    mixins: [usersList]
   };
 </script>

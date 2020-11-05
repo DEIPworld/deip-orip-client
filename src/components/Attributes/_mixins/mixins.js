@@ -1,6 +1,5 @@
 import { tenantAttributes } from '@/mixins/platformAttributes';
 import { pascalCase } from 'change-case';
-import { commonProps } from '@/variables/props';
 
 const componentTypeRender = {
   name: 'componentTypeRender',
@@ -56,8 +55,14 @@ export const attributeViewTypeComponent = {
   mixins: [componentTypeRender],
 
   props: {
-    ...commonProps.attribute,
-    ...commonProps.viewType
+    attribute: {
+      type: Object,
+      default: () => ({})
+    },
+    viewType: {
+      type: String,
+      default: undefined
+    }
   },
 
   computed: {

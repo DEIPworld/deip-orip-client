@@ -17,7 +17,7 @@ export const componentViewType = {
         return requestedView;
       }
 
-      throw new Error('Can`t find default view component');
+      throw new Error(`Can't find ${this.viewType} view component`);
     }
   }
 };

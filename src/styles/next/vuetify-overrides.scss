@@ -62,6 +62,10 @@
     @include tools.visually-hidden();
   }
 
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
   .limit-access {
 
     pointer-events: none;

@@ -3,6 +3,7 @@
     :schema="layoutSchemaExtended"
     :project="$$projectExtended"
     tag="tr"
+    class="cursor-pointer"
     @click.native="goToProject()"
   >
     <template #itemRowActions>

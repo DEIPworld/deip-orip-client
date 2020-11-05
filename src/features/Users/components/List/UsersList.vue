@@ -14,20 +14,22 @@
 
 <script>
   import { componentStoreFactory } from '@/mixins/registerStore';
-  import { usersStore } from '@/components/Users/store';
+  import { usersListStore } from '@/features/Users/store';
   import { mapState } from 'vuex';
   import { wrapInArray } from 'vuetify/lib/util/helpers';
   import { componentViewType } from '@/mixins/componentViewType';
-  import UsersListDefault from '@/components/Users/List/_views/UsersListDefault';
+  import UsersListDefault from '@/features/Users/components/List/views/UsersListDefault';
+  import UsersListStack from '@/features/Users/components/List/views/UsersListStack';
 
   export default {
     name: 'UsersList',
 
     components: {
-      UsersListDefault
+      UsersListDefault,
+      UsersListStack
     },
 
-    mixins: [componentStoreFactory(usersStore), componentViewType],
+    mixins: [componentStoreFactory(usersListStore), componentViewType],
 
     props: {
       users: {

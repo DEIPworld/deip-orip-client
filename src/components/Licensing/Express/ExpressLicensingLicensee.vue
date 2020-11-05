@@ -1,6 +1,10 @@
 <template>
   <d-stack :gap="16">
-    <users-list-stack v-if="users.length" :users="users" />
+    <users-list
+      v-if="users.length"
+      :users="users"
+      view-type="stack"
+    />
     <d-dot-list :items="list" />
   </d-stack>
 </template>
@@ -8,12 +12,12 @@
 <script>
   import DDotList from '@/components/Deipify/DDotList/DDotList';
   import { assetsChore } from '@/mixins/chores';
-  import UsersListStack from '@/components/Users/UsersListStack';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import UsersList from '@/features/Users/components/List/UsersList';
 
   export default {
     name: 'ExpressLicensingLicensee',
-    components: { DStack, UsersListStack, DDotList },
+    components: { UsersList, DStack, DDotList },
     mixins: [
       assetsChore
     ],

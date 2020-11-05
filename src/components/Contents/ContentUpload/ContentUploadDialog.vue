@@ -54,10 +54,10 @@
               item-value="id"
             />
 
-            <attributes-user-set
+            <user-selector
               v-model="authors"
               :users="research.members"
-              :attribute="{title: $t('contents.contentUploadDialog.authorsAttribute')}"
+              :label="$t('contents.contentUploadDialog.authorsAttribute')"
               multiple
               class="mb-4"
             />
@@ -115,7 +115,7 @@
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentService } from '@deip/research-content-service';
   import { SearchService } from '@deip/search-service';
-  import AttributesUserSet from '@/components/Attributes/User/AttributesUserSet';
+  import UserSelector from '@/features/Users/components/Selector/UserSelector';
 
   const searchService = SearchService.getInstance();
   const accessService = AccessService.getInstance();
@@ -126,7 +126,7 @@
     name: 'ContentUploadDialog',
 
     components: {
-      AttributesUserSet,
+      UserSelector,
       vueDropzone
     },
 
