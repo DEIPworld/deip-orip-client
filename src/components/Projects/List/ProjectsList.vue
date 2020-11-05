@@ -146,9 +146,11 @@
     },
 
     created() {
-      this.isMultiView(() => {
+      if (this.multiView) {
         this.$ls.on(this.storageViewTypeKey, this.changeViewType, true);
-      });
+      } else {
+        [this.currentViewType] = this.internalViewTypes;
+      }
 
       if (this.withFilter) {
         const hasQuery = !!this.$route.query.rFilter;
@@ -162,9 +164,9 @@
     },
 
     beforeDestroy() {
-      this.isMultiView(() => {
+      if (this.multiView) {
         this.$ls.on(this.storageViewTypeKey, this.changeViewType, true);
-      });
+      }
     },
 
     methods: {
@@ -216,12 +218,6 @@
 
       changeViewType(viewType) {
         this.currentViewType = viewType || this.internalViewTypes[0];
-      },
-
-      isMultiView(cb) {
-        if (this.multiView) {
-          cb();
-        }
       }
     }
   };
