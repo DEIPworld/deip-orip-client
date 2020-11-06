@@ -67,7 +67,8 @@ const actions = {
         return Promise.all(
           balances.map((b) => investmentsService.getAccountRevenueHistoryByAsset(
             b.owner,
-            b.asset_symbol
+            b.asset_symbol,
+            1
           ))
         );
       })
