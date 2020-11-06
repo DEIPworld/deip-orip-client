@@ -19,7 +19,7 @@
       </template>
       <template #item.myShare.amount="{ item }">
         <div class="text-body-1 white-space-nowrap">
-          {{ item.amount }}
+          {{ toAsset(item.amount) }}
         </div>
         <div class="text-body-2 text--secondary">
           {{ sharePercent(item) }} %
