@@ -9,7 +9,7 @@
       :hide-default-footer="balances.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
-      item-key="security_token_external_id"
+      item-key="tokenized_research"
       disable-sort
       show-expand
       :expanded.sync="expanded"
@@ -18,7 +18,7 @@
         <span class="text-body-1">{{ item.research.title }}</span>
       </template>
       <template #item.myShare.amount="{ item }">
-        <div class="text-body-1">
+        <div class="text-body-1 white-space-nowrap">
           {{ item.amount }}
         </div>
         <div class="text-body-2 text--secondary">
@@ -26,33 +26,25 @@
         </div>
       </template>
       <template #item.group.account.balances="{ item }">
-        <span class="text-body-1">
+        <span class="text-body-1 white-space-nowrap">
           {{ toAsset(tokensPrice(item)) }}
         </span>
       </template>
       <template #item.revenueHistory="{ item }">
-        <div class="text-body-1 mt-4">
+        <div class="text-body-1 mt-4 white-space-nowrap">
           {{ toAsset(totalRevenue(item.revenueHistory)) }}
         </div>
-        <div class="text-body-2 text--secondary mb-4">
+        <div class="text-body-2 text--secondary mb-4 white-space-nowrap">
           {{ toAsset(revenuePerToken(item)) }} per token
         </div>
       </template>
       <template #item.actions="{ item }">
-        <v-btn
-          outlined
-          small
-          max-height="30"
-          max-width="95"
-          class="text-caption"
-          color="primary"
-          @click="openSendResearchTokensDialog(item)"
-        >
-          <v-icon left>
-            mdi-bank-transfer
-          </v-icon>
-          Transfer
-        </v-btn>
+        <transfer-action
+          :all-accounts="allAccounts"
+          :transfer="{
+            ...item, balances, type: 'share'
+          }"
+        />
       </template>
       <template #expanded-item="{ item, headers }">
         <td :colspan="headers.length" class="pa-0">
@@ -74,123 +66,16 @@
         </td>
       </template>
     </v-data-table>
-    <d-dialog
-      v-if="$ready"
-      v-model="sendResearchTokensDialog.isOpened"
-      :disabled="sendResearchTokensDialog.isSending"
-      :loading="sendResearchTokensDialog.isSending"
-      title="Transfer asset"
-      max-width="570px"
-      :confirm-button-title="$t('userWallet.sendResearchTokensDialog.submitBtn')"
-      :cancel-button-title="$t('userWallet.cancel')"
-      @click:confirm="sendResearchTokens()"
-    >
-      <v-form
-        ref="sendResearchTokensForm"
-        v-model="sendResearchTokensDialog.form.valid"
-      >
-        <v-select
-          v-model="sendResearchTokensDialog.form.account"
-          label="Asset"
-          :items="balances"
-          outlined
-          return-object
-          item-text="research.title"
-          item-value="research.external_id"
-          :menu-props="{
-            maxWidth: 525
-          }"
-        />
-        <v-text-field
-          v-model.number="sendResearchTokensDialog.form.amount"
-          label="Amount"
-          :rules="sendResearchTokensDialog.form.rules.amount"
-          outlined
-        />
-        <v-autocomplete
-          v-model="sendResearchTokensDialog.form.receiver"
-          :items="allAccounts"
-          :rules="sendResearchTokensDialog.form.rules.username"
-          append-icon="search"
-          :menu-props="{
-            overflowX: true,
-            maxWidth: 520
-          }"
-          label="Recipient"
-          item-text="fullName"
-          outlined
-          return-object
-        >
-          <template #selection="{ item }">
-            <d-box-item
-              :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
-                    48,
-                    48
-                  ) : $options.filters.avatarSrc(
-                    item.profile,
-                    48,
-                    48,
-                    false
-                  )
-              "
-              :size="24"
-            >
-              <v-clamp :max-lines="1" class="text-body-2">
-                {{ item.fullName }}
-              </v-clamp>
-            </d-box-item>
-          </template>
-          <template #item="{ item }">
-            <d-box-item
-              :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
-                    48,
-                    48
-                  ) : $options.filters.avatarSrc(
-                    item.profile,
-                    48,
-                    48,
-                    false
-                  )
-              "
-              :size="24"
-            >
-              <v-clamp :max-lines="1" class="text-body-2">
-                {{ item.fullName }}
-              </v-clamp>
-            </d-box-item>
-          </template>
-        </v-autocomplete>
-        <v-textarea
-          v-model="sendResearchTokensDialog.form.memo"
-          outlined
-          label="Notes"
-          no-resize
-          rows="8"
-        />
-      </v-form>
-    </d-dialog>
   </v-skeleton-loader>
 </template>
 
 <script>
-  import { mapActions, mapGetters } from 'vuex';
-  import moment from 'moment';
-  import deipRpc from '@deip/rpc-client';
+  import { mapGetters } from 'vuex';
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
+  import TransferAction from '@/components/Wallet/components/TransferAction';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import { InvestmentsService } from '@deip/investments-service';
-  import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
-
-  const investmentsService = InvestmentsService.getInstance();
-  const assetsService = AssetsService.getInstance();
 
   export default {
     name: 'SharesInfoTable',
@@ -198,7 +83,8 @@
     components: {
       DChartColumn,
       DDialog,
-      DBoxItem
+      DBoxItem,
+      TransferAction
     },
 
     mixins: [assetsChore],
@@ -211,20 +97,6 @@
     },
 
     data() {
-      const rules = {
-        username: (value) => {
-          if (!value) {
-            return 'Receiver username is required';
-          }
-
-          if (value === this.$currentUserName) {
-            return 'Username shouldn\'t be yours';
-          }
-
-          return true;
-        }
-      };
-
       return {
         expanded: [],
         tableHeader: [
@@ -256,33 +128,6 @@
             align: 'start elevetion-0'
           }
         ],
-        dialog: false,
-        expandedInvestmentIdx: -1,
-
-        sendResearchTokensDialog: {
-          form: {
-            sender: '',
-            receiver: {},
-            amount: 0,
-            valid: false,
-            memo: '',
-            account: {},
-            rules: {
-              username: [rules.username],
-              amount: [
-                (value) => {
-                  if (isNaN(value)) return 'Should be valid float number';
-                  if (!value || value < 0) return 'Should be valid positive float number';
-
-                  return true;
-                }
-              ]
-            }
-          },
-          maxAmount: 0,
-          isOpened: false,
-          isSending: false
-        }
       };
     },
     computed: {
@@ -297,11 +142,6 @@
     },
 
     methods: {
-      ...mapActions({
-        loadResearchTokens: 'Wallet/loadResearchTokens',
-        loadUserBalances: 'auth/loadBalances',
-        loadWallet: ('Wallet/loadWallet')
-      }),
       sharePercent(item) {
         const token = item.research.security_tokens.find(
           (rst) => { 
@@ -312,45 +152,6 @@
         const { amount: tokenValue } = this.$$fromAssetUnits(token);
         const { amount } = this.$$fromAssetUnits(item.amount);
         return amount * 100 / tokenValue;
-      },
-      openSendResearchTokensDialog(item) {
-        this.sendResearchTokensDialog.isOpened = true;
-
-        this.sendResearchTokensDialog.form.valid = false;
-        this.sendResearchTokensDialog.form.amount = '';
-        this.sendResearchTokensDialog.form.account = item;
-      },
-
-      sendResearchTokens() {
-        if (this.sendResearchTokensDialog.form.valid) {
-          this.sendResearchTokensDialog.isSending = true;
-
-          const { assetId, precision } = this.$$fromAssetUnits(this.sendResearchTokensDialog.form.account.amount);
-          const amountToTransfer = this.$$toAssetUnits(this.sendResearchTokensDialog.form.amount.toString() || '0', false, { symbol: assetId, fractionCount: precision });
-          
-          assetsService.transferAsset(
-            { privKey: this.$currentUser.privKey, username: this.$currentUserName },
-            {
-              from: this.sendResearchTokensDialog.form.account.owner,
-              to: this.sendResearchTokensDialog.form.receiver.account.name,
-              amount: amountToTransfer,
-              memo: this.sendResearchTokensDialog.form.memo,
-              extensions: []
-            }
-          )
-            .then(() => {
-              this.$notifier.showSuccess('Research tokens successfully sent');
-            })
-            .catch((err) => {
-              this.$notifier.showError('Transaction was failed');
-              console.error(err);
-            })
-            .finally(() => {
-              this.sendResearchTokensDialog.isSending = false;
-              this.sendResearchTokensDialog.isOpened = false;
-              return this.$store.dispatch('Wallet/loadBalances', this.$route.params.account);
-            });
-        }
       },
 
       mockPriceChange(rtId) {
@@ -380,7 +181,7 @@
 
       toAsset(val) {
         return this.$$toAssetUnits({
-          amount: val,
+          amount: `${val}`,
           assetId: 'USD'
         })
       }

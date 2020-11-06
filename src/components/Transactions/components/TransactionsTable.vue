@@ -70,7 +70,7 @@
             Expires in {{ item.expirationDate | timeLeft }}
           </div>
           <div v-else>
-            {{ item.created_at | dateFormat('DD MMM YYYY, hh:mm', true) }}
+            {{ item.created_at | dateFormat('DD MMM YYYY, HH:mm', true) }}
           </div>
         </div>
       </template>
@@ -123,11 +123,11 @@
             </div>
             <div>
               <span class="font-weight-medium"> Receipt: </span>
-              {{ item.created_at | dateFormat('DD MMM YYYY, hh:mm', true) }}
+              {{ item.created_at | dateFormat('DD MMM YYYY, HH:mm', true) }}
             </div>
             <div>
               <span class="font-weight-medium"> Expiration: </span>
-              {{ item.expirationDate | dateFormat('DD MMM YYYY, hh:mm', true) }}
+              {{ item.expirationDate | dateFormat('DD MMM YYYY, HH:mm', true) }}
             </div>
           </div>
           <div class="mb-4 font-weight-medium">
@@ -237,7 +237,7 @@
                             history.timestamp
                               ? $options.filters.dateFormat(
                                 history.timestamp,
-                                'DD MMM YYYY, hh:mm',
+                                'DD MMM YYYY, HH:mm',
                                 true
                               )
                               : '—'

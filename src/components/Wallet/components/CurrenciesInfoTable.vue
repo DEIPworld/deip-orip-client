@@ -24,21 +24,13 @@
       </template>
 
       <template v-slot:item.actions="{ item }">
-        <v-btn
-          outlined
-          max-height="30"
-          max-width="95"
-          small
+        <transfer-action
+          :all-accounts="allAccounts"
+          :transfer="{
+            ...item, balances: accountData.balances, type: 'currency'
+          }"
           :disabled="!isTransferAvailable"
-          color="primary"
-          class="text-caption my-4"
-          @click="openSendTokensDialog(item)"
-        >
-          <v-icon left>
-            mdi-bank-transfer
-          </v-icon>
-          Transfer
-        </v-btn>
+        />
       </template>
       <template #item.actionMenu="{ item }">
         <v-menu
@@ -202,141 +194,14 @@
         </v-col>
       </v-row>
     </d-dialog>
-
-    <d-dialog
-      v-model="sendTokensDialog.isOpened"
-      title="Transfer asset"
-      max-width="570px"
-      :disabled="sendTokensDialog.isSending"
-      :loading="sendTokensDialog.isSending"
-      :confirm-button-title="$t('userWallet.sendTokensDialog.submitBtn')"
-      :cancel-button-title="$t('userWallet.cancel')"
-      @click:confirm="sendTokens()"
-    >
-      <v-form
-        ref="sendTokensForm"
-        v-model="sendTokensDialog.form.valid"
-      >
-        <v-select
-          v-model="sendTokensDialog.form.asset"
-          label="Asset"
-          :items="accountData.balances"
-          outlined
-          return-object
-          item-text="asset_id"
-          item-value="asset_id"
-        >
-          <template #selection="{ item }">
-            <div class="d-flex justify-space-between w-100 align-center">
-              <div>
-                <v-icon left>
-                  {{ assetsIcons[assetsInfo[item.asset_id].string_symbol] || assetsIcons.default }}
-                </v-icon>
-                {{ assetsInfo[item.asset_id].string_symbol }}
-              </div>
-              <div>
-                {{ getAvailableCurrencyAmount(item.amount)
-                  | currency({symbol:'',fractionCount:assetsInfo[item.asset_id].precision}) }}
-              </div>
-            </div>
-          </template>
-          <template #item="{ item }">
-            <div class="d-flex justify-space-between w-100">
-              <div>
-                <v-icon left>
-                  {{ assetsIcons[assetsInfo[item.asset_id].string_symbol] || assetsIcons.default }}
-                </v-icon>
-                {{ assetsInfo[item.asset_id].string_symbol }}
-              </div>
-              <div>
-                {{ getAvailableCurrencyAmount(item.amount)
-                  | currency({symbol:'',fractionCount:assetsInfo[item.asset_id].precision}) }}
-              </div>
-            </div>
-          </template>
-        </v-select>
-        <v-text-field
-          v-model="sendTokensDialog.form.amount"
-          label="Amount"
-          :rules="sendTokensDialog.form.rules.amount"
-          outlined
-        />
-        <v-autocomplete
-          v-model="sendTokensDialog.form.receiver"
-          :items="allAccounts"
-          :rules="sendTokensDialog.form.rules.username"
-          append-icon="search"
-          :menu-props="{
-            overflowX: true,
-            maxWidth: 520
-          }"
-          label="Recipient"
-          item-text="fullName"
-          outlined
-          return-object
-        >
-          <template #selection="{ item }">
-            <d-box-item
-              :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
-                    24,
-                    24
-                  ) : $options.filters.avatarSrc(
-                    item.profile,
-                    24,
-                    24,
-                    false
-                  )
-              "
-              :size="24"
-            >
-              <v-clamp :max-lines="1" class="text-body-2">
-                {{ item.fullName }}
-              </v-clamp>
-            </d-box-item>
-          </template>
-          <template #item="{ item }">
-            <d-box-item
-              :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
-                    24,
-                    24
-                  ) : $options.filters.avatarSrc(
-                    item.profile,
-                    24,
-                    24,
-                    false
-                  )
-              "
-              :size="24"
-            >
-              <v-clamp :max-lines="1" class="text-body-2">
-                {{ item.fullName }}
-              </v-clamp>
-            </d-box-item>
-          </template>
-        </v-autocomplete>
-        <v-textarea
-          v-model="sendTokensDialog.form.memo"
-          outlined
-          label="Notes"
-          no-resize
-          rows="8"
-        />
-      </v-form>
-    </d-dialog>
   </div>
 </template>
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import TransferAction from '@/components/Wallet/components/TransferAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
 
@@ -348,7 +213,8 @@
 
     components: {
       DDialog,
-      DBoxItem
+      DBoxItem,
+      TransferAction
     },
 
     mixins: [assetsChore],
@@ -361,19 +227,6 @@
     },
 
     data() {
-      const rules = {
-        username: (value) => {
-          if (!value) {
-            return 'Receiver username is required';
-          }
-
-          if (value === this.$currentUserName) {
-            return 'Username shouldn\'t be yours';
-          }
-
-          return true;
-        }
-      };
       return {
         translations: {
           name: {
@@ -417,41 +270,6 @@
           USD: 'attach_money',
           EUR: 'euro',
           default: 'mdi-bitcoin'
-        },
-        sendTokensDialog: {
-          form: {
-            valid: false,
-            to: '',
-            amount: 0,
-            asset: {},
-            receiver: {},
-            memo: '',
-            rules: {
-              username: [rules.username],
-              amount: [
-                (value) => {
-                  const formatValidationResult = this.deipTokenValidator(value);
-                  if (formatValidationResult !== true) {
-                    return formatValidationResult;
-                  }
-                  if (value > this.sendTokensDialog.maxAmount) {
-                    return 'Amount is greater than balance';
-                  }
-
-                  return true;
-                }
-              ],
-              memo: [
-                (value) => !value || !!value && value.length <= this.sendTokensDialog.maxMemo || 'String should be shorter'
-              ]
-            }
-          },
-          maxAmount: 0,
-          precision: 0,
-          maxMemo: 2000,
-          isOpened: false,
-          isSending: false,
-          currency: {}
         },
         withdrawDialog: {
           amount: 0,
@@ -549,9 +367,7 @@
 
     methods: {
       ...mapActions({
-        loadResearchTokens: 'Wallet/loadResearchTokens',
-        loadUserBalances: 'auth/loadBalances',
-        loadWallet: ('Wallet/loadWallet')
+        loadUserBalances: 'auth/loadBalances'
       }),
       updateBalances() {
         if (this.$route.name === 'userWallet') {
@@ -569,18 +385,6 @@
       },
       getAvailableCurrencyAmount(balance) {
         return this.fromAssetsToFloat(balance);
-      },
-      openSendTokensDialog(balance) {
-        this.sendTokensDialog.isOpened = true;
-
-        this.sendTokensDialog.maxAmount = this.getAvailableCurrencyAmount(balance.amount);
-
-        this.sendTokensDialog.form.receiver = {};
-        this.sendTokensDialog.form.asset = balance;
-        this.sendTokensDialog.form.valid = false;
-        this.sendTokensDialog.form.to = '';
-        this.sendTokensDialog.form.amount = '';
-        this.sendTokensDialog.form.memo = '';
       },
       openDepositDialog(item) {
         this.depositDialog.owner = item.owner;
@@ -664,36 +468,7 @@
             return this.updateBalances();
           });
       },
-      sendTokens() {
-        this.sendTokensDialog.isSending = true;
 
-        return assetsService.transferAsset(
-          { privKey: this.$currentUser.privKey, username: this.accountData.account.name },
-          {
-            from: this.accountData.account.name,
-            to: this.sendTokensDialog.form.receiver.account.name,
-            amount: this.toAssetUnits(
-              this.sendTokensDialog.form.amount,
-              this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].precision,
-              this.assetsInfo[this.sendTokensDialog.form.asset.asset_id].string_symbol
-            ),
-            memo: this.sendTokensDialog.form.memo ? this.sendTokensDialog.form.memo : '',
-            extensions: []
-          }
-        )
-          .then(() => {
-            this.$notifier.showSuccess('Transfer was successfull');
-          })
-          .catch((err) => {
-            console.error(err);
-            this.$notifier.showError('Transaction was failed');
-          })
-          .finally(() => {
-            this.sendTokensDialog.isSending = false;
-            this.sendTokensDialog.isOpened = false;
-            return this.updateBalances();
-          });
-      },
       creditInfoChanged(values) {
         for (const key in values) {
           this.depositDialog.cardData[key] = values[key];

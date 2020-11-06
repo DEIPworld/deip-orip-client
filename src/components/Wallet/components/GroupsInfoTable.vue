@@ -155,7 +155,7 @@
 
       toAsset(val) {
         return this.$$toAssetUnits({
-          amount: val,
+          amount: `${val}`,
           assetId: 'USD'
         })
       }
