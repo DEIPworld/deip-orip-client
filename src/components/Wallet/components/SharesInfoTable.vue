@@ -21,7 +21,7 @@
         <div class="text-body-2 white-space-nowrap">
           {{ toAsset(item.amount) }}
         </div>
-        <div class="text-body-2 text--secondary">
+        <div class="text-caption text--secondary">
           {{ sharePercent(item) }} %
         </div>
       </template>
@@ -34,7 +34,7 @@
         <div class="text-body-2 mt-4 white-space-nowrap">
           {{ toAsset(totalRevenue(item.revenueHistory)) }}
         </div>
-        <div class="text-body-2 text--secondary mb-4 white-space-nowrap">
+        <div class="text-caption text--secondary mb-4 white-space-nowrap">
           {{ toAsset(revenuePerToken(item)) }} per token
         </div>
       </template>
