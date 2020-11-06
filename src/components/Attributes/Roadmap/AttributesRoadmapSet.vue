@@ -19,11 +19,11 @@
             />
           </v-col>
           <v-col cols="6">
-            <validation-provider
+            <!-- <validation-provider
               v-slot="{ errors }"
               name="dateSequence"
               :rules="{ date: getPrevNextDates(item) }"
-            >
+            > -->
               <d-input-date
                 v-model="item.eta"
                 label="Roadmap Deadline"
@@ -31,7 +31,7 @@
                 name="Amount"
                 autocomplete="off"
               />
-            </validation-provider>
+            <!-- </validation-provider> -->
           </v-col>
           <v-col cols="6">
             <d-asset-input
