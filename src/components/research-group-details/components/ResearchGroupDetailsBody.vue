@@ -39,6 +39,8 @@
 
     <v-divider class="my-12" />
 
+    <research-group-asset />
+
     <!-- ### START Research Group Proposals Section ### -->
     <div v-if="isResearchGroupMember && group.is_dao" id="proposals" class="my-12">
       <transition v-if="highlightProposalsSection" name="fade">
@@ -106,6 +108,7 @@
   import { UsersService } from '@deip/users-service';
   import MemberList from '@/components/MemberList/MemberList';
   import ResearchGroupRequests from '@/components/research-group-details/components/ResearchGroupRequests';
+  import ResearchGroupAsset from '@/components/research-group-details/components/ResearchGroupAsset';
   import ProjectsList from '@/components/Projects/List/ProjectsList';
 
   const researchGroupService = ResearchGroupService.getInstance();
@@ -116,7 +119,8 @@
     components: {
       ProjectsList,
       MemberList,
-      ResearchGroupRequests
+      ResearchGroupRequests,
+      ResearchGroupAsset
     },
     props: {},
     data() {

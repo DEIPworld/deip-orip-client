@@ -47,7 +47,11 @@
                 {{ item.asset_symbol }}
               </div>
               <div>
-                {{ $$fromAssetUnits(item.amount).amount | currency('') }}
+                {{
+                  $$toAssetUnits(item.amount, true, {
+                    symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                  })
+                }}
               </div>
             </div>
           </template>
@@ -57,7 +61,11 @@
                 {{ item.asset_symbol }}
               </div>
               <div>
-                {{ $$fromAssetUnits(item.amount).amount | currency('') }}
+                {{
+                  $$toAssetUnits(item.amount, true, {
+                    symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                  })
+                }}
               </div>
             </div>
           </template>
@@ -214,9 +222,6 @@
     },
 
     methods: {
-      ...mapActions({
-        loadUserBalances: 'auth/loadBalances'
-      }),
       openTransferDialog(item) {
         this.transferDialog.isOpened = true;
 

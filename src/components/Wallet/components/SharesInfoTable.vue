@@ -14,11 +14,11 @@
       show-expand
       :expanded.sync="expanded"
     >
-      <template #item.research.title="{ item }">
+      <!-- <template #item.research.title="{ item }">
         <span class="text-body-1">{{ item.research.title }}</span>
-      </template>
+      </template> -->
       <template #item.myShare.amount="{ item }">
-        <div class="text-body-1 white-space-nowrap">
+        <div class="text-body-2 white-space-nowrap">
           {{ toAsset(item.amount) }}
         </div>
         <div class="text-body-2 text--secondary">
@@ -26,12 +26,12 @@
         </div>
       </template>
       <template #item.group.account.balances="{ item }">
-        <span class="text-body-1 white-space-nowrap">
+        <div class="text-body-2 mt-4 white-space-nowrap">
           {{ toAsset(tokensPrice(item)) }}
-        </span>
+        </div>
       </template>
       <template #item.revenueHistory="{ item }">
-        <div class="text-body-1 mt-4 white-space-nowrap">
+        <div class="text-body-2 mt-4 white-space-nowrap">
           {{ toAsset(totalRevenue(item.revenueHistory)) }}
         </div>
         <div class="text-body-2 text--secondary mb-4 white-space-nowrap">
@@ -72,9 +72,8 @@
 <script>
   import { mapGetters } from 'vuex';
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import TransferAction from '@/components/Wallet/components/TransferAction';
-  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
+  import { isString } from '@/utils/helpers';
   import { assetsChore } from '@/mixins/chores';
 
   export default {
@@ -82,8 +81,6 @@
 
     components: {
       DChartColumn,
-      DDialog,
-      DBoxItem,
       TransferAction
     },
 
@@ -107,12 +104,14 @@
           {
             text: 'Tokens and share',
             value: 'myShare.amount',
-            align: 'end'
+            align: 'end',
+            class: 'white-space-nowrap'
           },
           {
             text: 'Tokens price',
             value: 'group.account.balances',
-            align: 'center'
+            align: 'end vertical-top',
+            class: 'pt-3'
           },
           {
             text: 'Total Revenue',
@@ -180,10 +179,19 @@
       },
 
       toAsset(val) {
+        if (isString(val)) {
+          const assetData = this.$$fromAssetUnits(`${val}`);
+
+          return this.$$toAssetUnits(
+            assetData.stringAmount,
+            true,
+            { symbol: assetData.assetId, fractionCount: assetData.precision }
+          );
+        }
         return this.$$toAssetUnits({
           amount: `${val}`,
           assetId: 'USD'
-        })
+        });
       }
     }
   };

@@ -8,7 +8,11 @@ import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { BlockchainService } from '@deip/blockchain-service';
+import { InvestmentsService } from '@deip/investments-service';
+import { AssetsService } from '@deip/assets-service';
 
+const assetsService = AssetsService.getInstance();
+const investmentsService = InvestmentsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -21,6 +25,8 @@ const state = {
   group: undefined,
   groupShares: [],
   members: [],
+  revenueHistory: [],
+  researchList: [],
   joinRequests: [],
   invites: [],
 
@@ -55,7 +61,10 @@ const getters = {
 
     return {
       ...researchGroup,
-      balances
+      balances,
+      researchList: state.researchList,
+      revenueHistory: state.revenueHistory,
+      accountSecurityTokenBalance: state.accountSecurityTokenBalance
     };
   },
   groupShares: (state) => state.groupShares,
@@ -104,16 +113,49 @@ const actions = {
         });
 
         const groupInvitesPromise = dispatch('loadGroupInvites', { researchGroupExternalId: state.group.external_id });
+        const researchGroupResearchList = dispatch('loadResearchGroupResearchList', state.group.external_id);
+        const researchGroupRevenueHistory = dispatch('loadResearchGroupRevenueHistory', state.group.external_id);
 
         return Promise.all([
           proposalsLoad,
           membersLoad,
           joinRequestsLoad,
-          groupInvitesPromise
+          groupInvitesPromise,
+          researchGroupResearchList,
+          researchGroupRevenueHistory
         ]);
       })
       .finally(() => {
         commit('SET_GROUP_DETAILS_LOADING_STATE', false);
+      });
+  },
+
+  loadResearchGroupResearchList({ commit }, externalId) {
+    return researchService.getResearchGroupResearchListing(externalId)
+      .then((researchList) => {
+        commit('setResearchList', researchList);
+        return Promise.all(researchList.reduce((arr, r) => {
+          r.security_tokens.forEach((rst) => arr.push(
+            assetsService.getAccountAssetBalance(externalId, rst.split(' ')[1])
+          ));
+          return arr;
+        }, []));
+      })
+      .then((accountSecurityTokenBalance) => {
+        commit('setAccountSecurityTokenBalance', accountSecurityTokenBalance);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+
+  loadResearchGroupRevenueHistory({ commit }, externalId) {
+    return investmentsService.getAccountRevenueHistory(externalId)
+      .then((revenueHistory) => {
+        commit('setRevenueHistory', revenueHistory);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   },
 
@@ -272,6 +314,18 @@ const mutations = {
 
   SET_GROUP_JOIN_REQUESTS_LOADING_STATE(state, value) {
     state.isLoadingResearchGroupJoinRequests = value;
+  },
+
+  setResearchList(state, researchList) {
+    state.researchList = researchList;
+  },
+
+  setRevenueHistory(state, revenueHistory) {
+    state.revenueHistory = revenueHistory;
+  },
+
+  setAccountSecurityTokenBalance(state, accountSecurityTokenBalance) {
+    state.accountSecurityTokenBalance = accountSecurityTokenBalance;
   }
 };
 

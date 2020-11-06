@@ -20,33 +20,27 @@
     >
       <template #item.name="{ item }">
         <d-box-item
-          :avatar="item.external_id | researchGroupLogoSrc(96, 96)"
-          :size="48"
+          :avatar="item.external_id | researchGroupLogoSrc(48, 48)"
+          :size="40"
           class="my-3"
         >
           <v-clamp
             autoresize
             :max-lines="1"
-            class="text-body-1"
+            class="text-body-2"
           >
             {{ item.name }}
           </v-clamp>
         </d-box-item>
       </template>
       <template #item.tokenizedActives="{ item }">
-        <span class="text-body-1">
-          {{ item.researchList ? countTokenizedResearches(item.researchList) : 0 }}
-        </span>
+        {{ item.researchList ? countTokenizedResearches(item.researchList) : 0 }}
       </template>
       <template #item.account.balances="{ item }">
-        <span class="text-body-1">
-          {{ toAsset(tokensPrice(item)) }}
-        </span>
+        {{ toAsset(tokensPrice(item)) }}
       </template>
       <template #item.revenueHistory="{ item }">
-        <span class="text-body-1">
-          {{ toAsset(item.revenueHistory ? `${totalRevenue(item.revenueHistory)}` : '0') }}
-        </span>
+        {{ toAsset(item.revenueHistory ? `${totalRevenue(item.revenueHistory)}` : '0') }}
       </template>
       <template #item.action>
         <v-icon>
@@ -79,15 +73,18 @@
           },
           {
             text: 'Assets',
-            value: 'tokenizedActives'
+            value: 'tokenizedActives',
+            align: 'end'
           },
           {
             text: 'Tokens price',
-            value: 'account.balances'
+            value: 'account.balances',
+            align: 'end'
           },
           {
             text: 'Total Revenue',
-            value: 'revenueHistory'
+            value: 'revenueHistory',
+            align: 'end'
           },
           {
             value: 'action'
@@ -112,44 +109,36 @@
         );
       },
       totalRevenue(arr) {
-        return arr.reduce((val, r) => (
-          val + r.reduce((v, { revenue }) => {
-            const { amount } = this.$$fromAssetUnits(revenue);
-            return v + amount;
-          }, 0)
+        return arr.reduce((val, { revenue }) => (
+          val + this.$$fromAssetUnits(revenue).amount
         ), 0);
       },
       tokensPrice(item) {
         const valuationFactor = 1.5;
-        
+
         const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => {
           const { amount } = this.$$fromAssetUnits(i.amount);
           return v + amount;
         }, 0);
 
-        const revHisTotalRevenue = item.revenueHistory.reduce((v, i) => {
-          const val = i.reduce((vv, ii) => {
-            const { amount } = this.$$fromAssetUnits(ii.revenue);
-            return vv + amount;
-          }, 0);
+        const revHisTotalRevenue = item.revenueHistory ? item.revenueHistory.reduce((v, i) => {
+          const val = this.$$fromAssetUnits(i.revenue).amount;
 
           const research = item.researchList ? item.researchList.find(
-            (r) => {
-              return r.external_id === i[0].security_token.tokenized_research;
-            }
+            (r) => r.external_id === i.security_token.tokenized_research
           ) : false;
 
           const securityTokenAmount = research ? research.security_tokens.find(
             (st) => {
               const { assetId } = this.$$fromAssetUnits(st);
-              return assetId === i[0].security_token.string_symbol;
+              return assetId === i.security_token.string_symbol;
             }
-          ) : "1 TOKEN";
+          ) : '1 TOKEN';
 
           const { amount } = this.$$fromAssetUnits(securityTokenAmount);
           v += val / amount;
           return v;
-        }, 0);
+        }, 0) : 0;
         return totalAmount * revHisTotalRevenue * valuationFactor;
       },
 
@@ -157,7 +146,7 @@
         return this.$$toAssetUnits({
           amount: `${val}`,
           assetId: 'USD'
-        })
+        });
       }
     }
   };

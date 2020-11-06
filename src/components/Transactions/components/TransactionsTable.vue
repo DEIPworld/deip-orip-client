@@ -46,12 +46,12 @@
             </d-box-item>
           </v-col>
           <v-col class="d-flex ml-2 align-center">
-            <v-avatar :size="32">
+            <v-avatar v-if="item.status !== txStatus.pending" :size="32">
               <v-img
                 :src="item.extendedDetails.requester.profile | avatarSrc(64, 64, false)"
               />
             </v-avatar>
-            <v-avatar :size="32" class="ml-n2 mr-3">
+            <v-avatar :size="32" class="mr-3" :class="{'ml-n2': item.status !== txStatus.pending}">
               <v-img
                 :src="item.extendedDetails.researchGroup.external_id | researchGroupLogoSrc(64, 64)"
               />
@@ -107,7 +107,7 @@
       </template>
       <template #item.status="{ item }">
         <div class="d-flex mt-4">
-          <v-icon :color="statusChipData.color[item.status]" size="16" class="mr-1">
+          <v-icon :color="statusChipData.color[item.status]" size="14" class="mr-1">
             {{ statusChipData.icon[item.status] }}
           </v-icon>
           {{ statusChipData.text[item.status] }}
@@ -198,7 +198,7 @@
                         <div class="d-flex black--text text-body-2">
                           <v-icon
                             :color="statusChipData.color[accountData.status]"
-                            size="16"
+                            size="14"
                             class="mr-1"
                           >
                             {{ statusChipData.icon[accountData.status] }}

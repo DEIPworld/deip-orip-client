@@ -51,7 +51,7 @@ const actions = {
     let balances = [];
     return assetsService.getAccountAssetsBalancesByOwner(account)
       .then((assetsBalances) => {
-        const securityTokens = assetsBalances.filter(b => !!b.tokenized_research)
+        const securityTokens = assetsBalances.filter((b) => !!b.tokenized_research);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
           // (b) => researchService.getResearch(b.tokenized_research)
@@ -115,7 +115,7 @@ const actions = {
         return assetsService.getAccountAssetsBalancesByOwner(groupData.external_id);
       })
       .then((assetsBalances) => {
-        const currencies = assetsBalances.filter(b => !b.tokenized_research);
+        const currencies = assetsBalances.filter((b) => !b.tokenized_research);
         groupData.balances = currencies;
         commit('setGroupData', groupData);
         return dispatch('loadAssetsInfo', groupData);
@@ -168,7 +168,7 @@ const actions = {
       })
       .then((revenueHistory) => {
         groupList.forEach((g) => {
-          const revenueHistoryList = revenueHistory.filter(
+          const revenueHistoryList = revenueHistory.find(
             (r) => r[0] && r[0].account === g.external_id
           );
           g.revenueHistory = revenueHistoryList;
@@ -179,9 +179,9 @@ const actions = {
               item.researchList.reduce((arr, r) => {
                 r.security_tokens.forEach((rst) => arr.push(rst.split(' ')[1]));
                 return arr;
-              }, []).forEach((symbol) => { 
-                finalArr.push(assetsService.getAccountAssetBalance(item.external_id, symbol))}
-            );
+              }, []).forEach((symbol) => {
+                finalArr.push(assetsService.getAccountAssetBalance(item.external_id, symbol));
+              });
             }
             return finalArr;
           }, []

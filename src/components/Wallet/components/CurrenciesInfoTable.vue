@@ -10,17 +10,15 @@
         <v-chip
           outlined
         >
-          <v-icon left color="primary">
+          <!-- <v-icon left color="primary">
             {{ assetsIcons[$$fromAssetUnits(item.amount).assetId] || assetsIcons.default }}
-          </v-icon>
+          </v-icon> -->
           {{ $$fromAssetUnits(item.amount).assetId }}
         </v-chip>
       </template>
 
       <template v-slot:item.amountValue="{ item }">
-        <span class="text-body-2">
-          {{ $$toAssetUnits($$fromAssetUnits(item.amount), true, {symbol: ''}) }}<br>
-        </span>
+        {{ $$toAssetUnits($$fromAssetUnits(item.amount), true, {symbol: ''}) }}
       </template>
 
       <template v-slot:item.actions="{ item }">
