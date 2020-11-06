@@ -146,14 +146,10 @@ const actions = {
   },
 
   loadAssets({ commit }) { // TODO: temp
-    return Promise.all([
-      assetsService.getAssetBySymbol('USD'),
-      assetsService.getAssetBySymbol('EUR'),
-      assetsService.getAssetBySymbol('TESTS'),
-      assetsService.getAssetBySymbol('NGT')
-    ]).then((res) => {
-      commit('storeAssets', res);
-    });
+    return assetsService.lookupAssets("", 10000)
+      .then((res) => {
+        commit('storeAssets', res);
+      })
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {

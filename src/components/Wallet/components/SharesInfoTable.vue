@@ -56,7 +56,7 @@
             :data="[['Date', 'Revenue'], ...item.revenueHistoryChartData]"
             :options="{
               chartArea: {width: '100%'},
-              vAxis: {format: '##$'},
+              vAxis: {format: '## $'},
               legend: 'none'
             }"
           />

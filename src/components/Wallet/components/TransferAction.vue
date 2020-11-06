@@ -95,12 +95,12 @@
                 item.account.is_research_group
                   ? $options.filters.researchGroupLogoSrc(
                     item.external_id,
-                    24,
-                    24
+                    48,
+                    48
                   ) : $options.filters.avatarSrc(
                     item.profile,
-                    24,
-                    24,
+                    48,
+                    48,
                     false
                   )
               "
