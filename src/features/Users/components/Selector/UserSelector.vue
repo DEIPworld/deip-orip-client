@@ -66,7 +66,6 @@
 <script>
   import Validatable from 'vuetify/lib/mixins/validatable';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
-  // import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   import { componentStoreFactory } from '@/mixins/registerStore';
   import { usersListStore } from '@/features/Users/store';

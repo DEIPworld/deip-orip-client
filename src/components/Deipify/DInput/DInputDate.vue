@@ -5,7 +5,7 @@
     offset-y
     min-width="290px"
   >
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-text-field
         ref="field"
         v-model="dateText"
@@ -13,18 +13,25 @@
         outlined
         hide-details="auto"
         append-icon="event"
-        v-bind="fieldProps"
-        :readonly="!fieldProps.disabled"
+        v-bind="internalFieldProps"
+
         @click:clear="$refs.field.blur()"
         v-on="on"
       />
     </template>
-    <v-date-picker v-model="internalValue" v-bind="pickerProps" @change="onChange" />
+    <v-date-picker
+      v-model="internalValue"
+      v-bind="pickerProps"
+      @change="onChange"
+    />
   </v-menu>
 </template>
 
 <script>
+  import Validatable from 'vuetify/lib/mixins/validatable';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
+
+  import { isArray } from '@/utils/helpers';
 
   export default {
     name: 'DInputDate',
@@ -41,7 +48,9 @@
       fieldProps: {
         type: Object,
         default: () => ({})
-      }
+      },
+
+      ...Validatable.options.props
     },
     data() {
       return {
@@ -49,19 +58,37 @@
       };
     },
     computed: {
+      validatableProps() {
+        return Object.keys(Validatable.options.props)
+          .reduce((props, key) => ({ ...props, ...(this[key] ? { [key]: this[key] } : {}) }), {});
+      },
+
+      internalFieldProps() {
+        return {
+          ...this.fieldProps,
+          ...this.validatableProps
+        };
+      },
+
+      internalPickerProps() {
+        return {
+          ...this.pickerProps
+        };
+      },
+
       dateText: {
         get() {
-          if (this.pickerProps.range && Array.isArray(this.internalValue)) {
-            return this.internalValue.join(' ~ ');
-          }
-          if (!this.pickerProps.range && Array.isArray(this.internalValue)) {
+          if (isArray(this.internalValue)) {
+            if (this.pickerProps.range) {
+              return this.internalValue.join(' ~ ');
+            }
             return this.internalValue.join(', ');
           }
           return this.internalValue;
         },
         set(val) {
-          if (Array.isArray(this.internalValue)) {
-            if (val === null) {
+          if (isArray(this.internalValue)) {
+            if (!val) {
               this.internalValue = [];
             } else {
               this.internalValue = val;

@@ -1,7 +1,6 @@
 import { ValidationProvider } from 'vee-validate';
 
 export const factory = (
-  lazyRules = 'required',
   requiredProp = 'required'
 ) => ({
   name: 'VeeFieldValidatable',
@@ -21,7 +20,7 @@ export const factory = (
 
   data() {
     return {
-      veeLazyRules: lazyRules
+      veeLazyRules: 'required'
     };
   },
 
