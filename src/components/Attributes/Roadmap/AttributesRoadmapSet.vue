@@ -14,6 +14,8 @@
               label="Goal"
               outlined
               hide-details="auto"
+              name="Roadmap Goal"
+              autocomplete="off"
             />
           </v-col>
           <v-col cols="6">
@@ -24,8 +26,10 @@
             >
               <d-input-date
                 v-model="item.eta"
-                label="Deadline"
+                label="Roadmap Deadline"
                 :error-messages="errors"
+                name="Amount"
+                autocomplete="off"
               />
             </validation-provider>
           </v-col>
@@ -42,14 +46,19 @@
               label="Budget purpose"
               outlined
               hide-details="auto"
+              name="Roadmap budget purpose"
+              autocomplete="off"
             />
           </v-col>
           <v-col cols="12">
             <v-textarea
               v-model="item.details"
               label="Milestone description"
+              name="Milestone description"
+              autocomplete="off"
               outlined
             />
+
           </v-col>
         </v-row>
 

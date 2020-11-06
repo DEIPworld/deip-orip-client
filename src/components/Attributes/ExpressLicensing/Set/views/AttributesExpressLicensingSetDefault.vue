@@ -28,6 +28,8 @@
                 outlined
                 hide-details="auto"
                 :error-messages="errors"
+                name="License name"
+                autocomplete="off"
               />
             </validation-provider>
           </v-col>

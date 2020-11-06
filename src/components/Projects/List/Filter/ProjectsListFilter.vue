@@ -12,6 +12,8 @@
         label="Search text..."
         outlined
         hide-details="auto"
+        name="Filter search term"
+        autocomplete="off"
       />
     </d-block-widget>
 

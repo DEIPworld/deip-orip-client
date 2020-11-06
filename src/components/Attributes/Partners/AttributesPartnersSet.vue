@@ -43,6 +43,8 @@
           <v-text-field
             v-model="partner.title"
             label="Partner's name"
+            name="Partner name"
+            autocomplete="off"
             outlined
           />
         </v-col>

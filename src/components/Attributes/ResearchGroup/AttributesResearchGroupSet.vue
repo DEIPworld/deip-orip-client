@@ -16,6 +16,8 @@
       :disabled="isPersonal"
       outlined
       v-bind="isMultipleProps"
+      name="Project team"
+      autocomplete="off"
     >
       <template #append-item>
         <div>

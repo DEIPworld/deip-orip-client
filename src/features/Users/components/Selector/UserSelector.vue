@@ -17,6 +17,9 @@
 
     outlined
 
+    :name="label"
+    autocomplete="off"
+
     v-bind="fieldProps"
   >
     <template #item="{ item }">

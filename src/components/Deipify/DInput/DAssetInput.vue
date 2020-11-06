@@ -18,6 +18,8 @@
           outlined
           hide-details="auto"
           :error-messages="errors"
+          name="Amount"
+          autocomplete="off"
         />
       </validation-provider>
     </v-col>
