@@ -40,7 +40,7 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import { VIEW_TYPES } from '@/variables';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DStack from '@/components/Deipify/DStack/DStack';

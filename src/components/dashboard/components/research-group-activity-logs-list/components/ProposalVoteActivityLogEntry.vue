@@ -30,7 +30,7 @@
             approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }
@@ -41,7 +41,7 @@
             approved fundraising campaign for "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }

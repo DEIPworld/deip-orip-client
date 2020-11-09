@@ -40,7 +40,7 @@
     },
     computed: {
       ...mapGetters({
-        research: 'Research/data'
+        research: 'Project/data'
       })
     },
     methods: {

@@ -1,5 +1,5 @@
 <template>
-  <d-block :title="attribute.title">
+  <d-block :title="$$label">
     <d-timeline>
       <d-timeline-item
         v-for="(item, index) of internalValue"

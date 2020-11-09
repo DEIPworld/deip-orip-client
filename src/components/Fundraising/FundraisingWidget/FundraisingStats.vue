@@ -45,7 +45,7 @@
           color="primary"
           class="mt-3"
           :to="{
-            name: 'research.fundraising',
+            name: 'project.fundraising',
             params: {
               researchExternalId: $route.params.researchExternalId
             }
@@ -64,7 +64,7 @@
           color="primary"
           class="mt-3"
           :to="{
-            name: 'research.createTokenSale',
+            name: 'project.createTokenSale',
             params: {
               researchExternalId: $route.params.researchExternalId
             }

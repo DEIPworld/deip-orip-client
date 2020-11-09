@@ -72,7 +72,7 @@
           <router-link
             class="a text-subtitle-1 text-truncate"
             :to="{
-              name: 'research.details',
+              name: 'project.details',
               params: {
                 researchExternalId: investment.research.external_id
               }
@@ -985,7 +985,7 @@
         this.sendTokensDialog.isSending = true;
 
         return assetsService.transferAsset(
-          { privKey: this.user.privKey, username: this.user.username }, 
+          { privKey: this.user.privKey, username: this.user.username },
           {
             from: this.user.username,
             to: this.sendTokensDialog.form.to,
@@ -1022,7 +1022,7 @@
           extensions
         )
           .then((data) => {
-            this.$notifier.showSuccess('Research tokens successfully sent');
+            this.$notifier.showSuccess('Project tokens successfully sent');
             this.closeSendResearchTokensDialog();
           })
           .catch((err) => {
@@ -1038,7 +1038,7 @@
       deposit() {
         this.depositDialog.isDepositing = true;
         return assetsService.transferAsset(
-          { privKey: "5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa", username: "kim" }, 
+          { privKey: "5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa", username: "kim" },
           {
             from: 'kim',
             to: this.user.username,
@@ -1064,7 +1064,7 @@
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
         return assetsService.transferAsset(
-          { privKey:  this.user.privKey, username: this.user.username }, 
+          { privKey:  this.user.privKey, username: this.user.username },
           {
             from: this.user.username,
             to: 'kim',

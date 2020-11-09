@@ -7,7 +7,7 @@
     <d-wysiwyg
       v-model="internalValue"
 
-      :label="attribute.title"
+      :label="$$label"
 
       :error-messages="errors"
       hide-details="auto"

@@ -4,7 +4,7 @@
       <router-link
         class="title link"
         :to="{
-          name: 'research.details',
+          name: 'project.details',
           params: {
             researchExternalId: research.external_id
           }

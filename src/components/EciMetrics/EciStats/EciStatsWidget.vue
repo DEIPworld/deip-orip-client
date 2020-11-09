@@ -128,9 +128,9 @@
           };
         }
 
-        if (this.$route.name === 'ResearchDetails') {
+        if (this.$route.name === 'ProjectDetails') {
           return {
-            name: 'ResearchExpertise',
+            name: 'ProjectExpertise',
             params: {
               group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
               research_permlink: decodeURIComponent(this.$route.params.research_permlink)
@@ -138,9 +138,9 @@
           };
         }
 
-        if (this.$route.name === 'research.details') {
+        if (this.$route.name === 'project.details') {
           return {
-            name: 'research.expertise',
+            name: 'project.expertise',
             params: {
               researchExternalId: this.$route.params.researchExternalId
             }

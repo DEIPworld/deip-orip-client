@@ -12,7 +12,7 @@
     <user-details-employment />
     <!-- ### END User Profile Education\Employment Section ### -->
 
-    <!-- ### START User Profile Research Section ### -->
+    <!-- ### START User Profile Project Section ### -->
     <div v-if="!$route.name.includes('account')" class="user-research-groups-container spinner-container mb-4">
 
       <!-- TODO: hotfix -->
@@ -91,7 +91,7 @@
         </v-row>
       </div>
     </div>
-    <!-- ### END User Profile Research Section ### -->
+    <!-- ### END User Profile Project Section ### -->
   </div>
 </template>
 
@@ -102,7 +102,7 @@
   import UserDetailsEmployment from '@/components/UserDetails/components/UserDetailsEmployment';
   import UserDetailsProfileInfo from '@/components/UserDetails/components/UserDetailsProfileInfo';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
 
   export default {
     name: 'UserDetailsBody',

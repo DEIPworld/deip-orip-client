@@ -20,7 +20,7 @@
           Fundraising campaign for the "<router-link
             class="a"
             :to="{
-              name: 'research.details',
+              name: 'project.details',
               params: {
                 researchExternalId: log.metadata.research.external_id
               }
@@ -38,7 +38,7 @@
             scheduled fundraising campaign for the "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }
@@ -49,7 +49,7 @@
             proposed to schedule fundraising campaign for the "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }

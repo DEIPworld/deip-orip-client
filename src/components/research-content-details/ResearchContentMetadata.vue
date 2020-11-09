@@ -27,9 +27,9 @@
 
         <!--    <div class="c-mt-4">
                 <div class="legacy-row">
-                    <div class="bold width-7">Research</div>
+                    <div class="bold width-7">Project</div>
                     <div class="bold c-pl-4">
-                        <router-link class="a" :to="{ name: 'ResearchDetails', params: {
+                        <router-link class="a" :to="{ name: 'ProjectDetails', params: {
                             research_group_permlink: $route.params.research_group_permlink,
                             research_permlink: $route.params.research_permlink}}">
                             {{ contentMetadata.research.title }}

@@ -21,12 +21,12 @@ export const groupRouting = [{
       //   {
       //     name: 'group.details',
       //     path: '',
-      //     component: ResearchDetails
+      //     component: ProjectDetails
       //   },
       //   {
       //     name: 'group.expertise',
       //     path: 'expertise',
-      //     component: ResearchExpertise
+      //     component: ProjectExpertise
       //   }
       // ]
     },

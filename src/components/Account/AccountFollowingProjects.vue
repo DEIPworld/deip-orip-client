@@ -37,7 +37,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';

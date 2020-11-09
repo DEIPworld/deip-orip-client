@@ -6,7 +6,7 @@
   >
     <v-text-field
       v-model="internalValue"
-      :label="attribute.title"
+      :label="$$label"
 
       hide-details="auto"
       :error-messages="errors"

@@ -96,7 +96,7 @@
       </v-col>
     </d-form-block>
 
-    <d-form-block title="Research Group Tokens">
+    <d-form-block title="Project Group Tokens">
       <v-col cols="12">
 
       </v-col>

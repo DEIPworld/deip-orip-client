@@ -60,7 +60,7 @@
               :research-members="researchMembersList"
             />
 
-            <!-- START Research ContentDetails Reviews section -->
+            <!-- START Project ContentDetails Reviews section -->
             <div v-if="isPublished && contentReviewsList.length" class="py-6">
               <div id="reviews">
                 <div class="py-2 title">
@@ -396,8 +396,8 @@
                 .then((contentRef) => {
                   const isProposal = !this.research.research_group.is_personal;
                   researchContentService.createResearchContentViaOffchain(
-                    { privKey: this.user.privKey, username: this.user.username }, 
-                    false, 
+                    { privKey: this.user.privKey, username: this.user.username },
+                    false,
                     {
                       researchExternalId: this.research.external_id,
                       researchGroup: this.research.research_group.external_id,
@@ -424,7 +424,7 @@
                       this.proposeContent.isLoading = false;
                       setTimeout(() => {
                         this.$router.push({
-                          name: 'research.details',
+                          name: 'project.details',
                           params: {
                             researchExternalId: this.research.external_id
                           }

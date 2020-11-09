@@ -32,7 +32,7 @@
             material was accepted for the "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }
@@ -63,7 +63,7 @@
             material for the "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }
@@ -74,7 +74,7 @@
             proposed a new "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for the "<router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: log.metadata.research.external_id
                 }

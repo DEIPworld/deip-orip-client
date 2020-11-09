@@ -15,7 +15,7 @@
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
 
   export default {
     name: 'AccountPersonalProjects',

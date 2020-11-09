@@ -180,7 +180,7 @@
             rewardCoefficient: 4
           },
           {
-            contentType: 'Research proposal',
+            contentType: 'Project proposal',
             reviewCriteria: ['Technical quality', 'Methodology', 'Novelty'],
             rewardCoefficient: 7
           }

@@ -3,7 +3,7 @@ export default {
   titleBlock: {
     title: 'Tilte:',
     titleField: {
-      err: 'Research with the same name already exists'
+      err: 'Project with the same name already exists'
     }
   },
   descriptionBlock: {
@@ -14,7 +14,7 @@ export default {
     private: 'Private project',
     public: 'Public project'
   },
-  updateResearch: 'Update Research',
+  updateResearch: 'Update Project',
   updateInfo: 'Update Info',
   updateImg: 'Update image',
   back: 'Back to project',
@@ -28,7 +28,7 @@ export default {
     linkField: 'Link to a video presentation'
   },
   attributesBlock: {
-    title: 'Research attributes'
+    title: 'Project attributes'
   },
   partnersBlock: {
     title: 'Partners'
@@ -49,11 +49,11 @@ export default {
   errInfo: 'An error occurred during change info',
   successImg: 'Background image has been updated successfully ! Refresh the page please',
   errImg: 'Sorry, an error occurred while uploading background image, please try again later',
-  shouldHaveGoal: 'Research should have the primary Goal',
+  shouldHaveGoal: 'Project should have the primary Goal',
   requiredGoal: 'Step Goal is required',
-  shouldHaveBudget: 'Research should have the estimated budget',
+  shouldHaveBudget: 'Project should have the estimated budget',
   requiredBudget: 'Step budget is required',
-  shouldHavePurpose: 'Research should have the budget purpose',
+  shouldHavePurpose: 'Project should have the budget purpose',
   requiredPurpose: 'Step purpose is required',
   specifiedDeadline: 'Goal deadline should be specified',
   notPastdeadline: 'Goal deadline can not be in the Past'

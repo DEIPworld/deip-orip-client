@@ -10,8 +10,6 @@ import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 import { researchGroupStore } from '../components/research-group-details/store';
 import { rgWalletStore } from '../components/research-group-wallet/store';
-import { rdStore } from '../components/research-details/store';
-import { reStore } from '../components/research-edit/store';
 import { rcdStore } from '../components/research-content-details/store';
 import { radStore } from '../components/research-application-details/store';
 import { userWalletStore } from '../components/user-wallet/store';
@@ -44,8 +42,6 @@ export const store = new Vuex.Store({
 
     researchGroup: researchGroupStore,
     rgWallet: rgWalletStore,
-    rd: rdStore,
-    re: reStore,
     rcd: rcdStore,
     rad: radStore,
     userDetails: userDetailsStore,

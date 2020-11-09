@@ -96,7 +96,7 @@
             <router-link
               class="a"
               :to="{
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: proposal.extension.research.external_id
                 }
@@ -257,7 +257,7 @@
                 <span class="font-weight-bold">Research:</span>
                 <router-link
                   :to="{
-                    name: 'research.details',
+                    name: 'project.details',
                     params: {
                       researchExternalId: proposal.extension.research.external_id
                     }
@@ -343,7 +343,7 @@
                   <span class="font-weight-bold">Research:</span>
                   <router-link
                     :to="{
-                      name: 'research.details',
+                      name: 'project.details',
                       params: {
                         researchExternalId: proposal.extension.research.external_id
                       }

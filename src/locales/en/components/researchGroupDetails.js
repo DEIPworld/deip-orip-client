@@ -70,7 +70,7 @@ export default {
     updatePrMeta: 'Update project meta'
   },
   addMemberDialog: {
-    title: 'Invite user to Research Group',
+    title: 'Invite user to Project Group',
     findPlaceholder: 'Find future member',
     letterLabel: 'Invitation letter',
     create: 'Create proposal',
@@ -79,7 +79,7 @@ export default {
   },
   joinRequestDialog: {
     join: 'Join Request',
-    tokensLabel: 'Research Group Tokens',
+    tokensLabel: 'Project Group Tokens',
     submitBtn: 'Approve and create proposal',
     reject: 'Reject',
     successSend: 'Invite proposal for "{username}" has been created successfully !',

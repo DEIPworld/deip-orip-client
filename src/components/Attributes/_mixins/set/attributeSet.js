@@ -22,6 +22,10 @@ export const attributeSet = {
   },
 
   computed: {
+    $$label() {
+      return `${this.attribute.title}${!this.$$isRequired ? ' – optional' : ''}`;
+    },
+
     $$isRequired() {
       return this.attribute.isRequired;
     },

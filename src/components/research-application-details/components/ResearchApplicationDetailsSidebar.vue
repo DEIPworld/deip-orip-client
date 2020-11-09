@@ -4,7 +4,7 @@
       <router-link
         class="a title"
         :to="{
-          name: 'research.details',
+          name: 'project.details',
           params: {
             researchExternalId: research.external_id
           }
@@ -14,7 +14,7 @@
       </router-link>
     </div>
 
-    <!-- ### START Research Application Applicants Section ### -->
+    <!-- ### START Project Application Applicants Section ### -->
     <div class="c-mt-4">
       <div class="sidebar-fullwidth">
         <v-divider />
@@ -34,9 +34,9 @@
         </div>
       </div>
     </div>
-    <!-- ### END Research Application Applicants Section ### -->
+    <!-- ### END Project Application Applicants Section ### -->
 
-    <!-- ### START Research Applications Review Section ### -->
+    <!-- ### START Project Applications Review Section ### -->
     <div class="c-mt-4">
       <div class="sidebar-fullwidth">
         <v-divider />
@@ -74,7 +74,7 @@
         </v-btn>
       </div>
     </div>
-    <!-- ### END Research Applications Review Section ### -->
+    <!-- ### END Project Applications Review Section ### -->
   </div>
 </template>
 

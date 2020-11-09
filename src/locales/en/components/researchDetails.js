@@ -23,7 +23,7 @@ export default {
   createdCont: 'Created on platform content',
   uploadedCont: 'Uploaded content',
   sidebar: {
-    join: 'Join Research group',
+    join: 'Join Project group',
     letter: 'Provide a cover letter to your Join Request',
     letterField: 'Cover letter',
     send: 'Send',

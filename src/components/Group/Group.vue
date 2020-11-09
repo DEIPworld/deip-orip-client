@@ -4,7 +4,7 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  // import { researchStore } from '@/components/Research/store';
+  // import { researchStore } from '@/components/Project/store';
 
   export default {
     name: 'Research',

@@ -19,7 +19,7 @@
           <v-item
             v-for="(item, index) of roadmap"
             :key="`tba-${index}`"
-            #default="{ active, toggle }"
+            v-slot="{ active, toggle }"
           >
             <d-timeline-item
               :dot-size="active ? 24 : 18"
@@ -30,18 +30,21 @@
               :bottom-line-color="`linear-gradient(to bottom, ${colors[index]}, ${colors[index + 1]})`"
               @click="toggle"
             >
-              <div class="text-body-2 font-weight-medium text-uppercase">
-                {{ item.date }}
-              </div>
+              <d-stack gap="4" class="pb-4">
+                <div v-if="item.date" class="text-body-2 font-weight-medium text-uppercase">
+                  {{ item.date }}
+                </div>
 
-              <div class="text-caption font-weight-medium mt-1">
-                {{ item.label }}
-              </div>
+                <div class="text-caption font-weight-medium">
+                  {{ item.label }}
+                </div>
 
-              <div class="text-caption text--secondary mt-1 pb-4">
-                {{ item.budget }}
-                {{ item.purpose }}
-              </div>
+                <div class="text-caption text--secondary">
+                  {{ item.budget }}
+                  {{ item.purpose }}
+                </div>
+              </d-stack>
+
             </d-timeline-item>
           </v-item>
         </v-item-group>
@@ -58,11 +61,13 @@
   import { chartGradient } from '@/plugins/charts';
   import { isString } from '@/utils/helpers';
   import { assetsChore } from '@/mixins/chores';
+  import DStack from '@/components/Deipify/DStack/DStack';
 
   export default {
     name: 'AttributesRoadmapRead',
 
     components: {
+      DStack,
       DTimelineItem,
       DTimeline
     },
@@ -83,10 +88,10 @@
       roadmap() {
         const roadmap = this.attribute.value.map((milestone, i) => ({
           id: i + 1,
-          date: moment
+          date: milestone.eta ? moment
             .utc(milestone.eta)
             .local()
-            .format('MMM DD, YYYY'),
+            .format('MMM DD, YYYY') : null,
           label: milestone.goal,
           description: milestone.details,
           // for old string-budgets

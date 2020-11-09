@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import { projectItem } from '@/components/Projects/List/mixins';
+  import { projectItem } from '@/features/Projects/components/List/mixins';
 
   export default {
     name: 'AdminProjectsItemRow',
@@ -48,7 +48,7 @@
     methods: {
       goToResearch() {
         this.$router.push({
-          name: 'research.details',
+          name: 'project.details',
           params: {
             researchExternalId: this.researchExtended.external_id
           }

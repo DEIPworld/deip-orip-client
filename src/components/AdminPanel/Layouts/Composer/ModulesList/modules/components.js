@@ -1,7 +1,5 @@
 import {
-  extendModuleObject,
-  setAs,
-  setComponentProps
+  extendModuleObject
 } from '@/components/AdminPanel/Layouts/Composer/ModulesList/modules/_utils';
 
 export const modules = [
@@ -10,7 +8,7 @@ export const modules = [
     list: [
       {
         name: 'Edit Button',
-        component: 'ResearchDetailsEditCta',
+        component: 'ProjectDetailsEditCta',
         icon: 'mdi-circle-edit-outline',
         props: {
           project: '@research'
@@ -18,7 +16,7 @@ export const modules = [
       },
       {
         name: 'Bookmark Button',
-        component: 'ResearchDetailsFollowCta',
+        component: 'ProjectDetailsFollowCta',
         icon: 'mdi-bookmark-multiple-outline',
         props: {
           project: '@research'

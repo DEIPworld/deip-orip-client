@@ -50,7 +50,7 @@
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import { VIEW_TYPES } from '@/variables';
 
   const tenantService = TenantService.getInstance();
@@ -98,7 +98,7 @@
     methods: {
       editProject(id) {
         this.$router.push({
-          name: 'research.edit',
+          name: 'project.edit',
           params: {
             researchExternalId: id
           }

@@ -41,7 +41,7 @@
 
     <research-group-asset />
 
-    <!-- ### START Research Group Proposals Section ### -->
+    <!-- ### START Project Group Proposals Section ### -->
     <div v-if="isResearchGroupMember && group.is_dao" id="proposals" class="my-12">
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <!-- ### END Research Group Proposals Section ### -->
+    <!-- ### END Project Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
       <template #title-append-after>
@@ -71,7 +71,7 @@
       </template>
     </member-list>
 
-    <!-- ### START Research Group Research List Section ### -->
+    <!-- ### START Project Group Project List Section ### -->
 
     <projects-list
       :team-id="group.external_id"
@@ -96,7 +96,7 @@
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
       @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
     />
-    <!-- ### END Research Group Research List Section ### -->
+    <!-- ### END Project Group Project List Section ### -->
   </div>
 </template>
 
@@ -109,7 +109,7 @@
   import MemberList from '@/components/MemberList/MemberList';
   import ResearchGroupRequests from '@/components/research-group-details/components/ResearchGroupRequests';
   import ResearchGroupAsset from '@/components/research-group-details/components/ResearchGroupAsset';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
 
   const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();

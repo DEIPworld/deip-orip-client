@@ -346,7 +346,7 @@
           data: [
             ['Distribution', ''],
             ...this.currentShares.map(({ research, share }) => [research.title, this.convertToPercent(share.amount) / totalShares * 100])
-            // ['Research title', 10]
+            // ['Project title', 10]
           ],
 
           options: {

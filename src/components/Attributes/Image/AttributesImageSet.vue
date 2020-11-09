@@ -2,7 +2,7 @@
   <d-input-image
     v-model="image"
 
-    :label="attribute.title"
+    :label="$$label"
 
     :aspect-ratio="aspectRatio"
     :initial-image="initialImage"
