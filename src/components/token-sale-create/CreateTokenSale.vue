@@ -43,7 +43,7 @@
 
         investmentsService.createResearchTokenSaleViaOffchain(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          false, 
+          false,
           {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,
@@ -66,7 +66,7 @@
           .finally(() => {
             setTimeout(() => {
               this.$router.push({
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   researchExternalId: this.research.external_id
                 }

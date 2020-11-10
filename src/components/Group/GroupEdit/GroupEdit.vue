@@ -107,7 +107,7 @@
           .catch((err) => {
             console.error(err);
             this.isLoading = false;
-            this.$notifier.showError('An error occurred while creating Research Group, please try again later');
+            this.$notifier.showError('An error occurred while creating Project Group, please try again later');
           });
       },
 

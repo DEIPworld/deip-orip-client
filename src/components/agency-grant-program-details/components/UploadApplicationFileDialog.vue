@@ -52,7 +52,7 @@
                 <router-link
                   class="a"
                   :to="{
-                    name: 'research.details',
+                    name: 'project.details',
                     params: {
                       researchExternalId: research.external_id
                     }

@@ -33,7 +33,7 @@
     methods: {
       clickNotification() {
         this.$router.push({
-          name: 'research.details',
+          name: 'project.details',
           params: {
             researchExternalId: this.notification.metadata.research.external_id
           }

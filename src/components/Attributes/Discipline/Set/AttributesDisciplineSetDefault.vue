@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <validation-provider
+    ref="validator"
+    v-slot="{ errors, validate }"
+    :name="attribute.title"
+    rules="required"
+  >
+    <input v-model="internalValue" type="hidden" />
+
     <v-menu
       v-model="open"
       :close-on-content-click="false"
@@ -7,60 +14,49 @@
       offset-overflow
       max-height="560"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <div>
-          <v-text-field
-            v-model="search"
+      <template #activator="{ on, attrs }">
+        <v-text-field
+          v-model="search"
 
-            :label="attribute.title"
+          :label="$$label"
 
-            hide-details="auto"
-            :error-messages="$refs.validator ? $refs.validator.errors : []"
+          hide-details="auto"
+          :error-messages="errors"
 
-            :disabled="!$$isEditable"
+          :disabled="!$$isEditable"
 
-            outlined
+          outlined
 
-            v-bind="attrs"
-            v-on="on"
-          />
-        </div>
+          v-bind="attrs"
+          v-on="on"
+        />
       </template>
 
       <v-sheet>
-        <validation-provider
-          ref="validator"
-          v-slot="{ errors, validate }"
-          :detect-input="false"
-          :name="attribute.title"
-          rules="required"
-        >
-          <v-treeview
-            :value="internalValue"
-            :active="internalValue"
+        <v-treeview
+          :value="internalValue"
+          :active="internalValue"
 
-            hoverable
+          hoverable
 
-            selectable
-            selection-type="independent"
+          selectable
+          selection-type="independent"
 
-            activatable
-            multiple-active
+          activatable
+          multiple-active
 
-            :items="disciplinesTree"
-            item-key="id"
-            item-text="label"
+          :items="disciplinesTree"
+          item-key="id"
+          item-text="label"
 
-            :search="search"
+          :search="search"
 
-            class="py-2"
-            :class="{'v-treeview--without-children': withoutAnyChildren}"
+          class="py-2"
+          :class="{'v-treeview--without-children': withoutAnyChildren}"
 
-            @input="onInput($event); validate($event);"
-            @update:active="onInput"
-          />
-
-        </validation-provider>
+          @input="onInput($event); validate($event);"
+          @update:active="onInput"
+        />
       </v-sheet>
     </v-menu>
     <div
@@ -87,7 +83,7 @@
         </v-btn>
       </v-chip>
     </div>
-  </div>
+  </validation-provider>
 </template>
 
 <script>
@@ -96,21 +92,18 @@
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
 
   import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
-  import { arrayedModel } from '@/mixins/extendModel';
 
   import { extend } from 'vee-validate';
-  import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   extend('required', {
     validate(value) {
-      return !!value.length;
+      return value && !!value.length;
     },
     message: '{_field_} is required'
   });
 
   export default {
     name: 'AttributesDisciplineSetDefault',
-    components: { DAutocomplete },
     mixins: [attributeSet, attributeSetForceArray],
     data() {
       return {
@@ -143,6 +136,7 @@
           }
           return Object.values(obj);
         }
+
         return transform(disciplineTreeService.disciplineTree.children);
       },
 
@@ -188,15 +182,15 @@
           return lhsi > rhsi ? 1 : lhsi < rhsi ? -1 : 0;
         });
         return sorted;
-      },
+      }
     },
 
     methods: {
       onInput(value, validate) {
         const removed = this.oldValue.length > value.length;
         const changedId = (removed
-          ? arrayDiff(value, this.oldValue)
-          : arrayDiff(this.oldValue, value)
+            ? arrayDiff(value, this.oldValue)
+            : arrayDiff(this.oldValue, value)
         )[0];
 
         if (removed) {

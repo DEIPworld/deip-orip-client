@@ -31,7 +31,7 @@
       return {
         contributionTypeNameMap: {
           [EXPERTISE_CONTRIBUTION_TYPE.UNKNOWN]: 'Graduation',
-          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Research',
+          [EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION]: 'Project',
           [EXPERTISE_CONTRIBUTION_TYPE.REVIEW]: 'Review',
           [EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT]: 'Review support'
         }

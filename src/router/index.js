@@ -23,14 +23,9 @@ import GrantProgramAwardWithdrawalDetails
 
 import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
 import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
-import ResearchGroupWallet from '@/components/research-group-wallet/ResearchGroupWallet';
 import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings';
 
-// import ResearchFeed from '@/components/research-feed/ResearchFeed';
-import ResearchDetails from '@/components/research-details/ResearchDetails';
-import ResearchExpertise from '@/components/ResearchExpertise/ResearchExpertise';
-import ResearchDetailsPublic from '@/components/research-details/ResearchDetailsPublic';
-import ResearchEdit from '@/components/research-edit/ResearchEdit';
+
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
 import ResearchContentExpertise from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchApplicationDetails
@@ -43,8 +38,6 @@ import ResearchContentMetadata from '@/components/research-content-details/Resea
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview
   from '@/components/research-content-details/ResearchContentAddReview';
-import ResearchStartCreating from '@/components/ResearchCreate/ResearchStartCreating';
-import CreateNewResearch from '@/components/ResearchCreate/CreateNewResearch';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences
   from '@/components/research-content-details/ResearchContentReferences';
@@ -78,7 +71,7 @@ import { awaitStore } from '@/utils/helpers';
 import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
-import { researchRouting } from '@/components/Research/router';
+import { projectRouting } from '@/features/Projects/router';
 import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
@@ -252,64 +245,7 @@ const router = new Router({
   //   component: ResearchFeed
   // },
 
-  {
-    path: '/:research_group_permlink/research/:research_permlink',
-    name: 'ResearchDetails',
-    component: preliminaryDataLoader(ResearchDetails, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rd/loadResearchDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink)
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  },
 
-  {
-    path: '/:research_group_permlink/research/:research_permlink/expertise',
-    name: 'ResearchExpertise',
-    component: ResearchExpertise
-  },
-
-  {
-    path: '/:research_group_permlink/research-public/:research_permlink',
-    name: 'ResearchDetailsPublic',
-    component: preliminaryDataLoader(ResearchDetailsPublic, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rd/loadResearchDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink)
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
-    path: '/:research_group_permlink/edit-research/:research_permlink',
-    name: 'ResearchEdit',
-    component: preliminaryDataLoader(ResearchEdit, {
-      beforeEnter: (to, from, next) => {
-        if (store.getters['auth/user'].groups.find((item) => encodeURIComponent(item.permlink) == to.params.research_group_permlink)) {
-          const loadPagePromise = store.dispatch('re/loadResearchEditPage', {
-            group_permlink: decodeURIComponent(to.params.research_group_permlink),
-            research_permlink: decodeURIComponent(to.params.research_permlink)
-          });
-          loadPage(loadPagePromise, next);
-        } else {
-          next({
-            name: 'ResearchDetails',
-            params: {
-              research_group_permlink: to.params.research_group_permlink,
-              research_permlink: to.params.research_permlink
-            }
-          });
-        }
-      }
-    }),
-    meta: {
-      withoutHeader: true
-    }
-  },
 
   {
     path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
@@ -426,17 +362,6 @@ const router = new Router({
       }
     })
   }, {
-    path: '/create-research',
-    name: 'StartCreateResearch',
-    component: ResearchStartCreating
-  }, {
-    path: '/new-research',
-    name: 'CreateResearch',
-    component: CreateNewResearch,
-    meta: {
-      withoutHeader: true
-    }
-  }, {
     path: '/propose-research',
     name: 'CreateResearchProposal',
     component: ResearchRequestFormCreate,
@@ -451,7 +376,7 @@ const router = new Router({
 
     ...sandboxRouting,
 
-    ...researchRouting,
+    ...projectRouting,
     ...groupRouting,
 
     ...userDetailRouting,
@@ -593,11 +518,10 @@ router.beforeEach((to, from, next) => {
     'landing',
     'explore',
 
-    'ResearchDetailsPublic',
     'NoAccessPage',
     'FAQ',
     'UserApplicationAccepted',
-    'research.details'
+    'project.details'
   ];
 
   const loginPages = [

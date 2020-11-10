@@ -1,5 +1,5 @@
 <template>
-  <d-block :title="attribute.title">
+  <d-block :title="$$label">
     <d-timeline v-if="$ready">
       <d-timeline-item
         v-for="(item, index) of internalValue"
@@ -19,11 +19,11 @@
             />
           </v-col>
           <v-col cols="6">
-            <!-- <validation-provider
+            <validation-provider
               v-slot="{ errors }"
-              name="dateSequence"
-              :rules="{ date: getPrevNextDates(item) }"
-            > -->
+              name="Eta"
+              :rules="{ dateSequence: getPrevNextDates(item) }"
+            >
               <d-input-date
                 v-model="item.eta"
                 label="Roadmap Deadline"
@@ -31,7 +31,7 @@
                 name="Amount"
                 autocomplete="off"
               />
-            <!-- </validation-provider> -->
+            </validation-provider>
           </v-col>
           <v-col cols="6">
             <d-asset-input
@@ -79,7 +79,7 @@
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
-  import { attributeSet } from '@/components/Attributes/_mixins/';
+  import { attributeSet } from '@/components/Attributes/_mixins';
   import { arrayModelAddFactory } from '@/mixins/extendModel';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
   import { isString } from '@/utils/helpers';
@@ -150,10 +150,10 @@
           ...this.internalValue.map((step) => ({
             ...step,
             ...(
-                isString(step.budget)
-                  ? { budget: { amount: parseFloat(step.budget.replace(/^\D+/g, '')) } }
-                  : { budget: step.budget }
-              )
+              isString(step.budget)
+                ? { budget: { amount: parseFloat(step.budget.replace(/^\D+/g, '')) } }
+                : { budget: step.budget }
+            )
           }))
         ];
       }

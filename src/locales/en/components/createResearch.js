@@ -16,7 +16,7 @@ export default {
     add: 'Add title and description',
     titleField: {
       label: 'Title',
-      err: 'Research with the same name already exists'
+      err: 'Project with the same name already exists'
     },
     descriptionField: 'Description',
     linkField: 'Link to a video presentation',

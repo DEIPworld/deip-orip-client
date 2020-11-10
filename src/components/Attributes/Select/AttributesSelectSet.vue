@@ -7,7 +7,7 @@
     <d-autocomplete
       v-model="internalValue"
 
-      :label="attribute.title"
+      :label="$$label"
       :items="attribute.valueOptions"
 
       item-text="title"

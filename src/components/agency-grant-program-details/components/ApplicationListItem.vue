@@ -9,7 +9,7 @@
             class="text-subtitle-1"
             style="text-decoration: none"
             :to="{
-              name: 'research.details',
+              name: 'project.details',
               params: {
                 researchExternalId: application.research.external_id
               }

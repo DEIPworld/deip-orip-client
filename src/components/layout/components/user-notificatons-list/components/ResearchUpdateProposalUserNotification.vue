@@ -64,7 +64,7 @@
       clickNotification() {
         if (this.isAcceptedByQuorum || this.isAutoAccepted) {
           this.$router.push({
-            name: 'research.details',
+            name: 'project.details',
             params: {
               researchExternalId: this.notification.metadata.research.external_id
             }

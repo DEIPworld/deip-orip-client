@@ -9,7 +9,7 @@
 
     <d-autocomplete
       v-model="internalValue"
-      label="Select research group"
+      :label="$$label"
       :items="groups"
       item-text="name"
       item-value="external_id"

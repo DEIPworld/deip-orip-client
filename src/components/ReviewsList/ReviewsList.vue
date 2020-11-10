@@ -47,7 +47,7 @@
               class="a py-2"
               tag="div"
               :to="routeAccessCheck({
-                  name: 'research.content.details',
+                  name: 'project.content.details',
                   params: {
                     contentExternalId: review.researchContent.external_id,
                     researchExternalId: researchId,
@@ -176,7 +176,7 @@
       ...mapGetters({
         reviews: 'ResearchReviews/list',
         contents: 'ResearchContents/list', // temp
-        research: 'Research/data' // temp
+        research: 'Project/data' // temp
       }),
 
       internalReviews() {

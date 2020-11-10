@@ -83,7 +83,7 @@
       </div>
     </v-col>
     <v-col cols="12">
-      <!-- START Research ContentDetails Reviews section -->
+      <!-- START Project ContentDetails Reviews section -->
       <div class="c-pt-5 sidebar-fullwidth">
         <v-divider />
       </div>
@@ -122,7 +122,7 @@
           </div>
         </div>
       </div>
-      <!-- END Research ContentDetails Reviews section -->
+      <!-- END Project ContentDetails Reviews section -->
     </v-col>
   </v-row>
 </template>

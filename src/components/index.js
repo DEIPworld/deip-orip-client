@@ -4,7 +4,6 @@ import Vue from 'vue';
 
 import './layout/index';
 import './common/index';
-import './ResearchCreate/index';
 import './research-content-details/index';
 import './research-group-details/index';
 import './research-group-create/index';

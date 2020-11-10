@@ -92,7 +92,7 @@
   import AppLayout from '@/components/layout/components/Layout';
   import LayoutToolbar from '@/components/layout/components/LayoutToolbar';
   import LayoutSection from '@/components/layout/components/LayoutSection';
-  import ProjectsList from '@/components/Projects/List/ProjectsList';
+  import ProjectsList from '@/features/Projects/components/List/ProjectsList';
 
   export default {
     name: 'Dashboard',

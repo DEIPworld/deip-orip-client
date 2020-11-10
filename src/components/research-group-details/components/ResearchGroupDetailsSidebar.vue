@@ -41,14 +41,14 @@
       @onClose="closeHandleJoinRequestDialog"
     />
 
-    <!-- ### START Research Group Details Section ### -->
+    <!-- ### START Project Group Details Section ### -->
     <d-block-widget title="Group expertise tokens">
       <div v-for="(item, i) in groupExpertise" :key="i">
         <span class="font-weight-medium">{{ item.disciplineName }}</span>
         <span class="float-right">{{ item.value }}</span>
       </div>
     </d-block-widget>
-    <!-- ### END Research Group Details Section ### -->
+    <!-- ### END Project Group Details Section ### -->
 
     <d-block-widget v-if="isResearchGroupMember">
       <template #title>

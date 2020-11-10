@@ -9,7 +9,7 @@
       <router-link
         class="text-subtitle-1 half-bold investment-title"
         :to="{
-          name: 'research.details',
+          name: 'project.details',
           params: {
             researchExternalId: selectedInvestment.research.external_id
           }

@@ -25,9 +25,9 @@
           :to="routeAccessCheck({
             name: 'ResearchContentDetails',
             params: {
-              research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
+              research_group_permlink: $store.getters['Project/data'].researchGroup.permlink,
               content_permlink: item.permlink,
-              research_permlink: $store.getters['Research/data'].permlink,
+              research_permlink: $store.getters['Project/data'].permlink,
             }
           })"
         >
@@ -37,7 +37,7 @@
             v-if="$isLoggedIn"
             class="a"
             :to="routeAccessCheck({
-              name: 'research.content.details',
+              name: 'project.content.details',
               params: {
                 contentExternalId: item.external_id,
                 researchExternalId: $route.params.researchExternalId,
@@ -60,9 +60,9 @@
             :to="routeAccessCheck({
               name: 'ResearchContentReferences',
               params: {
-                research_group_permlink: $store.getters['Research/data'].researchGroup.permlink,
+                research_group_permlink: $store.getters['Project/data'].researchGroup.permlink,
                 content_permlink: item.permlink,
-                research_permlink: $store.getters['Research/data'].permlink,
+                research_permlink: $store.getters['Project/data'].permlink,
               }
             })"
           >

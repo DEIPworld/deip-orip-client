@@ -6,7 +6,7 @@
   >
     <user-selector
       v-model="internalValue"
-      :label="attribute.title"
+      :label="$$label"
       :error-messages="errors"
       :disabled="!$$isEditable"
       :multiple="attribute.isMultiple"

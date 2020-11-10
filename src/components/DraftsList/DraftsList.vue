@@ -84,7 +84,7 @@
     computed: {
       ...mapGetters({
         drafts: 'ResearchDrafts/list',
-        research: 'Research/data'
+        research: 'Project/data'
       })
     },
     created() {

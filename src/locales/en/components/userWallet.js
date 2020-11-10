@@ -40,7 +40,7 @@ export default {
     amountField: 'Amount'
   },
   sendResearchTokensDialog: {
-    transfer: 'Transfer Research Share',
+    transfer: 'Transfer Project Share',
     receiverField: 'Receiver',
     shareField: 'Share',
     submitBtn: 'Transfer'

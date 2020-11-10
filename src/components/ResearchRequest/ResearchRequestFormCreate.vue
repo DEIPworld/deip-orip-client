@@ -60,7 +60,7 @@
           .then((research) => {
             if (research) { // if proposal
               this.$router.push({
-                name: 'research.details',
+                name: 'project.details',
                 params: {
                   research_permlink: research.external_id
                 }
