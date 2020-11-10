@@ -18,7 +18,9 @@
   import { mapState } from 'vuex';
   import { wrapInArray } from 'vuetify/lib/util/helpers';
   import { componentViewType } from '@/mixins/componentViewType';
+
   import UsersListDefault from '@/features/Users/components/List/views/UsersListDefault';
+  import UsersListBrief from '@/features/Users/components/List/views/UsersListBrief';
   import UsersListStack from '@/features/Users/components/List/views/UsersListStack';
 
   export default {
@@ -26,6 +28,7 @@
 
     components: {
       UsersListDefault,
+      UsersListBrief,
       UsersListStack
     },
 

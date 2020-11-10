@@ -2,6 +2,7 @@
   <div>
     <users-list
       :users="attribute.value"
+      view-type="brief"
     >
       <template #item-avatar="{ user, avatar }">
         <v-badge

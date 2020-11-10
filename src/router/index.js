@@ -76,7 +76,7 @@ import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
 
-import { exploreRouter } from '@/components/Explore';
+import { exploreRouter } from '@/features/Explore/router';
 import { WalletRouting } from '@/components/Wallet/router';
 
 const accessService = AccessService.getInstance();
