@@ -16,7 +16,7 @@
       >
         <template #item.name="{ item }">
           <d-box-item
-            :avatar="item.external_id | researchGroupLogoSrc(48, 48)"
+            :avatar="item.external_id | researchGroupLogoSrc(80, 80)"
             :size="40"
             class="my-3"
           >

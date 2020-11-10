@@ -438,14 +438,14 @@
           {
             text: 'Programs',
             disabled: false,
-            href: `/#/${this.organizationProfile.permlink}/programs`
+            href: `/#/${this.organizationProfile.external_id}/programs`
           },
           // { text: this.program.area.abbreviation, disabled: true },
           // { text: this.program.subArea.abbreviation, disabled: true },
           {
             text: this.program.additional_info.funding_opportunity_title,
             disabled: false,
-            href: `/#/${this.organizationProfile.permlink}/programs/${this.program.funding_opportunity_number}`
+            href: `/#/${this.organizationProfile.external_id}/programs/${this.program.funding_opportunity_number}`
           },
           {
             text: 'Award Receivers',
@@ -671,7 +671,7 @@
             this.$notifier.showSuccess('Funding proposal has been created succesfully!');
             this.$router.push({
               name: 'GrantProgramsAwardsDashboard',
-              params: { agency: this.organizationProfile.permlink }
+              params: { agency: this.organizationProfile.external_id }
             });
           })
           .catch((err) => {

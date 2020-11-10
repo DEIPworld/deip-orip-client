@@ -134,7 +134,7 @@ const router = new Router({
     component: GrantProgramsAwardsDashboard,
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
-        permlink: decodeURIComponent(to.params.agency)
+        orgExternalId: to.params.agency
       });
       loadPage(loadPagePromise, next);
     }
@@ -168,7 +168,7 @@ const router = new Router({
     component: GrantPrograms,
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
-        organization: decodeURIComponent(to.params.agency),
+        orgExternalId: to.params.agency,
         areaCode: to.query.areaCode,
         subAreaCode: to.query.subAreaCode
       });
@@ -180,7 +180,7 @@ const router = new Router({
     component: GrantProgramDetails,
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
-        organization: decodeURIComponent(to.params.agency),
+        orgExternalId: to.params.agency,
         foaId: decodeURIComponent(to.params.foa)
       });
       loadPage(loadPagePromise, next);
@@ -191,7 +191,7 @@ const router = new Router({
     component: CreateGrantProgramAward,
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
-        organization: decodeURIComponent(to.params.agency),
+        orgExternalId: to.params.agency,
         foaId: decodeURIComponent(to.params.foa)
       });
       loadPage(loadPagePromise, next);
@@ -547,7 +547,7 @@ const router = new Router({
           }
           next({
             name: 'GrantProgramsAwardsDashboard',
-            params: { agency: tenant.account.permlink }
+            params: { agency: tenant.account.external_id }
           });
         } else {
           next({ name: 'landing' });

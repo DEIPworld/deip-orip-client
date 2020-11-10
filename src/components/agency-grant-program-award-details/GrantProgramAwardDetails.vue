@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="ma-0 pa-0 full-width full-height">
+  <v-container fluid class="ma-0 pa-5 full-width full-height">
     <v-card class="elevation-0">
       <v-row>
         <v-col cols="9" class="pa-6">
@@ -118,7 +118,7 @@
                 :to="{
                   name: 'GrantProgramDetails',
                   params: {
-                    agency: foa.organization.permlink,
+                    agency: foa.organization.external_id,
                     foa: foa.funding_opportunity_number
                   }
                 }"
@@ -213,9 +213,9 @@
         </v-col>
       </v-row>
 
-      <v-row v-if="subawardees.length" class="px-6 py-4">
+      <v-row v-if="subawardees.length" class="py-4">
         <v-col cols="12" class="py-4 text-h5">
-          Subawards
+          
         </v-col>
         <v-col cols="12">
           <v-data-table

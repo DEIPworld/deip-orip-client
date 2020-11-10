@@ -35,8 +35,8 @@ const getNodesByIdList = (idList) => idList.map((id) => getNodeById(id));
 
 const mapAreaToProgram = (program, researchAreas) => {
   // to do: prepare a better algo for the demo, must be revised in the future
-  program.disciplines = [program.target_discipline];
-
+  program.disciplines = program.target_disciplines;
+  
   const area = researchAreas.find((a) => a.subAreas.some((sa) => sa.disciplines.some((d) => program.disciplines.includes(d))));
   if (!area) {
     program.area = researchAreas[0];

@@ -105,10 +105,10 @@
             <span v-if="duplicate.status == applicationStatusMap.PENDING">
               There is a similar application in
             </span>
-            <span class="pr-1 pl-1">{{ duplicate.program.organization_name.toUpperCase() }}</span>
+            <span class="pr-1 pl-1">{{ duplicate.program.organizationExternalId }}</span>
             <span>
               <v-avatar size="30px">
-                <img :src="{ _id: duplicate.program.organization_name } | tenantLogoSrc(60, 60, false)">
+                <img :src="{ _id: duplicate.program.organizationExternalId } | tenantLogoSrc(60, 60, false)">
               </v-avatar>
             </span>
             <span class="text-caption grey--text">($ {{ fromAssetsToFloat(duplicate.total_amount) }} requested)</span>

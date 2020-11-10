@@ -62,7 +62,6 @@
               rules.withinAwardAvailableAmount
             ]"
             persistent-hint
-            append-icon="local_atm"
             :disabled="!awardee"
           />
 

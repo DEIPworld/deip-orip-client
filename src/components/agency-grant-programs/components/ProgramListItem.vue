@@ -6,7 +6,7 @@
     <v-row no-gutters class="pl-6 pb-2">
       <v-col cols="9">
         <div class="pl-6 pt-2">
-          <router-link class="a text-subtitle-1" :to="{ name: 'GrantProgramDetails', params: { agency: program.organization_name, foa: program.funding_opportunity_number }}">
+          <router-link class="a text-subtitle-1" :to="{ name: 'GrantProgramDetails', params: { agency: program.organizationExternalId, foa: program.funding_opportunity_number }}">
             {{ program.additional_info.funding_opportunity_title }}
           </router-link>
         </div>

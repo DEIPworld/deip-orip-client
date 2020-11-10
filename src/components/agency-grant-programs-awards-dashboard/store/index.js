@@ -177,30 +177,28 @@ const getters = {
 // actions
 const actions = {
 
-  loadAgencyAwardsDashboardPage({ commit, dispatch, state }, { permlink }) {
+  loadAgencyAwardsDashboardPage({ commit, dispatch, state }, { orgExternalId }) {
     commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
-    return researchGroupService.getResearchGroupByPermlink(permlink)
-      .then((currentOrganization) => {
-        commit('SET_CURRENT_ORGANIZATION', currentOrganization);
-
-        const awardsLoad = new Promise((resolve, reject) => {
-          dispatch('loadAwards', { organizationId: state.currentOrganization.id, notify: resolve });
-        });
-
-        const tokenStatsLoad = new Promise((resolve, reject) => {
-          dispatch('loadTokenStats', { organizationId: state.currentOrganization.id, notify: resolve });
-        });
-
-        return Promise.all([awardsLoad, tokenStatsLoad]);
+    return researchGroupService.getResearchGroup(orgExternalId)
+      .then((organization) => {
+        commit('SET_CURRENT_ORGANIZATION', organization);
+        return Promise.all([
+          dispatch('loadAwards', {})
+        ]);
+      })
+      .then(() => {
+        return Promise.all([
+          dispatch('loadTokenStats', {})
+        ]);
       })
       .finally(() => {
         commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', false);
       });
   },
 
-  loadAwards({ commit, dispatch, state }, { organizationId, notify }) {
+  loadAwards({ commit, dispatch, state }, { notify }) {
     // TODO: load awards for the current organization only
-    return grantsService.getFundingOpportunityAnnouncementsListing(1, 100)
+    return grantsService.getFundingOpportunityAnnouncementsListing(1, 10000)
       .then((awardsFoaList) => {
         commit('SET_AWARDS_FUNDING_OPPORTUNITIES_LIST', awardsFoaList);
 
@@ -243,16 +241,12 @@ const actions = {
       });
   },
 
-  loadTokenStats({ commit, dispatch, state }, { organizationId, notify }) {
-    // TODO: introduce specific token statistic object
-    const allOrganizationFundingOpportunities = [];
+  loadTokenStats({ commit, dispatch, state }, { notify }) {
+
+    const allOrganizationFundingOpportunities = [...state.awardsFoaList];
     const allOrganizationFundingOpportunitiesAwards = [];
 
-    return grantsService.getFundingOpportunityAnnouncementsByOrganization(organizationId)
-      .then((list) => {
-        allOrganizationFundingOpportunities.push(...list);
-        return Promise.all(allOrganizationFundingOpportunities.map((foa) => grantsService.getAwardsByFundingOpportunity(foa.funding_opportunity_number)));
-      })
+    return Promise.all(allOrganizationFundingOpportunities.map((foa) => grantsService.getAwardsByFundingOpportunity(foa.funding_opportunity_number)))
       .then((list) => {
         allOrganizationFundingOpportunitiesAwards.push(...[].concat.apply([], list));
 

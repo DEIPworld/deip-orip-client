@@ -59,7 +59,6 @@
         </template>
 
         <v-list
-          v-if="isDefaultToolbar"
           :dark="themeSettings.appBar.bar.dark"
           dense
         >
@@ -119,9 +118,6 @@
         themeSettings: 'layout/themeSettings'
       }),
       isLoggedIn() { return accessService.isLoggedIn(); }, // $isLoggedIn
-      isDefaultToolbar() {
-        return !this.isGrantsTransparencyDemo;
-      },
 
       mainMenu() {
         if (this.$isLoggedIn && !this.isGrantsTransparencyDemo) {
@@ -168,7 +164,7 @@
               label: this.$t('topMenu.dashboard'),
               to: {
                 name: 'GrantProgramsAwardsDashboard',
-                params: { agency: 'the-national-science-foundation' }
+                params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' }
               }
             },
             {
@@ -201,12 +197,9 @@
         if (this.isGrantsTransparencyDemo) {
           return [
             {
-              label: this.$t('topMenu.profile'),
-              to: { name: 'UserDetails', params: { account_name: user.username } }
-            },
-            {
-              label: this.$t('topMenu.accSettings'),
-              to: { name: 'AccountSettings' }
+              label: this.$t('topMenu.account'),
+              icon: 'person',
+              to: { name: 'account.summary' }
             },
             {
               label: this.$t('topMenu.createGrantProgram'),
@@ -214,7 +207,7 @@
             },
             {
               label: this.$t('topMenu.grantPrograms'),
-              to: { name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }
+              to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
             }
           ];
         }

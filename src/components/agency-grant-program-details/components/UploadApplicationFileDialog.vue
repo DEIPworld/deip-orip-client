@@ -398,7 +398,7 @@
         return value !== '' || 'Title field is required';
       },
       researchFilter(item, queryText, itemText) {
-        return item.disciplines.some((d) => d.id === this.program.target_discipline);
+        return item.disciplines.some((d) => this.program.target_disciplines.some(td => d.id == t.id));
       },
       close() {
         this.isLoading = false;

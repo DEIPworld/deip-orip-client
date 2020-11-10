@@ -35,11 +35,10 @@ const getters = {
 const actions = {
 
   // pages
-  loadGrantProgramsPage({ state, dispatch, commit }, { organization, areaCode, subAreaCode }) {
+  loadGrantProgramsPage({ state, dispatch, commit }, { orgExternalId, areaCode, subAreaCode }) {
     commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
 
-    return researchGroupService.getResearchGroupByPermlink(organization)
-      .then((org) => researchGroupService.getResearchGroup(org.external_id))
+    return researchGroupService.getResearchGroup(orgExternalId)
       .then((researchGroup) => {
         commit('SET_ORGANIZATION_PROFILE', researchGroup);
         const organizationProgramsLoad = new Promise((resolve, reject) => {
@@ -72,7 +71,7 @@ const actions = {
       .then((programs) => {
         const corePrograms = programs.map((item) => ({
           ...item,
-          organization_name: organization.permlink,
+          organizationExternalId: organization.external_id,
           abbreviation: organization.permlink,
           subAreaAbbreviation: organization.permlink
         }));

@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="ma-0 pa-0">
+  <v-container fluid class="ma-0 pa-5">
     <v-row>
-      <v-col cols="12" class="pb-6 pt-6 pl-6">
+      <v-col cols="12" class="pb-6 pt-6">
         <div class="text-h4">
           Payment # {{ withdrawal.paymentNumber }}
           <span class="ml-2 paymnet-current-status-box">
@@ -312,9 +312,6 @@
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="text-body-2 pt-1 pl-1">
-&nbsp;
-                      </div>
                       <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ record.blockInfo.signing_key }}
                       </div>
@@ -331,7 +328,7 @@
                   cols="12"
                   class="pt-2"
                 >
-                  <v-row>
+                  <v-row class="pt-4">
                     <v-col cols="2" class="tx-algo pa-1">
                       <div class="text-body-2 bold white--text text--darken-4 pt-1 pl-1 mb-1 signer">
                         {{ getWitnessOrg(witness.owner) }}
@@ -344,9 +341,6 @@
                       </div>
                     </v-col>
                     <v-col cols="10" class="tx-data pa-1">
-                      <div class="text-body-2 pt-1 pl-1">
-&nbsp;
-                      </div>
                       <div class="break-letter text-body-1 grey--text text--darken-1 pt-1 pl-2 pr-2 break-all">
                         {{ witness.signing_key }}
                       </div>

@@ -1,12 +1,11 @@
 <template>
-  <base-page-layout>
-    <template #toolbar>
+  <div class="pa-5">
+    <div>
       <div class="w-100">
         <v-breadcrumbs class="px-0 text-body-2" divider="/" :items="breadcrumbs" />
         <v-divider />
       </div>
-    </template>
-
+    </div>
     <v-card class="elevation-0">
       <v-card-text class="px-0">
         <v-row no-gutters>
@@ -154,7 +153,7 @@
         </v-card>
       </v-col>
     </v-row>
-  </base-page-layout>
+  </div>
 </template>
 
 <script>

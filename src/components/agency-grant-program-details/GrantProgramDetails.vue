@@ -170,7 +170,7 @@
                 :to="{
                   name: 'CreateGrantProgramAward',
                   params: {
-                    agency: decodeURIComponent(organizationProfile.permlink),
+                    agency: organizationProfile.external_id,
                     foa: decodeURIComponent(program.funding_opportunity_number)
                   }
                 }"
@@ -260,7 +260,7 @@
       breadcrumbs() {
         return [
           { text: this.organizationProfile.name, disabled: false, href: `/#/${this.organizationProfile.permlink}/group-details` },
-          { text: 'Programs', disabled: false, href: `/#/${this.organizationProfile.permlink}/programs` },
+          { text: 'Programs', disabled: false, href: `/#/${this.organizationProfile.external_id}/programs` },
           // { text: this.program.area.abbreviation, disabled: true },
           // { text: this.program.subArea.abbreviation, disabled: true },
           { text: this.program.additional_info.funding_opportunity_title, disabled: true }

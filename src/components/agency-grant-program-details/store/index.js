@@ -38,18 +38,13 @@ const getters = {
 
 // actions
 const actions = {
-  loadGrantProgramDetailsPage({ state, dispatch, commit }, { organization, foaId }) {
+  loadGrantProgramDetailsPage({ state, dispatch, commit }, { orgExternalId, foaId }) {
     commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-    return researchGroupService.getResearchGroupByPermlink(organization)
+    return researchGroupService.getResearchGroup(orgExternalId)
       .then((org) => researchGroupService.getResearchGroup(org.external_id))
       .then((organizationProfile) => {
         commit('SET_ORGANIZATION_PROFILE', organizationProfile);
-        const organizationProgramDetailsLoad = new Promise((resolve, reject) => {
-          dispatch('loadOrganizationProgramDetails', { foaId })
-            .then(() => {
-              dispatch('loadOrganizationProgramApplications', { notify: resolve });
-            });
-        });
+        const organizationProgramDetailsLoad = dispatch('loadOrganizationProgramDetails', { foaId });
         return Promise.all([organizationProgramDetailsLoad]);
       })
       .catch((err) => {
@@ -120,7 +115,7 @@ const actions = {
           application.research = researches[index];
           application.reviews = reviews[index];
           application.similarResearchApplications = otherResearchApplications[index]
-            .filter((a) => application.id != a.id && a.program.organization_name != state.program.organization_name
+            .filter((a) => application.id != a.id && a.program.organizationExternalId != state.program.organizationExternalId
               && a.application_hash.split(':')[0] == application.application_hash.split(':')[0]);
         });
         const groupPromises = researches.map((research) => deipRpc.api.getResearchGroupByPermlinkAsync(research.research_group.permlink));

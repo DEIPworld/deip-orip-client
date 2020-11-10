@@ -42,7 +42,7 @@
     <research-group-asset />
 
     <!-- ### START Research Group Proposals Section ### -->
-    <div v-if="isResearchGroupMember && group.is_dao" id="proposals" class="my-12">
+    <div v-if="isResearchGroupMember && !group.is_personal" id="proposals" class="my-12">
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
           <research-group-details-proposals :key="'group-proposals'" />
@@ -59,7 +59,7 @@
     <member-list namespace="memberDetails" :group="group" class="mb-12">
       <template #title-append-after>
         <v-btn
-          v-if="isResearchGroupMember && !group.is_personal"
+          v-if="isResearchGroupMember"
           color="primary"
           class="mt-4"
           outlined

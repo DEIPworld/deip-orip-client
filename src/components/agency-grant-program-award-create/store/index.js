@@ -31,9 +31,9 @@ const getters = {
 
 // actions
 const actions = {
-  loadProgramAwardProposalPage({ state, dispatch, commit }, { organization, foaId }) {
+  loadProgramAwardProposalPage({ state, dispatch, commit }, { orgExternalId, foaId }) {
     commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', true);
-    return deipRpc.api.getResearchGroupByPermlinkAsync(organization)
+    return researchGroupService.getResearchGroup(orgExternalId)
       .then((organizationProfile) => {
         commit('SET_ORGANIZATION_PROFILE', organizationProfile);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });

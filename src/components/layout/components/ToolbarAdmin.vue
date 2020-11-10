@@ -39,7 +39,6 @@
           </template>
 
           <v-list
-            v-if="isDefaultToolbar"
             dense
           >
             <v-list-item @click="signOut()">
@@ -61,7 +60,7 @@
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
               Create Grant Program
             </v-list-item>
-            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: 'the-national-science-foundation' } }">
+            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }">
               Grant Programs
             </v-list-item>
             <v-divider />
@@ -99,10 +98,7 @@
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); },
-      isDefaultToolbar() {
-        return !this.isGrantsTransparencyDemo;
-      }
+      isLoggedIn() { return accessService.isLoggedIn(); }
     },
 
     methods: {

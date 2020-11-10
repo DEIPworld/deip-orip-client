@@ -1,49 +1,37 @@
 <template>
-  <base-page-layout>
-    <template #header>
-      <layout-header light :muted="false">
-        <div class="text-h4">
-          Dashboard
-        </div>
-      </layout-header>
+  <div class="pa-5">
+    <div v-if="isGrantFinanceOfficer || isTreasuryCertifier" class="pa-12">
+      <v-row>
+        <v-col
+          v-for="(item, i) in tokenStat"
+          :key="`${i}-token-stat`"
+          :class="[{ 'delimiter': (i + 1) != tokenStat.length }]"
+        >
+          <v-card flat class="px-2 grey-background">
+            <v-list dense class="grey-background">
+              <v-list-item>
+                <v-list-item-content class="text-subtitle-1 grey--text bold">
+                  {{ item.text }}
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content class="text-h5 bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">
+                  {{ item.amount | currency }}
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content class="grey--text">
+                  <span class="text-body-2">
+                    NSF Grant Tokens
+                  </span>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-col>
+      </v-row>
       <v-divider />
-    </template>
-
-    <template #addons>
-      <div v-if="isGrantFinanceOfficer" class="pa-12">
-        <v-row>
-          <v-col
-            v-for="(item, i) in tokenStat"
-            :key="`${i}-token-stat`"
-            :class="[{ 'delimiter': (i + 1) != tokenStat.length }]"
-          >
-            <v-card flat class="px-2 grey-background">
-              <v-list dense class="grey-background">
-                <v-list-item>
-                  <v-list-item-content class="text-subtitle-1 grey--text bold">
-                    {{ item.text }}
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content class="text-h5 bold" :class="item.isGreen ? 'green--text text--darken-1': 'blue--text text--darken-1'">
-                    {{ item.amount | currency }}
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content class="grey--text">
-                    <span class="text-body-2">
-                      <v-icon class="text-subtitle-1">local_atm</v-icon>
-                      NSF Grant Tokens
-                    </span>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
-      <v-divider />
-    </template>
+    </div>
 
     <v-tabs
       v-model="tab"
@@ -106,7 +94,11 @@
                       </router-link>
                     </td>
                     <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer">
-                      <div><a href="#" class="a text-body-1">{{ item.organization.name }}</a></div>
+                      <div>
+                        <router-link class="a text-body-1" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink }}">
+                          {{ item.organization.name }}
+                        </router-link>
+                      </div>
                     </td>
                     <td><span class="text-body-1">{{ moment(new Date(item.foa.open_date)).format("MM/YY") }} - {{ moment(new Date(item.foa.close_date)).format("MM/YY") }}</span></td>
                     <td><span class="text-body-1">{{ item.totalAmount | currency }}</span></td>
@@ -385,7 +377,7 @@
         </v-row>
       </v-tab-item>
     </v-tabs-items>
-  </base-page-layout>
+  </div>
 </template>
 
 <script>
@@ -772,7 +764,6 @@
           .then(() => {
             const reload = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadAwards', {
-                organizationId: this.currentOrganization.id,
                 notify: resolve
               });
             });
@@ -809,7 +800,6 @@
           .then(() => {
             const reload = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadAwards', {
-                organizationId: this.currentOrganization.id,
                 notify: resolve
               });
             });
@@ -846,7 +836,6 @@
           .then(() => {
             const reload = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadAwards', {
-                organizationId: this.currentOrganization.id,
                 notify: resolve
               });
             });
@@ -883,14 +872,12 @@
           .then(() => {
             const reloadAwards = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadAwards', {
-                organizationId: this.currentOrganization.id,
                 notify: resolve
               });
             });
 
             const reloadTokenStats = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadTokenStats', {
-                organizationId: this.currentOrganization.id,
                 notify: resolve
               });
             });
