@@ -161,6 +161,10 @@
         if (this.$isLoggedIn && this.isGrantsTransparencyDemo) {
           return [
             {
+              label: this.$t('topMenu.explore'),
+              to: { name: 'explore' }
+            },
+            {
               label: this.$t('topMenu.dashboard'),
               to: {
                 name: 'GrantProgramsAwardsDashboard',
