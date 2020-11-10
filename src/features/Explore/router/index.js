@@ -1,4 +1,4 @@
-import Explore from '@/components/Explore/Explore';
+import Explore from '@/components/Explore/components/Explore';
 
 export const exploreRouter = [{
   path: '/explore',
