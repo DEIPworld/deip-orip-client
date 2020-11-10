@@ -1,5 +1,9 @@
 <template>
-  <d-block :title="$$label">
+  <d-block>
+    <template #title>
+      {{ attribute.title }}
+      <span v-if="!$$isRequired" class="text-body-2 text--secondary">(optional)</span>
+    </template>
     <d-timeline-item
       v-for="(partner, index) of internalValue"
       :key="`row-${index}`"

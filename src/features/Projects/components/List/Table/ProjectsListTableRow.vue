@@ -14,11 +14,11 @@
 </template>
 
 <script>
-  import { projectItem } from '@/features/Projects/mixins';
+  import { projectListItem } from '@/features/Projects/mixins';
 
   export default {
     name: 'ProjectsListTableRow',
-    mixins: [projectItem],
+    mixins: [projectListItem],
     props: {
       layoutKey: {
         type: String,

@@ -12,7 +12,7 @@
         :rules="required ? 'required|amount' : ''"
       >
         <v-text-field
-          v-model="assetModel.amount"
+          v-model="internalValue.amount"
           class="rounded-br-0 rounded-tr-0"
           :label="label"
           outlined
@@ -20,16 +20,18 @@
           :error-messages="errors"
           name="Amount"
           autocomplete="off"
+          @change="update()"
         />
       </validation-provider>
     </v-col>
     <v-col cols="4">
       <v-select
-        v-model="assetModel.assetId"
+        v-model="internalValue.assetId"
         class="rounded-bl-0 rounded-tl-0"
         :items="assetsList"
         :hide-details="true"
         outlined
+        @change="update()"
       />
     </v-col>
   </v-row>
@@ -37,6 +39,7 @@
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import { deepEqual } from 'vuetify/lib/util/helpers';
 
   import { assetsChore } from '@/mixins/chores';
   import { objectedModel } from '@/mixins/extendModel';
@@ -75,18 +78,19 @@
       }
     },
     data() {
+      const model = {
+        amount: undefined,
+        assetId: this.$env.ASSET_UNIT
+      };
+
       return {
-        assetModel: this.value
+        ...model,
+
+        internalLazyValue: this.value
           ? {
-            ...{
-                amount: undefined,
-                assetId: undefined
-              },
+            ...model,
             ...this.value
-          } : {
-            amount: undefined,
-            assetId: undefined
-          }
+          } : model
       };
     },
     computed: {
@@ -94,27 +98,16 @@
         return this.assets.map((ass) => ass.string_symbol);
       }
     },
-    watch: {
-      assetModel: {
-        deep: true,
-        handler(val) {
-          this.internalValue = {
-            ...this.internalValue,
-            ...{
-              amount: parseFloat(val.amount),
-              assetId: val.assetId
-            }
-          };
-        }
-      }
-    },
-    created() {
-      if (!this.assetModel.assetId) {
-        this.assetModel = {
-          ...this.assetModel,
-          ...{
-            assetId: this.$env.ASSET_UNIT
-          }
+    methods: {
+      update() {
+        const val = {
+          ...(this.amount ? { amount: parseFloat(this.internalLazyValue.amount) } : {}),
+          assetId: this.internalLazyValue.assetId
+        };
+
+        this.internalValue = {
+          ...this.internalValue,
+          ...val
         };
       }
     }

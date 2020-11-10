@@ -1,25 +1,22 @@
 <template>
   <div
     v-if="users.length"
-    class="d-flex"
+    :class="$style.host"
   >
-    <v-avatar
-      v-for="user of users"
+    <v-sheet
+      v-for="(user, index) of users"
       :key="user.profile.name"
-      color="white"
-      size="52"
-      style="border: 2px solid #fff"
-      class="mr-n2"
+      :class="$style.item"
+      :style="{zIndex: users.length - index}"
     >
       <router-link
         :to="userDetailsRoute(user.account.name)"
-        class="d-block"
       >
-        <v-avatar>
+        <v-avatar size="40">
           <v-img :src="user.profile | avatarSrc(64, 64, false)" />
         </v-avatar>
       </router-link>
-    </v-avatar>
+    </v-sheet>
   </div>
 </template>
 
@@ -31,3 +28,16 @@
     mixins: [usersList]
   };
 </script>
+
+<style lang="scss" module>
+  .host {
+    display: flex;
+  }
+
+  .item {
+    border-radius: 50%;
+    padding: 2px;
+    margin-right: -8px;
+  }
+
+</style>

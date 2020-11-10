@@ -11,13 +11,17 @@ export const dataReadyMixin = {
       },
       set(val) {
         this.$data.$lazyReady = val;
-        this.$emit('data-ready', val)
+        this.$emit('data-ready', val);
       }
     }
   },
   methods: {
-    $setReady(state = true) {
+    $setReady(state = true, cb) {
       this.$ready = state;
+
+      if (cb) {
+        this.$nextTick(() => { cb(); });
+      }
     }
   }
 };

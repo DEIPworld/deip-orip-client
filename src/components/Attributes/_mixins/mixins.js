@@ -1,4 +1,4 @@
-import { tenantAttributes } from '@/mixins/platformAttributes';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 import { pascalCase } from 'change-case';
 
 const componentTypeRender = {
@@ -27,7 +27,7 @@ const componentTypeRender = {
 };
 
 export const attributeTypeComponent = {
-  mixins: [tenantAttributes, componentTypeRender],
+  mixins: [attributesChore, componentTypeRender],
 
   computed: {
     attributeComponent() {
@@ -39,7 +39,7 @@ export const attributeTypeComponent = {
       } else if (this.attribute.type) {
         t = this.attribute.type;
       } else if (this.attribute.researchAttributeId) {
-        t = this.tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type;
+        t = this.$$tenantAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type;
       } else {
         throw new Error('Unknown attribute');
       }

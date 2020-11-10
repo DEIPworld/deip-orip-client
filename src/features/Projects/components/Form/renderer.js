@@ -8,7 +8,7 @@ import DraftsList from '@/components/DraftsList/DraftsList';
 import { tenantAttributesToObject } from '@/utils/helpers';
 
 export default {
-  name: 'ProjectEditRenderer',
+  name: 'ProjectFormRenderer',
   components: {
     AttributesSet,
 

@@ -23,7 +23,7 @@ export const attributeSet = {
 
   computed: {
     $$label() {
-      return `${this.attribute.title}${!this.$$isRequired ? ' – optional' : ''}`;
+      return `${this.attribute.title}${!this.$$isRequired ? ' (optional)' : ''}`;
     },
 
     $$isRequired() {

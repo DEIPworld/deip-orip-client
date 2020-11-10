@@ -1,340 +1,59 @@
 <template>
-  <d-layout-full-screen :title="title">
-<!--    <pre>{{JSON.stringify(offchainMeta, null ,2)}}</pre>-->
-    <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
-      <v-form v-if="$ready" :disabled="processing" @submit.prevent="handleSubmit(onSubmit)">
-        <research-edit-renderer
-          v-model="formModel"
-          :schema="layoutSchema"
-        />
-
-        <v-divider class="mt-8 mb-6" />
-        <div class="d-flex justify-end align-center">
-          <d-stack horizontal :gap="8">
-            <v-btn
-              text
-              color="primary"
-              :disabled="processing"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              type="submit"
-              color="primary"
-              :disabled="processing || !isChanged || invalid"
-              :loading="processing"
-            >
-              {{ formModel.externalId ? 'Update' : 'Create' }}
-            </v-btn>
-          </d-stack>
-        </div>
-      </v-form>
-    </validation-observer>
-  </d-layout-full-screen>
+  <project-form
+    title="Create technology"
+    :loading="loading"
+    @submit="createProject"
+  />
 </template>
 
 <script>
   import { ResearchService } from '@deip/research-service';
 
-  import DStack from '@/components/Deipify/DStack/DStack';
-  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
-  import { mapGetters } from 'vuex';
-  import {
-    compactResearchAttributes,
-    camelizeObjectKeys,
-    expandResearchAttributes,
-    isArray,
-    extendAttrModules,
-    extractFilesFromAttributes,
-    replaceFileWithName
-  } from '@/utils/helpers';
-  import { debounce } from 'vuetify/lib/util/helpers';
-
-  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { changeable } from '@/mixins/changeable';
-  import { researchStore } from '@/features/Projects/store/projectDetailsStore';
-
-  import { researchAttributes } from '@/mixins/platformAttributes';
-  import ResearchEditRenderer from '@/features/Projects/components/Create/renderer';
-  import { ATTR_TYPES } from '@/variables';
-
-  import { ValidationObserver } from 'vee-validate';
+  import { parseFormData } from '@/utils/helpers';
+  import ProjectForm from '@/features/Projects/components/Form/ProjectForm';
+  import { projectEditable } from '@/features/Projects/mixins';
 
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ProjectCreate',
-    components: {
-      DStack,
-      ResearchEditRenderer,
-      DLayoutFullScreen,
-
-      ValidationObserver
-    },
-    mixins: [
-      componentStoreFactoryOnce(researchStore, '$route.props.researchExternalId'),
-      researchAttributes,
-      changeable
-    ],
-    props: {
-      preset: {
-        type: Object,
-        default: () => ({})
-      },
-      title: {
-        type: String,
-        default: null
-      }
-    },
-    data() {
-      return {
-        processing: false,
-
-        formModel: {
-          researchRef: {
-            attributes: {}
-          }
-        },
-
-        isPermlinkVerifyed: true,
-
-        storeDraftDebounce: null,
-        enableDrafts: false // tmp
-      };
-    },
-    computed: {
-      ...mapGetters({
-        userGroups: 'auth/userGroups'
-      }),
-
-      layoutSchema() {
-        const schema = this.$tenantSettings.researchLayouts.projectEditForm.layout;
-
-        if (this.$route.params.researchExternalId) {
-          return extendAttrModules(
-            schema,
-            { attrs: { project: this.formModel } }
-          );
-        }
-
-        return schema;
-      },
-
-      userGroup() {
-        return this.$where(this.userGroups, { is_personal: true })[0];
-      },
-
-      isProposal() {
-        return this.onchainData.researchGroup !== null
-          && this.onchainData.researchGroup !== this.userGroup.external_id;
-      },
-
-      isChanged() {
-        return this.$$isChanged(this.formModel);
-      },
-
-      filesAttrs() {
-        return this.$where(
-          this.$tenantSettings.researchAttributes,
-          {
-            type: [ATTR_TYPES.IMAGE]
-          }
-        )
-          .map((attr) => attr._id);
-      },
-
-      attachedFiles() {
-        return extractFilesFromAttributes(this.formModel.researchRef.attributes);
-      },
-
-      onchainData() {
-        const onchainFields = this.$tenantSettings.researchAttributes
-          .filter((attr) => !!attr.blockchainFieldMeta)
-          .reduce((acc, attr) => {
-
-            // console.log(attr.title, attr._id, this.formModel.researchRef.attributes[attr._id])
-            const value = this.formModel.researchRef.attributes[attr._id];
-
-            if (attr.blockchainFieldMeta.isPartial) {
-              if (!value) return acc;
-              acc[attr.blockchainFieldMeta.field] = acc[attr.blockchainFieldMeta.field]
-                ? [...acc[attr.blockchainFieldMeta.field], ...(isArray(value) ? value : [value])]
-                : [...(isArray(value) ? value : [value])];
-            } else {
-              acc[attr.blockchainFieldMeta.field] = attr.isMultiple
-                ? isArray(value) ? value : [value]
-                : isArray(value) ? (value[0] || null) : (value || null);
-            }
-            return acc;
-          }, {});
-
-        return {
-          ...this.formModel,
-          ...camelizeObjectKeys(onchainFields)
-        };
-      },
-
-      offchainMeta() {
-        return {
-          attributes: compactResearchAttributes(
-            replaceFileWithName(this.formModel.researchRef.attributes)
-          )
-        };
-      },
-
-      formData() {
-        const formData = new FormData();
-
-        const offchainMeta = _.cloneDeep(this.offchainMeta);
-        const onchainData = _.cloneDeep(this.onchainData);
-
-        if (!onchainData.researchGroup) {
-          onchainData.creator = this.$currentUser.account.name;
-          onchainData.memo = this.$currentUser.account.memo_key;
-          onchainData.fee = this.toAssetUnits(0);
-        }
-
-        formData.append('onchainData', JSON.stringify(onchainData));
-        formData.append('offchainMeta', JSON.stringify(offchainMeta));
-
-        for (const file of this.attachedFiles) {
-          formData.append(...file);
-        }
-
-        return formData;
-      }
-    },
-
-    watch: {
-      formModel: {
-        deep: true,
-        handler() {
-          if (this.enableDrafts) this.storeDraftDebounce();
-        }
-      }
-    },
-    created() {
-      if (this.enableDrafts) {
-        this.storeDraftDebounce = debounce(this.storeDraft, 1000);
-      }
-
-      if (this.$route.params.researchExternalId) {
-        this.$store
-          .dispatch('Project/getResearchDetails', this.$route.params.researchExternalId)
-          .then(() => {
-            const clone = _.cloneDeep(this.$store.getters['Project/data']);
-            const transformed = {
-              ...clone,
-              ...{
-                researchRef: {
-                  attributes: expandResearchAttributes(clone.researchRef.attributes)
-                }
-              }
-            };
-
-            this.formModel = { ..._.cloneDeep(transformed) };
-
-            this.$setReady();
-
-            // this.$$storeCache(this.formModel);
-          });
-      } else {
-        this.$setReady();
-      }
-    },
+    components: { ProjectForm },
+    mixins: [projectEditable],
     methods: {
-      storeDraft() {
-        this.$ls.set('researchDraft', this.formModel, 1000 * 60 * 60);
-      },
-      readDraft() {},
-      clearDraft() {},
+      createProject(formData) {
+        this.loading = true;
 
-      verifyPermlink() {
-        if (this.onchainData.researchGroup) {
-          return researchService
-            .checkResearchExistenceByPermlink(
-              this.onchainData.researchGroup,
-              this.onchainData.title
-            )
-            .then((exists) => {
-              this.isPermlinkVerifyed = !exists;
-              return exists;
-            })
-            .catch(() => {
-              this.isPermlinkVerifyed = false;
-            });
-        }
+        const { onchainData } = parseFormData(formData);
 
-        return Promise.resolve(false)
-          .then((exists) => {
-            this.isPermlinkVerifyed = !exists;
-            return exists;
-          });
-      },
-
-      goToResearch(research) {
-        if (research && research.external_id) { // if not proposal
-          this.$router.push({
-            name: 'project.details',
-            params: {
-              researchExternalId: research.external_id
+        return this.$$verifyProject(
+          onchainData.researchGroup,
+          onchainData.title
+        )
+          .then((verified) => {
+            if (verified) {
+              return researchService.createResearchViaOffchain(
+                {
+                  privKey: this.$currentUser.privKey,
+                  username: this.$currentUser.account.name
+                },
+                false,
+                formData
+              )
+                .then((project) => {
+                  this.$notifier.showSuccess(`Project "${onchainData.title}" has been created successfully`);
+                  this.$$goToProject(project);
+                })
+                .catch((err) => {
+                  console.error(err);
+                  this.$notifier.showError('An error occurred while creating project, please try again later');
+                })
+                .finally(() => {
+                  this.loading = false;
+                });
             }
-          });
-        } else {
-          this.$router.push({ name: 'explore' });
-        }
-      },
 
-      createResearch(exists) {
-        if (exists) return false;
-
-        return researchService.createResearchViaOffchain(
-          {
-            privKey: this.$currentUser.privKey,
-            username: this.$currentUser.account.name
-          },
-          false,
-          this.formData
-        )
-          .then((research) => {
-            this.$notifier.showSuccess(`Project "${this.onchainData.title}" has been created successfully`);
-            this.goToResearch(research);
-          })
-          .catch((err) => {
-            console.error(err);
-            this.$notifier.showError('An error occurred while creating project, please try again later');
-          });
-      },
-
-      updateResearch() {
-        return researchService.updateResearchViaOffchain(
-          {
-            privKey: this.$currentUser.privKey,
-            username: this.$currentUser.account.name
-          },
-          false,
-          this.formData
-        )
-          .then((research) => {
-            this.$notifier.showSuccess('Info has been change successfully!');
-            this.goToResearch(research);
-          })
-          .catch((err) => {
-            this.$notifier.showError('An error occurred during change info');
-            console.error(err);
-          });
-      },
-
-      onSubmit() {
-        // this.$refs.observer.validate()
-        this.processing = true;
-
-        this.verifyPermlink()
-          .then((exists) => (this.$route.params.researchExternalId
-            ? this.updateResearch(exists)
-            : this.createResearch(exists)))
-          .finally(() => {
-            this.processing = false;
+            this.$notifier.showError('Project exist');
+            return true;
           });
       }
     }

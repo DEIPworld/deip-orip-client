@@ -1,5 +1,4 @@
 import { componentsRenderer } from '@/mixins/renderer';
-import { researchAttributes } from '@/mixins/platformAttributes';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
 import { extendAttrModules, hasValue, researchAttributesToObject } from '@/utils/helpers';
@@ -9,7 +8,7 @@ export const ProjectListItemRenderer = {
   components: {
     AttributesRead
   },
-  mixins: [componentsRenderer, researchAttributes],
+  mixins: [componentsRenderer],
   props: {
     project: {
       type: Object,
@@ -30,7 +29,7 @@ export const ProjectListItemRenderer = {
   }
 };
 
-export const projectItem = {
+export const projectListItem = {
   components: {
     ProjectListItemRenderer
   },

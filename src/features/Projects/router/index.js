@@ -6,6 +6,7 @@ import { reviewRoutingFabric } from '@/components/Reviews/router';
 import { contentRoutingFabric } from '@/components/Contents/router';
 import Project from '@/features/Projects/components/Project/Project';
 import ProjectFundraising from '@/features/Projects/components/Project/Fundraising/ProjectFundraising';
+import ProjectEdit from '@/features/Projects/components/Project/Edit/ProjectEdit';
 
 const routerView = { template: '<router-view />' };
 
@@ -54,10 +55,7 @@ export const projectRouting = [{
         {
           name: 'project.edit',
           path: 'edit',
-          component: ProjectCreate,
-          props: {
-            title: 'Edit technology'
-          }
+          component: ProjectEdit
         },
         {
           name: 'project.fundraising',

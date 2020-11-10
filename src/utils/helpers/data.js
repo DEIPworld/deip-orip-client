@@ -14,6 +14,18 @@ export const isNumber = (val) => kindOf(val) === 'number';
 
 export const isSimpleVal = (val) => ['boolean', 'string', 'number'].includes(kindOf(val));
 
+export const isJsonString = (str) => {
+  if (!isString(str)) {
+    return false;
+  }
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 // CHECKERS
 
 export const hasValue = (value) => {
@@ -98,7 +110,19 @@ export const replaceFileWithName = (obj) => {
   return clone;
 };
 
+export const parseFormData = (formData) => {
+  if (!(formData instanceof FormData)) {
+    throw new Error('Expected formData paramater to be an instance of FormData');
+  }
+
+  return [...formData.entries()]
+    .reduce((memo, ent) => ({
+      ...memo,
+      ...{ [ent[0]]: (isJsonString(ent[1]) ? JSON.parse(ent[1]) : ent[1]) }
+    }), {});
+};
+
 export const padStart = (str, length, char = '0') => {
   const str$ = `${str}`;
   return char.repeat(Math.max(0, length - str$.length)) + str$;
-}
+};

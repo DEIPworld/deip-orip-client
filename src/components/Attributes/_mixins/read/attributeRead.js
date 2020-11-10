@@ -1,8 +1,8 @@
-import { tenantAttributes } from '@/mixins/platformAttributes';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 import { hasValue } from '@/utils/helpers';
 
 export const attributeRead = {
-  mixins: [tenantAttributes],
+  mixins: [attributesChore],
   props: {
     attribute: {
       type: Object,
@@ -17,7 +17,7 @@ export const attributeRead = {
   computed: {
     attributeInfo() {
       const id = this.attribute._id || this.attribute.researchAttributeId;
-      return this.tenantAttributes.find(({ _id }) => _id === id);
+      return this.$$tenantAttributes.find(({ _id }) => _id === id);
     },
     attrHasData() {
       return this.attribute && hasValue(this.attribute.value);
