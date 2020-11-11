@@ -27,7 +27,7 @@
     "@deip/lib-crypto": "1.21.0",
     "@deip/organizations-service": "1.36.0",
     "@deip/proposals-service": "1.55.0",
-    "@deip/research-content-reviews-service": "1.55.0",
+    "@deip/research-content-reviews-service": "1.56.0",
     "@deip/research-content-service": "1.55.0",
     "@deip/research-group-service": "1.55.0",
     "@deip/research-service": "1.55.0",
