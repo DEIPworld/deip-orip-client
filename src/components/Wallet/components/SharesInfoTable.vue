@@ -41,7 +41,7 @@
       <template #item.actions="{ item }">
         <transfer-action
           :all-accounts="allAccounts"
-          :transfer="{
+          :asset="{
             ...item, balances, type: 'share'
           }"
         />
