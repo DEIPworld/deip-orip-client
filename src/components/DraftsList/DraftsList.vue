@@ -1,6 +1,7 @@
 <template>
   <v-data-table
     v-if="drafts.length"
+    v-custom="'hover-row'"
     :headers="tableHeaders"
     :items="drafts"
     disable-sort
@@ -12,9 +13,7 @@
     </template>
 
     <template #item.title="{item}">
-      <span class="bold">
-        <a class="a" @click="openDarDraft(item)">{{ item.title || item._id }}</a>
-      </span>
+      <span @click="openDarDraft(item)">{{ item.title || item._id }}</span>
       <span v-if="isDraftProposed(item)" class="ml-2 orange--text">(proposed)</span>
     </template>
 

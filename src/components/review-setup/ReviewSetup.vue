@@ -152,7 +152,7 @@
           },
           {
             contentType: 'Data',
-            reviewCriteria: ['Technical quality', 'Replication', 'Rationality'],
+            reviewCriteria: ['Technical quality', 'Replication', 'Commercialization'],
             rewardCoefficient: 3
           },
           {
@@ -212,7 +212,7 @@
             weight: 1
           },
           {
-            name: 'Rationality',
+            name: 'Commercialization',
             value: 2,
             weight: 0.2
           },
@@ -244,7 +244,7 @@
 
 <style scoped lang="less">
 @criteriaLabel-colors: technicalquality #abec95, replication #83d288,
-  impact #64b286, excellence #439583, methodology #277681, rationality #2b5483,
+  impact #64b286, excellence #439583, methodology #277681, commercialization #2b5483,
   novelty #213184, originality #000783, scientificrelevance #290147;
 
 .make-classes(@prefix, @list) {
