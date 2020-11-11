@@ -56,7 +56,7 @@
           })
           .then(() => {
             this.isLoading = false;
-            this.$notifier.showSuccess('Fundraise Proposal has been created successfully! Approve it to start the fundraise!');
+            this.$notifier.showSuccess('Fundraise has been created successfully!');
           })
           .catch((err) => {
             this.isLoading = false;

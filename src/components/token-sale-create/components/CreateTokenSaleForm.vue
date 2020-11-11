@@ -112,7 +112,7 @@
           class="ml-2"
           :loading="loading"
         >
-          {{ !isPersonalGroup ? 'Create Proposal' : 'Finish' }}
+          {{ !isPersonalGroup ? 'Start' : 'Finish' }}
         </v-btn>
       </slot>
     </div>
