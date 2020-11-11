@@ -26,6 +26,10 @@
       },
       width: {
         type: [String, Number],
+        default: '100%'
+      },
+      srcWidth: {
+        type: [String, Number],
         default: undefined
       }
     },
@@ -33,8 +37,8 @@
       query() {
         let q = '';
 
-        if (this.width) {
-          const w = this.width * 2;
+        if (this.srcWitdh) {
+          const w = this.srcWitdh * 2;
           q += `&width=${w}&height=${w / this.aspectRatio}`;
         }
         return q;

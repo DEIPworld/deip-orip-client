@@ -13,6 +13,7 @@ const propsForRead = {
   }),
   [ATTR_TYPES.IMAGE]: setComponentAttrs({
     width: setAs(Number),
+    srcWidth: setAs(Number),
     aspectRatio: setAs(Number)
   }),
   [ATTR_TYPES.STEPPER]: setComponentAttrs({
