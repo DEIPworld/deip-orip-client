@@ -10,10 +10,10 @@
           <a
             :href="item.url"
             target="_blank"
-            class="text-decoration-none"
+            class="text-decoration-none d-flex"
             :class="{ 'text--primary': !hover }"
           >
-            <v-icon size="20" class="mr-2" :color="hover ? 'primary' : ''">
+            <v-icon left size="20" :color="hover ? 'primary' : 'black'">
               launch
             </v-icon>
             {{ item.label || item.url }}
