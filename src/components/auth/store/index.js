@@ -34,6 +34,7 @@ const state = {
     assets: []
   },
   tenant: undefined,
+  allAssets: [], // TODO: temp
   assets: [] // TODO: temp
 };
 
@@ -41,6 +42,7 @@ const state = {
 const getters = {
   loaded: (state) => state.loaded,
   assets: (state) => state.assets, // TODO: temp
+  allAssets: (state) => state.allAssets, // TODO: temp
 
   user: (state, getters) => {
     const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
@@ -139,17 +141,25 @@ const actions = {
       dispatch('loadResearchBookmarks'),
       dispatch('loadBalances'),
       dispatch('loadGroups'),
-      dispatch('loadAssets') // TODO: temp
+      dispatch('loadAssets'), // TODO: temp
+      dispatch('loadAllAssets') // TODO: temp
     ]).then(() => {
       commit('SET_USER_LOADED', true);
     });
   },
 
-  loadAssets({ commit }) { // TODO: temp
+  loadAllAssets({ commit }) { // TODO: temp
     return assetsService.lookupAssets("", 10000)
+      .then((allAssets) => {
+        commit('storeAllAssets', allAssets);
+      })
+  },
+
+  loadAssets({ commit }) { // TODO: temp
+    return assetsService.getAssetsByType(1)
       .then((res) => {
         commit('storeAssets', res);
-      })
+      });
   },
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
@@ -382,6 +392,10 @@ const mutations = {
 
   storeAssets(state, payload) { // TODO: temp
     state.assets = payload;
+  },
+
+  storeAllAssets(state, allAssets) {
+    state.allAssets = allAssets;
   }
 };
 

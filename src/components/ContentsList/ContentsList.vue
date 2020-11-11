@@ -5,6 +5,7 @@
   >
     <v-data-table
       v-if="researchContents.length"
+      v-custom="'hover-row'"
       :headers="tableHeaders"
       :items="researchContents"
       disable-sort
@@ -21,7 +22,7 @@
         <!-- START TEMP SOLUTION (query) -->
         <router-link
           v-if="$isLoggedIn"
-          class="a"
+          tag="div"
           :to="routeAccessCheck({
             name: 'ResearchContentDetails',
             params: {

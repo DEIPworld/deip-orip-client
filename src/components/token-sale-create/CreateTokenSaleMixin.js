@@ -24,8 +24,7 @@ export const CreateTokenSaleMixin = {
         endDate: null,
         softCap: '',
         hardCap: '',
-        asset: undefined,
-        assetsList: []
+        asset: undefined
       },
       securityTokenOnSale: null,
       securityTokenOnSaleBalance: null,
@@ -51,8 +50,7 @@ export const CreateTokenSaleMixin = {
       })
       .then((balance) => {
         this.securityTokenOnSaleBalance = balance || null;
-        return assetsService.getAssetsByType(1);
-      })
-      .then((assetsList) => { this.formData.assetsList = assetsList; this.$setReady(); });
+        this.$setReady();
+      });
   }
 };
