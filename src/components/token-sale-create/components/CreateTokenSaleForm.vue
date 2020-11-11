@@ -62,7 +62,7 @@
               v-model="formData.asset"
               class="rounded-bl-0 rounded-tl-0"
               outlined
-              :items="assets"
+              :items="formData.assetsList"
               item-text="string_symbol"
               item-value="id"
             />
@@ -85,7 +85,7 @@
               disabled
               class="rounded-bl-0 rounded-tl-0"
               outlined
-              :items="assets"
+              :items="formData.assetsList"
               item-text="string_symbol"
               item-value="id"
             />
@@ -183,8 +183,7 @@
 
     computed: {
       ...mapGetters({
-        userPersonalGroup: 'auth/userPersonalGroup',
-        assets: 'auth/assets'
+        userPersonalGroup: 'auth/userPersonalGroup'
       }),
 
       isPersonalGroup() {
@@ -283,7 +282,7 @@
         .add(10, 'minutes')
         .format('YYYY-MM-DD HH:mm');
       this.setStartDate(startDate);
-      this.formData.asset = this.assets[0].id;
+      this.formData.asset = this.formData.assetsList[0].id;
     },
     methods: {
       verifyAmountRange(value) {

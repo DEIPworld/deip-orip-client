@@ -3,13 +3,26 @@
     <div
       v-for="(item, index) of attribute.value"
       :key="index"
+      class="text-body-2"
     >
       <template v-if="item.url">
-        <a :href="item.url" target="_blank" class="text--secondary text-caption">{{ item.label || item.url }}</a>
+        <v-hover v-slot="{ hover }">
+          <a
+            :href="item.url"
+            target="_blank"
+            class="text-decoration-none"
+            :class="{ 'text--primary': !hover }"
+          >
+            <v-icon size="20" class="mr-2" :color="hover ? 'primary' : ''">
+              launch
+            </v-icon>
+            {{ item.label || item.url }}
+          </a>
+        </v-hover>
       </template>
 
       <template v-if="!item.url">
-        <span class="text--secondary text-caption">{{ item.label }}</span>
+        <span class="">{{ item.label }}</span>
       </template>
 
     </div>

@@ -85,7 +85,7 @@ export const assetsChore = {
       if (isObject(val)) {
         const { amount, assetId } = val;
 
-        if (!amount) return null;
+        if (!amount && amount !== 0) return null;
 
         const asset = this.$$assetInfo(assetId || this.$env.ASSET_UNIT);
 

@@ -48,7 +48,12 @@
           <v-col class="d-flex ml-2 align-center">
             <v-avatar v-if="item.status !== txStatus.pending" :size="32">
               <v-img
-                :src="item.extendedDetails.requester.profile | avatarSrc(64, 64, false)"
+                :src="
+                  item.extendedDetails.rejectors[1] ?
+                    item.extendedDetails.rejectors[1].profile
+                    : item.extendedDetails.approvers[2].profile
+                    | avatarSrc(64, 64, false)
+                "
               />
             </v-avatar>
             <v-avatar :size="32" class="mr-3" :class="{'ml-n2': item.status !== txStatus.pending}">

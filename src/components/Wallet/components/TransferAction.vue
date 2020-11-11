@@ -8,31 +8,46 @@
       class="text-caption"
       color="primary"
       :disabled="disabled"
-      @click="openTransferDialog(transfer)"
+      @click="opendialog(asset)"
     >
       <v-icon left>
         mdi-bank-transfer
       </v-icon>
       Transfer
     </v-btn>
+    <!-- <v-btn
+      outlined
+      small
+      max-height="30"
+      class="text-caption ml-4"
+      color="primary"
+      @click="opendialog(asset, true)"
+    >
+      <v-icon left>
+        payments
+      </v-icon>
+      Exchange
+    </v-btn> -->
     <d-dialog
-      v-model="transferDialog.isOpened"
-      :disabled="transferDialog.isSending"
-      :loading="transferDialog.isSending"
-      title="Transfer asset"
+      v-model="dialog.isOpened"
+      :disabled="dialog.isSending"
+      :loading="dialog.isSending"
+      :title="dialog.title"
       max-width="570px"
-      :confirm-button-title="$t('userWallet.sendResearchTokensDialog.submitBtn')"
+      :confirm-button-title="
+        dialog.exchange ? 'Sell' : $t('userWallet.sendResearchTokensDialog.submitBtn')
+      "
       :cancel-button-title="$t('userWallet.cancel')"
-      @click:confirm="sendTokens"
+      @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
     >
       <v-form
         ref="sendResearchTokensForm"
-        v-model="transferDialog.form.valid"
+        v-model="dialog.form.valid"
       >
         <v-select
-          v-model="transferDialog.form.account"
-          label="Asset"
-          :items="transfer.balances"
+          v-model="dialog.form.fromAccount"
+          :label="dialog.exchange ? 'From asset' : 'Asset'"
+          :items="asset.balances"
           outlined
           return-object
           item-text="amount"
@@ -71,15 +86,64 @@
           </template>
         </v-select>
         <v-text-field
-          v-model.number="transferDialog.form.amount"
+          v-model="dialog.form.fromAmount"
           label="Amount"
-          :rules="transferDialog.form.rules.amount"
+          :rules="dialog.form.rules.amount"
           outlined
         />
+        <template v-if="dialog.exchange">
+          <v-select
+            v-model="dialog.form.toAccount"
+            label="To asset"
+            :items="exchangeToAccounts"
+            outlined
+            return-object
+            item-text="amount"
+            item-value="asset_symbol"
+            :menu-props="{
+              maxWidth: 525
+            }"
+          >
+            <template #selection="{ item }">
+              <div class="d-flex justify-space-between w-100 align-center">
+                <div>
+                  {{ item.asset_symbol }}
+                </div>
+                <div>
+                  {{
+                    $$toAssetUnits(item.amount, true, {
+                      symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                    })
+                  }}
+                </div>
+              </div>
+            </template>
+            <template #item="{ item }">
+              <div class="d-flex justify-space-between w-100">
+                <div>
+                  {{ item.asset_symbol }}
+                </div>
+                <div>
+                  {{
+                    $$toAssetUnits(item.amount, true, {
+                      symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                    })
+                  }}
+                </div>
+              </div>
+            </template>
+          </v-select>
+          <v-text-field
+            v-model="dialog.form.toAmount"
+            label="Amount"
+            :rules="dialog.form.rules.amount"
+            outlined
+          />
+        </template>
         <v-autocomplete
-          v-model="transferDialog.form.receiver"
+          v-model="dialog.form.receiver"
           :items="allAccounts"
-          :rules="transferDialog.form.rules.username"
+          :rules="dialog.form.rules.username"
           append-icon="search"
           :menu-props="{
             maxWidth: 520
@@ -134,8 +198,14 @@
             </d-box-item>
           </template>
         </v-autocomplete>
+        <d-date-time-input
+          v-if="dialog.exchange"
+          v-model="dialog.form.date"
+          label="Request expiration date"
+          class="mb-4"
+        />
         <v-textarea
-          v-model="transferDialog.form.memo"
+          v-model="dialog.form.memo"
           outlined
           label="Notes"
           no-resize
@@ -149,7 +219,7 @@
 <script>
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import { mapActions } from 'vuex';
+  import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
 
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
@@ -161,7 +231,8 @@
 
     components: {
       DDialog,
-      DBoxItem
+      DBoxItem,
+      DDateTimeInput
     },
 
     mixins: [assetsChore],
@@ -171,7 +242,7 @@
         type: Array,
         default: () => []
       },
-      transfer: {
+      asset: {
         type: Object,
         default: () => {}
       },
@@ -196,13 +267,17 @@
         }
       };
       return {
-        transferDialog: {
+        dialog: {
+          title: '',
           form: {
             receiver: {},
-            amount: 0,
+            fromAmount: '',
+            toAmount: '',
             valid: false,
             memo: '',
-            account: {},
+            date: '',
+            fromAccount: {},
+            toAccount: {},
             rules: {
               username: [rules.username],
               amount: [
@@ -221,42 +296,63 @@
       };
     },
 
-    methods: {
-      openTransferDialog(item) {
-        this.transferDialog.isOpened = true;
+    computed: {
+      exchangeToAccounts() {
+        if (this.dialog.exchange) {
+          return this.asset.balances.filter(
+            (item) => item.asset_symbol !== this.dialog.form.fromAccount.asset_symbol
+          );
+        }
+        return [];
+      }
+    },
 
-        this.transferDialog.form.valid = false;
-        this.transferDialog.form.amount = '';
-        this.transferDialog.form.account = item;
+    methods: {
+      opendialog(item, exchange = false) {
+        this.dialog.exchange = exchange;
+        this.dialog.isOpened = true;
+        if (exchange) {
+          this.dialog.title = 'Exchnage asset';
+          this.dialog.form.toAmount = '';
+        } else {
+          this.dialog.title = 'Transfer asset';
+        }
+
+        this.dialog.form.memo = '';
+        this.dialog.form.receiver = {};
+        this.dialog.form.valid = false;
+        this.dialog.form.fromAmount = '';
+        this.dialog.form.fromAccount = item;
       },
 
       sendTokens() {
-        if (this.transferDialog.form.valid) {
-          this.transferDialog.isSending = true;
+        if (this.dialog.form.valid) {
+          this.dialog.isSending = true;
 
-          let amount = '0';
+          let fromAmount = '0';
 
-          if (this.transfer.type === 'currency') {
-            amount = this.toAssetUnits(
-              this.transferDialog.form.amount,
-              this.$$assetInfo(this.transferDialog.form.account.asset_symbol).precision,
-              this.$$assetInfo(this.transferDialog.form.account.asset_symbol).string_symbol
+          if (this.asset.type === 'currency') {
+            const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+            fromAmount = this.$$toAssetUnits(
+              this.dialog.form.fromAmount,
+              false,
+              { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
             );
           }
-          if (this.transfer.type === 'share') {
-            amount = `${this.transferDialog.form.amount} ${this.transferDialog.form.account.asset_symbol}`;
+          if (this.asset.type === 'share') {
+            fromAmount = `${this.dialog.form.fromAmount} ${this.dialog.form.fromAccount.asset_symbol}`;
           }
 
           return assetsService.transferAsset(
             {
               privKey: this.$currentUser.privKey,
-              username: this.transferDialog.form.account.owner
+              username: this.dialog.form.fromAccount.owner
             },
             {
-              from: this.transferDialog.form.account.owner,
-              to: this.transferDialog.form.receiver.account.name,
-              amount,
-              memo: this.transferDialog.form.memo ? this.transferDialog.form.memo : '',
+              from: this.dialog.form.fromAccount.owner,
+              to: this.dialog.form.receiver.account.name,
+              amount: fromAmount,
+              memo: this.dialog.form.memo,
               extensions: []
             }
           )
@@ -268,17 +364,49 @@
               console.error(err);
             })
             .finally(() => {
-              this.transferDialog.isSending = false;
-              this.transferDialog.isOpened = false;
-              if (this.transfer.type === 'currency') {
+              this.dialog.isSending = false;
+              this.dialog.isOpened = false;
+              if (this.asset.type === 'currency') {
                 this.updateBalances();
               }
-              if (this.transfer.type === 'share') {
+              if (this.asset.type === 'share') {
                 this.$store.dispatch('Wallet/loadBalances', this.$route.params.account);
               }
             });
         }
         return false;
+      },
+      doExchange() {
+        if (this.dialog.form.valid) {
+          this.dialog.isSending = true;
+
+          let fromAmount = '0';
+          let toAmount = '0';
+
+          if (this.asset.type === 'currency') {
+            const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+            const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.asset_symbol);
+            fromAmount = this.$$toAssetUnits(
+              this.dialog.form.fromAmount,
+              false,
+              { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
+            );
+            toAmount = this.$$toAssetUnits(
+              this.dialog.form.toAmount,
+              false,
+              { symbol: toAccountData.string_symbol, fractionCount: toAccountData.precision }
+            );
+          }
+          if (this.asset.type === 'share') {
+            fromAmount = `${this.dialog.form.fromAmount} ${this.dialog.form.fromAccount.asset_symbol}`;
+            toAmount = `${this.dialog.form.toAmount} ${this.dialog.form.toAccount.asset_symbol}`;
+          }
+          console.log(fromAmount);
+          console.log(toAmount);
+
+          this.dialog.isSending = false;
+          this.dialog.isOpened = false;
+        }
       },
       updateBalances() {
         if (this.$route.name === 'userWallet') {

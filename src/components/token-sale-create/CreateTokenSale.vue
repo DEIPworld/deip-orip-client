@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view title="Create fundraising">
+  <full-screen-view v-if="$ready" title="Create fundraising">
     <create-token-sale-form
       v-model="formData"
       :security-token-on-sale="securityTokenOnSale ? securityTokenOnSale.external_id : ''"

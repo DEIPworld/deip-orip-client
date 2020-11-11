@@ -88,8 +88,7 @@
                   <v-col class="grow pl-12" align-self="center">
                     <div class="pb-4">
                       <div v-if="!contentReviewsList.length" class="pb-1 text-subtitle-1 font-weight-bold">
-                        There are no reviews for
-                        this material yet
+                        There are no reviews for this material yet
                       </div>
                       <div v-if="userHasResearchExpertise && !userHasReview">
                       You will get <span class="text-body-2 font-weight-bold">approximately 3000 ECI reward in {{

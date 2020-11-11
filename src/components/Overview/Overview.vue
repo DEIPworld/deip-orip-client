@@ -214,7 +214,7 @@
             {
               v: stamp,
               f: moment(stamp)
-                .format('DD MMM YY, hh:mm:ss')
+                .format('DD MMM YY, HH:mm')
             },
             ...stamps[stamp]
           ]);

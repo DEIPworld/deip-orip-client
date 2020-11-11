@@ -25,6 +25,7 @@ export const CreateTokenSaleMixin = {
         softCap: '',
         hardCap: '',
         asset: undefined,
+        assetsList: []
       },
       securityTokenOnSale: null,
       securityTokenOnSaleBalance: null,
@@ -44,10 +45,14 @@ export const CreateTokenSaleMixin = {
       })
       .then((securityToken) => {
         this.securityTokenOnSale = securityToken;
-        return assetsService.getAccountAssetBalance(this.research.research_group.external_id, this.securityTokenOnSale.string_symbol);
+        return assetsService.getAccountAssetBalance(
+          this.research.research_group.external_id, this.securityTokenOnSale.string_symbol
+        );
       })
       .then((balance) => {
         this.securityTokenOnSaleBalance = balance || null;
+        return assetsService.getAssetsByType(1);
       })
+      .then((assetsList) => { this.formData.assetsList = assetsList; this.$setReady(); });
   }
 };

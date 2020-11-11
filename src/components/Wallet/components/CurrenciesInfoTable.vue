@@ -10,9 +10,6 @@
         <v-chip
           outlined
         >
-          <!-- <v-icon left color="primary">
-            {{ assetsIcons[$$fromAssetUnits(item.amount).assetId] || assetsIcons.default }}
-          </v-icon> -->
           {{ $$fromAssetUnits(item.amount).assetId }}
         </v-chip>
       </template>
@@ -24,7 +21,7 @@
       <template v-slot:item.actions="{ item }">
         <transfer-action
           :all-accounts="allAccounts"
-          :transfer="{
+          :asset="{
             ...item, balances: accountData.balances, type: 'currency'
           }"
           :disabled="!isTransferAvailable"
@@ -71,7 +68,7 @@
       v-model="depositDialog.isOpened"
       max-width="800px"
       :title="$t('userWallet.depositDialog.depositFunds')"
-      :disabled="depositDialog.isDepositing"
+      :disabled="depositDialog.isDepositing || isDepositingDisabled"
       :loading="depositDialog.isDepositing"
       :confirm-button-title="$t('userWallet.depositDialog.depositFunds')"
       :cancel-button-title="$t('userWallet.cancel')"
@@ -112,7 +109,7 @@
       v-model="withdrawDialog.isOpened"
       max-width="800px"
       :title="$t('userWallet.withdrawDialog.withdrawFunds')"
-      :disabled="withdrawDialog.isWithdrawing"
+      :disabled="withdrawDialog.isWithdrawing || isWithdrawDisabled"
       :loading="withdrawDialog.isWithdrawing"
       :confirm-button-title="$t('userWallet.withdrawDialog.withdrawFunds')"
       :cancel-button-title="$t('userWallet.cancel')"
@@ -198,7 +195,6 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import DDialog from '@/components/Deipify/DDialog/DDialog';
-  import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import TransferAction from '@/components/Wallet/components/TransferAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
@@ -211,7 +207,6 @@
 
     components: {
       DDialog,
-      DBoxItem,
       TransferAction
     },
 
@@ -263,15 +258,10 @@
             width: '24px'
           }
         ],
-        assetsIcons: {
-          [window.env.ASSET_UNIT]: 'mdi-bitcoin',
-          USD: 'attach_money',
-          EUR: 'euro',
-          default: 'mdi-bitcoin'
-        },
         withdrawDialog: {
           amount: 0,
           precision: 0,
+          stringAmount: '',
           name: '',
           iban: '',
           refNum: '',
@@ -344,7 +334,7 @@
         if (formatValidationResult !== true) {
           return true;
         }
-        if (this.withdrawDialog.amount > this.getAvailableCurrencyAmount(this.withdrawDialog.selectedCurrency)) {
+        if (this.withdrawDialog.amount > this.$$fromAssetUnits(this.withdrawDialog.stringAmount).amount) {
           return true;
         }
         if (!this.withdrawDialog.termsConfirmed) {
@@ -381,14 +371,11 @@
       closeDepositDialog() {
         this.depositDialog.isOpened = false;
       },
-      getAvailableCurrencyAmount(balance) {
-        return this.fromAssetsToFloat(balance);
-      },
       openDepositDialog(item) {
         this.depositDialog.owner = item.owner;
         this.depositDialog.amount = 0;
-        this.depositDialog.precision = this.assetsInfo[item.asset_id].precision;
-        this.depositDialog.selectedCurrency = this.assetsInfo[item.asset_id].string_symbol;
+        this.depositDialog.precision = this.$$assetInfo(item.asset_symbol).precision;
+        this.depositDialog.selectedCurrency = item.asset_symbol;
         this.depositDialog.cardData.name = '';
         this.depositDialog.cardData.cardNumber = '';
         this.depositDialog.cardData.expiration = '';
@@ -407,8 +394,9 @@
       openWithdrawDialog(item) {
         this.depositDialog.owner = item.owner;
         this.withdrawDialog.amount = 0;
-        this.withdrawDialog.precision = this.assetsInfo[item.asset_id].precision;
-        this.withdrawDialog.selectedCurrency = this.assetsInfo[item.asset_id].string_symbol;
+        this.withdrawDialog.stringAmount = item.amount;
+        this.withdrawDialog.precision = this.$$assetInfo(item.asset_symbol).precision;
+        this.withdrawDialog.selectedCurrency = item.asset_symbol;
         this.withdrawDialog.name = '';
         this.withdrawDialog.iban = '';
         this.withdrawDialog.refNum = '';
