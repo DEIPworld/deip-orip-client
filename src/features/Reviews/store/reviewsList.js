@@ -20,13 +20,11 @@ const ACTIONS = {
         reviews.push(...items);
 
         return Promise.all([
-          Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
-          usersService.getEnrichedProfiles(reviews.map((r) => r.author))
+          Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id)))
         ]);
       }, (err) => { console.error(err); })
-      .then(([reviewVotes, users]) => {
+      .then(([reviewVotes]) => {
         reviews.forEach((review, i) => {
-          review.author = users.find((u) => u.account.name === review.author);
           review.votes = reviewVotes[i];
           review.supporters = reviewVotes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
         });

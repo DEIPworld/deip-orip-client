@@ -12,8 +12,8 @@ const GETTERS = {
 };
 
 const ACTIONS = {
-  getResearchDetails({ commit }, researchExternalId) {
-    return researchService.getResearch(researchExternalId)
+  getResearchDetails({ commit }, projectExternalId) {
+    return researchService.getResearch(projectExternalId)
       .then((res) => {
         commit('storeResearchDetails', res);
       });

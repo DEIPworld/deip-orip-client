@@ -23,18 +23,19 @@
       v-bind="limitAccessProps"
     >
       <template v-for="(review, index) of internalReviews">
+        <!--        {{review}}-->
         <v-row :key="`review-${index}`" class="text-body-2" no-gutters>
           <v-col cols="12" md="wide">
             <users-list
-              :users-data="review.author"
+              :users="review.author"
               view-type="brief"
               avatar-size="80"
             >
-              <template v-if="review.author.profile" #item-info="{ user }">
+              <template #item-info="{ user }">
                 <div v-if="user.profile" class="pt-1 text--secondary text-caption">
                   <span>{{ user | employmentOrEducation }}</span>
                   <span
-                    v-if="doesUserHaveLocation(review.author.profile)"
+                    v-if="doesUserHaveLocation(user.profile)"
                   >, {{ user | userLocation }}</span>
                 </div>
               </template>
@@ -58,7 +59,7 @@
                       name: 'project.content.details',
                       params: {
                         contentExternalId: review.researchContent.external_id,
-                        researchExternalId: researchId,
+                        researchExternalId: projectId,
                       }
                     })"
                   >
@@ -119,7 +120,7 @@
                     name: 'research.review.details',
                     params: {
                       reviewExternalId: review.researchContent.external_id,
-                      researchExternalId: researchId,
+                      researchExternalId: projectId,
                     }
                   })"
                 > -->
@@ -183,7 +184,15 @@
       limitAccess
     ],
     props: {
-      researchId: {
+      projectId: {
+        type: String,
+        default: null
+      },
+      contentId: {
+        type: String,
+        default: null
+      },
+      userName: {
         type: String,
         default: null
       }
@@ -239,7 +248,7 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ResearchReviews/getReviews', this.$route.params.researchExternalId)
+          this.$store.dispatch('ResearchReviews/getReviews', this.projectId)
         ])
           .then(() => {
             this.$setReady(true);
@@ -254,7 +263,7 @@
       },
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
-      },
+      }
 
     }
   };

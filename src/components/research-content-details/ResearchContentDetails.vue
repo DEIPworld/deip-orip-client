@@ -61,6 +61,11 @@
             />
 
             <!-- START Project ContentDetails Reviews section -->
+<!--            <reviews-list-->
+<!--              v-if="research && Object.keys(research).length"-->
+<!--              :project-id="research.external_id"-->
+<!--            />-->
+
             <div v-if="isPublished && contentReviewsList.length" class="py-6">
               <div id="reviews">
                 <div class="py-2 title">
@@ -280,6 +285,7 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
+  import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -288,7 +294,7 @@
 
   export default {
     name: 'ResearchContentDetails',
-    components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
+    components: { ReviewsList, DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
     data() {
       return {
         isSavingDraft: false,

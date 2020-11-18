@@ -64,7 +64,7 @@ export const modules = [
         name: 'Reviews',
         icon: 'mdi-comment-processing-outline',
         props: {
-          researchId: '@research.externalId',
+          projectId: '@research.externalId',
 
           accessMessage: 'Become available after licensing',
           limitedAccess: '@limitedAccess'
