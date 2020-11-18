@@ -2,7 +2,9 @@
   <component
     :is="$$componentViewType"
     :users="usersList"
+    v-bind="attrs$"
   >
+
     <template #item-info="{ user }" >
       <slot name="item-info" v-bind="{ user }" />
     </template>
@@ -22,6 +24,7 @@
   import UsersListDefault from '@/features/Users/components/List/views/UsersListDefault';
   import UsersListBrief from '@/features/Users/components/List/views/UsersListBrief';
   import UsersListStack from '@/features/Users/components/List/views/UsersListStack';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   export default {
     name: 'UsersList',
@@ -32,26 +35,43 @@
       UsersListStack
     },
 
-    mixins: [componentStoreFactory(usersListStore), componentViewType],
+    mixins: [componentStoreFactory(usersListStore), componentViewType, BindsAttrs],
 
     props: {
       users: {
         type: [Array, String],
+        default: () => ([])
+      },
+
+      usersData: {
+        type: [Array, Object],
         default: () => ([])
       }
     },
 
     computed: {
       ...mapState({
-        usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
-      })
+        usersListStore(state, getters) { return getters[`${this.storeNS}/list`]; }
+      }),
+
+      usersList() {
+        if (this.usersListStore.length) {
+          return this.usersListStore;
+        }
+
+        return wrapInArray(this.usersData);
+      }
     },
 
     created() {
-      this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, wrapInArray(this.users))
-        .then(() => {
-          this.$setReady();
-        });
+      const users = wrapInArray(this.users);
+
+      if (users.length) {
+        this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, wrapInArray(this.users))
+          .then(() => {
+            this.$setReady();
+          });
+      }
     }
   };
 </script>

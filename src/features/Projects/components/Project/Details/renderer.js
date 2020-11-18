@@ -3,11 +3,11 @@ import { componentsRenderer } from '@/mixins/renderer';
 import AttributesRead from '@/components/Attributes/AttributesRead';
 
 import { hasValue, researchAttributeFileUrl } from '@/utils/helpers';
-import ContentsList from '@/components/ContentsList/ContentsList';
+import ContentsList from '@/features/Contents/components/List/ContentsList';
 import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
 import DraftsList from '@/components/DraftsList/DraftsList';
 
-import ReviewsList from '@/components/ReviewsList/ReviewsList';
+import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
 
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';

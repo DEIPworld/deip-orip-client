@@ -3,7 +3,7 @@ import Proxyable from 'vuetify/lib/mixins/proxyable';
 
 import AttributesSet from '@/components/Attributes/AttributesSet';
 
-import ContentsList from '@/components/ContentsList/ContentsList';
+import ContentsList from '@/features/Contents/components/List/ContentsList';
 import DraftsList from '@/components/DraftsList/DraftsList';
 import { tenantAttributesToObject } from '@/utils/helpers';
 

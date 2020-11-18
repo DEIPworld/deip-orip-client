@@ -16,21 +16,25 @@
           name="item-avatar"
           v-bind="{ user, avatar: $options.filters.avatarSrc(user.profile, 40) }"
         >
-          <v-avatar :size="40">
-            <v-img :src="user.profile | avatarSrc(40)" />
+          <v-avatar :size="avatarSize">
+            <v-img :src="user.profile | avatarSrc(avatarSize)" />
           </v-avatar>
         </slot>
       </v-list-item-action>
 
+      <v-list-item-content class="pa-0">
+        <v-sheet :min-height="avatarSize" class="align-self-start d-flex flex-column justify-center">
+          <slot name="item-title" v-bind="{ user }">
+            <div class="text-h6">
+              {{ user | fullname }}
+            </div>
+          </slot>
 
-      <v-sheet :min-height="40" class="spacer align-self-start d-flex flex-column justify-center">
-        <div class="text-h6">
-          {{ user | fullname }}
-        </div>
+          <slot name="item-info" v-bind="{ user }" />
+        </v-sheet>
+      </v-list-item-content>
 
-        <slot name="item-info" v-bind="{ user }" />
 
-      </v-sheet>
     </v-list-item>
   </v-list>
 </template>

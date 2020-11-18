@@ -260,6 +260,9 @@ const actions = {
 
     const rgtList = [];
     let researchExternalId;
+
+
+
     return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);

@@ -3,6 +3,10 @@ export const usersList = {
     users: {
       type: [Array, String],
       default: () => ([])
+    },
+    avatarSize: {
+      type: [Number, String],
+      default: 40
     }
   },
   methods: {

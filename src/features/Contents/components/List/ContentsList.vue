@@ -4,17 +4,17 @@
     v-bind="limitAccessProps"
   >
     <v-data-table
-      v-if="researchContents.length"
+      v-if="contentsList.length"
       v-custom="'hover-row'"
       :headers="tableHeaders"
-      :items="researchContents"
+      :items="contentsList"
       disable-sort
       disable-pagination
       hide-default-footer
     >
       <template #item.type="{item}">
         <div class="text-no-wrap">
-          {{ getResearchContentType(item.content_type).text }}
+          {{ $$contentType(item.content_type).text }}
         </div>
       </template>
 
@@ -75,16 +75,16 @@
       </template>
 
       <template #item.comments="{ item }">
-        <d-meta-item v-if="hasReviews(item)" :meta="{icon: 'chat_bubble'}">
+        <d-meta-item v-if="$$hasReviews(item)" :meta="{icon: 'chat_bubble'}">
           <span
-            v-show="hasPositiveReviews(item)"
+            v-show="$$hasPositiveReviews(item)"
             class="success--text font-weight-medium"
-          >{{ countContentReviews(item, true) }}</span>
-          <span v-show="hasPositiveReviews(item) && hasNegativeReviews(item)">/</span>
+          >{{ $$countReviews(item, true) }}</span>
+          <span v-show="$$hasPositiveReviews(item) && $$hasNegativeReviews(item)">/</span>
           <span
-            v-show="hasNegativeReviews(item)"
+            v-show="$$hasNegativeReviews(item)"
             class="error--text font-weight-medium"
-          >{{ countContentReviews(item, false) }}</span>
+          >{{ $$countReviews(item, false) }}</span>
         </d-meta-item>
       </template>
     </v-data-table>
@@ -93,12 +93,13 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { contentListStore } from '@/components/ContentsList/store';
+  import { contentListStore } from '@/features/Contents/store/contentsList';
   import { mapGetters } from 'vuex';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { ResearchService } from '@deip/research-service';
   import { limitAccess } from '@/mixins/limitAccess';
+  import { contentCommon } from '@/features/Contents/mixins';
 
   const researchService = ResearchService.getInstance();
 
@@ -108,7 +109,11 @@
       DMetaItem,
       DSimpleTooltip
     },
-    mixins: [componentStoreFactoryOnce(contentListStore, 'ResearchContents'), limitAccess],
+    mixins: [
+      contentCommon,
+      componentStoreFactoryOnce(contentListStore, 'ProjectContents'),
+      limitAccess
+    ],
     props: {
       researchId: {
         type: String,
@@ -145,7 +150,7 @@
     },
     computed: {
       ...mapGetters({
-        researchContents: 'ResearchContents/list'
+        contentsList: 'ProjectContents/list'
       })
     },
     created() {
@@ -156,38 +161,12 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ResearchContents/getContents', this.$route.params.researchExternalId)
+          this.$store.dispatch('ProjectContents/getContents', this.researchId)
         ])
           .then(() => {
             this.$setReady(true);
           });
       },
-
-      getResearchContentType(type) {
-        return researchService.getResearchContentType(type);
-      },
-
-      hasReviews(content) {
-        return content.reviews.length;
-      },
-
-      hasPositiveReviews(content) {
-        return content.reviews.some((r) => r.is_positive);
-      },
-
-      hasNegativeReviews(content) {
-        return content.reviews.some((r) => !r.is_positive);
-      },
-
-      countContentReviews(content, isPositive) {
-        return content.reviews.reduce(
-          (acc, review) => ((review.is_positive && isPositive)
-            || (!review.is_positive && !isPositive)
-            ? acc + 1
-            : acc),
-          0
-        );
-      }
     }
   };
 </script>
