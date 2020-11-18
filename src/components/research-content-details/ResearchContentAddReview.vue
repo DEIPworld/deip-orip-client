@@ -10,9 +10,8 @@
       }
     })"
   >
-    <pre>{{ JSON.stringify(formModel, null, 2) }}</pre>
+<!--    <pre>{{ JSON.stringify(formModel, null, 2) }}</pre>-->
     <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
-      {{invalid}}
       <v-form @submit.prevent="handleSubmit(publishReview)">
         <d-stack gap="32">
           <d-block title="Subject" title-margin="16">
@@ -211,15 +210,15 @@
 
         const extensions = [];
 
-        console.log(this.$currentUser.privKey, {
-          author: this.$currentUserName,
-          researchContentExternalId,
-          content: reviewData,
-          weight,
-          assessment,
-          disciplines,
-          extensions
-        })
+        // console.log(this.$currentUser.privKey, {
+        //   author: this.$currentUserName,
+        //   researchContentExternalId,
+        //   content: reviewData,
+        //   weight,
+        //   assessment,
+        //   disciplines,
+        //   extensions
+        // })
 
         return researchContentReviewsService.createReviewViaOffchain(this.$currentUser.privKey, {
           author: this.$currentUserName,
