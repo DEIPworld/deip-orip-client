@@ -426,7 +426,7 @@
             },
             {
               requestId: request._id,
-              approver: request.researchGroupExternalId
+              approver: this.$currentUser.username
             }
           )
           .then(() => {
@@ -457,7 +457,7 @@
             },
             {
               requestId: request._id,
-              rejector: request.researchGroupExternalId
+              rejector: this.$currentUser.username
             }
           )
           .then(() => {
