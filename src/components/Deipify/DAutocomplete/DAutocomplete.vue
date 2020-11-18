@@ -1,5 +1,7 @@
 <script>
-  import { VAutocomplete, VChip, VBtn, VIcon } from 'vuetify/lib/components';
+  import {
+    VAutocomplete, VChip, VBtn, VIcon
+  } from 'vuetify/lib/components';
   import { convertToUnit } from 'vuetify/lib/util/helpers';
 
   export default {
@@ -130,7 +132,7 @@
             disabled: isDisabled,
             inputValue: index === this.selectedIndex,
             small: this.smallChips,
-            outlined: true,
+            outlined: true
           },
           on: {
             click: (e) => {

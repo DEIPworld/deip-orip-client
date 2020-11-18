@@ -163,7 +163,7 @@
     },
     computed: {
       ...mapGetters({
-        research: 'Project/data',
+        research: 'Project/data'
       }),
 
       isCentralizedGroup() {

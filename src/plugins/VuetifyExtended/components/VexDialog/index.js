@@ -1,7 +1,6 @@
 import VexDialog from './VexDialog';
 
 const install = (Vue, options = {}) => {
-
   if (install.installed) return;
   // eslint-disable-next-line no-unused-vars
   install.installed = true;
@@ -51,13 +50,13 @@ const install = (Vue, options = {}) => {
   Vue.component('VexDialog', { vuetify, ...VexDialog });
 };
 
-const VeDialogPlugin = {
+const VexDialogPlugin = {
   install
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(VeDialogPlugin)
+  window.Vue.use(VexDialogPlugin);
 }
 
-export default VeDialogPlugin;
+export default VexDialogPlugin;
 export { VexDialog };

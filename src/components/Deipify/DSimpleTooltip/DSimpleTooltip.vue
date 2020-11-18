@@ -1,6 +1,6 @@
 <template>
   <v-tooltip v-bind="componentProps">
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <component :is="tag" v-on="on">
         <slot />
       </component>

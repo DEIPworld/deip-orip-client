@@ -1,5 +1,10 @@
 <template>
-  <v-form ref="form" v-model="isValid" :disabled="disabled" @submit="onSubmit">
+  <v-form
+    ref="form"
+    v-model="isValid"
+    :disabled="disabled"
+    @submit="onSubmit"
+  >
     <slot />
   </v-form>
 </template>

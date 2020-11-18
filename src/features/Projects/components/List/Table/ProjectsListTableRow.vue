@@ -9,7 +9,6 @@
     <template #itemRowActions>
       <slot name="itemRowActions" :project="$$projectExtended" />
     </template>
-
   </project-list-item-renderer>
 </template>
 
@@ -32,7 +31,6 @@
         const row = _.cloneDeep(layout[0]);
 
         if (row) {
-
           for (const cell of row.children) {
             delete cell.attrs.title;
           }

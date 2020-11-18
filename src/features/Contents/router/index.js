@@ -1,12 +1,9 @@
-import ContentDetails from '@/components/Contents/ContentDetails/ContentDetails';
+import ContentDetails from '@/features/Contents/components/Content/Details/ContentDetails';
 import { routerView, routeNameGenerator } from '@/utils/helpers';
+import Content from '@/features/Contents/components/Content/Content';
 
 export const contentRoutingFabric = (parent) => {
-  const routeName = (n) => [
-    ...(parent ? [parent] : []),
-    'content',
-    n
-  ].join('.');
+  const routeName = routeNameGenerator('content', parent).get;
 
   return {
     path: 'c',
@@ -21,7 +18,12 @@ export const contentRoutingFabric = (parent) => {
 
       {
         path: ':contentExternalId',
-        component: routerView,
+        component: Content,
+        props(route) {
+          return {
+            contentId: route.params.contentExternalId
+          };
+        },
         children: [
           {
             name: routeName('details'),

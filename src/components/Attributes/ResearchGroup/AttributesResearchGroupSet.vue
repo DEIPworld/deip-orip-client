@@ -31,7 +31,7 @@
               :to="{
                 name: 'group.create',
                 query: {
-                  backTo: 'research.create'
+                  backTo: 'project.create'
                 }
               }"
             >

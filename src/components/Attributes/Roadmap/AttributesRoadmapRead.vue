@@ -44,7 +44,6 @@
                   {{ item.purpose }}
                 </div>
               </d-stack>
-
             </d-timeline-item>
           </v-item>
         </v-item-group>

@@ -57,7 +57,7 @@ export const activatableArrayModelFactory = (modelFactory) => ({
   mixins: [arrayModelAddFactory(modelFactory)],
   data() {
     return {
-      modelActive: false,
+      modelActive: false
     };
   },
 

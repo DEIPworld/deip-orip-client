@@ -1,5 +1,5 @@
 <template>
-  <d-stack :gap="stackGap">
+  <d-stack :gap="titleMarginComputed">
     <div v-if="hasHeader" :class="headerClassList">
       <slot name="title-prepend" />
 
@@ -41,6 +41,10 @@
         type: Boolean,
         default: false
       },
+      titleMargin: {
+        type: [Number, String],
+        default: 24
+      },
 
       title: {
         type: String,
@@ -56,6 +60,10 @@
       hasSubtitle() { return !!this.subtitle || this.$hasSlot('subtitle'); },
       hasHeader() { return this.hasTitle || this.hasSubtitle; },
 
+      titleMarginComputed() {
+        return this.compact ? 16 : this.titleMargin;
+      },
+
       titleClassList() {
         return {
           'text-h6': this.compact,
@@ -65,12 +73,8 @@
       headerClassList() {
         return {
           'd-flex': true,
-          'align-center': true,
+          'align-center': true
         };
-      },
-
-      stackGap() {
-        return this.compact ? 16 : 24
       },
 
       subtitleClassList() {

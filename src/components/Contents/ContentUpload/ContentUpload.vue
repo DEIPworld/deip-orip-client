@@ -54,11 +54,11 @@
             //   // `${window.location.href}!draft?ref=${res.draft._id}`
             // );
             // location.reload();
-            //////////////// START TEMP SOLUTION ///////////////////
+            /// ///////////// START TEMP SOLUTION ///////////////////
             this.$router.push({
               path: `/${this.research.researchGroup.permlink}/research/${this.research.permlink}/!draft?ref=${res.draft._id}`
             });
-            //////////////// END TEMP SOLUTION ///////////////////
+            /// ///////////// END TEMP SOLUTION ///////////////////
           })
           .catch((err) => {
             console.error(err);
@@ -71,7 +71,7 @@
         Promise.all([
           this.$store.dispatch('ResearchContents/getContents', this.$route.params.researchExternalId),
           this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.researchExternalId)
-        ])
+        ]);
       }
     }
   };

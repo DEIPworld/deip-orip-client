@@ -38,7 +38,6 @@
       :row-layout-key="rowLayoutKey"
       :card-layout-key="cardLayoutKey"
     >
-
       <template #itemCardActions="{ project }">
         <slot name="itemCardActions" :project="project" />
       </template>
@@ -46,9 +45,7 @@
       <template #itemRowActions="{ project }">
         <slot name="itemRowActions" :project="project" />
       </template>
-
     </component>
-
   </d-block>
 </template>
 

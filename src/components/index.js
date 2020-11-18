@@ -22,5 +22,5 @@ import Gravatar from 'vue-gravatar';
 
 import VueQrcode from '@xkeshi/vue-qrcode';
 
-Vue.component('v-gravatar', Gravatar);
+Vue.component('VGravatar', Gravatar);
 Vue.component(VueQrcode.name, VueQrcode);

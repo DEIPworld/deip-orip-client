@@ -9,9 +9,15 @@
   export default {
     name: 'Project',
     mixins: [componentStoreFactoryOnce(researchStore)],
+    props: {
+      projectId: {
+        type: String,
+        required: true
+      }
+    },
     created() {
       this.$store
-        .dispatch('Project/getResearchDetails', this.$route.params.researchExternalId)
+        .dispatch('Project/getResearchDetails', this.projectId)
         .then(() => {
           this.$setReady();
         });

@@ -5,7 +5,7 @@
     :name="attribute.title"
     rules="required"
   >
-    <input v-model="internalValue" type="hidden" />
+    <input v-model="internalValue" type="hidden">
 
     <v-menu
       v-model="open"
@@ -189,8 +189,8 @@
       onInput(value, validate) {
         const removed = this.oldValue.length > value.length;
         const changedId = (removed
-            ? arrayDiff(value, this.oldValue)
-            : arrayDiff(this.oldValue, value)
+          ? arrayDiff(value, this.oldValue)
+          : arrayDiff(this.oldValue, value)
         )[0];
 
         if (removed) {

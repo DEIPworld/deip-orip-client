@@ -87,7 +87,7 @@
           } : {})
           // ...(this.bgDominant ? { gradient: `to top, ${this.bgDominant}, transparent` } : {})
         };
-      },
+      }
     },
 
     created() {

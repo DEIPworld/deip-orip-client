@@ -20,7 +20,7 @@
         clipped-right
         outlined
       >
-        <v-btn icon @click="$router.back()">
+        <v-btn icon @click="clickBack">
           <v-icon>arrow_back</v-icon>
         </v-btn>
 
@@ -41,6 +41,13 @@
   export default {
     name: 'DLayoutFullScreen',
     mixins: [Colorable],
+
+    beforeRouteEnter(to, from, next) {
+      next((vm) => {
+        vm.prevRoute = from;
+      });
+    },
+
     props: {
       title: {
         type: String,
@@ -58,6 +65,11 @@
         type: Boolean,
         default: false
       }
+    },
+    data() {
+      return {
+        prevRoute: null
+      };
     },
     computed: {
       contentAttrs() {
@@ -77,6 +89,19 @@
         return {
           ...(this.setBackgroundColor(this.color).style || {})
         };
+      }
+    },
+    methods: {
+      clickBack() {
+        if (this.$listeners['click-back']) {
+          this.$emit('click-back');
+        } else {
+          if (this.prevRoute) {
+            this.$router.back();
+          } else {
+            this.$router.push({ name: 'explore' });
+          }
+        }
       }
     }
   };

@@ -22,7 +22,7 @@
     props: {
       graduate: {
         type: Number,
-        default: 5,
+        default: 5
       },
       placeholder: {
         type: String,

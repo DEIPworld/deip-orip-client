@@ -11,7 +11,6 @@
         :dot-top="16"
         :ctrl-height="48"
       >
-
         <v-row>
           <v-col cols="6">
             <v-text-field
@@ -36,7 +35,6 @@
             <v-icon>delete</v-icon>
           </v-btn>
         </template>
-
       </d-timeline-item>
       <d-timeline-add @click="addItem()" />
     </d-timeline>

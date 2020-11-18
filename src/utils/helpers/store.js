@@ -17,13 +17,11 @@ export const awaitStore = (getter, nestKey) => new Promise((resolve, reject) => 
   }
 });
 
-export const getActionMapKey = (payloadKey, defaultValue) => {
-  return {
-    get(payload = {}) {
-      return payload[payloadKey] || defaultValue;
-    }
-  };
-};
+export const getActionMapKey = (payloadKey, defaultValue) => ({
+  get(payload = {}) {
+    return payload[payloadKey] || defaultValue;
+  }
+});
 
 export const getActionTarget = (payload = {}) => {
   if (payload.target) return payload.target;

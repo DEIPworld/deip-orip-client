@@ -4,7 +4,7 @@
     :name="attribute.title"
     :rules="$$veeRules"
   >
-    <d-wysiwyg
+    <vex-wysiwyg
       v-model="internalValue"
 
       :label="$$label"
@@ -24,16 +24,9 @@
 
 <script>
   import { attributeSet } from '@/components/Attributes/_mixins';
-  import DWysiwyg from '@/components/Deipify/DWysiwyg/DWysiwyg';
 
   export default {
     name: 'AttributesTextareaSet',
-    components: { DWysiwyg },
-    mixins: [attributeSet],
-    methods: {
-      onChange(val) {
-        console.log(val)
-      }
-    }
+    mixins: [attributeSet]
   };
 </script>

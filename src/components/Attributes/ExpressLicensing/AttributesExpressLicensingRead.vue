@@ -12,9 +12,7 @@
       </d-block-widget>
     </template>
 
-
     <template v-if="!project.members.includes($currentUserName) && attrHasData">
-
       <template
         v-if="userLicenses.length"
       >

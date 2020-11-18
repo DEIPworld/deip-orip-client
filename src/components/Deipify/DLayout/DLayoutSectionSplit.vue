@@ -13,12 +13,12 @@
       gap: {
         type: [Number, String],
         default: 24
-      },
+      }
     },
     computed: {
       additionalClasses() {
         return {
-          [this.$style.host]: true,
+          [this.$style.host]: true
         };
       },
       additionalStyles() {
@@ -26,7 +26,7 @@
           '--layout-split-stack-gap': convertToUnit(this.gap),
           '--layout-split-template': this.template.split(' ').map((i) => `${i}fr`).join(' ')
         };
-      },
+      }
     }
   };
 </script>

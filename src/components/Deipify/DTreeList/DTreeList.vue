@@ -14,8 +14,6 @@
       <template #itemAction="{ item }">
         <slot name="itemAction" v-bind="{ item }" />
       </template>
-
-
     </d-tree-list-node>
 
     <!--      </template>-->

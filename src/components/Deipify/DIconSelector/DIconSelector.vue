@@ -35,6 +35,6 @@
             value: _.kebabCase(i)
           }));
       }
-    },
+    }
   };
 </script>

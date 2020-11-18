@@ -39,7 +39,7 @@ const ACTIONS = {
 const MUTATIONS = {
   storeContents(state, list) {
     state.list = list;
-  },
+  }
 };
 
 export const contentListStore = {

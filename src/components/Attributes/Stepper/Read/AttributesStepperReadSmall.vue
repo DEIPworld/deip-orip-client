@@ -1,6 +1,5 @@
 <template>
   <div class="d-flex align-center">
-
     <d-simple-tooltip :tooltip="attributeInfo.title" tag="div">
       <div class="text-overline font-weight-medium mr-1">
         {{ attributeInfo.shortTitle }}

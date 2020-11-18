@@ -1,0 +1,224 @@
+@import '~@/styles/next/tools/get-text-style';
+
+// WARN: core styles goes from module
+
+@mixin btn() {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--color-text-secondary);
+  transition: all .2s;
+
+  &.ql-active {
+    color: var(--v-primary-base);
+  }
+
+  &:hover {
+    background-color: rgba(#1A1B22, .04);
+  }
+
+  svg {
+    width: 24px !important;
+    height: 24px !important;
+    fill: currentColor;
+  }
+}
+
+.vex-wysiwyg {
+  --ql-border-color: var(--color-text-disabled, grey);
+  --ql-divider-color: var(--color-divider, #ddd);
+
+  .error--text & {
+    --ql-border-color: var(--v-error-base, red);
+  }
+
+  &__slot {
+    width: 100%;
+  }
+
+  .v-label {
+    margin-bottom: 4px;
+  }
+}
+
+.ql-md {
+  a {
+    color: var(--v-primary-base, #000)
+  }
+
+  .ql-editor {
+    min-height: 200px;
+    padding: 24px;
+
+    > p, ul, ol, h1, h2, h3, h4, h5, h6 {
+      &:not(:first-child) {
+        margin-top: 16px;
+      }
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
+    }
+
+    p, li {
+      @include get-text-style(body-2);
+    }
+
+    @each $h in (h1,h2,h3,h4,h5,h6) {
+      #{$h} {
+        @include get-text-style($h)
+      }
+    }
+  }
+
+  &.ql-container {
+    border: 1px solid var(--ql-border-color, rgba(#000, .12));
+    border-radius: 4px;
+  }
+
+  &.ql-toolbar {
+    border: 1px solid var(--ql-border-color, rgba(#000, .12));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 8px 4px 0;
+    border-radius: 4px 4px 0 0;
+
+    .ql-formats {
+      margin: 0 8px 8px 0;
+      height: 32px;
+      display: flex;
+      grid-auto-flow: column;
+      align-items: center;
+
+      &:not(:last-child) {
+        padding-right: 8px;
+        border-right: 1px solid var(--ql-divider-color);
+      }
+
+      &:after {
+        display: none;
+      }
+
+      button {
+        @include btn();
+      }
+    }
+
+    .ql-picker {
+      &.ql-header {
+        top: 0;
+        width: 112px;
+
+        .ql-picker-label {
+          padding-left: 12px;
+        }
+      }
+    }
+
+
+    .ql-picker-options {
+      border: 1px solid transparent;
+      box-shadow: rgba(0, 0, 0, 0.2) 0 2px 8px;
+    }
+
+    .ql-color-picker {
+      width: 32px;
+      height: 32px;
+      top: 0;
+
+      .ql-picker-label {
+        @include btn();
+      }
+
+      .ql-picker-item.ql-selected, .ql-picker-item:hover {
+        border-color: #000;
+      }
+    }
+  }
+
+  &.ql-toolbar + &.ql-container {
+    border-radius: 0 0 4px 4px;
+    border-top: 0;
+  }
+
+  .ql-tooltip {
+    background-color: #fff;
+    border: 1px solid var(--ql-border-color);
+    color: (--color-text-primary);
+    padding: 5px 12px;
+    white-space: nowrap;
+
+    &::before {
+      content: "Visit URL:";
+      line-height: 26px;
+      margin-right: 8px;
+    }
+
+    input[type=text] {
+      display: none;
+      border: 1px solid var(--ql-border-color);
+      font-size: 13px;
+      height: 26px;
+      margin: 0px;
+      padding: 3px 5px;
+      width: 170px;
+    }
+
+    a.ql-preview {
+      display: inline-block;
+      max-width: 200px;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      vertical-align: top;
+    }
+
+    a.ql-action::after {
+      border-right: 1px solid var(--ql-border-color);
+      content: "Edit";
+      margin-left: 16px;
+      padding-right: 8px;
+    }
+
+    a.ql-remove::before {
+      content: "Remove";
+      margin-left: 8px;
+    }
+
+    a {
+      line-height: 26px;
+    }
+  }
+
+  .ql-tooltip.ql-editing {
+    a.ql-preview, a.ql-remove {
+      display: none;
+    }
+
+    input[type=text] {
+      display: inline-block;
+    }
+
+    a.ql-action::after {
+      border-right: 0px;
+      content: "Save";
+      padding-right: 0px;
+    }
+  }
+
+  .ql-tooltip[data-mode=link]::before {
+    content: "Enter link:";
+  }
+
+  .ql-tooltip[data-mode=formula]::before {
+    content: "Enter formula:";
+  }
+
+  .ql-tooltip[data-mode=video]::before {
+    content: "Enter video:";
+  }
+}

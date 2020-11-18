@@ -9,7 +9,6 @@
       }
     }"
   >
-
     <slot name="itemCardActions" :project="$$projectExtended" />
 
     <project-list-item-renderer

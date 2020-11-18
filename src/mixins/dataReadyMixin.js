@@ -7,7 +7,7 @@ export const dataReadyMixin = {
   computed: {
     $ready: {
       get() {
-        return this.$data.$lazyReady
+        return this.$data.$lazyReady;
       },
       set(val) {
         this.$data.$lazyReady = val;

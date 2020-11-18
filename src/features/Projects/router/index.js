@@ -3,7 +3,7 @@ import ProjectExpertise from '@/features/Projects/components/Project/Expertise/P
 import ProjectCreate from '@/features/Projects/components/Create/ProjectCreate';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import { reviewRoutingFabric } from '@/components/Reviews/router';
-import { contentRoutingFabric } from '@/components/Contents/router';
+import { contentRoutingFabric } from '@/features/Contents/router';
 import Project from '@/features/Projects/components/Project/Project';
 import ProjectFundraising from '@/features/Projects/components/Project/Fundraising/ProjectFundraising';
 import ProjectEdit from '@/features/Projects/components/Project/Edit/ProjectEdit';
@@ -12,12 +12,12 @@ const routerView = { template: '<router-view />' };
 
 export const projectRouting = [{
   path: '/p',
-  redirect: { name: 'research.create' },
+  redirect: { name: 'project.create' },
   component: routerView,
 
   children: [
     {
-      name: 'research.create',
+      name: 'project.create',
       path: 'create',
       component: ProjectCreate,
       props: {
@@ -28,6 +28,11 @@ export const projectRouting = [{
     {
       path: ':researchExternalId',
       component: Project,
+      props(route) {
+        return {
+          projectId: route.params.researchExternalId
+        };
+      },
 
       children: [
         {
@@ -68,6 +73,6 @@ export const projectRouting = [{
           component: CreateTokenSale
         }
       ]
-    },
+    }
   ]
 }];

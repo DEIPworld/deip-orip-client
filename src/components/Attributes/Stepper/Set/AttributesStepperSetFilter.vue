@@ -12,7 +12,6 @@
     outlined
     multiple
   >
-
     <template #item="{ item }">
       <v-list-item-avatar
         :size="24"
@@ -54,10 +53,7 @@
         </v-btn>
       </v-chip>
     </template>
-
   </d-autocomplete>
-
-
 </template>
 
 <script>

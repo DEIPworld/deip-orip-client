@@ -67,6 +67,6 @@
       if (!this.internalValue.length) {
         this.addItem();
       }
-    },
+    }
   };
 </script>

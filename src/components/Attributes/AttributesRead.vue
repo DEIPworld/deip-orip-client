@@ -53,7 +53,7 @@
       attribute: {
         type: Object,
         default: () => ({})
-      },
+      }
     }
   };
 </script>

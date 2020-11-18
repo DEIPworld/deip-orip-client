@@ -1,6 +1,5 @@
 <template>
   <d-layout>
-
     <d-layout-section
       :background="$options.filters.tenantBackgroundSrc($tenant.account)"
       :min-height="300"
@@ -29,7 +28,6 @@
         <projects-list with-filter />
       </d-layout-section-main>
     </d-layout-section>
-
   </d-layout>
 </template>
 
@@ -48,6 +46,6 @@
       DLayoutSectionMain,
       DLayoutSection,
       DLayout
-    },
+    }
   };
 </script>

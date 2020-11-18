@@ -7,10 +7,10 @@
   $target: map.get(typography.$styles, $key);
 
   @each $bp, $style in $target {
-    @if $bp != xs {
+    //@if $bp != xs {
       @include bp-map($bp) {
         @include query-loop($style);
       }
-    }
+    //}
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters>
+  <v-row no-gutters :class="classes">
     <v-col cols="auto">
       <div v-if="!$hasSlot('label')" class="text-caption">
         {{ label }}
@@ -30,6 +30,17 @@
       value: {
         type: [String, Number],
         default: null
+      },
+      align: {
+        type: String,
+        default: null
+      }
+    },
+    computed: {
+      classes() {
+        return {
+          ...(this.align ? { [`align-${this.align}`]: true } : {})
+        };
       }
     }
   };

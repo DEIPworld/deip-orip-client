@@ -1,38 +1,25 @@
 const path = require('path');
 
 module.exports = {
-  css: {
-    loaderOptions: {
-      // sass: {
-      //   prependData: () => {
-      //     return ''
-      //   }
-      // }
-    }
-  },
+  chainWebpack: (config) => {
+    const svgRule = config.module.rule('svg');
 
-  // chainWebpack: (config) => {
-  //   ['vue-modules', 'vue', 'normal-modules', 'normal'].forEach(match => {
-  //     config.module
-  //       .rule('sass')
-  //       .oneOf(match)
-  //       .use('sass-loader')
-  //       .tap(opt => {
-  //         return {
-  //           ...opt,
-  //           ...{
-  //             additionalData(content, loaderContext) {
-  //               const { resourcePath, rootContext } = loaderContext;
-  //               console.log('@@@@@@@@@@', resourcePath);
-  //             }
-  //               // resourcePath.includes('vuetify') && resourcePath.includes('node_modules')
-  //               //   ? '@import "~@/styles/next/core/_vuetify-settings.scss"'
-  //               //   : ''
-  //           }
-  //         };
-  //       });
-  //   });
-  // },
+    svgRule.uses.clear();
+
+    svgRule
+      .test(/^((?!webfont).)*\.svg(\?.*)?$/)
+      .use('inline-svgo-loader')
+      .loader(require.resolve('inline-svgo-loader'));
+
+    config.module
+      .rule('svgFont')
+      .test(/^(.*(?=webfont).*)\.svg(\?.*)?$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'))
+      .tap(() => ({
+        name: 'fonts/[name].[hash:8].[ext]'
+      }));
+  },
 
   devServer: {
     setup(app) {

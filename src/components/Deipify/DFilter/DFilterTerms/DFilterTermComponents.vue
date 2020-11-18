@@ -1,7 +1,7 @@
 <template>
   <d-stack :gap="24" class="px-6">
-<!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
-<!--    <pre>{{JSON.stringify(researchAttributes, null, 2)}}</pre>-->
+    <!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
+    <!--    <pre>{{JSON.stringify(researchAttributes, null, 2)}}</pre>-->
 
     <attributes-set
       v-for="(attribute, index) of researchAttributes"

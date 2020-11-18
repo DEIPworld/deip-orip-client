@@ -1,4 +1,5 @@
-import VexDialogPlugin from '@/plugins/VuetifyExtended/VexDialog';
+import VexDialogPlugin from '@/plugins/VuetifyExtended/components/VexDialog';
+import VexWysiwygPlugin from '@/plugins/VuetifyExtended/components/VexWysiwyg';
 
 const install = (Vue, options = {}) => {
   if (install.installed) return;
@@ -9,6 +10,7 @@ const install = (Vue, options = {}) => {
   Vue.delete(options, 'vuetify');
 
   Vue.use(VexDialogPlugin, { vuetify, ...(options.dialog || {}) });
+  Vue.use(VexWysiwygPlugin);
 };
 
 const VuetifyExtended = {

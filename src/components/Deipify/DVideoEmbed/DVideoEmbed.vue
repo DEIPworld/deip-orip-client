@@ -80,7 +80,7 @@
     computed: {
       measurableProps() {
         return Object.keys(Measurable.options.props)
-          .reduce((props, key) => ({ ...props, ...(this[key] ? { [key]: this[key] } : {}) }), {})
+          .reduce((props, key) => ({ ...props, ...(this[key] ? { [key]: this[key] } : {}) }), {});
       },
 
       videoUrl() {

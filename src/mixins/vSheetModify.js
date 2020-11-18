@@ -29,7 +29,7 @@ export const vSheetModify = {
           ...this.additionalStyles
         },
         on: this.listeners$
-      }
+      };
     }
   },
   methods: {

@@ -25,7 +25,7 @@
           {
             attrs: {
               projectId: this.researchExtended.externalId,
-              project: _.cloneDeep(this.researchExtended), // global
+              project: _.cloneDeep(this.researchExtended) // global
             }
           }
         );

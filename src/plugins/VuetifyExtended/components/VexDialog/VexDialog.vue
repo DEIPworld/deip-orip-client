@@ -52,7 +52,6 @@
           </v-btn>
         </v-card-actions>
       </template>
-
     </v-card>
   </v-dialog>
 </template>
@@ -125,7 +124,7 @@
       cancelDisabled: Boolean,
       trueDisabled: Boolean,
       loading: Boolean,
-      confirm: Boolean,
+      confirm: Boolean
     },
 
     data() {
@@ -175,7 +174,7 @@
           this.$destroy();
         } else {
           this.isActive = false;
-        };
+        }
         this.$emit('close', e);
       }
     }

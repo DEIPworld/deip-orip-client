@@ -1,7 +1,6 @@
 <template>
   <v-sheet color="transparent">
     <v-list-item>
-
       <v-sheet v-for="index in depth" :key="index" :width="24" />
 
       <v-sheet

@@ -47,7 +47,7 @@
       AttributesUserSet,
       AttributesVideoUrlSet,
       AttributesImageSet,
-      AttributesExpressLicensingSet,
+      AttributesExpressLicensingSet
     },
 
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
@@ -55,7 +55,7 @@
       attribute: {
         type: Object,
         default: () => ({})
-      },
+      }
     }
   };
 </script>

@@ -167,7 +167,6 @@
         const onchainFields = this.$tenantSettings.researchAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
-
             // console.log(attr.title, attr._id, this.formModel.researchRef.attributes[attr._id])
             const value = this.formModel.researchRef.attributes[attr._id];
 

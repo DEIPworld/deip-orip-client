@@ -16,7 +16,9 @@ import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
 import CrudActions from '@/components/layout/CrudActions';
 
-import { VDivider, VSheet, VIcon, VBtn, VRow, VCol } from 'vuetify/lib/components';
+import {
+  VDivider, VSheet, VIcon, VBtn, VRow, VCol
+} from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
 const rendererCommon = {

@@ -9,22 +9,31 @@
       dense
       @change="change"
     >
-      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.GRID">
-        <v-btn tile icon small @click="toggle">
+      <v-item v-slot="{ active, toggle }" :value="VIEW_TYPES.GRID">
+        <v-btn
+          tile
+          icon
+          small
+          @click="toggle"
+        >
           <v-icon :color="active ? 'primary' : 'grey'">
             view_module
           </v-icon>
         </v-btn>
       </v-item>
       <v-divider vertical />
-      <v-item #default="{ active, toggle }" :value="VIEW_TYPES.TABLE">
-        <v-btn tile icon small @click="toggle">
+      <v-item v-slot="{ active, toggle }" :value="VIEW_TYPES.TABLE">
+        <v-btn
+          tile
+          icon
+          small
+          @click="toggle"
+        >
           <v-icon :color="active ? 'primary' : 'grey'">
             view_list
           </v-icon>
         </v-btn>
       </v-item>
-
     </v-item-group>
   </v-sheet>
 </template>

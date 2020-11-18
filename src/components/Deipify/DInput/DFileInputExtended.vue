@@ -51,7 +51,7 @@
       label: {
         type: String,
         default: undefined
-      },
+      }
     },
     data() {
       return {

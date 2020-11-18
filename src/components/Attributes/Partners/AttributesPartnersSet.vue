@@ -62,7 +62,6 @@
     </d-timeline-item>
 
     <d-timeline-add @click="addItem()" />
-
   </d-block>
 </template>
 

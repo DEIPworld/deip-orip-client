@@ -49,7 +49,7 @@
       bookmarkService() {
         return !this.bookmarkId
           ? userService.createResearchBookmark(this.$currentUserName, this.project.externalId)
-          : userService.removeResearchBookmark(this.$currentUserName, this.bookmarkId)
+          : userService.removeResearchBookmark(this.$currentUserName, this.bookmarkId);
       },
 
       toggleBookmark() {

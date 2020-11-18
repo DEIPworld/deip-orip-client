@@ -1,6 +1,5 @@
 <template>
   <v-clamp :max-lines="maxLines" :autoresize="true">
-
     <slot />
 
     <template #after="{ clamped, toggle, expanded }">

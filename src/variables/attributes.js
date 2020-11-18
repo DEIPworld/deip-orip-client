@@ -8,7 +8,7 @@ export const ATTR_TYPES = {
   SWITCH: 'switch',
   CHECKBOX: 'checkbox',
 
-  //=============================
+  //= ============================
 
   URL: 'url',
   VIDEO_URL: 'video-url',
@@ -41,7 +41,7 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.SWITCH]: 'Switch',
   [ATTR_TYPES.CHECKBOX]: 'Checkbox',
 
-  //=============================
+  //= ============================
 
   [ATTR_TYPES.URL]: 'URL`s list',
   [ATTR_TYPES.VIDEO_URL]: 'Video URL',
@@ -74,7 +74,7 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.SWITCH]: 'mdi-toggle-switch-outline',
   [ATTR_TYPES.CHECKBOX]: 'mdi-check-box-outline',
 
-  //=============================
+  //= ============================
 
   [ATTR_TYPES.URL]: 'mdi-link-variant-plus',
   [ATTR_TYPES.VIDEO_URL]: 'mdi-video-outline',

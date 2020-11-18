@@ -12,24 +12,12 @@ export const compactResearchAttributes = (
     [valueKey]: attrs[id]
   }));
 
-export const expandResearchAttributes = (attrs) => {
-  return attrs.reduce((res, attr) => {
-    return { ...res, ...{ [attr.researchAttributeId]: attr.value } };
-  }, {});
-};
+export const expandResearchAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.researchAttributeId]: attr.value } }), {});
 
 // TODO: switch to expand
-export const researchAttributesToObject = (attrs) => {
-  return attrs.reduce((res, attr) => {
-    return { ...res, ...{ [attr.researchAttributeId]: attr } };
-  }, {});
-};
+export const researchAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.researchAttributeId]: attr } }), {});
 
-export const tenantAttributesToObject = (attrs) => {
-  return attrs.reduce((res, attr) => {
-    return { ...res, ...{ [attr._id]: attr } };
-  }, {});
-};
+export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr._id]: attr } }), {});
 
 export const researchAttributeFileUrl = (
   researchExternalId,
@@ -62,7 +50,7 @@ export const extendAttrModules = (schema, obj = {}) => {
     if (isObject(node) && node.type === 'attribute') {
       parent[key] = mergeDeep(node, obj);
     }
-  };
+  }
   return clone;
 };
 

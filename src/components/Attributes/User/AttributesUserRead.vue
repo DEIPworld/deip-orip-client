@@ -40,7 +40,6 @@
           </a>
         </div>
       </template>
-
     </users-list>
   </div>
 </template>

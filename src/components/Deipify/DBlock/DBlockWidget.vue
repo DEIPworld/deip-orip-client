@@ -19,7 +19,6 @@
     </template>
 
     <slot />
-
   </d-block>
 </template>
 

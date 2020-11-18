@@ -1,6 +1,6 @@
 import Comparable from 'vuetify/lib/mixins/comparable';
 
-const stabilizeJson = (obj) => JSON.parse(JSON.stringify(obj))
+const stabilizeJson = (obj) => JSON.parse(JSON.stringify(obj));
 
 export const changeable = {
   name: 'comparable',

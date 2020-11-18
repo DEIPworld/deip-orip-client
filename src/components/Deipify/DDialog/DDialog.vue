@@ -35,7 +35,6 @@
       <v-card-actions v-if="!hideButtons">
         <v-spacer />
         <slot name="actions">
-
           <slot name="buttonCancel">
             <v-btn
               text
@@ -65,7 +64,7 @@
 </template>
 
 <script>
-  import Toggleable from 'vuetify/lib/mixins/toggleable'
+  import Toggleable from 'vuetify/lib/mixins/toggleable';
 
   export default {
     name: 'DDialog',

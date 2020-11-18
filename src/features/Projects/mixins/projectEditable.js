@@ -11,7 +11,6 @@ export const projectEditable = {
 
   methods: {
     $$verifyProject(groupId, title, projectId) {
-
       if (groupId && !projectId) {
         return researchService
           .checkResearchExistenceByPermlink(groupId, title)

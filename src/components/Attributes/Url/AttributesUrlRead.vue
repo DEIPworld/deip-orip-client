@@ -24,7 +24,6 @@
       <template v-if="!item.url">
         <span class="">{{ item.label }}</span>
       </template>
-
     </div>
   </d-stack>
 </template>
