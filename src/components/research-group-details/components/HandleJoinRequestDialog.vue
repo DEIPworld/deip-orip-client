@@ -143,7 +143,7 @@
         })
           .then(() => {
             this.$store.dispatch('researchGroup/loadJoinRequests', { groupId: this.groupId });
-            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.groupId });
+            this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
             this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
           }, (err) => {
             this.$notifier.showError(this.$t('researchGroupDetails.joinRequestDialog.errSend'));

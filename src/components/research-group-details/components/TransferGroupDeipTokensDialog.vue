@@ -182,7 +182,7 @@
               this.$notifier.showSuccess(this.$t('researchGroupDetails.transferDialog.success'));
 
               this.clearForm();
-              this.$store.dispatch('researchGroup/loadResearchGroupProposals', { groupId: this.group.id });
+              this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
 
               setTimeout(() => this.close(), 1500);
             })

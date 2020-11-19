@@ -4,27 +4,7 @@
       <div class="text-h4 mb-8">
         Transactions
       </div>
-      <v-tabs v-model="tab">
-        <v-tab :key="1">
-          <v-badge color="primary" inline :content="`${pendingRequests.length}`">
-            Pending
-          </v-badge>
-        </v-tab>
-        <v-tab :key="2">
-          <v-badge color="primary" inline :content="`${approvedRequests.length}`">
-            History
-          </v-badge>
-        </v-tab>
-      </v-tabs>
-      <v-divider />
-      <v-tabs-items v-model="tab">
-        <v-tab-item :key="1">
-          <transactions-table have-actions :data-table="pendingRequestsDataTable" />
-        </v-tab-item>
-        <v-tab-item :key="2">
-          <transactions-table :data-table="completedRequestsDataTable" />
-        </v-tab-item>
-      </v-tabs-items>
+      <transactions-list :key="'group-proposals'" :account="$currentUserName" />
     </d-layout-section-main>
   </d-layout-section>
 </template>
@@ -35,7 +15,7 @@
   import { mapGetters } from 'vuex';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import TransactionsTable from '@/components/Transactions/components/TransactionsTable';
+  import TransactionsList from '@/components/TransactionsList/TransactionsList';
 
   export default {
     name: 'Transactions',
@@ -43,7 +23,7 @@
     components: {
       DLayoutSection,
       DLayoutSectionMain,
-      TransactionsTable
+      TransactionsList
     },
 
     mixins: [componentStoreFactoryOnce(transactionsStore)],
