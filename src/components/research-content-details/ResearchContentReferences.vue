@@ -478,10 +478,4 @@
   .outer-references-by-discipline {
     border-left: 1px solid #efefef;
   }
-
-  .tabs-container {
-    height: 500px;
-    // overflow-y: scroll;
-  }
-
 </style>

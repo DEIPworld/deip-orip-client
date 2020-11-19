@@ -104,7 +104,7 @@
               hide-details
             />
 
-            <div class="pb-4 text-justify caption grey--text" v-html="$t('signUp.free.form.privacyText', {link:'https://deip.world/pdf/PRIVACY-POLICY-January-22-2020.pdf'})"></div>
+            <div class="pb-4 text-justify caption grey--text" v-html="$t('signUp.free.form.privacyText', {link:'https://deip.world/pdf/PRIVACY-POLICY-January-22-2020.pdf'})" />
 
             <v-btn
               block
@@ -270,7 +270,7 @@
         }).then(() => {
           this.isSaving = false;
           this.isServerValidated = true;
-          this.$notifier.showSuccess(this.$t('signUp.free.form.success', {account: this.formData.username}));
+          this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formData.username }));
           this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
           this.isSaving = false;
