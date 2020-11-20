@@ -18,14 +18,38 @@
       <template #item.type="{ item }">
         <div class="d-flex mt-4">
           <v-icon size="20" left color="black">
-            {{ transactionTypes['LICENSE'].icon }}
-          </v-icon>{{ transactionTypes['LICENSE'].text }}
+            {{ transactionTypes[item.type].icon }}
+          </v-icon>{{ transactionTypes[item.type].text }}
         </div>
       </template>
       <template #item.details="{ item }">
-        <v-clamp autoresize :max-lines="2" class="mt-4">
-          {{ item.details.title }} Details title
-          <!-- ( {{ $$toAssetUnits(item.licencePlan.fee) }} ) -->
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.TRANSFER_ASSET === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset)) }} to
+          {{ item.extendedDetails.party2.name ||
+            $options.filters.fullname(item.extendedDetails.party2) }}
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ item.extendedDetails.research.title }}
+          ( {{ $$toAssetUnits(item.details.licencePlan.fee) }} )
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset1)) }} to
+          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset2)) }}
         </v-clamp>
         <v-row
           v-if="!isShowAccountsBlock(item)"
@@ -49,16 +73,18 @@
                 :src="item.proposer.account.external_id | researchGroupLogoSrc(64, 64)"
               />
             </v-avatar>
-            <v-avatar
-              v-for="(s, i) in item.proposer.signers"
-              :key="`${i}-signer`"
-              class="ml-n2"
-              :size="32"
-            >
-              <v-img
-                :src="s.signer.profile | avatarSrc(64,64)"
-              />
-            </v-avatar>
+            <template v-for="(s, i) in item.proposer.signers">
+              <v-avatar
+                v-if="s.signer.profile"
+                :key="`${i}-signer`"
+                class="ml-n2"
+                :size="32"
+              >
+                <v-img
+                  :src="s.signer.profile | avatarSrc(64,64)"
+                />
+              </v-avatar>
+            </template>
             <v-clamp
               class="ml-3"
               autoresize
@@ -67,27 +93,27 @@
               {{ item.proposer.account.name || $options.filters.fullname(item.proposer.account) }}
             </v-clamp>
           </v-col>
-          <v-col class="d-flex ml-2 align-center">
-            <template v-for="(p, i) in item.parties">
-              <v-avatar v-if="!p.isProposer" :key="`${i}-party`" :size="32">
+          <v-col class="d-flex ml-4 align-center">
+            <template v-for="(s, i) in item.signers.signers">
+              <v-avatar :key="`${i}-party`" class="ml-n2" :size="32">
                 <v-img
                   :src="
-                    p.account.profile ?
-                      ($options.filters.avatarSrc(p.account.profile, 64, 64))
-                      : ($options.filters.researchGroupLogoSrc(p.account.external_id, 64, 64))
+                    s.signer.profile ?
+                      ($options.filters.avatarSrc(s.signer.profile, 64, 64))
+                      : ($options.filters.researchGroupLogoSrc(
+                        s.signer.external_id, 64, 64
+                      ))
                   "
                 />
               </v-avatar>
-              <v-clamp
-                v-if="!p.isProposer"
-                :key="`${i}-party-clamp`"
-                class="ml-3"
-                autoresize
-                :max-lines="1"
-              >
-                {{ p.account.name || $options.filters.fullname(p.account) }}
-              </v-clamp>
             </template>
+            <v-clamp
+              class="ml-3"
+              autoresize
+              :max-lines="1"
+            >
+              {{ item.signers.text }}
+            </v-clamp>
           </v-col>
         </v-row>
       </template>
@@ -110,7 +136,7 @@
             class="mr-4"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="approveExpressLicensingRequest(item)"
+            @click="approve(item)"
           >
             <v-icon left>
               done
@@ -123,7 +149,7 @@
             color="primary"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="rejectExpressLicensingRequest(item)"
+            @click="reject(item)"
           >
             <v-icon left>
               clear
@@ -166,72 +192,82 @@
             <template v-for="(party, i) in item.parties">
               <template v-for="(signer, j) in party.signers">
                 <v-expansion-panel
-                  v-if="!signer.signer.external_id"
+                  v-if="!signer.signer.external_id
+                    || signer.signer.external_id && party.signers.length === 1"
                   :key="`${i}-${j}-accounts`"
                   class="pa-0"
                   :class="{'mt-6': !item.expand.length}"
                 >
                   <v-expansion-panel-header class="pa-0" hide-actions>
-                    <d-box-item
-                      :avatar="
-                        signer.signer.profile
-                          ? $options.filters.avatarSrc(
-                            signer.signer.profile,
-                            80,
-                            80,
-                            false
-                          )
-                          : $options.filters.researchGroupLogoSrc(
-                            signer.signer.external_id,
-                            80,
-                            80
-                          )
-                      "
-                      :size="40"
-                      style="max-width: 400px"
-                    >
-                      <router-link
-                        tag="div"
-                        :to="
-                          signer.signer.profile
-                            ? {
-                              name: 'UserDetails',
-                              params: { account_name: signer.signer.account.name },
-                            }
-                            : {
-                              name: 'ResearchGroupDetails',
-                              params: {
-                                research_group_permlink: encodeURIComponent(
-                                  signer.signer.permlink
-                                ),
-                              },
-                            }
-                        "
-                        class="text-caption text-decoration-none"
+                    <div class="d-flex">
+                      <v-avatar
+                        v-if="!signer.signer.external_id && party.account.external_id"
+                        class="mr-n2"
+                        :size="40"
                       >
-                        <v-clamp autoresize :max-lines="1" class="text-h6">
-                          {{
+                        <v-img :src="party.account.external_id | researchGroupLogoSrc(80,80)" />
+                      </v-avatar>
+                      <d-box-item
+                        :avatar="
+                          signer.signer.profile
+                            ? $options.filters.avatarSrc(
+                              signer.signer.profile,
+                              80,
+                              80,
+                              false
+                            )
+                            : $options.filters.researchGroupLogoSrc(
+                              signer.signer.external_id,
+                              80,
+                              80
+                            )
+                        "
+                        :size="40"
+                        style="max-width: 400px"
+                      >
+                        <router-link
+                          tag="div"
+                          :to="
                             signer.signer.profile
-                              ? $options.filters.fullname(signer.signer)
-                              : signer.signer.name
-                          }}
-                        </v-clamp>
-                      </router-link>
-                      <template #actionText>
-                        <div style="width: 93px">
-                          <div class="d-flex black--text text-body-2">
-                            <v-icon
-                              :color="statusChipData.color[party.status]"
-                              size="14"
-                              class="mr-1"
-                            >
-                              {{ statusChipData.icon[party.status] }}
-                            </v-icon>
-                            {{ statusChipData.text[party.status] }}
+                              ? {
+                                name: 'UserDetails',
+                                params: { account_name: signer.signer.account.name },
+                              }
+                              : {
+                                name: 'ResearchGroupDetails',
+                                params: {
+                                  research_group_permlink: encodeURIComponent(
+                                    signer.signer.permlink
+                                  ),
+                                },
+                              }
+                          "
+                          class="text-caption text-decoration-none"
+                        >
+                          <v-clamp autoresize :max-lines="1" class="text-h6">
+                            {{
+                              signer.signer.profile
+                                ? $options.filters.fullname(signer.signer)
+                                : signer.signer.name
+                            }}
+                          </v-clamp>
+                        </router-link>
+                        <template #actionText>
+                          <div style="width: 93px">
+                            <div class="d-flex black--text text-body-2">
+                              <v-icon
+                                :color="statusChipData.color[party.status]"
+                                size="14"
+                                class="mr-1"
+                              >
+                                {{ statusChipData.icon[party.status] }}
+                              </v-icon>
+                              {{ statusChipData.text[party.status] }}
+                            </div>
                           </div>
-                        </div>
-                      </template>
-                    </d-box-item>
+                        </template>
+                      </d-box-item>
+                    </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content class="pa-0">
                     <div
@@ -286,19 +322,59 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { chartGradient, switchColor } from '@/plugins/charts';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { ExpressLicensingService } from '@deip/express-licensing-service';
   import { assetsChore } from '@/mixins/chores';
-  import { PROPOSAL_STATUS } from '@/variables';
+  import { PROPOSAL_STATUS, LOC_PROPOSAL_TYPES } from '@/variables';
+  import { ProposalsService } from '@deip/proposals-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
+  import { AssetsService } from '@deip/assets-service';
 
+  const assetsService = AssetsService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();
+  const proposalsService = ProposalsService.getInstance();
   const expressLicensingService = ExpressLicensingService.getInstance();
 
   const transactionTypes = {
-    LICENSE: {
-      id: 1,
+    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH]: {
+      icon: 'add_box',
+      text: 'Create Project'
+    },
+    [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH]: {
+      icon: 'update',
+      text: 'Project Update'
+    },
+    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: {
+      icon: 'note_add',
+      text: 'Content Upload'
+    },
+    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: {
+      icon: 'business_center',
+      text: 'Investment'
+    },
+    [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: {
+      icon: 'groups',
+      text: 'Team update'
+    },
+    [LOC_PROPOSAL_TYPES.INVITE_MEMBER]: {
+      icon: 'person_add',
+      text: 'Invite Member'
+    },
+    [LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER]: {
+      icon: 'person_remove',
+      text: 'Remove Member'
+    },
+    [LOC_PROPOSAL_TYPES.TRANSFER_ASSET]: {
+      icon: 'mdi-arrow-right-circle',
+      text: 'Transfer'
+    },
+    [LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST]: {
       icon: 'work',
       text: 'Licensing'
+    },
+    [LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST]: {
+      icon: 'swap_horizontal_circle',
+      text: 'Exchange'
     }
   };
 
@@ -342,6 +418,7 @@
         transactionTypes,
         txStatus,
         PROPOSAL_STATUS,
+        LOC_PROPOSAL_TYPES,
         disableButtonsId: '',
         txStatusChips: {
           [PROPOSAL_STATUS.APPROVED]: this.$t('transactionsPage.signed'),
@@ -401,14 +478,6 @@
         }
         return header;
       },
-      // chipColors() {
-      //   return chartGradient(Object.keys(transactionTypes).length + 1).map(
-      //     (color) => ({
-      //       bg: color,
-      //       textColor: switchColor(color)
-      //     })
-      //   );
-      // },
       statusChipData() {
         return {
           color: chipColors,
@@ -430,13 +499,13 @@
     methods: {
       isShowActions(item) {
         let show = true;
-        for (const i in item.parties) {
+        Object.keys(item.parties).forEach((i) => {
           item.parties[i].signers.forEach((s) => {
-            if(!s.signer.external_id && s.signer.account.name === this.$currentUserName) {
+            if (!s.signer.external_id && s.signer.account.name === this.$currentUserName) {
               show = false;
             }
           });
-        }
+        });
         return show;
       },
       isShowAccountsBlock(item) {
@@ -446,33 +515,127 @@
       },
       showDetails(item) {
         const expandData = [];
-        for (const i in item.parties) {
+        Object.keys(item.parties).forEach((i) => {
           item.parties[i].signers.forEach((s) => {
             if (!s.external_id) {
               expandData.push(s);
             }
           });
-        }
+        });
         !item.expand.length
           ? item.expand = expandData.map((item, i) => i)
           : item.expand = [];
       },
-      approveExpressLicensingRequest(request) {
-        this.disableButtonsId = request.proposal.external_id;
-        expressLicensingService
-          .approveExpressLicensingRequest(
+      // approveExpressLicensingRequest(trc) {
+      //   this.disableButtonsId = trc.proposal.external_id;
+      //   expressLicensingService
+      //     .approveExpressLicensingRequest(
+      //       {
+      //         privKey: this.$currentUser.privKey,
+      //         username: this.$currentUser.username
+      //       },
+      //       {
+      //         requestId: trc.proposal.external_id,
+      //         approver: this.$currentUser.username
+      //       }
+      //     )
+      //     .then(() => {
+      //       this.$emit('update-data');
+      //       this.$notifier.showSuccess('Approve successfully !');
+      //     })
+      //     .catch((err) => {
+      //       console.error(err);
+      //       this.$notifier.showError(
+      //         'Oops! Something went wrong. Please try again later'
+      //       );
+      //     })
+      //     .finally(() => {
+      //       this.disableButtonsId = '';
+      //     });
+      // },
+
+      approve(trc) {
+        let promise;
+        this.disableButtonsId = trc.proposal.external_id;
+        if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
+          // promise = researchGroupService.approveResearchGroupInviteViaOffChain(
+          //   this.currentUser.privKey, {
+          //     inviteId: trc.external_id,
+          //     account: this.currentUser.username
+          //   }
+          // )
+          //   .then(() => {
+          //     this.$store.dispatch('researchGroup/loadGroupInvites', {
+          //       researchGroupExternalId: this.group.external_id
+          //     });
+          //   });
+        } else if (trc.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
+          promise = assetsService.approveAssetsTransferProposal(
             {
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
-            },
-            {
-              requestId: request.proposal.external_id,
+            }, {
+              proposalId: trc.proposal.external_id,
               approver: this.$currentUser.username
             }
-          )
+          );
+        } else if (trc.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
+          promise = assetsService.approveAssetsExchangeProposal(
+            {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            }, {
+              proposalId: trc.proposal.external_id,
+              approver: this.$currentUser.username
+            }
+          );
+        } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
+          promise = expressLicensingService
+            .approveExpressLicensingRequest(
+              {
+                privKey: this.$currentUser.privKey,
+                username: this.$currentUser.username
+              },
+              {
+                requestId: trc.proposal.external_id,
+                approver: this.$currentUser.username
+              }
+            );
+        } else {
+          // promise = proposalsService.updateProposal(this.currentUser.privKey, {
+          //   externalId: trc.external_id,
+          //   activeApprovalsToAdd: [this.currentUser.username],
+          //   activeApprovalsToRemove: [],
+          //   ownerApprovalsToAdd: [],
+          //   ownerApprovalsToRemove: [],
+          //   keyApprovalsToAdd: [],
+          //   keyApprovalsToRemove: [],
+          //   extensions: []
+          // });
+        }
+
+        promise
           .then(() => {
-            this.$emit('updateData');
-            this.$notifier.showSuccess('Approve successfully !');
+            if (trc.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
+            // Promise.all([this.$store.dispatch('auth/loadGroups')])
+            //   .then(() => {
+              // const { permlink } = this.$store.getters['auth/userGroups'].find(
+              //   (item) => item.external_id === this.group.external_id
+              // );
+            //     this.$router.push({
+            //       name: 'ResearchGroupDetails',
+            //       params: {
+            //         research_group_permlink: encodeURIComponent(permlink)
+            //       }
+            //     });
+            //   });
+            } else {
+              // this.$store.dispatch(
+              //   'researchGroup/loadResearchGroup', { permlink: this.group.permlink }
+              // );
+            }
+            this.$emit('update-data');
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
           })
           .catch((err) => {
             console.error(err);
@@ -484,23 +647,90 @@
             this.disableButtonsId = '';
           });
       },
-
-      rejectExpressLicensingRequest(request) {
-        this.disableButtonsId = request.proposal.external_id;
-        expressLicensingService
-          .rejectExpressLicensingRequest(
+      reject(trc) {
+        let promise;
+        this.disableButtonsId = trc.proposal.external_id;
+        if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
+          // promise = researchGroupService.rejectResearchGroupInviteViaOffChain(
+          //   this.currentUser.privKey, {
+          //     inviteId: trc.external_id,
+          //     account: this.currentUser.username
+          //   }
+          // )
+          //   .then(() => {
+          //     this.$store.dispatch('researchGroup/loadGroupInvites', {
+          //       researchGroupExternalId: this.group.external_id
+          //     });
+          //   });
+        } else if (trc.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
+          promise = assetsService.rejectAssetsTransferProposal(
             {
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
-            },
-            {
-              requestId: request.proposal.external_id,
-              rejector: this.$currentUser.username
+            }, {
+              proposalId: trc.proposal.external_id,
+              rejector: this.$currentUser.username,
+              authority: 2
             }
-          )
+          );
+        } else if (trc.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
+          promise = assetsService.rejectAssetsExchangeProposal(
+            {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            }, {
+              proposalId: trc.proposal.external_id,
+              rejector: this.$currentUser.username,
+              authority: 2
+            }
+          );
+        } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
+          promise = expressLicensingService
+            .rejectExpressLicensingRequest(
+              {
+                privKey: this.$currentUser.privKey,
+                username: this.$currentUserName
+              },
+              {
+                requestId: trc.proposal.external_id,
+                rejector: this.$currentUserName
+              }
+            );
+        } else {
+          // promise = proposalsService.updateProposal(this.currentUser.privKey, {
+          //   externalId: trc.external_id,
+          //   activeApprovalsToAdd: [this.currentUser.username],
+          //   activeApprovalsToRemove: [],
+          //   ownerApprovalsToAdd: [],
+          //   ownerApprovalsToRemove: [],
+          //   keyApprovalsToAdd: [],
+          //   keyApprovalsToRemove: [],
+          //   extensions: []
+          // });
+        }
+
+        promise
           .then(() => {
-            this.$emit('updateData');
-            this.$notifier.showSuccess('Approve successfully !');
+            if (trc.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
+            // Promise.all([this.$store.dispatch('auth/loadGroups')])
+            //   .then(() => {
+              // const { permlink } = this.$store.getters['auth/userGroups'].find(
+              //   (item) => item.external_id === this.group.external_id
+              // );
+            //     this.$router.push({
+            //       name: 'ResearchGroupDetails',
+            //       params: {
+            //         research_group_permlink: encodeURIComponent(permlink)
+            //       }
+            //     });
+            //   });
+            } else {
+              // this.$store.dispatch(
+              //   'researchGroup/loadResearchGroup', { permlink: this.group.permlink }
+              // );
+            }
+            this.$emit('update-data');
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
           })
           .catch((err) => {
             console.error(err);

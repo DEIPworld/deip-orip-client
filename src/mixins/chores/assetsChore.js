@@ -4,14 +4,14 @@ import { isArray, isObject, isString } from '@/utils/helpers';
 export const assetsChore = {
   computed: {
     ...mapGetters({
-      assets: 'auth/assets'
+      allAssets: 'auth/allAssets'
     })
   },
 
   methods: {
     $$assetInfo(assetId) {
-      // return this.assets.find((ass) => ass.string_symbol);
-      return this.assets.find((ass) => (ass.string_symbol === assetId || ass.id === assetId));
+      // return this.allAssets.find((ass) => ass.string_symbol);
+      return this.allAssets.find((ass) => (ass.string_symbol === assetId || ass.id === assetId));
     },
 
     $$fromAssetUnits(val) {

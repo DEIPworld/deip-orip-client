@@ -18,10 +18,14 @@
     <v-divider />
     <v-tabs-items v-model="tab">
       <v-tab-item :key="1">
-        <transactions-table @updateData="updateData" have-actions :data-table="pendingTrcDataTable" />
+        <transactions-table
+          have-actions
+          :data-table="pendingTrcDataTable"
+          @update-data="updateData"
+        />
       </v-tab-item>
       <v-tab-item :key="2">
-        <transactions-table @updateData="updateData" :data-table="completedTrcDataTable" />
+        <transactions-table :data-table="completedTrcDataTable" @update-data="updateData" />
       </v-tab-item>
     </v-tabs-items>
   </v-skeleton-loader>
@@ -61,138 +65,89 @@
         completedTrc: 'TransactionsList/completedTrc'
       }),
       completedTrcDataTable() {
-        // this.completedTrc.map((p) => {
-        //   const signers = [];
-        //   let text = '';
-        //   for (const i in p.parties) {
-        //     if (!p.parties[i].isProposer) {
-        //       signers.push(p.parties[i]);
-        //     }
-        //   }
-        //   const count = signers.reduce((summ, s) => {
+        const getSignersData = (trc) => {
+          let signers = [];
+          let text = '';
+          let signersCount = 0;
+          Object.keys(trc.parties).forEach((i) => {
+            if (
+              !trc.parties[i].isProposer && trc.parties[i].account.external_id && signers.length < 5
+            ) {
+              signers.push({ signer: trc.parties[i].account });
+            }
+            if (!trc.parties[i].isProposer) {
+              trc.parties[i].signers.forEach((s) => {
+                if (!s.signer.external_id) {
+                  signersCount++;
+                }
+              });
+            }
+          });
 
-        //   }, 0)
-        //   if (signers.length > 1) {
-        //     text = `Signatures: ${signers.length}`;
-        //   }
-        //   if (signers.length > 1) {
-        //     text = `Parties: ${signers.length}`;
-        //   }
-        //   if ()
-        // });
+          if (signers.length > 1 && signersCount > 1) {
+            text = `Parties: ${Object.keys(trc.parties).length - 1}, Signatures: ${signersCount}`;
+          } else if (signers.length > 1) {
+            text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+          } else if (signersCount > 1) {
+            text = `Signatures: ${signersCount}`;
+            signers = [
+              { signer: signers[0] }, signers[0].signers.filter((s) => !s.signer.external_id)
+            ];
+          } else if (signers[0]) {
+            text = signers[0].signer.name || this.$options.filters.fullname(
+              signers[0].signer
+            );
+            const signerKey = Object.keys(trc.parties).find((i) => !trc.parties[i].isProposer);
+            signers = trc.parties[signerKey].account.external_id
+              ? [
+                { signer: trc.parties[signerKey].account },
+                ...trc.parties[signerKey].signers.filter((s) => !s.signer.external_id)
+              ]
+              : [{ signer: trc.parties[signerKey].account }];
+          }
+          return { text, signers };
+        };
         return this.completedTrc.map((p) => ({
           ...p,
           proposer: this.proposer(p.parties),
+          signers: getSignersData(p),
           expand: []
         }));
-      //   const data = _.cloneDeep(this.approvedRequests);
-
-      //   const chainHistoryDataTable = (item) => (item.chainHistory
-      //     ? [
-      //       {
-      //         status: 'approved',
-      //         historys: item.extendedDetails.approvers.map((approver) => {
-      //           const id = approver.external_id || approver.account.name;
-
-      //           return {
-      //             ...item.chainHistory[id],
-      //             account: approver
-      //           };
-      //         })
-      //       },
-      //       {
-      //         status: 'rejected',
-      //         historys: item.extendedDetails.rejectors.map((rejector) => {
-      //           const id = rejector.external_id || rejector.account.name;
-
-      //           return {
-      //             ...item.chainHistory[id],
-      //             account: rejector
-      //           };
-      //         })
-      //       }
-      //     ] : []);
-      //   const accountData = (item) => (item.extendedDetails
-      //     ? [
-      //       {
-      //         status: 'approved',
-      //         accounts: item.extendedDetails.approvers
-      //       },
-      //       {
-      //         status: 'rejected',
-      //         accounts: item.extendedDetails.rejectors
-      //       }
-      //     ] : []);
-
-      //   return data.map((item) => ({
-      //     ...item,
-      //     accountsData: accountData(item),
-      //     chainHistoryDataTable: chainHistoryDataTable(item),
-      //     expand: []
-      //   }
-      //   ));
       },
       pendingTrcDataTable() {
+        const getSignersData = (trc) => {
+          const signers = [];
+          let text = '';
+          Object.keys(trc.parties).forEach((i) => {
+            if (
+              !trc.parties[i].isProposer && signers.length < 5
+            ) {
+              signers.push({ signer: trc.parties[i].account });
+            }
+          });
+
+          if (signers.length > 1) {
+            text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+          } else if (signers[0]) {
+            text = signers[0].signer.name || this.$options.filters.fullname(
+              signers[0].signer
+            );
+          }
+          return { text, signers };
+        };
         return this.pendingTrc.map((p) => ({
           ...p,
           proposer: this.proposer(p.parties),
+          signers: getSignersData(p),
           expand: []
         }));
-      //   const data = _.cloneDeep(this.pendingRequests);
-
-      //   const chainHistoryDataTable = (item) => (item.chainHistory
-      //     ? [
-      //       {
-      //         status: 'approved',
-      //         historys: item.extendedDetails.approvers.map((approver) => {
-      //           const id = approver.external_id || approver.account.name;
-
-      //           return {
-      //             ...item.chainHistory[id],
-      //             account: approver
-      //           };
-      //         })
-      //       },
-      //       {
-      //         status: 'pending',
-      //         historys: [
-      //           {
-      //             ...item.chainHistory[item.extendedDetails.researchGroup.external_id],
-      //             account: item.extendedDetails.researchGroup
-      //           }
-      //         ]
-      //       }
-      //     ] : []);
-
-      //   const accountData = (item) => (item.extendedDetails
-      //     ? [
-      //       {
-      //         status: 'approved',
-      //         accounts: item.extendedDetails.approvers
-      //       },
-      //       {
-      //         status: 'pending',
-      //         accounts: [item.extendedDetails.researchGroup]
-      //       }
-      //     ] : []);
-
-      //   return data.map((item) => ({
-      //     ...item,
-      //     accountsData: accountData(item),
-      //     chainHistoryDataTable: chainHistoryDataTable(item),
-      //     expand: []
-      //   }
-      //   ));
       }
     },
     created() {
-      // Promise.all([
       this.updateData()
         .then(() => {
           this.$setReady();
         });
-      //   this.$store.dispatch('TransactionsList/loadPendingRequests')
-      // ])
     },
     methods: {
       updateData() {

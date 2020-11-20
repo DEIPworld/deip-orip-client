@@ -37,7 +37,7 @@ export default {
     pending: 'Pending',
     approved: 'Approved by:',
     noApproval: 'No approvals yet',
-    success: 'You have voted for the proposal successfully!',
+    success: 'You have voted for the transaction successfully!',
     header: {
       status: 'Status',
       proposal: 'Proposal',
