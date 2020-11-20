@@ -34,6 +34,22 @@
             $options.filters.fullname(item.extendedDetails.party2) }}
         </v-clamp>
         <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ item.details.researchTitle }}
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.UPDATE_RESEARCH === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ item.extendedDetails.research.title }}
+        </v-clamp>
+        <v-clamp
           v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === item.type"
           autoresize
           :max-lines="2"
@@ -150,7 +166,7 @@
             color="primary"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="reject(item)"
+            @click="approve(item, true)"
           >
             <v-icon left>
               clear
@@ -527,39 +543,22 @@
           ? item.expand = expandData.map((item, i) => i)
           : item.expand = [];
       },
-      // approveExpressLicensingRequest(trc) {
-      //   this.disableButtonsId = trc.proposal.external_id;
-      //   expressLicensingService
-      //     .approveExpressLicensingRequest(
-      //       {
-      //         privKey: this.$currentUser.privKey,
-      //         username: this.$currentUser.username
-      //       },
-      //       {
-      //         requestId: trc.proposal.external_id,
-      //         approver: this.$currentUser.username
-      //       }
-      //     )
-      //     .then(() => {
-      //       this.$emit('update-data');
-      //       this.$notifier.showSuccess('Approve successfully !');
-      //     })
-      //     .catch((err) => {
-      //       console.error(err);
-      //       this.$notifier.showError(
-      //         'Oops! Something went wrong. Please try again later'
-      //       );
-      //     })
-      //     .finally(() => {
-      //       this.disableButtonsId = '';
-      //     });
-      // },
 
-      approve(trc) {
+      approve(trc, reject = false) {
         let promise;
+        const defaultUserData = {
+          privKey: this.$currentUser.privKey,
+          username: this.$currentUserName
+        };
+        const defaultPromiseData = {
+          proposalId: trc.proposal.external_id,
+          [reject ? 'rejector' : 'approver']: this.$currentUserName,
+          authority: 2
+        };
         this.disableButtonsId = trc.proposal.external_id;
         if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
-          // promise = researchGroupService.approveResearchGroupInviteViaOffChain(
+          // promise = researchGroupService[reject
+          //   ? 'rejectResearchGroupInviteViaOffChain' : 'approveResearchGroupInviteViaOffChain'](
           //   this.currentUser.privKey, {
           //     inviteId: trc.external_id,
           //     account: this.currentUser.username
@@ -571,143 +570,45 @@
           //     });
           //   });
         } else if (trc.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
-          promise = assetsService.approveAssetsTransferProposal(
-            {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            }, {
-              proposalId: trc.proposal.external_id,
-              approver: this.$currentUser.username
-            }
+          promise = assetsService[reject ? 'rejectAssetsTransferProposal' : 'approveAssetsTransferProposal'](
+            defaultUserData,
+            defaultPromiseData
           );
         } else if (trc.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
-          promise = assetsService.approveAssetsExchangeProposal(
+          promise = assetsService[reject ? 'rejectAssetsExchangeProposal' : 'approveAssetsExchangeProposal'](
+            defaultUserData,
             {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            }, {
               proposalId: trc.proposal.external_id,
-              approver: this.$currentUser.username
-            }
-          );
-        } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
-          promise = expressLicensingService
-            .approveExpressLicensingRequest(
-              {
-                privKey: this.$currentUser.privKey,
-                username: this.$currentUser.username
-              },
-              {
-                requestId: trc.proposal.external_id,
-                approver: this.$currentUser.username
-              }
-            );
-        } else {
-          // promise = proposalsService.updateProposal(this.currentUser.privKey, {
-          //   externalId: trc.external_id,
-          //   activeApprovalsToAdd: [this.currentUser.username],
-          //   activeApprovalsToRemove: [],
-          //   ownerApprovalsToAdd: [],
-          //   ownerApprovalsToRemove: [],
-          //   keyApprovalsToAdd: [],
-          //   keyApprovalsToRemove: [],
-          //   extensions: []
-          // });
-        }
-
-        promise
-          .then(() => {
-            if (trc.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
-            // Promise.all([this.$store.dispatch('auth/loadGroups')])
-            //   .then(() => {
-              // const { permlink } = this.$store.getters['auth/userGroups'].find(
-              //   (item) => item.external_id === this.group.external_id
-              // );
-            //     this.$router.push({
-            //       name: 'ResearchGroupDetails',
-            //       params: {
-            //         research_group_permlink: encodeURIComponent(permlink)
-            //       }
-            //     });
-            //   });
-            } else {
-              // this.$store.dispatch(
-              //   'researchGroup/loadResearchGroup', { permlink: this.group.permlink }
-              // );
-            }
-            this.$emit('update-data');
-            this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
-          })
-          .catch((err) => {
-            console.error(err);
-            this.$notifier.showError(
-              'Oops! Something went wrong. Please try again later'
-            );
-          })
-          .finally(() => {
-            this.disableButtonsId = '';
-          });
-      },
-      reject(trc) {
-        let promise;
-        this.disableButtonsId = trc.proposal.external_id;
-        if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
-          // promise = researchGroupService.rejectResearchGroupInviteViaOffChain(
-          //   this.currentUser.privKey, {
-          //     inviteId: trc.external_id,
-          //     account: this.currentUser.username
-          //   }
-          // )
-          //   .then(() => {
-          //     this.$store.dispatch('researchGroup/loadGroupInvites', {
-          //       researchGroupExternalId: this.group.external_id
-          //     });
-          //   });
-        } else if (trc.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
-          promise = assetsService.rejectAssetsTransferProposal(
-            {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            }, {
-              proposalId: trc.proposal.external_id,
-              rejector: this.$currentUser.username,
-              authority: 2
-            }
-          );
-        } else if (trc.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
-          promise = assetsService.rejectAssetsExchangeProposal(
-            {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            }, {
-              proposalId: trc.proposal.external_id,
-              rejector: this.$currentUser.username,
+              [reject ? 'rejector' : 'approver']: trc.details.party2,
               authority: 2
             }
           );
         } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
-          promise = expressLicensingService
-            .rejectExpressLicensingRequest(
-              {
-                privKey: this.$currentUser.privKey,
-                username: this.$currentUserName
-              },
-              {
-                requestId: trc.proposal.external_id,
-                rejector: this.$currentUserName
-              }
-            );
+          promise = expressLicensingService[reject ? 'rejectExpressLicensingRequest' : 'approveExpressLicensingRequest'](
+            defaultUserData,
+            {
+              requestId: trc.proposal.external_id,
+              [reject ? 'rejector' : 'approver']: this.$currentUser.username
+            }
+          );
         } else {
-          // promise = proposalsService.updateProposal(this.currentUser.privKey, {
-          //   externalId: trc.external_id,
-          //   activeApprovalsToAdd: [this.currentUser.username],
-          //   activeApprovalsToRemove: [],
-          //   ownerApprovalsToAdd: [],
-          //   ownerApprovalsToRemove: [],
-          //   keyApprovalsToAdd: [],
-          //   keyApprovalsToRemove: [],
-          //   extensions: []
-          // });
+          promise = reject
+            ? proposalsService.deleteProposal(this.$currentUser.privKey, {
+              externalId: trc.proposal.external_id,
+              account: this.$currentUserName,
+              authority: 2,
+              extensions: []
+            }, true)
+            : proposalsService.updateProposal(this.$currentUser.privKey, {
+              externalId: trc.proposal.external_id,
+              activeApprovalsToAdd: [this.$currentUserName],
+              activeApprovalsToRemove: [],
+              ownerApprovalsToAdd: [],
+              ownerApprovalsToRemove: [],
+              keyApprovalsToAdd: [],
+              keyApprovalsToRemove: [],
+              extensions: []
+            });
         }
 
         promise

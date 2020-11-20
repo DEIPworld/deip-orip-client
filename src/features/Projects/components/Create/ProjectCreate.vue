@@ -36,7 +36,7 @@
                   privKey: this.$currentUser.privKey,
                   username: this.$currentUser.account.name
                 },
-                false,
+                true,
                 formData
               )
                 .then((project) => {

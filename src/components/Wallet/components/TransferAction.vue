@@ -35,7 +35,7 @@
       :title="dialog.title"
       max-width="570px"
       :confirm-button-title="
-        dialog.exchange ? 'Sell' : $t('userWallet.sendResearchTokensDialog.submitBtn')
+        dialog.exchange ? 'Exchange' : $t('userWallet.sendResearchTokensDialog.submitBtn')
       "
       :cancel-button-title="$t('userWallet.cancel')"
       @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
