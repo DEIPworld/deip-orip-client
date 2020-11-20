@@ -68,48 +68,73 @@
         const getSignersData = (trc) => {
           let signers = [];
           let text = '';
-          let signersCount = 0;
-          Object.keys(trc.parties).forEach((i) => {
-            if (
-              !trc.parties[i].isProposer && trc.parties[i].account.external_id && signers.length < 5
-            ) {
-              signers.push({ signer: trc.parties[i].account });
-            }
-            if (!trc.parties[i].isProposer) {
-              trc.parties[i].signers.forEach((s) => {
-                if (!s.signer.external_id) {
-                  signersCount++;
+          if (trc.type) {
+            let signersCount = 0;
+            Object.keys(trc.parties).forEach((i) => {
+              if (
+                !trc.parties[i].isProposer
+                && trc.parties[i].account.external_id
+                && signers.length < 5
+              ) {
+                signers.push({ signer: trc.parties[i].account });
+              }
+              if (!trc.parties[i].isProposer) {
+                trc.parties[i].signers.forEach((s) => {
+                  if (!s.signer.external_id) {
+                    signersCount++;
+                  }
+                });
+              }
+            });
+
+            if (signers.length > 1 && signersCount > 1) {
+              text = `Parties: ${Object.keys(trc.parties).length - 1}, Signatures: ${signersCount}`;
+            } else if (signers.length > 1) {
+              text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+            } else if (signersCount > 1) {
+              text = `Signatures: ${signersCount}`;
+              Object.keys(trc.parties).forEach((i) => {
+                if (
+                  !trc.parties[i].isProposer && signers.length < 5
+                ) {
+                  trc.parties[i].signers.forEach((s) => {
+                    if (!s.signer.external_id) {
+                      signers.push(s);
+                    }
+                  });
                 }
               });
+            } else if (signers[0]) {
+              text = signers[0].signer.name || this.$options.filters.fullname(
+                signers[0].signer
+              );
+              const signerKey = Object.keys(trc.parties).find((i) => !trc.parties[i].isProposer);
+              signers = trc.parties[signerKey].account.external_id
+                ? [
+                  { signer: trc.parties[signerKey].account },
+                  ...trc.parties[signerKey].signers.filter((s) => !s.signer.external_id)
+                ]
+                : [{ signer: trc.parties[signerKey].account }];
+            } else {
+              Object.keys(trc.parties).forEach((i) => {
+                if (!trc.parties[i].isProposer) {
+                  trc.parties[i].signers.forEach((s) => {
+                    if (!s.signer.external_id) {
+                      signers.push(s);
+                    }
+                  });
+                }
+              });
+              if (signers.length) {
+                text = this.$options.filters.fullname(signers[0].signer);
+              }
             }
-          });
-
-          if (signers.length > 1 && signersCount > 1) {
-            text = `Parties: ${Object.keys(trc.parties).length - 1}, Signatures: ${signersCount}`;
-          } else if (signers.length > 1) {
-            text = `Parties: ${Object.keys(trc.parties).length - 1}`;
-          } else if (signersCount > 1) {
-            text = `Signatures: ${signersCount}`;
-            signers = [
-              { signer: signers[0] }, signers[0].signers.filter((s) => !s.signer.external_id)
-            ];
-          } else if (signers[0]) {
-            text = signers[0].signer.name || this.$options.filters.fullname(
-              signers[0].signer
-            );
-            const signerKey = Object.keys(trc.parties).find((i) => !trc.parties[i].isProposer);
-            signers = trc.parties[signerKey].account.external_id
-              ? [
-                { signer: trc.parties[signerKey].account },
-                ...trc.parties[signerKey].signers.filter((s) => !s.signer.external_id)
-              ]
-              : [{ signer: trc.parties[signerKey].account }];
           }
           return { text, signers };
         };
         return this.completedTrc.map((p) => ({
           ...p,
-          proposer: this.proposer(p.parties),
+          proposerSigners: this.proposer(p),
           signers: getSignersData(p),
           expand: []
         }));
@@ -118,26 +143,28 @@
         const getSignersData = (trc) => {
           const signers = [];
           let text = '';
-          Object.keys(trc.parties).forEach((i) => {
-            if (
-              !trc.parties[i].isProposer && signers.length < 5
-            ) {
-              signers.push({ signer: trc.parties[i].account });
-            }
-          });
+          if (trc.type) {
+            Object.keys(trc.parties).forEach((i) => {
+              if (
+                !trc.parties[i].isProposer && signers.length < 5
+              ) {
+                signers.push({ signer: trc.parties[i].account });
+              }
+            });
 
-          if (signers.length > 1) {
-            text = `Parties: ${Object.keys(trc.parties).length - 1}`;
-          } else if (signers[0]) {
-            text = signers[0].signer.name || this.$options.filters.fullname(
-              signers[0].signer
-            );
+            if (signers.length > 1) {
+              text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+            } else if (signers[0]) {
+              text = signers[0].signer.name || this.$options.filters.fullname(
+                signers[0].signer
+              );
+            }
           }
           return { text, signers };
         };
         return this.pendingTrc.map((p) => ({
           ...p,
-          proposer: this.proposer(p.parties),
+          proposerSigners: this.proposer(p),
           signers: getSignersData(p),
           expand: []
         }));
@@ -153,15 +180,15 @@
       updateData() {
         return this.$store.dispatch('TransactionsList/loadTransactions', this.account);
       },
-      proposer(parties) {
-        if (parties) {
-          for (const i in parties) {
-            if (parties[i].isProposer) {
-              return parties[i];
+      proposer(item) {
+        if (item.parties) {
+          for (const i in item.parties) {
+            if (item.parties[i].isProposer) {
+              return item.parties[i];
             }
           }
         }
-        return {};
+        return item.proposer;
       }
     }
   };

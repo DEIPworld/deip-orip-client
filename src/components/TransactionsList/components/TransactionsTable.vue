@@ -57,23 +57,23 @@
           justify="space-between"
           class="mt-4 mb-6"
         >
-          <v-col v-if="item.proposer.account.profile">
+          <v-col v-if="item.proposerSigners.account.profile">
             <d-box-item
-              :avatar="item.proposer.account.profile | avatarSrc(64, 64)"
+              :avatar="item.proposerSigners.account.profile | avatarSrc(64, 64)"
               :size="32"
             >
               <v-clamp autoresize :max-lines="1">
-                {{ item.proposer.account.name || $options.filters.fullname(item.proposer.account) }}
+                {{ item.proposerSigners.account | fullname }}
               </v-clamp>
             </d-box-item>
           </v-col>
           <v-col v-else class="d-flex align-center">
             <v-avatar :size="32">
               <v-img
-                :src="item.proposer.account.external_id | researchGroupLogoSrc(64, 64)"
+                :src="item.proposerSigners.account.external_id | researchGroupLogoSrc(64, 64)"
               />
             </v-avatar>
-            <template v-for="(s, i) in item.proposer.signers">
+            <template v-for="(s, i) in item.proposerSigners.signers">
               <v-avatar
                 v-if="s.signer.profile"
                 :key="`${i}-signer`"
@@ -90,7 +90,8 @@
               autoresize
               :max-lines="1"
             >
-              {{ item.proposer.account.name || $options.filters.fullname(item.proposer.account) }}
+              {{ item.proposerSigners.account.name
+                || $options.filters.fullname(item.proposerSigners.account) }}
             </v-clamp>
           </v-col>
           <v-col class="d-flex ml-4 align-center">
@@ -128,7 +129,7 @@
         </div>
       </template>
       <template #item.actions="{ item }">
-        <div v-if="isShowActions(item)" class="d-flex mt-4">
+        <div v-if="isShowActions(item) && item.type" class="d-flex mt-4">
           <v-btn
             outlined
             x-small
