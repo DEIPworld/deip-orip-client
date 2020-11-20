@@ -356,7 +356,7 @@
           return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
-              username: this.dialog.form.fromAccount.owner
+              username: this.$currentUserName
             },
             isProposal,
             {

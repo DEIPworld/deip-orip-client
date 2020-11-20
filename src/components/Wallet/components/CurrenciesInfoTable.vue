@@ -407,7 +407,7 @@
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
         return assetsService.transferAssets(
-          { privKey: this.$currentUser.privKey, username: this.depositDialog.owner },
+          { privKey: this.$currentUser.privKey, username: this.$currentUserName },
           false,
           {
             from: this.depositDialog.owner,
