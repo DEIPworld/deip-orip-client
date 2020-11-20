@@ -42,7 +42,12 @@
     <research-group-asset class="mb-12" />
 
     <!-- ### START Research Group Proposals Section ### -->
-    <div v-if="isResearchGroupMember && !group.is_personal" id="proposals" class="mb-12">
+    <d-block
+      v-if="isResearchGroupMember && !group.is_personal"
+      id="proposals"
+      class="mb-12"
+      title="Transactions"
+    >
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
           <!-- <research-group-details-proposals :key="'group-proposals'" /> -->
@@ -55,7 +60,7 @@
           <transactions-list :key="'group-proposals'" :account="group.external_id" />
         </div>
       </div>
-    </div>
+    </d-block>
     <!-- ### END Project Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
@@ -113,6 +118,7 @@
   import ResearchGroupAsset from '@/components/research-group-details/components/ResearchGroupAsset';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import TransactionsList from '@/components/TransactionsList/TransactionsList';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();
@@ -124,7 +130,8 @@
       MemberList,
       ResearchGroupRequests,
       ResearchGroupAsset,
-      TransactionsList
+      TransactionsList,
+      DBlock
     },
     props: {},
     data() {

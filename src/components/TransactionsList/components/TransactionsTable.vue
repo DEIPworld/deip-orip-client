@@ -153,7 +153,7 @@
             class="mr-4"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="approve(item)"
+            @click="signTrc(item)"
           >
             <v-icon left>
               done
@@ -166,7 +166,7 @@
             color="primary"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="approve(item, true)"
+            @click="signTrc(item, true)"
           >
             <v-icon left>
               clear
@@ -544,7 +544,7 @@
           : item.expand = [];
       },
 
-      approve(trc, reject = false) {
+      signTrc(trc, reject = false) {
         let promise;
         const defaultUserData = {
           privKey: this.$currentUser.privKey,
