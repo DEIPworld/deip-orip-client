@@ -342,12 +342,13 @@
           if (this.asset.type === 'share') {
             fromAmount = `${this.dialog.form.fromAmount} ${this.dialog.form.fromAccount.asset_symbol}`;
           }
-
-          return assetsService.transferAsset(
+          
+          return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
               username: this.dialog.form.fromAccount.owner
             },
+            false,
             {
               from: this.dialog.form.fromAccount.owner,
               to: this.dialog.form.receiver.account.name,

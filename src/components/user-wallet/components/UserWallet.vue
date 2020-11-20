@@ -984,8 +984,9 @@
       sendTokens() {
         this.sendTokensDialog.isSending = true;
 
-        return assetsService.transferAsset(
+        return assetsService.transferAssets(
           { privKey: this.user.privKey, username: this.user.username },
+          false,
           {
             from: this.user.username,
             to: this.sendTokensDialog.form.to,
@@ -1037,8 +1038,9 @@
 
       deposit() {
         this.depositDialog.isDepositing = true;
-        return assetsService.transferAsset(
+        return assetsService.transferAssets(
           { privKey: "5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa", username: "kim" },
+          false,
           {
             from: 'kim',
             to: this.user.username,
@@ -1063,8 +1065,9 @@
 
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-        return assetsService.transferAsset(
+        return assetsService.transferAssets(
           { privKey:  this.user.privKey, username: this.user.username },
+          false,
           {
             from: this.user.username,
             to: 'kim',
