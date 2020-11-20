@@ -409,7 +409,7 @@
 
           assetsService.createAssetsExchangeProposal({
             privKey: this.$currentUser.privKey,
-            username: this.dialog.form.fromAccount.owner
+            username: this.$currentUserName
           }, {
             party1: this.dialog.form.fromAccount.owner,
             party2: this.dialog.form.receiver.account.name,
