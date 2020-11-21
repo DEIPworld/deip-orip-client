@@ -402,7 +402,7 @@
                   const isProposal = !this.research.research_group.is_personal;
                   researchContentService.createResearchContentViaOffchain(
                     { privKey: this.user.privKey, username: this.user.username },
-                    false,
+                    isProposal,
                     {
                       researchExternalId: this.research.external_id,
                       researchGroup: this.research.research_group.external_id,
