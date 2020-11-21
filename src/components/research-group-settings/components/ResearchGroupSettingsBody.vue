@@ -268,7 +268,7 @@
           params: {
             research_group_permlink: encodeURIComponent(this.group.permlink)
           },
-          hash: proposal ? '#proposals' : ''
+          // hash: proposal ? '#proposals' : ''
         });
       },
       logoUploadSuccess(file, response) {
@@ -365,7 +365,7 @@
               const isProposal = !this.group.is_personal;
               researchGroupService.updateResearchGroupAccountViaOffchain(
                 { privKey: this.user.privKey, username: this.user.username }, 
-                false, 
+                isProposal, 
                 {
                   researchGroup: this.group.external_id,
                   accountOwnerAuth: undefined,
@@ -382,7 +382,7 @@
               )
                 .then(() => {
                   this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
-                  this.cancel(true);
+                  this.cancel(isProposal);
                 })
                 .catch((err) => {
                   console.error(err);

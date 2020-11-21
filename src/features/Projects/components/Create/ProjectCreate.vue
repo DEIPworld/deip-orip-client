@@ -31,12 +31,13 @@
         )
           .then((verified) => {
             if (verified) {
+              const isProposal = onchainData.researchGroup != null && onchainData.researchGroup != this.$currentUser.account.name;
               return researchService.createResearchViaOffchain(
                 {
                   privKey: this.$currentUser.privKey,
                   username: this.$currentUser.account.name
                 },
-                true,
+                isProposal,
                 formData
               )
                 .then((project) => {
