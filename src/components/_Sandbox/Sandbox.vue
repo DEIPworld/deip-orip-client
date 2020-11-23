@@ -19,17 +19,18 @@
 
     <d-layout-section>
       <d-layout-section-main>
-        <projects-list with-filter>
+        <vex-editor />
+<!--        <projects-list with-filter>-->
 
-          <!--        <template #itemRowActions="{ project }">-->
-          <!--          <v-btn small icon><v-icon>clear</v-icon></v-btn>-->
-          <!--        </template>-->
+<!--          &lt;!&ndash;        <template #itemRowActions="{ project }">&ndash;&gt;-->
+<!--          &lt;!&ndash;          <v-btn small icon><v-icon>clear</v-icon></v-btn>&ndash;&gt;-->
+<!--          &lt;!&ndash;        </template>&ndash;&gt;-->
 
-          <!--        <template #itemCardActions="{ project }">-->
-          <!--          <v-btn small>clear</v-btn>-->
-          <!--        </template>-->
+<!--          &lt;!&ndash;        <template #itemCardActions="{ project }">&ndash;&gt;-->
+<!--          &lt;!&ndash;          <v-btn small>clear</v-btn>&ndash;&gt;-->
+<!--          &lt;!&ndash;        </template>&ndash;&gt;-->
 
-        </projects-list>
+<!--        </projects-list>-->
       </d-layout-section-main>
     </d-layout-section>
   </d-layout>
@@ -44,10 +45,11 @@
   import { VIEW_TYPES } from '@/variables';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import VexEditor from '@/plugins/VuetifyExtended/components/VexEditor/VexEditor';
 
   export default {
     name: 'Sandbox',
-    components: { DStack, DLayout, ProjectsList, DLayoutSectionMain, DLayoutSection },
+    components: { VexEditor, DStack, DLayout, ProjectsList, DLayoutSectionMain, DLayoutSection },
     data() {
       return {
         VIEW_TYPES

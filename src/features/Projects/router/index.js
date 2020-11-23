@@ -2,7 +2,7 @@ import ProjectDetails from '@/features/Projects/components/Project/Details/Proje
 import ProjectExpertise from '@/features/Projects/components/Project/Expertise/ProjectExpertise';
 import ProjectCreate from '@/features/Projects/components/Create/ProjectCreate';
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
-import { reviewRoutingFabric } from '@/components/Reviews/router';
+import { reviewRoutingFabric } from '@/features/Reviews/router';
 import { contentRoutingFabric } from '@/features/Contents/router';
 import Project from '@/features/Projects/components/Project/Project';
 import ProjectFundraising from '@/features/Projects/components/Project/Fundraising/ProjectFundraising';
@@ -50,11 +50,6 @@ export const projectRouting = [{
         {
           name: 'project.content',
           ...contentRoutingFabric('project')
-        },
-
-        {
-          name: 'project.review',
-          ...reviewRoutingFabric('project')
         },
 
         {

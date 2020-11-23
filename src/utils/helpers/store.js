@@ -1,5 +1,5 @@
 import { store } from '@/store';
-import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
+import { getObjectValueByPath, wrapInArray } from 'vuetify/lib/util/helpers';
 
 export const awaitStore = (getter, nestKey) => new Promise((resolve, reject) => {
   const target = nestKey ? store.getters[getter][nestKey] : store.getters[getter];
@@ -17,29 +17,10 @@ export const awaitStore = (getter, nestKey) => new Promise((resolve, reject) => 
   }
 });
 
-export const getActionMapKey = (payloadKey, defaultValue) => ({
-  get(payload = {}) {
-    return payload[payloadKey] || defaultValue;
-  }
-});
-
-export const getActionTarget = (payload = {}) => {
-  if (payload.target) return payload.target;
-  if (payload.userName) return 'user';
-  if (payload.teamId) return 'team';
-  return 'public';
-};
-
-export const getActionFrom = (map, getters) => {
-  const getters$ = !getters ? [
-    getActionTarget
-  ] : getters;
-
+export const getActionByPath = (actionsMap) => {
   return {
-    get(payload = {}) {
-      const path = getters$.map((getter) => getter(payload))
-        .join('.');
-      return getObjectValueByPath(map, path);
+    get(path) {
+      return getObjectValueByPath(actionsMap, wrapInArray(path).join('.'));
     }
   };
 };

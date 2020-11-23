@@ -20,14 +20,5 @@
   export default {
     name: 'ResearchContentReview',
     components: { DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
-    data() {
-      return {};
-    },
-    computed: {},
-    created() {},
-    methods: {}
   };
 </script>
-
-<style lang="less" scoped>
-</style>

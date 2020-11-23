@@ -18,12 +18,11 @@
     <v-divider />
 
     <div
-      v-if="$ready && internalReviews.length && contents.length"
+      v-if="$ready && internalReviews.length"
       :class="limitAccessClasses"
       v-bind="limitAccessProps"
     >
       <template v-for="(review, index) of internalReviews">
-        <!--        {{review}}-->
         <v-row :key="`review-${index}`" class="text-body-2" no-gutters>
           <v-col cols="12" md="wide">
             <users-list
@@ -46,10 +45,10 @@
 
           <v-col cols="12" md="wide">
             <d-stack gap="8">
-              <template v-if="review.researchContent">
+              <template v-if="review.contentData">
                 <div class="text-caption text--secondary">
                   <span class="font-weight-medium">Review to:</span>
-                  {{ getResearchContentType(review.researchContent.content_type).text }}
+                  {{ getResearchContentType(review.contentData.contentType).text }}
                 </div>
                 <div>
                   <router-link
@@ -58,12 +57,12 @@
                     :to="routeAccessCheck({
                       name: 'project.content.details',
                       params: {
-                        contentExternalId: review.researchContent.external_id,
-                        researchExternalId: projectId,
+                        contentExternalId: review.contentData.externalId,
+                        researchExternalId: $route.params.researchExternalId,
                       }
                     })"
                   >
-                    {{ review.researchContent.title }}
+                    {{ review.contentData.title }}
                   </router-link>
                 </div>
               </template>
@@ -75,7 +74,7 @@
               <d-meta-item
                 class="text-caption"
                 icon="event"
-                :label="moment(review.created_at).format('D, MMM YYYY')"
+                :label="moment(review.createdAt).format('D, MMM YYYY')"
               />
             </d-stack>
           </v-col>
@@ -93,45 +92,22 @@
               </template>
 
               <template #title-append>
-                <!-- START TEMP SOLUTION (query) -->
                 <v-btn
-                  small
-                  text
-                  class="my-n3"
-                  color="primary"
-                  :disabled="limitedAccess"
-                  :to="routeAccessCheck({
-                    name: 'ResearchContentReview',
-                    params: {
-                      research_group_permlink: research.researchGroup.permlink,
-                      content_permlink: review.researchContentPermlink,
-                      research_permlink: research.permlink,
-                      review_id: review.id
-                    }
-                  })"
-                >
-                  <!-- END TEMP SOLUTION (query) -->
-
-                  <!-- <v-btn
                   small
                   color="primary"
                   outlined
                   :to="routeAccessCheck({
-                    name: 'research.review.details',
+                    name: 'project.content.review.details',
                     params: {
-                      reviewExternalId: review.researchContent.external_id,
-                      researchExternalId: projectId,
+                      researchExternalId: $route.params.researchExternalId,
+                      contentExternalId: review.contentData.externalId,
+                      reviewExternalId: review.externalId,
                     }
                   })"
-                > -->
+                >
                   See review
                 </v-btn>
               </template>
-
-              <review-assessment
-                v-model="review.scores"
-                :research-content-type="review.researchContent.content_type"
-              />
 
               <div v-if="review.supporters.length" class="pt-2">
                 <v-tooltip tag="div" bottom>
@@ -148,6 +124,11 @@
                   </div>
                 </v-tooltip>
               </div>
+
+              <review-assessment
+                v-model="review.scores"
+                :research-content-type="review.contentData.contentType"
+              />
             </d-block>
           </v-col>
         </v-row>
@@ -158,10 +139,11 @@
 </template>
 
 <script>
-  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { reviewsListStore } from '@/features/Reviews/store/reviewsList';
-  import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
+  import { componentStoreFactory } from '@/mixins/registerStore';
+  import { reviewsListStore } from '@/features/Reviews/store/reviewsListStore';
+
+  import { mapGetters, mapState } from 'vuex';
+
   import { ResearchService } from '@deip/research-service';
   import { limitAccess } from '@/mixins/limitAccess';
   import UsersList from '@/features/Users/components/List/UsersList';
@@ -180,7 +162,7 @@
       UsersList
     },
     mixins: [
-      componentStoreFactoryOnce(reviewsListStore, 'ResearchReviews'),
+      componentStoreFactory(reviewsListStore),
       limitAccess
     ],
     props: {
@@ -198,39 +180,22 @@
       }
     },
     computed: {
-      ...mapGetters({
-        reviews: 'ResearchReviews/list',
-        contents: 'ProjectContents/list', // temp
-        research: 'Project/data' // temp
+      ...mapState({
+        reviews(state, getters) { return getters[`${this.storeNS}/reviewsList`]; }
       }),
 
       internalReviews() {
         const transformed = this.reviews.map((review) => {
           const disciplines = review.disciplines.map((d) => d.name);
 
-          /// ////// START TEMP SOLUTION (contentPermlink) /////////
-          const contentPermlink = this.contents.find(
-            // eslint-disable-next-line camelcase
-            ({ external_id }) => external_id === review.research_content_external_id
-          );
-          const researchContentPermlink = contentPermlink ? contentPermlink.permlink : '';
-          /// ////// END TEMP SOLUTION (contentPermlink) /////////
 
           const model = {
             ...review,
-            /// ////// START TEMP SOLUTION (contentPermlink) /////////
-            researchContentPermlink,
-            /// ////// END TEMP SOLUTION (contentPermlink) /////////
 
             scores: review.scores.reduce((res, score) => ({
               ...res,
               ...{ [score[0]]: score[1] }
             }), {}),
-
-            researchContent: this.$where(this.contents, { isDraft: false })
-              .find(
-                (c) => c.id === review.research_content_id
-              ),
             disciplines
           };
 
@@ -248,7 +213,10 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ResearchReviews/getReviews', this.projectId)
+          this.$store.dispatch(`${this.storeNS}/getReviews`, {
+            projectId: this.projectId,
+            contentId: this.contentId
+          })
         ])
           .then(() => {
             this.$setReady(true);

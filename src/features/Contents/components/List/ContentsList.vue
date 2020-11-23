@@ -4,47 +4,33 @@
     v-bind="limitAccessProps"
   >
     <v-data-table
-      v-if="contentsList.length"
+      v-if="contents.length"
       v-custom="'hover-row'"
       :headers="tableHeaders"
-      :items="contentsList"
+      :items="contents"
       disable-sort
       disable-pagination
       hide-default-footer
     >
       <template #item.type="{item}">
         <div class="text-no-wrap">
-          {{ $$contentType(item.content_type).text }}
+          {{ $$contentType(item.contentType).text }}
         </div>
       </template>
 
       <template #item.title="{item}">
-        <!-- START TEMP SOLUTION (query) -->
+
         <router-link
           v-if="$isLoggedIn"
-          tag="div"
+          class="a"
           :to="routeAccessCheck({
-            name: 'ResearchContentDetails',
+            name: 'project.content.details',
             params: {
-              research_group_permlink: $store.getters['Project/data'].researchGroup.permlink,
-              content_permlink: item.permlink,
-              research_permlink: $store.getters['Project/data'].permlink,
+              contentExternalId: item.externalId,
+              researchExternalId: $route.params.researchExternalId,
             }
           })"
         >
-          <!-- END TEMP SOLUTION (query) -->
-
-          <!-- <router-link
-            v-if="$isLoggedIn"
-            class="a"
-            :to="routeAccessCheck({
-              name: 'project.content.details',
-              params: {
-                contentExternalId: item.external_id,
-                researchExternalId: $route.params.researchExternalId,
-              }
-            })"
-          > -->
           {{ item.title }}
         </router-link>
         <template v-else>
@@ -54,6 +40,7 @@
 
       <template #item.ref="{item}">
         <d-simple-tooltip tooltip="Browse references">
+          <!-- TODO: need ref -->
           <v-btn
             icon
             small
@@ -61,9 +48,9 @@
             :to="routeAccessCheck({
               name: 'ResearchContentReferences',
               params: {
-                research_group_permlink: $store.getters['Project/data'].researchGroup.permlink,
+                research_group_permlink: $store.getters['Project/projectDetails'].researchGroup.permlink,
                 content_permlink: item.permlink,
-                research_permlink: $store.getters['Project/data'].permlink,
+                research_permlink: $store.getters['Project/projectDetails'].permlink,
               }
             })"
           >
@@ -92,9 +79,10 @@
 </template>
 
 <script>
-  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { contentListStore } from '@/features/Contents/store/contentsList';
-  import { mapGetters } from 'vuex';
+  import { componentStoreFactory } from '@/mixins/registerStore';
+  import { contentListStore } from '@/features/Contents/store/contentsListStore';
+  import { mapState } from 'vuex';
+
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { ResearchService } from '@deip/research-service';
@@ -111,11 +99,11 @@
     },
     mixins: [
       contentCommon,
-      componentStoreFactoryOnce(contentListStore, 'ProjectContents'),
+      componentStoreFactory(contentListStore),
       limitAccess
     ],
     props: {
-      researchId: {
+      projectId: {
         type: String,
         default: null
       }
@@ -149,9 +137,9 @@
       };
     },
     computed: {
-      ...mapGetters({
-        contentsList: 'ProjectContents/list'
-      })
+      ...mapState({
+        contents(state, getters) { return getters[`${this.storeNS}/contentsList`]; }
+      }),
     },
     created() {
       this.updateData();
@@ -161,12 +149,14 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ProjectContents/getContents', this.researchId)
+          this.$store.dispatch(`${this.storeNS}/getContents`, {
+            projectId: this.projectId
+          })
         ])
           .then(() => {
             this.$setReady(true);
           });
-      },
+      }
     }
   };
 </script>

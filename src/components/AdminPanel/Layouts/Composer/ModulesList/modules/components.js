@@ -32,7 +32,7 @@ export const modules = [
         name: 'Materials',
         icon: 'mdi-file-document-outline',
         props: {
-          researchId: '@research.externalId',
+          projectId: '@research.externalId',
 
           accessMessage: 'Become available after licensing',
           limitedAccess: '@limitedAccess'

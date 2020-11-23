@@ -52,7 +52,6 @@ Vue.component('toggle-text', ToggleText);
 Vue.component('milestone-stepper', MilestoneStepper);
 Vue.component('milestone', Milestone);
 Vue.component('top-research-label', TopResearchLabel);
-Vue.component('review-tile', ReviewTile);
 Vue.component('review-assessment', ReviewAssessment);
 Vue.component('review-assessment-squared-rating', ReviewAssessmentSquaredRating);
 Vue.component('technology-readiness-level', TechnologyReadinessLevel);

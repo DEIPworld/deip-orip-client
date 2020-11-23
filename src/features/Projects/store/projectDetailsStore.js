@@ -4,11 +4,11 @@ import { camelizeObjectKeys } from '@/utils/helpers';
 const researchService = ResearchService.getInstance();
 
 const STATE = {
-  data: {}
+  projectDetails: {}
 };
 
 const GETTERS = {
-  data: (state) => state.data
+  projectDetails: (state) => state.projectDetails
 };
 
 const ACTIONS = {
@@ -22,7 +22,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeResearchDetails(state, research) {
-    state.data = camelizeObjectKeys(research);
+    state.projectDetails = camelizeObjectKeys(research);
   }
 };
 

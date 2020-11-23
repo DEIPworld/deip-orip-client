@@ -24,7 +24,7 @@
 
     computed: {
       ...mapGetters({
-        project: 'Project/data'
+        project: 'Project/projectDetails'
       }),
 
       projectExtended() {

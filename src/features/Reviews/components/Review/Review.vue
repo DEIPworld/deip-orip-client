@@ -4,23 +4,24 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { contentDetailsStore } from '@/features/Contents/store';
+  import { reviewDetailsStore } from '@/features/Reviews/store';
 
   export default {
-    name: 'Content',
+    name: 'Review',
 
     mixins: [
-      componentStoreFactoryOnce(contentDetailsStore)
+      componentStoreFactoryOnce(reviewDetailsStore)
     ],
 
     props: {
-      contentId: {
+      reviewId: {
         type: String,
         required: true
       }
     },
+
     created() {
-      this.$store.dispatch('Content/getContentDetails', this.contentId)
+      this.$store.dispatch('Review/getReviewDetails', this.reviewId)
         .then(() => {
           this.$setReady();
         });
