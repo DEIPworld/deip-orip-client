@@ -222,7 +222,7 @@
         xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
         // TODO: add as formParam after upgrading back-end
         xhr.setRequestHeader('Research-External-Id', this.research.externalId);
-        xhr.setRequestHeader('Project-ContentDetails-References', this.references.map((ref) => ref.external_id));
+        xhr.setRequestHeader('Research-Content-References', this.references.map((ref) => ref.external_id));
       },
       vdropzoneErrorMultiple(files, message, xhr) {
         this.$notifier.showError(this.$t('contents.contentUploadDialog.errFile'));
