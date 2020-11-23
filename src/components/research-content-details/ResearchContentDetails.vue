@@ -111,7 +111,7 @@
                           research.disciplines.map(d => d.name)
                             .join(', ')
                         }}</span>
-                        can review this project only
+                        can review this project
                       </div>
                     </div>
                     <div style="width: 200px">

@@ -55,8 +55,8 @@
           :max-lines="2"
           class="mt-4"
         >
+          {{ $$toAssetUnits(item.details.licencePlan.fee) }}, project:
           {{ item.extendedDetails.research.title }}
-          ( {{ $$toAssetUnits(item.details.licencePlan.fee) }} )
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST === item.type"

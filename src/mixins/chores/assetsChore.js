@@ -4,7 +4,8 @@ import { isArray, isObject, isString } from '@/utils/helpers';
 export const assetsChore = {
   computed: {
     ...mapGetters({
-      allAssets: 'auth/allAssets'
+      allAssets: 'auth/allAssets',
+      assets: 'auth/assets'
     })
   },
 
