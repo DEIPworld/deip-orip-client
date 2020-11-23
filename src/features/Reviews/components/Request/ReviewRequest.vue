@@ -1,0 +1,122 @@
+<template>
+  <div>
+    <slot name="button" :startRequest="startRequest">
+      <v-btn
+        outlined
+        color="primary"
+        small
+        @click="startRequest"
+      >
+        Request Expert Review
+      </v-btn>
+    </slot>
+
+    <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
+      <v-form>
+        <vex-dialog
+          v-model="requestDialog"
+          title="Request Expert Review"
+          :true-disabled="invalid || loading"
+          :false-disabled="loading"
+          @click:confirm="handleSubmit(createRequest)"
+        >
+
+          <d-stack>
+
+            <validation-provider
+              v-if="!contentId"
+              v-slot="{ errors }"
+              name="Content"
+              rules="required"
+            >
+              <content-selector
+                v-model="formModel.contentId"
+                :project-id="projectId"
+                :error-messages="errors"
+              />
+            </validation-provider>
+
+            <validation-provider
+              v-slot="{ errors }"
+              name="Content"
+              rules="required"
+            >
+              <user-selector
+                v-model="formModel.reviewer"
+                :error-messages="errors"
+              />
+            </validation-provider>
+
+          </d-stack>
+
+        </vex-dialog>
+      </v-form>
+    </validation-observer>
+
+  </div>
+
+</template>
+
+<script>
+  import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import UserSelector from '@/features/Users/components/Selector/UserSelector';
+  import ContentSelector from '@/features/Contents/components/Selector/ContentSelector';
+
+  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import { dataContextSwitch } from '@/mixins/dataContextSwitch';
+
+  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+
+  export default {
+    name: 'ReviewRequest',
+    components: {
+      ContentSelector,
+      UserSelector,
+      DStack,
+
+      ValidationObserver,
+      ValidationProvider
+    },
+    mixins: [dataContextSwitch],
+
+    data() {
+      return {
+        requestDialog: false,
+        loading: false,
+        formModel: {
+          contentId: this.contentId ? this.contentId : null,
+          reviewer: null
+        }
+      };
+    },
+
+    methods: {
+      startRequest() {
+        this.requestDialog = true;
+      },
+
+      createRequest() {
+        this.loading = true;
+
+        return researchContentReviewsService.createReviewRequest({
+          contentId: this.formModel.contentId,
+          expert: this.formModel.reviewer
+        })
+          .then(() => {
+            this.$notifier.showSuccess('Request for the review has been sent successfully');
+            this.requestDialog = false;
+            this.loading = false;
+          })
+          .catch((err) => {
+            let errMsg = 'An error occurred while requesting the review. Please try again later';
+            if (err.response && err.response.data) {
+              errMsg = err.response.data;
+            }
+            this.$notifier.showError(errMsg);
+          })
+      }
+    }
+  };
+</script>

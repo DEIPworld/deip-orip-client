@@ -7,6 +7,12 @@
   export default {
     name: 'DAutocomplete',
     mixins: [VAutocomplete],
+    props: {
+      outlined: {
+        type: Boolean,
+        default: true
+      }
+    },
     computed: {
       labelValue() {
         return !this.isSingle

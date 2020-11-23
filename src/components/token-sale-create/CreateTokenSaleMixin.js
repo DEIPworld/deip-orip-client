@@ -22,9 +22,8 @@ export const CreateTokenSaleMixin = {
         amountToSell: null,
         startDate: null,
         endDate: null,
-        softCap: '',
-        hardCap: '',
-        asset: undefined
+        softCap: {},
+        hardCap: {}
       },
       securityTokenOnSale: null,
       securityTokenOnSaleBalance: null,

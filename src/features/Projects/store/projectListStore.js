@@ -1,10 +1,9 @@
 import { ResearchService } from '@deip/research-service';
 import {
-  getActionFrom,
-  getActionTarget,
-  getActionMapKey,
+  getActionByPath,
   camelizeObjectKeys
 } from '@/utils/helpers';
+
 import where from 'filter-where';
 
 const researchService = ResearchService.getInstance();
@@ -41,11 +40,7 @@ const actionsMap = {
   }
 };
 
-const actionFor = getActionFrom(actionsMap, [
-  getActionMapKey('scope', 'projects').get,
-  getActionTarget,
-  getActionMapKey('type', 'all').get
-]).get;
+const getAction = getActionByPath(actionsMap).get;
 
 const STATE = {
   projectsList: []
@@ -58,7 +53,15 @@ const GETTERS = {
 const ACTIONS = {
 
   getProjectsData({ dispatch }, payload = {}) {
-    return dispatch(actionFor(payload), payload);
+    const target = [payload.scope];
+
+    if (payload.userName) target.push('user');
+    else if (payload.teamId) target.push('team');
+    else target.push('public');
+
+    target.push(payload.type || 'all');
+
+    return dispatch(getAction(target), payload);
   },
 
   // PROJECTS

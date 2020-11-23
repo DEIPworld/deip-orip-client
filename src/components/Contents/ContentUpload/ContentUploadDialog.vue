@@ -53,7 +53,7 @@
               :label="$t('contents.contentUploadDialog.typeField')"
               item-value="id"
             />
-
+            {{research.members}}
             <user-selector
               v-model="authors"
               :users="research.members"
@@ -163,7 +163,7 @@
     },
     computed: {
       ...mapGetters({
-        research: 'Project/data'
+        research: 'Project/projectDetails'
       }),
 
       isCentralizedGroup() {

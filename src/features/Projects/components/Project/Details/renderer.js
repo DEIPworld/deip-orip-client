@@ -108,6 +108,11 @@ export default {
           true
         )
         : false;
+    },
+
+    onContentUploaded() {
+      console.log('aaaaa', this.$refs)
+      this.$refs.ContentsList.updateData()
     }
   }
 };

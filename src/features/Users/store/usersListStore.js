@@ -3,11 +3,11 @@ import { UsersService } from '@deip/users-service';
 const usersService = UsersService.getInstance();
 
 const STATE = {
-  list: []
+  usersList: []
 };
 
 const GETTERS = {
-  list: (state) => state.list
+  usersList: (state) => state.usersList
 };
 
 const ACTIONS = {
@@ -27,7 +27,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeUsersProfiles(state, payload) {
-    state.list = payload;
+    state.usersList = payload;
   }
 };
 

@@ -10,133 +10,112 @@
           paragraph: 'text@2'
         }"
       >
-        <v-row class="full-height">
-          <v-col v-if="isInProgress" cols="auto">
-            <v-card class="full-height elevation-0">
-              <div>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
+
+        <d-stack class="fill-height">
+          <template v-if="isDarContent">
+            <v-row class="fill-height">
+              <v-col v-if="isInProgress" cols="auto">
+                <d-stack>
+                  <d-simple-tooltip
+                    v-if="isSavingDraftAvailable"
+                    tooltip="Save Draft"
+                  >
                     <v-btn
-                      v-if="isSavingDraftAvailable"
-                      text
                       icon
                       color="primary"
                       :loading="isSavingDraft"
                       :disabled="isSavingDraft"
-                      v-on="on"
                       @click="saveDraft()"
                     >
                       <v-icon>save</v-icon>
                     </v-btn>
-                  </template>
-                  <span>Save Draft</span>
-                </v-tooltip>
-              </div>
-              <div>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
+                  </d-simple-tooltip>
+                  <d-simple-tooltip
+                    v-if="isInProgress"
+                    :tooltip="!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'"
+                  >
                     <v-btn
-                      v-if="isInProgress"
-                      text
                       icon
                       color="primary"
-                      v-on="on"
                       @click="openContentProposalDialog()"
                     >
                       <v-icon>send</v-icon>
                     </v-btn>
-                  </template>
+                  </d-simple-tooltip>
+                </d-stack>
+              </v-col>
+              <v-col>
+                <research-content-details-dar
+                  v-if="isDarContent"
+                  :content-ref="contentRef"
+                  :research-members="researchMembersList"
+                />
+              </v-col>
+            </v-row>
+          </template>
 
-                  <span>{{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}</span>
-                </v-tooltip>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col>
-            <research-content-details-package v-if="isFilePackageContent" />
-            <research-content-details-dar
-              v-if="isDarContent"
-              :content-ref="contentRef"
-              :research-members="researchMembersList"
+          <research-content-details-package v-if="isFilePackageContent" />
+
+          <template v-if="isPublished && contentReviewsList.length">
+            <reviews-list
+              v-if="content && Object.keys(content).length"
+              :content-id="content.external_id"
             />
+          </template>
 
-            <!-- START Project ContentDetails Reviews section -->
-<!--            <reviews-list-->
-<!--              v-if="research && Object.keys(research).length"-->
-<!--              :project-id="research.external_id"-->
-<!--            />-->
-
-            <div v-if="isPublished && contentReviewsList.length" class="py-6">
-              <div id="reviews">
-                <div class="py-2 title">
-                  Reviews: {{ contentReviewsList.length }}
-                </div>
-                <div class="py-2">
-                  <div v-for="(review, i) in contentReviewsList" :key="`review-${i}`">
-                    <review-tile
-                      class="my-2"
-                      :review="review"
-                      :research-content-type="content.content_type"
-                    />
-                    <v-divider v-if="i != contentReviewsList.length - 1" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="isPublished && !isResearchGroupMember" class="pt-2 pb-12">
-              <v-card class="py-6 px-12">
-                <v-row id="reviews" class="py-2">
-                  <v-col class="shrink pr-12" align-self="center">
-                    <img src="/assets/img/add-review.png">
-                  </v-col>
-                  <v-col class="grow pl-12" align-self="center">
-                    <div class="pb-4">
-                      <div v-if="!contentReviewsList.length" class="pb-1 text-subtitle-1 font-weight-bold">
-                        There are no reviews for this material yet
-                      </div>
-                      <div v-if="userHasResearchExpertise && !userHasReview">
-                      You will get <span class="text-body-2 font-weight-bold">approximately 3000 ECI reward in {{
-                          userRelatedExpertise.map(exp => exp.discipline_name)
-                            .join(', ')
-                        }}</span>
-                        for your contribution to this project
-                      </div>
-                    <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
-                        You
-                        have reviewed this material already
-                      </div>
-                      <div v-else-if="!userHasResearchExpertise">
-                        Users with expertise in <span class="text-body-2">{{
-                          research.disciplines.map(d => d.name)
-                            .join(', ')
-                        }}</span>
-                        can review this project only
-                      </div>
+          <div v-if="isPublished && !isResearchGroupMember" class="pt-2 pb-12">
+            <v-card class="py-6 px-12">
+              <v-row id="reviews" class="py-2">
+                <v-col class="shrink pr-12" align-self="center">
+                  <img src="/assets/img/add-review.png">
+                </v-col>
+                <v-col class="grow pl-12" align-self="center">
+                  <div class="pb-4">
+                    <div v-if="!contentReviewsList.length" class="pb-1 text-subtitle-1 font-weight-bold">
+                      There are no reviews for this material yet
                     </div>
-                    <div style="width: 200px">
-                      <v-btn
-                        :to="{
+                    <div v-if="userHasResearchExpertise && !userHasReview">
+                      You will get <span class="text-body-2 font-weight-bold">approximately 3000 ECI reward in {{
+                        userRelatedExpertise.map(exp => exp.discipline_name)
+                          .join(', ')
+                      }}</span>
+                      for your contribution to this project
+                    </div>
+                    <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
+                      You
+                      have reviewed this material already
+                    </div>
+                    <div v-else-if="!userHasResearchExpertise">
+                      Users with expertise in <span class="text-body-2">{{
+                        research.disciplines.map(d => d.name)
+                          .join(', ')
+                      }}</span>
+                      can review this project
+                    </div>
+                  </div>
+                  <div style="width: 200px">
+                    <v-btn
+                      :to="{
                           name: 'ResearchContentAddReview',
                           params: {
                             group_permlink: decodeURIComponent(research.research_group.permlink),
                             research_permlink: decodeURIComponent(research.permlink),
                             content_permlink: decodeURIComponent(content.permlink),
                           }}"
-                        :disabled="!isCreatingReviewAvailable"
-                        block
-                        color="primary"
-                        class="ma-0"
-                      >
-                        Add review
-                      </v-btn>
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </div>
-          </v-col>
-        </v-row>
+                      :disabled="!isCreatingReviewAvailable"
+                      block
+                      color="primary"
+                      class="ma-0"
+                    >
+                      Add review
+                    </v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+          </div>
+
+        </d-stack>
 
         <!-- START Proposal dialog section -->
         <v-dialog
@@ -258,6 +237,7 @@
 
       <!-- END Proposal dialog section -->
     </d-layout-section-main>
+
     <d-layout-section-sidebar>
       <v-skeleton-loader
         :loading="!$ready"
@@ -286,6 +266,8 @@
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
   import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -294,7 +276,22 @@
 
   export default {
     name: 'ResearchContentDetails',
-    components: { ReviewsList, DLayoutSectionSidebar, DLayoutSectionMain, DLayoutSection },
+    components: {
+      DSimpleTooltip,
+      DStack,
+      ReviewsList,
+      DLayoutSectionSidebar,
+      DLayoutSectionMain,
+      DLayoutSection
+    },
+
+    props: {
+      permData: { // temp solution
+        type: Object,
+        default: () => ({})
+      }
+    },
+
     data() {
       return {
         isSavingDraft: false,
@@ -348,9 +345,9 @@
 
     created() {
       this.$store.dispatch('rcd/loadResearchContentDetails', {
-        group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
-        research_permlink: decodeURIComponent(this.$route.params.research_permlink),
-        content_permlink: decodeURIComponent(this.$route.params.content_permlink),
+        group_permlink: decodeURIComponent(this.permData.groupPermalink || this.$route.params.research_group_permlink),
+        research_permlink: decodeURIComponent(this.permData.projectPermalink || this.$route.params.research_permlink),
+        content_permlink: decodeURIComponent(this.permData.contentPermalink || this.$route.params.content_permlink),
         ref: this.$route.query.ref
       })
         .then(() => {
@@ -401,7 +398,10 @@
                 .then((contentRef) => {
                   const isProposal = !this.research.research_group.is_personal;
                   researchContentService.createResearchContent(
-                    { privKey: this.user.privKey, username: this.user.username },
+                    {
+                      privKey: this.user.privKey,
+                      username: this.user.username
+                    },
                     isProposal,
                     {
                       researchExternalId: this.research.external_id,

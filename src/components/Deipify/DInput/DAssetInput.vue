@@ -30,6 +30,7 @@
         class="rounded-bl-0 rounded-tl-0"
         :items="assetsList"
         :hide-details="true"
+        :disabled="disableAssets"
         outlined
         @change="update()"
       />
@@ -73,6 +74,10 @@
         default: null
       },
       required: {
+        type: Boolean,
+        default: false
+      },
+      disableAssets: {
         type: Boolean,
         default: false
       }

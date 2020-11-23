@@ -1,7 +1,7 @@
 <template>
   <component
     :is="$$componentViewType"
-    :users="usersList"
+    :users="usersListComputed"
     v-bind="attrs$"
   >
 
@@ -51,12 +51,12 @@
 
     computed: {
       ...mapState({
-        usersListStore(state, getters) { return getters[`${this.storeNS}/list`]; }
+        usersList(state, getters) { return getters[`${this.storeNS}/usersList`]; }
       }),
 
-      usersList() {
-        if (this.usersListStore.length) {
-          return this.usersListStore;
+      usersListComputed() {
+        if (this.usersList.length) {
+          return this.usersList;
         }
 
         return wrapInArray(this.usersData);

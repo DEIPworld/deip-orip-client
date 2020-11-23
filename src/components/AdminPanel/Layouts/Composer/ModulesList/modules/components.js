@@ -32,11 +32,12 @@ export const modules = [
         name: 'Materials',
         icon: 'mdi-file-document-outline',
         props: {
-          researchId: '@research.externalId',
+          projectId: '@research.externalId',
 
           accessMessage: 'Become available after licensing',
           limitedAccess: '@limitedAccess'
-        }
+        },
+        ref: 'ContentsList'
       },
       {
         component: 'DraftsList',
@@ -44,7 +45,8 @@ export const modules = [
         icon: 'mdi-file-edit-outline',
         props: {
           researchId: '@research.externalId'
-        }
+        },
+        ref: 'DraftsList'
       },
       {
         component: 'ContentUpload',
@@ -52,7 +54,11 @@ export const modules = [
         icon: 'mdi-file-upload-outline',
         props: {
           researchId: '@research.external_id'
-        }
+        },
+        on: {
+          'content-uploaded': '@onContentUploaded'
+        },
+        ref: 'ContentUpload'
       }
     ]
   },

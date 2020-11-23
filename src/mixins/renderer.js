@@ -61,13 +61,23 @@ const rendererCommon = {
 
       const stringPattern = /{{\s*(.*?)\s*}}/gm;
       const modelPattern = /^@([a-zA-Z0-9_.-]*)$/;
-      const methodPattern = /^@([a-zA-Z0-9_.-]*\(['"][a-zA-Z0-9_.-]*['"]\))$/;
+      const methodPattern = /^@([a-zA-Z0-9_.-]*\(['"]?[a-zA-Z0-9_.-]*['"]?\))$/;
 
       for (const { parent, node, key } of new RecursiveIterator(clone, 1, true)) {
+
         if (kindOf(node) === 'string') {
+
           const stringMatches = [...node.matchAll(stringPattern)];
           const modelMatches = node.match(modelPattern);
           const methodMatches = node.match(methodPattern);
+
+          if(node === '@onContentUploaded()') {
+            console.log('get', '@onContentUploaded()')
+          }
+
+          if(node === '@onContentUploaded') {
+            console.log('get', '@onContentUploaded')
+          }
 
           if (modelMatches && modelMatches.length) {
             parent[key] = getObjectValueByPath(this, modelMatches[1]);
@@ -157,7 +167,8 @@ export const componentsRenderer = {
         ...(node.attrs ? { attrs: node.attrs } : {}),
         ...(node.class ? { class: node.class } : {}),
         ...(node.slot ? { slot: node.slot } : {}),
-        ...(node.on ? { on: node.on } : {})
+        ...(node.on ? { on: node.on } : {}),
+        ...(node.ref ? { ref: node.ref } : {})
       };
 
       let vModel = {};
@@ -168,6 +179,7 @@ export const componentsRenderer = {
             value: getObjectValueByPath(self.internalValue, node.model)
           },
           on: {
+            ...node.on,
             change(event) {
               const a = dotProp.set(self.internalValue, node.model, event);
               self.internalValue = { ...self.internalValue, ...a };

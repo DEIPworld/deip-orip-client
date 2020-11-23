@@ -1,21 +1,39 @@
 import deipRpc from '@deip/rpc-client';
+
+import {
+  getActionByPath,
+  camelizeObjectKeys,
+} from '@/utils/helpers';
+
 import { ResearchContentService } from '@deip/research-content-service';
 
 const researchContentService = ResearchContentService.getInstance();
 
+const actionsMap = {
+  project: 'getContentsByProject'
+};
+
+const getAction = getActionByPath(actionsMap).get;
+
 const STATE = {
-  list: []
+  contentsList: []
 };
 
 const GETTERS = {
-  list: (state) => state.list
+  contentsList: (state) => state.contentsList
 };
 
 const ACTIONS = {
-  getContents({ commit }, researchExternalId) {
+  getContents({ dispatch }, payload) {
+    let target;
+    if (payload.projectId) target = 'project';
+    return dispatch(getAction(target), payload);
+  },
+
+  getContentsByProject({ commit }, { projectId }) {
     const researchContents = [];
 
-    return researchContentService.getResearchContentByResearch(researchExternalId)
+    return researchContentService.getResearchContentByResearch(projectId)
       .then((list) => {
         researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
 
@@ -33,12 +51,12 @@ const ACTIONS = {
         commit('storeContents', researchContents);
       })
       .catch((err) => { console.error(err); });
-  }
+  },
 };
 
 const MUTATIONS = {
-  storeContents(state, list) {
-    state.list = list;
+  storeContents(state, payload) {
+    state.contentsList = payload.map((item) => camelizeObjectKeys(item));
   }
 };
 

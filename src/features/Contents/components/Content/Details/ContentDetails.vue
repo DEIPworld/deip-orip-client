@@ -1,39 +1,28 @@
 <template>
-  <d-layout>
-    <d-layout-section class="spacer">
-      <d-layout-section-main>
-        sss
-      </d-layout-section-main>
-
-      <d-layout-section-sidebar>
-        sss
-      </d-layout-section-sidebar>
-    </d-layout-section>
-  </d-layout>
+  <research-content-details
+    :perm-data="permData"
+  />
 </template>
 
 <script>
-  import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
-  import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
-  import DLayout from '@/components/Deipify/DLayout/DLayout';
-  import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'ContentDetails',
-    components: {
-      DLayoutSectionSidebar,
-      DLayout,
-      DLayoutSectionMain,
-      DLayoutSection
-    },
-    props: {
-      contentId: {
-        type: String,
-        default: null
-      },
-      researchId: {
-        type: String,
-        default: null
+
+    computed: {
+      ...mapGetters({
+        content: 'Content/contentDetails',
+        project: 'Project/projectDetails'
+      }),
+
+      permData() {
+        console.log('@@@@', this.content)
+        return {
+          groupPermalink: this.project.researchGroup.permlink,
+          projectPermalink: this.project.permlink,
+          contentPermalink: this.content.permlink
+        };
       }
     }
   };

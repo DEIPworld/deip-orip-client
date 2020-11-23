@@ -70,13 +70,16 @@
           let text = '';
           if (trc.type) {
             let signersCount = 0;
+            let partyCount = 0;
             Object.keys(trc.parties).forEach((i) => {
               if (
                 !trc.parties[i].isProposer
                 && trc.parties[i].account.external_id
-                && signers.length < 5
               ) {
-                signers.push({ signer: trc.parties[i].account });
+                partyCount++;
+                if (signers.length < 5) {
+                  signers.push({ signer: trc.parties[i].account });
+                }
               }
               if (!trc.parties[i].isProposer) {
                 trc.parties[i].signers.forEach((s) => {
@@ -87,10 +90,21 @@
               }
             });
 
-            if (signers.length > 1 && signersCount > 1) {
-              text = `Parties: ${Object.keys(trc.parties).length - 1}, Signatures: ${signersCount}`;
-            } else if (signers.length > 1) {
-              text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+            if (partyCount >= 1 && signersCount > 1) {
+              text = `Parties: ${partyCount}, Signatures: ${signersCount}`;
+              if (partyCount === 1) {
+                Object.keys(trc.parties).forEach((i) => {
+                  if (!trc.parties[i].isProposer) {
+                    trc.parties[i].signers.forEach((s) => {
+                      if (!s.signer.external_id) {
+                        signers.push(s);
+                      }
+                    });
+                  }
+                });
+              }
+            } else if (partyCount > 1) {
+              text = `Parties: ${partyCount}`;
             } else if (signersCount > 1) {
               text = `Signatures: ${signersCount}`;
               Object.keys(trc.parties).forEach((i) => {
@@ -144,16 +158,20 @@
           const signers = [];
           let text = '';
           if (trc.type) {
+            let partyCount = 0;
             Object.keys(trc.parties).forEach((i) => {
               if (
-                !trc.parties[i].isProposer && signers.length < 5
+                !trc.parties[i].isProposer
               ) {
-                signers.push({ signer: trc.parties[i].account });
+                partyCount++;
+                if (signers.length < 5) {
+                  signers.push({ signer: trc.parties[i].account });
+                }
               }
             });
 
-            if (signers.length > 1) {
-              text = `Parties: ${Object.keys(trc.parties).length - 1}`;
+            if (partyCount > 1) {
+              text = `Parties: ${partyCount}`;
             } else if (signers[0]) {
               text = signers[0].signer.name || this.$options.filters.fullname(
                 signers[0].signer
@@ -188,7 +206,7 @@
             }
           }
         }
-        return item.proposer;
+        return { account: item.proposer };
       }
     }
   };

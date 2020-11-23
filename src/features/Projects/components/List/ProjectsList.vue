@@ -176,6 +176,7 @@
 
           userName: this.userName,
           teamId: this.teamId,
+
           ...(this.withFilter ? { filter: this.filterPayload() } : {})
         };
 
