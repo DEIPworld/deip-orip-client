@@ -28,7 +28,7 @@ export const dropoutMember = {
   methods: {
     dropoutMember(member) {
       this.actionDialog.loading = true;
-      researchGroupService.leaveResearchGroupViaOffchain(
+      researchGroupService.leaveResearchGroup(
         {
           privKey: this.user.privKey,
           username: this.user.username
@@ -45,7 +45,7 @@ export const dropoutMember = {
       )
         .then(() => {
           this.$notifier.showSuccess('Dropout Proposal has been created successfully!');
-          this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
+          this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
         })
         .catch((err) => {
           this.$notifier.showError('An error occurred while creating proposal, please try again later');

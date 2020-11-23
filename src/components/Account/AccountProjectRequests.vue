@@ -205,7 +205,7 @@
       },
 
       deleteRequest(proposalId) {
-        researchService.deleteResearchApplicationViaOffchain(this.user.privKey, {
+        researchService.deleteResearchApplication(this.user.privKey, {
           researcher: this.user.username,
           proposalId
         })

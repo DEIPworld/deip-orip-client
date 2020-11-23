@@ -97,7 +97,7 @@
                         research.disciplines.map(d => d.name)
                           .join(', ')
                       }}</span>
-                      can review this project only
+                      can review this project
                     </div>
                   </div>
                   <div style="width: 200px">
@@ -401,12 +401,12 @@
               saveDocument()
                 .then((contentRef) => {
                   const isProposal = !this.research.research_group.is_personal;
-                  researchContentService.createResearchContentViaOffchain(
+                  researchContentService.createResearchContent(
                     {
                       privKey: this.user.privKey,
                       username: this.user.username
                     },
-                    false,
+                    isProposal,
                     {
                       researchExternalId: this.research.external_id,
                       researchGroup: this.research.research_group.external_id,

@@ -261,7 +261,7 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+        researchGroupService.approveResearchGroupInvite(this.currentUser.privKey, {
           inviteId: proposalId,
           account: this.currentUser.username
         })
@@ -284,7 +284,7 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        researchGroupService.rejectResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+        researchGroupService.rejectResearchGroupInvite(this.currentUser.privKey, {
           inviteId: proposalId,
           account: this.currentUser.username
         })

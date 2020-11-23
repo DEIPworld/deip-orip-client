@@ -42,18 +42,25 @@
     <research-group-asset class="mb-12" />
 
     <!-- ### START Research Group Proposals Section ### -->
-    <div v-if="isResearchGroupMember && !group.is_personal" id="proposals" class="mb-12">
+    <d-block
+      v-if="isResearchGroupMember && !group.is_personal"
+      id="proposals"
+      class="mb-12"
+      title="Transactions"
+    >
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
-          <research-group-details-proposals :key="'group-proposals'" />
+          <!-- <research-group-details-proposals :key="'group-proposals'" /> -->
+          <transactions-list :key="'group-proposals'" :account="group.external_id" />
         </div>
       </transition>
       <div v-else>
         <div class="pt-2 pb-6">
-          <research-group-details-proposals :key="'group-proposals'" />
+          <!-- <research-group-details-proposals :key="'group-proposals'" /> -->
+          <transactions-list :key="'group-proposals'" :account="group.external_id" />
         </div>
       </div>
-    </div>
+    </d-block>
     <!-- ### END Project Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
@@ -81,7 +88,7 @@
           v-if="isResearchGroupMember && !group.is_personal"
           color="primary"
           small
-          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'research.create' } : { name: 'CreateResearchProposal' }"
+          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'project.create' } : { name: 'CreateResearchProposal' }"
           outlined
         >
           {{ $t('researchGroupDetails.start') }}
@@ -94,7 +101,7 @@
       :group-external-id="group.external_id"
       :users="usersToInvite"
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
-      @onSuccess="$store.dispatch('researchGroup/loadResearchGroupProposals', { account: group.external_id })"
+      @onSuccess="$store.dispatch('TransactionsList/loadTransactions', group.external_id)"
     />
     <!-- ### END Project Group Project List Section ### -->
   </div>
@@ -110,6 +117,8 @@
   import ResearchGroupRequests from '@/components/research-group-details/components/ResearchGroupRequests';
   import ResearchGroupAsset from '@/components/research-group-details/components/ResearchGroupAsset';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
+  import TransactionsList from '@/components/TransactionsList/TransactionsList';
+  import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();
@@ -120,7 +129,9 @@
       ProjectsList,
       MemberList,
       ResearchGroupRequests,
-      ResearchGroupAsset
+      ResearchGroupAsset,
+      TransactionsList,
+      DBlock
     },
     props: {},
     data() {
@@ -149,7 +160,6 @@
         invites: 'researchGroup/invites',
         isLoadingResearchGroupDetails: 'researchGroup/isLoadingResearchGroupDetails',
         isLoadingResearchGroupMembers: 'researchGroup/isLoadingResearchGroupMembers',
-        isLoadingResearchGroupProposals: 'researchGroup/isLoadingResearchGroupProposals',
         userPersonalGroup: 'auth/userPersonalGroup',
         pendingJoinRequests: 'researchGroup/pendingJoinRequests',
         tenant: 'auth/tenant'
@@ -206,7 +216,7 @@
     methods: {
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
-        researchGroupService.leaveResearchGroupViaOffchain(
+        researchGroupService.leaveResearchGroup(
           {
             privKey: this.user.privKey,
             username: this.user.username
@@ -223,7 +233,7 @@
         )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchGroupDetails.successDrop'));
-            this.$store.dispatch('researchGroup/loadResearchGroupProposals', { account: this.group.external_id });
+            this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
           })
           .catch((err) => {
             this.$notifier.showError(this.$t('researchGroupDetails.errDrop'));

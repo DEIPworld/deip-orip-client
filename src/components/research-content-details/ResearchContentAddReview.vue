@@ -220,7 +220,7 @@
         //   extensions
         // })
 
-        return researchContentReviewsService.createReviewViaOffchain(this.$currentUser.privKey, {
+        return researchContentReviewsService.createReview(this.$currentUser.privKey, {
           author: this.$currentUserName,
           researchContentExternalId,
           content: reviewData,

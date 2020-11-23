@@ -80,7 +80,9 @@ export default {
   transactionsPage: {
     signed: 'Signed',
     pending: 'Pending',
-    declined: 'Declined'
+    declined: 'Declined',
+    failed: 'Failed',
+    expired: 'Expired'
   },
 
   contents,

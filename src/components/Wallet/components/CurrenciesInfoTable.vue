@@ -406,8 +406,9 @@
       },
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
-        return assetsService.transferAsset(
-          { privKey: this.$currentUser.privKey, username: this.depositDialog.owner },
+        return assetsService.transferAssets(
+          { privKey: this.$currentUser.privKey, username: this.$currentUserName },
+          false,
           {
             from: this.depositDialog.owner,
             to: 'kim',
@@ -431,8 +432,9 @@
       },
       deposit() {
         this.depositDialog.isDepositing = true;
-        return assetsService.transferAsset(
+        return assetsService.transferAssets(
           { privKey: '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa', username: 'kim' },
+          false,
           {
             from: "kim", 
             to: this.depositDialog.owner,

@@ -145,7 +145,7 @@
         };
 
         this.isPasswordChanging = true;
-        userService.updateUserAccountViaOffchain(oldPrivateKey, {
+        userService.updateUserAccount(oldPrivateKey, {
           account: username,
           accountOwnerAuth: ownerAuth,
           accountActiveAuth: ownerAuth,

@@ -9,7 +9,7 @@
 
 <script>
   // WIP !!!
-  import { expandResearchAttributes } from '@/utils/helpers';
+  import { expandResearchAttributes, parseFormData } from '@/utils/helpers';
   import { projectEditable } from '@/features/Projects/mixins';
   import ProjectForm from '@/features/Projects/components/Form/ProjectForm';
   import { mapGetters } from 'vuex';
@@ -43,13 +43,15 @@
     methods: {
       updateProject(formData) {
         this.loading = true;
-
-        return researchService.updateResearchViaOffchain(
+        
+        const { onchainData } = parseFormData(formData);
+        const isProposal = onchainData.researchGroup != this.$currentUser.account.name;
+        return researchService.updateResearch(
           {
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.account.name
           },
-          false,
+          isProposal,
           formData
         )
           .then((project) => {

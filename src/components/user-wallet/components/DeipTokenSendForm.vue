@@ -137,8 +137,9 @@
         if (this.$refs.form.validate()) {
           this.isSending = true;
 
-          assetsService.transferAsset(
+          assetsService.transferAssets(
             { privKey: this.user.privKey, username: this.user.username }, 
+            false,
             {
               from: this.user.username,
               to: this.form.to,

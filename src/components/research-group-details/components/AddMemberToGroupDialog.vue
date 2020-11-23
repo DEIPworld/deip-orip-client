@@ -111,7 +111,7 @@
       sendProposal() {
         this.isLoading = true;
 
-        researchGroupService.createResearchGroupInviteViaOffchain(
+        researchGroupService.createResearchGroupInvite(
           { privKey: this.user.privKey, username: this.user.username },
           {
             researchGroup: this.groupExternalId,

@@ -21,7 +21,7 @@ const blockchainService = BlockchainService.getInstance();
 const proposalsService = ProposalsService.getInstance();
 
 const state = {
-  proposals: [],
+  // proposals: [],
   group: undefined,
   groupShares: [],
   members: [],
@@ -36,11 +36,11 @@ const state = {
     isTransferTokensDialogOpen: false
   },
 
-  proposalListFilter: {
-    areShownPastProposals: false,
-    sortBy: 'creation_time',
-    order: 'asc'
-  },
+  // proposalListFilter: {
+  //   areShownPastProposals: false,
+  //   sortBy: 'creation_time',
+  //   order: 'asc'
+  // },
 
   isLoadingResearchGroupDetails: undefined,
   isLoadingResearchGroupMembers: undefined,
@@ -51,7 +51,7 @@ const state = {
 // getters
 const getters = {
 
-  proposals: (state) => state.proposals,
+  // proposals: (state) => state.proposals,
   group: (state) => {
     const researchGroup = state.group;
     const balances = researchGroup.account.balances.reduce((acc, b) => {
@@ -70,7 +70,7 @@ const getters = {
   groupShares: (state) => state.groupShares,
   members: (state) => state.members,
   invites: (state) => state.invites,
-  proposalListFilter: (state) => state.proposalListFilter,
+  // proposalListFilter: (state) => state.proposalListFilter,
   options: (state) => state.options,
   joinRequests: (state) => state.joinRequests,
   pendingJoinRequests: (state) => state.joinRequests.filter((r) => r.status == 'pending'),
@@ -91,12 +91,12 @@ const actions = {
       .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
 
-        const proposalsLoad = new Promise((resolve, reject) => {
-          dispatch('loadResearchGroupProposals', {
-            account: state.group.account.name,
-            notify: resolve
-          });
-        });
+        // const proposalsLoad = new Promise((resolve, reject) => {
+        //   dispatch('loadResearchGroupProposals', {
+        //     account: state.group.account.name,
+        //     notify: resolve
+        //   });
+        // });
 
         const membersLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupMembers', {
@@ -117,7 +117,7 @@ const actions = {
         const researchGroupRevenueHistory = dispatch('loadResearchGroupRevenueHistory', state.group.external_id);
 
         return Promise.all([
-          proposalsLoad,
+          // proposalsLoad,
           membersLoad,
           joinRequestsLoad,
           groupInvitesPromise,
@@ -159,17 +159,17 @@ const actions = {
       });
   },
 
-  loadResearchGroupProposals({ commit }, { account, notify }) {
-    commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
-    proposalsService.getProposalsByCreator(account)
-      .then((data) => {
-        commit('SET_PROPOSALS', data);
-      })
-      .finally(() => {
-        commit('SET_GROUP_PROPOSALS_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
+  // loadResearchGroupProposals({ commit }, { account, notify }) {
+  //   commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
+  //   proposalsService.getProposalsByCreator(account)
+  //     .then((data) => {
+  //       commit('SET_PROPOSALS', data);
+  //     })
+  //     .finally(() => {
+  //       commit('SET_GROUP_PROPOSALS_LOADING_STATE', false);
+  //       if (notify) notify();
+  //     });
+  // },
 
   loadResearchGroupMembers({ commit, state }, { groupId, notify }) {
     const members = [];
@@ -260,9 +260,9 @@ const actions = {
 
 // mutations
 const mutations = {
-  SET_PROPOSALS(state, proposals) {
-    state.proposals = proposals;
-  },
+  // SET_PROPOSALS(state, proposals) {
+  //   state.proposals = proposals;
+  // },
 
   SET_RESEARCH_GROUP(state, group) {
     state.group = group;
@@ -276,21 +276,21 @@ const mutations = {
     state.members = members;
   },
 
-  CHANGE_PROPOSAL(state, payload) {
-    const index = state.proposals.indexOf(payload.old);
+  // CHANGE_PROPOSAL(state, payload) {
+  //   const index = state.proposals.indexOf(payload.old);
 
-    if (index !== -1) {
-      state.proposals.splice(index, 1, payload.new);
-    }
-  },
+  //   if (index !== -1) {
+  //     state.proposals.splice(index, 1, payload.new);
+  //   }
+  // },
 
   SET_GROUP_INVITES(state, invites) {
     state.invites = invites;
   },
 
-  UPDATE_PROPOSAL_FILTER(state, { key, value }) {
-    state.proposalListFilter[key] = value;
-  },
+  // UPDATE_PROPOSAL_FILTER(state, { key, value }) {
+  //   state.proposalListFilter[key] = value;
+  // },
 
   UPDATE_OPTIONS(state, { key, value }) {
     state.options[key] = value;

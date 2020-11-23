@@ -81,7 +81,7 @@
           weight_threshold: 1
         };
 
-        return researchGroupService.createResearchGroupViaOffchain(
+        return researchGroupService.createResearchGroup(
             this.$currentUser.privKey,
             {
               fee: this.toAssetUnits(0),

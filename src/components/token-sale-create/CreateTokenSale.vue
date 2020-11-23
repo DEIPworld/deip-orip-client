@@ -39,21 +39,21 @@
         this.formProcessing = true;
 
         const isProposal = !this.research.research_group.is_personal;
-        const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        investmentsService.createResearchTokenSaleViaOffchain(
+        investmentsService.createResearchTokenSale(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          false,
+          isProposal,
           {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,
-            startTime: this.formData.startDate.toISOString().split('.')[0],
-            endTime: this.formData.endDate.toISOString().split('.')[0],
+            startTime: this.formData.startDate,
+            endTime: this.formData.endDate,
             securityTokensOnSale: [this.formData.amountToSell],
-            softCap: this.toAssetUnits(this.formData.softCap, asset.precision, asset.string_symbol),
-            hardCap: this.toAssetUnits(this.formData.hardCap, asset.precision, asset.string_symbol),
+            softCap: this.$$toAssetUnits(this.formData.softCap, false),
+            hardCap: this.$$toAssetUnits(this.formData.hardCap, false),
             extensions: []
-          })
+          }
+        )
           .then(() => {
             this.isLoading = false;
             this.$notifier.showSuccess('Fundraise has been created successfully!');

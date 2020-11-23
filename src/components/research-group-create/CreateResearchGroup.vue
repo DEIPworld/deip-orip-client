@@ -52,7 +52,7 @@
                 weight_threshold: 1
               };
 
-              researchGroupService.createResearchGroupViaOffchain(
+              researchGroupService.createResearchGroup(
                 this.user.privKey,
                 {
                   fee: this.toAssetUnits(0),
@@ -73,11 +73,13 @@
                   this.formProcessing = false;
                   this.$store.dispatch('auth/loadGroups'); // reload user groups
                   this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
+                  const [{ onchainDatums }] = res;
+                  const [[ opName, { 'new_account_name': researchGroupExternalId } ]] = onchainDatums;
 
-                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
+                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInvite(
                     { privKey: this.user.privKey, username: this.user.username },
                     {
-                      researchGroup: res.external_id,
+                      researchGroup: researchGroupExternalId,
                       member: invitee.account,
                       rewardShare: '0.00 %',
                       researches: [],
@@ -90,7 +92,7 @@
 
                   return Promise.all([
                     Promise.all(invitesPromises),
-                    deipRpc.api.getResearchGroupAsync(res.external_id),
+                    deipRpc.api.getResearchGroupAsync(researchGroupExternalId),
                     this.$store.dispatch('auth/loadGroups')
                   ]);
                 })
@@ -105,7 +107,7 @@
                       }
                     });
                   } else {
-                    if (this.backRouterToken.name === 'research.create') {
+                    if (this.backRouterToken.name === 'project.create') {
                       this.backRouterToken.query.externalId = researchGroup.external_id;
                     }
                     this.$router.push(this.backRouterToken);

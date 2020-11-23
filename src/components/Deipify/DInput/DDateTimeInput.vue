@@ -56,7 +56,7 @@
       setModel() {
         const [date, time] = this.internalValue.split('T');
         this.date = date;
-        this.type = time;
+        this.time = time;
       }
     }
   };

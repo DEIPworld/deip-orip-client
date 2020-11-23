@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex justify-end">
     <v-btn
       outlined
       small
@@ -15,7 +15,7 @@
       </v-icon>
       Transfer
     </v-btn>
-    <!-- <v-btn
+    <v-btn
       outlined
       small
       max-height="30"
@@ -27,7 +27,7 @@
         payments
       </v-icon>
       Exchange
-    </v-btn> -->
+    </v-btn>
     <d-dialog
       v-model="dialog.isOpened"
       :disabled="dialog.isSending"
@@ -35,7 +35,7 @@
       :title="dialog.title"
       max-width="570px"
       :confirm-button-title="
-        dialog.exchange ? 'Sell' : $t('userWallet.sendResearchTokensDialog.submitBtn')
+        dialog.exchange ? 'Exchange' : $t('userWallet.sendResearchTokensDialog.submitBtn')
       "
       :cancel-button-title="$t('userWallet.cancel')"
       @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
@@ -47,7 +47,7 @@
         <v-select
           v-model="dialog.form.fromAccount"
           :label="dialog.exchange ? 'From asset' : 'Asset'"
-          :items="asset.balances"
+          :items="dialog.exchange ? [...balances, ...accountData.balances] : asset.balances"
           outlined
           return-object
           item-text="amount"
@@ -223,6 +223,7 @@
 
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
+  import { mapGetters } from 'vuex';
 
   const assetsService = AssetsService.getInstance();
 
@@ -297,9 +298,22 @@
     },
 
     computed: {
+      ...mapGetters({
+        balances: 'Wallet/balances',
+        groupData: 'Wallet/groupData'
+      }),
+      accountData() {
+        if (this.$route.name === 'userWallet') {
+          return this.$currentUser;
+        }
+        if (this.$route.name === 'groupWallet') {
+          return this.groupData;
+        }
+        return { balances: [] };
+      },
       exchangeToAccounts() {
         if (this.dialog.exchange) {
-          return this.asset.balances.filter(
+          return [...this.balances, ...this.accountData.balances].filter(
             (item) => item.asset_symbol !== this.dialog.form.fromAccount.asset_symbol
           );
         }
@@ -331,23 +345,20 @@
 
           let fromAmount = '0';
 
-          if (this.asset.type === 'currency') {
-            const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
-            fromAmount = this.$$toAssetUnits(
-              this.dialog.form.fromAmount,
-              false,
-              { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
-            );
-          }
-          if (this.asset.type === 'share') {
-            fromAmount = `${this.dialog.form.fromAmount} ${this.dialog.form.fromAccount.asset_symbol}`;
-          }
+          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+          fromAmount = this.$$toAssetUnits(
+            this.dialog.form.fromAmount,
+            false,
+            { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
+          );
 
-          return assetsService.transferAsset(
+          const isProposal = this.$currentUserName !== this.dialog.form.fromAccount.owner;
+          return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
-              username: this.dialog.form.fromAccount.owner
+              username: this.$currentUserName
             },
+            isProposal,
             {
               from: this.dialog.form.fromAccount.owner,
               to: this.dialog.form.receiver.account.name,
@@ -357,7 +368,7 @@
             }
           )
             .then(() => {
-              this.$notifier.showSuccess('Ttokens successfully sent');
+              this.$notifier.showSuccess('Tokens successfully sent');
             })
             .catch((err) => {
               this.$notifier.showError('Transaction was failed');
@@ -383,29 +394,45 @@
           let fromAmount = '0';
           let toAmount = '0';
 
-          if (this.asset.type === 'currency') {
-            const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
-            const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.asset_symbol);
-            fromAmount = this.$$toAssetUnits(
-              this.dialog.form.fromAmount,
-              false,
-              { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
-            );
-            toAmount = this.$$toAssetUnits(
-              this.dialog.form.toAmount,
-              false,
-              { symbol: toAccountData.string_symbol, fractionCount: toAccountData.precision }
-            );
-          }
-          if (this.asset.type === 'share') {
-            fromAmount = `${this.dialog.form.fromAmount} ${this.dialog.form.fromAccount.asset_symbol}`;
-            toAmount = `${this.dialog.form.toAmount} ${this.dialog.form.toAccount.asset_symbol}`;
-          }
-          console.log(fromAmount);
-          console.log(toAmount);
+          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+          const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.asset_symbol);
+          fromAmount = this.$$toAssetUnits(
+            this.dialog.form.fromAmount,
+            false,
+            { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
+          );
+          toAmount = this.$$toAssetUnits(
+            this.dialog.form.toAmount,
+            false,
+            { symbol: toAccountData.string_symbol, fractionCount: toAccountData.precision }
+          );
 
-          this.dialog.isSending = false;
-          this.dialog.isOpened = false;
+          assetsService.createAssetsExchangeProposal({
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUserName
+          }, {
+            party1: this.dialog.form.fromAccount.owner,
+            party2: this.dialog.form.receiver.account.name,
+            asset1: fromAmount,
+            asset2: toAmount,
+            memo: this.dialog.form.memo,
+            extensions: []
+          })
+            .then(() => {
+              this.$notifier.showSuccess('Exchange successfully sent');
+            })
+            .catch((err) => {
+              this.$notifier.showError('Transaction was failed');
+              console.error(err);
+            })
+            .finally(() => {
+              this.dialog.isSending = false;
+              this.dialog.isOpened = false;
+              Promise.all([
+                this.updateBalances(),
+                this.$store.dispatch('Wallet/loadBalances', this.$route.params.account)
+              ]);
+            });
         }
       },
       updateBalances() {

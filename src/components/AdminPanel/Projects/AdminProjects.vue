@@ -12,7 +12,7 @@
             outlined
             small
             color="primary"
-            :to="{name: 'research.create'}"
+            :to="{name: 'project.create'}"
           >
             <v-icon left>
               mdi-file-document-outline

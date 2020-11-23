@@ -106,7 +106,7 @@
 
           const extensions = [];
 
-          return researchContentReviewsService.createReviewViaOffchain(this.user.privKey, {
+          return researchContentReviewsService.createReview(this.user.privKey, {
             author: this.user.username,
             researchContentExternalId,
             content: reviewData,
