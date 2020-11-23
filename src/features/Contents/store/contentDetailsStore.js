@@ -19,7 +19,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeContentDetails(state, payload) {
-    state.data = payload;
+    state.contentDetails = payload;
   }
 };
 

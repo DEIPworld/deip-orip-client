@@ -17,6 +17,7 @@
       }),
 
       permData() {
+        console.log('@@@@', this.content)
         return {
           groupPermalink: this.project.researchGroup.permlink,
           projectPermalink: this.project.permlink,

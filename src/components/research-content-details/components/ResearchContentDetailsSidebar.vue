@@ -52,70 +52,19 @@
     </d-block-widget>
 
     <d-block-widget v-if="isPublished">
-      <v-dialog
-        v-model="requestExpertReviewDialog.isShown"
-        persistent
-        max-width="600px"
-      >
-        <template v-slot:activator="{ on }">
+
+      <review-request :content-id="content.id">
+        <template #button="{ startRequest }">
           <v-btn
-            block
             color="primary"
-            dark
-            v-on="on"
+            block
+            @click="startRequest"
           >
             Request Review
           </v-btn>
         </template>
-        <v-card class="pa-6">
-          <v-card-title>
-            <div class="text-h5">
-              Request review from an Expert
-            </div>
-            <div class="right-top-angle">
-              <v-btn icon class="pa-0 ma-0" @click="requestExpertReviewDialog.isShown = false">
-                <v-icon color="black">
-                  close
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-card-title>
-          <v-card-text>
-            <user-autocomplete-picker
-              label="Find an expert to request a review"
-              :users="experts"
-              :is-disabled="requestExpertReviewDialog.isRequestingReview"
-              :display-limit="8"
-              @onSelectUser="selectExpertForReview"
-            />
-          </v-card-text>
-          <v-card-actions class="px-6">
-            <v-row>
-              <v-col cols="12" class="py-2">
-                <v-btn
-                  :loading="requestExpertReviewDialog.isRequestingReview"
-                  :disabled="isRequestingReviewDisabled"
-                  block
-                  color="primary"
-                  @click="requestReview()"
-                >
-                  Request
-                </v-btn>
-              </v-col>
-              <v-col cols="12" class="py-2">
-                <v-btn
-                  color="primary"
-                  text
-                  block
-                  @click="requestExpertReviewDialog.isShown = false"
-                >
-                  Cancel
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      </review-request>
+
     </d-block-widget>
 
     <d-block-widget title="Authors">
@@ -137,7 +86,6 @@
         <div
           v-for="(member, index) in draftAuthorsList"
           :key="`author-${index}`"
-          align-baseline
           :class="{'pb-1' : index == 0, 'py-1': index != 0}"
         >
           <platform-avatar
@@ -237,6 +185,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import ReviewRequest from '@/features/Reviews/components/Request/ReviewRequest';
 
   const researchContentService = ResearchContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
@@ -245,18 +194,13 @@
     name: 'ResearchContentDetailsSidebar',
 
     components: {
+      ReviewRequest,
       DBlockWidget,
       EciStats,
-      DBlock
     },
 
     data() {
       return {
-        requestExpertReviewDialog: {
-          isShown: false,
-          selectedExpert: null,
-          isRequestingReview: false
-        }
       };
     },
 
@@ -404,28 +348,6 @@
           name: 'ResearchContentAddReview',
           params: this.$route.params
         });
-      },
-
-      requestReview() {
-        this.requestExpertReviewDialog.isRequestingReview = true;
-        return researchContentReviewsService.createReviewRequest({
-          contentId: this.content.id,
-          expert: this.requestExpertReviewDialog.selectedExpert.account.name
-        })
-          .then(() => {
-            this.$notifier.showSuccess('Request for the review has been sent successfully');
-          })
-          .catch((err) => {
-            let errMsg = 'An error occurred while requesting the review. Please try again later';
-            if (err.response && err.response.data) {
-              errMsg = err.response.data;
-            }
-            this.$notifier.showError(errMsg);
-          })
-          .finally(() => {
-            this.requestExpertReviewDialog.isRequestingReview = false;
-            this.requestExpertReviewDialog.isShown = false;
-          });
       },
 
       getResearchContentEciPercentile() {

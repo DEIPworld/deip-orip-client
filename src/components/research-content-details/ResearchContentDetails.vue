@@ -11,57 +11,50 @@
         }"
       >
 
-        <d-stack>
-
-          <template v-if="isInProgress">
-            <v-card class="full-height elevation-0">
-              <div>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
+        <d-stack class="fill-height">
+          <template v-if="isDarContent">
+            <v-row class="fill-height">
+              <v-col v-if="isInProgress" cols="auto">
+                <d-stack>
+                  <d-simple-tooltip
+                    v-if="isSavingDraftAvailable"
+                    tooltip="Save Draft"
+                  >
                     <v-btn
-                      v-if="isSavingDraftAvailable"
-                      text
                       icon
                       color="primary"
                       :loading="isSavingDraft"
                       :disabled="isSavingDraft"
-                      v-on="on"
                       @click="saveDraft()"
                     >
                       <v-icon>save</v-icon>
                     </v-btn>
-                  </template>
-                  <span>Save Draft</span>
-                </v-tooltip>
-              </div>
-              <div>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
+                  </d-simple-tooltip>
+                  <d-simple-tooltip
+                    v-if="isInProgress"
+                    :tooltip="!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'"
+                  >
                     <v-btn
-                      v-if="isInProgress"
-                      text
                       icon
                       color="primary"
-                      v-on="on"
                       @click="openContentProposalDialog()"
                     >
                       <v-icon>send</v-icon>
                     </v-btn>
-                  </template>
-
-                  <span>{{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}</span>
-                </v-tooltip>
-              </div>
-            </v-card>
+                  </d-simple-tooltip>
+                </d-stack>
+              </v-col>
+              <v-col>
+                <research-content-details-dar
+                  v-if="isDarContent"
+                  :content-ref="contentRef"
+                  :research-members="researchMembersList"
+                />
+              </v-col>
+            </v-row>
           </template>
 
           <research-content-details-package v-if="isFilePackageContent" />
-
-          <research-content-details-dar
-            v-if="isDarContent"
-            :content-ref="contentRef"
-            :research-members="researchMembersList"
-          />
 
           <template v-if="isPublished && contentReviewsList.length">
             <reviews-list
@@ -244,6 +237,7 @@
 
       <!-- END Proposal dialog section -->
     </d-layout-section-main>
+
     <d-layout-section-sidebar>
       <v-skeleton-loader
         :loading="!$ready"
@@ -273,6 +267,7 @@
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
   import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -282,6 +277,7 @@
   export default {
     name: 'ResearchContentDetails',
     components: {
+      DSimpleTooltip,
       DStack,
       ReviewsList,
       DLayoutSectionSidebar,

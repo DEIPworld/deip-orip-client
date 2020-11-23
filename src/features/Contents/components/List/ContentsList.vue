@@ -79,17 +79,12 @@
 </template>
 
 <script>
-  import { componentStoreFactory } from '@/mixins/registerStore';
-  import { contentListStore } from '@/features/Contents/store/contentsListStore';
-  import { mapState } from 'vuex';
 
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import { ResearchService } from '@deip/research-service';
   import { limitAccess } from '@/mixins/limitAccess';
-  import { contentCommon } from '@/features/Contents/mixins';
+  import { contentList } from '@/features/Contents/mixins';
 
-  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ContentsList',
@@ -98,16 +93,9 @@
       DSimpleTooltip
     },
     mixins: [
-      contentCommon,
-      componentStoreFactory(contentListStore),
+      contentList,
       limitAccess
     ],
-    props: {
-      projectId: {
-        type: String,
-        default: null
-      }
-    },
     data() {
       return {
         expanded: [],
@@ -135,28 +123,6 @@
           }
         ]
       };
-    },
-    computed: {
-      ...mapState({
-        contents(state, getters) { return getters[`${this.storeNS}/contentsList`]; }
-      }),
-    },
-    created() {
-      this.updateData();
-    },
-    methods: {
-      updateData() {
-        this.$setReady(false);
-
-        return Promise.all([
-          this.$store.dispatch(`${this.storeNS}/getContents`, {
-            projectId: this.projectId
-          })
-        ])
-          .then(() => {
-            this.$setReady(true);
-          });
-      }
     }
   };
 </script>

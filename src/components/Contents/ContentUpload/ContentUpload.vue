@@ -68,8 +68,10 @@
           });
       },
       newContentUploaded() {
+        this.$emit('content-uploaded');
+
         Promise.all([
-          this.$store.dispatch('ProjectContents/getContents', this.$route.params.researchExternalId),
+          // this.$store.dispatch('ProjectContents/getContents', this.$route.params.researchExternalId),
           this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.researchExternalId)
         ]);
       }

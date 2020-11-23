@@ -101,7 +101,7 @@
     },
     computed: {
       ...mapState({
-        usersList(state, getters) { return getters[`${this.storeNS}/list`]; }
+        usersList(state, getters) { return getters[`${this.storeNS}/usersList`]; }
       }),
 
       isMultipleProps() {
@@ -130,6 +130,8 @@
     methods: {
       loadUsers() {
         this.$setReady(false);
+
+        console.log(this.users)
 
         const loadUsers = this.users.length
           ? this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.users)

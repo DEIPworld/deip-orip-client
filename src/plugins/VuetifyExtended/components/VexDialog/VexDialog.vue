@@ -133,6 +133,10 @@
       };
     },
 
+    computed: {
+
+    },
+
     // mounted() {
     //   document.addEventListener('keyup', this.onEnterPressed);
     // },

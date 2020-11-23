@@ -1,3 +1,5 @@
+import { contentListStore } from '@/features/Contents/store';
+
 import {
   getActionByPath,
   camelizeObjectKeys
@@ -23,11 +25,13 @@ const getAdditionalData = (items) => items.map((item) => Promise.all([
 })));
 
 const STATE = {
-  reviewsList: []
+  reviewsList: [],
+  contentsList: contentListStore.state.contentsList
 };
 
 const GETTERS = {
-  reviewsList: (state) => state.reviewsList
+  reviewsList: (state) => state.reviewsList,
+  contentsList: contentListStore.getters.contentsList
 };
 
 const ACTIONS = {
@@ -39,13 +43,16 @@ const ACTIONS = {
     return dispatch(getAction(target), payload);
   },
 
-  getReviewsByProject({ commit }, { projectId }) {
+  getReviewsByProject({ dispatch, commit }, { projectId }) {
     return deipRpc.api.getReviewsByResearchAsync(projectId)
       .then((items) => Promise.all(
         getAdditionalData(items)
       )
         .then((res) => {
-          commit('storeReviews', res);
+          return dispatch('getContentsByProject', { projectId })
+            .then(() => {
+              commit('storeReviews', res);
+            });
         }));
   },
 
@@ -57,14 +64,18 @@ const ACTIONS = {
         .then((res) => {
           commit('storeReviews', res);
         }));
-  }
+  },
+
+  getContentsByProject: contentListStore.actions.getContentsByProject
 
 };
 
 const MUTATIONS = {
   storeReviews(state, payload) {
     state.reviewsList = payload.map((item) => (camelizeObjectKeys(item)));
-  }
+  },
+
+  storeContents: contentListStore.mutations.storeContents
 };
 
 export const reviewsListStore = {

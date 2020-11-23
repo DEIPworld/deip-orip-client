@@ -55,8 +55,8 @@
       }),
 
       usersListComputed() {
-        if (this.usersListStore.length) {
-          return this.usersListStore;
+        if (this.usersList.length) {
+          return this.usersList;
         }
 
         return wrapInArray(this.usersData);
