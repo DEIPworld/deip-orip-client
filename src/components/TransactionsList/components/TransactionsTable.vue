@@ -574,8 +574,8 @@
             ? proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
               account: trc.type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
-                ? this.$currentUser.groups.some(g => trc.proposal.required_approvals.some(a => a == g.account.name)) 
-                    ? this.$currentUser.groups.find(g => trc.proposal.required_approvals.some(a => a == g.account.name)).account.name
+                ? trc.proposal.required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
+                    ? trc.proposal.required_approvals.find(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
                     : this.$currentUserName
                 : this.$currentUserName,
               authority: 2, // active auth
