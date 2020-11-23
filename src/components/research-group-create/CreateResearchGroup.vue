@@ -52,7 +52,7 @@
                 weight_threshold: 1
               };
 
-              researchGroupService.createResearchGroupViaOffchain(
+              researchGroupService.createResearchGroup(
                 this.user.privKey,
                 {
                   fee: this.toAssetUnits(0),
@@ -76,7 +76,7 @@
                   const [{ onchainDatums }] = res;
                   const [[ opName, { 'new_account_name': researchGroupExternalId } ]] = onchainDatums;
 
-                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInviteViaOffchain(
+                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInvite(
                     { privKey: this.user.privKey, username: this.user.username },
                     {
                       researchGroup: researchGroupExternalId,

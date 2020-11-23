@@ -28,7 +28,7 @@ export const dropoutMember = {
   methods: {
     dropoutMember(member) {
       this.actionDialog.loading = true;
-      researchGroupService.leaveResearchGroupViaOffchain(
+      researchGroupService.leaveResearchGroup(
         {
           privKey: this.user.privKey,
           username: this.user.username

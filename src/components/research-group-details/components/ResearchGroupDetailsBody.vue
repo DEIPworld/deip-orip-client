@@ -216,7 +216,7 @@
     methods: {
       dropoutMember(member) {
         this.dropoutMemberMeta.isConfirming = true;
-        researchGroupService.leaveResearchGroupViaOffchain(
+        researchGroupService.leaveResearchGroup(
           {
             privKey: this.user.privKey,
             username: this.user.username

@@ -454,7 +454,7 @@
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
         
-        investmentsService.contributeToResearchTokenSaleViaOffchain({ privKey: this.$currentUser.privKey, username: this.$currentUser.account.name }, {
+        investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.account.name }, {
           tokenSaleExternalId: this.tokenSale.external_id,
           contributor: this.$currentUser.account.name,
           amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),

@@ -41,9 +41,9 @@
         const isProposal = !this.research.research_group.is_personal;
         const asset = this.assets.find((a) => a.id === this.formData.asset);
 
-        investmentsService.createResearchTokenSaleViaOffchain(
+        investmentsService.createResearchTokenSale(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
-          false,
+          isProposal,
           {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,

@@ -400,7 +400,7 @@
               saveDocument()
                 .then((contentRef) => {
                   const isProposal = !this.research.research_group.is_personal;
-                  researchContentService.createResearchContentViaOffchain(
+                  researchContentService.createResearchContent(
                     { privKey: this.user.privKey, username: this.user.username },
                     isProposal,
                     {

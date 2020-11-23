@@ -57,7 +57,7 @@
 
         const formData = this.createFormData(this.formData);
 
-        researchService.editResearchApplicationViaOffchain(this.formData._id, formData)
+        researchService.editResearchApplication(this.formData._id, formData)
           .then((result) => {
             this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successUpdate', { title: this.formData.researchTitle }));
             this.$emit('done');

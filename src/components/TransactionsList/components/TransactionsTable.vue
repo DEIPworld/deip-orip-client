@@ -558,7 +558,7 @@
         this.disableButtonsId = trc.proposal.external_id;
         if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
           // promise = researchGroupService[reject
-          //   ? 'rejectResearchGroupInviteViaOffChain' : 'approveResearchGroupInviteViaOffChain'](
+          //   ? 'rejectResearchGroupInvite' : 'approveResearchGroupInvite'](
           //   this.currentUser.privKey, {
           //     inviteId: trc.external_id,
           //     account: this.currentUser.username
@@ -569,20 +569,6 @@
           //       researchGroupExternalId: this.group.external_id
           //     });
           //   });
-        } else if (trc.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
-          promise = assetsService[reject ? 'rejectAssetsTransferProposal' : 'approveAssetsTransferProposal'](
-            defaultUserData,
-            defaultPromiseData
-          );
-        } else if (trc.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
-          promise = assetsService[reject ? 'rejectAssetsExchangeProposal' : 'approveAssetsExchangeProposal'](
-            defaultUserData,
-            {
-              proposalId: trc.proposal.external_id,
-              [reject ? 'rejector' : 'approver']: trc.details.party2,
-              authority: 2
-            }
-          );
         } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
           promise = expressLicensingService[reject ? 'rejectExpressLicensingRequest' : 'approveExpressLicensingRequest'](
             defaultUserData,
@@ -593,13 +579,13 @@
           );
         } else {
           promise = reject
-            ? proposalsService.deleteProposal(this.$currentUser.privKey, {
+            ? proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
               account: this.$currentUserName,
-              authority: 2,
+              authority: 2, // active auth
               extensions: []
             }, true)
-            : proposalsService.updateProposal(this.$currentUser.privKey, {
+            : proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
               activeApprovalsToAdd: [this.$currentUserName],
               activeApprovalsToRemove: [],

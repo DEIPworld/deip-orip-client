@@ -363,7 +363,7 @@
               this.isLoading = true;
 
               const isProposal = !this.group.is_personal;
-              researchGroupService.updateResearchGroupAccountViaOffchain(
+              researchGroupService.updateResearchGroupAccount(
                 { privKey: this.user.privKey, username: this.user.username }, 
                 isProposal, 
                 {

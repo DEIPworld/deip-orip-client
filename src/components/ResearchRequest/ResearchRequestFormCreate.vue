@@ -52,7 +52,7 @@
         formData.append('researchGroupName', `${this.formData.researchTitle} team`);
         formData.append('researchGroupDescription', '');
 
-        researchService.createResearchApplicationViaOffchain(researcherPrivKey, formData)
+        researchService.createResearchApplication(researcherPrivKey, formData)
           .then(({ rm }) => {
             this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successReq'));
             return deipRpc.api.getResearchAsync(rm._id);

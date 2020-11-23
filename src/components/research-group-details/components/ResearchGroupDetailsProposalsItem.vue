@@ -398,7 +398,7 @@
         this.isApprovingLoading = true;
 
         if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
-          promise = researchGroupService.approveResearchGroupInviteViaOffChain(this.currentUser.privKey, {
+          promise = researchGroupService.approveResearchGroupInvite(this.currentUser.privKey, {
             inviteId: proposal.external_id,
             account: this.currentUser.username
           })
@@ -408,7 +408,7 @@
               });
             });
         } else {
-          promise = proposalsService.updateProposal(this.currentUser.privKey, {
+          promise = proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
             externalId: proposal.external_id,
             activeApprovalsToAdd: [this.currentUser.username],
             activeApprovalsToRemove: [],

@@ -239,7 +239,7 @@
         }
 
         const isProposal = !this.research.researchGroup.is_personal;
-        researchContentService.createResearchContentViaOffchain(
+        researchContentService.createResearchContent(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
           isProposal,
           {

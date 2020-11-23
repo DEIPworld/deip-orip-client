@@ -46,7 +46,7 @@
         
         const { onchainData } = parseFormData(formData);
         const isProposal = onchainData.researchGroup != this.$currentUser.account.name;
-        return researchService.updateResearchViaOffchain(
+        return researchService.updateResearch(
           {
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.account.name
