@@ -277,9 +277,11 @@
   import { chartGradient, switchColor } from '@/plugins/charts';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { ExpressLicensingService } from '@deip/express-licensing-service';
+  import { ProposalsService } from '@deip/proposals-service';
   import { assetsChore } from '@/mixins/chores';
 
   const expressLicensingService = ExpressLicensingService.getInstance();
+  const proposalsService = ProposalsService.getInstance();
 
   const transactionTypes = {
     LICENSE: {
@@ -418,15 +420,16 @@
       },
       approveExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
-        expressLicensingService
-          .approveExpressLicensingRequest(
+        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username },
             {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            },
-            {
-              requestId: request._id,
-              approver: this.$currentUser.username
+              externalId: request._id,
+              activeApprovalsToAdd: [this.$currentUser.username],
+              activeApprovalsToRemove: [],
+              ownerApprovalsToAdd: [],
+              ownerApprovalsToRemove: [],
+              keyApprovalsToAdd: [],
+              keyApprovalsToRemove: [],
+              extensions: []
             }
           )
           .then(() => {
@@ -449,15 +452,12 @@
 
       rejectExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
-        expressLicensingService
-          .rejectExpressLicensingRequest(
+        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username },
             {
-              privKey: this.$currentUser.privKey,
-              username: this.$currentUser.username
-            },
-            {
-              requestId: request._id,
-              rejector: this.$currentUser.username
+              externalId: request._id,
+              account: this.$currentUser.username,
+              authority: 2, // active auth
+              extensions: [],
             }
           )
           .then(() => {

@@ -569,19 +569,15 @@
           //       researchGroupExternalId: this.group.external_id
           //     });
           //   });
-        } else if (trc.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
-          promise = expressLicensingService[reject ? 'rejectExpressLicensingRequest' : 'approveExpressLicensingRequest'](
-            defaultUserData,
-            {
-              requestId: trc.proposal.external_id,
-              [reject ? 'rejector' : 'approver']: this.$currentUser.username
-            }
-          );
         } else {
           promise = reject
             ? proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
-              account: this.$currentUserName,
+              account: trc.type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
+                ? this.$currentUser.groups.some(g => trc.proposal.required_approvals.some(a => a == g.account.name)) 
+                    ? this.$currentUser.groups.find(g => trc.proposal.required_approvals.some(a => a == g.account.name)).account.name
+                    : this.$currentUserName
+                : this.$currentUserName,
               authority: 2, // active auth
               extensions: []
             }, true)

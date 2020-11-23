@@ -203,10 +203,7 @@
               });
             });
         } else {
-          promise = proposalsService.updateProposal({
-            privKey: this.currentUser.privKey,
-            username: this.currentUser.username
-          }, {
+          promise = proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
             externalId: proposal.external_id,
             activeApprovalsToAdd: [this.currentUser.username],
             activeApprovalsToRemove: [],
