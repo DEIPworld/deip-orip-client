@@ -420,18 +420,16 @@
       },
       approveExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
-        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-            {
-              externalId: request._id,
-              activeApprovalsToAdd: [this.$currentUser.username],
-              activeApprovalsToRemove: [],
-              ownerApprovalsToAdd: [],
-              ownerApprovalsToRemove: [],
-              keyApprovalsToAdd: [],
-              keyApprovalsToRemove: [],
-              extensions: []
-            }
-          )
+        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+          externalId: request._id,
+          activeApprovalsToAdd: [this.$currentUser.username],
+          activeApprovalsToRemove: [],
+          ownerApprovalsToAdd: [],
+          ownerApprovalsToRemove: [],
+          keyApprovalsToAdd: [],
+          keyApprovalsToRemove: [],
+          extensions: []
+        })
           .then(() => {
             Promise.all([
               this.$store.dispatch('Transactions/loadApprovedRequests'),
@@ -453,13 +451,13 @@
       rejectExpressLicensingRequest(request) {
         this.disableButtonsId = request._id;
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-            {
-              externalId: request._id,
-              account: this.$currentUser.username,
-              authority: 2, // active auth
-              extensions: [],
-            }
-          )
+          {
+            externalId: request._id,
+            account: this.$currentUser.username,
+            authority: 2, // active auth
+            extensions: [],
+          }
+        )
           .then(() => {
             Promise.all([
               this.$store.dispatch('Transactions/loadApprovedRequests'),

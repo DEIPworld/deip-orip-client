@@ -394,56 +394,48 @@
       }),
 
       approve(proposal) {
-        let promise;
         this.isApprovingLoading = true;
+        proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
+          externalId: proposal.external_id,
+          activeApprovalsToAdd: [this.currentUser.username],
+          activeApprovalsToRemove: [],
+          ownerApprovalsToAdd: [],
+          ownerApprovalsToRemove: [],
+          keyApprovalsToAdd: [],
+          keyApprovalsToRemove: [],
+          extensions: []
+        })
+          .then(() => {
+            this.isApprovingLoading = false;
 
-        if (proposal.action === PROPOSAL_TYPES.INVITE_MEMBER) {
-          promise = researchGroupService.approveResearchGroupInvite(this.currentUser.privKey, {
-            inviteId: proposal.external_id,
-            account: this.currentUser.username
-          })
-            .then(() => {
+            if (proposal.action == PROPOSAL_TYPES.INVITE_MEMBER) {
               this.$store.dispatch('researchGroup/loadGroupInvites', {
                 researchGroupExternalId: this.group.external_id
               });
-            });
-        } else {
-          promise = proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
-            externalId: proposal.external_id,
-            activeApprovalsToAdd: [this.currentUser.username],
-            activeApprovalsToRemove: [],
-            ownerApprovalsToAdd: [],
-            ownerApprovalsToRemove: [],
-            keyApprovalsToAdd: [],
-            keyApprovalsToRemove: [],
-            extensions: []
-          });
-        }
+            }
 
-        promise.then(() => {
-          this.isApprovingLoading = false;
-          const copy = _.cloneDeep(this.proposal);
-          copy.voted_accounts.push(this.currentUser.username);
-          this.changeProposal({ old: this.proposal, new: copy });
-          if (proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
-            Promise.all([this.$store.dispatch('auth/loadGroups')])
-              .then(() => {
-                const { permlink } = this.$store.getters['auth/userGroups'].find((item) => item.external_id === this.group.external_id);
-                this.$router.push({
-                  name: 'ResearchGroupDetails',
-                  params: {
-                    research_group_permlink: encodeURIComponent(permlink)
-                  }
+            const copy = _.cloneDeep(this.proposal);
+            copy.voted_accounts.push(this.currentUser.username);
+            this.changeProposal({ old: this.proposal, new: copy });
+            if (proposal.action === PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
+              Promise.all([this.$store.dispatch('auth/loadGroups')])
+                .then(() => {
+                  const { permlink } = this.$store.getters['auth/userGroups'].find((item) => item.external_id === this.group.external_id);
+                  this.$router.push({
+                    name: 'ResearchGroupDetails',
+                    params: {
+                      research_group_permlink: encodeURIComponent(permlink)
+                    }
+                  });
                 });
-              });
-          } else {
-            this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
-          }
-          this.$notifier.showSuccess('You have voted for the proposal successfully!');
+            } else {
+              this.$store.dispatch('researchGroup/loadResearchGroup', { permlink: this.group.permlink });
+            }
+            this.$notifier.showSuccess('You have voted for the proposal successfully!');
         })
-          .catch((err) => {
-            alert(err.message);
-          });
+        .catch((err) => {
+          alert(err.message);
+        });
       },
 
       // for CREATE_RESEARCH

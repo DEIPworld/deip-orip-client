@@ -545,33 +545,10 @@
       },
 
       signTrc(trc, reject = false) {
-        let promise;
-        const defaultUserData = {
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUserName
-        };
-        const defaultPromiseData = {
-          proposalId: trc.proposal.external_id,
-          [reject ? 'rejector' : 'approver']: this.$currentUserName,
-          authority: 2
-        };
         this.disableButtonsId = trc.proposal.external_id;
-        if (trc.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
-          // promise = researchGroupService[reject
-          //   ? 'rejectResearchGroupInvite' : 'approveResearchGroupInvite'](
-          //   this.currentUser.privKey, {
-          //     inviteId: trc.external_id,
-          //     account: this.currentUser.username
-          //   }
-          // )
-          //   .then(() => {
-          //     this.$store.dispatch('researchGroup/loadGroupInvites', {
-          //       researchGroupExternalId: this.group.external_id
-          //     });
-          //   });
-        } else {
-          promise = reject
-            ? proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+        let promise = reject 
+          ? 
+            proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
               account: trc.type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
                 ? trc.proposal.required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
@@ -581,7 +558,8 @@
               authority: 2, // active auth
               extensions: []
             }, true)
-            : proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+          :
+            proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
               externalId: trc.proposal.external_id,
               activeApprovalsToAdd: [this.$currentUserName],
               activeApprovalsToRemove: [],
@@ -590,8 +568,7 @@
               keyApprovalsToAdd: [],
               keyApprovalsToRemove: [],
               extensions: []
-            });
-        }
+          });
 
         promise
           .then(() => {

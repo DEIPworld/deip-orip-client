@@ -261,9 +261,15 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        researchGroupService.approveResearchGroupInvite(this.currentUser.privKey, {
-          inviteId: proposalId,
-          account: this.currentUser.username
+        proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
+          externalId: proposalId,
+          activeApprovalsToAdd: [this.currentUser.username],
+          activeApprovalsToRemove: [],
+          ownerApprovalsToAdd: [],
+          ownerApprovalsToRemove: [],
+          keyApprovalsToAdd: [],
+          keyApprovalsToRemove: [],
+          extensions: []
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
@@ -284,9 +290,11 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        researchGroupService.rejectResearchGroupInvite(this.currentUser.privKey, {
-          inviteId: proposalId,
-          account: this.currentUser.username
+        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+          externalId: proposalId,
+          account: this.$currentUser.username,
+          authority: 2, // active auth
+          extensions: [],
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
