@@ -19,6 +19,7 @@
 
     :name="label"
     autocomplete="off"
+    :return-object="returnObject"
 
     v-bind="fieldProps"
   >
@@ -93,6 +94,10 @@
         default: () => ([])
       },
       multiple: {
+        type: Boolean,
+        default: false
+      },
+      returnObject: {
         type: Boolean,
         default: false
       },

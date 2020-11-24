@@ -1,6 +1,8 @@
-import ContentDetails from '@/features/Contents/components/Content/Details/ContentDetails';
-import { routerView, routeNameGenerator } from '@/utils/helpers';
 import Content from '@/features/Contents/components/Content/Content';
+import ContentDraft from '@/features/Contents/components/Content/Draft/ContentDraft';
+import ContentDetails from '@/features/Contents/components/Content/Details/ContentDetails';
+
+import { routerView, routeNameGenerator } from '@/utils/helpers';
 import { reviewRoutingFabric } from '@/features/Reviews/router';
 
 export const contentRoutingFabric = (parent) => {
@@ -12,9 +14,14 @@ export const contentRoutingFabric = (parent) => {
 
     children: [
       {
-        name: routeName('create'),
-        path: 'create',
-        component: routerView
+        name: routeName('draft'),
+        path: 'draft-:draftId',
+        component: ContentDraft,
+        props(route) {
+          return {
+            draftId: route.params.draftId
+          };
+        },
       },
 
       {
@@ -30,11 +37,6 @@ export const contentRoutingFabric = (parent) => {
             name: routeName('details'),
             component: ContentDetails,
             path: ''
-          },
-          {
-            name: routeName('edit'),
-            path: 'edit',
-            component: routerView
           },
           {
             name: routeName('review'),

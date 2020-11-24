@@ -12,21 +12,21 @@ const GETTERS = {
 };
 
 const ACTIONS = {
-  getResearchDetails({ commit }, projectExternalId) {
+  getProjectDetails({ commit }, projectExternalId) {
     return researchService.getResearch(projectExternalId)
       .then((res) => {
-        commit('storeResearchDetails', res);
+        commit('storeProjectDetails', res);
       });
   }
 };
 
 const MUTATIONS = {
-  storeResearchDetails(state, research) {
+  storeProjectDetails(state, research) {
     state.projectDetails = camelizeObjectKeys(research);
   }
 };
 
-export const researchStore = {
+export const projectDetailsStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

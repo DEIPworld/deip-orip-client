@@ -1,25 +1,23 @@
 export const limitAccess = {
   name: 'LimitAccess',
-  props: {
-    limitedAccess: {
-      type: Boolean,
-      default: false
-    },
-    accessMessage: {
-      type: String,
-      default: 'No access'
-    }
+
+  data() {
+    return {
+      limitAccessMessage: 'Become available after licensing'
+    };
   },
 
   computed: {
-    limitAccessClasses() {
-      return {
-        'limit-access': this.limitedAccess
-      };
+    $$limitedAccess() {
+      return false;
     },
-    limitAccessProps() {
+
+    $$limitedAccessProps() {
       return {
-        ...(this.limitedAccess ? { 'data-access-message': this.accessMessage } : {})
+        ...(this.limitedAccess ? {
+          'data-access-message': this.limitAccessMessage,
+          class: 'limit-access'
+        } : {})
       };
     }
   },

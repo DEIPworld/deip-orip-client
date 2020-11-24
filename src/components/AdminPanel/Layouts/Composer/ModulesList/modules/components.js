@@ -4,7 +4,7 @@ import {
 
 export const modules = [
   {
-    title: 'Project actions',
+    title: 'Project',
     list: [
       {
         name: 'Edit Button',
@@ -21,61 +21,29 @@ export const modules = [
         props: {
           project: '@research'
         }
+      },
+      {
+        name: 'Contents',
+        component: 'ProjectDetailsContents',
+        icon: 'mdi-file-document-multiple-outline',
+        props: {
+          project: '@research'
+        }
+      },
+      {
+        name: 'Reviews',
+        component: 'ProjectDetailsReviews',
+        icon: 'mdi-comment-processing-outline',
+        props: {
+          project: '@research'
+        }
       }
     ]
   },
-  {
-    title: 'Materials',
-    list: [
-      {
-        component: 'ContentsList',
-        name: 'Materials',
-        icon: 'mdi-file-document-outline',
-        props: {
-          projectId: '@research.externalId',
 
-          accessMessage: 'Become available after licensing',
-          limitedAccess: '@limitedAccess'
-        },
-        ref: 'ContentsList'
-      },
-      {
-        component: 'DraftsList',
-        name: 'Drafts',
-        icon: 'mdi-file-edit-outline',
-        props: {
-          researchId: '@research.externalId'
-        },
-        ref: 'DraftsList'
-      },
-      {
-        component: 'ContentUpload',
-        name: 'Material Upload',
-        icon: 'mdi-file-upload-outline',
-        props: {
-          researchId: '@research.external_id'
-        },
-        on: {
-          'content-uploaded': '@onContentUploaded'
-        },
-        ref: 'ContentUpload'
-      }
-    ]
-  },
   {
     title: 'Statistic',
     list: [
-      {
-        component: 'ReviewsList',
-        name: 'Reviews',
-        icon: 'mdi-comment-processing-outline',
-        props: {
-          projectId: '@research.externalId',
-
-          accessMessage: 'Become available after licensing',
-          limitedAccess: '@limitedAccess'
-        }
-      },
       {
         component: 'EciStats',
         name: 'ECI stats',

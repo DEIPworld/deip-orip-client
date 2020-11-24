@@ -16,18 +16,14 @@
 
 <script>
   import { UserService } from '@deip/user-service';
+  import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
   const userService = UserService.getInstance();
 
   export default {
     name: 'ResearchDetailsFollowCta',
 
-    props: {
-      project: {
-        type: Object,
-        default: () => ({})
-      }
-    },
+    mixins: [projectDetails],
 
     data() {
       return {

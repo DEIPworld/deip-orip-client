@@ -2,7 +2,7 @@ import { componentsRenderer } from '@/mixins/renderer';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
 
-import { hasValue, researchAttributeFileUrl } from '@/utils/helpers';
+import { researchAttributeFileUrl } from '@/utils/helpers';
 import ContentsList from '@/features/Contents/components/List/ContentsList';
 import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
 import DraftsList from '@/components/DraftsList/DraftsList';
@@ -12,28 +12,31 @@ import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
 
-import ProjectDetailsEditCta from '@/features/Projects/components/Project/Details/cta/ProjectDetailsEditCta';
+import ProjectDetailsEditCta from '@/features/Projects/components/Project/Details/ProjectDetailsEditCta';
 import ProjectDetailsFollowCta
-  from '@/features/Projects/components/Project/Details/cta/ProjectDetailsFollowCta';
+  from '@/features/Projects/components/Project/Details/ProjectDetailsFollowCta';
+import ProjectDetailsContents
+  from '@/features/Projects/components/Project/Details/ProjectDetailsContents';
+import ProjectDetailsReviews
+  from '@/features/Projects/components/Project/Details/ProjectDetailsReviews';
 
 import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
 import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
 import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
 import { ATTR_TYPES } from '@/variables';
+import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
 export default {
   name: 'ProjectDetailsRenderer',
   components: {
     ProjectDetailsEditCta,
     ProjectDetailsFollowCta,
+    ProjectDetailsContents,
+    ProjectDetailsReviews,
+
     EciStats,
     AttributesRead,
 
-    ReviewsList,
-
-    ContentUpload,
-    ContentsList,
-    DraftsList,
     FundraisingStats,
 
     // Licensing
@@ -41,7 +44,10 @@ export default {
     ExpressLicensingPurchase,
     ExpressLicensingPurchased
   },
-  mixins: [componentsRenderer],
+  mixins: [
+    componentsRenderer,
+    projectDetails // TODO: replace 'research' with 'project'
+  ],
   props: {
     research: {
       type: Object,
@@ -50,10 +56,6 @@ export default {
   },
 
   computed: {
-    isMember() {
-      return this.research.members.includes(this.$currentUserName);
-    },
-
     hasMaterials() {
       return !!this.research.numberOfResearchContents || this.isMember;
     },
@@ -61,42 +63,9 @@ export default {
     hasReviews() {
       return !!(this.research.numberOfPositiveReviews + this.research.numberOfNegativeReviews);
     },
-
-    limitedAccess() {
-      const expressLicensingId = this.$tenantSettings.researchAttributes
-        .find((attr) => attr.type === ATTR_TYPES.EXPRESS_LICENSING)
-        ._id;
-      const hasExpressLicensing = this.ifAttribute(expressLicensingId);
-
-      if (!hasExpressLicensing) {
-        return false;
-      }
-
-      const owners = this.research.researchRef.expressLicenses.map((lic) => lic.owner);
-
-      return ![...this.research.members, ...owners].includes(this.$currentUserName);
-    }
   },
 
   methods: {
-    getAttribute(id) {
-      const attr = this.research.researchRef.attributes[id];
-      if (!attr || !hasValue(attr.value)) return false;
-      return attr;
-    },
-
-    ifAttribute(id) {
-      const attr = this.getAttribute(id);
-
-      return attr ? hasValue(attr.value) : false;
-    },
-
-    attributeValue(id) {
-      const attr = this.research.researchRef.attributes[id];
-
-      return attr ? attr.value : false;
-    },
-
     getImageUrl(id) {
       const attr = this.getAttribute(id);
 
@@ -108,11 +77,6 @@ export default {
           true
         )
         : false;
-    },
-
-    onContentUploaded() {
-      console.log('aaaaa', this.$refs)
-      this.$refs.ContentsList.updateData()
     }
   }
 };

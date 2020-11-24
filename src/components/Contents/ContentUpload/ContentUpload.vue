@@ -67,6 +67,7 @@
             this.isCreatingDraft = false;
           });
       },
+
       newContentUploaded() {
         this.$emit('content-uploaded');
 

@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    v-if="project.members.includes(this.$currentUserName)"
+    v-if="isMember"
     :to="{
       name: 'project.edit',
       params: {
@@ -18,13 +18,10 @@
 </template>
 
 <script>
+  import { projectDetails } from '@/features/Projects/mixins/projectDetails';
+
   export default {
     name: 'ResearchDetailsEditCta',
-    props: {
-      project: {
-        type: Object,
-        default: () => ({})
-      }
-    }
+    mixins: [projectDetails]
   };
 </script>

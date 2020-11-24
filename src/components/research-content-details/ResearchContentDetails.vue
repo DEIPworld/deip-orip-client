@@ -1,4 +1,26 @@
 <template>
+
+<!--  <d-layout v-if="$ready">-->
+<!--    <v-toolbar prominent class="flex-grow-0 flex-shrink-0">-->
+<!--      <v-btn icon @click="$router.back()">-->
+<!--        <v-icon>arrow_back</v-icon>-->
+<!--      </v-btn>-->
+<!--      <v-toolbar-title v-if="content" class="text-h4">-->
+<!--        {{ content.title }}}-->
+<!--      </v-toolbar-title>-->
+<!--    </v-toolbar>-->
+<!--    <v-divider />-->
+<!--    <d-layout-section>-->
+<!--      <d-layout-section-main>-->
+
+<!--      </d-layout-section-main>-->
+<!--    </d-layout-section>-->
+
+<!--  </d-layout>-->
+
+
+
+
   <d-layout-section class="full-height">
     <d-layout-section-main>
       <v-skeleton-loader
@@ -11,54 +33,57 @@
         }"
       >
 
-        <d-stack class="fill-height">
-          <template v-if="isDarContent">
-            <v-row class="fill-height">
-              <v-col v-if="isInProgress" cols="auto">
-                <d-stack>
-                  <d-simple-tooltip
-                    v-if="isSavingDraftAvailable"
-                    tooltip="Save Draft"
-                  >
-                    <v-btn
-                      icon
-                      color="primary"
-                      :loading="isSavingDraft"
-                      :disabled="isSavingDraft"
-                      @click="saveDraft()"
-                    >
-                      <v-icon>save</v-icon>
-                    </v-btn>
-                  </d-simple-tooltip>
-                  <d-simple-tooltip
-                    v-if="isInProgress"
-                    :tooltip="!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'"
-                  >
-                    <v-btn
-                      icon
-                      color="primary"
-                      @click="openContentProposalDialog()"
-                    >
-                      <v-icon>send</v-icon>
-                    </v-btn>
-                  </d-simple-tooltip>
-                </d-stack>
-              </v-col>
-              <v-col>
-                <research-content-details-dar
-                  v-if="isDarContent"
-                  :content-ref="contentRef"
-                  :research-members="researchMembersList"
-                />
-              </v-col>
-            </v-row>
-          </template>
+        ---{{content}}<br>
+        ---{{contentRef}}<br>
 
+        <template v-if="isDarContent">
+          <v-row class="fill-height">
+            <v-col v-if="isInProgress" cols="auto">
+              <d-stack>
+                <d-simple-tooltip
+                  v-if="isSavingDraftAvailable"
+                  tooltip="Save Draft"
+                >
+                  <v-btn
+                    icon
+                    color="primary"
+                    :loading="isSavingDraft"
+                    :disabled="isSavingDraft"
+                    @click="saveDraft()"
+                  >
+                    <v-icon>save</v-icon>
+                  </v-btn>
+                </d-simple-tooltip>
+                <d-simple-tooltip
+                  v-if="isInProgress"
+                  :tooltip="!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'"
+                >
+                  <v-btn
+                    icon
+                    color="primary"
+                    @click="openContentProposalDialog()"
+                  >
+                    <v-icon>send</v-icon>
+                  </v-btn>
+                </d-simple-tooltip>
+              </d-stack>
+            </v-col>
+            <v-col>
+              <research-content-details-dar
+                v-if="isDarContent"
+                :content-ref="contentRef"
+                :research-members="researchMembersList"
+              />
+            </v-col>
+          </v-row>
+        </template>
+
+        <d-stack>
           <research-content-details-package v-if="isFilePackageContent" />
 
           <template v-if="isPublished && contentReviewsList.length">
             <reviews-list
-              v-if="content && Object.keys(content).length"
+              v-if="content && content.external_id"
               :content-id="content.external_id"
             />
           </template>
@@ -117,7 +142,6 @@
 
         </d-stack>
 
-        <!-- START Proposal dialog section -->
         <v-dialog
           v-if="research && $ready"
           v-model="proposeContent.isOpen"
@@ -235,7 +259,6 @@
         </v-dialog>
       </v-skeleton-loader>
 
-      <!-- END Proposal dialog section -->
     </d-layout-section-main>
 
     <d-layout-section-sidebar>
@@ -268,6 +291,7 @@
   import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
+  import DLayout from '@/components/Deipify/DLayout/DLayout';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -277,6 +301,7 @@
   export default {
     name: 'ResearchContentDetails',
     components: {
+      DLayout,
       DSimpleTooltip,
       DStack,
       ReviewsList,

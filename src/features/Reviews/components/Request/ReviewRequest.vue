@@ -21,20 +21,22 @@
           @click:confirm="handleSubmit(createRequest)"
         >
 
+
           <d-stack>
 
-            <validation-provider
-              v-if="!contentId"
-              v-slot="{ errors }"
-              name="Content"
-              rules="required"
-            >
-              <content-selector
-                v-model="formModel.contentId"
-                :project-id="projectId"
-                :error-messages="errors"
-              />
-            </validation-provider>
+            <div v-if="!contentId">
+              <validation-provider
+                v-slot="{ errors }"
+                name="Content"
+                rules="required"
+              >
+                <content-selector
+                  v-model="formModel.contentId"
+                  :project-id="projectId"
+                  :error-messages="errors"
+                />
+              </validation-provider>
+            </div>
 
             <validation-provider
               v-slot="{ errors }"

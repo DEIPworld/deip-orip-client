@@ -75,6 +75,7 @@
           const storageUrl = `${this.fileStorageBaseUrl}/content`;
 
           const container = this.$refs['deip-texture-container'];
+
           const promise = new Promise((resolve, reject) => {
             const headers = {
               Authorization: `Bearer ${accessService.getAccessToken()}`,
@@ -164,7 +165,7 @@
       setAuthors({ authors }) {
         const persons = this.texture.api.getAuthors();
         const deletedAuthors = persons
-          .filter((p) => !authors.some((a) => a.account.name == p.alias))
+          .filter((p) => !authors.some((a) => a.account.name === p.alias))
           // filter out authors without DEIP account
           .filter((p) => this.researchMembers.some((m) => m.account.name === p.alias));
 

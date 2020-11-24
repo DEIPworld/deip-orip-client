@@ -1,7 +1,10 @@
 <template>
+  <!-- TODO: switch research -> project  -->
   <project-details-renderer
     :schema="layoutSchema"
+
     :research="researchExtended"
+    :project="researchExtended"
   />
 </template>
 

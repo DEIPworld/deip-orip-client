@@ -53,7 +53,6 @@
               :label="$t('contents.contentUploadDialog.typeField')"
               item-value="id"
             />
-            {{research.members}}
             <user-selector
               v-model="authors"
               :users="research.members"
