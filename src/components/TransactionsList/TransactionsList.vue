@@ -91,13 +91,25 @@
         const proposals = tab == PROPOSAL_TAB.PENDING ? this.pendingProposals : this.completedProposals;
 
         return proposals.map((proposal) => {
-          const { parties } = proposal;
+          const { parties, proposal: { required_approvals: requiredApprovals } } = proposal;
 
           const proposerParty = this.getProposerParty(proposal);
           const otherParties = this.getOtherParties(proposal);
 
-          const partiesCount = Object.keys(parties).length;
-          const signaturesCount = [proposerParty, ...otherParties].reduce((count, party) => count + party.signers.filter(({ hasSignature }) => { return hasSignature; }).length, 0);
+          const partiesCount = Object.keys(parties)
+            .reduce((count, key) => {
+              const party = parties[key];
+              const { account: { account: { name } } } = party;
+              if (requiredApprovals.some(ra => ra == name)) {
+                return count + 1;
+              }
+              return count;
+            }, 0);
+
+          const signaturesCount = [proposerParty, ...otherParties]
+            .reduce((count, party) => {
+               return count + party.signers.filter(({ hasSignature }) => hasSignature).length
+            }, 0);
 
           const partiesSummary = otherParties.length == 1 
             ?  this.$options.filters.accountFullname(otherParties[0].account)
