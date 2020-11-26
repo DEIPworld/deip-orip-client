@@ -397,11 +397,6 @@
           text: this.txStatusChips,
           icon: this.txStatusChipIcons
         };
-      },
-      isCurrentUserSigned() {
-        return this.pendingRequests.approvers.includes(
-          (item) => item === this.$currentUser.username
-        );
       }
     },
 
