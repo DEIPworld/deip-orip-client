@@ -8,10 +8,10 @@ const STATE = {
 };
 
 const GETTERS = {
-  pendingTrc: (state) => state.transactions.filter(
+  pendingProposals: (state) => state.transactions.filter(
     ({ proposal: { status } }) => status === PROPOSAL_STATUS.PENDING
   ),
-  completedTrc: (state) => state.transactions.filter(
+  completedProposals: (state) => state.transactions.filter(
     ({ proposal: { status } }) => status !== PROPOSAL_STATUS.PENDING
   )
 };

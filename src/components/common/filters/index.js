@@ -50,6 +50,7 @@ Vue.filter('employmentOrEducation', (enrichedProfile) => {
   return `${education ? education.educationalInstitution : ''}${education && employment ? ', ' : ''}${employment ? employment.company : ''}`;
 });
 
+
 Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
@@ -74,9 +75,58 @@ Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = fals
   return pathArray.join('');
 });
 
-Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
 
-Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true, ext = 'png') => `${window.env.DEIP_SERVER_URL}/api/groups/logo/${researchGroupExternalId}?authorization=${accessService.getAccessToken()}&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}&ext=${ext}`);
+Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true) => {
+  
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+  const id = researchGroupExternalId || null;
+
+  const pathArray = [
+    window.env.DEIP_SERVER_URL,
+    '/api/groups/logo/',
+    id,
+    '/?authorization=',
+    accessService.getAccessToken(),
+    '&width=',
+    internalWidth,
+    '&height=',
+    internalHeight,
+    '&round=',
+    isRound,
+    '&noCache=',
+    noCache
+  ];
+
+  return pathArray.join('');
+});
+
+
+Vue.filter('accountFullname', (model, width, height, isRound = false, noCache = true) => {
+  const { account, profile } = model;
+  const { name: id, is_research_group: isResearchGroup } = account;
+  const isUser = !isResearchGroup;
+
+  const path = isUser
+    ? Vue.filter('fullname')({ profile, account })
+    : id
+
+  return path;
+});
+
+Vue.filter('accountAvatarSrc', (model, width, height, isRound = false, noCache = true) => {
+  const { account, profile } = model;
+  const { name: id, is_research_group: isResearchGroup } = account;
+  const isUser = !isResearchGroup;
+
+  const path = isUser
+    ? Vue.filter('avatarSrc')({ _id: id }, width, height, isRound, noCache)
+    : Vue.filter('researchGroupLogoSrc')(id, width, height, isRound, noCache)
+    
+  return path;
+});
+
+Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
 
 Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo/${tenant.external_id}?width=${width}&height=${height}&noCache=${noCache}`);
 

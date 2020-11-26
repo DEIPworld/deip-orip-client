@@ -68,60 +68,28 @@
           {{ $$toAssetUnits($$fromAssetUnits(item.details.asset2)) }}
         </v-clamp>
         <v-row
-          v-if="!isShowAccountsBlock(item)"
+          v-if="!isAccountsBlockVisible(item)"
           no-gutters
           justify="space-between"
           class="mt-4 mb-6"
         >
-          <v-col v-if="item.proposerSigners.account.profile">
-            <d-box-item
-              :avatar="item.proposerSigners.account.profile | avatarSrc(64, 64)"
-              :size="32"
-            >
-              <v-clamp autoresize :max-lines="1">
-                {{ item.proposerSigners.account | fullname }}
-              </v-clamp>
-            </d-box-item>
-          </v-col>
-          <v-col v-else class="d-flex align-center">
+          <v-col class="d-flex align-center">
             <v-avatar :size="32">
-              <v-img
-                :src="item.proposerSigners.account.external_id | researchGroupLogoSrc(64, 64)"
-              />
+              <v-img :src="item.header.proposerParty.account | accountAvatarSrc(64, 64)" />
             </v-avatar>
-            <template v-for="(s, i) in item.proposerSigners.signers">
-              <v-avatar
-                v-if="s.signer.profile"
-                :key="`${i}-signer`"
-                class="ml-n2"
-                :size="32"
-              >
-                <v-img
-                  :src="s.signer.profile | avatarSrc(64,64)"
-                />
-              </v-avatar>
-            </template>
             <v-clamp
               class="ml-3"
               autoresize
               :max-lines="1"
             >
-              {{ item.proposerSigners.account.name
-                || $options.filters.fullname(item.proposerSigners.account) }}
+              {{ item.header.proposerParty.account | accountFullname }}
             </v-clamp>
           </v-col>
+
           <v-col class="d-flex ml-4 align-center">
-            <template v-for="(s, i) in item.signers.signers">
-              <v-avatar :key="`${i}-party`" class="ml-n2" :size="32">
-                <v-img
-                  :src="
-                    s.signer.profile ?
-                      ($options.filters.avatarSrc(s.signer.profile, 64, 64))
-                      : ($options.filters.researchGroupLogoSrc(
-                        s.signer.external_id, 64, 64
-                      ))
-                  "
-                />
+            <template v-for="(party, i) in item.header.otherParties">
+              <v-avatar :size="32" :key="`${i}-party`" class="ml-n2">
+                <v-img :src="party.account | accountAvatarSrc(64, 64)" />
               </v-avatar>
             </template>
             <v-clamp
@@ -129,7 +97,7 @@
               autoresize
               :max-lines="1"
             >
-              {{ item.signers.text }}
+              {{ item.header.partiesSummary }}
             </v-clamp>
           </v-col>
         </v-row>
@@ -145,7 +113,7 @@
         </div>
       </template>
       <template #item.actions="{ item }">
-        <div v-if="isShowActions(item) && item.type" class="d-flex mt-4">
+        <div v-if="isActionBlockVisible(item) && item.type" class="d-flex mt-4">
           <v-btn
             outlined
             x-small
@@ -153,7 +121,7 @@
             class="mr-4"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="signTrc(item)"
+            @click="sign(item)"
           >
             <v-icon left>
               done
@@ -166,7 +134,7 @@
             color="primary"
             :disabled="disableButtonsId === item.proposal.external_id"
             :loading="disableButtonsId === item.proposal.external_id"
-            @click="signTrc(item, true)"
+            @click="reject(item)"
           >
             <v-icon left>
               clear
@@ -207,10 +175,8 @@
             :class="{'mt-n6': !item.expand.length}"
           >
             <template v-for="(party, i) in item.parties">
-              <template v-for="(signer, j) in party.signers">
+              <template v-for="({ signer, txInfo }, j) in party.signers">
                 <v-expansion-panel
-                  v-if="!signer.signer.external_id
-                    || signer.signer.external_id && party.signers.length === 1"
                   :key="`${i}-${j}-accounts`"
                   class="pa-0"
                   :class="{'mt-6': !item.expand.length}"
@@ -218,55 +184,26 @@
                   <v-expansion-panel-header class="pa-0" hide-actions>
                     <div class="d-flex">
                       <v-avatar
-                        v-if="!signer.signer.external_id && party.account.external_id"
+                        v-if="!signer.is_research_group && party.account.account.is_research_group"
                         class="mr-n2"
                         :size="40"
                       >
-                        <v-img :src="party.account.external_id | researchGroupLogoSrc(80,80)" />
+                        <v-img :src="party.account | accountAvatarSrc(80, 80)" />
                       </v-avatar>
                       <d-box-item
-                        :avatar="
-                          signer.signer.profile
-                            ? $options.filters.avatarSrc(
-                              signer.signer.profile,
-                              80,
-                              80,
-                              false
-                            )
-                            : $options.filters.researchGroupLogoSrc(
-                              signer.signer.external_id,
-                              80,
-                              80
-                            )
-                        "
+                        :avatar="signer | accountAvatarSrc(80, 80)"
                         :size="40"
                         style="max-width: 400px"
                       >
                         <router-link
                           tag="div"
-                          :to="
-                            signer.signer.profile
-                              ? {
-                                name: 'UserDetails',
-                                params: { account_name: signer.signer.account.name },
-                              }
-                              : {
-                                name: 'ResearchGroupDetails',
-                                params: {
-                                  research_group_permlink: encodeURIComponent(
-                                    signer.signer.permlink
-                                  ),
-                                },
-                              }
-                          "
                           class="text-caption text-decoration-none"
+                          :to="signer.profile
+                            ? { name: 'UserDetails', params: { account_name: signer.account.name } }
+                            : { name: 'ResearchGroupDetails', params: { research_group_permlink: encodeURIComponent(signer.permlink) } }"
                         >
                           <v-clamp autoresize :max-lines="1" class="text-h6">
-                            {{
-                              signer.signer.profile
-                                ? $options.filters.fullname(signer.signer)
-                                : signer.signer.name
-                            }}
+                            {{ signer | accountFullname }}
                           </v-clamp>
                         </router-link>
                         <template #actionText>
@@ -287,32 +224,20 @@
                     </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content class="pa-0">
-                    <div
-                      class="text--secondary text-caption ml-7"
-                    >
+                    <div class="text--secondary text-caption">
                       <div>
                         <span class="font-weight-medium">
                           Transaction ID:
                         </span>
-                        <span>{{ signer.txInfo.trx_id || '—' }}</span>
+                        <span>{{ txInfo.trx_id || '—' }}</span>
                       </div>
                       <div>
                         <span class="font-weight-medium"> Block: </span>
-                        <span>{{
-                          signer.txInfo.block_num || '—'
-                        }}</span>
+                        <span>{{ txInfo.block_num || '—' }}</span>
                       </div>
                       <div>
                         <span class="font-weight-medium"> Timestamp: </span>
-                        {{
-                          signer.txInfo.timestamp
-                            ? $options.filters.dateFormat(
-                              signer.txInfo.timestamp,
-                              'DD MMM YYYY, HH:mm',
-                              true
-                            )
-                            : '—'
-                        }}
+                        {{ txInfo.timestamp ? $options.filters.dateFormat(txInfo.timestamp, 'DD MMM YYYY, HH:mm', true) : '—' }}
                       </div>
                     </div>
                   </v-expansion-panel-content>
@@ -495,6 +420,7 @@
         }
         return header;
       },
+
       statusChipData() {
         return {
           color: chipColors,
@@ -502,6 +428,7 @@
           icon: this.txStatusChipIcons
         };
       },
+
       isCurrentUserSigned() {
         return this.pendingRequests.approvers.includes(
           (item) => item === this.$currentUser.username
@@ -509,95 +436,88 @@
       }
     },
 
-    created() {
-      console.log(this.dataTable);
-    },
+    created() {},
 
     methods: {
-      isShowActions(item) {
-        let show = true;
-        Object.keys(item.parties).forEach((i) => {
-          item.parties[i].signers.forEach((s) => {
-            if (!s.signer.external_id && s.signer.account.name === this.$currentUserName) {
-              show = false;
-            }
-          });
+
+      isActionBlockVisible(item) {
+        const { approvals, rejectors } = item.proposal;
+
+        const hasApprovals = approvals.some(([name,]) => {
+          return name == this.$currentUserName;
         });
-        return show;
+        const hasRejections = rejectors.some(([name,]) => {
+          return name == this.$currentUserName;
+        });
+        
+        return !hasApprovals && !hasRejections;
       },
-      isShowAccountsBlock(item) {
-        return this.expanded.find(
-          ({ proposal }) => proposal.external_id === item.proposal.external_id
-        );
+      
+      isAccountsBlockVisible(item) {
+        return this.expanded.some(({ proposal }) => proposal.external_id === item.proposal.external_id);
       },
+
       showDetails(item) {
-        const expandData = [];
-        Object.keys(item.parties).forEach((i) => {
-          item.parties[i].signers.forEach((s) => {
-            if (!s.external_id) {
-              expandData.push(s);
-            }
-          });
-        });
-        !item.expand.length
-          ? item.expand = expandData.map((item, i) => i)
-          : item.expand = [];
+        const { parties } = item;
+        const signatures = Object.keys(parties).reduce((acc, key) => {
+          const party = parties[key];
+          const { account: { account: { is_research_group: isResearchGroup } } } = party;
+          return [...acc, party];
+        }, []);
+
+        if (!item.expand.length) {
+          item.expand = signatures.map((sig, i) => i);
+        } else {
+          item.expand = [];
+        }
       },
 
-      signTrc(trc, reject = false) {
-        this.disableButtonsId = trc.proposal.external_id;
-        let promise = reject 
-          ? 
-            proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
-              externalId: trc.proposal.external_id,
-              account: trc.type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
-                ? trc.proposal.required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
-                    ? trc.proposal.required_approvals.find(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
-                    : this.$currentUserName
-                : this.$currentUserName,
-              authority: 2, // active auth
-              extensions: []
-            }, true)
-          :
-            proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
-              externalId: trc.proposal.external_id,
-              activeApprovalsToAdd: [this.$currentUserName],
-              activeApprovalsToRemove: [],
-              ownerApprovalsToAdd: [],
-              ownerApprovalsToRemove: [],
-              keyApprovalsToAdd: [],
-              keyApprovalsToRemove: [],
-              extensions: []
-          });
+      sign(proposal) {
+        const { proposal: { external_id } } = proposal;
+        this.disableButtonsId = external_id;
+        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+          externalId: external_id,
+          activeApprovalsToAdd: [this.$currentUserName],
+          activeApprovalsToRemove: [],
+          ownerApprovalsToAdd: [],
+          ownerApprovalsToRemove: [],
+          keyApprovalsToAdd: [],
+          keyApprovalsToRemove: [],
+          extensions: []
+      })
+        .then(() => {
+          this.$emit('update-data');
+          this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
+        })
+        .catch((err) => {
+          console.error(err);
+          this.$notifier.showError('Oops! Something went wrong. Please try again later');
+        })
+        .finally(() => {
+          this.disableButtonsId = '';
+        });
+      },
 
-        promise
+      reject(proposal) {
+        const { proposal: { external_id, required_approvals }, type } = proposal;
+        this.disableButtonsId = external_id;
+        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+          externalId: external_id,
+          account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
+            ? required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
+                ? required_approvals.find(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
+                : this.$currentUserName
+            : this.$currentUserName,
+          authority: 2, // active auth
+          extensions: []
+        })
           .then(() => {
-            if (trc.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP) {
-            // Promise.all([this.$store.dispatch('auth/loadGroups')])
-            //   .then(() => {
-              // const { permlink } = this.$store.getters['auth/userGroups'].find(
-              //   (item) => item.external_id === this.group.external_id
-              // );
-            //     this.$router.push({
-            //       name: 'ResearchGroupDetails',
-            //       params: {
-            //         research_group_permlink: encodeURIComponent(permlink)
-            //       }
-            //     });
-            //   });
-            } else {
-              // this.$store.dispatch(
-              //   'researchGroup/loadResearchGroup', { permlink: this.group.permlink }
-              // );
-            }
             this.$emit('update-data');
             this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError(
-              'Oops! Something went wrong. Please try again later'
-            );
+            this.$notifier.showError('Oops! Something went wrong. Please try again later');
           })
           .finally(() => {
             this.disableButtonsId = '';

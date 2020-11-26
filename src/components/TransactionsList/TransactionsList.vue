@@ -1,31 +1,33 @@
 <template>
   <v-skeleton-loader
     :loading="!$ready"
-    type="table-thead, table-tbody, table-tfoot"
-  >
+    type="table-thead, table-tbody, table-tfoot">
     <v-tabs v-model="tab">
       <v-tab :key="1">
-        <v-badge color="primary" inline :content="`${pendingTrcDataTable.length}`">
+        <v-badge color="primary" inline :content="`${proposalsDataTable(PROPOSAL_TAB.PENDING).length}`">
           Pending
         </v-badge>
       </v-tab>
       <v-tab :key="2">
-        <v-badge color="primary" inline :content="`${completedTrcDataTable.length}`">
+        <v-badge color="primary" inline :content="`${proposalsDataTable(PROPOSAL_TAB.HISTORY).length}`">
           History
         </v-badge>
       </v-tab>
     </v-tabs>
     <v-divider />
     <v-tabs-items v-model="tab">
-      <v-tab-item :key="1">
+      <v-tab-item :key="PROPOSAL_TAB.PENDING">
         <transactions-table
           have-actions
-          :data-table="pendingTrcDataTable"
+          :data-table="proposalsDataTable(PROPOSAL_TAB.PENDING)"
           @update-data="updateData"
         />
       </v-tab-item>
-      <v-tab-item :key="2">
-        <transactions-table :data-table="completedTrcDataTable" @update-data="updateData" />
+      <v-tab-item :key="PROPOSAL_TAB.HISTORY">
+        <transactions-table 
+          :data-table="proposalsDataTable(PROPOSAL_TAB.HISTORY)" 
+          @update-data="updateData" 
+        />
       </v-tab-item>
     </v-tabs-items>
   </v-skeleton-loader>
@@ -36,6 +38,13 @@
   import { transactionsListStore } from '@/components/TransactionsList/store';
   import { mapGetters } from 'vuex';
   import TransactionsTable from '@/components/TransactionsList/components/TransactionsTable';
+
+  const MAX_SIGNERS_TO_DISPLAY_COUNT = 5;
+
+  const PROPOSAL_TAB = {
+    PENDING: 1,
+    HISTORY: 2
+  }
 
   export default {
     name: 'TransactionsList',
@@ -56,137 +65,15 @@
 
     data() {
       return {
-        tab: null
+        tab: null,
+        PROPOSAL_TAB
       };
     },
     computed: {
       ...mapGetters({
-        pendingTrc: 'TransactionsList/pendingTrc',
-        completedTrc: 'TransactionsList/completedTrc'
-      }),
-      completedTrcDataTable() {
-        const getSignersData = (trc) => {
-          let signers = [];
-          let text = '';
-          if (trc.type) {
-            let signersCount = 0;
-            let partyCount = 0;
-            Object.keys(trc.parties).forEach((i) => {
-              if (
-                !trc.parties[i].isProposer
-                && trc.parties[i].account.external_id
-              ) {
-                partyCount++;
-                if (signers.length < 5) {
-                  signers.push({ signer: trc.parties[i].account });
-                }
-              }
-              if (!trc.parties[i].isProposer) {
-                trc.parties[i].signers.forEach((s) => {
-                  if (!s.signer.external_id) {
-                    signersCount++;
-                  }
-                });
-              }
-            });
-
-            if (partyCount >= 1 && signersCount > 1) {
-              text = `Parties: ${partyCount}, Signatures: ${signersCount}`;
-              if (partyCount === 1) {
-                Object.keys(trc.parties).forEach((i) => {
-                  if (!trc.parties[i].isProposer) {
-                    trc.parties[i].signers.forEach((s) => {
-                      if (!s.signer.external_id) {
-                        signers.push(s);
-                      }
-                    });
-                  }
-                });
-              }
-            } else if (partyCount > 1) {
-              text = `Parties: ${partyCount}`;
-            } else if (signersCount > 1) {
-              text = `Signatures: ${signersCount}`;
-              Object.keys(trc.parties).forEach((i) => {
-                if (
-                  !trc.parties[i].isProposer && signers.length < 5
-                ) {
-                  trc.parties[i].signers.forEach((s) => {
-                    if (!s.signer.external_id) {
-                      signers.push(s);
-                    }
-                  });
-                }
-              });
-            } else if (signers[0]) {
-              text = signers[0].signer.name || this.$options.filters.fullname(
-                signers[0].signer
-              );
-              const signerKey = Object.keys(trc.parties).find((i) => !trc.parties[i].isProposer);
-              signers = trc.parties[signerKey].account.external_id
-                ? [
-                  { signer: trc.parties[signerKey].account },
-                  ...trc.parties[signerKey].signers.filter((s) => !s.signer.external_id)
-                ]
-                : [{ signer: trc.parties[signerKey].account }];
-            } else {
-              Object.keys(trc.parties).forEach((i) => {
-                if (!trc.parties[i].isProposer) {
-                  trc.parties[i].signers.forEach((s) => {
-                    if (!s.signer.external_id) {
-                      signers.push(s);
-                    }
-                  });
-                }
-              });
-              if (signers.length) {
-                text = this.$options.filters.fullname(signers[0].signer);
-              }
-            }
-          }
-          return { text, signers };
-        };
-        return this.completedTrc.map((p) => ({
-          ...p,
-          proposerSigners: this.proposer(p),
-          signers: getSignersData(p),
-          expand: []
-        }));
-      },
-      pendingTrcDataTable() {
-        const getSignersData = (trc) => {
-          const signers = [];
-          let text = '';
-          if (trc.type) {
-            let partyCount = 0;
-            Object.keys(trc.parties).forEach((i) => {
-              if (
-                !trc.parties[i].isProposer
-              ) {
-                partyCount++;
-                if (signers.length < 5) {
-                  signers.push({ signer: trc.parties[i].account });
-                }
-              }
-            });
-
-            if (partyCount > 1) {
-              text = `Parties: ${partyCount}`;
-            } else if (signers[0]) {
-              text = signers[0].signer.name || this.$options.filters.fullname(
-                signers[0].signer
-              );
-            }
-          }
-          return { text, signers };
-        };
-        return this.pendingTrc.map((p) => ({
-          ...p,
-          proposerSigners: this.proposer(p),
-          signers: getSignersData(p),
-          expand: []
-        }));
-      }
+        pendingProposals: 'TransactionsList/pendingProposals',
+        completedProposals: 'TransactionsList/completedProposals'
+      })
     },
     created() {
       this.updateData()
@@ -195,18 +82,70 @@
         });
     },
     methods: {
+
       updateData() {
         return this.$store.dispatch('TransactionsList/loadTransactions', this.account);
       },
-      proposer(item) {
-        if (item.parties) {
-          for (const i in item.parties) {
-            if (item.parties[i].isProposer) {
-              return item.parties[i];
-            }
+
+      proposalsDataTable(tab) {
+        const proposals = tab == PROPOSAL_TAB.PENDING ? this.pendingProposals : this.completedProposals;
+
+        return proposals.map((proposal) => {
+          const { parties } = proposal;
+
+          const proposerParty = this.getProposerParty(proposal);
+          const otherParties = this.getOtherParties(proposal);
+
+          const partiesCount = Object.keys(parties).length;
+          const signaturesCount = [proposerParty, ...otherParties].reduce((count, party) => count + party.signers.filter(({ hasSignature }) => { return hasSignature; }).length, 0);
+
+          const partiesSummary = otherParties.length == 1 
+            ?  this.$options.filters.accountFullname(otherParties[0])
+            : `${partiesCount} ${partiesCount > 1 ? 'Parties' : 'Party'}, ${signaturesCount} ${signaturesCount > 1 ? 'Signatures' : 'Signature'}`;
+
+          const header = { proposerParty, otherParties, partiesSummary };
+
+          return {
+            ...proposal,
+            header,
+            expand: []
           }
-        }
-        return { account: item.proposer };
+        });
+      },
+
+      getProposerParty(proposal) {
+        const { proposer: proposalCreator, parties } = proposal;
+        
+        const proposer = Object
+          .keys(parties)
+          .reduce((acc, key) => { return [...acc, parties[key]] }, [])
+          .find((party) => { return party.isProposer; }) || { account: proposalCreator, isProposer: true, signers: [] };
+
+        const proposerParty = {
+          account: proposer.account, 
+          signers: proposer.signers.map(({ signer, txInfo }) => { return { ...signer, hasSignature: !!txInfo, isResearchGroup: signer.account.is_research_group }}), 
+          isResearchGroup: proposer.account.account.is_research_group 
+        };
+
+        return proposerParty;
+      },
+
+      getOtherParties(proposal) {
+        const { parties } = proposal;
+
+        const otherParties = Object
+          .keys(parties)
+          .reduce((acc, key) => { return [...acc, parties[key]]}, [])
+          .filter((party) => !party.isProposer)
+          .map((party) => {
+            return {
+              account: party.account,
+              signers: party.signers.map(({ signer, txInfo }) => { return { ...signer, hasSignature: !!txInfo, isResearchGroup: signer.account.is_research_group }}), 
+              isResearchGroup: party.account.account.is_research_group 
+            }
+          });
+
+        return otherParties;
       }
     }
   };
