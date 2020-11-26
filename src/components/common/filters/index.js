@@ -104,12 +104,13 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height
 
 Vue.filter('accountFullname', (model, width, height, isRound = false, noCache = true) => {
   const { account, profile } = model;
-  const { name: id, is_research_group: isResearchGroup } = account;
+  const { is_research_group: isResearchGroup } = account;
+  const { name: researchGroupTitle } = model;
   const isUser = !isResearchGroup;
 
   const path = isUser
     ? Vue.filter('fullname')({ profile, account })
-    : id
+    : researchGroupTitle
 
   return path;
 });

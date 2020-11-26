@@ -19,8 +19,8 @@ const GETTERS = {
 const ACTIONS = {
   loadTransactions({ commit }, account) {
     return proposalsService.getAccountProposals(account)
-      .then((transactions) => {
-        commit('setTransactions', transactions);
+      .then((proposals) => {
+        commit('setTransactions', proposals.filter(proposal => !!proposal.type));
       }, (err) => { console.error(err); });
   }
 };

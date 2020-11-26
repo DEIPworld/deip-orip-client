@@ -113,7 +113,7 @@
         </div>
       </template>
       <template #item.actions="{ item }">
-        <div v-if="isActionBlockVisible(item) && item.type" class="d-flex mt-4">
+        <div v-if="isActionsBlockVisible(item) && item.type" class="d-flex mt-4">
           <v-btn
             outlined
             x-small
@@ -434,7 +434,7 @@
 
     methods: {
 
-      isActionBlockVisible(item) {
+      isActionsBlockVisible(item) {
         const { approvals, rejectors } = item.proposal;
 
         const hasApprovals = approvals.some(([name,]) => {

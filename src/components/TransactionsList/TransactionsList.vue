@@ -100,7 +100,7 @@
           const signaturesCount = [proposerParty, ...otherParties].reduce((count, party) => count + party.signers.filter(({ hasSignature }) => { return hasSignature; }).length, 0);
 
           const partiesSummary = otherParties.length == 1 
-            ?  this.$options.filters.accountFullname(otherParties[0])
+            ?  this.$options.filters.accountFullname(otherParties[0].account)
             : `${partiesCount} ${partiesCount > 1 ? 'Parties' : 'Party'}, ${signaturesCount} ${signaturesCount > 1 ? 'Signatures' : 'Signature'}`;
 
           const header = { proposerParty, otherParties, partiesSummary };
