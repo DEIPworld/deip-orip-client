@@ -1,12 +1,30 @@
 @use 'sass:map';
 @use '../tools/text';
 
+@use '~vuetify/src/styles/settings/variables' as v;
+@use '~vuetify/src/styles/tools';
+
+@function gen-style($key, $override: ()) {
+  $target: ();
+  @each $prop, $val in map.get(v.$headings, $key) {
+    @if index(size weight, $prop) {
+      $target: map.merge($target, ('font-#{$prop}': $val));
+    } @else {
+      $target: map.merge($target, ($prop: $val));
+    }
+
+  }
+  @return map.merge($target, $override)
+}
+
 $styles: (
   h1: (
-    xs: (
-      font-size: text.round-fz(xs, 5),
-      font-weight: 900,
-      line-height: text.round-lh(text.round-fz(xs, 5), 1.1),
+    xs: gen-style(h1,
+        (
+          font-size: text.round-fz(xs, 5),
+          font-weight: 900,
+          line-height: text.round-lh(text.round-fz(xs, 5), 1.1),
+        )
     ),
     md: (
       font-size: text.round-fz(md, 5),
@@ -18,10 +36,12 @@ $styles: (
     )
   ),
   h2: (
-    xs: (
-      font-size: text.round-fz(xs, 4),
-      font-weight: 700,
-      line-height: text.round-lh(text.round-fz(xs, 4), 1.2),
+    xs: gen-style(h2,
+        (
+          font-size: text.round-fz(xs, 4),
+          font-weight: 700,
+          line-height: text.round-lh(text.round-fz(xs, 4), 1.2),
+        )
     ),
     md: (
       font-size: text.round-fz(md, 4),
@@ -33,10 +53,12 @@ $styles: (
     )
   ),
   h3: (
-    xs: (
-      font-size: text.round-fz(xs, 3),
-      font-weight: 700,
-      line-height: text.round-lh(text.round-fz(xs, 3), 1.2),
+    xs: gen-style(h3,
+        (
+          font-size: text.round-fz(xs, 3),
+          font-weight: 700,
+          line-height: text.round-lh(text.round-fz(xs, 3), 1.2),
+        )
     ),
     md: (
       font-size: text.round-fz(md, 3),
@@ -48,10 +70,12 @@ $styles: (
     )
   ),
   h4: (
-    xs: (
-      font-size: text.round-fz(xs, 2),
-      font-weight: 500,
-      line-height: text.round-lh(text.round-fz(xs, 2), 1.2),
+    xs: gen-style(h4,
+        (
+          font-size: text.round-fz(xs, 2),
+          font-weight: 500,
+          line-height: text.round-lh(text.round-fz(xs, 2), 1.2),
+        )
     ),
     md: (
       font-size: text.round-fz(md, 2),
@@ -63,10 +87,12 @@ $styles: (
     )
   ),
   h5: (
-    xs: (
-      font-size: text.round-fz(xs, 1),
-      font-weight: 500,
-      line-height: text.round-lh(text.round-fz(xs, 1), 1.2),
+    xs: gen-style(h5,
+        (
+          font-size: text.round-fz(xs, 1),
+          font-weight: 500,
+          line-height: text.round-lh(text.round-fz(xs, 1), 1.2),
+        )
     ),
     md: (
       font-size: text.round-fz(md, 1),
@@ -78,43 +104,36 @@ $styles: (
     )
   ),
   h6: (
-    xs: (
-      font-size: 1rem,
-      font-weight: 500,
-      line-height: 1.5rem,
-    ),
+    xs: gen-style(h6,
+        (
+          font-size: 1rem,
+          line-height: 1.5rem,
+        )
+    )
   ),
   body-1: (
-    xs: (
-      font-size: 1rem,
-      line-height: 1.5rem,
-    )
+    xs: gen-style(body-1)
   ),
   body-2: (
-    xs: (
-      font-size: .875rem,
-      line-height: 1.25rem,
-    )
+    xs: gen-style(body-2)
   ),
   button: (
-    xs: (
-      font-size: 1rem,
-      font-weight: 500,
-      line-height: 1.5rem,
+    xs: gen-style(button,
+      (
+        font-size: 1rem,
+        line-height: 1.5rem,
+      )
     )
   ),
   caption: (
-    xs: (
-      font-size: .75rem,
-      font-weight: 400,
-      line-height: 1rem,
-    )
+    xs: gen-style(caption)
   ),
   overline: (
-    xs: (
-      font-size: .625rem,
-      font-weight: 500,
-      line-height: 1rem,
+    xs: gen-style(overline,
+        (
+          font-size: .625rem,
+          line-height: 1rem,
+        )
     )
   ),
 );

@@ -190,3 +190,54 @@
     }
   };
 </script>
+
+<style lang="scss">
+  @import '~@/styles/next/tools/get-text-style';
+
+  .deip-texture {
+    .sc-manuscript {
+      display: grid;
+      grid-gap: 32px;
+
+      .sm-hidden {
+        display: none;
+      }
+
+      .sc-section-label {
+        @include get-text-style(overline);
+        margin-top: 0;
+      }
+
+      .sm-title {
+        @include get-text-style(h2);
+      }
+
+      .sm-subtitle {
+        @include get-text-style(h6);
+      }
+
+      .sm-empty {
+        color: var(--color-text-disabled) !important;
+      }
+
+      .sm-empty,
+      .se-contrib,
+      .sc-paragraph,
+      .sc-reference {
+        @include get-text-style(body-2);
+      }
+
+      h1.sc-heading {
+        @include get-text-style(h3)
+      }
+
+      h2.sc-heading {
+        @include get-text-style(h4)
+      }
+
+      h3.sc-heading {
+        @include get-text-style(h5)
+      }
+    }
+  }
+</style>
