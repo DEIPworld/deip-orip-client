@@ -1,6 +1,5 @@
 <template>
   <d-autocomplete
-    v-if="$ready"
     ref="field"
     v-model="internalValue"
 
@@ -136,14 +135,13 @@
       loadUsers() {
         this.$setReady(false);
 
-        console.log(this.users)
-
         const loadUsers = this.users.length
           ? this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.users)
           : this.$store.dispatch(`${this.storeNS}/getActiveUsers`, this.users);
 
         loadUsers.then(() => {
           this.$setReady();
+          this.$emit('ready', this.usersList);
         });
       },
 

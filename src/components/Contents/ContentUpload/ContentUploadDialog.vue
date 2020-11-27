@@ -61,14 +61,12 @@
               class="mb-4"
             />
 
-            <internal-references-picker
-              :show-selected="true"
-              :current-research="research"
-              :preselected="references"
-              :all-references-list="allReferencesList"
-              @referenceAdded="addReference"
-              @referenceRemoved="removeReference"
+            <references-selector
+              v-model="references"
+              label="Add references to material posted at DEIP"
+              multiple
             />
+
           </div>
         </v-card-text>
         <v-card-actions class="px-6">
@@ -115,6 +113,7 @@
   import { ResearchContentService } from '@deip/research-content-service';
   import { SearchService } from '@deip/search-service';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
+  import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
 
   const searchService = SearchService.getInstance();
   const accessService = AccessService.getInstance();
@@ -125,6 +124,7 @@
     name: 'ContentUploadDialog',
 
     components: {
+      ReferencesSelector,
       UserSelector,
       vueDropzone
     },
@@ -136,7 +136,7 @@
         authors: [],
         researchContentTypes,
         references: [],
-        allReferencesList: [],
+        // allReferencesList: [],
         isPermlinkVerifyed: true,
 
         isOpen: false,
@@ -187,10 +187,10 @@
     },
 
     created() {
-      searchService.getAllResearchContents()
-        .then((contents) => {
-          this.allReferencesList.push(...contents);
-        });
+      // searchService.getAllResearchContents()
+      //   .then((contents) => {
+      //     this.allReferencesList.push(...contents);
+      //   });
     },
 
     methods: {
@@ -269,16 +269,16 @@
           });
       },
 
-      addReference(ref) {
-        if (!this.references.some((r) => r.external_id == ref.external_id)) {
-          this.references.push(ref);
-        }
-      },
-      removeReference(ref) {
-        if (this.references.some((r) => r.external_id == ref.external_id)) {
-          this.references = this.references.filter((r) => r.external_id != ref.external_id);
-        }
-      }
+      // addReference(ref) {
+      //   if (!this.references.some((r) => r.external_id == ref.external_id)) {
+      //     this.references.push(ref);
+      //   }
+      // },
+      // removeReference(ref) {
+      //   if (this.references.some((r) => r.external_id == ref.external_id)) {
+      //     this.references = this.references.filter((r) => r.external_id != ref.external_id);
+      //   }
+      // }
     }
   };
 </script>

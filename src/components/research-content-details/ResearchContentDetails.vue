@@ -219,14 +219,13 @@
                 </template>
               </v-autocomplete>
 
-              <internal-references-picker
-                :show-selected="true"
-                :current-research="research"
-                :preselected="contentRef.references"
-                :all-references-list="allReferencesList"
-                @referenceAdded="addReference"
-                @referenceRemoved="removeReference"
+              <references-selector
+                v-model="contentRef.references"
+                label="Add references to material posted at DEIP"
+                return-object
+                multiple
               />
+
             </v-card-text>
 
             <v-card-actions class="px-6">
@@ -292,6 +291,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
+  import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -301,6 +301,7 @@
   export default {
     name: 'ResearchContentDetails',
     components: {
+      ReferencesSelector,
       DLayout,
       DSimpleTooltip,
       DStack,
@@ -406,6 +407,7 @@
         researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.proposeContent.title)
           .then((exists) => {
             this.isPermlinkVerifyed = !exists;
+
             if (this.isPermlinkVerifyed) {
               this.proposeContent.isLoading = true;
 
@@ -421,6 +423,7 @@
 
               saveDocument()
                 .then((contentRef) => {
+                  console.log(contentRef)
                   const isProposal = !this.research.research_group.is_personal;
                   researchContentService.createResearchContent(
                     {

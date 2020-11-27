@@ -84,6 +84,8 @@
           .then((texture) => {
             this.texture = texture;
             this.loading = false;
+
+            this.$emit('ready', this.getData());
           });
       },
 
@@ -91,9 +93,9 @@
         const cntEl = document.querySelector('.se-content');
         const barEl = document.querySelector('.se-toolbar-wrapper');
 
-        const viewPort = window.innerHeight
-          - document.querySelector('.v-app-bar').offsetHeight
-          - (48 * 2);
+        // const viewPort = window.innerHeight
+        //   - document.querySelector('.v-app-bar').offsetHeight
+        //   - (48 * 2);
 
         const cntHeight = cntEl ? cntEl.offsetHeight : 0;
         const barHeight = barEl ? barEl.offsetHeight : 0;
@@ -110,11 +112,15 @@
       },
 
       onChange() {
-        this.$emit('change', {
+        this.$emit('change', this.getData());
+      },
+
+      getData() {
+        return {
           title: this.texture.api.getArticleTitle() || '',
           authors: this.texture.api.getAuthors() || [],
           references: this.texture.api.getReferences() || []
-        });
+        }
       },
 
       // ////////////////////////////////////////////////
@@ -145,9 +151,19 @@
 
       // ////////////////////////////////////////////////
 
+      genRefUri(reference) {
+        return [
+          this.$env.DEIP_CLIENT_URL,
+          '/#/p/',
+          encodeURIComponent(reference.researchExternalId),
+          '/c/',
+          encodeURIComponent(reference.external_id)
+        ].join('');
+      },
+
       addReferences(references) {
         for (const reference of references) {
-          const uri = `${window.env.DEIP_CLIENT_URL}/#/${encodeURIComponent(reference.group_permlink)}/research/${encodeURIComponent(reference.research_permlink)}/${encodeURIComponent(reference.permlink)}`;
+          const uri = this.genRefUri(reference);
           const title = `${reference.title} (${reference.research_title})`;
           const containerTitle = title;
           this.texture.api.addReference(uri, title, containerTitle);
@@ -156,7 +172,7 @@
 
       removeReferences(references) {
         for (const reference of references) {
-          const uri = `${window.env.DEIP_CLIENT_URL}/#/${encodeURIComponent(reference.group_permlink)}/research/${encodeURIComponent(reference.research_permlink)}/${encodeURIComponent(reference.permlink)}`;
+          const uri = this.genRefUri(reference);
           const ref = this.texture.api.getReferences()
             .find((r) => r.uri === uri);
           this.texture.api.removeReference(ref);

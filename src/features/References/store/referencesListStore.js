@@ -1,4 +1,7 @@
 import { SearchService } from '@deip/search-service';
+import {
+  camelizeObjectKeys
+} from '@/utils/helpers';
 
 const searchService = SearchService.getInstance();
 
@@ -21,7 +24,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeReferences(state, payload) {
-    state.referencesList = payload;
+    state.referencesList = payload.map((item) => camelizeObjectKeys(item));
   }
 };
 

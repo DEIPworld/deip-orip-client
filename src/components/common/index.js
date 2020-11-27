@@ -14,8 +14,6 @@ import DisciplineTreeItem from './disciplines/components/DisciplineTreeItem';
 
 import AdvancedDisciplinePicker from './disciplines/components/AdvancedDisciplinePicker';
 
-import InternalReferencesPicker from './components/InternalReferencesPicker';
-
 import PlatformAvatar from './components/PlatformAvatar';
 
 import UserAutocompletePicker from './components/UserAutocompletePicker';
@@ -45,7 +43,6 @@ Vue.component('sidebar-loader', SidebarLoader);
 Vue.component('discipline-tree-picker', DisciplineTreePicker);
 Vue.component('discipline-tree-item', DisciplineTreeItem);
 Vue.component('advanced-discipline-picker', AdvancedDisciplinePicker);
-Vue.component('internal-references-picker', InternalReferencesPicker);
 Vue.component('platform-avatar', PlatformAvatar);
 Vue.component('user-autocomplete-picker', UserAutocompletePicker);
 Vue.component('toggle-text', ToggleText);

@@ -29,9 +29,14 @@ export const fieldWrapper = {
     $$fieldProps() {
       return {
         label: this.label,
-        multiple: this.multiple,
         returnObject: this.returnObject,
         hideDetails: 'auto',
+
+        ...(this.multiple ? {
+          multiple: this.multiple,
+          chips: true,
+          deletableChips: true
+        } : {}),
 
         ...Object.keys(Validatable.options.props)
           .reduce((props, key) => ({

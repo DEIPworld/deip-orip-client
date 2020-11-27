@@ -1,14 +1,17 @@
 <template>
   <d-autocomplete
     v-model="internalValue"
-    :items="references"
+    :items="referencesList"
     item-text="title"
-    item-value="id"
+    item-value="externalId"
     v-bind="$$fieldProps"
   >
     <template #item="{ item } ">
-      {{ item.title }}
+      <div class="py-2 text-body-2">
+        {{ item.title }}
+      </div>
     </template>
+
   </d-autocomplete>
 </template>
 

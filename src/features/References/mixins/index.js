@@ -18,7 +18,7 @@ export const referencesList = {
 
   computed: {
     ...mapState({
-      references(state, getters) { return getters[`${this.storeNS}/referencesList`]; }
+      referencesList(state, getters) { return getters[`${this.storeNS}/referencesList`]; }
     })
   },
 
@@ -35,6 +35,7 @@ export const referencesList = {
       ])
         .then(() => {
           this.$setReady(true);
+          this.$emit('ready', this.referencesList);
         });
     }
   }

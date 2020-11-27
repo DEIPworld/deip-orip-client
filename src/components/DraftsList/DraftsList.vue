@@ -102,26 +102,26 @@
       },
       openDarDraft(draft) {
         if (draft.type === 'dar') {
-          // we have to reload the window as Texture InMemory buffer is getting flushed after the first saving
-          // and doesn't persist new changes for several instances during the current session
-          // window.location.replace(`${window.location.href}/!draft?ref=${draft._id}`);
-          // location.reload();
-          //////////////// START TEMP SOLUTION ///////////////////
+
           this.$router.push({
-            path: `/${decodeURIComponent(this.research.researchGroup.permlink)}/research/${decodeURIComponent(this.research.permlink)}/!draft?ref=${draft._id}`
+            name: 'project.content.draft',
+            params: {
+              draftId: draft._id.replace('draft-', ''),
+              projectExternalId: this.research.externalId
+            }
           });
-          //////////////// END TEMP SOLUTION ///////////////////
+
         } else {
-          const params = {
-            research_group_permlink: this.research.researchGroup.permlink,
-            research_permlink: this.research.permlink,
-            content_permlink: '!draft'
-          };
-          const query = { ref: draft._id };
+          // TODO: need check
           this.$router.push({
-            name: 'ResearchContentDetails',
-            params,
-            query
+            name: 'project.content.details',
+            params: {
+              projectExternalId: this.research.externalId,
+              contentExternalId: draft.externalId
+            },
+            query: {
+              ref: draft._id, draft: true
+            }
           });
         }
       },

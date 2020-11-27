@@ -15,11 +15,11 @@ export const contentRoutingFabric = (parent) => {
     children: [
       {
         name: routeName('draft'),
-        path: 'draft-:draftId',
+        path: 'draft/:draftId',
         component: ContentDraft,
         props(route) {
           return {
-            draftId: route.params.draftId
+            draftId: `draft-${route.params.draftId}`
           };
         },
       },
