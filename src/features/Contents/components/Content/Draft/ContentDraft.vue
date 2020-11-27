@@ -194,6 +194,7 @@
       },
       'formModel.references': {
         handler(newVal, oldVal) {
+          console.log(newVal)
           if (newVal !== oldVal && this.ready) {
             if (oldVal.length > newVal.length) {
               this.$refs.contentDar.removeReferences(arrayDiff(newVal, oldVal));
@@ -419,6 +420,14 @@
 
     .sc-tool-spacer {
       flex: 1 !important;
+    }
+
+    .se-text {
+      min-width: 0;
+
+      a {
+        word-break: break-all;
+      }
     }
 
   }

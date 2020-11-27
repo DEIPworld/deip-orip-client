@@ -157,14 +157,14 @@
           '/#/p/',
           encodeURIComponent(reference.researchExternalId),
           '/c/',
-          encodeURIComponent(reference.external_id)
+          encodeURIComponent(reference.externalId)
         ].join('');
       },
 
       addReferences(references) {
         for (const reference of references) {
           const uri = this.genRefUri(reference);
-          const title = `${reference.title} (${reference.research_title})`;
+          const title = `${reference.title} (${reference.researchTitle})`;
           const containerTitle = title;
           this.texture.api.addReference(uri, title, containerTitle);
         }
