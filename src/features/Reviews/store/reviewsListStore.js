@@ -6,6 +6,7 @@ import {
 } from '@/utils/helpers';
 
 import deipRpc from '@deip/rpc-client';
+import { getAdditionalData } from '@/features/Reviews/utils/getAdditionalData';
 
 const actionsMap = {
   project: 'getReviewsByProject',
@@ -13,16 +14,6 @@ const actionsMap = {
 };
 
 const getAction = getActionByPath(actionsMap).get;
-
-const getAdditionalData = (items) => items.map((item) => Promise.all([
-  deipRpc.api.getReviewVotesByReviewIdAsync(item.id),
-  deipRpc.api.getResearchContentAsync(item.research_content_external_id)
-]).then(([votes, contentData]) => ({
-  ...item,
-  contentData: camelizeObjectKeys(contentData),
-  votes,
-  supporters: [...new Set(votes.map((v) => v.voter))]
-})));
 
 const STATE = {
   reviewsList: [],

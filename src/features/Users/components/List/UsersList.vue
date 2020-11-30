@@ -26,6 +26,7 @@
   import UsersListBrief from '@/features/Users/components/List/views/UsersListBrief';
   import UsersListStack from '@/features/Users/components/List/views/UsersListStack';
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+  import { dataContextSwitch } from '@/mixins/dataContextSwitch';
 
   export default {
     name: 'UsersList',
@@ -36,7 +37,12 @@
       UsersListStack
     },
 
-    mixins: [componentStoreFactory(usersListStore), componentViewType, BindsAttrs],
+    mixins: [
+      componentStoreFactory(usersListStore),
+      componentViewType,
+      BindsAttrs,
+      dataContextSwitch
+    ],
 
     props: {
       users: {
@@ -67,17 +73,21 @@
     created() {
       const users = wrapInArray(this.users);
 
-      if (users.length) {
-        this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, users)
+      // if (users.length) {
+        this.$store.dispatch(`${this.storeNS}/getUsersList`, {
+          users,
+          teamId: this.teamId
+        })
           .then(() => {
             this.$setReady();
           });
-      } else {
-        this.$store.dispatch(`${this.storeNS}/getActiveUsers`)
-          .then(() => {
-            this.$setReady();
-          });
-      }
+
+      // } else {
+      //   this.$store.dispatch(`${this.storeNS}/getActiveUsers`)
+      //     .then(() => {
+      //       this.$setReady();
+      //     });
+      // }
     },
 
     methods: {
