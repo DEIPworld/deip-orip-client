@@ -120,6 +120,10 @@ const getters = {
       && getters.tenant
       && r.researchGroupExternalId == getters.tenant.account.external_id),
 
+  isGrantChiefOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-chief-officer'
+    && getters.tenant
+    && r.researchGroupExternalId == getters.tenant.account.external_id),
+
   isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
       && getters.tenant
       && r.researchGroupExternalId == getters.tenant.account.external_id),

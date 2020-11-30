@@ -440,10 +440,10 @@
       },
 
       getWitnessOrg(witness) {
-        if (witness == 'initdelegate') return 'NSF';
+        if (witness == 'initdelegate') return 'Granting agency';
         if (witness == 'initdelegate1') return 'MIT';
         if (witness == 'initdelegate2') return 'TREASURY';
-        return 'NSF';
+        return 'Granting agency';
       },
 
       getAttachmentUrl(awardNumber, paymentNumber, hash, download = false) {

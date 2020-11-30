@@ -22,7 +22,7 @@
               <v-list-item>
                 <v-list-item-content class="grey--text">
                   <span class="text-body-2">
-                    NSF Grant Tokens
+                    Grant Tokens
                   </span>
                 </v-list-item-content>
               </v-list-item>
@@ -310,9 +310,9 @@
                 <tr>
                   <td v-if="isUniversityCertifier || isGrantProgramOfficer || isTreasuryCertifier">
                     <v-simple-checkbox
-                      v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && isUniversityCertifier) ||
-                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && isGrantProgramOfficer) ||
-                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && isTreasuryCertifier)"
+                      v-if="(item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && (isUniversityCertifier || isGrantChiefOfficer)) ||
+                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED && (isGrantProgramOfficer || isGrantChiefOfficer)) ||
+                        (item.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED && (isTreasuryCertifier || isGrantChiefOfficer))"
                       primary
                       :value="isSelected"
                       @input="select($event)"
@@ -471,6 +471,7 @@
         isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
         isUniversityCertifier: 'auth/isUniversityCertifier',
         isTreasuryCertifier: 'auth/isTreasuryCertifier',
+        isGrantChiefOfficer: 'auth/isGrantChiefOfficer',
 
         awards: 'agencyGrantProgramAwardsDashboard/awards',
         payments: 'agencyGrantProgramAwardsDashboard/payments',
@@ -704,7 +705,7 @@
           },
           {
             amount: this.tokenInfo.totalAvailableTokensAmount,
-            text: 'Available for NSF'
+            text: 'Available'
           },
           {
             amount: this.tokenInfo.totalAwardedTokensAmount,
@@ -723,7 +724,8 @@
     watch: {
       selectedPayments(newVal, oldVal) {
         this.selectedToCertify = newVal.filter((p) => p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING);
-        this.selectedToApprove = newVal.filter((p) => p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED);
+        // this.selectedToApprove = newVal.filter((p) => p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED);
+        this.selectedToApprove = newVal.filter((p) => (p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED) || (p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING && this.isGrantChiefOfficer));
         this.selectedToPay = newVal.filter((p) => p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED);
         this.selectedToReject = newVal.filter((p) => p.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING || AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED);
       }
@@ -787,7 +789,15 @@
         this.isApproving = true;
 
         const promises = this.selectedToApprove.map(
-          (p) => grantsService.approveAwardWithdrawalRequest(this.user.privKey, {
+          (p) => this.isGrantChiefOfficer 
+          ? grantsService.authorizeAwardWithdrawalRequest(this.user.privKey, {
+            paymentNumber: p.paymentNumber,
+            awardNumber: p.awardNumber,
+            subawardNumber: p.subawardNumber,
+            account: this.user.username,
+            extensions: []
+          }) 
+          : grantsService.approveAwardWithdrawalRequest(this.user.privKey, {
             paymentNumber: p.paymentNumber,
             awardNumber: p.awardNumber,
             subawardNumber: p.subawardNumber,
