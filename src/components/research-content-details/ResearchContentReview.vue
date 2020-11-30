@@ -11,8 +11,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';

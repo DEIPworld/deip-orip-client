@@ -1,27 +1,5 @@
 <template>
-
-<!--  <d-layout v-if="$ready">-->
-<!--    <v-toolbar prominent class="flex-grow-0 flex-shrink-0">-->
-<!--      <v-btn icon @click="$router.back()">-->
-<!--        <v-icon>arrow_back</v-icon>-->
-<!--      </v-btn>-->
-<!--      <v-toolbar-title v-if="content" class="text-h4">-->
-<!--        {{ content.title }}}-->
-<!--      </v-toolbar-title>-->
-<!--    </v-toolbar>-->
-<!--    <v-divider />-->
-<!--    <d-layout-section>-->
-<!--      <d-layout-section-main>-->
-
-<!--      </d-layout-section-main>-->
-<!--    </d-layout-section>-->
-
-<!--  </d-layout>-->
-
-
-
-
-  <d-layout-section class="full-height">
+  <d-layout-section class="full-height" v-if="$ready">
     <d-layout-section-main>
       <v-skeleton-loader
         :loading="!$ready"
@@ -33,53 +11,43 @@
         }"
       >
 
-        ---{{content}}<br>
-        ---{{contentRef}}<br>
+        <d-stack gap="32">
 
-        <template v-if="isDarContent">
-          <v-row class="fill-height">
-            <v-col v-if="isInProgress" cols="auto">
-              <d-stack>
-                <d-simple-tooltip
-                  v-if="isSavingDraftAvailable"
-                  tooltip="Save Draft"
-                >
-                  <v-btn
-                    icon
-                    color="primary"
-                    :loading="isSavingDraft"
-                    :disabled="isSavingDraft"
-                    @click="saveDraft()"
-                  >
-                    <v-icon>save</v-icon>
-                  </v-btn>
-                </d-simple-tooltip>
-                <d-simple-tooltip
-                  v-if="isInProgress"
-                  :tooltip="!isCentralizedGroup ? 'Create Proposal' : 'Upload Material'"
-                >
-                  <v-btn
-                    icon
-                    color="primary"
-                    @click="openContentProposalDialog()"
-                  >
-                    <v-icon>send</v-icon>
-                  </v-btn>
-                </d-simple-tooltip>
-              </d-stack>
-            </v-col>
-            <v-col>
-              <research-content-details-dar
-                v-if="isDarContent"
-                :content-ref="contentRef"
-                :research-members="researchMembersList"
-              />
-            </v-col>
-          </v-row>
-        </template>
+          <d-stack gap="4">
+            <div class="text-overline text--secondary">
+              project
+            </div>
+            <div>
+              <router-link
+                :to="{ name: 'project.details', params: { projectExternalId: research.external_id } }"
+                class="link text--primary"
+              >
+                {{ research.title }}
+              </router-link>
+            </div>
+          </d-stack>
 
-        <d-stack>
-          <research-content-details-package v-if="isFilePackageContent" />
+          <template v-if="isDarContent">
+            <content-dar :dar-id="contentRef._id" readonly />
+          </template>
+
+          <template v-if="isFilePackageContent">
+            <d-stack gap="4">
+              <div class="text-overline text--secondary">
+                Subject
+              </div>
+              <div class="text-h3">
+                {{ getResearchContentType(content.content_type).text }}
+                :
+                {{ content.title }}
+              </div>
+            </d-stack>
+            <research-content-details-package />
+          </template>
+
+
+
+
 
           <template v-if="isPublished && contentReviewsList.length">
             <reviews-list
@@ -142,120 +110,6 @@
 
         </d-stack>
 
-        <v-dialog
-          v-if="research && $ready"
-          v-model="proposeContent.isOpen"
-          persistent
-          transition="scale-transition"
-          max-width="600px"
-        >
-          <v-card class="pa-6">
-            <v-card-title>
-              <div class="text-h5">
-                Upload material for project
-              </div>
-              <div class="right-top-angle">
-                <v-btn icon class="pa-0 ma-0" @click="closeContentProposalDialog()">
-                  <v-icon color="black">
-                    close
-                  </v-icon>
-                </v-btn>
-              </div>
-            </v-card-title>
-
-            <v-card-text>
-              <v-text-field
-                v-model="proposeContent.title"
-                outlined
-                :rules="[rules.titleLength]"
-                label="Title"
-                :error-messages="isPermlinkVerifyed === false ? 'ContentDetails with the same name already exists' : ''"
-              />
-
-              <v-select
-                v-model="proposeContent.type"
-                :items="proposeContent.researchContentTypes"
-                label="Content Type"
-                outlined
-                item-value="id"
-              />
-
-              <v-autocomplete
-                v-model="proposeContent.authors"
-                :items="researchMembersList"
-                :menu-props="{ closeOnContentClick: true }"
-                hint="You can select multiple authors"
-                persistent-hint
-                outlined
-                placeholder="Authors"
-                class="mb-3"
-                multiple
-                @change="setDraftAuthors"
-              >
-                <template slot="selection" slot-scope="data">
-                  <div class="pl-2">
-                    <platform-avatar
-                      :user="data.item"
-                      :size="30"
-                      no-follow
-                      no-follow-name
-                      link-to-profile-class="pl-2"
-                    />
-                  </div>
-                </template>
-
-                <template slot="item" slot-scope="data">
-                  <template>
-                    <div class="author-item" :class="{ 'selected-author-item': isAuthorSelected(data.item) }">
-                      <platform-avatar
-                        :user="data.item"
-                        :size="30"
-                        no-follow
-                        no-follow-name
-                        link-to-profile-class="pl-2"
-                      />
-                    </div>
-                  </template>
-                </template>
-              </v-autocomplete>
-
-              <references-selector
-                v-model="contentRef.references"
-                label="Add references to material posted at DEIP"
-                return-object
-                multiple
-              />
-
-            </v-card-text>
-
-            <v-card-actions class="px-6">
-              <v-row no-gutters>
-                <v-col class="py-2" cols="12">
-                  <v-btn
-                    color="primary"
-                    :disabled="proposeContent.isLoading || !isCreatingProposalAvailable"
-                    :loading="proposeContent.isLoading"
-                    block
-                    @click="sendContentProposal()"
-                  >
-                    {{ !isCentralizedGroup ? 'Create Proposal' : 'Upload Material' }}
-                  </v-btn>
-                </v-col>
-                <v-col class="py-2" cols="12">
-                  <v-btn
-                    :disabled="proposeContent.sLoading"
-                    color="primary"
-                    block
-                    text
-                    @click="closeContentProposalDialog()"
-                  >
-                    Cancel
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-skeleton-loader>
 
     </d-layout-section-main>
@@ -268,7 +122,8 @@
         width="500"
         type="heading"
       >
-        <research-content-details-sidebar @setDraftAuthors="setDraftAuthors" />
+        <research-content-details-sidebar />
+        <!--        <research-content-details-sidebar @setDraftAuthors="setDraftAuthors" />-->
       </v-skeleton-loader>
     </d-layout-section-sidebar>
   </d-layout-section>
@@ -292,6 +147,7 @@
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
+  import ContentDar from '@/features/Contents/components/Content/Dar/ContentDar';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -301,6 +157,7 @@
   export default {
     name: 'ResearchContentDetails',
     components: {
+      ContentDar,
       ReferencesSelector,
       DLayout,
       DSimpleTooltip,
@@ -386,140 +243,138 @@
     },
 
     methods: {
-      openContentProposalDialog() {
-        const openDialog = (title) => {
-          this.proposeContent.title = title;
-          this.proposeContent.authors = this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
-          this.proposeContent.isOpen = true;
-        };
-        if (this.isDarContent) {
-          bus.$emit('texture:getArticleTitle', openDialog);
-        } else {
-          openDialog(this.contentRef.title);
-        }
-      },
+      // openContentProposalDialog() {
+      //   const openDialog = (title) => {
+      //     this.proposeContent.title = title;
+      //     this.proposeContent.authors = this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
+      //     this.proposeContent.isOpen = true;
+      //   };
+      //   if (this.isDarContent) {
+      //     bus.$emit('texture:getArticleTitle', openDialog);
+      //   } else {
+      //     openDialog(this.contentRef.title);
+      //   }
+      // },
+      //
+      // closeContentProposalDialog() {
+      //   this.proposeContent.isOpen = false;
+      // },
 
-      closeContentProposalDialog() {
-        this.proposeContent.isOpen = false;
-      },
+      // sendContentProposal() {
+      //   researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.proposeContent.title)
+      //     .then((exists) => {
+      //       this.isPermlinkVerifyed = !exists;
+      //
+      //       if (this.isPermlinkVerifyed) {
+      //         this.proposeContent.isLoading = true;
+      //
+      //         const saveDocument = () => {
+      //           if (this.isDarContent) {
+      //             return new Promise((resolve, reject) => {
+      //               bus.$emit('texture:saveDocument', resolve);
+      //             })
+      //               .then(() => researchContentService.getContentRefById(this.contentRef._id));
+      //           }
+      //           return researchContentService.getContentRefById(this.contentRef._id);
+      //         };
+      //
+      //         saveDocument()
+      //           .then((contentRef) => {
+      //             console.log(contentRef)
+      //             const isProposal = !this.research.research_group.is_personal;
+      //             researchContentService.createResearchContent(
+      //               {
+      //                 privKey: this.user.privKey,
+      //                 username: this.user.username
+      //               },
+      //               isProposal,
+      //               {
+      //                 researchExternalId: this.research.external_id,
+      //                 researchGroup: this.research.research_group.external_id,
+      //                 type: parseInt(this.proposeContent.type),
+      //                 title: this.proposeContent.title || contentRef.title,
+      //                 content: contentRef.hash,
+      //                 authors: this.proposeContent.authors.map((a) => a.account.name),
+      //                 references: [...this.contentRef.references],
+      //                 extensions: []
+      //               }
+      //             )
+      //               .then(() => {
+      //                 this.$notifier.showSuccess('New material has been uploaded successfully');
+      //               }, (err) => {
+      //                 console.error(err);
+      //                 if (err.response && err.response.status === 409) {
+      //                   alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
+      //                 } else {
+      //                   this.$notifier.showError('An error occurred while creating proposal, please try again later');
+      //                 }
+      //               })
+      //               .finally(() => {
+      //                 this.proposeContent.isOpen = false;
+      //                 this.proposeContent.isLoading = false;
+      //                 setTimeout(() => {
+      //                   this.$router.push({
+      //                     name: 'project.details',
+      //                     params: {
+      //                       researchExternalId: this.research.external_id
+      //                     }
+      //                   });
+      //                 }, 1500);
+      //               });
+      //           });
+      //       }
+      //     })
+      //     .catch((error) => {
+      //       this.isPermlinkVerifyed = false;
+      //     });
+      // },
 
-      sendContentProposal() {
-        researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.proposeContent.title)
-          .then((exists) => {
-            this.isPermlinkVerifyed = !exists;
+      // saveDraft() {
+      //   this.isSavingDraft = true;
+      //   researchContentService.getContentRefById(this.contentRef._id)
+      //     .then((draft) => {
+      //       if (draft.status == 'in-progress') {
+      //         bus.$emit('texture:saveDocument', () => {
+      //           this.isSavingDraft = false;
+      //           this.$notifier.showSuccess('Document draft has been saved !');
+      //         });
+      //       } else {
+      //         this.isSavingDraft = false;
+      //         this.$notifier.showError('Document draft is locked for editing !');
+      //       }
+      //     });
+      // },
 
-            if (this.isPermlinkVerifyed) {
-              this.proposeContent.isLoading = true;
+      // setDraftAuthors(authors) {
+      //   if (!authors.length) return;
+      //   bus.$emit('texture:setAuthors', {
+      //     authors,
+      //     members: this.researchMembersList
+      //   });
+      //   this.$store.dispatch('rcd/setDraftAuthors', authors.map((a) => a.account.name));
+      // },
 
-              const saveDocument = () => {
-                if (this.isDarContent) {
-                  return new Promise((resolve, reject) => {
-                    bus.$emit('texture:saveDocument', resolve);
-                  })
-                    .then(() => researchContentService.getContentRefById(this.contentRef._id));
-                }
-                return researchContentService.getContentRefById(this.contentRef._id);
-              };
+      // isAuthorSelected(member) {
+      //   return this.proposeContent.authors.some((a) => a.account.name === member.account.name);
+      // },
 
-              saveDocument()
-                .then((contentRef) => {
-                  console.log(contentRef)
-                  const isProposal = !this.research.research_group.is_personal;
-                  researchContentService.createResearchContent(
-                    {
-                      privKey: this.user.privKey,
-                      username: this.user.username
-                    },
-                    isProposal,
-                    {
-                      researchExternalId: this.research.external_id,
-                      researchGroup: this.research.research_group.external_id,
-                      type: parseInt(this.proposeContent.type),
-                      title: this.proposeContent.title || contentRef.title,
-                      content: contentRef.hash,
-                      authors: this.proposeContent.authors.map((a) => a.account.name),
-                      references: [...this.contentRef.references],
-                      extensions: []
-                    }
-                  )
-                    .then(() => {
-                      this.$notifier.showSuccess('New material has been uploaded successfully');
-                    }, (err) => {
-                      console.error(err);
-                      if (err.response && err.response.status === 409) {
-                        alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
-                      } else {
-                        this.$notifier.showError('An error occurred while creating proposal, please try again later');
-                      }
-                    })
-                    .finally(() => {
-                      this.proposeContent.isOpen = false;
-                      this.proposeContent.isLoading = false;
-                      setTimeout(() => {
-                        this.$router.push({
-                          name: 'project.details',
-                          params: {
-                            researchExternalId: this.research.external_id
-                          }
-                        });
-                      }, 1500);
-                    });
-                });
-            }
-          })
-          .catch((error) => {
-            this.isPermlinkVerifyed = false;
-          });
-      },
+      // addReference(reference) {
+      //   bus.$emit('texture:addReference', { reference });
+      //   const refs = this.contentRef.references.slice();
+      //   refs.push(reference.external_id);
+      //   this.$store.dispatch('rcd/setDraftReferences', refs);
+      // },
 
-      saveDraft() {
-        this.isSavingDraft = true;
-        researchContentService.getContentRefById(this.contentRef._id)
-          .then((draft) => {
-            if (draft.status == 'in-progress') {
-              bus.$emit('texture:saveDocument', () => {
-                this.isSavingDraft = false;
-                this.$notifier.showSuccess('Document draft has been saved !');
-              });
-            } else {
-              this.isSavingDraft = false;
-              this.$notifier.showError('Document draft is locked for editing !');
-            }
-          });
-      },
+      // removeReference(reference) {
+      //   bus.$emit('texture:removeReference', { reference });
+      //   const refs = this.contentRef.references.slice()
+      //     .filter((r) => r != reference.external_id);
+      //   this.$store.dispatch('rcd/setDraftReferences', refs);
+      // },
 
-      setDraftAuthors(authors) {
-        if (!authors.length) return;
-        bus.$emit('texture:setAuthors', {
-          authors,
-          members: this.researchMembersList
-        });
-        this.$store.dispatch('rcd/setDraftAuthors', authors.map((a) => a.account.name));
-      },
-
-      isAuthorSelected(member) {
-        return this.proposeContent.authors.some((a) => a.account.name === member.account.name);
-      },
-
-      addReference(reference) {
-        bus.$emit('texture:addReference', { reference });
-        const refs = this.contentRef.references.slice();
-        refs.push(reference.external_id);
-        this.$store.dispatch('rcd/setDraftReferences', refs);
-      },
-
-      removeReference(reference) {
-        bus.$emit('texture:removeReference', { reference });
-        const refs = this.contentRef.references.slice()
-          .filter((r) => r != reference.external_id);
-        this.$store.dispatch('rcd/setDraftReferences', refs);
-      },
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
       }
     }
   };
 </script>
-
-<style lang="less" scoped>
-</style>

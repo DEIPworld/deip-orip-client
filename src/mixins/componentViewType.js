@@ -9,6 +9,10 @@ export const componentViewType = {
   },
   computed: {
     $$componentViewType() {
+      if (this.viewType === 'dataProvider') {
+        return 'div';
+      }
+
       const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
       const requestedViewExist = Object.keys(this.$options.components)
         .includes(requestedView);

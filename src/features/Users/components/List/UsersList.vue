@@ -4,11 +4,12 @@
     :users="usersListComputed"
     v-bind="attrs$"
   >
+    <slot v-bind="{ users: usersListComputed }" />
 
-    <template #item-info="{ user }" >
-      <slot name="item-info" v-bind="{ user }" />
+    <template #item-info="{ user }">
+      <slot name="item-info" v-bind="{ user, hasLocation }" />
     </template>
-    <template #item-avatar="{ user, avatar }" >
+    <template #item-avatar="{ user, avatar }">
       <slot name="item-avatar" v-bind="{ user, avatar }" />
     </template>
   </component>
@@ -25,6 +26,7 @@
   import UsersListBrief from '@/features/Users/components/List/views/UsersListBrief';
   import UsersListStack from '@/features/Users/components/List/views/UsersListStack';
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
+  import { dataContextSwitch } from '@/mixins/dataContextSwitch';
 
   export default {
     name: 'UsersList',
@@ -35,7 +37,12 @@
       UsersListStack
     },
 
-    mixins: [componentStoreFactory(usersListStore), componentViewType, BindsAttrs],
+    mixins: [
+      componentStoreFactory(usersListStore),
+      componentViewType,
+      BindsAttrs,
+      dataContextSwitch
+    ],
 
     props: {
       users: {
@@ -66,11 +73,29 @@
     created() {
       const users = wrapInArray(this.users);
 
-      if (users.length) {
-        this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, wrapInArray(this.users))
+      // if (users.length) {
+        this.$store.dispatch(`${this.storeNS}/getUsersList`, {
+          users,
+          teamId: this.teamId
+        })
           .then(() => {
             this.$setReady();
           });
+
+      // } else {
+      //   this.$store.dispatch(`${this.storeNS}/getActiveUsers`)
+      //     .then(() => {
+      //       this.$setReady();
+      //     });
+      // }
+    },
+
+    methods: {
+      hasLocation(userProfile) {
+        return (
+          userProfile.location
+          && (userProfile.location.country || userProfile.location.city)
+        );
       }
     }
   };

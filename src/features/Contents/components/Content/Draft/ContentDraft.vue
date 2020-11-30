@@ -6,7 +6,6 @@
     color="grey lighten-4"
     full-width
   >
-
     <div class="draft-editor">
       <content-dar
         ref="contentDar"
@@ -18,29 +17,38 @@
 
     <portal to="sidebar">
       <validation-observer v-slot="{ invalid, handleSubmit, errors }" ref="observer">
-
         <v-navigation-drawer
           app
           right
           clipped
           width="320"
         >
-
           <validation-provider
             ref="titleValidator"
-            name="Title"
+            immediate
+            name="title"
             rules="required"
           >
             <input v-model="formModel.title" type="hidden">
           </validation-provider>
 
-          <d-stack class="pa-6">
+          <validation-provider
+            ref="bodyValidator"
+            immediate
+            name="main text"
+            rules="required"
+          >
+            <input v-model="formModel.body" type="hidden">
+          </validation-provider>
 
+          <d-stack class="pa-6">
             <div
-              v-if="$refs.titleValidator && $refs.titleValidator.errors.length"
+              v-if="filteredErrors(errors).length"
               class="text-body-2 error--text"
             >
-              {{ $refs.titleValidator.errors[0] }}
+              <div v-for="err of filteredErrors(errors)">
+                {{ err }}
+              </div>
             </div>
 
             <validation-provider
@@ -84,7 +92,6 @@
             />
           </d-stack>
 
-
           <template #append>
             <v-divider />
             <d-stack horizontal gap="8" class="pa-6">
@@ -111,7 +118,6 @@
           </template>
         </v-navigation-drawer>
       </validation-observer>
-
     </portal>
   </d-layout-full-screen>
 </template>
@@ -194,7 +200,6 @@
       },
       'formModel.references': {
         handler(newVal, oldVal) {
-          console.log(newVal)
           if (newVal !== oldVal && this.ready) {
             if (oldVal.length > newVal.length) {
               this.$refs.contentDar.removeReferences(arrayDiff(newVal, oldVal));
@@ -214,7 +219,6 @@
           new Promise((resolve) => this.$refs.referencesSelector.$once('ready', resolve))
         ])
           .then(([data, users, references]) => {
-
             if (this.$ls.get(this.cache)) {
               this.formModel = this.$ls.get(this.cache);
             }
@@ -236,23 +240,32 @@
         this.setFormModel(data);
       },
 
+      filteredErrors(errors) {
+        return [
+          ...(errors.title || []),
+          ...(errors['main text'] || [])
+        ];
+      },
+
       setFormModel(data) {
         this.formModel = {
-          contentType: this.formModel.contentType,
-          title: data.title,
-          authors: this.$where(
-            this.internalUsers,
-            {
-              account: { name: data.authors.map((a) => a.alias) }
-            }
-          ),
-          references: this.$where(
-            this.internalreferences,
-            {
-              externalId: data.references.map((ref) => ref.uri.split('/')
-                .pop())
-            }
-          )
+          ...data,
+          ...{
+            contentType: this.formModel.contentType,
+            authors: this.$where(
+              this.internalUsers,
+              {
+                account: { name: data.authors.map((a) => a.alias) }
+              }
+            ),
+            references: this.$where(
+              this.internalreferences,
+              {
+                externalId: data.references.map((ref) => ref.uri.split('/')
+                  .pop())
+              }
+            )
+          }
         };
       },
 

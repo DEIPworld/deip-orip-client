@@ -1,5 +1,9 @@
 import deipRpc from '@deip/rpc-client';
 import { camelizeObjectKeys } from '@/utils/helpers';
+import {
+  getAdditionalData,
+  getAdditionalDataOne
+} from '@/features/Reviews/utils/getAdditionalData';
 
 const STATE = {
   reviewDetails: []
@@ -12,8 +16,11 @@ const GETTERS = {
 const ACTIONS = {
   getReviewDetails({ commit }, reviewExternalId) {
     return deipRpc.api.getReviewAsync(reviewExternalId)
-      .then((res) => {
-        commit('storeReviewDetails', res);
+      .then((item) => {
+        return getAdditionalDataOne(item)
+          .then((res) => {
+            commit('storeReviewDetails', res);
+          });
       });
   }
 };

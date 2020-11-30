@@ -75,6 +75,12 @@
           texture.on('archive:ready', () => {
             texture.state.archive.on('archive:changed', this.onChange);
 
+            // const a = texture.state.archive.getDocument('manuscript');
+            // const bodyNodes = a.get('body').content.map((node) => a.get(node).content)
+            // console.log(texture.el.el.querySelector('[data-id="body.content"]').innerHTML)
+            // console.log(a)
+            // console.log(bodyNodes)
+
             setTimeout(() => {
               // this.setDefaultContentHeight();
             }, 100);
@@ -85,7 +91,9 @@
             this.texture = texture;
             this.loading = false;
 
-            this.$emit('ready', this.getData());
+            if (!this.readonly) {
+              this.$emit('ready', this.getData());
+            }
           });
       },
 
@@ -112,12 +120,16 @@
       },
 
       onChange() {
-        this.$emit('change', this.getData());
+        if (!this.readonly) {
+          this.$emit('change', this.getData());
+        }
       },
 
       getData() {
         return {
           title: this.texture.api.getArticleTitle() || '',
+          body: this.texture.api.getContentHtml('body') || '',
+          abstract: this.texture.api.getContentHtml('abstract') || '',
           authors: this.texture.api.getAuthors() || [],
           references: this.texture.api.getReferences() || []
         }

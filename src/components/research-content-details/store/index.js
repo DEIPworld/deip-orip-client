@@ -20,9 +20,9 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 const proposalsService = ProposalsService.getInstance();
 
 const state = {
-  content: null,
-  research: null,
-  group: null,
+  content: {},
+  research: {},
+  group: {},
   disciplinesList: [],
   membersList: [],
   contentList: [],
