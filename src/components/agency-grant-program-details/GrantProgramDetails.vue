@@ -165,7 +165,7 @@
                 </div>
               </div> -->
 
-            <div class="pt-4 pb-12">
+            <!-- <div class="pt-4 pb-12">
               <router-link
                 :to="{
                   name: 'CreateGrantProgramAward',
@@ -179,7 +179,37 @@
                   Add Award Receivers
                 </v-btn>
               </router-link>
-            </div>
+            </div> -->
+
+
+            <v-card>
+              <v-data-table
+                :headers="researchesAppliedForGrantTableHeader"
+                :items="researchesAppliedForGrant"
+                :hide-default-footer="researchesAppliedForGrant.length < 50"
+                :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
+                :items-per-page="50"
+              >
+                <template #item.actions="{ item }">
+                  <router-link
+                    :to="{
+                      name: 'CreateGrantProgramAward',
+                      params: {
+                        agency: organizationProfile.external_id,
+                        foa: decodeURIComponent(program.funding_opportunity_number),
+                      },
+                      query: {
+                        awardee: JSON.stringify(item)
+                      }
+                    }"
+                  >
+                    <v-btn class="ma-0" color="primary" small>
+                      Award
+                    </v-btn>
+                  </router-link>
+                </template>
+              </v-data-table>
+            </v-card>
           </v-card>
         </v-col>
 
@@ -231,6 +261,9 @@
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
+  import { ResearchService } from '@deip/research-service';
+
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AgencyGrantProgramDetails',
@@ -245,7 +278,22 @@
           REJECTED: 'application_rejected'
         },
 
-        applicationDialogMeta: { isOpen: false }
+        applicationDialogMeta: { isOpen: false },
+
+        researchesAppliedForGrantTableHeader: [
+          {
+            text: 'Title',
+            value: 'title'
+          },
+          {
+            text: 'ECI',
+            value: 'eciStats.eci'
+          },
+          {
+            text: 'Actions',
+            value: 'actions'
+          }
+        ]
       };
     },
 
@@ -254,6 +302,7 @@
         organizationProfile: 'agencyGrantProgramDetails/organization',
         program: 'agencyGrantProgramDetails/program',
         applications: 'agencyGrantProgramDetails/applications',
+        researchesAppliedForGrant: 'agencyGrantProgramDetails/researchesAppliedForGrant',        
         user: 'auth/user'
       }),
 
@@ -332,14 +381,10 @@
       }
     },
 
-    mounted() {
-    },
-
     methods: {
       applyToProgram() {
         this.applicationDialogMeta.isOpen = true;
       }
-
     }
   };
 </script>

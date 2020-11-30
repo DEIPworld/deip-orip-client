@@ -14,6 +14,7 @@ const state = {
   university: undefined,
   program: undefined,
   allUsers: [],
+  awardee: null,
 
   isLoadingContractProposalPage: undefined
 };
@@ -26,12 +27,14 @@ const getters = {
   program: (state, getters) => state.program,
   allUsers: (state) => state.allUsers,
 
+  awardee: (state) => state.awardee,
+
   isLoadingContractProposalPage: (state, getters) => state.isLoadingContractProposalPage !== false
 };
 
 // actions
 const actions = {
-  loadProgramAwardProposalPage({ state, dispatch, commit }, { orgExternalId, foaId }) {
+  loadProgramAwardProposalPage({ state, dispatch, commit }, { orgExternalId, foaId, awardee }) {
     commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', true);
     return researchGroupService.getResearchGroup(orgExternalId)
       .then((organizationProfile) => {
@@ -39,7 +42,9 @@ const actions = {
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
         const usersLoad = dispatch('loadUsers');
         const universityLoad = dispatch('loadUniversity', { universityExternalId: 'c8a87b12c23f53866acd397f43b591fd4e631419' });
-        return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad]);
+        const awardeeLoad = dispatch('loadAwardee', { awardee: awardee });
+        
+        return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad, awardeeLoad]);
       })
       .catch((err) => { console.error(err); })
       .finally(() => {
@@ -80,6 +85,10 @@ const actions = {
       .then((university) => {
         commit('SET_UNIVERSITY', university);
       }, (err) => { console.error(err); });
+  },
+
+  loadAwardee({ state, dispatch, commit }, { awardee }) {
+    commit('SET_AWARDEE', awardee);
   }
 };
 
@@ -103,7 +112,12 @@ const mutations = {
 
   SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE(state, isLoading) {
     state.isLoadingContractProposalPage = isLoading;
+  },
+
+  SET_AWARDEE(state, awardee) {
+    state.awardee = awardee;
   }
+
 };
 
 const namespaced = true;

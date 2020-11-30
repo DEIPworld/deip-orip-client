@@ -4,12 +4,14 @@ import { UsersService } from '@deip/users-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { GrantsService } from '@deip/grants-service';
 import { ResearchGroupService } from '@deip/research-group-service';
+import { ResearchService } from '@deip/research-service';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const grantsService = GrantsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
+const researchService = ResearchService.getInstance();
 
 const state = {
   organization: undefined,
@@ -18,6 +20,8 @@ const state = {
 
   corePrograms: [],
   additionalPrograms: [],
+  appliedForGrantResearches: [],
+  appliedForGrantResearchesEciStats: [],
 
   isLoadingOrganizationProgramDetailsPage: undefined,
   isLoadingOrganizationProgramDetails: undefined,
@@ -33,7 +37,14 @@ const getters = {
   corePrograms: (state, getters) => state.corePrograms,
   additionalPrograms: (state, getters) => state.additionalPrograms,
 
-  isLoadingOrganizationProgramDetailsPage: (state, getters) => state.isLoadingOrganizationProgramDetailsPage !== false
+  isLoadingOrganizationProgramDetailsPage: (state, getters) => state.isLoadingOrganizationProgramDetailsPage !== false,
+
+  researchesAppliedForGrant: (state, getters) => {
+    return state.appliedForGrantResearches.map((research, i) => {
+      const eciStats = state.appliedForGrantResearchesEciStats.find((stats) => stats.research_external_id == research.external_id);
+      return { ...research, eciStats: eciStats ? eciStats : { eci: 0, research_external_id: research.external_id } };
+    })
+  }
 };
 
 // actions
@@ -67,8 +78,14 @@ const actions = {
       .then((profiles) => {
         program.officers = profiles;
         mapAreaToProgram(program, state.organization.researchGroupRef.researchAreas);
-
         commit('SET_ORGANIZATION_PROGRAM', program);
+        
+        const attrId = Vue.$env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID;
+        let grantNumber = program.additional_info[attrId];
+        return grantNumber ? dispatch('loadAppliedForGrantResearches', { 
+          grantAttributeId: attrId,
+          grantAttributeValue: grantNumber
+         }) : Promise.resolve([]);
       })
       .catch((err) => {
         console.error(err);
@@ -152,6 +169,24 @@ const actions = {
         commit('SET_ORGANIZATION_PROGRAM_APPLICATIONS_LOADING_STATE', false);
         if (notify) notify();
       });
+  },
+
+  loadAppliedForGrantResearches({ state, dispatch, commit }, { grantAttributeId, grantAttributeValue }) {
+    const filter = {
+      researchAttributes: [{
+        researchAttributeId: grantAttributeId,
+        values: [grantAttributeValue]
+      }]
+    }
+
+    return researchService.getPublicResearchListing(filter)
+      .then((result) => {
+        commit('SET_RESEARCHES_APPLIED_FOR_GRANT', result);
+        return Promise.all(result.map(r => expertiseContributionsService.getResearchExpertiseStats(r.external_id, {})))
+      })
+      .then((result) => {
+        commit('SET_RESEARCHES_APPLIED_FOR_GRANT_ECI_STATS', result.filter(stats => !!stats.research_external_id));
+      })
   }
 };
 
@@ -180,6 +215,14 @@ const mutations = {
 
   SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE(state, isLoading) {
     state.isLoadingOrganizationProgramDetailsPage = isLoading;
+  },
+
+  SET_RESEARCHES_APPLIED_FOR_GRANT(state, researches) {
+    state.appliedForGrantResearches = researches;
+  },
+
+  SET_RESEARCHES_APPLIED_FOR_GRANT_ECI_STATS(state, eciStats) {
+    state.appliedForGrantResearchesEciStats = eciStats;
   }
 };
 

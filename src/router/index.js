@@ -185,7 +185,8 @@ const router = new Router({
     beforeEnter: (to, from, next) => {
       const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
         orgExternalId: to.params.agency,
-        foaId: decodeURIComponent(to.params.foa)
+        foaId: decodeURIComponent(to.params.foa),
+        awardee: to.query.awardee ? JSON.parse(to.query.awardee) : null
       });
       loadPage(loadPagePromise, next);
     }

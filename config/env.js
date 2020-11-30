@@ -16,7 +16,8 @@ const config = {
     CHAIN_ID: process.env.CHAIN_ID,
     ASSET_UNIT: process.env.ASSET_UNIT,
     TENANT: process.env.TENANT,
-    DEMO: process.env.DEMO
+    DEMO: process.env.DEMO,
+    GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID: process.env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID
 };
 
 module.exports = config;

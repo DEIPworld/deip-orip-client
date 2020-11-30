@@ -5,6 +5,13 @@
         Add title and number
       </div>
 
+      <d-stack class="pb-5">
+        <attributes-set
+          v-model="foa.grantNumber"
+          :attribute="grantSelector"
+        />
+      </d-stack>
+    
       <div>
         <v-text-field
           v-model="foa.title"
@@ -40,8 +47,16 @@
 </template>
 
 <script>
+  import AttributesSet from '@/components/Attributes/AttributesSet';
+  import DStack from '@/components/Deipify/DStack/DStack';
+
   export default {
     name: 'FundingOpportunityTitle',
+
+    components: {
+      DStack,
+      AttributesSet
+    },
 
     props: {
       foa: { type: Object, required: true },
@@ -50,6 +65,7 @@
 
     data() {
       return {
+        grantLabelAttribute: null,
         MIN_FOA_NUMBER_LENGTH: 3,
         MAX_FOA_NUMBER_LENGTH: 15,
         rules: {
@@ -74,6 +90,12 @@
       isNextDisabled() {
         return !this.foa.title || !this.foa.number || this.foa.number.length < this.MIN_FOA_NUMBER_LENGTH || this.foa.number.length > this.MAX_FOA_NUMBER_LENGTH;
       }
+    },
+
+    created() {
+      this.grantSelector = this.$tenantSettings.researchAttributes.find((attr) => { 
+        return attr._id == this.$env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID;
+      });
     }
   };
 </script>

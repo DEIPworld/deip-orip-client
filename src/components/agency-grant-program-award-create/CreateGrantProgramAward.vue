@@ -425,6 +425,7 @@
         universityProfile: 'agencyGrantProgramAwardCreate/university',
         program: 'agencyGrantProgramAwardCreate/program',
         allUsers: 'agencyGrantProgramAwardCreate/allUsers',
+        awardee: 'agencyGrantProgramAwardCreate/awardee',
         user: 'auth/user'
       }),
 
@@ -466,6 +467,7 @@
       },
 
       saveIsDisabled() {
+        if (!this.fundings.length) return true;
         const totalAward = this.fundings[0].purpose.awardAmount;
         return this.fundings.some((f, i) => {
           const isInvalid = !f.researcher || !f.research || (i == 0 ? f.overhead == null : false)
@@ -482,9 +484,27 @@
       }
     },
 
-    mounted() {},
     created() {
       this.addReceiver();
+
+      if (this.awardee) {
+        const funding = this.fundings[0];
+
+        this.queryResearchers(funding);
+        const researcher = funding.foundResearchers.find(({ user }) => user.account.name == this.awardee.research_group.creator);
+        funding.researcher = researcher;
+
+        this.setResearchGroupsList(funding)
+          .then(() => {
+            const researchGroup = funding.foundResearchGroups.find((rg) => rg.external_id == this.awardee.research_group.external_id);
+            funding.researchGroup = researchGroup;
+            return this.setResearchList(funding);
+          })
+          .then(() => {
+            const research = funding.foundResearch.find((r) => r.external_id == this.awardee.external_id);
+            funding.research = research;
+          });
+      }
     },
 
     methods: {
@@ -547,7 +567,7 @@
           // milestones: [],
           awardSource: null
         };
-        // this.addMilestone(funding);
+        this.addMilestone(funding);
         this.fundings.push(funding);
       },
 
@@ -572,7 +592,7 @@
         funding.foundResearch = [];
         funding.isResearchGroupsLoading = true;
 
-        deipRpc.api.getResearchGroupTokensByAccountAsync(funding.researcher.user.account.name)
+        return deipRpc.api.getResearchGroupTokensByAccountAsync(funding.researcher.user.account.name)
           .then((tokens) => Promise.all(tokens.map((token) => deipRpc.api.getResearchGroupByIdAsync(token.research_group_id))))
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
@@ -587,7 +607,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        deipRpc.api.getResearchesByResearchGroupAsync(funding.researchGroup.external_id)
+        return deipRpc.api.getResearchesByResearchGroupAsync(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);
@@ -622,7 +642,6 @@
         const grantAssetPrecision = blockchainService.getAssetPrecision(this.program.amount);
 
         this.isSaving = true;
-
         for (let i = 1; i < this.fundings.length; i++) {
           const funding = this.fundings[i];
           const source = funding.awardSource.user.account.name;

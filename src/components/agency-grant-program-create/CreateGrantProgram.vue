@@ -213,7 +213,9 @@
 
         organization: null,
         treasury: null,
+      
         foa: {
+          grantNumber: "",
           title: '',
           number: '',
           disciplines: [],
@@ -296,7 +298,8 @@
               ['additional_info_of_eligibility', this.foa.eligibilityAdditionalInformation],
               ['description', this.foa.description],
               ['link_to_additional_info', this.foa.additionalInfoLink],
-              ['grantor_email', this.foa.grantorEmail]
+              ['grantor_email', this.foa.grantorEmail],
+              [this.$env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID, this.foa.grantNumber]
             ]
           }
         ];
