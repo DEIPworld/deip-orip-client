@@ -7,7 +7,7 @@
     :items="usersList"
 
     :item-text="userFullName"
-    :item-value="userId"
+    :item-value="userExternalId"
 
     hide-details="auto"
 
@@ -74,13 +74,15 @@
   import { usersListStore } from '@/features/Users/store';
   import { mapState } from 'vuex';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
+  import { dataContextSwitch } from '@/mixins/dataContextSwitch';
 
   export default {
     name: 'UserSelector',
     components: { DAutocomplete },
     mixins: [
       Proxyable,
-      componentStoreFactory(usersListStore)
+      componentStoreFactory(usersListStore),
+      dataContextSwitch
     ],
 
     props: {
@@ -135,11 +137,10 @@
       loadUsers() {
         this.$setReady(false);
 
-        const loadUsers = this.users.length
-          ? this.$store.dispatch(`${this.storeNS}/getUsersProfiles`, this.users)
-          : this.$store.dispatch(`${this.storeNS}/getActiveUsers`, this.users);
-
-        loadUsers.then(() => {
+        this.$store.dispatch(`${this.storeNS}/getUsersList`, {
+          users: this.users,
+          ...this.$$dataContextProps
+        }).then(() => {
           this.$setReady();
           this.$emit('ready', this.usersList);
         });
@@ -149,7 +150,7 @@
         return e.profile ? this.$options.filters.fullname(e) : 'undefined';
       },
 
-      userId(e) {
+      userExternalId(e) {
         return e.profile ? e.profile._id : 'undefined';
       }
     }
