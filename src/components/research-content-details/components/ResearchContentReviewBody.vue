@@ -1,42 +1,74 @@
 <template>
-  <div class="review-content-container">
-    <div class="legacy-row-nowrap c-pb-4">
-      <div class="text-align-center">
-        <platform-avatar
-          :user="review.author"
-          :size="120"
-        />
-      </div>
-      <div class="legacy-column c-ml-10">
-        <div class="c-pt-4">
-          <router-link class="a title" :to="{ name: 'UserDetails', params: { account_name: review.author.account.name }}">
-            {{ review.author | fullname }}
+  <div v-if="review" class="review-content-container">
+    <d-stack gap="32" class="mx-auto">
+      <d-stack gap="4">
+        <div class="text-overline text--secondary">
+          project
+        </div>
+        <div>
+          <router-link
+            :to="{ name: 'project.details', params: { projectExternalId: research.external_id } }"
+            class="link text--primary"
+          >
+            {{ research.title }}
           </router-link>
         </div>
-        <div v-if="review.author.profile" class="c-pt-2 c-pb-1">
-          <span class="text-caption bold">{{ review.author | employmentOrEducation }}</span>
+      </d-stack>
+
+      <d-stack gap="4">
+        <div class="text-overline text--secondary">
+          Subject
         </div>
-        <div v-if="hasLocation" class="c-pb-1">
-          <v-icon small>
-            location_on
-          </v-icon><span class="text-caption"> {{ review.author | userLocation }}</span>
+        <div class="text-h3">
+          Review on
+          {{ getResearchContentType(content.content_type).text }}
+          :
+          <router-link
+              :to="{ name: 'project.content.details', params: { projectExternalId: research.external_id, contentExternalId: content.external_id } }"
+              class="link text--primary"
+          >
+            {{ content.title }}
+          </router-link>
+
         </div>
-      </div>
-    </div>
-    <v-divider />
-    <div v-html="review.content" />
+      </d-stack>
+
+      <d-stack gap="4">
+        <div class="text-overline text--secondary">
+          Reviewer
+        </div>
+        <users-list
+          :users="review.author.account.name"
+          view-type="brief"
+          avatar-size="80"
+        >
+          <template #item-info="{ user, hasLocation }">
+            <div v-if="user.profile" class="pt-1 text--secondary text-caption">
+              <span>{{ user | employmentOrEducation }}</span>
+              <span v-if="hasLocation(user.profile)">, {{ user | userLocation }}</span>
+            </div>
+          </template>
+        </users-list>
+      </d-stack>
+      <div v-html="review.content" />
+    </d-stack>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import { ResearchService } from '@deip/research-service';
+  import UsersList from '@/features/Users/components/List/UsersList';
+
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ResearchContentReviewBody',
+    components: { UsersList, DStack },
     data() {
-      return {
-      };
+      return {};
     },
 
     computed: {
@@ -48,49 +80,23 @@
         contentReviewsList: 'rcd/contentReviewsList'
       }),
       review() {
-        return this.contentReviewsList.find((r) => r.id == this.$route.params.review_id);
+        // return this.contentReviewsList.find((r) => r.id == this.$route.params.review_id);
+        return this.contentReviewsList.find((r) => r.external_id === this.$route.params.reviewExternalId);
       },
 
-      hasLocation() {
-        return this.review && this.review.author.profile
-          && this.review.author.profile.location
-          && (this.review.author.profile.location.country || this.review.author.profile.location.city);
-      }
+      // hasLocation() {
+      //   return this.review && this.review.author.profile
+      //       && this.review.author.profile.location
+      //       && (this.review.author.profile.location.country || this.review.author.profile.location.city);
+      // }
     },
     created() {
     },
 
     methods: {
-
+      getResearchContentType(type) {
+        return researchService.getResearchContentType(type);
+      }
     }
   };
 </script>
-
-<style lang="less">
-
-.review-content-container {
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-.review-content-container h1, h2, h3 {
-  margin-top: 3%;
-  margin-bottom: 3%;
-}
-
-.review-content-container h4, h5, h6 {
-  margin-top: 2%;
-  margin-bottom: 2%;
-}
-
-.review-content-container p, img {
-  margin-top: 1%;
-  margin-bottom: 1%;
-}
-
-.reviewed-content-container {
-  border-top: 1px solid #e4e4e4;
-  border-bottom: 1px solid #e4e4e4;
-}
-
-</style>

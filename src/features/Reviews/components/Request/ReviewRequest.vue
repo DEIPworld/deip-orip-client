@@ -20,10 +20,7 @@
           :false-disabled="loading"
           @click:confirm="handleSubmit(createRequest)"
         >
-
-
           <d-stack>
-
             <div v-if="!contentId">
               <validation-provider
                 v-slot="{ errors }"
@@ -48,9 +45,7 @@
                 :error-messages="errors"
               />
             </validation-provider>
-
           </d-stack>
-
         </vex-dialog>
       </v-form>
     </validation-observer>

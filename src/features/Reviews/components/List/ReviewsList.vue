@@ -27,11 +27,11 @@
               view-type="brief"
               avatar-size="80"
             >
-              <template #item-info="{ user }">
+              <template #item-info="{ user, hasLocation }">
                 <div v-if="user.profile" class="pt-1 text--secondary text-caption">
                   <span>{{ user | employmentOrEducation }}</span>
                   <span
-                    v-if="doesUserHaveLocation(user.profile)"
+                    v-if="hasLocation(user.profile)"
                   >, {{ user | userLocation }}</span>
                 </div>
               </template>
@@ -93,7 +93,7 @@
                   small
                   :disabled="disabled"
                   color="primary"
-                  outlined
+                  text
                   :to="{
                     name: 'project.content.review.details',
                     params: {
@@ -222,13 +222,6 @@
           .then(() => {
             this.$setReady(true);
           });
-      },
-
-      doesUserHaveLocation(userProfile) {
-        return (
-          userProfile.location
-          && (userProfile.location.country || userProfile.location.city)
-        );
       },
 
       getResearchContentType(type) {

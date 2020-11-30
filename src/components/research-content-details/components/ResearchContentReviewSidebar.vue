@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <d-block-widget>
-      <div class="text-h6">
-        <router-link
-          class="link"
-          :to="{
-            name: 'ResearchContentDetails',
-            params: {
-              research_group_permlink: encodeURIComponent(research.research_group.permlink),
-              research_permlink: encodeURIComponent(research.permlink),
-              content_permlink: encodeURIComponent(content.permlink)
-            }
-          }"
-        >
-          {{ content.title }}
-        </router-link>
-      </div>
-    </d-block-widget>
+  <div v-if="ready">
+<!--    <d-block-widget>-->
+<!--      <div class="text-h6">-->
+<!--        <router-link-->
+<!--          class="link"-->
+<!--          :to="{-->
+<!--            name: 'project.content.details',-->
+<!--            params: {-->
+<!--              contentExternalId: content.external_id,-->
+<!--            }-->
+<!--          }"-->
+<!--        >-->
+<!--          {{ content.title }}-->
+<!--        </router-link>-->
+<!--      </div>-->
+<!--    </d-block-widget>-->
 
     <d-block-widget>
-      <review-assessment v-model="review.scores" :research-content-type="content.content_type" />
+      <review-assessment v-if="review.scores" v-model="review.scores" :research-content-type="content.content_type" />
     </d-block-widget>
 
     <d-block-widget v-if="review.author.account.name !== user.username">
@@ -40,11 +38,21 @@
         </div>
       </div>
       <div v-else-if="!userHasResearchExpertise">
-        Users with expertise in <span class="text-body-2">{{ review.disciplines.map(d => d.name).join(", ") }}</span>
+        Users with expertise in <span class="text-body-2">{{
+          review.disciplines.map(d => d.name)
+            .join(', ')
+        }}</span>
         can support this review only
       </div>
       <div v-else-if="!userHasVoted" class="pt-2">
-        <div>You will get <span class="text-body-2">approximately 1000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(", ") }}</span> for your contribution to this project</div>
+        <div>
+          You will get
+          <span class="text-body-2">approximately 1000 ECI reward in {{
+            userRelatedExpertise.map(exp => exp.discipline_name)
+              .join(', ')
+          }}</span>
+          for your contribution to this project
+        </div>
       </div>
       <div v-else-if="userHasVoted" class="pt-2">
         <div class="text-body-2">
@@ -77,7 +85,9 @@
     <d-block-widget>
       <v-row>
         <v-col>
-          <div class="text-body-2 font-weight-medium">Date Added:</div>
+          <div class="text-body-2 font-weight-medium">
+            Date Added:
+          </div>
         </v-col>
         <v-col cols="auto">
           <d-meta-item :meta="{icon: 'event', label: moment(review.created_at).format('D MMM YYYY')}" />
@@ -91,16 +101,20 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentReviewSidebar',
-    components: { DBlockWidget, DMetaItem, DBlock },
+    components: {
+      DBlockWidget,
+      DMetaItem,
+      DBlock
+    },
     data() {
       return {
         isReviewVoting: false,
@@ -118,8 +132,15 @@
         contentReviewsList: 'rcd/contentReviewsList',
         groupMembers: 'rcd/membersList'
       }),
+
+      ready() {
+        return Object.keys(this.content).length
+          && this.contentReviewsList.length;
+      },
+
       review() {
-        const review = this.contentReviewsList.find((r) => r.id == this.$route.params.review_id);
+        const review = this.contentReviewsList.find((r) => r.external_id === this.$route.params.reviewExternalId);
+
         return {
           ...review,
           scores: review.scores.reduce((acc, score) => {
@@ -128,6 +149,7 @@
           }, {})
         };
       },
+
       userHasResearchExpertise() {
         return this.userExperise.some((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id == exp.discipline_id));
       },
@@ -184,11 +206,12 @@
 </script>
 
 <style lang="less" scoped>
-    .eci-item {
-        border: 1px solid #e4e4e4;
-        border-radius: 3px;
-    }
-    .eci-label {
-       color: #818181;
-    }
+  .eci-item {
+    border: 1px solid #e4e4e4;
+    border-radius: 3px;
+  }
+
+  .eci-label {
+    color: #818181;
+  }
 </style>

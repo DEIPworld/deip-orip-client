@@ -1,4 +1,5 @@
 import deipRpc from '@deip/rpc-client';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
 const STATE = {
   contentDetails: {}
@@ -19,7 +20,7 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeContentDetails(state, payload) {
-    state.contentDetails = payload;
+    state.contentDetails = camelizeObjectKeys(payload);
   }
 };
 

@@ -47,6 +47,12 @@ export default class DeipTextureEditorApp extends TextureWebApp {
       return title;
     },
 
+    getContentHtml: (key = 'body') => {
+      const { archive } = this.state;
+      if (!archive) return null;
+      return this.el.el.querySelector(`[data-id="${key}.content"]`).innerHTML;
+    },
+
     getAuthors: () => {
       const { archive } = this.state;
       if (!archive) return null;
