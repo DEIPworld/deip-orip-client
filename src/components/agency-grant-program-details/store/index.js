@@ -40,10 +40,13 @@ const getters = {
   isLoadingOrganizationProgramDetailsPage: (state, getters) => state.isLoadingOrganizationProgramDetailsPage !== false,
 
   researchesAppliedForGrant: (state, getters) => {
-    return state.appliedForGrantResearches.map((research, i) => {
+     const list = state.appliedForGrantResearches.map((research, i) => {
       const eciStats = state.appliedForGrantResearchesEciStats.find((stats) => stats.research_external_id == research.external_id);
       return { ...research, eciStats: eciStats ? eciStats : { eci: 0, research_external_id: research.external_id } };
     })
+
+    list.sort((a, b) => b.eciStats.eci - a.eciStats.eci);
+    return list;
   }
 };
 
