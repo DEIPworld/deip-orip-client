@@ -567,7 +567,7 @@
           // milestones: [],
           awardSource: null
         };
-        this.addMilestone(funding);
+        // this.addMilestone(funding);
         this.fundings.push(funding);
       },
 
