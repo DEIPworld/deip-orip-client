@@ -33,11 +33,11 @@
       <d-block title="Select start and end dates of project fundraise" compact>
         <v-row>
           <v-col cols="6">
-            <d-date-time-input v-model="formData.startDate" label="Start date" />
+            <d-date-time-input v-model="formData.startDate" only-future label="Start date" />
           </v-col>
 
           <v-col cols="6">
-            <d-date-time-input v-model="formData.endDate" label="End date" />
+            <d-date-time-input v-model="formData.endDate" only-future label="End date" />
           </v-col>
         </v-row>
       </d-block>

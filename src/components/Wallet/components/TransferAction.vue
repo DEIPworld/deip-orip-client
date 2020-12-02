@@ -61,12 +61,12 @@
               <div>
                 {{ item.asset_symbol }}
               </div>
-              <div>
+              <div class="text--secondary">
                 {{
                   $$toAssetUnits(item.amount, true, {
                     symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
                   })
-                }}
+                }} Available
               </div>
             </div>
           </template>
@@ -109,12 +109,12 @@
                 <div>
                   {{ item.asset_symbol }}
                 </div>
-                <div>
+                <div class="text--secondary">
                   {{
                     $$toAssetUnits(item.amount, true, {
                       symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
                     })
-                  }}
+                  }} Available
                 </div>
               </div>
             </template>
@@ -148,7 +148,7 @@
           :menu-props="{
             maxWidth: 520
           }"
-          label="Recipient"
+          :label="dialog.exchange ? 'Exchange recipient' : 'Recipient'"
           item-text="fullName"
           outlined
           return-object

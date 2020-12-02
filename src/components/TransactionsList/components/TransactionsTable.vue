@@ -9,11 +9,11 @@
       show-expand
       item-key="proposal.external_id"
       sort-by="updated_at"
-      class="black--text"
+      class="text--primary"
       sort-desc
-      :hide-default-footer="dataTable.length < 50"
+      :hide-default-footer="dataTable.length < 10 "
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
-      :items-per-page="50"
+      :items-per-page="10"
     >
       <template #item.type="{ item }">
         <div class="d-flex mt-4">
@@ -67,6 +67,46 @@
           {{ $$toAssetUnits($$fromAssetUnits(item.details.asset1)) }} to
           {{ $$toAssetUnits($$fromAssetUnits(item.details.asset2)) }}
         </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.INVITE_MEMBER === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ item.extendedDetails.invitee | accountFullname }}
+          invited to join
+          {{ item.extendedDetails.researchGroup | accountFullname }}
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          Remove {{ item.extendedDetails.member | accountFullname }}
+          from the
+          {{ item.extendedDetails.researchGroup | accountFullname }}
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ item.details.title }},
+          project:
+          {{ item.extendedDetails.research.title }}
+        </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{ $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.soft_cap)) }},
+          project:
+          {{ item.extendedDetails.research.title }}
+        </v-clamp>
         <v-row
           v-if="!isAccountsBlockVisible(item)"
           no-gutters
@@ -88,7 +128,12 @@
 
           <v-col class="d-flex ml-4 align-center">
             <template v-for="(party, i) in item.header.otherParties">
-              <v-avatar :size="32" :key="`${i}-party`" class="ml-n2">
+              <v-avatar
+                v-if="i < maxSignersCountToDisplay"
+                :key="`${i}-party`"
+                :size="32"
+                class="ml-n2"
+              >
                 <v-img :src="party.account | accountAvatarSrc(64, 64)" />
               </v-avatar>
             </template>
@@ -153,36 +198,70 @@
       </template>
       <template #expanded-item="{ item, headers }">
         <td />
-        <td class="pa-4 text--secondary">
-          <div class="mb-6">
-            <div>
-              <span class="font-weight-medium"> Receipt: </span>
-              {{ item.proposal.created_at | dateFormat('DD MMM YYYY, HH:mm', true) }}
+        <td class="pa-4 text--secondary text-caption">
+          <div class="mb-12">
+            <div class="mb-2 font-weight-medium">
+              Required parties
             </div>
-            <div>
-              <span class="font-weight-medium"> Expiration: </span>
-              {{ item.proposal.expiration_time | dateFormat('DD MMM YYYY, HH:mm', true) }}
+            <d-box-item
+              v-for="(signer, i) in item.header.otherParties"
+              :key="`${i}-otherPartiesSigner`"
+              class="mb-4"
+              :avatar="signer.isResearchGroup ?
+                $options.filters.researchGroupLogoSrc(signer.account.external_id, 80, 80)
+                : $options.filters.accountAvatarSrc(signer.account, 80, 80)
+              "
+              :size="40"
+              style="max-width: 400px"
+            >
+              <router-link
+                tag="div"
+                class="text-decoration-none text--primary"
+                :to="signer.isResearchGroup
+                  ? {
+                    name: 'ResearchGroupDetails',
+                    params: { research_group_permlink: encodeURIComponent(signer.account.permlink) }
+                  }
+                  : { name: 'UserDetails', params: { account_name: signer.account.account.name } }"
+              >
+                <v-clamp autoresize :max-lines="1" class="text-h6">
+                  {{ signer.account | accountFullname }}
+                </v-clamp>
+              </router-link>
+              <template #actionText>
+                <div style="width: 93px">
+                  <div class="d-flex text--primary text-body-2">
+                    <v-icon
+                      :color="statusChipData.color[signer.status]"
+                      size="14"
+                      class="mr-1"
+                    >
+                      {{ statusChipData.icon[signer.status] }}
+                    </v-icon>
+                    {{ statusChipData.text[signer.status] }}
+                  </div>
+                </div>
+              </template>
+            </d-box-item>
+          </div>
+          <div>
+            <div class="mb-2 font-weight-medium">
+              Transaction signed by
             </div>
-          </div>
-          <div class="mb-4 font-weight-medium">
-            Signees:
-          </div>
-          <v-expansion-panels
-            flat
-            multiple
-            readonly
-            :value="item.expand"
-            :class="{'mt-n6': !item.expand.length}"
-          >
-            <template v-for="(party, i) in item.parties">
-              <template v-for="({ signer, txInfo }, j) in party.signers">
-                <v-expansion-panel
-                  :key="`${i}-${j}-accounts`"
-                  class="pa-0"
-                  :class="{'mt-6': !item.expand.length}"
-                >
-                  <v-expansion-panel-header class="pa-0" hide-actions>
-                    <div class="d-flex">
+            <v-expansion-panels
+              flat
+              multiple
+              readonly
+              class="mb-n4"
+              :value="item.expand"
+            >
+              <template v-for="(party, i) in item.parties">
+                <template v-for="({ signer, txInfo }, j) in party.signers">
+                  <v-expansion-panel
+                    :key="`${i}-${j}-accounts`"
+                    class="pa-0 mt-0 mb-4"
+                  >
+                    <div class="d-flex" :class="{ 'mb-2': item.expand.length }">
                       <v-avatar
                         v-if="!signer.is_research_group && party.account.account.is_research_group"
                         class="mr-n2"
@@ -193,58 +272,52 @@
                       <d-box-item
                         :avatar="signer | accountAvatarSrc(80, 80)"
                         :size="40"
-                        style="max-width: 400px"
                       >
                         <router-link
                           tag="div"
-                          class="text-caption text-decoration-none"
+                          class="text-decoration-none"
                           :to="signer.profile
                             ? { name: 'UserDetails', params: { account_name: signer.account.name } }
-                            : { name: 'ResearchGroupDetails', params: { research_group_permlink: encodeURIComponent(signer.permlink) } }"
+                            : {
+                              name: 'ResearchGroupDetails',
+                              params:
+                                { research_group_permlink: encodeURIComponent(signer.permlink)}
+                            }"
                         >
                           <v-clamp autoresize :max-lines="1" class="text-h6">
                             {{ signer | accountFullname }}
                           </v-clamp>
                         </router-link>
-                        <template #actionText>
-                          <div style="width: 93px">
-                            <div class="d-flex black--text text-body-2">
-                              <v-icon
-                                :color="statusChipData.color[party.status]"
-                                size="14"
-                                class="mr-1"
-                              >
-                                {{ statusChipData.icon[party.status] }}
-                              </v-icon>
-                              {{ statusChipData.text[party.status] }}
-                            </div>
-                          </div>
-                        </template>
                       </d-box-item>
                     </div>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content class="pa-0">
-                    <div class="text--secondary text-caption">
-                      <div>
-                        <span class="font-weight-medium">
-                          Transaction ID:
-                        </span>
-                        <span>{{ txInfo.trx_id || '—' }}</span>
+                    <v-expansion-panel-content class="pa-0 ml-7">
+                      <div class="text--secondary text-caption">
+                        <div>
+                          <span class="font-weight-medium">
+                            Transaction ID:
+                          </span>
+                          <span>{{ txInfo.trx_id || '—' }}</span>
+                        </div>
+                        <div>
+                          <span class="font-weight-medium"> Block: </span>
+                          <span>{{ txInfo.block_num || '—' }}</span>
+                        </div>
+                        <div>
+                          <span class="font-weight-medium"> Timestamp: </span>
+                          {{ txInfo.timestamp
+                            ? $options.filters.dateFormat(
+                              txInfo.timestamp, 'DD MMM YYYY, HH:mm', true
+                            )
+                            : '—'
+                          }}
+                        </div>
                       </div>
-                      <div>
-                        <span class="font-weight-medium"> Block: </span>
-                        <span>{{ txInfo.block_num || '—' }}</span>
-                      </div>
-                      <div>
-                        <span class="font-weight-medium"> Timestamp: </span>
-                        {{ txInfo.timestamp ? $options.filters.dateFormat(txInfo.timestamp, 'DD MMM YYYY, HH:mm', true) : '—' }}
-                      </div>
-                    </div>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </template>
               </template>
-            </template>
-          </v-expansion-panels>
+            </v-expansion-panels>
+          </div>
           <v-btn
             text
             color="primary"
@@ -271,6 +344,8 @@
   import { ProposalsService } from '@deip/proposals-service';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { AssetsService } from '@deip/assets-service';
+
+  const maxSignersCountToDisplay = 4;
 
   const assetsService = AssetsService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
@@ -320,12 +395,6 @@
     }
   };
 
-  const txStatus = {
-    approved: 'approved',
-    pending: 'pending',
-    rejected: 'rejected'
-  };
-
   const chipColors = {
     [PROPOSAL_STATUS.APPROVED]: 'success',
     [PROPOSAL_STATUS.PENDING]: 'warning',
@@ -358,9 +427,9 @@
       return {
         expanded: [],
         transactionTypes,
-        txStatus,
         PROPOSAL_STATUS,
         LOC_PROPOSAL_TYPES,
+        maxSignersCountToDisplay,
         disableButtonsId: '',
         txStatusChips: {
           [PROPOSAL_STATUS.APPROVED]: this.$t('transactionsPage.signed'),
@@ -384,7 +453,7 @@
           {
             text: 'Type',
             value: 'type',
-            align: 'center vertical-top',
+            align: 'left vertical-top',
             sortable: false
           },
           {
@@ -430,7 +499,9 @@
       }
     },
 
-    created() {},
+    created() {
+      console.log(this.dataTable)
+    },
 
     methods: {
 

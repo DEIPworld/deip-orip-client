@@ -6,11 +6,17 @@
       <d-input-date
         v-model="date"
         :label="label"
+        :only-future="onlyFuture"
         :field-props="{class: 'rounded-br-0 rounded-tr-0'}"
       />
     </v-spacer>
     <v-sheet min-width="112px" width="30%">
-      <d-time-input v-model="time" placeholder="00:00" class="rounded-bl-0 rounded-tl-0" />
+      <d-time-input
+        v-model="time"
+        :date="onlyFuture ? date : ''"
+        placeholder="00:00"
+        class="rounded-bl-0 rounded-tl-0"
+      />
     </v-sheet>
   </v-sheet>
 </template>
@@ -29,6 +35,10 @@
       label: {
         type: String,
         default: null
+      },
+      onlyFuture: {
+        type: Boolean,
+        default: false
       }
     },
     data() {

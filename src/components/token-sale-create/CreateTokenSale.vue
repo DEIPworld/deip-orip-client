@@ -46,8 +46,8 @@
           {
             researchGroup: this.research.research_group.external_id,
             researchExternalId: this.research.external_id,
-            startTime: this.formData.startDate,
-            endTime: this.formData.endDate,
+            startTime: new Date(this.formData.startDate).toISOString().split('.')[0],
+            endTime: new Date(this.formData.endDate).toISOString().split('.')[0],
             securityTokensOnSale: [this.formData.amountToSell],
             softCap: this.$$toAssetUnits(this.formData.softCap, false),
             hardCap: this.$$toAssetUnits(this.formData.hardCap, false),

@@ -22,6 +22,7 @@
     <v-date-picker
       v-model="internalValue"
       v-bind="pickerProps"
+      :allowed-dates="allowedDates"
       @change="onChange"
     />
   </v-menu>
@@ -48,6 +49,10 @@
       fieldProps: {
         type: Object,
         default: () => ({})
+      },
+      onlyFuture: {
+        type: Boolean,
+        default: false
       },
 
       ...Validatable.options.props
@@ -103,6 +108,13 @@
       onChange(e) {
         this.$emit('change', e);
         this.open = false;
+      },
+      allowedDates(val) {
+        if (this.onlyFuture) {
+          return this.moment(val).isSameOrAfter(this.moment(new Date()), 'day');
+        }
+
+        return true;
       }
     }
   };

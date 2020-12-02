@@ -31,19 +31,35 @@
       label: {
         type: String,
         default: undefined
+      },
+      date: {
+        type: String,
+        default: ''
       }
     },
     computed: {
       list() {
         const hours = createRange(24);
         const minutes = createRange(60);
+        const currentDate = this.moment(new Date());
+        if (currentDate.format('YYYY-MM-DD') === this.date) {
+          hours.splice(0, currentDate.format('HH'));
+        }
 
         const list = [];
 
         for (const h of hours) {
           for (const m of minutes) {
             if (m % this.graduate === 0) {
-              list.push(`${padStart(h, 2)}:${padStart(m, 2)}`);
+              if (this.date) {
+                if (h === parseInt(currentDate.format('HH'), 10) && m > currentDate.format('mm')) {
+                  list.push(`${padStart(h, 2)}:${padStart(m, 2)}`);
+                } else if (h !== parseInt(currentDate.format('HH'), 10)) {
+                  list.push(`${padStart(h, 2)}:${padStart(m, 2)}`);
+                }
+              } else {
+                list.push(`${padStart(h, 2)}:${padStart(m, 2)}`);
+              }
             }
           }
         }
