@@ -147,7 +147,6 @@
       },
 
       onChange() {
-        console.log('change')
         this.$emit('change')
       },
 
@@ -176,9 +175,9 @@
       getEditorData() {
         this.editor.save().then((outputData) => {
           // console.log(this.editor)
-          console.log('Article data: ', outputData)
+          console.info('Article data: ', outputData)
         }).catch((error) => {
-          console.log('Saving failed: ', error)
+          console.error('Saving failed: ', error)
         });
       }
     }

@@ -369,7 +369,7 @@
           const { amount } = this.$$fromAssetUnits(this.tokenSale.security_tokens_on_sale[0]);
           data.push(['On Sale', this.convertToPercent(amount)]);
         }
-        
+
         return data;
       },
       currentCap() {
@@ -436,7 +436,7 @@
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           this.$router.back();
         });
     },
@@ -453,7 +453,7 @@
         this.isInvesting = true;
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
-        
+
         investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.account.name }, {
           tokenSaleExternalId: this.tokenSale.external_id,
           contributor: this.$currentUser.account.name,

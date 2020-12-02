@@ -92,6 +92,7 @@
       </d-dialog>
     </d-block-widget>
 
+
     <d-block-widget v-if="isOwner && hasReviewRequests">
       <div id="review-requests" class="text-h6 font-weight-bold pa-4">
         {{ $t('userDetailRouting.sidebar.reviewReq') }} {{ reviewRequests.length }}
@@ -104,20 +105,21 @@
       >
         <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
         <div class="py-2 caption font-weight-medium">
-          {{ $t('userDetailRouting.sidebar.reqYouReview', { title:reviewRequest.research.title }) }}
+          {{ $t('userDetailRouting.sidebar.reqYouReview', { title: reviewRequest.research.title }) }}
         </div>
-
         <div class="pt-2 full-width display-flex justify-space-between">
           <v-btn
             color="green"
             text
             small
             class="ma-0 py-0 px-2"
-            :to="{ name: 'ResearchContentDetails', params: {
-              research_group_permlink: encodeURIComponent(reviewRequest.research.research_group.permlink),
-              research_permlink: encodeURIComponent(reviewRequest.research.permlink),
-              content_permlink: encodeURIComponent(reviewRequest.content.permlink)
-            }}"
+            :to="{
+              name: 'project.content.details',
+              params: {
+                researchExternalId: reviewRequest.research.external_id,
+                contentExternalId: reviewRequest.content.external_id
+              }
+          }"
           >
             {{ $t('userDetailRouting.sidebar.proceedBtn') }}
           </v-btn>
@@ -261,7 +263,10 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.updateProposal({ privKey: this.currentUser.privKey, username: this.currentUser.username }, {
+        proposalsService.updateProposal({
+          privKey: this.currentUser.privKey,
+          username: this.currentUser.username
+        }, {
           externalId: proposalId,
           activeApprovalsToAdd: [this.currentUser.username],
           activeApprovalsToRemove: [],
@@ -290,11 +295,14 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+        proposalsService.deleteProposal({
+          privKey: this.$currentUser.privKey,
+          username: this.$currentUser.username
+        }, {
           externalId: proposalId,
           account: this.$currentUser.username,
           authority: 2, // active auth
-          extensions: [],
+          extensions: []
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });

@@ -3,6 +3,8 @@
     <v-btn
       block
       color="primary"
+      small
+      text
       :loading="loading"
       :disabled="loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise"
       @click="voteReview()"
@@ -100,9 +102,9 @@
           .map((exp) => exp.discipline_external_id);
 
         const votesPromises = disciplinesExternalIds
-          .map((disciplineExternalId) => researchContentReviewsService.voteForReview(this.user.privKey, {
-            voter: this.user.username,
-            reviewExternalId: review.external_id,
+          .map((disciplineExternalId) => researchContentReviewsService.voteForReview(this.$currentUser.privKey, {
+            voter: this.$currentUserName,
+            reviewExternalId: review.externalId,
             disciplineExternalId,
             weight: '100.00 %',
             extensions: []
@@ -118,8 +120,8 @@
             this.$notifier.showError('An error occured, please try again later');
           })
           .finally(() => {
-            this.isReviewVoting = false;
-            this.votingDisabled = true;
+            this.loading = false;
+            this.disabled = true;
           });
       }
     }

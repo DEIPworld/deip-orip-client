@@ -21,7 +21,7 @@
     props: {
       darId: {
         type: String,
-        default: null,
+        default: null
       },
       readonly: {
         type: Boolean,
@@ -75,15 +75,9 @@
           texture.on('archive:ready', () => {
             texture.state.archive.on('archive:changed', this.onChange);
 
-            // const a = texture.state.archive.getDocument('manuscript');
-            // const bodyNodes = a.get('body').content.map((node) => a.get(node).content)
-            // console.log(texture.el.el.querySelector('[data-id="body.content"]').innerHTML)
-            // console.log(a)
-            // console.log(bodyNodes)
-
-            setTimeout(() => {
-              // this.setDefaultContentHeight();
-            }, 100);
+            // setTimeout(() => {
+            //   // this.setDefaultContentHeight();
+            // }, 100);
             resolve(texture);
           });
         })
@@ -128,11 +122,11 @@
       getData() {
         return {
           title: this.texture.api.getArticleTitle() || '',
-          body: this.texture.api.getContentHtml('body') || '',
-          abstract: this.texture.api.getContentHtml('abstract') || '',
+          body: this.texture.api.getContentText('body') || '',
+          abstract: this.texture.api.getContentText('abstract') || '',
           authors: this.texture.api.getAuthors() || [],
           references: this.texture.api.getReferences() || []
-        }
+        };
       },
 
       // ////////////////////////////////////////////////

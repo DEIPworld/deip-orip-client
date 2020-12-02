@@ -13,15 +13,19 @@
       ref="DraftList"
       :research-id="project.externalId"
     />
-    <content-upload
-      v-if="isMember"
-      ref="ContentUpload"
-      :research-id="project.externalId"
-      @content-upload="onContentUploaded"
-    />
-    <content-draft-cta
-      :project-id="project.externalId"
-    />
+    <d-stack gap="8">
+      <content-upload
+        v-if="isMember"
+        ref="ContentUpload"
+        :research-id="project.externalId"
+        @content-uploaded="onContentUploaded"
+      />
+      <content-draft-cta
+        v-if="isMember"
+        :project-id="project.externalId"
+      />
+    </d-stack>
+
   </d-stack>
 </template>
 

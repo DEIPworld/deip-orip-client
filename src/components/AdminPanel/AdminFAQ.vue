@@ -98,9 +98,9 @@
         )
           .then((confirm) => {
             if (confirm) {
-              console.log('process', id);
+              console.info('process', id);
             } else {
-              console.log('cancel', id);
+              console.info('cancel', id);
             }
           });
       },

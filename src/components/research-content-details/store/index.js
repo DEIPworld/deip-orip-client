@@ -176,7 +176,6 @@ const actions = {
         return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
-            console.log(group_permlink, research_permlink, content_permlink, contentObj)
             const { content: hash } = contentObj;
 
             const contentRefLoad = new Promise((resolve, reject) => {

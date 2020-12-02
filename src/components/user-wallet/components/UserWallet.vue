@@ -880,7 +880,7 @@
     created() {
       this.$store.dispatch('userWallet/loadWallet', {
         username: decodeURIComponent(this.username)
-      }).then(() => { console.log(this.investments, 'this.investments'); this.$setReady(); });
+      }).then(() => { console.info(this.investments, 'this.investments'); this.$setReady(); });
     },
 
     methods: {

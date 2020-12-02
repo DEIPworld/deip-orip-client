@@ -26,7 +26,7 @@
           <validation-provider
             ref="titleValidator"
             immediate
-            name="title"
+            name="Title"
             rules="required"
           >
             <input v-model="formModel.title" type="hidden">
@@ -35,21 +35,21 @@
           <validation-provider
             ref="bodyValidator"
             immediate
-            name="main text"
+            name="Main text"
             rules="required"
           >
             <input v-model="formModel.body" type="hidden">
           </validation-provider>
 
           <d-stack class="pa-6">
-            <div
-              v-if="filteredErrors(errors).length"
-              class="text-body-2 error--text"
-            >
-              <div v-for="err of filteredErrors(errors)">
-                {{ err }}
-              </div>
-            </div>
+<!--            <div-->
+<!--              v-if="filteredErrors(errors).length"-->
+<!--              class="text-body-2 error&#45;&#45;text"-->
+<!--            >-->
+<!--              <div v-for="err of filteredErrors(errors)">-->
+<!--                {{ err }}-->
+<!--              </div>-->
+<!--            </div>-->
 
             <validation-provider
               v-slot="{ errors }"
@@ -94,27 +94,34 @@
 
           <template #append>
             <v-divider />
-            <d-stack horizontal gap="8" class="pa-6">
-              <v-btn
-                color="primary"
-                outlined
-                small
-                :disabled="loading"
-                :loading="loading"
-                @click="saveDraft()"
-              >
-                Save draft
-              </v-btn>
-              <v-btn
-                :disabled="loading || invalid"
-                :loading="loading"
-                color="primary"
-                small
-                @click="handleSubmit(createContent)"
-              >
-                Create proposal
-              </v-btn>
+            <d-stack gap="8" class="pa-6">
+              <d-stack horizontal gap="8">
+                <v-btn
+                  color="primary"
+                  outlined
+                  small
+                  :disabled="loading"
+                  :loading="loading"
+                  @click="saveDraft()"
+                >
+                  Save draft
+                </v-btn>
+                <v-btn
+                  :disabled="loading || invalid"
+                  :loading="loading"
+                  color="primary"
+                  small
+                  @click="handleSubmit(createContent)"
+                >
+                  Create proposal
+                </v-btn>
+              </d-stack>
+              <div v-if="filteredErrors(errors).length" class="text-caption text--secondary">
+                * To create proposal, please, fill at least
+                {{ filteredErrors(errors).join(' and ') }}
+              </div>
             </d-stack>
+
           </template>
         </v-navigation-drawer>
       </validation-observer>
@@ -241,10 +248,13 @@
       },
 
       filteredErrors(errors) {
-        return [
-          ...(errors.title || []),
-          ...(errors['main text'] || [])
-        ];
+        const err = [];
+
+        for (const e of ['Title', 'Main text']) {
+          if (errors[e] && errors[e].length) err.push(e);
+        }
+
+        return err;
       },
 
       setFormModel(data) {

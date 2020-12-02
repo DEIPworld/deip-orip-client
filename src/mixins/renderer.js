@@ -71,14 +71,6 @@ const rendererCommon = {
           const modelMatches = node.match(modelPattern);
           const methodMatches = node.match(methodPattern);
 
-          if(node === '@onContentUploaded()') {
-            console.log('get', '@onContentUploaded()')
-          }
-
-          if(node === '@onContentUploaded') {
-            console.log('get', '@onContentUploaded')
-          }
-
           if (modelMatches && modelMatches.length) {
             parent[key] = getObjectValueByPath(this, modelMatches[1]);
           }

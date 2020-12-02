@@ -109,11 +109,11 @@
             </v-col>
             <v-col cols="4" class="align-self-center d-flex">
               <div class="align-self-center">
-                <review-assessment-squared-rating
-                  v-model="item.value"
-                  :readonly="false"
-                  :value="item.value"
-                />
+<!--                <review-assessment-squared-rating-->
+<!--                  v-model="item.value"-->
+<!--                  :readonly="false"-->
+<!--                  :value="item.value"-->
+<!--                />-->
               </div>
             </v-col>
             <v-col cols="3">

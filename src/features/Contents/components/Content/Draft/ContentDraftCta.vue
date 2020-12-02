@@ -5,7 +5,6 @@
     block
     outlined
     color="primary"
-    class="mt-2"
     @click="createDarDraft()"
   >
     Use Editor

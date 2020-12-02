@@ -191,7 +191,6 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeProjectsData(state, payload) {
-    // console.log('@@@@', payload)
     state.projectsList = payload.map((item) => (camelizeObjectKeys(item)));
   }
 };

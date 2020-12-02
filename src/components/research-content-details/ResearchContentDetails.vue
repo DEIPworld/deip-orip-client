@@ -20,9 +20,10 @@
             <div>
               <router-link
                 :to="{ name: 'project.details', params: { projectExternalId: research.external_id } }"
-                class="link text--primary"
+                class="link text--primary text-decoration-none"
               >
                 {{ research.title }}
+                <v-icon small>mdi-arrow-top-right-thin-circle-outline</v-icon>
               </router-link>
             </div>
           </d-stack>
@@ -37,8 +38,7 @@
                 Subject
               </div>
               <div class="text-h3">
-                {{ getResearchContentType(content.content_type).text }}
-                :
+                {{ getResearchContentType(content.content_type).text }}:
                 {{ content.title }}
               </div>
             </d-stack>
@@ -46,67 +46,39 @@
           </template>
 
 
+          <reviews-list
+            v-if="content && content.external_id"
+            :content-id="content.external_id"
+            :disabled-creating="!isCreatingReviewAvailable || isResearchGroupMember"
+          >
+            <template #create-messages>
+              <template v-if="!contentReviewsList.length">
+                <div class="mb-2">No reviews yet.</div>
+                <div>
+                  You will get approximately 3000 ECI reward in
+                  {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
+                  for your contribution to this project
+                </div>
+              </template>
 
+              <div v-if="userHasResearchExpertise && !userHasReview">
+                You will get approximately 3000 ECI reward in
+                {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
+                for your contribution to this project
+              </div>
 
+              <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
+                You have reviewed this material already
+              </div>
 
-          <template v-if="isPublished && contentReviewsList.length">
-            <reviews-list
-              v-if="content && content.external_id"
-              :content-id="content.external_id"
-            />
-          </template>
+              <div v-else-if="!userHasResearchExpertise">
+                To add review you need expertise in
+                {{ research.disciplines.map(d => d.name).join(', ') }}
+                and have no relations to this project or project’s group.
+              </div>
+            </template>
+          </reviews-list>
 
-          <div v-if="isPublished && !isResearchGroupMember" class="pt-2 pb-12">
-            <v-card class="py-6 px-12">
-              <v-row id="reviews" class="py-2">
-                <v-col class="shrink pr-12" align-self="center">
-                  <img src="/assets/img/add-review.png">
-                </v-col>
-                <v-col class="grow pl-12" align-self="center">
-                  <div class="pb-4">
-                    <div v-if="!contentReviewsList.length" class="pb-1 text-subtitle-1 font-weight-bold">
-                      There are no reviews for this material yet
-                    </div>
-                    <div v-if="userHasResearchExpertise && !userHasReview">
-                      You will get <span class="text-body-2 font-weight-bold">approximately 3000 ECI reward in {{
-                        userRelatedExpertise.map(exp => exp.discipline_name)
-                          .join(', ')
-                      }}</span>
-                      for your contribution to this project
-                    </div>
-                    <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
-                      You
-                      have reviewed this material already
-                    </div>
-                    <div v-else-if="!userHasResearchExpertise">
-                      Users with expertise in <span class="text-body-2">{{
-                        research.disciplines.map(d => d.name)
-                          .join(', ')
-                      }}</span>
-                      can review this project
-                    </div>
-                  </div>
-                  <div style="width: 200px">
-                    <v-btn
-                      :to="{
-                          name: 'ResearchContentAddReview',
-                          params: {
-                            group_permlink: decodeURIComponent(research.research_group.permlink),
-                            research_permlink: decodeURIComponent(research.permlink),
-                            content_permlink: decodeURIComponent(content.permlink),
-                          }}"
-                      :disabled="!isCreatingReviewAvailable"
-                      block
-                      color="primary"
-                      class="ma-0"
-                    >
-                      Add review
-                    </v-btn>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-card>
-          </div>
 
         </d-stack>
 

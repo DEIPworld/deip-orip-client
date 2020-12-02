@@ -50,12 +50,11 @@ const GETTERS = {
           .getResearchContentType(record.research_content.content_type);
 
         const link = {
-          name: 'ResearchContentReview',
+          name: 'project.content.review.details',
           params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
+            researchExternalId: record.research.external_id,
+            contentExternalId: record.research_content.external_id,
+            reviewExternalId: record.review.external_id
           }
         };
 
@@ -74,12 +73,11 @@ const GETTERS = {
 
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
         const link = {
-          name: 'ResearchContentReview',
+          name: 'project.content.review.details',
           params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink),
-            review_id: record.review.id
+            researchExternalId: record.research.external_id,
+            contentExternalId: record.research_content.external_id,
+            reviewExternalId: record.review.external_id
           }
         };
 
@@ -102,11 +100,10 @@ const GETTERS = {
           .getResearchContentType(record.research_content.content_type);
 
         const link = {
-          name: 'ResearchContentDetails',
+          name: 'project.content.details',
           params: {
-            research_group_permlink: decodeURIComponent(record.research_group.permlink),
-            research_permlink: decodeURIComponent(record.research.permlink),
-            content_permlink: decodeURIComponent(record.research_content.permlink)
+            researchExternalId: record.research.external_id,
+            contentExternalId: record.research_content.external_id
           }
         };
 

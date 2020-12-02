@@ -37,6 +37,10 @@
     --ql-border-color: var(--v-error-base, red);
   }
 
+  &.v-input--is-disabled {
+    opacity: .5;
+  }
+
   &__slot {
     width: 100%;
   }
@@ -54,6 +58,13 @@
   .ql-editor {
     min-height: 200px;
     padding: 24px;
+
+    &.ql-blank::before {
+      left: 24px;
+      font-style: normal;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
 
     > p, ul, ol, h1, h2, h3, h4, h5, h6 {
       &:not(:first-child) {

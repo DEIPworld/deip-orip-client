@@ -1,22 +1,27 @@
 export const dataContextSwitch = {
   props: {
     projectId: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     },
 
     contentId: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     },
 
     teamId: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: null
     },
 
     userId: {
-      type: [String, Number],
+      type: [String, Number, Array],
+      default: null
+    },
+
+    disciplineId: {
+      type: [String, Number, Array],
       default: null
     },
 
@@ -33,6 +38,7 @@ export const dataContextSwitch = {
         contentId: this.contentId,
         teamId: this.teamId,
         userId: this.userId,
+        disciplineId: this.disciplineId,
 
         userName: this.userName // deprecated
       };

@@ -40,7 +40,7 @@
         type: Object,
         required: true
       },
-      researchContentType: {
+      contentType: {
         type: String,
         required: true
       },

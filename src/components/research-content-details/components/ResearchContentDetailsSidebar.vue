@@ -1,19 +1,5 @@
 <template>
   <div>
-    <d-block-widget>
-      <router-link
-        class="title link"
-        :to="{
-          name: 'project.details',
-          params: {
-            researchExternalId: research.external_id
-          }
-        }"
-      >
-        {{ research.title }}
-      </router-link>
-    </d-block-widget>
-
     <d-block-widget v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)">
       <div v-if="isProposed" class="text-body-1">
         Draft is
@@ -49,22 +35,6 @@
         :content-id="content.external_id"
         :disciplines="disciplinesList"
       />
-    </d-block-widget>
-
-    <d-block-widget v-if="isPublished">
-
-      <review-request :content-id="content.id">
-        <template #button="{ startRequest }">
-          <v-btn
-            color="primary"
-            block
-            @click="startRequest"
-          >
-            Request Review
-          </v-btn>
-        </template>
-      </review-request>
-
     </d-block-widget>
 
     <d-block-widget title="Authors">
@@ -160,6 +130,8 @@
     <d-block-widget v-if="isPublished">
       <v-btn
         block
+        small
+        text
         color="primary"
         :to="{
           name: 'ResearchContentMetadata',
@@ -345,7 +317,7 @@
 
       goAddReview() {
         this.$router.push({
-          name: 'ResearchContentAddReview',
+          name: 'ReviewCreate',
           params: this.$route.params
         });
       },

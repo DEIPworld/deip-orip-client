@@ -17,12 +17,10 @@ const getAction = getActionByPath(actionsMap).get;
 
 const STATE = {
   reviewsList: [],
-  contentsList: contentListStore.state.contentsList
 };
 
 const GETTERS = {
   reviewsList: (state) => state.reviewsList,
-  contentsList: contentListStore.getters.contentsList
 };
 
 const ACTIONS = {

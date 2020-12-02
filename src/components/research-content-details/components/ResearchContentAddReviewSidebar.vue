@@ -19,28 +19,28 @@
     <d-block-widget v-if="!!research">
       <review-assessment
         v-model="assessmentCriteria"
-        :research-content-type="content.content_type"
+        :content-type="content.content_type"
         :readonly="false"
       />
     </d-block-widget>
 
-    <d-block-widget>
-      <v-btn
-        color="primary"
-        block
-        :disabled="isReviewPublishingDisabled"
-        :loading="isLoading"
-        @click="publishReview()"
-      >
-        Publish
-      </v-btn>
-      <div class="pt-4 text-caption">
-        <div>
-          You will get <span class="font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>
-          for your contribution to this project
-        </div>
-      </div>
-    </d-block-widget>
+<!--    <d-block-widget>-->
+<!--      <v-btn-->
+<!--        color="primary"-->
+<!--        block-->
+<!--        :disabled="isReviewPublishingDisabled"-->
+<!--        :loading="isLoading"-->
+<!--        @click="publishReview()"-->
+<!--      >-->
+<!--        Publish-->
+<!--      </v-btn>-->
+<!--      <div class="pt-4 text-caption">-->
+<!--        <div>-->
+<!--          You will get <span class="font-weight-bold">approximately 3000 ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>-->
+<!--          for your contribution to this project-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </d-block-widget>-->
   </div>
 </template>
 
@@ -51,13 +51,14 @@
   import { AccessService } from '@deip/access-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
-    components: { DBlockWidget, DBlock },
+    components: { ReviewAssessment, DBlockWidget, DBlock },
     data() {
       return {
         isLoading: false,

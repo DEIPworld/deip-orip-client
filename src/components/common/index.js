@@ -26,10 +26,6 @@ import Milestone from './components/research/milestone-stepper/Milestone';
 
 import TopResearchLabel from './components/research/TopResearchLabel';
 
-import ReviewTile from './components/review/ReviewTile';
-
-import ReviewAssessment from './components/review/review-assessment/ReviewAssessment';
-import ReviewAssessmentSquaredRating from './components/review/review-assessment/ReviewAssessmentSquaredRating';
 
 import TechnologyReadinessLevel from './components/research/technology-readiness-level/TechnologyReadinessLevel';
 
@@ -49,7 +45,5 @@ Vue.component('toggle-text', ToggleText);
 Vue.component('milestone-stepper', MilestoneStepper);
 Vue.component('milestone', Milestone);
 Vue.component('top-research-label', TopResearchLabel);
-Vue.component('review-assessment', ReviewAssessment);
-Vue.component('review-assessment-squared-rating', ReviewAssessmentSquaredRating);
 Vue.component('technology-readiness-level', TechnologyReadinessLevel);
 Vue.component('research-partners', ResearchPartners);

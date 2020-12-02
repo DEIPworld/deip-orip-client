@@ -35,9 +35,7 @@ import ResearchApplicationReview
 import ResearchApplicationAddReview
   from '@/components/research-application-details/ResearchApplicationAddReview';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
-import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
-import ResearchContentAddReview
-  from '@/components/research-content-details/ResearchContentAddReview';
+
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences
   from '@/components/research-content-details/ResearchContentReferences';
@@ -287,35 +285,37 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     })
-  }, {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
-    name: 'ResearchContentReview',
-    component: preliminaryDataLoader(ResearchContentReview, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          content_permlink: decodeURIComponent(to.params.content_permlink),
-          ref: to.query.ref
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
-    name: 'ResearchContentAddReview',
-    component: preliminaryDataLoader(ResearchContentAddReview, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          content_permlink: decodeURIComponent(to.params.content_permlink),
-          ref: to.query.ref
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
   },
+  //   {
+  //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
+  //   name: 'ResearchContentReview',
+  //   component: preliminaryDataLoader(ResearchContentReview, {
+  //     beforeEnter: (to, from, next) => {
+  //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+  //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
+  //         research_permlink: decodeURIComponent(to.params.research_permlink),
+  //         content_permlink: decodeURIComponent(to.params.content_permlink),
+  //         ref: to.query.ref
+  //       });
+  //       loadPage(loadPagePromise, next);
+  //     }
+  //   })
+  // },
+    // {
+  //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
+  //   name: 'ReviewCreate',
+  //   component: preliminaryDataLoader(ReviewCreate, {
+  //     beforeEnter: (to, from, next) => {
+  //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+  //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
+  //         research_permlink: decodeURIComponent(to.params.research_permlink),
+  //         content_permlink: decodeURIComponent(to.params.content_permlink),
+  //         ref: to.query.ref
+  //       });
+  //       loadPage(loadPagePromise, next);
+  //     }
+  //   })
+  // },
   // {
   //   path: '/eci-model-setup',
   //   name: 'ReviewSetup',

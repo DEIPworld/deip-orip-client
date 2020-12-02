@@ -90,10 +90,6 @@
         type: String,
         default: 'Select members'
       },
-      users: {
-        type: Array,
-        default: () => ([])
-      },
       multiple: {
         type: Boolean,
         default: false
@@ -101,6 +97,15 @@
       returnObject: {
         type: Boolean,
         default: false
+      },
+
+      users: {
+        type: Array,
+        default: () => ([])
+      },
+      exclude: {
+        type: [Array, String],
+        default: () => ([])
       },
 
       ...Validatable.options.props
@@ -139,6 +144,7 @@
 
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
           users: this.users,
+          exclude: this.exclude,
           ...this.$$dataContextProps
         }).then(() => {
           this.$setReady();

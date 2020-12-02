@@ -21,7 +21,8 @@
           @click:confirm="handleSubmit(createRequest)"
         >
           <d-stack>
-            <div v-if="!contentId">
+            <!-- TODO: replace conditions after switch to externalId -->
+            <div v-if="contentId === null">
               <validation-provider
                 v-slot="{ errors }"
                 name="Content"
@@ -29,8 +30,8 @@
               >
                 <content-selector
                   v-model="formModel.contentId"
-                  :project-id="projectId"
                   :error-messages="errors"
+                  v-bind="$$dataContextProps"
                 />
               </validation-provider>
             </div>
@@ -42,6 +43,7 @@
             >
               <user-selector
                 v-model="formModel.reviewer"
+                v-bind="reviewerConditions"
                 :error-messages="errors"
               />
             </validation-provider>
@@ -77,6 +79,13 @@
       ValidationProvider
     },
     mixins: [dataContextSwitch],
+
+    props: {
+      reviewerConditions: {
+        type: Object,
+        default: () => ({})
+      }
+    },
 
     data() {
       return {

@@ -76,7 +76,6 @@ const actions = {
         return Promise.all(state.researches.map((research) => deipRpc.api.getResearchGroupByIdAsync(research.research_group_id)));
       })
       .then((groups) => {
-        console.log(groups, 'groups')
         commit('SET_RESEARCH_GROUPS', groups);
       });
   },

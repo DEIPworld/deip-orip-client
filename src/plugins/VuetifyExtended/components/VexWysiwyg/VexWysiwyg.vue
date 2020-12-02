@@ -9,22 +9,11 @@
 
   import MdTheme, { TOOLBAR_CONFIG } from './theme/mdTheme';
 
-  import { createPlaceholderModule } from './blots/placeholder'
-
   // DIV blot for editor
 
-  const Block = Quill.import('blots/block');
-
-  class DivBlot extends Block {
-    static blotName = 'div';
-
-    static tagName = 'DIV';
-  }
-
   Quill.register('themes/md', MdTheme, true);
-  Quill.register(DivBlot, true);
 
-  // Quill.debug(false);
+  Quill.debug(false);
 
   // //////////////////////////////////////////////////////////////////////
 
@@ -120,7 +109,7 @@
       },
 
       registerPrototypes() {
-        const {cleanHtml} = this;
+        const { cleanHtml } = this;
         Quill.prototype.getHTML = function getHTML() {
           return cleanHtml(this.container.querySelector('.ql-editor').innerHTML);
         };
@@ -152,7 +141,7 @@
             theme: 'md',
             modules: this.setDefaultModules(),
             placeholder: this.placeholder ? this.placeholder : '',
-            readOnly: this.disabled ? this.disabled : false
+            readOnly: this.disabled ? this.disabled : false,
           },
           this.options
         );
@@ -167,14 +156,12 @@
       },
 
       setDefaultModules() {
-        Quill.register('modules/contentPlaceholder', createPlaceholderModule(), true);
         Quill.register('modules/magicUrl', MagicUrl, true);
         Quill.register('modules/imageDrop', ImageDrop, true);
 
         return {
           toolbar: this.toolbar.length ? this.toolbar : TOOLBAR_CONFIG,
           history: { userOnly: true },
-          contentPlaceholder: true,
           magicUrl: true,
           imageDrop: true
         };

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="text-caption text--secondary text-truncate">
+    <div class="text-caption text--secondary text-truncate mb-4">
       {{ contentRef.hash }}
     </div>
     <v-card v-for="file in contentRef.packageFiles" :key="file.hash">
@@ -18,15 +18,15 @@
               </v-clamp>
             </a>
             <span v-else class="text-body-2">
-                    {{ file.filename }}
-                  </span>
+              {{ file.filename }}
+            </span>
           </v-col>
           <v-col class="text-align-right">
-                  <span>
-                    <a class="a download-content" :href="getContentUrl(file.hash, true)">
-                      <v-icon small>save</v-icon>
-                    </a>
-                  </span>
+            <span>
+              <a class="a download-content" :href="getContentUrl(file.hash, true)">
+                <v-icon small>save</v-icon>
+              </a>
+            </span>
             <span class="text-body-2 grey--text ml-2">{{ file.hash.slice(0, 8) }}</span>
           </v-col>
         </v-row>
