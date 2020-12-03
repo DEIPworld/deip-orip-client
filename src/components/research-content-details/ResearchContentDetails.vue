@@ -54,14 +54,14 @@
             <template #create-messages>
               <template v-if="!contentReviewsList.length">
                 <div class="mb-2">No reviews yet.</div>
-                <div>
+                <div v-if="userHasResearchExpertise && !userHasReview">
                   You will get approximately 3000 ECI reward in
                   {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
                   for your contribution to this project
                 </div>
               </template>
 
-              <div v-if="userHasResearchExpertise && !userHasReview">
+              <div v-else-if="userHasResearchExpertise && !userHasReview">
                 You will get approximately 3000 ECI reward in
                 {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
                 for your contribution to this project

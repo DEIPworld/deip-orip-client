@@ -14,5 +14,6 @@ export default {
   grantPrograms: 'Grant Programs',
   account: 'Account',
   signOut: 'Sign Out',
-  blockchainExplorer: 'Blockchain explorer'
+  blockchainExplorer: 'Blockchain explorer',
+  createProject: 'Create Project'
 };

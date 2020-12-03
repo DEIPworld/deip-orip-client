@@ -210,7 +210,7 @@
               icon: 'person',
               to: { name: 'account.summary' }
             }, {
-              label: this.$t('adminRouting.projects.create'),
+              label: this.$t('topMenu.createProject'),
               icon: 'mdi-clipboard-edit-outline',
               to: { name: 'project.create' }
             }, {
