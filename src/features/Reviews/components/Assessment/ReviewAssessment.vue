@@ -68,7 +68,7 @@
             form[field] = this.value[field];
             return form;
           }, {}),
-        criterias: researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.researchContentType)
+        criterias: researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.contentType)
       };
     },
 
