@@ -192,6 +192,7 @@
               >
                 <template #item.actions="{ item }">
                   <router-link
+                    v-if="isGrantProgramOfficer || isGrantChiefOfficer"
                     :to="{
                       name: 'CreateGrantProgramAward',
                       params: {
@@ -299,7 +300,12 @@
         program: 'agencyGrantProgramDetails/program',
         applications: 'agencyGrantProgramDetails/applications',
         researchesAppliedForGrant: 'agencyGrantProgramDetails/researchesAppliedForGrant',        
-        user: 'auth/user'
+        user: 'auth/user',
+        isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
+        isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
+        isUniversityCertifier: 'auth/isUniversityCertifier',
+        isTreasuryCertifier: 'auth/isTreasuryCertifier',
+        isGrantChiefOfficer: 'auth/isGrantChiefOfficer'
       }),
 
       breadcrumbs() {

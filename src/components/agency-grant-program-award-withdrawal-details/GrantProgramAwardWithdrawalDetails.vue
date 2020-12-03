@@ -207,7 +207,7 @@
                       <router-link class="a text-body-2" :to="{ name: 'UserDetails', params: { account_name: record.trxSigner.account.name } }">
                         {{ record.trxSigner | fullname }}
                       </router-link>
-                      <span class="text-body-2 grey--text pl-2">({{ record.trxOrg.name }})</span>
+                      <!-- <span class="text-body-2 grey--text pl-2">({{ record.trxOrg.name }})</span> -->
                     </v-col>
                   </v-row>
 
@@ -441,8 +441,8 @@
 
       getWitnessOrg(witness) {
         if (witness == 'initdelegate') return 'Granting agency';
-        if (witness == 'initdelegate1') return 'MIT';
-        if (witness == 'initdelegate2') return 'TREASURY';
+        if (witness == 'initdelegate1') return 'University';
+        if (witness == 'initdelegate2') return 'Granting agency';
         return 'Granting agency';
       },
 

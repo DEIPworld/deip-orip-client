@@ -1,4 +1,5 @@
 <template>
+<div class="pa-5">
   <div class="pa-5">
     <div v-if="isGrantFinanceOfficer || isTreasuryCertifier" class="pa-12">
       <v-row>
@@ -378,6 +379,7 @@
       </v-tab-item>
     </v-tabs-items>
   </div>
+</div>
 </template>
 
 <script>
@@ -813,7 +815,13 @@
                 notify: resolve
               });
             });
-            return Promise.all([reload]);
+
+            const reloadTokenStats = new Promise((resolve, reject) => {
+              this.$store.dispatch('agencyGrantProgramAwardsDashboard/loadTokenStats', {
+                notify: resolve
+              });
+            });
+            return Promise.all([reload, reloadTokenStats]);
           })
           .then(() => {
             this.$notifier.showSuccess('Payment requests have been approved successfully!');

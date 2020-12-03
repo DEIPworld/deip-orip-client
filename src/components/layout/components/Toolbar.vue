@@ -115,7 +115,12 @@
       ...mapGetters({
         user: 'auth/user',
         tenant: 'auth/tenant',
-        themeSettings: 'layout/themeSettings'
+        themeSettings: 'layout/themeSettings',
+        isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
+        isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
+        isUniversityCertifier: 'auth/isUniversityCertifier',
+        isTreasuryCertifier: 'auth/isTreasuryCertifier',
+        isGrantChiefOfficer: 'auth/isGrantChiefOfficer'
       }),
       isLoggedIn() { return accessService.isLoggedIn(); }, // $isLoggedIn
 
@@ -199,21 +204,28 @@
 
       userMenu() {
         if (this.isGrantsTransparencyDemo) {
-          return [
-            {
+
+          const routes = [{
               label: this.$t('topMenu.account'),
               icon: 'person',
               to: { name: 'account.summary' }
-            },
-            {
-              label: this.$t('topMenu.createGrantProgram'),
-              to: { name: 'CreateGrantProgram' }
-            },
-            {
+            }, {
+              label: this.$t('adminRouting.projects.create'),
+              to: { name: 'project.create' }
+            }, {
               label: this.$t('topMenu.grantPrograms'),
               to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
             }
           ];
+
+          if (this.isGrantProgramOfficer) {
+            routes.push({
+              label: this.$t('topMenu.createGrantProgram'),
+              to: { name: 'CreateGrantProgram' }
+            })
+          }
+
+          return routes;
         }
 
         return [

@@ -1,6 +1,6 @@
 <template>
   <project-form
-    title="Create technology"
+    :title="$t('adminRouting.projects.create')"
     :loading="loading"
     @submit="createProject"
   />
