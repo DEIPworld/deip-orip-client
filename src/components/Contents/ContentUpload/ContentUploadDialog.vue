@@ -248,7 +248,7 @@
             title: this.title,
             content: hash,
             authors: this.authors,
-            references: this.references.map((ref) => ref.external_id),
+            references: [...this.references],
             extensions: []
           }
         )

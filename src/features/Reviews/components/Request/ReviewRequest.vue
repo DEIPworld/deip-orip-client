@@ -92,7 +92,7 @@
         requestDialog: false,
         loading: false,
         formModel: {
-          contentId: this.contentId ? this.contentId : null,
+          contentId: this.contentId || this.contentId === 0 ? this.contentId : null,
           reviewer: null
         }
       };
