@@ -12,7 +12,7 @@
     <template v-if="!(disabledRequest || disabled)" #title-append>
       <review-request
         :project-id="projectId"
-        :content-id="contentId"
+        :content-id="content.id"
       />
     </template>
 
