@@ -1,4 +1,5 @@
 import en from 'vuetify/lib/locale/en';
+import Vue from 'vue';
 
 import defaultNaming from './components/defaultNaming';
 import notifications from './components/notifications';
@@ -67,7 +68,7 @@ export default {
     }
   },
   researchFeed: {
-    title: 'Technologies',
+    title: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
     startProjectBtn: 'Start a project',
     signInBtn: 'Sign in',
     signInText: 'After creating an account/log in you can add new projects or enjoy shared materials'

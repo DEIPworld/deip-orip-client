@@ -211,9 +211,11 @@
               to: { name: 'account.summary' }
             }, {
               label: this.$t('adminRouting.projects.create'),
+              icon: 'mdi-clipboard-edit-outline',
               to: { name: 'project.create' }
             }, {
               label: this.$t('topMenu.grantPrograms'),
+              icon: 'mdi-folder',
               to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
             }
           ];
@@ -221,6 +223,7 @@
           if (this.isGrantProgramOfficer) {
             routes.push({
               label: this.$t('topMenu.createGrantProgram'),
+              icon: 'mdi-folder-edit-outline',
               to: { name: 'CreateGrantProgram' }
             })
           }
