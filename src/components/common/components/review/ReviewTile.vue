@@ -80,8 +80,10 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'ReviewTile',
@@ -169,7 +171,7 @@
           })
           .then((research) => {
             params.research_permlink = encodeURIComponent(research.permlink);
-            return deipRpc.api.getResearchGroupByIdAsync(research.research_group_id);
+            return researchGroupService.getResearchGroup(research.research_group.external_id);
           })
           .then((group) => {
             params.research_group_permlink = encodeURIComponent(group.permlink);

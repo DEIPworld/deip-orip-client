@@ -259,7 +259,7 @@ const actions = {
         for (let i = 0; i < tokensList.length; i++) {
           const rgt = tokensList[i];
           groupTokens.push(rgt);
-          promises.push(deipRpc.api.getResearchGroupByIdAsync(rgt.research_group_id));
+          promises.push(researchGroupService.getResearchGroup(rgt.research_group.external_id))
         }
         return Promise.all(promises);
       })

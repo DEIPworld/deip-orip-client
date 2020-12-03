@@ -262,14 +262,17 @@
         this.avatarUploadIsShown = false;
       },
       cancel(proposal = false) {
-        this.$refs.researchGroupLogo.removeAllFiles();
-        this.$router.push({
-          name: 'ResearchGroupDetails',
-          params: {
-            research_group_permlink: encodeURIComponent(this.group.permlink)
-          },
-          // hash: proposal ? '#proposals' : ''
-        });
+        this.$refs.researchGroupLogo.removeAllFiles(this.group.external_id);
+        researchGroupService.getResearchGroup(this.group.external_id)
+          .then((researchGroup) => {
+            this.$router.push({
+              name: 'ResearchGroupDetails',
+              params: {
+                research_group_permlink: encodeURIComponent(researchGroup.permlink)
+              },
+              // hash: proposal ? '#proposals' : ''
+            });
+          })
       },
       logoUploadSuccess(file, response) {
         if (this.isSaveAvailable) {
@@ -304,42 +307,6 @@
         this.newResearchGroupDescription = this.groupDescription;
       },
 
-      // sendChangeQuorumProposal() {
-      //   this.isChangingQuorumLoading = true;
-      //   const promises = [];
-
-      //   this.proposalOrderMap.forEach((proposalBlock, i) => {
-      //     proposalBlock.forEach((proposalData, j) => {
-      //       if (proposalData.value !== this.shadowProposalOrderMap[i][j].value) {
-      //         const promise = researchGroupService.createChangeQuorumProposal({
-      //           groupId: this.group.id,
-      //           action: proposalData.key,
-      //           quorum: this.toDeipPercent(proposalData.value)
-      //         });
-
-      //         promises.push(promise);
-      //       }
-      //     });
-      //   });
-
-      //   Promise.all(promises)
-      //     .then(() => {
-      //       this.$store.dispatch('layout/setSuccess', {
-      //         message: this.$t('researchGroupSettings.quorumForm.successProposal')
-      //       });
-      //       this.cancel(true);
-      //     })
-      //     .catch((err) => {
-      //       console.error(err);
-
-      //       this.$store.dispatch('layout/setError', {
-      //         message: this.$t('researchGroupSettings.quorumForm.errProposal')
-      //       });
-      //     })
-      //     .finally(() => {
-      //       this.isChangingQuorumLoading = false;
-      //     });
-      // },
 
       save() {
         if (this.$refs.researchGroupLogo.getQueuedFiles().length) {

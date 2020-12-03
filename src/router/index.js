@@ -28,12 +28,6 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
 import ResearchContentExpertise from '@/components/ResearchContentExpertise/ResearchContentExpertise';
-import ResearchApplicationDetails
-  from '@/components/research-application-details/ResearchApplicationDetails';
-import ResearchApplicationReview
-  from '@/components/research-application-details/ResearchApplicationReview';
-import ResearchApplicationAddReview
-  from '@/components/research-application-details/ResearchApplicationAddReview';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 import ResearchContentReview from '@/components/research-content-details/ResearchContentReview';
 import ResearchContentAddReview
@@ -44,7 +38,6 @@ import ResearchContentReferences
 
 import UserDetails from '@/components/UserDetails/UserDetails';
 import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
-import UserWallet from '@/components/user-wallet/components/UserWallet';
 
 import ClaimUserExpertiseDetails
   from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
@@ -258,21 +251,6 @@ const router = new Router({
     path: '/:research_group_permlink/research/:research_permlink/:content_permlink/expertise',
     name: 'ResearchContentExpertise',
     component: ResearchContentExpertise
-  },
-
-  {
-    path: '/:research_group_permlink/research/:research_permlink/application/:application_id',
-    name: 'ResearchApplicationDetails',
-    component: preliminaryDataLoader(ResearchApplicationDetails, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          application_id: to.params.application_id
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
   }, {
     path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
     name: 'ResearchContentMetadata',
@@ -336,33 +314,6 @@ const router = new Router({
       }
     })
   }, {
-    path: '/:research_group_permlink/research/:research_permlink/application/:application_id/review/:review_id',
-    name: 'ResearchApplicationReview',
-    component: preliminaryDataLoader(ResearchApplicationReview, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          application_id: to.params.application_id,
-          review_id: to.params.review_id
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
-    path: '/:research_group_permlink/research/:research_permlink/application/:application_id/add-review',
-    name: 'ResearchApplicationAddReview',
-    component: preliminaryDataLoader(ResearchApplicationAddReview, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rad/loadResearchApplicationDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          application_id: to.params.application_id
-        });
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
     path: '/propose-research',
     name: 'CreateResearchProposal',
     component: ResearchRequestFormCreate,
@@ -389,11 +340,7 @@ const router = new Router({
     ...TransactionsRouting,
     ...WalletRouting,
 
-  {
-    path: '/user-wallet',
-    name: 'UserWallet',
-    component: UserWallet
-  }, {
+   {
     path: '/claim-user-experience',
     name: 'ClaimUserExpertiseList',
     component: preliminaryDataLoader(ClaimUserExpertiseList, {

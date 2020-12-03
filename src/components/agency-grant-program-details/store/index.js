@@ -138,7 +138,7 @@ const actions = {
             .filter((a) => application.id != a.id && a.program.organizationExternalId != state.program.organizationExternalId
               && a.application_hash.split(':')[0] == application.application_hash.split(':')[0]);
         });
-        const groupPromises = researches.map((research) => deipRpc.api.getResearchGroupByPermlinkAsync(research.research_group.permlink));
+        const groupPromises = researches.map((research) => researchGroupService.getResearchGroup(research.research_group.external_id));
 
         return Promise.all([
           Promise.all(groupPromises)

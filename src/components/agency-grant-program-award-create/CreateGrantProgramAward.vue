@@ -593,7 +593,7 @@
         funding.isResearchGroupsLoading = true;
 
         return deipRpc.api.getResearchGroupTokensByAccountAsync(funding.researcher.user.account.name)
-          .then((tokens) => Promise.all(tokens.map((token) => deipRpc.api.getResearchGroupByIdAsync(token.research_group_id))))
+          .then((tokens) => Promise.all(tokens.map((token) => researchGroupService.getResearchGroup(token.research_group.external_id))))
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
             return Promise.all(groups.map((group) => deipRpc.api.getResearchesByResearchGroupAsync(group.external_id)));

@@ -9,10 +9,7 @@ import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 import { researchGroupStore } from '../components/research-group-details/store';
-import { rgWalletStore } from '../components/research-group-wallet/store';
 import { rcdStore } from '../components/research-content-details/store';
-import { radStore } from '../components/research-application-details/store';
-import { userWalletStore } from '../components/user-wallet/store';
 import { layoutStore } from '../components/layout/store';
 import { claimExpertiseDetailsStore } from '../components/claim-expertise-details/store';
 import { claimExpertiseListStore } from '../components/claim-expertise-list/store';
@@ -41,11 +38,8 @@ export const store = new Vuex.Store({
     account: accountStore,
 
     researchGroup: researchGroupStore,
-    rgWallet: rgWalletStore,
     rcd: rcdStore,
-    rad: radStore,
     userDetails: userDetailsStore,
-    userWallet: userWalletStore,
     layout: layoutStore,
     claimExpertiseDetails: claimExpertiseDetailsStore,
     claimExpertiseList: claimExpertiseListStore,

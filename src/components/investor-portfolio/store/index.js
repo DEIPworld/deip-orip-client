@@ -4,10 +4,12 @@ import deipRpc from '@deip/rpc-client';
 import { UsersService } from '@deip/users-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchService } from '@deip/research-service';
+import { ResearchGroupService } from '@deip/research-group-service';
 
 const usersService = UsersService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchService = ResearchService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 
 const defaultListId = 'all';
 
@@ -135,10 +137,10 @@ const actions = {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCHES', researches);
         return Promise.all(state.researches
           .reduce((unique, research) => {
-            if (unique.some((rgId) => rgId == research.research_group_id)) return unique;
-            return [research.research_group_id, ...unique];
+            if (unique.some((rgId) => rgId == research.research_group.external_id)) return unique;
+            return [research.research_group.external_id, ...unique];
           }, [])
-          .map((rgId) => deipRpc.api.getResearchGroupByIdAsync(rgId)));
+          .map((rgId) => researchGroupService.getResearchGroup(rgId)));
       })
       .then((groups) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS', groups);

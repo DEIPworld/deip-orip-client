@@ -191,6 +191,7 @@
   import { TenantService } from '@deip/tenant-service';
   import { GrantsService } from '@deip/grants-service';
   import { UsersService } from '@deip/users-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
 
   const GRANT_TOKEN_SYMBOL = 'NGT';
   const GRANT_TOKEN_PRECISION = 2;
@@ -198,6 +199,7 @@
   const usersService = UsersService.getInstance();
   const tenantService = TenantService.getInstance();
   const grantsService = GrantsService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'CreateGrantProgram',
@@ -243,7 +245,7 @@
       const grantingAgencyOrg = '58e3bfd753fcb860a66b82635e43524b285ab708';
       const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
 
-      deipRpc.api.getResearchGroupAsync(grantingAgencyOrg)
+      researchGroupService.getResearchGroup(grantingAgencyOrg)
         .then((organization) => {
           const members = [];
 
@@ -258,7 +260,7 @@
             });
         });
 
-      deipRpc.api.getResearchGroupAsync(treasuryOrg)
+      researchGroupService.getResearchGroup(treasuryOrg)
         .then((organization) => {
           this.treasury = organization;
         });

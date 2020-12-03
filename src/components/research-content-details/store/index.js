@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
-
 import { ResearchService } from '@deip/research-service';
+import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { ProposalsService } from '@deip/proposals-service';
@@ -18,6 +18,7 @@ const researchContentService = ResearchContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   content: {},
@@ -298,7 +299,7 @@ const actions = {
 
   loadResearchGroupDetails({ state, commit, dispatch }, { group_permlink, notify }) {
     commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true);
-    deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink)
+    researchGroupService.getResearchGroupByPermlink(group_permlink)
       .then((group) => {
         commit('SET_RESEARCH_GROUP_DETAILS', group);
       }, (err) => {
@@ -415,7 +416,7 @@ const actions = {
       const genesisMillis = currentMillis - millisSinceGenesis;
       const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
       const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
-      const group = await deipRpc.api.getResearchGroupByPermlinkAsync(group_permlink);
+      const group = await researchGroupService.getResearchGroupByPermlink(group_permlink);
 
       if (false /*! isGenesisContent */) { // TODO: recover this
         const proposals = await deipRpc.api.getProposalsByResearchGroupIdAsync(research.research_group_id);
