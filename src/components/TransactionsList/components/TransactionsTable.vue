@@ -103,7 +103,10 @@
           :max-lines="2"
           class="mt-4"
         >
+          Min:
           {{ $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.soft_cap)) }},
+          max:
+          {{ $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.hard_cap)) }},
           project:
           {{ item.extendedDetails.research.title }}
         </v-clamp>
@@ -199,15 +202,29 @@
       <template #expanded-item="{ item, headers }">
         <td />
         <td class="pa-4 text--secondary text-caption">
-          <div class="mb-12">
+          <div class="mb-6">
+            <div v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === item.type">
+              <span class="font-weight-medium"> License type: </span>
+              {{ item.details.licencePlan.name }}
+            </div>
+            <div>
+              <span class="font-weight-medium"> Receipt: </span>
+              {{ item.proposal.created_at | dateFormat('DD MMM YYYY, HH:mm', true) }}
+            </div>
+            <div>
+              <span class="font-weight-medium"> Expiration: </span>
+              {{ item.proposal.expiration_time | dateFormat('DD MMM YYYY, HH:mm', true) }}
+            </div>
+          </div>
+          <div class="mb-6">
             <div class="mb-2 font-weight-medium">
               Required parties
             </div>
             <d-box-item
-              v-for="(signer, i) in item.header.otherParties"
+              v-for="(signer, i) in item.parties"
               :key="`${i}-otherPartiesSigner`"
               class="mb-4"
-              :avatar="signer.isResearchGroup ?
+              :avatar="signer.account.external_id ?
                 $options.filters.researchGroupLogoSrc(signer.account.external_id, 80, 80)
                 : $options.filters.accountAvatarSrc(signer.account, 80, 80)
               "
@@ -217,7 +234,7 @@
               <router-link
                 tag="div"
                 class="text-decoration-none text--primary"
-                :to="signer.isResearchGroup
+                :to="signer.account.external_id
                   ? {
                     name: 'ResearchGroupDetails',
                     params: { research_group_permlink: encodeURIComponent(signer.account.permlink) }
@@ -366,8 +383,8 @@
       text: 'Content Upload'
     },
     [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: {
-      icon: 'business_center',
-      text: 'Investment'
+      icon: 'payments',
+      text: 'Fundraising'
     },
     [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: {
       icon: 'groups',

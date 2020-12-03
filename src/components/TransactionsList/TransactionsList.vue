@@ -169,8 +169,7 @@
                 isResearchGroup: signer.account.is_research_group
               }
             )),
-            isResearchGroup: party.account.account.is_research_group,
-            status: party.status
+            isResearchGroup: party.account.account.is_research_group
           }));
 
         return otherParties;

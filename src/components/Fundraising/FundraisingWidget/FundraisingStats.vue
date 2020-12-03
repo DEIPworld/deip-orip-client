@@ -126,11 +126,11 @@
         return [
           {
             label: 'Start',
-            value: this.$options.filters.dateFormat(this.tokenSaleData.start_time, 'D MMM YYYY, hh:mm', true)
+            value: this.$options.filters.dateFormat(this.tokenSaleData.start_time, 'D MMM YYYY, HH:mm', true)
           },
           {
             label: 'End',
-            value: this.$options.filters.dateFormat(this.tokenSaleData.end_time, 'D MMM YYYY, hh:mm', true)
+            value: this.$options.filters.dateFormat(this.tokenSaleData.end_time, 'D MMM YYYY, HH:mm', true)
           },
           {
             label: 'Total investment',

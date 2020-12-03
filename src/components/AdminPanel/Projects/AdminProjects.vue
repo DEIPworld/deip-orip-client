@@ -27,10 +27,10 @@
 
         <template #itemRowActions="{ project }">
           <crud-actions>
-            <v-btn icon small @click="editProject(project.externalId)">
+            <v-btn icon small @click.stop="editProject(project.externalId)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon small @click="deleteProject(project.externalId)">
+            <v-btn icon small @click.stop="deleteProject(project.externalId)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </crud-actions>

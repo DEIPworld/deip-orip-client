@@ -49,7 +49,7 @@
           </div>
         </div>
         <v-row class="mt-2">
-          <v-col v-for="(group, i) in commonGroups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
+          <v-col v-for="(group, i) in commonGroups" :key="`${i}-group`" cols="4">
             <v-card
               outlined
               class="full-height d-flex"
@@ -126,7 +126,7 @@
       },
       commonGroups() {
         return this.groups.slice()
-          .sort((g) => (g.is_personal ? -1 : 1));
+          .filter((g) => !g.is_personal);
       }
     }
   };

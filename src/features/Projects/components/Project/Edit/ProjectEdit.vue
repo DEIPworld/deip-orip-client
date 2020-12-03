@@ -43,7 +43,7 @@
     methods: {
       updateProject(formData) {
         this.loading = true;
-        
+
         const { onchainData } = parseFormData(formData);
         const isProposal = onchainData.researchGroup != this.$currentUser.account.name;
         return researchService.updateResearch(
@@ -54,9 +54,9 @@
           isProposal,
           formData
         )
-          .then((project) => {
+          .then(() => {
             this.$notifier.showSuccess('Info has been change successfully!');
-            this.$$goToProject(project);
+            this.$$goToProject(this.project);
           })
           .catch((err) => {
             this.$notifier.showError('An error occurred during change info');
