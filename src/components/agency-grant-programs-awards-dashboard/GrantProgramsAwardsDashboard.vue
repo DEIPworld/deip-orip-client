@@ -50,20 +50,15 @@
     <v-tabs-items v-model="tab">
       <v-tab-item key="awards">
         <v-row class="py-6">
-          <v-col cols="12">
-            <v-row>
-              <v-col cols="3">
-                <v-row class="pr-6">
-                  <v-select
-                    v-model="awardsFilter.status"
-                    :items="awardsFilterByStatus"
-                    label="STATUS"
-                    return-object
-                    outlined
-                  />
-                </v-row>
-              </v-col>
-            </v-row>
+          <v-col cols="3">
+            <v-select
+              v-model="awardsFilter.status"
+              :items="awardsFilterByStatus"
+              label="STATUS"
+              return-object
+              outlined
+              hide-details
+            />
           </v-col>
 
           <v-col cols="12">

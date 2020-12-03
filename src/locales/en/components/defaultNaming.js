@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export default {
   all: 'All',
   apply: 'Apply',
@@ -12,7 +14,7 @@ export default {
   contributions: 'Contributions',
   citations: 'Citations',
   hIndex: 'H-index',
-  projects: 'Technologies',
+  projects: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
   noProjects: 'No Projects found for specified criteria',
   yourDomain: 'Your domain',
   allDomain: 'All domain',
