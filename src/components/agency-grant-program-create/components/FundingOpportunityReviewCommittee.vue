@@ -52,8 +52,10 @@
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { UsersService } from '@deip/users-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
 
   const usersService = UsersService.getInstance();
+  const researchGroupService = ResearchGroupService.getInstance();  
 
   export default {
     name: 'FundingOpportunityReviewCommittee',
@@ -98,7 +100,7 @@
         return this.foa.reveiwCommittee == null;
       },
       getReviewCommittes(ids) {
-        deipRpc.api.getResearchGroupsAsync(ids)
+        researchGroupService.getResearchGroups(ids)
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
             Promise.all(researchGroups.map(({ id }) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id)))

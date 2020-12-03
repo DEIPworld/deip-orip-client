@@ -7,14 +7,11 @@ import './common/index';
 import './research-content-details/index';
 import './research-group-details/index';
 import './research-group-create/index';
-import './user-wallet/index';
 import './claim-expertise-details/index';
 import './claim-expertise-list/index';
-import './research-application-details/index';
 import './dashboard/index';
 import './agency-grant-program-create/index';
 import './agency-grant-programs/index';
-import './agency-grant-program-details/index';
 import './agency-grant-program-award-create/index';
 import './agency-grant-program-award-details/index';
 

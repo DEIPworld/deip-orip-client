@@ -135,8 +135,7 @@
             </v-col>
             <v-col v-if="selectedArea" cols="12" class="c-pt-10">
               <div class="text-subtitle-1 bold c-pl-5 c-pb-5 c-pt-2">
-                Additional Funding Opportunities for the
-                {{ selectedArea.abbreviation }}
+                Additional Funding Opportunities
               </div>
               <template v-for="(program, i) in filteredAdditionalPrograms">
                 <program-list-item

@@ -129,11 +129,7 @@ const actions = {
     return deipRpc.api.getResearchGroupTokensByAccountAsync(user)
       .then((data) => {
         const groups = data.filter((item) => !item.research_group.is_personal);
-        const groupsInfo = Promise.all(
-          groups.map(
-            (groupToken) => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id)
-          )
-        );
+        const groupsInfo = Promise.all(groups.map((groupToken) => researchGroupService.getResearchGroup(groupToken.research_group.external_id)));
 
         const groupsShares = Promise.all(
           groups.map(

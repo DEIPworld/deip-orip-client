@@ -192,6 +192,7 @@
               >
                 <template #item.actions="{ item }">
                   <router-link
+                    v-if="isGrantProgramOfficer || isGrantChiefOfficer"
                     :to="{
                       name: 'CreateGrantProgramAward',
                       params: {
@@ -247,10 +248,6 @@
               <span class="pl-1 font-weight-bold">{{ program.additional_info.grantor_email || organizationProfile.email }}</span>
             </div>
             <v-divider />
-            <!-- <div class="pa-6">
-              <v-btn block color="primary" @click="applyToProgram()">Apply</v-btn>
-              <send-application-dialog :meta="applicationDialogMeta" :program="program"></send-application-dialog>
-            </div> -->
           </v-card>
         </v-col>
       </v-row>
@@ -303,7 +300,12 @@
         program: 'agencyGrantProgramDetails/program',
         applications: 'agencyGrantProgramDetails/applications',
         researchesAppliedForGrant: 'agencyGrantProgramDetails/researchesAppliedForGrant',        
-        user: 'auth/user'
+        user: 'auth/user',
+        isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
+        isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
+        isUniversityCertifier: 'auth/isUniversityCertifier',
+        isTreasuryCertifier: 'auth/isTreasuryCertifier',
+        isGrantChiefOfficer: 'auth/isGrantChiefOfficer'
       }),
 
       breadcrumbs() {

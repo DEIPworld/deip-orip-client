@@ -6,12 +6,14 @@ import moment from 'moment';
 import { UsersService } from '@deip/users-service';
 import { UserService } from '@deip/user-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ResearchGroupService } from '@deip/research-group-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const userService = UserService.getInstance();
 const usersService = UsersService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -129,7 +131,7 @@ const actions = {
     return deipRpc.api.getResearchGroupTokensByAccountAsync(username)
       .then((data) => {
         const groupsInfo = Promise.all(
-          data.map((groupToken) => deipRpc.api.getResearchGroupByIdAsync(groupToken.research_group_id))
+          data.map((groupToken) => researchGroupService.getResearchGroup(groupToken.research_group.external_id))
         );
 
         const groupsShares = Promise.all(
@@ -197,7 +199,7 @@ const actions = {
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
           invites.push(invite);
-          promises.push(deipRpc.api.getResearchGroupAsync(invite.researchGroupExternalId));
+          promises.push(researchGroupService.getResearchGroup(invite.researchGroupExternalId));
         }
         return Promise.all(promises);
       })

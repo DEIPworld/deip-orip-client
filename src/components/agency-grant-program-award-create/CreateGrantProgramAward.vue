@@ -195,7 +195,7 @@
               </v-row> -->
 
               <v-row no-gutters>
-                <v-col cols="8">
+                <!-- <v-col cols="8">
                   <div v-if="fundingIdx == 0">
                     <div class="text-subtitle-1 font-weight-bold">
                       University overhead cap
@@ -208,8 +208,8 @@
                       suffix="%"
                     />
                   </div>
-                </v-col>
-                <v-col cols="3" offset="1">
+                </v-col> -->
+                <v-col cols="3" offset="9">
                   <div class="text-subtitle-1 font-weight-bold">
 &nbsp;
                   </div>
@@ -558,7 +558,7 @@
 
           researchGroup: null,
           research: null,
-          overhead: null,
+          overhead: "10.00 %",
           purpose: {
             // businessTravel: null,
             // equipment: null,
@@ -593,7 +593,7 @@
         funding.isResearchGroupsLoading = true;
 
         return deipRpc.api.getResearchGroupTokensByAccountAsync(funding.researcher.user.account.name)
-          .then((tokens) => Promise.all(tokens.map((token) => deipRpc.api.getResearchGroupByIdAsync(token.research_group_id))))
+          .then((tokens) => Promise.all(tokens.map((token) => researchGroupService.getResearchGroup(token.research_group.external_id))))
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
             return Promise.all(groups.map((group) => deipRpc.api.getResearchesByResearchGroupAsync(group.external_id)));
@@ -680,7 +680,7 @@
             awardee: this.fundings[0].researcher.user.account.name,
             researchExternalId: this.fundings[0].research.external_id,
             universityExternalId: this.universityProfile.external_id,
-            universityOverhead: `${this.fundings[0].overhead}.00 %`,
+            universityOverhead: `10.00 %`, //`${this.fundings[0].overhead}.00 %`,
             subawardees,
             creator: this.user.username,
             extensions: []

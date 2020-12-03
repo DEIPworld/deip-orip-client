@@ -87,10 +87,9 @@ const actions = {
   loadResearchGroup({ commit, dispatch, state }, { permlink }) {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
-    return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
+    return researchGroupService.getResearchGroupByPermlink(permlink)
       .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
-
         // const proposalsLoad = new Promise((resolve, reject) => {
         //   dispatch('loadResearchGroupProposals', {
         //     account: state.group.account.name,

@@ -1,6 +1,5 @@
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
-
 import { ResearchGroupService } from '@deip/research-group-service';
 
 const researchGroupService = ResearchGroupService.getInstance();
@@ -26,7 +25,7 @@ const actions = {
   loadResearchGroup({ commit, dispatch, state }, { permlink }) {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
-    return deipRpc.api.getResearchGroupByPermlinkAsync(permlink)
+    return researchGroupService.getResearchGroupByPermlink(permlink)
       .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
         return Promise.all([]);
