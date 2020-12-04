@@ -10,9 +10,9 @@
     </template>
 
     <template v-if="!(disabledRequest || disabled)" #title-append>
-      <review-request
+      <review-request 
         :project-id="projectId"
-        :content-id="content.id"
+        :content-id="hasContentSelector ? content.id : null"
       />
     </template>
 
@@ -214,6 +214,10 @@
       disabledCreating: {
         type: Boolean,
         default: true
+      },
+      hasContentSelector: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {

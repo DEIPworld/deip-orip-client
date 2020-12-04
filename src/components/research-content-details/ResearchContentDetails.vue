@@ -49,6 +49,7 @@
           <reviews-list
             v-if="content && content.external_id"
             :content-id="content.external_id"
+            :has-content-selector="true"
             :disabled-creating="!isCreatingReviewAvailable || isResearchGroupMember"
           >
             <template #create-messages>
