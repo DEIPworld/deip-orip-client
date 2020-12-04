@@ -55,7 +55,7 @@
         researchService.createResearchApplication(researcherPrivKey, formData)
           .then(({ rm }) => {
             this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successReq'));
-            return deipRpc.api.getResearchAsync(rm._id);
+            return researchService.getResearch(rm._id);
           })
           .then((research) => {
             if (research) { // if proposal

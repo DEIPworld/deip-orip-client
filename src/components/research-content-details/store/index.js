@@ -264,7 +264,7 @@ const actions = {
 
 
 
-    return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+    return researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
         researchExternalId = research.external_id;
@@ -414,7 +414,7 @@ const actions = {
       const currentMillis = new Date(`${dgp.time}Z`).getTime();
       const genesisMillis = currentMillis - millisSinceGenesis;
       const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
-      const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
+      const research = await researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink);
       const group = await researchGroupService.getResearchGroupByPermlink(group_permlink);
 
       if (false /*! isGenesisContent */) { // TODO: recover this

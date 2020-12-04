@@ -359,9 +359,11 @@
   import { mapGetters } from 'vuex';
   import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { ResearchService } from '@deip/research-service';
   import { GrantsService } from '@deip/grants-service';
   import { BlockchainService } from '@deip/blockchain-service';
 
+  const researchService = ResearchService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
   const grantsService = GrantsService.getInstance();
   const blockchainService = BlockchainService.getInstance();
@@ -596,7 +598,7 @@
           .then((tokens) => Promise.all(tokens.map((token) => researchGroupService.getResearchGroup(token.research_group.external_id))))
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => deipRpc.api.getResearchesByResearchGroupAsync(group.external_id)));
+            return Promise.all(groups.map((group) => researchService.getResearchesByResearchGroup(group.external_id)));
           })
           .finally(() => {
             funding.isResearchGroupsLoading = false;
@@ -607,7 +609,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        return deipRpc.api.getResearchesByResearchGroupAsync(funding.researchGroup.external_id)
+        return researchService.getResearchesByResearchGroup(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);
