@@ -174,7 +174,7 @@ const actions = {
         }
 
         commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-        return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+        return researchContentService.getResearchContentByPermlink(group_permlink, research_permlink, content_permlink)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
             const { content: hash } = contentObj;
@@ -409,7 +409,7 @@ const actions = {
     try {
       const dgp = await blockchainService.getDynamicGlobalProperties();
       const conf = await blockchainService.getConfig();
-      const content = await deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink);
+      const content = await researchContentService.getResearchContentByPermlink(group_permlink, research_permlink, content_permlink);
       const millisSinceGenesis = (dgp.current_aslot * conf.DEIP_BLOCK_INTERVAL) * 1000;
       const currentMillis = new Date(`${dgp.time}Z`).getTime();
       const genesisMillis = currentMillis - millisSinceGenesis;
