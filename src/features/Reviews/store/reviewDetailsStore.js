@@ -1,9 +1,12 @@
 import deipRpc from '@deip/rpc-client';
 import { camelizeObjectKeys } from '@/utils/helpers';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import {
   getAdditionalData,
   getAdditionalDataOne
 } from '@/features/Reviews/utils/getAdditionalData';
+
+const researchContentReviewsService = new ResearchContentReviewsService();
 
 const STATE = {
   reviewDetails: []
@@ -15,7 +18,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getReviewDetails({ commit }, reviewExternalId) {
-    return deipRpc.api.getReviewAsync(reviewExternalId)
+    return researchContentReviewsService.getReview(reviewExternalId)
       .then((item) => {
         return getAdditionalDataOne(item)
           .then((res) => {

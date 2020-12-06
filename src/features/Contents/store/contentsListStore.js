@@ -6,8 +6,10 @@ import {
 } from '@/utils/helpers';
 
 import { ResearchContentService } from '@deip/research-content-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
 const researchContentService = ResearchContentService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const actionsMap = {
   project: 'getContentsByProject'
@@ -39,7 +41,7 @@ const ACTIONS = {
 
         return Promise.all(
           researchContents.map(
-            (content) => deipRpc.api.getReviewsByResearchContentAsync(content.external_id)
+            (content) => researchContentReviewsService.getReviewsByResearchContent(content.external_id)
           )
         );
       })

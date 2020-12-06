@@ -5,6 +5,8 @@ import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+
 import { ProposalsService } from '@deip/proposals-service';
 
 import { BlockchainService } from '@deip/blockchain-service';
@@ -19,6 +21,7 @@ const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const state = {
   content: {},
@@ -338,8 +341,7 @@ const actions = {
   loadContentReviews({ state, dispatch, commit }, { researchContentExternalId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
-    // todo: fix the method in database_api to return reviews for content only
-    deipRpc.api.getReviewsByResearchContentAsync(researchContentExternalId)
+    researchContentReviewsService.getReviewsByResearchContent(researchContentExternalId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
