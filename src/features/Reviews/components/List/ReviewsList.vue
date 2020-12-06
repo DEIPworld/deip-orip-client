@@ -12,7 +12,7 @@
     <template v-if="!(disabledRequest || disabled)" #title-append>
       <review-request
         :project-id="projectId"
-        :content-id="content.id"
+        :content-id="contentId"
       />
     </template>
 
@@ -51,14 +51,14 @@
                   <div>
                     <component
                       :is="disabled ? 'span' : 'router-link'"
-                      class="link"
+                      class="link text--primary"
                       :to="{
-                      name: 'project.content.details',
-                      params: {
-                        contentExternalId: review.contentData.externalId,
-                        researchExternalId: $route.params.researchExternalId,
-                      }
-                    }"
+                        name: 'project.content.details',
+                        params: {
+                          contentExternalId: review.contentData.externalId,
+                          researchExternalId: $route.params.researchExternalId,
+                        }
+                      }"
                     >
                       {{ review.contentData.title }}
                     </component>
@@ -96,13 +96,13 @@
                     color="primary"
                     text
                     :to="{
-                    name: 'project.content.review.details',
-                    params: {
-                      researchExternalId: $route.params.researchExternalId,
-                      contentExternalId: review.contentData.externalId,
-                      reviewExternalId: review.externalId,
-                    }
-                  }"
+                      name: 'project.content.review.details',
+                      params: {
+                        researchExternalId: $route.params.researchExternalId,
+                        contentExternalId: review.contentData.externalId,
+                        reviewExternalId: review.externalId,
+                      }
+                    }"
                   >
                     See review
                   </v-btn>
@@ -141,14 +141,22 @@
       <v-divider />
     </template>
 
-
     <v-row class="text-body-2 align-center" no-gutters>
       <v-col>
         <slot name="create-messages">
-          <template v-if="!internalReviews.length">
-            <div class="mb-2">No reviews yet.</div>
-            <div>You will get approximately 3000 ECI reward in Biology, Physics for review on the materials associated with this project.</div>
-          </template>
+          <div v-if="!internalReviews.length" class="mb-2">
+            No reviews yet.
+          </div>
+          <div v-if="userRelatedExpertise.length">
+            You will get approximately 3000 ECI reward in
+            {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
+            for review on the materials associated with this project.
+          </div>
+          <div v-else-if="!userRelatedExpertise.length">
+            To add review you need expertise in
+            {{ project.disciplines.map(d => d.name).join(', ') }}
+            and have no relations to this project or project’s group.
+          </div>
         </slot>
       </v-col>
       <v-col v-if="!(disabledCreating || disabled)" cols="auto">
@@ -167,6 +175,7 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-divider />
   </d-block>
 </template>
 
@@ -222,8 +231,8 @@
       }),
 
       ...mapGetters({
-        content: 'Content/contentDetails',
-        project: 'Project/projectDetails'
+        project: 'Project/projectDetails',
+        userExperise: 'auth/userExperise'
       }),
 
       internalReviews() {
@@ -244,6 +253,13 @@
         });
 
         return transformed;
+      },
+      userRelatedExpertise() {
+        return this.userExperise.filter(
+          (exp) => exp.amount > 0 && this.project.disciplines.some(
+            (d) => d.id === exp.discipline_id
+          )
+        );
       }
     },
     created() {

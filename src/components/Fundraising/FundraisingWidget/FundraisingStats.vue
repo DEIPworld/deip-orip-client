@@ -41,7 +41,7 @@
           v-if="hasHistory || tokenSaleData"
           block
           small
-          outlined
+          text
           color="primary"
           class="mt-3"
           :to="{
@@ -60,7 +60,7 @@
           v-if="!tokenSaleData && isResearchGroupMember"
           block
           small
-          outlined
+          text
           color="primary"
           class="mt-3"
           :to="{

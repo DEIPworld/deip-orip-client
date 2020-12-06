@@ -54,6 +54,11 @@
             <template #create-messages>
               <template v-if="!contentReviewsList.length">
                 <div class="mb-2">No reviews yet.</div>
+                <div v-if="!userHasResearchExpertise">
+                  To add review you need expertise in
+                  <span class="font-weight-bold">project's disciplines</span>
+                  and have no relations to this project or project’s group.
+                </div>
                 <div v-if="userHasResearchExpertise && !userHasReview">
                   You will get approximately 3000 ECI reward in
                   {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
@@ -67,7 +72,7 @@
                 for your contribution to this project
               </div>
 
-              <div v-else-if="userHasResearchExpertise && userHasReview" class="pb-1 text-subtitle-1 half-bold">
+              <div v-else-if="userHasResearchExpertise && userHasReview">
                 You have reviewed this material already
               </div>
 
@@ -78,7 +83,6 @@
               </div>
             </template>
           </reviews-list>
-
 
         </d-stack>
 
