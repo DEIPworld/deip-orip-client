@@ -6,6 +6,7 @@ import moment from 'moment';
 import { UsersService } from '@deip/users-service';
 import { UserService } from '@deip/user-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { ResearchService } from '@deip/research-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
@@ -17,6 +18,7 @@ const researchGroupService = ResearchGroupService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const researchService = ResearchService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const researchContentService = ResearchContentService.getInstance();
 
 const state = {
   account: undefined,
@@ -224,11 +226,13 @@ const actions = {
         reviewRequests.push(...results);
         reviewRequests.forEach((r) => {
           detailsPromises.push(
-            deipRpc.api.getResearchContentByIdAsync(r.contentId) // replace with external id
+            researchContentService.getResearchContent(r.researchContentExternalId) // replace with external id
               .then((content) => {
                 r.content = content;
                 return researchService.getResearch(content.research_external_id);
-              }).then((research) => r.research = research)
+              }).then((research) => {
+                r.research = research;
+              })
           );
         });
         return Promise.all(detailsPromises);

@@ -1,7 +1,7 @@
 <template>
   <reviews-list
     :project-id="project.externalId"
-    :has-content-selector="false"
+    :content-id="null"
     :disabled="$$limitedAccess"
     v-bind="$$limitedAccessProps"
   />

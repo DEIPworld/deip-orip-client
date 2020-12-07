@@ -5,7 +5,7 @@
     hide-details="auto"
     :items="contents"
     item-text="title"
-    item-value="id"
+    item-value="externalId"
     v-bind="validatableProps"
   />
 </template>

@@ -219,7 +219,7 @@
       // TODO: rethink
       return researchContentReviewsService.getReviewRequestsByExpert(this.$currentUserName, 'pending')
         .then((res) => {
-          const request = res.find((r) => r.contentId === this.content.id);
+          const request = res.find((r) => r.contentId === this.content.external_id);
           if (request) {
             this.requestAccepted = false;
             this.requestData = request;

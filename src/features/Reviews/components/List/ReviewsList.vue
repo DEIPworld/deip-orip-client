@@ -12,7 +12,7 @@
     <template v-if="!(disabledRequest || disabled)" #title-append>
       <review-request 
         :project-id="projectId"
-        :content-id="hasContentSelector ? content.id : null"
+        :content-id="contentId"
       />
     </template>
 
@@ -224,9 +224,13 @@
         type: Boolean,
         default: true
       },
-      hasContentSelector: {
-        type: Boolean,
-        default: false
+      projectId: {
+        type: String,
+        default: null
+      },
+      contentId: {
+        type: String,
+        default: null
       }
     },
     computed: {

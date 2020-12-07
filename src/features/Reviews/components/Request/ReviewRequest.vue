@@ -84,6 +84,14 @@
       reviewerConditions: {
         type: Object,
         default: () => ({})
+      },
+      projectId: {
+        type: String,
+        default: null
+      },
+      contentId: {
+        type: String,
+        default: null
       }
     },
 
@@ -92,7 +100,7 @@
         requestDialog: false,
         loading: false,
         formModel: {
-          contentId: this.contentId || this.contentId === 0 ? this.contentId : null,
+          contentId: this.contentId ? this.contentId : null,
           reviewer: null
         }
       };
@@ -107,7 +115,7 @@
         this.loading = true;
 
         return researchContentReviewsService.createReviewRequest({
-          contentId: this.formModel.contentId,
+          researchContentExternalId: this.formModel.contentId,
           expert: this.formModel.reviewer
         })
           .then(() => {
