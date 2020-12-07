@@ -1,5 +1,8 @@
 import deipRpc from '@deip/rpc-client';
 import { camelizeObjectKeys } from '@/utils/helpers';
+import { ResearchContentService } from '@deip/research-content-service';
+
+const researchContentService = ResearchContentService.getInstance();
 
 const STATE = {
   contentDetails: {}
@@ -11,7 +14,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getContentDetails({ commit }, contentExternalId) {
-    return deipRpc.api.getResearchContentAsync(contentExternalId)
+    return researchContentService.getResearchContent(contentExternalId)
       .then((content) => {
         commit('storeContentDetails', content);
       });

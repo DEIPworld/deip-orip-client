@@ -1,4 +1,6 @@
 import { contentListStore } from '@/features/Contents/store';
+import { ResearchContentService } from '@deip/research-content-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
 import {
   getActionByPath,
@@ -7,6 +9,9 @@ import {
 
 import deipRpc from '@deip/rpc-client';
 import { getAdditionalData } from '@/features/Reviews/utils/getAdditionalData';
+
+const researchContentService = ResearchContentService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const actionsMap = {
   project: 'getReviewsByProject',
@@ -33,7 +38,7 @@ const ACTIONS = {
   },
 
   getReviewsByProject({ dispatch, commit }, { projectId }) {
-    return deipRpc.api.getReviewsByResearchAsync(projectId)
+    return researchContentReviewsService.getReviewsByResearch(projectId)
       .then((items) => Promise.all(
         getAdditionalData(items)
       )
@@ -46,7 +51,7 @@ const ACTIONS = {
   },
 
   getReviewsByContent({ commit }, { contentId }) {
-    return deipRpc.api.getReviewsByResearchContentAsync(contentId)
+    return researchContentReviewsService.getReviewsByResearchContent(contentId)
       .then((items) => Promise.all(
         getAdditionalData(items)
       )

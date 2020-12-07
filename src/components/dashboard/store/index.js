@@ -351,7 +351,8 @@ const actions = {
   },
 
   loadMyReviews({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getReviewsByAuthorAsync(username)
+
+    return researchContentReviewsService.getReviewsByAuthor(username)
       .then((reviews) => {
         commit('SET_MY_REVIEWS', reviews);
       }).finally(() => {

@@ -224,10 +224,10 @@ const actions = {
         reviewRequests.push(...results);
         reviewRequests.forEach((r) => {
           detailsPromises.push(
-            deipRpc.api.getResearchContentByIdAsync(r.contentId)
+            deipRpc.api.getResearchContentByIdAsync(r.contentId) // replace with external id
               .then((content) => {
                 r.content = content;
-                return deipRpc.api.getResearchByIdAsync(content.research_id);
+                return researchService.getResearch(content.research_external_id);
               }).then((research) => r.research = research)
           );
         });

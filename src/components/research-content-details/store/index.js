@@ -5,6 +5,8 @@ import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
+import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+
 import { ProposalsService } from '@deip/proposals-service';
 
 import { BlockchainService } from '@deip/blockchain-service';
@@ -19,6 +21,7 @@ const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
+const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const state = {
   content: {},
@@ -174,7 +177,7 @@ const actions = {
         }
 
         commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-        return deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink)
+        return researchContentService.getResearchContentByPermlink(group_permlink, research_permlink, content_permlink)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
             const { content: hash } = contentObj;
@@ -264,7 +267,7 @@ const actions = {
 
 
 
-    return deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink)
+    return researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
         researchExternalId = research.external_id;
@@ -338,8 +341,7 @@ const actions = {
   loadContentReviews({ state, dispatch, commit }, { researchContentExternalId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
-    // todo: fix the method in database_api to return reviews for content only
-    deipRpc.api.getReviewsByResearchContentAsync(researchContentExternalId)
+    researchContentReviewsService.getReviewsByResearchContent(researchContentExternalId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
@@ -409,12 +411,12 @@ const actions = {
     try {
       const dgp = await blockchainService.getDynamicGlobalProperties();
       const conf = await blockchainService.getConfig();
-      const content = await deipRpc.api.getResearchContentByAbsolutePermlinkAsync(group_permlink, research_permlink, content_permlink);
+      const content = await researchContentService.getResearchContentByPermlink(group_permlink, research_permlink, content_permlink);
       const millisSinceGenesis = (dgp.current_aslot * conf.DEIP_BLOCK_INTERVAL) * 1000;
       const currentMillis = new Date(`${dgp.time}Z`).getTime();
       const genesisMillis = currentMillis - millisSinceGenesis;
       const isGenesisContent = new Date(`${content.created_at}Z`).getTime() === new Date(genesisMillis).getTime();
-      const research = await deipRpc.api.getResearchByAbsolutePermlinkAsync(group_permlink, research_permlink);
+      const research = await researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink);
       const group = await researchGroupService.getResearchGroupByPermlink(group_permlink);
 
       if (false /*! isGenesisContent */) { // TODO: recover this

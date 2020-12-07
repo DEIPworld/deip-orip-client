@@ -54,8 +54,7 @@ const actions = {
         const securityTokens = assetsBalances.filter((b) => !!b.tokenized_research);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
-          // (b) => researchService.getResearch(b.tokenized_research)
-          (b) => deipRpc.api.getResearchAsync(b.tokenized_research)
+          (b) => researchService.getResearch(b.tokenized_research)
         ));
       })
       .then((researches) => {
