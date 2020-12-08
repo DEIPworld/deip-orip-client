@@ -1,82 +1,79 @@
 <template>
   <div>
-
-
     <d-block-widget v-if="isOwner && hasInvites">
-      <v-card outlined>
-        <div id="invites" class="text-h6 font-weight-medium px-4 py-3 ">
-          <v-badge
-            color="warning"
-            inline
-            :content="invites.length"
-          >
-            {{ $t('userDetailRouting.sidebar.invites') }}
-          </v-badge>
-        </div>
-        <v-divider />
-        <v-carousel
-          v-model="invitesSlider"
-          hide-delimiters
-          :show-arrows="false"
-          light
-          height="auto"
-          class="pt-4 px-4"
+      <!-- <v-card outlined> -->
+      <div id="invites" class="text-h6 font-weight-medium">
+        <v-badge
+          color="warning"
+          inline
+          :content="invites.length"
         >
-          <v-carousel-item
-            v-for="(invite, index) in invites"
-            :key="'invite-request-' + index"
+          {{ $t('userDetailRouting.sidebar.invites') }}
+        </v-badge>
+      </div>
+      <v-divider class="mt-n2" />
+      <v-carousel
+        v-model="invitesSlider"
+        hide-delimiters
+        :show-arrows="false"
+        light
+        height="auto"
+      >
+        <v-carousel-item
+          v-for="(invite, index) in invites"
+          :key="'invite-request-' + index"
+        >
+          <d-box-item
+            :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
+            :size="40"
           >
-            <d-box-item
-              :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
-              :size="40"
+            <router-link
+              class="a full-width break-word font-weight-medium"
+              :to="{ name: 'ResearchGroupDetails', params: {
+                research_group_permlink: encodeURIComponent(invite.group.permlink),
+              }}"
             >
-              <router-link
-                class="a full-width break-word font-weight-medium"
-                :to="{ name: 'ResearchGroupDetails', params: {
-                  research_group_permlink: encodeURIComponent(invite.group.permlink),
-                }}"
+              <v-clamp
+                autoresize
+                :max-lines="1"
+                class="text-body-2 font-weight-medium"
               >
-                <v-clamp
-                  autoresize
-                  :max-lines="1"
-                  class="text-body-2 font-weight-medium"
-                >
-                  {{ invite.group.name }}
-                </v-clamp>
-              </router-link>
-              <div class="text-caption text--secondary">
-                {{ $t('userDetailRouting.sidebar.invitedYou') }}
-              </div>
-            </d-box-item>
-          </v-carousel-item>
-        </v-carousel>
-        <div class="d-flex justify-space-between align-center px-4 pb-4">
-          <div>
-            <v-icon
-              v-if="invites.length > 1"
-              class="mr-4"
-              @click="prevSlide()"
-            >
-              navigate_before
-            </v-icon>
-            <v-icon
-              v-if="invites.length > 1"
-              @click="nextSlide()"
-            >
-              navigate_next
-            </v-icon>
-          </div>
-          <v-btn
-            text
-            small
-            class="ml-1"
-            color="primary"
-            @click="openInviteDetailsDialog(invites[invitesSlider], invitesSlider)"
+                {{ invite.group.name }}
+              </v-clamp>
+            </router-link>
+            <div class="text-caption text--secondary">
+              {{ $t('userDetailRouting.sidebar.invitedYou') }}
+            </div>
+          </d-box-item>
+        </v-carousel-item>
+      </v-carousel>
+      <div class="d-flex justify-space-between align-center">
+        <div>
+          <v-icon
+            v-if="invites.length > 1"
+            class="mr-4"
+            @click="prevSlide('invitesSlider', invites)"
           >
-            {{ $t('userDetailRouting.sidebar.viewBtn') }}
-          </v-btn>
+            navigate_before
+          </v-icon>
+          <v-icon
+            v-if="invites.length > 1"
+            @click="nextSlide('invitesSlider', invites)"
+          >
+            navigate_next
+          </v-icon>
         </div>
-      </v-card>
+        <v-btn
+          text
+          small
+          class="ml-1"
+          color="primary"
+          @click="openInviteDetailsDialog(invites[invitesSlider])"
+        >
+          {{ $t('userDetailRouting.sidebar.viewBtn') }}
+        </v-btn>
+      </div>
+      <!-- </v-card> -->
 
       <d-dialog
         v-model="inviteDetailsDialog.isShown"
@@ -92,49 +89,77 @@
       </d-dialog>
     </d-block-widget>
 
-
     <d-block-widget v-if="isOwner && hasReviewRequests">
-      <div id="review-requests" class="text-h6 font-weight-bold pa-4">
-        {{ $t('userDetailRouting.sidebar.reviewReq') }} {{ reviewRequests.length }}
+      <div id="review-requests" class="text-h6 font-weight-medium">
+        <v-badge
+          color="warning"
+          inline
+          :content="reviewRequests.length"
+        >
+          {{ $t('userDetailRouting.sidebar.reviewReq') }}
+        </v-badge>
       </div>
-      <v-divider class="mx-n4 my-4" style="width:auto;max-width:none;" />
-      <div
-        v-for="(reviewRequest, index) of reviewRequests"
-        :key="reviewRequest._id"
-        class="pa-4"
+      <v-divider class="mt-n2" />
+      <v-carousel
+        v-model="reviewsSlider"
+        hide-delimiters
+        :show-arrows="false"
+        light
+        height="auto"
       >
-        <platform-avatar link-to-profile :user="reviewRequest.requestorProfile" />
-        <div class="py-2 caption font-weight-medium">
-          {{ $t('userDetailRouting.sidebar.reqYouReview', { title: reviewRequest.research.title }) }}
-        </div>
-        <div class="pt-2 full-width display-flex justify-space-between">
-          <v-btn
-            color="green"
-            text
-            small
-            class="ma-0 py-0 px-2"
-            :to="{
-              name: 'project.content.details',
-              params: {
-                researchExternalId: reviewRequest.research.external_id,
-                contentExternalId: reviewRequest.content.external_id
-              }
-          }"
+        <v-carousel-item
+          v-for="(reviewRequest, index) of reviewRequests"
+          :key="`review-request-${index}`"
+        >
+          <d-box-item
+            :avatar="reviewRequest.requestorProfile.profile | avatarSrc(64, 64)"
+            :size="40"
+            class="align-end"
           >
-            {{ $t('userDetailRouting.sidebar.proceedBtn') }}
-          </v-btn>
-          <v-btn
-            color="red"
-            text
-            small
-            class="ma-0 py-0 px-2"
-            :loading="reviewRequest.isDenying"
-            @click="denyReviewRequest(reviewRequest._id)"
+            <router-link
+              class="a full-width break-word font-weight-medium"
+              :to="{ name: 'UserDetails', params: { account_name: reviewRequest.requestorProfile.account.name } }"
+            >
+              <v-clamp
+                autoresize
+                :max-lines="1"
+                class="text-body-2 font-weight-medium"
+              >
+                {{ reviewRequest.requestorProfile | accountFullname }}
+              </v-clamp>
+            </router-link>
+            <div class="text-caption text--secondary">
+              {{ $t('userDetailRouting.sidebar.reqYouReview',
+                    { title: reviewRequest.research.title }) }}
+            </div>
+          </d-box-item>
+        </v-carousel-item>
+      </v-carousel>
+      <div class="d-flex justify-space-between align-center">
+        <div>
+          <v-icon
+            v-if="reviewRequests.length > 1"
+            class="mr-4"
+            @click="prevSlide('reviewsSlider', reviewRequests)"
           >
-            {{ $t('userDetailRouting.sidebar.rejectBtn') }}
-          </v-btn>
+            navigate_before
+          </v-icon>
+          <v-icon
+            v-if="reviewRequests.length > 1"
+            @click="nextSlide('reviewsSlider', reviewRequests)"
+          >
+            navigate_next
+          </v-icon>
         </div>
-        <v-divider v-if="index !== reviewRequests.length - 1" class="ma-2" />
+        <v-btn
+          text
+          small
+          class="ml-1"
+          color="primary"
+          @click="goToReview(reviewRequests[reviewsSlider])"
+        >
+          {{ $t('userDetailRouting.sidebar.viewBtn') }}
+        </v-btn>
       </div>
     </d-block-widget>
 
@@ -194,6 +219,7 @@
     data() {
       return {
         invitesSlider: 0,
+        reviewsSlider: 0,
         inviteDetailsDialog: {
           isShown: false,
           item: null,
@@ -239,16 +265,28 @@
     },
 
     methods: {
-      nextSlide() {
-        this.invitesSlider === invites.length - 1 ? this.invitesSlider = 0 : this.invitesSlider++;
+      nextSlide(slider, sliderItems) {
+        this[slider] === sliderItems.length - 1 ? this[slider] = 0 : this[slider]++;
       },
-      prevSlide() {
-        this.invitesSlider === 0 ? this.invitesSlider = this.invites.length - 1 : this.invitesSlider--;
+      prevSlide(slider, sliderItems) {
+        this[slider] === 0 ? this[slider] = sliderItems.length - 1 : this[slider]--;
       },
       openInviteDetailsDialog(invite) {
         this.inviteDetailsDialog.item = invite;
         this.inviteDetailsDialog.groupName = invite.group.name;
         this.inviteDetailsDialog.isShown = true;
+      },
+
+      goToReview(review) {
+        this.$router.push(
+          {
+            name: 'project.content.details',
+            params: {
+              researchExternalId: review.research.external_id,
+              contentExternalId: review.content.external_id
+            }
+          }
+        );
       },
 
       closeInviteDetailsDialog() {
