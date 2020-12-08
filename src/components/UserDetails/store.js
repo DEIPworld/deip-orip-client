@@ -239,7 +239,9 @@ const actions = {
       })
       .then(() => usersService.getEnrichedProfiles(reviewRequests.map((r) => r.requestor)))
       .then((users) => {
-        const requests = reviewRequests.map((r, i) => ({ ...r, requestorProfile: users[i] }));
+        const requests = reviewRequests.map((r) => (
+          { ...r, requestorProfile: users.find(((u) => u.account.name === r.requestor)) }
+        ));
         commit('SET_USER_REVIEW_REQUESTS', requests);
       })
       .finally(() => {

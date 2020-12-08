@@ -12,15 +12,30 @@
       <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
         <v-form @submit.prevent="handleSubmit(publishReview)">
           <d-stack gap="32">
-            <d-block title="Subject" title-margin="16">
-              <div class="text-body-2">
-                {{ getProjectContentType(content.contentType).text }}:
-                {{ content.title }}
-                in Project:
-                {{ project.title }}
+            <d-stack gap="4">
+              <div class="text-overline">
+                Project
               </div>
-            </d-block>
-            <d-block title="Review questions and resume">
+              <router-link
+                :to="{ name: 'project.details', params: { projectExternalId: project.external_id } }"
+                class="link text--primary text-decoration-none"
+              >
+                {{ project.title }}
+                <v-icon size="20">mdi-arrow-top-right-thin-circle-outline</v-icon>
+              </router-link>
+            </d-stack>
+            <d-stack gap="4">
+              <div class="text-overline">
+                Subject
+              </div>
+              <div class="text-h3">
+                <span class="font-weight-regular">
+                  Review on {{ getProjectContentType(content.contentType).text }}:
+                  {{ content.title }}
+                </span>
+              </div>
+            </d-stack>
+            <d-block>
               <div
                 v-for="(question, index) of questions"
                 :key="index"
@@ -32,7 +47,7 @@
                   rules="required"
                 >
                   <div class="text-overline text--secondary">
-                    Question
+                    Question {{ index + 1 }}
                   </div>
                   <div class="text-h6 mb-2">
                     {{ question }}

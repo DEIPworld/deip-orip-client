@@ -113,7 +113,7 @@
           </d-block-widget>
 
           <d-block-widget v-if="reviewSupporters.length">
-            <users-list view-type="brief" :users="reviewSupporters" />
+            <users-list view-type="brief" class="my-n2" :users="reviewSupporters" />
           </d-block-widget>
 
           <d-block-widget>

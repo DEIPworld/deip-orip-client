@@ -1,48 +1,42 @@
 <template>
-  <div>
+  <div class="text-caption">
     <v-btn
+      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
       block
       color="primary"
-      small
+      x-small
       text
+      class="text-caption mb-2"
       :loading="loading"
-      :disabled="loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise"
       @click="voteReview()"
     >
       Support Review
     </v-btn>
 
-    <div v-if="isGroupMember" class="pt-2">
-      <div class="text-body-2">
-        Review can be supported only by members of other groups
-      </div>
+    <div v-if="isGroupMember">
+      Review can be supported only by members of other groupTokens
     </div>
 
     <div v-else-if="!userHasResearchExpertise">
-      Users with expertise in <span class="text-body-2">{{
+      Users with expertise in <span>{{
         review.disciplines.map(d => d.name)
           .join(', ')
       }}</span>
       can support this review only
     </div>
 
-    <div v-else-if="!userHasVoted" class="pt-2">
-      <div>
-        You will get
-        <span class="text-body-2">approximately 1000 ECI reward in {{
-          userRelatedExpertise.map(exp => exp.discipline_name)
-            .join(', ')
-        }}</span>
-        for your contribution to this project
-      </div>
+    <div v-else-if="!userHasVoted">
+      You will get
+      <span>approximately 1000 ECI reward in {{
+        userRelatedExpertise.map(exp => exp.discipline_name)
+          .join(', ')
+      }}</span>
+      for your contribution to this project
     </div>
 
-    <div v-else-if="userHasVoted" class="pt-2">
-      <div class="text-body-2">
-        Review can be supported once
-      </div>
+    <div v-else-if="userHasVoted">
+      Review can be supported once
     </div>
-
   </div>
 </template>
 

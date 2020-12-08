@@ -41,9 +41,8 @@ export default {
     viewBtn: 'View',
     acceptBtn: 'Accept',
     rejectBtn: 'Reject',
-    reviewReq: 'Review Requests:',
-    reqYouReview: 'requests your review for "{title}" research',
-    proceedBtn: 'Proceed'
+    reviewReq: 'Reviews',
+    reqYouReview: 'requests your review for "{title}" project'
   },
   educationDialog: {
     title: 'Education',
