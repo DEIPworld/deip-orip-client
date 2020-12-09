@@ -355,20 +355,6 @@
 
           const isProposal = this.$currentUserName !== this.dialog.form.fromAccount.owner;
 
-          console.log({
-            privKey: this.$currentUser.privKey,
-            username: this.$currentUserName
-          },
-          isProposal,
-          {
-            from: this.dialog.form.fromAccount.owner,
-            to: this.dialog.form.receiver.account.name,
-            amount: fromAmount,
-            memo: this.dialog.form.memo,
-            extensions: []
-          })
-
-
           return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
@@ -415,13 +401,13 @@
           fromAmount = this.$$toAssetUnits(
             this.dialog.form.fromAmount,
             false,
-            { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
+            { symbol: fromAccountData.stringSymbol, fractionCount: fromAccountData.precision }
           );
           toAmount = this.$$toAssetUnits(
             this.dialog.form.toAmount,
             false,
-            { symbol: toAccountData.string_symbol, fractionCount: toAccountData.precision }
-          );
+            { symbol: toAccountData.stringSymbol, fractionCount: toAccountData.precision }
+          )
 
           assetsService.createAssetsExchangeProposal({
             privKey: this.$currentUser.privKey,
