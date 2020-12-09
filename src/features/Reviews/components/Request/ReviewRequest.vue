@@ -7,7 +7,7 @@
         small
         @click="startRequest"
       >
-        Request Expert Review
+        Request expert review
       </v-btn>
     </slot>
 
@@ -15,7 +15,7 @@
       <v-form>
         <vex-dialog
           v-model="requestDialog"
-          title="Request Expert Review"
+          title="Request expert review"
           :true-disabled="invalid || loading"
           :false-disabled="loading"
           @click:confirm="handleSubmit(createRequest)"

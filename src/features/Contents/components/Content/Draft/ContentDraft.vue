@@ -113,11 +113,11 @@
                   small
                   @click="handleSubmit(createContent)"
                 >
-                  Create proposal
+                  Publish
                 </v-btn>
               </d-stack>
               <div v-if="filteredErrors(errors).length" class="text-caption text--secondary">
-                * To create proposal, please, fill at least
+                * To create proposal, please, fill in at least
                 {{ filteredErrors(errors).join(' and ') }}
               </div>
             </d-stack>

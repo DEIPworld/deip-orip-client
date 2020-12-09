@@ -1,7 +1,7 @@
 export default {
   free: {
     toolbarButton: 'Explorer',
-    title: 'Open Project and Innovation Platform',
+    title: 'Open Research and Innovation Platform',
     collaboration: 'Collaboration',
     tokenization: 'Project tokenization',
     licensing: 'Licensing of intellectual property',

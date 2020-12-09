@@ -1,5 +1,5 @@
 <template>
-  <d-layout-section class="full-height" v-if="$ready">
+  <d-layout-section class="full-height">
     <d-layout-section-main>
       <v-skeleton-loader
         :loading="!$ready"
@@ -40,8 +40,10 @@
                 Subject
               </div>
               <div class="text-h3">
-                {{ getResearchContentType(content.content_type).text }}:
-                {{ content.title }}
+                <span class="font-weight-regular">
+                  {{ getResearchContentType(content.content_type).text }}:
+                  {{ content.title }}
+                </span>
               </div>
             </d-stack>
             <research-content-details-package />
@@ -53,23 +55,25 @@
             :project-id="content.research_external_id"
             :content-id="content.external_id"
             :disabled-creating="!isCreatingReviewAvailable || isResearchGroupMember"
+            :discipline-id="research.disciplines.map(({external_id}) => external_id)"
+            :exclude-users="research.members"
           >
             <template #create-messages>
               <template v-if="!contentReviewsList.length">
                 <div class="mb-2">No reviews yet.</div>
-                <div v-if="!userHasResearchExpertise">
+                <div v-if="!userHasResearchExpertise || isReseachGroupMember">
                   To add review you need expertise in
-                  <span class="font-weight-bold">project's disciplines</span>
+                  {{ research.disciplines.map(d => d.name).join(', ') }}
                   and have no relations to this project or project’s group.
                 </div>
-                <div v-if="userHasResearchExpertise && !userHasReview">
+                <div v-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
                   You will get approximately 3000 ECI reward in
                   {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
                   for your contribution to this project
                 </div>
               </template>
 
-              <div v-else-if="userHasResearchExpertise && !userHasReview">
+              <div v-else-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
                 You will get approximately 3000 ECI reward in
                 {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
                 for your contribution to this project
@@ -79,7 +83,7 @@
                 You have reviewed this material already
               </div>
 
-              <div v-else-if="!userHasResearchExpertise">
+              <div v-else-if="!userHasResearchExpertise || isReseachGroupMember">
                 To add review you need expertise in
                 {{ research.disciplines.map(d => d.name).join(', ') }}
                 and have no relations to this project or project’s group.
@@ -201,8 +205,15 @@
       },
 
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
-      }
+        return this.userExperise.filter(
+          (exp) => exp.amount > 0 && this.research.disciplines.some(
+            (d) => d.id == exp.discipline_id
+          )
+        );
+      },
+      isReseachGroupMember() {
+        return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.research.research_group.external_id);
+      },
     },
 
     created() {

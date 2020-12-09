@@ -7,7 +7,7 @@
     color="primary"
     @click="createDarDraft()"
   >
-    Use Editor
+    Use editor
   </v-btn>
 </template>
 

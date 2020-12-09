@@ -95,11 +95,10 @@
             target="_blank"
             class="a text-body-2"
             :to="{
-              name: 'ResearchContentDetails',
+              name: 'project.content.details',
               params: {
-                research_group_permlink: encodeURIComponent(research.research_group.permlink),
-                research_permlink: encodeURIComponent(research.permlink),
-                content_permlink: encodeURIComponent(item.permlink)
+                contentExternalId: item.externalId,
+                researchExternalId: research.external_id,
               }
             }"
           >
@@ -248,7 +247,8 @@
           return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
-            permlink: content.permlink
+            permlink: content.permlink,
+            externalId: content.external_id
           }] : arr;
         }, []);
       },

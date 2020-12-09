@@ -203,16 +203,12 @@ const actions = {
               dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
             });
 
-            const referencesLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentReferences', { researchContentId: contentObj.id, notify: resolve });
-            });
-
             return Promise.all([
+              dispatch('loadResearchContentReferences', contentObj.id),
               contentRefLoad,
               contentReviewsLoad,
               contentVotesLoad,
               researchGroupDetailsLoad,
-              referencesLoad,
               dispatch('loadResearchContentEciStatsRecords', { research_content_external_id: contentObj.external_id })
             ]);
           }, (err) => {
@@ -388,10 +384,24 @@ const actions = {
       });
   },
 
-  async loadResearchContentReferences({ state, dispatch, commit }, { researchContentId, notify }) {
-    const graph = await researchService.getResearchContentReferencesGraph(researchContentId);
-    commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
-    if (notify) notify();
+  loadResearchContentReferences({ state, dispatch, commit }, researchContentId) {
+    let graph = {};
+    return researchService.getResearchContentReferencesGraph(researchContentId)
+      .then((graphData) => {
+        graph = graphData;
+        return Promise.all(graphData.nodes.map(
+          ({ researchGroup }) => researchGroupService.getResearchGroup(researchGroup.external_id)
+        ));
+      })
+      .then((researchGroups) => {
+        graph.nodes = graph.nodes.map((n) => ({
+          ...n,
+          researchGroup: researchGroups.find(
+            (rg) => rg.external_id === n.researchGroup.external_id
+          ) || n.researchGroup.external_id
+        }));
+        commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
+      });
   },
 
   setDraftAuthors({ state, commit, dispatch }, authors) {

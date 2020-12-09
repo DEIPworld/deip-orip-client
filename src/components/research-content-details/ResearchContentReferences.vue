@@ -53,11 +53,10 @@
                       <router-link
                         class="a"
                         :to="{
-                          name: 'ResearchContentDetails',
+                          name: 'project.content.details',
                           params: {
-                            research_group_permlink: encodeURIComponent(researchGroup.permlink),
-                            research_permlink: encodeURIComponent(research.permlink),
-                            content_permlink: encodeURIComponent(researchContent.permlink)
+                            contentExternalId: researchContent.external_id,
+                            researchExternalId: research.external_id,
                           }
                         }"
                       >
@@ -153,12 +152,11 @@
                     <v-col cols="4">
                       <span class="text-body-2">Verified by:</span>
                     </v-col>
-                    <v-col cols="8">
+                    <v-col cols="8" class="my-n1">
                       <div
                         v-for="(review, i) in contentReviewsList"
                         :key="`file-verifier-${i}`"
-                        class="d-flex justify-space-between"
-                        :class="{'py-2': i != 0}"
+                        class="d-flex justify-space-between py-1"
                       >
                         <platform-avatar
                           :user="review.author"
@@ -167,14 +165,17 @@
                           link-to-profile-class="px-1"
                         />
 
-                        <v-tooltip class="align-self-center" style="cursor: default" left>
+                        <!-- <v-tooltip class="align-self-center" style="cursor: default" left>
                           <template v-slot:activator="{ on }">
                             <v-icon color="green" v-on="on">
                               check_circle_outline
                             </v-icon>
                           </template>
                           <span>Digital Signature: {{ mockSignature(review.id) }}</span>
-                        </v-tooltip>
+                        </v-tooltip> -->
+                        <v-icon color="green">
+                          check_circle_outline
+                        </v-icon>
                       </div>
                     </v-col>
                   </v-row>
@@ -195,11 +196,10 @@
                       <router-link
                         class="a"
                         :to="{
-                          name: 'ResearchContentDetails',
+                          name: 'project.content.details',
                           params: {
-                            research_group_permlink: encodeURIComponent(ref.researchGroup.permlink),
-                            research_permlink: encodeURIComponent(ref.research.permlink),
-                            content_permlink: encodeURIComponent(ref.researchContent.permlink)
+                            contentExternalId: ref.researchContent.external_id,
+                            researchExternalId: ref.research.external_id,
                           }
                         }"
                       >

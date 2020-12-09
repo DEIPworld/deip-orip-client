@@ -10,9 +10,10 @@
     </template>
 
     <template v-if="!(disabledRequest || disabled)" #title-append>
-      <review-request 
+      <review-request
         :project-id="projectId"
         :content-id="contentId"
+        :reviewer-conditions="{disciplineId, exclude: excludeUsers}"
       />
     </template>
 
@@ -147,12 +148,12 @@
           <div v-if="!internalReviews.length" class="mb-2">
             No reviews yet.
           </div>
-          <div v-if="userRelatedExpertise.length">
+          <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
             You will get approximately 3000 ECI reward in
             {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
             for review on the materials associated with this project.
           </div>
-          <div v-else-if="!userRelatedExpertise.length">
+          <div v-else-if="!userRelatedExpertise.length || isReseachGroupMember">
             To add review you need expertise in
             {{ project.disciplines.map(d => d.name).join(', ') }}
             and have no relations to this project or project’s group.
@@ -231,6 +232,10 @@
       contentId: {
         type: String,
         default: null
+      },
+      excludeUsers: {
+        type: [Array, String],
+        default: () => []
       }
     },
     computed: {
@@ -268,7 +273,10 @@
             (d) => d.id === exp.discipline_id
           )
         );
-      }
+      },
+      isReseachGroupMember() {
+        return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.project.researchGroup.external_id);
+      },
     },
     created() {
       this.updateData();

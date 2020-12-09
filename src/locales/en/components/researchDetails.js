@@ -3,7 +3,7 @@ export default {
   edit: 'Edit',
   follow: 'Follow',
   unfollow: 'Unfollow',
-  editor: 'Use Editor',
+  editor: 'Use editor',
   investors: 'Investors:',
   totalInv: 'Total investments',
   averageInv: 'Average investment',

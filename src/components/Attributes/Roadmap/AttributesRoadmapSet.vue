@@ -40,14 +40,14 @@
           <v-col cols="6">
             <d-asset-input
               v-model="item.budget"
-              label="Estimated budget"
+              label="Estimated budget (optional)"
               return-string
             />
           </v-col>
           <v-col cols="6">
             <v-text-field
               v-model="item.purpose"
-              label="Budget purpose"
+              label="Budget purpose (optional)"
               outlined
               hide-details="auto"
               name="Roadmap budget purpose"

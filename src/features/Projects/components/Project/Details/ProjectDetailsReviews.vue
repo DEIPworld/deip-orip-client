@@ -4,6 +4,8 @@
     :content-id="null"
     :disabled="$$limitedAccess"
     v-bind="$$limitedAccessProps"
+    :discipline-id="project.disciplines.map(({external_id}) => external_id)"
+    :exclude-users="project.members"
   />
 </template>
 
