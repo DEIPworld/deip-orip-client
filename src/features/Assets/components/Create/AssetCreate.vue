@@ -363,6 +363,7 @@
 
       createAsset() {
         this.loading = true;
+        const DEFAULT_PRECISION = 0;
 
         const data = [
           {
@@ -373,9 +374,9 @@
             researchExternalId: this.project.externalId,
             researchGroup: this.project.researchGroup.external_id,
             symbol: this.formModel.symbol,
-            precision: 2,
+            precision: DEFAULT_PRECISION,
             description: '',
-            maxSupply: parseInt(this.formModel.maxSupply + '0'.repeat(2)),
+            maxSupply: parseInt(this.formModel.maxSupply + '0'.repeat(DEFAULT_PRECISION)),
             holders: [
               this.teamTokens,
               ...this.formModel.holders
@@ -384,7 +385,7 @@
               amount: this.$$toAssetUnits({
                 amount: holder.amount,
                 assetId: this.formModel.symbol,
-                precision: 2
+                precision: DEFAULT_PRECISION
               }, false)
             }))
           }
