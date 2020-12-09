@@ -20,7 +20,7 @@ export const usersList = {
         return {
           name: 'ResearchGroupDetails',
           params: {
-            research_group_permlink: user.external_id
+            research_group_permlink: user.account.name
           }
         };
       }
