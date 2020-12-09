@@ -21,7 +21,9 @@
                 class="link text--primary text-decoration-none"
               >
                 {{ project.title }}
-                <v-icon size="20">mdi-arrow-top-right-thin-circle-outline</v-icon>
+                <v-icon size="20">
+                  mdi-arrow-top-right-thin-circle-outline
+                </v-icon>
               </router-link>
             </d-stack>
             <d-stack gap="4">
@@ -131,7 +133,6 @@
                   Accept review invitation
                 </v-btn>
               </template>
-
             </div>
           </d-stack>
         </v-form>
