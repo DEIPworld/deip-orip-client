@@ -73,9 +73,7 @@
                   this.formProcessing = false;
                   this.$store.dispatch('auth/loadGroups'); // reload user groups
                   this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
-                  const [{ onchainDatums }] = res;
-                  const [[ opName, { 'new_account_name': researchGroupExternalId } ]] = onchainDatums;
-
+                  const { 'external_id': researchGroupExternalId } = res;
                   const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInvite(
                     { privKey: this.user.privKey, username: this.user.username },
                     {
