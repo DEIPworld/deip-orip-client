@@ -16,7 +16,13 @@ export const usersList = {
       }
 
       if (user.account.is_research_group) {
-        return { name: 'group.detail' };
+        // return { name: 'group.detail' };
+        return {
+          name: 'ResearchGroupDetails',
+          params: {
+            research_group_permlink: user.external_id
+          }
+        };
       }
 
       return {

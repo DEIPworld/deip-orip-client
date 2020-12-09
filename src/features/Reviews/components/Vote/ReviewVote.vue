@@ -1,12 +1,12 @@
 <template>
-  <div class="text-caption">
+  <div class="text-body-2">
     <v-btn
       v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
       block
       color="primary"
-      x-small
+      small
       text
-      class="text-caption mb-2"
+      class="mb-2 text-body-2"
       :loading="loading"
       @click="voteReview()"
     >
