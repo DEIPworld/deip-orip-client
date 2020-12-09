@@ -16,13 +16,7 @@ const ACTIONS = {
   getProjectDetails({ commit }, projectExternalId) {
     return researchService.getResearch(projectExternalId)
       .then((res) => {
-        deipRpc.api.getResearchGroupMembershipTokensAsync(res.research_group.external_id)
-          .then((groupMembers) => {
-            commit('storeProjectDetails', {
-              ...res,
-              groupMembers
-            });
-          });
+        commit('storeProjectDetails', res);
       });
   }
 };
