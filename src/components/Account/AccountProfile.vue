@@ -7,10 +7,18 @@
       @mouseover="onAvatarMouseOver"
       @mouseout="onAvatarMouseOut"
     >
-      <img v-if="currentUser.profile" :src="currentUser.profile | avatarSrc(320, 320, false)">
+      <v-img
+        v-if="currentUser.profile && !tempAva"
+        :src="currentUser.profile | avatarSrc(320, 320, false)"
+      />
+
+      <v-img
+        v-if="tempAva"
+        :src="tempAva"
+      />
 
       <v-gravatar
-        v-if="!currentUser.profile && currentUser.account"
+        v-if="!currentUser.profile && currentUser.account &&  !tempAva"
         :email="currentUser.account.name + '@deip.world'"
       />
 
@@ -71,6 +79,7 @@
         formModel: null,
         formModelCache: null,
         countFiles: 0,
+        tempAva: null,
 
         schema: [
           {
@@ -221,7 +230,7 @@
         currentUser: 'auth/user'
       }),
 
-      dropzoneOptions() {
+        dropzoneOptions() {
         return this.currentUser != null ? {
           url: `${window.env.DEIP_SERVER_URL}/api/user/upload-avatar`,
           paramName: 'user-avatar',
@@ -269,10 +278,19 @@
 
     methods: {
       fileAdded(file) {
-        this.countFiles = this.$refs['avatar-upload'].getQueuedFiles().length;
+        this.$nextTick(() => {
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            this.tempAva = event.target.result;
+          };
+          reader.readAsDataURL(file);
+
+          this.countFiles = this.$refs['avatar-upload'].getQueuedFiles().length;
+        });
       },
       onAvatarMouseOver() {
-        if (this.currentUser.username == this.currentUser.account.name) {
+        if (this.currentUser.username === this.currentUser.account.name) {
           this.avatarUploadIsShown = true;
         }
       },
@@ -309,11 +327,13 @@
         });
       },
       save() {
-        if (this.$refs['avatar-upload'].getQueuedFiles().length) {
-          this.$refs['avatar-upload'].processQueue();
-        } else if (JSON.stringify(this.formModel) !== this.formModelCache) {
-          this.updateAccountData();
-        }
+        this.$nextTick(() => {
+          if (this.$refs['avatar-upload'].getQueuedFiles().length) {
+            this.$refs['avatar-upload'].processQueue();
+          } else if (JSON.stringify(this.formModel) !== this.formModelCache) {
+            this.updateAccountData();
+          }
+        })
       },
       updateAccountData() {
         this.isLoading = true;
