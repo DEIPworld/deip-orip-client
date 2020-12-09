@@ -37,7 +37,8 @@
                 </span>
               </div>
             </d-stack>
-            <d-block v-if="requestAccepted">
+
+            <d-block>
               <div
                 v-for="(question, index) of questions"
                 :key="index"
@@ -55,6 +56,7 @@
                     {{ question }}
                   </div>
                   <vex-wysiwyg
+                    v-if="requestAccepted"
                     v-model="formModel.reviewData[index]"
                     :error-messages="errors"
                     placeholder="Your answer"
