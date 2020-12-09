@@ -415,7 +415,7 @@
             amount: this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
             memo: `withdraw for ${this.depositDialog.owner}`,
             extensions: []
-          } 
+          }
         )
           .then(() => {
             this.$notifier.showSuccess('Funds have been withdrawn successfully!');
@@ -436,7 +436,7 @@
           { privKey: '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa', username: 'kim' },
           false,
           {
-            from: "kim", 
+            from: "kim",
             to: this.depositDialog.owner,
             amount:  this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
             memo: `deposit for ${this.depositDialog.owner}`,

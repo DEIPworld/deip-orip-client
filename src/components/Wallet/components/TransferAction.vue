@@ -346,13 +346,29 @@
           let fromAmount = '0';
 
           const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+
           fromAmount = this.$$toAssetUnits(
             this.dialog.form.fromAmount,
             false,
-            { symbol: fromAccountData.string_symbol, fractionCount: fromAccountData.precision }
+            { symbol: fromAccountData.stringSymbol, fractionCount: fromAccountData.precision }
           );
 
           const isProposal = this.$currentUserName !== this.dialog.form.fromAccount.owner;
+
+          console.log({
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUserName
+          },
+          isProposal,
+          {
+            from: this.dialog.form.fromAccount.owner,
+            to: this.dialog.form.receiver.account.name,
+            amount: fromAmount,
+            memo: this.dialog.form.memo,
+            extensions: []
+          })
+
+
           return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
