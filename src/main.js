@@ -37,6 +37,7 @@ import { i18n } from './plugins/i18n';
 import { router } from './router';
 import { store } from './store';
 import App from './App';
+import AssetsFeature from '@/features/Assets';
 
 // ////////////////////////
 
@@ -76,6 +77,12 @@ Vue.mixin(dataReadyMixin);
 Vue.mixin(contextHelpersMixin);
 
 Vue.directive('custom', CustomDirective);
+
+// Featyures // NOTE: Try new feature logic
+
+Vue.use(AssetsFeature);
+
+// ////////////////////////////////////////
 
 Vue.config.optionMergeStrategies.props = (parentVal, childVal) => {
   if (childVal) {

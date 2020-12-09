@@ -4,7 +4,7 @@ import { isArray, isObject, isString } from '@/utils/helpers';
 export const assetsChore = {
   computed: {
     ...mapGetters({
-      allAssets: 'auth/allAssets',
+      allAssets: 'Assets/list',
       assets: 'auth/assets'
     })
   },
@@ -12,7 +12,7 @@ export const assetsChore = {
   methods: {
     $$assetInfo(assetId) {
       // return this.allAssets.find((ass) => ass.string_symbol);
-      return this.allAssets.find((ass) => (ass.string_symbol === assetId || ass.id === assetId));
+      return this.allAssets.find((ass) => (ass.stringSymbol === assetId || ass.id === assetId));
     },
 
     $$fromAssetUnits(val) {
@@ -81,7 +81,7 @@ export const assetsChore = {
       }
 
       if (isObject(val)) {
-        const { amount, assetId } = val;
+        const { amount, assetId, precision } = val;
 
         if (!amount && amount !== 0) return null;
 
@@ -91,9 +91,13 @@ export const assetsChore = {
           ? this.$options.filters
             .currency(amount, this.$$formatOpts({
               fractionCount: asset.precision,
-              symbol: asset.string_symbol
+              symbol: asset.stringSymbol
             }, options, formatted))
-          : null;
+          : this.$options.filters
+            .currency(amount, this.$$formatOpts({
+              fractionCount: precision,
+              symbol: assetId
+            }, options, formatted));
       }
 
       throw new Error('Unknown asset format');
@@ -101,6 +105,10 @@ export const assetsChore = {
 
     $$formatAssetUnits(val) {
       return this.$$toAssetUnits(this.$$fromAssetUnits(val));
+    },
+
+    $$reAsset(assetString) {
+      return this.$$toAssetUnits(this.$$fromAssetUnits(assetString))
     }
   }
 };

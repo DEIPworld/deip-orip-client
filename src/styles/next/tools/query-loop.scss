@@ -1,7 +1,12 @@
-@mixin query-loop($query) {
+@mixin query-loop($query, $imp: true) {
   @each $key, $val in $query {
     @if $val != false {
-      #{$key}: $val !important;
+      @if($imp == true) {
+        #{$key}: $val !important;
+      }
+      @else {
+        #{$key}: $val;
+      }
     }
   }
 }

@@ -10,13 +10,19 @@ export const usersList = {
     }
   },
   methods: {
-    userDetailsRoute(name) {
-      return this.$currentUserName === name
-        ? { name: 'account.summary' }
-        : {
-          name: 'UserDetails',
-          params: { account_name: name }
-        };
+    userDetailsRoute(user) {
+      if (this.$currentUserName === user.account.name) {
+        return { name: 'account.summary' };
+      }
+
+      if (user.account.is_research_group) {
+        return { name: 'group.detail' };
+      }
+
+      return {
+        name: 'UserDetails',
+        params: { account_name: user.account.name }
+      };
     }
   }
-}
+};

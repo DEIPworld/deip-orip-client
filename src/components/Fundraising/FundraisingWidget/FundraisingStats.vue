@@ -6,13 +6,33 @@
       'eci-widget': 'heading@3',
     }"
   >
-    <d-block title="Fundraising" compact class="mt-n4">
+    <d-block-widget title="Fundraising" class="ma-n4">
       <template #title-append>
-        <v-chip v-if="tokenSaleData" outlined :color="timeChipData.color" text-color="black">
+        <v-chip
+          v-if="tokenSaleData"
+          outlined
+          :color="timeChipData.color"
+          text-color="black"
+        >
           {{ timeChipData.date | timeLeft }}
         </v-chip>
       </template>
-      <div>
+
+      <div v-if="disabled" class="text-body-2">
+        Project has never fundraised before.
+        Please,
+        <router-link
+          :to="{
+            name: 'project.asset.create',
+            params: $route.params
+          }"
+        >
+          issue project’s tokens
+        </router-link>
+        to start Fundraising.
+      </div>
+
+      <div v-else>
         <template v-if="tokenSaleData">
           <template
             v-for="(item, index) of saleInfo"
@@ -73,7 +93,7 @@
           Start new fundraise
         </v-btn>
       </div>
-    </d-block>
+    </d-block-widget>
   </v-skeleton-loader>
 </template>
 
@@ -81,12 +101,13 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingWidgetStore } from '@/components/Fundraising/FundraisingWidget/store';
   import { mapGetters } from 'vuex';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
+  import { hasValue } from '@/utils/helpers';
+  import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
   export default {
     name: 'FundraisingStats',
     components: {
-      DBlock
+      DBlockWidget
     },
 
     mixins: [componentStoreFactoryOnce(fundraisingWidgetStore)],
@@ -95,9 +116,13 @@
       researchId: {
         type: [String, Number],
         default: ''
+      },
+
+      project: {
+        type: Object,
+        default: () => ({})
       }
     },
-
 
     computed: {
       ...mapGetters({
@@ -111,12 +136,11 @@
             color: 'info',
             date: this.tokenSaleData.start_time
           };
-        } else {
-          return {
-            color: 'warning',
-            date: this.tokenSaleData.end_time
-          }
         }
+        return {
+          color: 'warning',
+          date: this.tokenSaleData.end_time
+        };
       },
       token() {
         return this.tokenSaleData.soft_cap ? this.tokenSaleData.soft_cap.split(' ')[1] : '';
@@ -154,6 +178,13 @@
           )
           : false;
       },
+
+      disabled() {
+        if (hasValue(this.project)) {
+          return !(this.project.securityTokens && this.project.securityTokens.length);
+        }
+        return false;
+      }
     },
     created() {
       this.$store.dispatch('FundraisingStats/loadResearchTokenSale', this.researchId)

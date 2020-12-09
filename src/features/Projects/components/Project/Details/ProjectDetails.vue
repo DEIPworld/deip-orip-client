@@ -1,11 +1,14 @@
 <template>
   <!-- TODO: switch research -> project  -->
-  <project-details-renderer
-    :schema="layoutSchema"
+  <div>
+    <project-details-renderer
+      :schema="layoutSchema"
 
-    :research="researchExtended"
-    :project="researchExtended"
-  />
+      :research="researchExtended"
+      :project="researchExtended"
+    />
+  </div>
+
 </template>
 
 <script>
@@ -47,6 +50,9 @@
           }
         };
       }
+    },
+    mounted() {
+      console.log(this.researchExtended.securityTokens)
     }
   };
 </script>

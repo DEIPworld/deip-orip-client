@@ -170,10 +170,6 @@
     computed: {
       ...mapGetters({
         review: 'Review/reviewDetails',
-        content: 'Content/contentDetails'
-      }),
-
-      ...mapGetters({
         content: 'Content/contentDetails',
         project: 'Project/projectDetails'
       }),

@@ -3,14 +3,14 @@
     v-if="users.length"
     :class="$style.host"
   >
+
     <v-sheet
       v-for="(user, index) of users"
-      :key="user.profile.name"
+      :key="index"
       :class="$style.item"
-      :style="{zIndex: users.length - index}"
     >
       <router-link
-        :to="userDetailsRoute(user.account.name)"
+        :to="userDetailsRoute(user)"
       >
         <v-avatar size="40">
           <v-img :src="user.profile | avatarSrc(64, 64, false)" />
@@ -35,9 +35,10 @@
   }
 
   .item {
+    box-shadow: 0 0 0 2px #fff !important;
     border-radius: 50%;
-    padding: 2px;
     margin-right: -8px;
+    z-index: 1;
   }
 
 </style>

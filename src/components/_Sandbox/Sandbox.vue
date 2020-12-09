@@ -46,6 +46,7 @@
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DStack from '@/components/Deipify/DStack/DStack';
   import VexEditor from '@/plugins/VuetifyExtended/components/VexEditor/VexEditor';
+  import { registerStoreModule, unregisterStoreModule } from '@/composables/registerStoreModule';
 
   export default {
     name: 'Sandbox',
@@ -54,6 +55,23 @@
       return {
         VIEW_TYPES
       };
+    },
+    created() {
+      console.log('sandbox created')
+      registerStoreModule.call(this, {
+        state: {},
+        getters: {},
+        actions: {},
+        mutations: {},
+        namespaced: true
+      })
+        .then((name) => {
+          console.log(name)
+          console.log(this.$$storeNS)
+        });
+    },
+    beforeDestroy() {
+      unregisterStoreModule.call(this, this.$$storeNS)
     }
   };
 </script>

@@ -23,7 +23,7 @@ const STATE = {
 };
 
 const GETTERS = {
-  usersList: (state) => state.usersList
+  usersList: (state) => _.sortBy(state.usersList, (u) => !u.account.is_research_group)
 };
 
 const ACTIONS = {

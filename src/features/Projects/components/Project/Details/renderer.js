@@ -3,14 +3,9 @@ import { componentsRenderer } from '@/mixins/renderer';
 import AttributesRead from '@/components/Attributes/AttributesRead';
 
 import { researchAttributeFileUrl } from '@/utils/helpers';
-import ContentsList from '@/features/Contents/components/List/ContentsList';
-import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
-import DraftsList from '@/components/DraftsList/DraftsList';
-
-import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
 
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
-import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
+import  FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
 
 import ProjectDetailsEditCta from '@/features/Projects/components/Project/Details/ProjectDetailsEditCta';
 import ProjectDetailsFollowCta
@@ -19,11 +14,12 @@ import ProjectDetailsContents
   from '@/features/Projects/components/Project/Details/ProjectDetailsContents';
 import ProjectDetailsReviews
   from '@/features/Projects/components/Project/Details/ProjectDetailsReviews';
+import ProjectDetailsAssets
+  from '@/features/Projects/components/Project/Details/ProjectDetailsAssets';
 
 import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
 import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
 import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
-import { ATTR_TYPES } from '@/variables';
 import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
 export default {
@@ -33,6 +29,7 @@ export default {
     ProjectDetailsFollowCta,
     ProjectDetailsContents,
     ProjectDetailsReviews,
+    ProjectDetailsAssets,
 
     EciStats,
     AttributesRead,

@@ -50,7 +50,6 @@ export const objectNotEmpty = (obj) => !!(obj && Object.keys(obj).length);
 
 export const camelizeObjectKeys = (obj) => {
   if (!obj) return {};
-
   return Object.keys(obj)
     .reduce((o, key) => ({ ...o, ...{ [camelCase(key)]: obj[key] } }), {});
 };

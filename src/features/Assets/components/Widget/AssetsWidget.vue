@@ -1,0 +1,220 @@
+<template>
+<!--  <div>-->
+  <div v-if="$ready">
+    <template v-if="!asset">
+      <v-btn
+        color="primary"
+        small
+        block
+        :to="{
+          name: 'project.asset.create',
+          params: $route.params
+        }"
+      >
+        Issue tokens
+      </v-btn>
+    </template>
+    <template v-else>
+      <d-stack gap="16">
+        <users-list view-type="stack" :users="shareholders" />
+        <d-dot-list :items="listData" />
+        <v-btn
+          block
+          text
+          small
+          color="primary"
+          @click="details = true"
+        >
+          More details
+        </v-btn>
+      </d-stack>
+      <vex-dialog
+        v-model="details"
+        :max-width="580"
+        title="Shareholders"
+        :button-false-text="false"
+        button-true-text="Ok"
+      >
+        <d-stack>
+          <div class="text-body-1">
+            Shareholders: {{ internalAsset.balances.length }}<br>
+            Tokens issued: {{ listDataTotal.value }}<br>
+            Your tokens: {{ listDataUserBalance.value }}<br>
+            Your share: {{ listDataUserBalancePercent.value }}<br>
+          </div>
+          <users-list :users="shareholders" view-type="dataProvider">
+            <template #default="{ users }">
+              <v-simple-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Name
+                    </th>
+                    <th class="text-left">
+                      Shares
+                    </th>
+                    <th class="text-right">
+                      Tokens
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="user in users"
+                    :key="user.account.name"
+                  >
+                    <td>
+                      <v-sheet color="transparent" max-width="200" class="d-flex align-center">
+                        <v-avatar size="40" class="mr-4 my-2">
+                          <v-img :src="user.profile | avatarSrc(64, 64, false)" />
+                        </v-avatar>
+                        <div class="text-body-2 font-weight-medium text-truncate">
+                          {{ user | fullname }}
+                        </div>
+                      </v-sheet>
+                    </td>
+                    <td>
+                      {{ toPercent(getBalance(user.account.name).amount) }}
+                    </td>
+                    <td>
+                      {{ getBalance(user.account.name).amount }}
+                    </td>
+                  </tr>
+                </tbody>
+              </v-simple-table>
+            </template>
+          </users-list>
+        </d-stack>
+
+      </vex-dialog>
+    </template>
+  </div>
+</template>
+
+<script>
+
+  import DDotList from '@/components/Deipify/DDotList/DDotList';
+  import { assetsChore } from '@/mixins/chores';
+  import DStack from '@/components/Deipify/DStack/DStack';
+  import UsersList from '@/features/Users/components/List/UsersList';
+
+  export default {
+    name: 'AssetsWidget',
+    components: {
+      UsersList,
+      DStack,
+      DDotList
+    },
+    mixins: [assetsChore],
+    props: {
+      asset: {
+        type: String,
+        default: null
+      }
+    },
+
+    data() {
+      return {
+        details: false
+      };
+    },
+
+    computed: {
+      internalAsset() {
+        if (this.asset) {
+          return this.$store.getters['Assets/one']({
+            stringSymbol: this.$$fromAssetUnits(this.asset).assetId
+          });
+        }
+
+        return null;
+      },
+
+      shareholders() {
+        return this.internalAsset.balances.map((balance) => balance.owner);
+      },
+
+      currentUserBalance() {
+        const balance = this.getBalance(this.$currentUserName);
+
+        return balance ? balance.amount : this.toAssetUnits(0);
+      },
+
+      listData() {
+        return [
+          this.listDataTotal,
+          this.listDataUserBalance,
+          this.listDataUserBalancePercent
+        ];
+      },
+
+      listDataTotal() {
+        return {
+          label: 'Tokens issued',
+          value: this.toAssetUnits(this.internalAsset.maxSupply)
+        };
+      },
+
+      listDataUserBalance() {
+        return {
+          label: 'Your tokens',
+          value: this.currentUserBalance
+        };
+      },
+
+      listDataUserBalancePercent() {
+        return {
+          label: 'Your share',
+          value: this.toPercent(this.currentUserBalance)
+        };
+      }
+    },
+
+    created() {
+      if (!this.asset) {
+        this.$setReady();
+      }
+
+      if (this.asset && !(this.internalAsset && this.internalAsset.balances)) {
+        this.$store
+          .dispatch('Assets/getAsset', { symbol: this.$$fromAssetUnits(this.asset).assetId })
+          .then(() => {
+            this.$setReady();
+          });
+      } else {
+        this.$setReady();
+      }
+    },
+
+    methods: {
+      toAssetUnits(amount) {
+        return this.$$toAssetUnits(
+          {
+            amount,
+            assetId: this.internalAsset.stringSymbol
+          }
+        );
+      },
+
+      toPercent(accetString) {
+        const asset = this.$$fromAssetUnits(accetString);
+
+        return this.$options.filters
+          .currency(
+            (asset.amount / this.internalAsset.maxSupply) * 100,
+            {
+              symbol: '%',
+              symbolPosition: false
+            }
+          );
+      },
+
+      getBalance(user) {
+        return this.$where(
+          this.internalAsset.balances,
+          { owner: user }
+        )[0];
+      }
+    }
+  };
+</script>

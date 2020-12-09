@@ -37,6 +37,14 @@ export const modules = [
         props: {
           project: '@research'
         }
+      },
+      {
+        name: 'Tokenization',
+        component: 'ProjectDetailsAssets',
+        icon: 'mdi-currency-sign',
+        props: {
+          project: '@research'
+        }
       }
     ]
   },
@@ -58,7 +66,8 @@ export const modules = [
         name: 'Fund stats',
         icon: 'mdi-cash-refund',
         props: {
-          researchId: '@research.externalId'
+          researchId: '@research.externalId',
+          project: '@research' // temp
         }
       },
     ]

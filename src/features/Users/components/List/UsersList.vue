@@ -71,9 +71,8 @@
     },
 
     created() {
-      const users = wrapInArray(this.users);
-
-      // if (users.length) {
+      if (!wrapInArray(this.usersData).length) {
+        const users = wrapInArray(this.users);
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
           users,
           teamId: this.teamId
@@ -81,13 +80,7 @@
           .then(() => {
             this.$setReady();
           });
-
-      // } else {
-      //   this.$store.dispatch(`${this.storeNS}/getActiveUsers`)
-      //     .then(() => {
-      //       this.$setReady();
-      //     });
-      // }
+      }
     },
 
     methods: {

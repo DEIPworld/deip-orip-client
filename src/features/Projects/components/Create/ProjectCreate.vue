@@ -38,7 +38,8 @@
                   username: this.$currentUser.account.name
                 },
                 isProposal,
-                formData
+                formData,
+                false
               )
                 .then((project) => {
                   this.$notifier.showSuccess(`Project "${onchainData.title}" has been created successfully`);

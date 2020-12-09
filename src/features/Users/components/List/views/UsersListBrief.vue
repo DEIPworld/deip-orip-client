@@ -7,7 +7,7 @@
       v-for="(user, index) in users"
       :key="`user-${index}`"
       class="px-3 py-2 rounded overflow-hidden reset-height"
-      :to="userDetailsRoute(user.account.name)"
+      :to="userDetailsRoute(user)"
     >
 
 

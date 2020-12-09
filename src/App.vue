@@ -101,6 +101,10 @@
         });
 
       this.isGrantsTransparencyDemo = this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY';
+
+
+      this.$store.dispatch('Assets/fetchAssets');
+
     },
 
     methods: {

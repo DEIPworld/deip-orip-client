@@ -1,69 +1,72 @@
 <template>
-  <d-autocomplete
-    ref="field"
-    v-model="internalValue"
+  <div>
+    <d-autocomplete
+      ref="field"
+      v-model="internalValue"
 
-    :label="label"
-    :items="usersList"
+      :label="label"
+      :items="usersList"
 
-    :item-text="userFullName"
-    :item-value="userExternalId"
+      :item-text="userFullName"
+      :item-value="userExternalId"
 
-    hide-details="auto"
+      hide-details="auto"
 
-    offset-y
-    offset-overflow
+      offset-y
+      offset-overflow
 
-    outlined
+      outlined
 
-    :name="label"
-    autocomplete="off"
-    :return-object="returnObject"
+      :name="label"
+      autocomplete="off"
+      :return-object="returnObject"
 
-    v-bind="fieldProps"
-  >
-    <template #item="{ item }">
-      <v-list-item-avatar :size="24">
-        <v-img :src="item.profile | avatarSrc(24)" />
-      </v-list-item-avatar>
-      <v-list-item-content class="ttext-body-2">
-        {{ item | fullname }}
-      </v-list-item-content>
-    </template>
-
-    <template #selection="{ item }">
-      <v-chip
-        v-if="multiple"
-        :disabled="disabled"
-        outlined
-      >
-        <v-avatar left class="mr-2 ml-n2">
-          <img :src="item.profile | avatarSrc(24)" alt="">
-        </v-avatar>
-
-        <div class="text-truncate spacer">
+      v-bind="fieldProps"
+    >
+      <template #item="{ item }">
+        <v-list-item-avatar :size="24">
+          <v-img :src="item.profile | avatarSrc(24)" />
+        </v-list-item-avatar>
+        <v-list-item-content class="text-body-2">
           {{ item | fullname }}
-        </div>
+        </v-list-item-content>
+      </template>
 
-        <v-btn
-          icon
-          x-small
-          class="mr-n2 ml-2"
-          @click="$refs.field.onChipInput(item)"
+      <template #selection="{ item }">
+        <v-chip
+          v-if="multiple"
+          :disabled="disabled"
+          outlined
         >
-          <!--          @click="remove(item)" -->
-          <v-icon>clear</v-icon>
-        </v-btn>
-      </v-chip>
+          <v-avatar left class="mr-2 ml-n2">
+            <img :src="item.profile | avatarSrc(24)" alt="">
+          </v-avatar>
 
-      <div v-else class="d-inline-flex mr-4 align-center">
-        <v-avatar size="24" class="mr-2">
-          <img :src="item.profile | avatarSrc(24)" alt="">
-        </v-avatar>
-        {{ item | fullname }}
-      </div>
-    </template>
-  </d-autocomplete>
+          <div class="text-truncate spacer">
+            {{ item | fullname }}
+          </div>
+
+          <v-btn
+            icon
+            x-small
+            class="mr-n2 ml-2"
+            @click="$refs.field.onChipInput(item)"
+          >
+            <!--          @click="remove(item)" -->
+            <v-icon>clear</v-icon>
+          </v-btn>
+        </v-chip>
+
+        <div v-else class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">
+          <v-avatar size="24" class="mr-2">
+            <img :src="item.profile | avatarSrc(24)" alt="">
+          </v-avatar>
+          <div class="text-truncate">{{ item | fullname }}</div>
+        </div>
+      </template>
+    </d-autocomplete>
+  </div>
+
 </template>
 
 <script>
@@ -75,6 +78,7 @@
   import { mapState } from 'vuex';
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
+  import { wrapInArray } from 'vuetify/lib/util/helpers';
 
   export default {
     name: 'UserSelector',
@@ -100,7 +104,7 @@
       },
 
       users: {
-        type: Array,
+        type: [Array, String],
         default: () => ([])
       },
       exclude: {
@@ -143,7 +147,7 @@
         this.$setReady(false);
 
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-          users: this.users,
+          users: wrapInArray(this.users),
           exclude: this.exclude,
           ...this.$$dataContextProps
         }).then(() => {
@@ -157,7 +161,16 @@
       },
 
       userExternalId(e) {
-        return e.profile ? e.profile._id : 'undefined';
+
+        if (e.account && e.account.is_research_group) {
+          return e.account.name;
+        }
+
+        if (e.profile) {
+          return e.profile._id;
+        }
+
+        return e;
       }
     }
   };

@@ -2,6 +2,11 @@ import crc32 from 'crc/crc32';
 import dotProp from 'dot-prop';
 
 export const registerStore = {
+  data() {
+    return {
+      storeNS: null
+    };
+  },
   methods: {
     registerStoreModule(module, name) {
       if (!(this.$store && this.$store.state && this.$store.state[name])) {
@@ -21,11 +26,6 @@ export const registerStore = {
 
 export const componentStoreFactory = (storeModule, hashFromProp) => ({
   mixins: [registerStore],
-  data() {
-    return {
-      storeNS: null
-    };
-  },
   created() {
     this.setNs(hashFromProp);
     this.registerStoreModule(_.cloneDeep(storeModule), this.storeNS);

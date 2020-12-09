@@ -1,0 +1,9 @@
+
+fetch: '/todos', // url for fetching data with parameters
+get: '/todos/:id', // url for getting data for a single
+create: '/todos', // url for creating new
+update: '/todos/:id', // url for updating a single
+delete: '/todos/:id', // url for deleting a single
+
+
+

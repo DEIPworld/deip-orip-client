@@ -4,12 +4,13 @@
     :value="isActive"
     :max-width="maxWidth"
     :persistent="persistent"
+    scrollable
     @input="closeDialog"
     @keydown.esc="choose(false)"
   >
     <v-card tile>
       <v-toolbar>
-        <v-toolbar-title v-if="Boolean(title)">
+        <v-toolbar-title class="text-h5" v-if="Boolean(title)">
           {{ title }}
         </v-toolbar-title>
 
@@ -100,7 +101,7 @@
         default: 'Confirm'
       },
       buttonFalseText: {
-        type: String,
+        type: [String, Boolean],
         default: 'Cancel'
       },
 
