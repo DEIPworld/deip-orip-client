@@ -128,34 +128,17 @@
           };
         }
 
-        if (this.$route.name === 'ProjectDetails') {
-          return {
-            name: 'ProjectExpertise',
-            params: {
-              group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
-              research_permlink: decodeURIComponent(this.$route.params.research_permlink)
-            }
-          };
-        }
-
         if (this.$route.name === 'project.details') {
           return {
             name: 'project.expertise',
-            params: {
-              researchExternalId: this.$route.params.researchExternalId
-            }
+            params: this.$route.params
           };
         }
 
-        if (this.$route.name === 'ResearchContentDetails') {
+        if (this.$route.name === 'project.content.details') {
           return {
-            name: 'ResearchContentExpertise',
-            params: {
-              group_permlink: decodeURIComponent(this.$route.params.research_group_permlink),
-              research_permlink: decodeURIComponent(this.$route.params.research_permlink),
-              content_permlink: decodeURIComponent(this.$route.params.content_permlink),
-              ref: this.$route.query.ref
-            }
+            name: 'project.content.expertise',
+            params: this.$route.params
           };
         }
 

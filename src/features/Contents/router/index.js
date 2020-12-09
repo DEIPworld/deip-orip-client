@@ -4,6 +4,7 @@ import ContentDetails from '@/features/Contents/components/Content/Details/Conte
 
 import { routerView, routeNameGenerator } from '@/utils/helpers';
 import { reviewRoutingFabric } from '@/features/Reviews/router';
+import ContentExpertise from '@/features/Contents/components/Content/Expertise/ContentExpertise';
 
 export const contentRoutingFabric = (parent) => {
   const routeName = routeNameGenerator('content', parent).get;
@@ -37,6 +38,11 @@ export const contentRoutingFabric = (parent) => {
             name: routeName('details'),
             component: ContentDetails,
             path: ''
+          },
+          {
+            name: routeName('expertise'),
+            component: ContentExpertise,
+            path: 'expertise'
           },
           {
             name: routeName('review'),

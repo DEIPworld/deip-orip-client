@@ -27,7 +27,8 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-import ResearchContentExpertise from '@/components/ResearchContentExpertise/ResearchContentExpertise';
+// import ResearchContentExpertise
+//   from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 
 import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
@@ -48,7 +49,8 @@ import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio
 // import ReviewSetup from '@/components/review-setup/ReviewSetup';
 
 import FAQ from '@/components/faq/FAQ';
-import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
+import UserApplicationAccepted
+  from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
@@ -81,250 +83,251 @@ const router = new Router({
     ...exploreRouter,
 
     {
-    path: '/sign-in',
-    name: 'SignIn',
-    component: SignIn,
-    beforeEnter: (to, from, next) => {
-      if (Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-        const tenant = store.getters['auth/tenant'];
-        if (!tenant) {
-          throw new Error('Granting agency must be specified for the Demo');
+      path: '/sign-in',
+      name: 'SignIn',
+      component: SignIn,
+      beforeEnter: (to, from, next) => {
+        if (Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+          const tenant = store.getters['auth/tenant'];
+          if (!tenant) {
+            throw new Error('Granting agency must be specified for the Demo');
+          }
+          next({ name: 'TenantSignIn' });
+        } else {
+          next();
         }
-        next({ name: 'TenantSignIn' });
-      } else {
-        next();
+      },
+      meta: {
+        withoutHeader: true
       }
     },
-    meta: {
-      withoutHeader: true
-    }
-  },
     {
-    path: '/org-sign-in',
-    name: 'TenantSignIn',
-    component: TenantSignIn
-  },
+      path: '/org-sign-in',
+      name: 'TenantSignIn',
+      component: TenantSignIn
+    },
     {
-    path: '/sign-up',
-    name: 'SignUp',
-    component: SignUp,
-    meta: {
-      withoutHeader: true,
-      viewTitle: 'Sign Up'
-    }
-  }, {
-    path: '/:agency/grants/dashboard',
-    name: 'GrantProgramsAwardsDashboard',
-    component: GrantProgramsAwardsDashboard,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
-        orgExternalId: to.params.agency
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/grants/award/:award_number/:subaward_number',
-    name: 'GrantProgramAwardDetails',
-    component: GrantProgramAwardDetails,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetailsPage', {
-        awardNumber: decodeURIComponent(to.params.award_number),
-        subawardNumber: decodeURIComponent(to.params.subaward_number)
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/grants/award/:award_number/:subaward_number/withdrawal/:payment_number',
-    name: 'GrantProgramAwardWithdrawalDetails',
-    component: GrantProgramAwardWithdrawalDetails,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantProgramAwardWithdrawalDetails/loadWithdrawalDetailsPage', {
-        awardNumber: decodeURIComponent(to.params.award_number),
-        subawardNumber: decodeURIComponent(to.params.subaward_number),
-        paymentNumber: decodeURIComponent(to.params.payment_number)
-      });
-      loadPage(loadPagePromise, next);
-    }
-  },
-  {
-    path: '/:agency/programs',
-    name: 'GrantPrograms',
-    component: GrantPrograms,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
-        orgExternalId: to.params.agency,
-        areaCode: to.query.areaCode,
-        subAreaCode: to.query.subAreaCode
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/:agency/programs/:foa',
-    name: 'GrantProgramDetails',
-    component: GrantProgramDetails,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
-        orgExternalId: to.params.agency,
-        foaId: decodeURIComponent(to.params.foa)
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/:agency/programs/:foa/award-proposal',
-    name: 'CreateGrantProgramAward',
-    component: CreateGrantProgramAward,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
-        orgExternalId: to.params.agency,
-        foaId: decodeURIComponent(to.params.foa),
-        awardee: to.query.awardee ? JSON.parse(to.query.awardee) : null
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/:research_group_permlink/group-details',
-    name: 'ResearchGroupDetails',
-    component: ResearchGroupDetails
-  }, {
-    path: '/:research_group_permlink/group-details/group-settings',
-    name: 'ResearchGroupSettings',
-    component: ResearchGroupSettings
-    // component: preliminaryDataLoader(ResearchGroupSettings, {
-    //   beforeEnter: (to, from, next) => {
-    //     if (store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === to.params.research_group_permlink)) {
-    //       next({
-    //         name: 'ResearchGroupDetails',
-    //         params: {
-    //           research_group_permlink: to.params.research_group_permlink
-    //         }
-    //       });
-    //     } else {
-    //       next()
-    //     }
-    //   }
-    // })
-  }, {
-    path: '/:account_name/create-research-group',
-    name: 'CreateResearchGroup',
-    component: CreateResearchGroup
-  },
-  //  {
-  //   path: '/:research_group_permlink/wallet',
-  //   name: 'ResearchGroupWallet',
-  //   component: preliminaryDataLoader(ResearchGroupWallet, {
-  //     beforeEnter: (to, from, next) => {
-  //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-  //         permlink: decodeURIComponent(to.params.research_group_permlink)
-  //       });
-  //       loadPage(loadPagePromise, next);
-  //     }
-  //   })
-  // },
-   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
-        username: decodeURIComponent(store.getters['auth/user'].username)
-      });
-      loadPage(loadPagePromise, next);
-    }
-  },
-  // {
-  //   path: '/research-feed',
-  //   name: 'ResearchFeed',
-  //   component: ResearchFeed
-  // },
-
-
-
-  {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
-    name: 'ResearchContentDetails',
-    component: ResearchContentDetails
-  },
-
-  {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/expertise',
-    name: 'ResearchContentExpertise',
-    component: ResearchContentExpertise
-  }, {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
-    name: 'ResearchContentMetadata',
-    component: preliminaryDataLoader(ResearchContentMetadata, {
-      beforeEnter: async (to, from, next) => {
-        const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          content_permlink: decodeURIComponent(to.params.content_permlink),
-          ref: to.query.ref
-        });
-        loadPage(loadPagePromise, next);
+      path: '/sign-up',
+      name: 'SignUp',
+      component: SignUp,
+      meta: {
+        withoutHeader: true,
+        viewTitle: 'Sign Up'
       }
-    })
-  },
-  //   {
-  //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
-  //   name: 'ResearchContentReview',
-  //   component: preliminaryDataLoader(ResearchContentReview, {
-  //     beforeEnter: (to, from, next) => {
-  //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-  //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
-  //         research_permlink: decodeURIComponent(to.params.research_permlink),
-  //         content_permlink: decodeURIComponent(to.params.content_permlink),
-  //         ref: to.query.ref
-  //       });
-  //       loadPage(loadPagePromise, next);
-  //     }
-  //   })
-  // },
-    // {
-  //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
-  //   name: 'ReviewCreate',
-  //   component: preliminaryDataLoader(ReviewCreate, {
-  //     beforeEnter: (to, from, next) => {
-  //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-  //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
-  //         research_permlink: decodeURIComponent(to.params.research_permlink),
-  //         content_permlink: decodeURIComponent(to.params.content_permlink),
-  //         ref: to.query.ref
-  //       });
-  //       loadPage(loadPagePromise, next);
-  //     }
-  //   })
-  // },
-  // {
-  //   path: '/eci-model-setup',
-  //   name: 'ReviewSetup',
-  //   component: ReviewSetup
-  // },
-  {
-    path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
-    name: 'ResearchContentReferences',
-    component: preliminaryDataLoader(ResearchContentReferences, {
+    }, {
+      path: '/:agency/grants/dashboard',
+      name: 'GrantProgramsAwardsDashboard',
+      component: GrantProgramsAwardsDashboard,
       beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-          group_permlink: decodeURIComponent(to.params.research_group_permlink),
-          research_permlink: decodeURIComponent(to.params.research_permlink),
-          content_permlink: decodeURIComponent(to.params.content_permlink),
-          ref: to.query.ref
+        const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
+          orgExternalId: to.params.agency
         });
         loadPage(loadPagePromise, next);
       }
-    })
-  }, {
-    path: '/propose-research',
-    name: 'CreateResearchProposal',
-    component: ResearchRequestFormCreate,
-    meta: {
-      withoutHeader: true
-    }
-  }, {
-    path: '/:research_group_permlink/create-fundraise/:research_permlink',
-    name: 'CreateTokenSale',
-    component: CreateTokenSale
-  },
+    }, {
+      path: '/grants/award/:award_number/:subaward_number',
+      name: 'GrantProgramAwardDetails',
+      component: GrantProgramAwardDetails,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetailsPage', {
+          awardNumber: decodeURIComponent(to.params.award_number),
+          subawardNumber: decodeURIComponent(to.params.subaward_number)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    }, {
+      path: '/grants/award/:award_number/:subaward_number/withdrawal/:payment_number',
+      name: 'GrantProgramAwardWithdrawalDetails',
+      component: GrantProgramAwardWithdrawalDetails,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('agencyGrantProgramAwardWithdrawalDetails/loadWithdrawalDetailsPage', {
+          awardNumber: decodeURIComponent(to.params.award_number),
+          subawardNumber: decodeURIComponent(to.params.subaward_number),
+          paymentNumber: decodeURIComponent(to.params.payment_number)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    },
+    {
+      path: '/:agency/programs',
+      name: 'GrantPrograms',
+      component: GrantPrograms,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
+          orgExternalId: to.params.agency,
+          areaCode: to.query.areaCode,
+          subAreaCode: to.query.subAreaCode
+        });
+        loadPage(loadPagePromise, next);
+      }
+    }, {
+      path: '/:agency/programs/:foa',
+      name: 'GrantProgramDetails',
+      component: GrantProgramDetails,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
+          orgExternalId: to.params.agency,
+          foaId: decodeURIComponent(to.params.foa)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    }, {
+      path: '/:agency/programs/:foa/award-proposal',
+      name: 'CreateGrantProgramAward',
+      component: CreateGrantProgramAward,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
+          orgExternalId: to.params.agency,
+          foaId: decodeURIComponent(to.params.foa),
+          awardee: to.query.awardee ? JSON.parse(to.query.awardee) : null
+        });
+        loadPage(loadPagePromise, next);
+      }
+    }, {
+      path: '/:research_group_permlink/group-details',
+      name: 'ResearchGroupDetails',
+      component: ResearchGroupDetails
+    }, {
+      path: '/:research_group_permlink/group-details/group-settings',
+      name: 'ResearchGroupSettings',
+      component: ResearchGroupSettings
+      // component: preliminaryDataLoader(ResearchGroupSettings, {
+      //   beforeEnter: (to, from, next) => {
+      //     if (store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === to.params.research_group_permlink)) {
+      //       next({
+      //         name: 'ResearchGroupDetails',
+      //         params: {
+      //           research_group_permlink: to.params.research_group_permlink
+      //         }
+      //       });
+      //     } else {
+      //       next()
+      //     }
+      //   }
+      // })
+    }, {
+      path: '/:account_name/create-research-group',
+      name: 'CreateResearchGroup',
+      component: CreateResearchGroup
+    },
+    //  {
+    //   path: '/:research_group_permlink/wallet',
+    //   name: 'ResearchGroupWallet',
+    //   component: preliminaryDataLoader(ResearchGroupWallet, {
+    //     beforeEnter: (to, from, next) => {
+    //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
+    //         permlink: decodeURIComponent(to.params.research_group_permlink)
+    //       });
+    //       loadPage(loadPagePromise, next);
+    //     }
+    //   })
+    // },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
+      beforeEnter: (to, from, next) => {
+        const loadPagePromise = store.dispatch('dashboard/loadDashboardPage', {
+          username: decodeURIComponent(store.getters['auth/user'].username)
+        });
+        loadPage(loadPagePromise, next);
+      }
+    },
+    // {
+    //   path: '/research-feed',
+    //   name: 'ResearchFeed',
+    //   component: ResearchFeed
+    // },
+
+
+    { // TODO: delete
+      path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
+      name: 'ResearchContentDetails',
+      component: ResearchContentDetails
+    },
+
+    // { // TODO: delete
+    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/expertise',
+    //   name: 'ResearchContentExpertise',
+    //   component: ResearchContentExpertise
+    // },
+
+    {
+      path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
+      name: 'ResearchContentMetadata',
+      component: preliminaryDataLoader(ResearchContentMetadata, {
+        beforeEnter: async (to, from, next) => {
+          const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
+            group_permlink: decodeURIComponent(to.params.research_group_permlink),
+            research_permlink: decodeURIComponent(to.params.research_permlink),
+            content_permlink: decodeURIComponent(to.params.content_permlink),
+            ref: to.query.ref
+          });
+          loadPage(loadPagePromise, next);
+        }
+      })
+    },
+    //   {
+    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
+    //   name: 'ResearchContentReview',
+    //   component: preliminaryDataLoader(ResearchContentReview, {
+    //     beforeEnter: (to, from, next) => {
+    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+    //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
+    //         research_permlink: decodeURIComponent(to.params.research_permlink),
+    //         content_permlink: decodeURIComponent(to.params.content_permlink),
+    //         ref: to.query.ref
+    //       });
+    //       loadPage(loadPagePromise, next);
+    //     }
+    //   })
+    // },
+    // {
+    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
+    //   name: 'ReviewCreate',
+    //   component: preliminaryDataLoader(ReviewCreate, {
+    //     beforeEnter: (to, from, next) => {
+    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+    //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
+    //         research_permlink: decodeURIComponent(to.params.research_permlink),
+    //         content_permlink: decodeURIComponent(to.params.content_permlink),
+    //         ref: to.query.ref
+    //       });
+    //       loadPage(loadPagePromise, next);
+    //     }
+    //   })
+    // },
+    // {
+    //   path: '/eci-model-setup',
+    //   name: 'ReviewSetup',
+    //   component: ReviewSetup
+    // },
+    {
+      path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
+      name: 'ResearchContentReferences',
+      component: preliminaryDataLoader(ResearchContentReferences, {
+        beforeEnter: (to, from, next) => {
+          const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+            group_permlink: decodeURIComponent(to.params.research_group_permlink),
+            research_permlink: decodeURIComponent(to.params.research_permlink),
+            content_permlink: decodeURIComponent(to.params.content_permlink),
+            ref: to.query.ref
+          });
+          loadPage(loadPagePromise, next);
+        }
+      })
+    }, {
+      path: '/propose-research',
+      name: 'CreateResearchProposal',
+      component: ResearchRequestFormCreate,
+      meta: {
+        withoutHeader: true
+      }
+    }, {
+      path: '/:research_group_permlink/create-fundraise/:research_permlink',
+      name: 'CreateTokenSale',
+      component: CreateTokenSale
+    },
 
     ...sandboxRouting,
 
@@ -340,97 +343,97 @@ const router = new Router({
     ...TransactionsRouting,
     ...WalletRouting,
 
-   {
-    path: '/claim-user-experience',
-    name: 'ClaimUserExpertiseList',
-    component: preliminaryDataLoader(ClaimUserExpertiseList, {
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
-        loadPage(loadPagePromise, next);
+    {
+      path: '/claim-user-experience',
+      name: 'ClaimUserExpertiseList',
+      component: preliminaryDataLoader(ClaimUserExpertiseList, {
+        beforeEnter: (to, from, next) => {
+          const loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
+          loadPage(loadPagePromise, next);
+        }
+      })
+    }, {
+      path: '/claim-user-experience/:account_name/:claim_id',
+      name: 'ClaimUserExpertiseDetails',
+      component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
+        beforeEnter: (to, from, next) => {
+          const loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
+            username: to.params.account_name,
+            claimId: to.params.claim_id
+          });
+          loadPage(loadPagePromise, next);
+        }
+      })
+    }, {
+      // TODO: deprecated
+      path: '/no-access-page',
+      name: 'NoAccessPage',
+      component: NoAccessPage,
+      meta: {
+        withoutHeader: true
       }
-    })
-  }, {
-    path: '/claim-user-experience/:account_name/:claim_id',
-    name: 'ClaimUserExpertiseDetails',
-    component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
+    }, {
+      path: '/voting-for-block-producers',
+      name: 'VotingForBlockProducers',
+      component: preliminaryDataLoader(VotingForBlockProducers, {
+        beforeEnter: (to, from, next) => {
+          const loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
+          loadPage(loadPagePromise, next);
+        }
+      })
+    }, {
+      path: '/investor-portfolio',
+      name: 'InvestorPortfolio',
+      component: InvestorPortfolio,
       beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
-          username: to.params.account_name,
-          claimId: to.params.claim_id
+        const loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
+          username: decodeURIComponent(store.getters['auth/user'].username)
         });
         loadPage(loadPagePromise, next);
       }
-    })
-  }, {
-    // TODO: deprecated
-    path: '/no-access-page',
-    name: 'NoAccessPage',
-    component: NoAccessPage,
-    meta: {
-      withoutHeader: true
-    }
-  }, {
-    path: '/voting-for-block-producers',
-    name: 'VotingForBlockProducers',
-    component: preliminaryDataLoader(VotingForBlockProducers, {
+    }, {
+      path: '/create-funding-opportunity-announcement',
+      name: 'CreateGrantProgram',
+      component: CreateGrantProgram
+    }, {
+      path: '/faq',
+      name: 'FAQ',
+      component: FAQ
+    },
+    {
+      path: '/user-application-accepted',
+      name: 'UserApplicationAccepted',
+      component: UserApplicationAccepted
+    },
+    {
+      path: '/',
+      name: 'Default',
       beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
-        loadPage(loadPagePromise, next);
-      }
-    })
-  }, {
-    path: '/investor-portfolio',
-    name: 'InvestorPortfolio',
-    component: InvestorPortfolio,
-    beforeEnter: (to, from, next) => {
-      const loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
-        username: decodeURIComponent(store.getters['auth/user'].username)
-      });
-      loadPage(loadPagePromise, next);
-    }
-  }, {
-    path: '/create-funding-opportunity-announcement',
-    name: 'CreateGrantProgram',
-    component: CreateGrantProgram
-  }, {
-    path: '/faq',
-    name: 'FAQ',
-    component: FAQ
-  },
-  {
-    path: '/user-application-accepted',
-    name: 'UserApplicationAccepted',
-    component: UserApplicationAccepted
-  },
-  {
-    path: '/',
-    name: 'Default',
-    beforeEnter: (to, from, next) => {
-      const user = store.getters['auth/user'];
-      const rolePromise = user.profile
-        ? Promise.resolve(user.profile.roles || [])
-        : usersService.getUserProfile(user.username)
-          .then((p) => p.roles || []);
+        const user = store.getters['auth/user'];
+        const rolePromise = user.profile
+          ? Promise.resolve(user.profile.roles || [])
+          : usersService.getUserProfile(user.username)
+            .then((p) => p.roles || []);
 
-      rolePromise.then((roles) => {
-        if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-          const tenant = store.getters['auth/tenant'];
-          if (!tenant) {
-            throw new Error('Granting agency must be specified for the Demo');
+        rolePromise.then((roles) => {
+          if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
+            const tenant = store.getters['auth/tenant'];
+            if (!tenant) {
+              throw new Error('Granting agency must be specified for the Demo');
+            }
+            next({
+              name: 'GrantProgramsAwardsDashboard',
+              params: { agency: tenant.account.external_id }
+            });
+          } else {
+            next({ name: 'landing' });
           }
-          next({
-            name: 'GrantProgramsAwardsDashboard',
-            params: { agency: tenant.account.external_id }
-          });
-        } else {
-          next({ name: 'landing' });
-        }
-      });
-    }
-  }, {
-    path: '*',
-    redirect: { name: 'Default' }
-  }],
+        });
+      }
+    }, {
+      path: '*',
+      redirect: { name: 'Default' }
+    }],
 
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
@@ -458,7 +461,7 @@ const authDataLoad = () => Promise.all([
   awaitStore('auth/loaded'),
   // awaitStore('auth/user', 'account'),
   awaitStore('auth/tenant'),
-  awaitStore('auth/assets'),
+  awaitStore('auth/assets')
 ]);
 
 router.beforeEach((to, from, next) => {
@@ -484,14 +487,16 @@ router.beforeEach((to, from, next) => {
 
   if (loginPages.includes(to.path)) {
     if (accessService.isLoggedIn()) {
-      authDataLoad().then(() => { next(to.path === '/admin/sign-in' ? '/admin' : '/'); }); // if token is already presented redirect user to home page
+      authDataLoad()
+        .then(() => { next(to.path === '/admin/sign-in' ? '/admin' : '/'); }); // if token is already presented redirect user to home page
     } else {
       next(); // otherwise redirect to sign-in page
     }
   } else if (PUBLIC_PAGES_NAMES.includes(to.name)) {
     next();
   } else if (accessService.isLoggedIn()) {
-    authDataLoad().then(() => { next(); }); // if there is a token allow to visit requested route
+    authDataLoad()
+      .then(() => { next(); }); // if there is a token allow to visit requested route
   } else {
     next(!to.path.includes('admin') ? { name: 'landing' } : { name: 'admin.login' }); // otherwise redirect to sign-in page
   }
