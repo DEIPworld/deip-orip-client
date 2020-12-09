@@ -78,6 +78,7 @@
             color="primary"
             class="ml-2"
             :loading="loading"
+            :disabled="disabled || loading"
           >
             {{ !isPersonalGroup ? 'Start' : 'Finish' }}
           </v-btn>
@@ -260,8 +261,13 @@
           return this.formData.amountToSell;
         },
         set(val) {
-          const { assetId, precision } = this.availableBalance;
-          const amountToSell = this.$$toAssetUnits(val || '0', false, { symbol: assetId, fractionCount: 0 });
+          const amountToSell = this.$$toAssetUnits({
+            ...this.availableBalance,
+            ...{
+              amount: val
+            }
+          }, false);
+
           this.formData.amountToSell = amountToSell;
         }
       },
@@ -274,7 +280,7 @@
         const maxSupplyAsset = this.$$toAssetUnits({
           amount: `${max_supply}`,
           assetId: this.availableBalance.assetId
-        })
+        });
         const issuedTokens = sellingAmount / max_supply * 100;
         const teamsTokens = sellingAmount / availableAmount * 100;
         let hint = `<div class="text-body-2 text--primary">${issuedTokens.toFixed(2)}% of ${maxSupplyAsset} issued tokens</div>`;

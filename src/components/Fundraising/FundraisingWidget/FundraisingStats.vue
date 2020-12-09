@@ -73,6 +73,7 @@
         >
           {{ tokenSaleData ? 'More details' : 'Info' }}
         </v-btn>
+
         <div v-else class="caption">
           Project has never fundraised before.
         </div>
