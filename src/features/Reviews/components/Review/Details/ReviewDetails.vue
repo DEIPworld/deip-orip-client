@@ -4,7 +4,6 @@
       <d-layout-section class="fill-height">
         <d-layout-section-main>
           <d-stack gap="32">
-
             <d-stack gap="4">
               <div class="text-overline text--secondary">
                 project
@@ -20,7 +19,9 @@
                   class="link text--primary text-decoration-none"
                 >
                   {{ project.title }}
-                  <v-icon small>mdi-arrow-top-right-thin-circle-outline</v-icon>
+                  <v-icon>
+                    mdi-arrow-top-right-thin-circle-outline
+                  </v-icon>
                 </router-link>
               </div>
             </d-stack>
@@ -60,11 +61,15 @@
                   <template #item-info="{ user, hasLocation }">
                     <div v-if="user.profile" class="pt-1 text-body-2">
                       <d-stack v-if="hasLocation(user.profile)" horizontal gap="9">
-                        <v-icon small>mdi-map-marker</v-icon>
+                        <v-icon small>
+                          mdi-map-marker
+                        </v-icon>
                         <div>{{ user | userLocation }}</div>
                       </d-stack>
                       <d-stack horizontal gap="9">
-                        <v-icon small>mdi-school</v-icon>
+                        <v-icon small>
+                          mdi-school
+                        </v-icon>
                         <div>{{ user | employmentOrEducation }}</div>
                       </d-stack>
                     </div>
@@ -72,7 +77,6 @@
                 </users-list>
               </template>
             </d-block>
-
 
             <d-stack v-if="reviewContent.isJson" gap="32">
               <div v-for="(item, index) of reviewContent.data" :key="index">
@@ -86,8 +90,6 @@
               </div>
             </d-stack>
             <div v-else v-html="reviewContent.data" />
-
-
           </d-stack>
         </d-layout-section-main>
 

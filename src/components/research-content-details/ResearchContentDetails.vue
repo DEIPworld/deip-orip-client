@@ -23,7 +23,9 @@
                 class="link text--primary text-decoration-none"
               >
                 {{ research.title }}
-                <v-icon small>mdi-arrow-top-right-thin-circle-outline</v-icon>
+                <v-icon>
+                  mdi-arrow-top-right-thin-circle-outline
+                </v-icon>
               </router-link>
             </div>
           </d-stack>

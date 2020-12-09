@@ -42,11 +42,10 @@
     methods: {
       clickNotification() {
         this.$router.push({
-          name: 'ResearchContentDetails',
+          name: 'project.content.details',
           params: {
-            research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink),
-            research_permlink: encodeURIComponent(this.notification.metadata.research.permlink),
-            content_permlink: encodeURIComponent(this.notification.metadata.researchContent.permlink)
+            researchExternalId: this.notification.metadata.research.external_id,
+            contentExternalId: this.notification.metadata.researchContent.external_id
           },
           hash: '#reviews'
         });

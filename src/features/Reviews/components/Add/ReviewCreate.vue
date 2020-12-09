@@ -37,7 +37,7 @@
                 </span>
               </div>
             </d-stack>
-            <d-block>
+            <d-block v-if="requestAccepted">
               <div
                 v-for="(question, index) of questions"
                 :key="index"
