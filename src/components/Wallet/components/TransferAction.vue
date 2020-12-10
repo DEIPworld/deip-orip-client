@@ -98,8 +98,8 @@
             :items="exchangeToAccounts"
             outlined
             return-object
-            item-text="asset_symbol"
-            item-value="asset_symbol"
+            item-text="stringSymbol"
+            item-value="stringSymbol"
             :menu-props="{
               maxWidth: 525
             }"
@@ -293,8 +293,8 @@
       },
       exchangeToAccounts() {
         if (this.dialog.exchange) {
-          return [...this.balances, ...this.accountData.balances].filter(
-            (item) => item.asset_symbol !== this.dialog.form.fromAccount.asset_symbol
+          return this.allAssets.filter(
+            (item) => item.stringSymbol !== this.dialog.form.fromAccount.asset_symbol
           );
         }
         return [];
@@ -310,7 +310,8 @@
     methods: {
       getAccountsByAsset($event) {
         this.loadingAccounts = true;
-        assetsService.getAccountsAssetBalancesByAsset($event.asset_symbol)
+        this.exchangeAccounts = [];
+        assetsService.getAccountsAssetBalancesByAsset($event.stringSymbol)
           .then((accounts) => usersService.getEnrichedProfiles(accounts.map(({ owner }) => owner)))
           .then((accounts) => {
             const usersAccounts = [];
@@ -413,7 +414,7 @@
           let toAmount = '0';
 
           const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
-          const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.asset_symbol);
+          const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.stringSymbol);
           fromAmount = this.$$toAssetUnits(
             this.dialog.form.fromAmount,
             false,
