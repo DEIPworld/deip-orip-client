@@ -77,7 +77,7 @@ Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = fals
 
 
 Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true) => {
-  
+
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
   const id = researchGroupExternalId || null;
@@ -116,14 +116,17 @@ Vue.filter('accountFullname', (model, width, height, isRound = false, noCache = 
 });
 
 Vue.filter('accountAvatarSrc', (model, width, height, isRound = false, noCache = true) => {
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+
   const { account, profile } = model;
   const { name: id, is_research_group: isResearchGroup } = account;
   const isUser = !isResearchGroup;
 
   const path = isUser
-    ? Vue.filter('avatarSrc')({ _id: id }, width, height, isRound, noCache)
-    : Vue.filter('researchGroupLogoSrc')(id, width, height, isRound, noCache)
-    
+    ? Vue.filter('avatarSrc')({ _id: id }, internalWidth, internalHeight, isRound, noCache)
+    : Vue.filter('researchGroupLogoSrc')(id, internalWidth, internalHeight, isRound, noCache)
+
   return path;
 });
 

@@ -66,7 +66,7 @@
                     <td>
                       <v-sheet color="transparent" class="d-flex align-center">
                         <v-avatar size="40" class="mr-4 my-2">
-                          <v-img :src="user.profile | avatarSrc(64, 64, false)" />
+                          <v-img :src="user | accountAvatarSrc(64, 64, false)" />
                         </v-avatar>
                         <v-clamp
                           autoresize
@@ -74,7 +74,7 @@
                           class="text-body-2 font-weight-medium"
                         >
                           <template v-if="user.teamRef">{{ user.teamRef.name }}</template>
-                          <template v-else>{{ user | fullname }}</template>
+                          <template v-else>{{ user | accountFullname }}</template>
                         </v-clamp>
                       </v-sheet>
                     </td>

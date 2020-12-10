@@ -13,7 +13,7 @@
         :to="userDetailsRoute(user)"
       >
         <v-avatar size="40">
-          <v-img :src="user.profile | avatarSrc(64, 64, false)" />
+          <v-img :src="user | accountAvatarSrc(64, 64, false)" />
         </v-avatar>
       </router-link>
     </v-sheet>

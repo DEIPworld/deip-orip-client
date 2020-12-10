@@ -17,7 +17,7 @@
           v-bind="{ user, avatar: $options.filters.avatarSrc(user.profile, 40) }"
         >
           <v-avatar :size="avatarSize">
-            <v-img :src="user.profile | avatarSrc(avatarSize)" />
+            <v-img :src="user | accountAvatarSrc(avatarSize)" />
           </v-avatar>
         </slot>
       </v-list-item-action>
@@ -26,7 +26,7 @@
         <v-sheet :min-height="avatarSize" class="align-self-start d-flex flex-column justify-center">
           <slot name="item-title" v-bind="{ user }">
             <div class="text-h6">
-              {{ user | fullname }}
+              {{ user | accountFullname }}
             </div>
           </slot>
 
