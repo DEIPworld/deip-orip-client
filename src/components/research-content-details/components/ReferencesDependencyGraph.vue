@@ -421,8 +421,8 @@
 
         titleLinkBox.append('xhtml:a')
           .attr('href', (d) => (true
-            ? `/#/p/research/${d.research.external_id}/c/${d.researchContent.external_id}`
-            : `/#/p/research/${d.research.external_id}?accessRequestTo=${d.researchContent.id}`) // redirect to Project page to request access
+            ? `/#/p/${d.research.external_id}/c/${d.researchContent.external_id}`
+            : `/#/p/${d.research.external_id}?accessRequestTo=${d.researchContent.id}`) // redirect to Project page to request access
           )
           .attr('target', '_blank')
           .attr('class', 'a ref-info-title-link')
