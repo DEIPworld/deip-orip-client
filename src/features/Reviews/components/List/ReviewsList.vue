@@ -81,7 +81,7 @@
             <v-sheet width="64" />
 
             <v-col cols="12" md="wide">
-              <d-block :title-margin="16">
+              <d-block :title-margin="8">
                 <template #title>
                   <div class="text-caption text--secondary">
                     <div class="font-weight-medium">
@@ -93,6 +93,7 @@
                 <template #title-append>
                   <v-btn
                     small
+                    height="20"
                     :disabled="disabled"
                     color="primary"
                     text
@@ -109,7 +110,7 @@
                   </v-btn>
                 </template>
 
-                <div v-if="review.supporters.length" class="pt-2">
+                <div v-if="review.supporters.length">
                   <v-tooltip tag="div" bottom>
                     <template #activator="{ on }">
                       <div class="d-flex justify-end" v-on="on">

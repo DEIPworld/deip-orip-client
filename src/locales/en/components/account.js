@@ -1,9 +1,9 @@
 export default {
   sidebar: {
     projectsBlock: {
-      title: 'Projects',
+      title: 'Technologies',
       teamsPr: 'Team\'s projects',
-      pr: 'Projects',
+      pr: 'Technologies',
       myPr: 'My projects',
       follPr: 'Following projects',
       prReq: 'Project requests'

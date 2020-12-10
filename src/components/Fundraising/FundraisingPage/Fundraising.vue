@@ -242,25 +242,9 @@
     },
     mixins: [componentStoreFactoryOnce(fundraisingStore), assetsChore],
     props: {
-      securityToken: {
-        type: String,
-        default: ''
-      },
-      researchId: {
-        type: String,
-        default: ''
-      },
-      researchTitle: {
-        type: String,
-        default: ''
-      },
-      researchGroupId: {
-        type: String,
-        default: ''
-      },
-      researchGroupName: {
-        type: String,
-        default: ''
+      research: {
+        type: Object,
+        default: () => ({})
       }
     },
     data() {
@@ -311,7 +295,8 @@
         userBalances: 'auth/userBalances',
         userAssets: 'auth/userAssets',
         securityTokenBalances: 'Fundraising/securityTokenBalances',
-        transactionsHistory: 'Fundraising/transactionsHistory'
+        transactionsHistory: 'Fundraising/transactionsHistory',
+        researchGroup: 'Fundraising/researchGroup'
       }),
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
@@ -352,10 +337,10 @@
       },
       chartData() {
         const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
-          if (item.owner === this.researchGroupId) { // TODO: resolve this for all group accounts in store
-            arr.push([this.researchGroupName, this.convertToPercent(item.amount)]);
+          if (item.owner === this.research.researchGroup.external_id) { // TODO: resolve this for all group accounts in store
+            arr.push([this.researchGroup.name, this.convertToPercent(item.amount)]);
           } else {
-            arr.push([this.$options.filters.fullname(item.user), this.convertToPercent(item.amount)]);
+            arr.push([this.$options.filters.accountFullname(item.user), this.convertToPercent(item.amount)]);
           }
           return arr;
         }, []);
@@ -422,11 +407,12 @@
       }
     },
     created() {
-      const { assetId } = this.$$fromAssetUnits(this.securityToken);
+      const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
       Promise.all([
         this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
-        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
-        this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId)
+        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.research.externalId),
+        this.$store.dispatch('Fundraising/loadTransactionsHistory', this.research.externalId),
+        this.$store.dispatch('Fundraising/loadResearchGroup', this.research.researchGroup.external_id)
       ])
         .then(() => {
           if (!this.tokenSale) {
@@ -461,12 +447,12 @@
           extensions: []
         })
           .then(() => {
-            const { assetId } = this.$$fromAssetUnits(this.securityToken);
+            const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
             Promise.all(
               [
-                this.$store.dispatch('Fundraising/loadResearchTokenSale', this.researchId),
+                this.$store.dispatch('Fundraising/loadResearchTokenSale', this.research.externalId),
                 this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
-                this.$store.dispatch('Fundraising/loadTransactionsHistory', this.researchId),
+                this.$store.dispatch('Fundraising/loadTransactionsHistory', this.research.externalId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')
               ]
@@ -476,7 +462,7 @@
             this.formData.amountToContribute = '';
             this.isOpenFundraisingDialog = false;
 
-            this.$notifier.showSuccess(`You have contributed to "${this.researchTitle}" fundraise successfully !`);
+            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`);
           })
           .catch((err) => {
             console.error(err);
