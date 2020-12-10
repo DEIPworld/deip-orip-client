@@ -32,7 +32,11 @@
                   ref="validator1"
                   v-slot="{ errors }"
                   name="Ticker"
-                  :rules="{ asset: { assets: existingAssets } }"
+                  :rules="{
+                    required: true,
+                    minmaxLength: { min: 5, max: 6 },
+                    asset: { assets: existingAssets }
+                  }"
                 >
                   <v-text-field
                     v-model="formModel.symbol"
@@ -249,6 +253,14 @@
       // eslint-disable-next-line no-underscore-dangle
       return `${data._field_} can't be empty`;
     }
+  });
+
+  extend('minmaxLength', {
+    params: ['min', 'max'],
+    validate(value, { min, max }) {
+      return value.length >= min && value.length <= max;
+    },
+    message: '{_field_} length should be from {min} to {max} alpha characters in length'
   });
 
   export default {
