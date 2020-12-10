@@ -38,6 +38,12 @@ export default {
       id: '721e75eb0535e152669b0c3fbbb9e21675483553',
       path: 'medicine_and_health',
       children: {}
+    },
+    aquaculture: {
+      label: 'Aquaculture',
+      id: '2519ef55e1b69f1a7e13275e3273950cce7e26a8',
+      path: 'aquaculture',
+      children: {}
     }
   }
 };
