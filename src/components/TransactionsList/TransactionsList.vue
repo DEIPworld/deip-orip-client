@@ -19,7 +19,7 @@
           inline
           :content="`${proposalsDataTable(PROPOSAL_TAB.HISTORY).length}`"
         >
-          History
+          Completed
         </v-badge>
       </v-tab>
     </v-tabs>

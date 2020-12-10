@@ -127,7 +127,7 @@
         </v-sheet>
       </v-col>
 
-      <v-col class="d-none d-md-flex">
+      <v-col>
         <v-sheet
           tile
           min-height="100%"

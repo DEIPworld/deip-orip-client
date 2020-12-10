@@ -63,7 +63,6 @@
           small
           text
           color="primary"
-          class="mt-3"
           :to="{
             name: 'project.fundraising',
             params: {
@@ -81,7 +80,6 @@
           v-if="!tokenSaleData && isResearchGroupMember"
           block
           small
-          text
           color="primary"
           class="mt-3"
           :to="{
