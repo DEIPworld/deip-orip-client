@@ -70,17 +70,18 @@
       }
     },
 
-    created() {
-      if (!wrapInArray(this.usersData).length) {
-        const users = wrapInArray(this.users);
-        this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-          users,
-          teamId: this.teamId
-        })
-          .then(() => {
-            this.$setReady();
-          });
+    watch: {
+      users: {
+        handler(newVal, oldVal) {
+          if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+            this.getUsers();
+          }
+        }
       }
+    },
+
+    created() {
+      this.getUsers();
     },
 
     methods: {
@@ -89,6 +90,24 @@
           userProfile.location
           && (userProfile.location.country || userProfile.location.city)
         );
+      },
+
+      getUsers() {
+        if (!wrapInArray(this.usersData).length) {
+          this.$setReady(false);
+
+          const users = wrapInArray(this.users);
+
+          this.$store.dispatch(`${this.storeNS}/getUsersList`, {
+            users,
+            teamId: this.teamId
+          })
+            .then(() => {
+              this.$setReady();
+            });
+        } else {
+          this.$setReady();
+        }
       }
     }
   };

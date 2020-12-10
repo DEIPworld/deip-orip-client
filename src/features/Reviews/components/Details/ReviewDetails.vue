@@ -109,6 +109,7 @@
               <review-vote
                 :review="review"
                 :members="users"
+                @vote="onVote"
               />
             </users-list>
           </d-block-widget>
@@ -236,6 +237,10 @@
     methods: {
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
+      },
+
+      onVote() {
+        this.$store.dispatch('Review/getReviewDetails', this.review.externalId);
       },
 
       ...projectDetails.methods
