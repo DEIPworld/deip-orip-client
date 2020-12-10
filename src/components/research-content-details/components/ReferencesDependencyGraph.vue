@@ -414,15 +414,15 @@
 
         hashTextBox.append('xhtml:span')
           .attr('class', 'ref-info-hash-value')
-          .text((d) => d.researchContent.content.split(':')[1]);
+          .text((d) => d.researchContent.content);
 
         const titleLinkBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-title-box');
 
         titleLinkBox.append('xhtml:a')
           .attr('href', (d) => (true
-            ? `/#/${d.researchGroup.permlink}/research/${d.research.permlink}/${d.researchContent.permlink}`
-            : `/#/${d.researchGroup.permlink}/research/${d.research.permlink}?accessRequestTo=${d.researchContent.id}`) // redirect to Project page to request access
+            ? `/#/p/research/${d.research.external_id}/c/${d.researchContent.external_id}`
+            : `/#/p/research/${d.research.external_id}?accessRequestTo=${d.researchContent.id}`) // redirect to Project page to request access
           )
           .attr('target', '_blank')
           .attr('class', 'a ref-info-title-link')
