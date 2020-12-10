@@ -16,7 +16,7 @@
                     required: true,
                     minmax: {
                       min: MIN_TOKEN_UNITS_TO_SELL,
-                      max: availableBalance.amount
+                      max: issuedTokens.amount
                     }
                   }"
                 >
@@ -26,9 +26,13 @@
                     outlined
                     persistent-hint
                     :error-messages="errors"
-                    :suffix="availableBalance.assetId"
+                    :suffix="issuedTokens.assetId"
                     :hint="amountHint(formData.amount)"
-                  />
+                  >
+                    <template #message="{ message }">
+                      <div class="text-caption" v-html="message" />
+                    </template>
+                  </v-text-field>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -245,7 +249,8 @@
           hardCap: {}
         },
 
-        loading: false
+        loading: false,
+        availableTokens: null
       };
     },
 
@@ -254,13 +259,25 @@
         project: 'Project/projectDetails'
       }),
 
-      availableBalance() {
+      issuedTokens() {
         if (hasValue(this.project.securityTokens)) {
           return this.$$fromAssetUnits(this.project.securityTokens[0]);
         }
 
         return null;
       }
+    },
+
+    created() {
+      this.availableTokens = this.issuedTokens.amount;
+
+      this.$store.dispatch('Assets/getTeamBalance', [
+        this.project.researchGroup.external_id,
+        this.issuedTokens.assetId
+      ]).then((res) => {
+        console.log(res)
+        this.availableTokens = this.$$fromAssetUnits(res.amount);
+      });
     },
 
     methods: {
@@ -281,7 +298,7 @@
         const isProposal = !this.project.researchGroup.is_personal;
         const securityTokensOnSale = [
           this.$$toAssetUnits({
-            ...this.availableBalance,
+            ...this.issuedTokens,
             ...{ amount: this.formData.amount }
           }, false)
         ];
@@ -321,12 +338,22 @@
       amountHint(val) {
         if (!val) return '';
 
-        return `${this.toPercent(val)} of ${this.$$toAssetUnits(this.availableBalance)} issued tokens`;
+        const messages = [
+          `${this.toPercent(val)} of ${this.$$toAssetUnits(this.issuedTokens)} issued tokens`
+        ];
+        if (this.issuedTokens.amount > this.availableTokens.amount) {
+          messages.push(
+            `${this.toPercent(val, this.availableTokens)} of ${this.$$toAssetUnits(this.availableTokens)} team's tokens`
+          );
+        }
+
+        return messages.join('<br>');
       },
 
-      toPercent(val) {
+      toPercent(val, from) {
         if (!val) return '';
-        const pc = (val / this.availableBalance.amount) * 100;
+        const target = from || this.issuedTokens;
+        const pc = (val / target.amount) * 100;
 
         return `${Math.round(pc * 100) / 100}%`;
       },

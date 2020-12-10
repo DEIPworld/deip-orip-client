@@ -32,16 +32,23 @@ const ACTIONS = {
     return Promise.all([
       assetsService.getAssetBySymbol(payload.symbol),
       assetsService.getAccountsAssetBalancesByAsset(payload.symbol)
-    ]).then(([asset, balances]) => {
-      commit('storeAsset', {
-        ...asset,
-        balances
+    ])
+      .then(([asset, balances]) => {
+        commit('storeAsset', {
+          ...asset,
+          balances
+        });
       });
-    });
   },
 
   createAsset({ commit }, payload) {
     return assetsService.createSecurityTokenAsset(...payload)
+      .then((res) => res);
+  },
+
+  getTeamBalance(context, payload) {
+    return assetsService
+      .getAccountAssetBalance(...payload)
       .then((res) => res);
   }
 
@@ -76,7 +83,7 @@ const MUTATIONS = {
     } else {
       state.data.push(res);
     }
-  },
+  }
 
   // storeBalances(state, balances) {
   //   if (!(balances || balances.length)) return;
