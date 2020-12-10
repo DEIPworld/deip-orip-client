@@ -150,7 +150,7 @@
         );
         const { amount: tokenValue } = this.$$fromAssetUnits(token);
         const { amount } = this.$$fromAssetUnits(item.amount);
-        return amount * 100 / tokenValue;
+        return (amount * 100 / tokenValue).toFixed(2);
       },
 
       mockPriceChange(rtId) {
