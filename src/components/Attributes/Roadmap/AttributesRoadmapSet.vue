@@ -94,7 +94,6 @@
     validate(date, { prevDates, nextDates }) {
       const curentDate = new Date(date);
 
-      // console.log(prevDates, date, nextDates)
 
       if (prevDates.length && nextDates.length) {
         return prevDates.some((d) => curentDate >= new Date(d))

@@ -157,19 +157,15 @@
       },
 
       userFullName(e) {
-        console.log(e);
 
         if (e.teamRef) {
-          console.log(1);
           return e.teamRef.name;
         }
 
         if (e.profile) {
-          console.log(2);
           return this.$options.filters.fullname(e);
         }
 
-        console.log(3);
         return 'undefined';
       },
 

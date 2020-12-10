@@ -174,7 +174,6 @@
 
       getEditorData() {
         this.editor.save().then((outputData) => {
-          // console.log(this.editor)
           console.info('Article data: ', outputData)
         }).catch((error) => {
           console.error('Saving failed: ', error)

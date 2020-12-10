@@ -34,7 +34,6 @@ export const colorChore = {
     },
 
     isDarkColor(color = '#000') {
-      // console.log(color, chroma(color).luminance())
       return chroma(color).luminance() < 0.5;
     }
   }

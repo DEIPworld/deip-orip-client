@@ -270,7 +270,6 @@
       //
       //         saveDocument()
       //           .then((contentRef) => {
-      //             console.log(contentRef)
       //             const isProposal = !this.research.research_group.is_personal;
       //             researchContentService.createResearchContent(
       //               {

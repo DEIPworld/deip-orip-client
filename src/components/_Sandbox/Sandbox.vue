@@ -57,7 +57,6 @@
       };
     },
     created() {
-      console.log('sandbox created')
       registerStoreModule.call(this, {
         state: {},
         getters: {},
@@ -66,8 +65,6 @@
         namespaced: true
       })
         .then((name) => {
-          console.log(name)
-          console.log(this.$$storeNS)
         });
     },
     beforeDestroy() {

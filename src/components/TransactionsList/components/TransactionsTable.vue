@@ -516,10 +516,6 @@
       }
     },
 
-    created() {
-      console.log(this.dataTable)
-    },
-
     methods: {
 
       isActionsBlockVisible(item) {
@@ -531,10 +527,10 @@
         const hasRejections = rejectors.some(([name,]) => {
           return name == this.$currentUserName;
         });
-        
+
         return !hasApprovals && !hasRejections;
       },
-      
+
       isAccountsBlockVisible(item) {
         return this.expanded.some(({ proposal }) => proposal.external_id === item.proposal.external_id);
       },
@@ -585,7 +581,7 @@
         this.disableButtonsId = external_id;
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
           externalId: external_id,
-          account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST 
+          account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
             ? required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
                 ? required_approvals.find(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
                 : this.$currentUserName

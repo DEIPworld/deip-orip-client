@@ -69,6 +69,7 @@
           <d-date-time-input
             v-model="dialogModel.date"
             label="Request expiration date"
+            only-future
           />
         </v-sheet>
 
