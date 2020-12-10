@@ -27,7 +27,7 @@ export const attributeSet = {
     },
 
     $$isRequired() {
-      return this.attribute.isRequired;
+      return this.viewType !== 'filter' && this.attribute.isRequired;
     },
 
     $$isEditable() {
