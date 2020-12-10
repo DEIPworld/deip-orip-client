@@ -1,5 +1,5 @@
 <template>
-<!--  <div>-->
+  <!--  <div>-->
   <div v-if="$ready">
     <template v-if="!asset">
       <v-btn
@@ -37,10 +37,10 @@
       >
         <d-stack>
           <div class="text-body-1">
-            Shareholders: {{ internalAsset.balances.length }}<br>
-            Tokens issued: {{ listDataTotal.value }}<br>
-            Your tokens: {{ listDataUserBalance.value }}<br>
-            Your share: {{ listDataUserBalancePercent.value }}<br>
+            <span class="font-weight-medium">Shareholders:</span> {{ internalAsset.balances.length }}<br>
+            <span class="font-weight-medium">Tokens issued:</span> {{ listDataTotal.value }}<br>
+            <span class="font-weight-medium">Your tokens:</span> {{ listDataUserBalance.value }}<br>
+            <span class="font-weight-medium">Your share:</span> {{ listDataUserBalancePercent.value }}<br>
           </div>
           <users-list :users="shareholders" view-type="dataProvider">
             <template #default="{ users }">
@@ -50,7 +50,7 @@
                     <th class="text-left">
                       Name
                     </th>
-                    <th class="text-left">
+                    <th class="text-right">
                       Shares
                     </th>
                     <th class="text-right">
@@ -64,19 +64,24 @@
                     :key="user.account.name"
                   >
                     <td>
-                      <v-sheet color="transparent" max-width="200" class="d-flex align-center">
+                      <v-sheet color="transparent" class="d-flex align-center">
                         <v-avatar size="40" class="mr-4 my-2">
                           <v-img :src="user.profile | avatarSrc(64, 64, false)" />
                         </v-avatar>
-                        <div class="text-body-2 font-weight-medium text-truncate">
-                          {{ user | fullname }}
-                        </div>
+                        <v-clamp
+                          autoresize
+                          :max-lines="2"
+                          class="text-body-2 font-weight-medium"
+                        >
+                          <template v-if="user.teamRef">{{ user.teamRef.name }}</template>
+                          <template v-else>{{ user | fullname }}</template>
+                        </v-clamp>
                       </v-sheet>
                     </td>
-                    <td>
+                    <td class="text-right white-space-nowrap">
                       {{ toPercent(getBalance(user.account.name).amount) }}
                     </td>
-                    <td>
+                    <td class="text-right white-space-nowrap">
                       {{ getBalance(user.account.name).amount }}
                     </td>
                   </tr>

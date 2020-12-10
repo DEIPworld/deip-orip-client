@@ -88,7 +88,6 @@
                   </v-col>
                 </v-row>
               </d-timeline-item>
-
               <d-timeline-item
                 v-for="(item, index) of formModel.holders"
                 :key="`row-${index}`"
@@ -220,8 +219,8 @@
   // import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
   const shareholderModel = () => ({
-    account: null,
-    amount: null
+    account: undefined,
+    amount: undefined
   });
 
   extend('asset', {
@@ -295,7 +294,9 @@
       }),
 
       teamTokens() {
-        const tokensSpend = this.formModel.holders.map((s) => s.amount)
+        const tokensSpend = this.formModel.holders
+          .map((s) => parseFloat(s.amount))
+          .filter((a) => a)
           .reduce((a, b) => a + b, 0);
 
         return {
@@ -333,7 +334,7 @@
         const idx = this.formModel.holders.indexOf(item);
         if (idx !== -1) {
           this.formModel.holders.splice(idx, 1);
-          this.formModel.holders = [...new Set(this.internalValue)];
+          this.formModel.holders = [...new Set(this.formModel.holders)];
         }
       },
 
