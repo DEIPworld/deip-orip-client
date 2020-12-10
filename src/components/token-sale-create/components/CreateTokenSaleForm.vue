@@ -276,15 +276,16 @@
         if (!this.amountToSell || !this.availableBalance) return '';
         const { amount: availableAmount } = this.availableBalance;
         const { amount: sellingAmount } = this.$$fromAssetUnits(this.amountToSell);
-        const { max_supply } = this.$$assetInfo(this.availableBalance.assetId);
+        const { maxSupply } = this.$$assetInfo(this.availableBalance.assetId);
         const maxSupplyAsset = this.$$toAssetUnits({
-          amount: `${max_supply}`,
+          amount: `${maxSupply}`,
           assetId: this.availableBalance.assetId
         });
-        const issuedTokens = sellingAmount / max_supply * 100;
+        const issuedTokens = sellingAmount / maxSupply * 100;
         const teamsTokens = sellingAmount / availableAmount * 100;
+        
         let hint = `<div class="text-body-2 text--primary">${issuedTokens.toFixed(2)}% of ${maxSupplyAsset} issued tokens</div>`;
-        if (max_supply !== availableAmount) {
+        if (maxSupply !== availableAmount) {
           hint = `${hint}<div class="text-body-2 text--primary">${teamsTokens.toFixed(2)}% of ${this.$$toAssetUnits(this.availableBalance)} team's tokens</div>`;
         }
         return hint;
