@@ -198,7 +198,7 @@
 </script>
 
 <style lang="scss">
-  @import '~@/styles/next/tools/get-text-style';
+  @import '~@/styles/next/tools/get-text-style.scss';
 
   .deip-texture {
     .sc-manuscript {

@@ -42,17 +42,7 @@
           </validation-provider>
 
           <d-stack class="pa-6">
-<!--            <div-->
-<!--              v-if="filteredErrors(errors).length"-->
-<!--              class="text-body-2 error&#45;&#45;text"-->
-<!--            >-->
-<!--              <div v-for="err of filteredErrors(errors)">-->
-<!--                {{ err }}-->
-<!--              </div>-->
-<!--            </div>-->
-
             <validation-provider
-              v-slot="{ errors }"
               name="Content Type"
               rules="required"
             >
@@ -60,7 +50,7 @@
                 v-model="formModel.contentType"
                 :items="contentTypes"
                 label="Content Type"
-                :error-messages="errors"
+                :error-messages="errors['Content Type']"
                 outlined
                 item-value="id"
                 hide-details="auto"
@@ -68,7 +58,6 @@
             </validation-provider>
 
             <validation-provider
-              v-slot="{ errors }"
               name="Authors"
               rules="required"
             >
@@ -76,7 +65,7 @@
                 ref="userSelector"
                 v-model="formModel.authors"
                 label="Authors"
-                :error-messages="errors"
+                :error-messages="errors['Authors']"
                 :users="project.members"
                 multiple
                 return-object
@@ -130,7 +119,7 @@
 </template>
 
 <script>
-  import ContentDar from '@/features/Contents/components/Content/Dar/ContentDar';
+  import ContentDar from '@/features/Contents/components/Dar/ContentDar';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import DStack from '@/components/Deipify/DStack/DStack';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
@@ -171,7 +160,7 @@
         contentTypes: researchContentTypes,
 
         internalUsers: [],
-        internalreferences: [],
+        internalReferences: [],
 
         loading: false,
         ready: false,
@@ -231,7 +220,7 @@
             }
 
             this.internalUsers = users;
-            this.internalreferences = references;
+            this.internalReferences = references;
 
             this.setFormModel(data);
 
@@ -269,7 +258,7 @@
               }
             ),
             references: this.$where(
-              this.internalreferences,
+              this.internalReferences,
               {
                 externalId: data.references.map((ref) => ref.uri.split('/')
                   .pop())

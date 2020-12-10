@@ -36,7 +36,7 @@
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
   import { limitAccess } from '@/mixins/limitAccess';
-  import ContentDraftCta from '@/features/Contents/components/Content/Draft/ContentDraftCta';
+  import ContentDraftCta from '@/features/Contents/components/Draft/ContentDraftCta';
 
   export default {
     name: 'ProjectDetailsContents',

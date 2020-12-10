@@ -36,7 +36,6 @@
     name: 'DBlock',
     components: { DStack },
     props: {
-
       compact: {
         type: Boolean,
         default: false

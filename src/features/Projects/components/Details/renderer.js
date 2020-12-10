@@ -7,15 +7,15 @@ import { researchAttributeFileUrl } from '@/utils/helpers';
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 import  FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
 
-import ProjectDetailsEditCta from '@/features/Projects/components/Project/Details/ProjectDetailsEditCta';
+import ProjectDetailsEditCta from '@/features/Projects/components/Details/ProjectDetailsEditCta';
 import ProjectDetailsFollowCta
-  from '@/features/Projects/components/Project/Details/ProjectDetailsFollowCta';
+  from '@/features/Projects/components/Details/ProjectDetailsFollowCta';
 import ProjectDetailsContents
-  from '@/features/Projects/components/Project/Details/ProjectDetailsContents';
+  from '@/features/Projects/components/Details/ProjectDetailsContents';
 import ProjectDetailsReviews
-  from '@/features/Projects/components/Project/Details/ProjectDetailsReviews';
+  from '@/features/Projects/components/Details/ProjectDetailsReviews';
 import ProjectDetailsAssets
-  from '@/features/Projects/components/Project/Details/ProjectDetailsAssets';
+  from '@/features/Projects/components/Details/ProjectDetailsAssets';
 
 import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLicensingLicensee';
 import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';

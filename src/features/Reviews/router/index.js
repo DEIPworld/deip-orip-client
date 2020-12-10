@@ -1,6 +1,6 @@
-import Review from '@/features/Reviews/components/Review/Review';
-import ReviewCreate from '@/features/Reviews/components/Add/ReviewCreate';
-import ReviewDetails from '@/features/Reviews/components/Review/Details/ReviewDetails';
+import ReviewDataProvider from '@/features/Reviews/components/DataProvider/ReviewDataProvider';
+import ReviewCreate from '@/features/Reviews/components/Create/ReviewCreate';
+import ReviewDetails from '@/features/Reviews/components/Details/ReviewDetails';
 
 const routerView = { template: '<router-view />' };
 
@@ -33,7 +33,7 @@ export const reviewRoutingFabric = (parent) => {
 
       {
         path: ':reviewExternalId',
-        component: Review,
+        component: ReviewDataProvider,
         props(route) {
           return {
             reviewId: route.params.reviewExternalId

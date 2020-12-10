@@ -2,7 +2,6 @@ import deipRpc from '@deip/rpc-client';
 import { camelizeObjectKeys } from '@/utils/helpers';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import {
-  getAdditionalData,
   getAdditionalDataOne
 } from '@/features/Reviews/utils/getAdditionalData';
 

@@ -4,20 +4,23 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { projectDetailsStore } from '@/features/Projects/store/projectDetailsStore';
+  import { contentDetailsStore } from '@/features/Contents/store';
 
   export default {
-    name: 'Project',
-    mixins: [componentStoreFactoryOnce(projectDetailsStore)],
+    name: 'ContentDataProvider',
+
+    mixins: [
+      componentStoreFactoryOnce(contentDetailsStore, 'Content')
+    ],
+
     props: {
-      projectId: {
+      contentId: {
         type: String,
         required: true
       }
     },
     created() {
-      this.$store
-        .dispatch('Project/getProjectDetails', this.projectId)
+      this.$store.dispatch('Content/getContentDetails', this.contentId)
         .then(() => {
           this.$setReady();
         });

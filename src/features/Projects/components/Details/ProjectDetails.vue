@@ -13,7 +13,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import ProjectDetailsRenderer from '@/features/Projects/components/Project/Details/renderer';
+  import ProjectDetailsRenderer from '@/features/Projects/components/Details/renderer';
   import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
 
   export default {
