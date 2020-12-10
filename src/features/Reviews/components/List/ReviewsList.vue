@@ -9,7 +9,7 @@
       </v-badge>
     </template>
 
-    <template v-if="!(disabledRequest || disabled)" #title-append>
+    <template v-if="!check(disableReviewRequestRoute)" #title-append>
       <review-request
         :project-id="projectId"
         :content-id="contentId"
@@ -50,8 +50,9 @@
                     {{ getResearchContentType(review.contentData.contentType).text }}
                   </div>
                   <div>
-                    <component
-                      :is="disabled ? 'span' : 'router-link'"
+
+                    <router-link
+                      v-if="!check(disableContentRoute)"
                       class="link text--primary"
                       :to="{
                         name: 'project.content.details',
@@ -62,7 +63,11 @@
                       }"
                     >
                       {{ review.contentData.title }}
-                    </component>
+                    </router-link>
+                    <span v-else>
+                      {{ review.contentData.title }}
+                    </span>
+
                   </div>
                 </template>
 
@@ -94,7 +99,7 @@
                   <v-btn
                     small
                     height="20"
-                    :disabled="disabled"
+                    :disabled="check(disableReviewRoute)"
                     color="primary"
                     text
                     :to="{
@@ -161,7 +166,7 @@
           </div>
         </slot>
       </v-col>
-      <v-col v-if="!(disabledCreating || disabled)" cols="auto">
+      <v-col v-if="!check(disableCreateRoute)" cols="auto">
         <v-btn
           color="primary"
           small
@@ -188,7 +193,6 @@
   import { mapGetters, mapState } from 'vuex';
 
   import { ResearchService } from '@deip/research-service';
-  import { limitAccess } from '@/mixins/limitAccess';
   import UsersList from '@/features/Users/components/List/UsersList';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
@@ -214,18 +218,6 @@
       dataContextSwitch
     ],
     props: {
-      disabled: {
-        type: Boolean,
-        default: false
-      },
-      disabledRequest: {
-        type: Boolean,
-        default: false
-      },
-      disabledCreating: {
-        type: Boolean,
-        default: true
-      },
       projectId: {
         type: String,
         default: null
@@ -237,7 +229,13 @@
       excludeUsers: {
         type: [Array, String],
         default: () => []
-      }
+      },
+
+      disableAllRoutes: Boolean,
+      disableContentRoute: Boolean,
+      disableReviewRoute: Boolean,
+      disableReviewRequestRoute: Boolean,
+      disableCreateRoute: Boolean,
     },
     computed: {
       ...mapState({
@@ -298,6 +296,10 @@
 
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
+      },
+
+      check(target) {
+        return this.disableAllRoutes || target
       }
 
     }

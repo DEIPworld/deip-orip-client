@@ -18,7 +18,7 @@
     <template #item.title="{item}">
 
       <component
-        :is="disabled ? 'span' : 'router-link'"
+        :is="disableAllRoutes || disableContentRoute ? 'span' : 'router-link'"
         v-if="$isLoggedIn"
         class="a"
         :to="{
@@ -42,7 +42,7 @@
         <v-btn
           icon
           small
-          :disabled="disabled"
+          :disabled="disableAllRoutes || disableReferenceRoute"
           :to="{
             name: 'ResearchContentReferences',
             params: {
@@ -91,10 +91,9 @@
       contentList
     ],
     props: {
-      disabled: {
-        type: Boolean,
-        default: false
-      }
+      disableAllRoutes: Boolean,
+      disableReferenceRoute: Boolean,
+      disableContentRoute: Boolean,
     },
     data() {
       return {

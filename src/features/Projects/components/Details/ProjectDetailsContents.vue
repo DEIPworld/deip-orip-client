@@ -5,14 +5,16 @@
 
       :project-id="project.externalId"
 
-      :disabled="$$limitedAccess"
-      v-bind="$$limitedAccessProps"
+      :disable-all-routes="isLicensingAccessLimited"
+      v-bind="licensingAccessProps"
     />
+
     <drafts-list
       v-if="isMember"
       ref="DraftList"
       :research-id="project.externalId"
     />
+
     <d-stack gap="8">
       <content-upload
         v-if="isMember"
@@ -35,7 +37,6 @@
   import DraftsList from '@/components/DraftsList/DraftsList';
   import ContentUpload from '@/components/Contents/ContentUpload/ContentUpload';
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
-  import { limitAccess } from '@/mixins/limitAccess';
   import ContentDraftCta from '@/features/Contents/components/Draft/ContentDraftCta';
 
   export default {
@@ -50,8 +51,7 @@
     },
 
     mixins: [
-      projectDetails,
-      limitAccess
+      projectDetails
     ],
 
     computed: {

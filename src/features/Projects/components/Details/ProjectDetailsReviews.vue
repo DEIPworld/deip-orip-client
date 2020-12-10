@@ -2,24 +2,24 @@
   <reviews-list
     :project-id="project.externalId"
     :content-id="null"
-    :disabled="$$limitedAccess"
-    v-bind="$$limitedAccessProps"
     :discipline-id="project.disciplines.map(({external_id}) => external_id)"
     :exclude-users="project.members"
+
+    :disable-content-route="isLicensingAccessLimited"
+    :disable-review-request-route="isLicensingAccessLimited"
+    :disable-create-route="isLicensingAccessLimited"
   />
 </template>
 
 <script>
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
-  import { limitAccess } from '@/mixins/limitAccess';
   import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
 
   export default {
     name: 'ProjectDetailsReviews',
     components: { ReviewsList },
     mixins: [
-      projectDetails,
-      limitAccess
-    ],
+      projectDetails
+    ]
   };
 </script>

@@ -17,7 +17,7 @@ export const projectDetails = {
       return !!(this.isMember || this.project.securityTokens.length)
     },
 
-    limitedAccess() {
+    isLicensingAccessLimited() {
       const expressLicensingId = this.$tenantSettings.researchAttributes
         .find((attr) => attr.type === ATTR_TYPES.EXPRESS_LICENSING)
         ._id;
@@ -30,6 +30,14 @@ export const projectDetails = {
       const owners = this.project.researchRef.expressLicenses.map((lic) => lic.owner);
 
       return ![...this.project.members, ...owners].includes(this.$currentUserName);
+    },
+    licensingAccessProps() {
+      return {
+        ...(this.isLicensingAccessLimited ? {
+          'data-access-message': 'Become available after licensing',
+          class: 'limit-access'
+        } : {})
+      };
     }
   },
   methods: {

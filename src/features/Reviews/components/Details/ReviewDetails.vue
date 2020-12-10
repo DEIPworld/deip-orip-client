@@ -12,9 +12,7 @@
                 <router-link
                   :to="{
                     name: 'project.details',
-                    params: {
-                      researchtExternalId: project.externalId
-                    }
+                    params: $route.params
                   }"
                   class="link text--primary text-decoration-none"
                 >
@@ -34,17 +32,18 @@
                 Review on
                 {{ getResearchContentType(content.contentType).text }}:
                 <router-link
+                  v-if="isLicensingAccessLimited"
                   :to="{
                     name: 'project.content.details',
-                    params: {
-                      researchtExternalId: project.externalId,
-                      contentExternalId: content.externalId
-                    }
+                    params: $route.params
                   }"
                   class="link text--primary"
                 >
                   {{ content.title }}
                 </router-link>
+                <template v-else>
+                  {{ content.title }}
+                </template>
               </div>
             </d-stack>
 
@@ -148,9 +147,11 @@
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewVote from '@/features/Reviews/components/Vote/ReviewVote';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import { isJsonString } from '@/utils/helpers';
+  import { isJsonString, researchAttributesToObject } from '@/utils/helpers';
   import { ResearchService } from '@deip/research-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
+
+  import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
   const researchService = ResearchService.getInstance();
 
@@ -173,8 +174,21 @@
       ...mapGetters({
         review: 'Review/reviewDetails',
         content: 'Content/contentDetails',
-        project: 'Project/projectDetails'
+        projectRaw: 'Project/projectDetails'
       }),
+
+      project() {
+        return {
+          ...this.projectRaw,
+          ...{
+            createdAt: this.$options.filters.dateFormat(this.projectRaw.createdAt, 'D MMM YYYY', true),
+            researchRef: {
+              ...this.projectRaw.researchRef,
+              attributes: researchAttributesToObject(this.projectRaw.researchRef.attributes)
+            }
+          }
+        };
+      },
 
       reviewContent() {
         const isJson = isJsonString(this.review.content);
@@ -214,29 +228,17 @@
 
       reviewSupporters() {
         return [...new Set(this.review.votes.map((v) => v.voter))];
-      }
-    },
+      },
 
-    mounted() {
-      // this.xxx();
+      ...projectDetails.computed
     },
 
     methods: {
-      // xxx() {
-      //   this.$store.dispatch('rcd/loadResearchContentDetails', {
-      //     group_permlink: decodeURIComponent(this.permData.groupPermalink),
-      //     research_permlink: decodeURIComponent(this.permData.projectPermalink),
-      //     content_permlink: decodeURIComponent(this.permData.contentPermalink),
-      //     ref: this.$route.query.ref
-      //   })
-      //     .then(() => {
-      //       this.$setReady();
-      //     });
-      // }
-
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
-      }
+      },
+
+      ...projectDetails.methods
     }
   };
 </script>
