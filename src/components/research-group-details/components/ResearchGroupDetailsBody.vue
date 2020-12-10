@@ -46,7 +46,7 @@
       v-if="isResearchGroupMember && !group.is_personal"
       id="proposals"
       class="mb-12"
-      title="Transactions"
+      :title="$t('researchGroupDetails.proposalsTable.title')"
     >
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">

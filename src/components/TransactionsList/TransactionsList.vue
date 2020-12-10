@@ -10,7 +10,7 @@
           inline
           :content="`${proposalsDataTable(PROPOSAL_TAB.PENDING).length}`"
         >
-          Pending
+          {{$t('transactions.table.pending')}}
         </v-badge>
       </v-tab>
       <v-tab :key="2">
@@ -19,7 +19,7 @@
           inline
           :content="`${proposalsDataTable(PROPOSAL_TAB.HISTORY).length}`"
         >
-          Completed
+          {{$t('transactions.table.completed')}}
         </v-badge>
       </v-tab>
     </v-tabs>

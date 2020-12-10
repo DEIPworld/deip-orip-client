@@ -20,7 +20,8 @@ export default {
       rules: {
         unique: 'Username should be unique in system',
         nameChars: 'Incorrect value',
-        email: 'Invalid E-mail'
+        email: 'Invalid E-mail',
+        rePasswordField: 'Passwords should match'
       },
       submitBtn: 'Finish registration',
       bottomText: 'Already have an account?',

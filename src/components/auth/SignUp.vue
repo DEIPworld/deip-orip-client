@@ -233,7 +233,7 @@
 
             return true;
           },
-          reEnterMasterPassword: (value) => value === this.formData.masterPassword || this.$t('signUp.free.form.rules.reEnterMasterPassword')
+          reEnterMasterPassword: (value) => value === this.formData.masterPassword || this.$t('signUp.free.form.rules.rePasswordField')
         }
       };
     },

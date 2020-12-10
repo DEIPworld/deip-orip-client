@@ -2,7 +2,7 @@
   <d-layout-section v-if="$ready">
     <d-layout-section-main>
       <div class="text-h4 mb-8">
-        Transactions
+        {{$t('transactions.title')}}
       </div>
       <transactions-list :key="'group-proposals'" :account="$currentUserName" />
     </d-layout-section-main>

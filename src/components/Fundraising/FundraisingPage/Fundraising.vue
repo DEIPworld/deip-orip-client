@@ -2,26 +2,25 @@
   <d-layout-section v-if="$ready">
     <d-layout-section-main>
       <div class="text-h4 mb-8">
-        Fundraising
+        {{$t('researchTokenSale.title')}}
       </div>
       <v-row v-if="tokenSale">
         <v-col cols="12" md="7">
           <d-stack gap="32">
             <div class="text-h6">
-              Assessing the Simulated Arctic Freshwater System
-              in CMIP5 Models, the CESM Large Ensemble, and Forced Simulations
+              {{research.title}}
             </div>
             <div class="d-flex align-center">
               <d-stack gap="6" class="caption">
                 <div>
                   <span class="font-weight-bold">
-                    Start:
+                    {{$t('researchTokenSale.fundraisingStatsSection.startTime')}}
                   </span>
                   {{ tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
                 <div>
                   <span class="font-weight-bold">
-                    End:
+                    {{$t('researchTokenSale.fundraisingStatsSection.endTime')}}
                   </span>
                   {{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
@@ -81,12 +80,14 @@
           </v-sheet>
           <d-stack gap="12" class="caption text--secondary mb-6">
             <d-stack horizontal gap="6" class="text--secondary">
-              <span class="font-weight-bold">Already collected investments:</span>
+              <span class="font-weight-bold">
+                {{$t('researchTokenSale.fundraisingControlSection.collected')}}
+              </span>
               <span>{{ toAsset(tokenSale.total_amount) }}</span>
             </d-stack>
             <div class="d-flex align-center">
               <d-stack horizontal gap="6" class="text--secondary mr-3">
-                <span class="font-weight-bold">Min Goal:</span>
+                <span class="font-weight-bold">{{$t('researchTokenSale.fundraisingControlSection.softCap')}}</span>
                 <span>{{ toAsset(tokenSale.soft_cap) }}</span>
               </d-stack>
               <v-chip
@@ -101,7 +102,7 @@
               </v-chip>
             </div>
             <d-stack horizontal gap="6" class="text--secondary">
-              <span class="font-weight-bold">Max Goal:</span>
+              <span class="font-weight-bold">{{$t('researchTokenSale.fundraisingControlSection.hardCap')}}</span>
               <span>{{ toAsset(tokenSale.hard_cap) }}</span>
             </d-stack>
           </d-stack>
@@ -144,7 +145,7 @@
         </v-col>
       </v-row>
 
-      <d-block title="Transactions" class="mt-8">
+      <d-block :title="$t('researchTokenSale.contributionsHistorySection.title')" class="mt-8">
         <v-divider />
         <v-data-table
           :hide-default-footer="transactionsHistory.length < 50"

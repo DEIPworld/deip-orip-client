@@ -30,7 +30,7 @@ export default {
     transfer: 'Transfer'
   },
   proposalsTable: {
-    title: 'Proposals',
+    title: 'Multisignature transactions',
     failure: 'Failure',
     next: 'Next attempt:',
     reason: 'Reason:',

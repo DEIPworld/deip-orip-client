@@ -9,6 +9,8 @@ import adminRouting from './components/adminRouting';
 import signUp from './components/signUp';
 import userWallet from './components/userWallet';
 import researchGroupDetails from './components/researchGroupDetails';
+import researchTokenSale from './components/researchTokenSale';
+import transactions from './components/transactions';
 import researchDetails from './components/researchDetails';
 import createResearch from './components/createResearch';
 import signIn from './components/signIn';
@@ -101,5 +103,7 @@ export default {
   researchDetails,
   researchEdit,
   createResearch,
-  userWallet
+  userWallet,
+  transactions,
+  researchTokenSale
 };
