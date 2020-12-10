@@ -7,6 +7,8 @@
 
       hide-details="auto"
 
+      class="mt-0 pt-0"
+
       :disabled="!$$isEditable"
     />
     <d-timeline v-if="modelActive">

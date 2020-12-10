@@ -3,7 +3,9 @@ import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
+import { ResearchGroupService } from '@deip/research-group-service';
 
+const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -12,16 +14,24 @@ const assetsService = AssetsService.getInstance();
 const STATE = {
   tokenSale: undefined,
   securityTokenBalances: [],
-  transactionsHistory: []
+  transactionsHistory: [],
+  researchGroup: {}
 };
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
   securityTokenBalances: (state) => state.securityTokenBalances,
-  transactionsHistory: (state) => state.transactionsHistory
+  transactionsHistory: (state) => state.transactionsHistory,
+  researchGroup: (state) => state.researchGroup
 };
 
 const ACTIONS = {
+  loadResearchGroup({ commit }, accountExternalId) {
+    return researchGroupService.getResearchGroup(accountExternalId)
+      .then((researchGroup) => {
+        commit('setResearchGroup', researchGroup);
+      });
+  },
   loadResearchTokenSale({ dispatch, commit }, researchId) {
     // TODO: load research token sale by id
     return investmentsService.getCurrentTokenSaleByResearch(researchId)
@@ -95,6 +105,9 @@ const MUTATIONS = {
   },
   setTransactionsHistory(state, transactionsHistory) {
     state.transactionsHistory = transactionsHistory;
+  },
+  setResearchGroup(state, researchGroup) {
+    state.researchGroup = researchGroup;
   }
 };
 

@@ -82,19 +82,7 @@
 
     <projects-list
       :team-id="group.external_id"
-    >
-      <template #title-append-after>
-        <v-btn
-          v-if="isResearchGroupMember && !group.is_personal"
-          color="primary"
-          small
-          :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'project.create' } : { name: 'CreateResearchProposal' }"
-          outlined
-        >
-          {{ $t('researchGroupDetails.start') }}
-        </v-btn>
-      </template>
-    </projects-list>
+    />
 
     <add-member-to-group-dialog
       v-if="group"
