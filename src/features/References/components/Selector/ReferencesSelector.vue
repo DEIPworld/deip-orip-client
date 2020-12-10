@@ -5,6 +5,9 @@
     item-text="title"
     item-value="externalId"
     v-bind="$$fieldProps"
+
+    :loading="!$ready"
+    :disabled="!$ready"
   >
     <template #item="{ item } ">
       <div class="py-2 text-body-2">

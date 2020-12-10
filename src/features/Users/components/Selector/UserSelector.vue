@@ -21,6 +21,9 @@
     :return-object="returnObject"
 
     v-bind="fieldProps"
+
+    :loading="!$ready"
+    :disabled="!$ready"
   >
     <template #item="{ item }">
       <v-list-item-avatar :size="24">

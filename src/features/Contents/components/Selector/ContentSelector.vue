@@ -7,6 +7,9 @@
     item-text="title"
     item-value="externalId"
     v-bind="validatableProps"
+
+    :loading="!$ready"
+    :disabled="!$ready"
   />
 </template>
 
