@@ -47,7 +47,7 @@
         <v-select
           v-model="dialog.form.fromAccount"
           :label="dialog.exchange ? 'From asset' : 'Asset'"
-          :items="dialog.exchange ? [...balances, ...accountData.balances] : asset.balances"
+          :items="[...balances, ...accountData.balances]"
           outlined
           return-object
           item-text="amount"
@@ -98,41 +98,13 @@
             :items="exchangeToAccounts"
             outlined
             return-object
-            item-text="amount"
+            item-text="asset_symbol"
             item-value="asset_symbol"
             :menu-props="{
               maxWidth: 525
             }"
-          >
-            <template #selection="{ item }">
-              <div class="d-flex justify-space-between w-100 align-center">
-                <div>
-                  {{ item.asset_symbol }}
-                </div>
-                <div class="text--secondary">
-                  {{
-                    $$toAssetUnits(item.amount, true, {
-                      symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
-                    })
-                  }}
-                </div>
-              </div>
-            </template>
-            <template #item="{ item }">
-              <div class="d-flex justify-space-between w-100">
-                <div>
-                  {{ item.asset_symbol }}
-                </div>
-                <div>
-                  {{
-                    $$toAssetUnits(item.amount, true, {
-                      symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
-                    })
-                  }}
-                </div>
-              </div>
-            </template>
-          </v-select>
+            @change="getAccountsByAsset"
+          />
           <v-text-field
             v-model="dialog.form.toAmount"
             label="Amount"
@@ -142,9 +114,10 @@
         </template>
         <v-autocomplete
           v-model="dialog.form.receiver"
-          :items="allAccounts"
+          :items="accountsList"
           :rules="dialog.form.rules.username"
           append-icon="search"
+          :loading="loadingAccounts"
           :menu-props="{
             maxWidth: 520
           }"
@@ -220,11 +193,15 @@
   import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
+  import { UsersService } from '@deip/users-service';
+  import { ResearchGroupService } from '@deip/research-group-service';
 
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
   import { mapGetters } from 'vuex';
 
+  const researchGroupService = ResearchGroupService.getInstance();
+  const usersService = UsersService.getInstance();
   const assetsService = AssetsService.getInstance();
 
   export default {
@@ -268,7 +245,10 @@
         }
       };
       return {
+        loadingAccounts: false,
+        exchangeAccounts: [],
         dialog: {
+          exchange: false,
           title: '',
           form: {
             receiver: {},
@@ -318,10 +298,46 @@
           );
         }
         return [];
+      },
+      accountsList() {
+        if (this.dialog.exchange) {
+          return this.exchangeAccounts;
+        }
+        return this.allAccounts;
       }
     },
 
     methods: {
+      getAccountsByAsset($event) {
+        this.loadingAccounts = true;
+        assetsService.getAccountsAssetBalancesByAsset($event.asset_symbol)
+          .then((accounts) => usersService.getEnrichedProfiles(accounts.map(({ owner }) => owner)))
+          .then((accounts) => {
+            const usersAccounts = [];
+            const groupsAccount = [];
+            accounts.forEach((a) => {
+              if (a.account.is_research_group) {
+                groupsAccount.push(a);
+              } else {
+                usersAccounts.push(a);
+              }
+            });
+            this.exchangeAccounts.push(...usersAccounts.map((a) => ({
+              ...a,
+              fullName: this.$options.filters.accountFullname(a)
+            })));
+            return Promise.all(
+              groupsAccount.map((g) => researchGroupService.getResearchGroup(g.account.name))
+            );
+          })
+          .then((groupAccounts) => {
+            this.exchangeAccounts.push(...groupAccounts.map((g) => ({
+              ...g,
+              fullName: g.name
+            })));
+          })
+          .finally(() => { this.loadingAccounts = false; });
+      },
       opendialog(item, exchange = false) {
         this.dialog.exchange = exchange;
         this.dialog.isOpened = true;
@@ -407,7 +423,7 @@
             this.dialog.form.toAmount,
             false,
             { symbol: toAccountData.stringSymbol, fractionCount: toAccountData.precision }
-          )
+          );
 
           assetsService.createAssetsExchangeProposal({
             privKey: this.$currentUser.privKey,

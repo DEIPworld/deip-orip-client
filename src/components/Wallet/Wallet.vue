@@ -93,7 +93,7 @@
       deipRpc.api
         .lookupAccountsAsync('0', 10000)
         .then((accounts) => {
-          const blackList = ['regacc', 'hermes', 'initdelegate', this.$currentUserName];
+          const blackList = ['regacc', 'hermes', 'initdelegate'];
 
           const usersToInvite = accounts
             .filter(
