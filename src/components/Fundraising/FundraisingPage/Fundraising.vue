@@ -144,7 +144,7 @@
         </v-col>
       </v-row>
 
-      <d-block title="Transactions" class="mt-8">
+      <d-block title="Fundraising contributions" class="mt-8">
         <v-divider />
         <v-data-table
           :hide-default-footer="transactionsHistory.length < 50"
