@@ -55,7 +55,7 @@
           formData
         )
           .then(() => {
-            this.$notifier.showSuccess('Info has been change successfully!');
+            this.$notifier.showSuccess('Project has been updated successfully');
             this.$$goToProject(this.project);
           })
           .catch((err) => {

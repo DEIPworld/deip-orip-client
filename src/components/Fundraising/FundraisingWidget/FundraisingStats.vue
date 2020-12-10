@@ -32,8 +32,8 @@
         to start Fundraising.
       </div>
 
-      <div v-else>
-        <template v-if="tokenSaleData">
+      <template v-else>
+        <div v-if="tokenSaleData">
           <template
             v-for="(item, index) of saleInfo"
           >
@@ -56,7 +56,7 @@
               </v-col>
             </v-row>
           </template>
-        </template>
+        </div>
         <v-btn
           v-if="hasHistory || tokenSaleData"
           block
@@ -81,7 +81,6 @@
           block
           small
           color="primary"
-          class="mt-3"
           :to="{
             name: 'project.fundraising.create',
             params: $route.params
@@ -89,7 +88,7 @@
         >
           Start new fundraise
         </v-btn>
-      </div>
+      </template>
     </d-block-widget>
   </v-skeleton-loader>
 </template>

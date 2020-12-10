@@ -45,7 +45,7 @@ export default {
   },
   successProp: 'Proposal has been sent successfully!',
   errProp: 'An error occurred during proposal sending',
-  successInfo: 'Info has been change successfully!',
+  successInfo: 'Project has been updated successfully',
   errInfo: 'An error occurred during change info',
   successImg: 'Background image has been updated successfully ! Refresh the page please',
   errImg: 'Sorry, an error occurred while uploading background image, please try again later',

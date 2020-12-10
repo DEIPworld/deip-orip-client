@@ -337,10 +337,11 @@
       },
       chartData() {
         const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
+          const { amount } = this.$$fromAssetUnits(item.amount);
           if (item.owner === this.research.researchGroup.external_id) { // TODO: resolve this for all group accounts in store
-            arr.push([this.researchGroup.name, this.convertToPercent(item.amount)]);
+            arr.push([this.researchGroup.name, amount]);
           } else {
-            arr.push([this.$options.filters.accountFullname(item.user), this.convertToPercent(item.amount)]);
+            arr.push([this.$options.filters.accountFullname(item.user), amount]);
           }
           return arr;
         }, []);
@@ -352,7 +353,7 @@
 
         if (this.hasActiveTokenSale || this.hasInactiveTokenSale) {
           const { amount } = this.$$fromAssetUnits(this.tokenSale.security_tokens_on_sale[0]);
-          data.push(['On Sale', this.convertToPercent(amount)]);
+          data.push(['On Sale', amount]);
         }
 
         return data;
