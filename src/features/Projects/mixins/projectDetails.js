@@ -13,6 +13,10 @@ export const projectDetails = {
       return this.project.members.includes(this.$currentUserName);
     },
 
+    financeVisible() {
+      return !!(this.isMember || this.project.securityTokens.length)
+    },
+
     limitedAccess() {
       const expressLicensingId = this.$tenantSettings.researchAttributes
         .find((attr) => attr.type === ATTR_TYPES.EXPRESS_LICENSING)

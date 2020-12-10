@@ -114,7 +114,7 @@
                     $$toAssetUnits(item.amount, true, {
                       symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
                     })
-                  }} Available
+                  }}
                 </div>
               </div>
             </template>

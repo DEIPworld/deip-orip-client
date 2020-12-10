@@ -63,7 +63,6 @@
           small
           text
           color="primary"
-          class="mt-3"
           :to="{
             name: 'project.fundraising',
             params: {
@@ -81,14 +80,11 @@
           v-if="!tokenSaleData && isResearchGroupMember"
           block
           small
-          text
           color="primary"
           class="mt-3"
           :to="{
-            name: 'project.createTokenSale',
-            params: {
-              researchExternalId: $route.params.researchExternalId
-            }
+            name: 'project.fundraising.create',
+            params: $route.params
           }"
         >
           Start new fundraise

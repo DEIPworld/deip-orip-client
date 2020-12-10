@@ -50,7 +50,7 @@
     },
     computed: {
       ...mapGetters({
-        tokenSale: 'Fundraising/tokenSale'
+        tokenSale: 'FundraisingDetails/tokenSale'
       }),
       flexColumn() {
         return `flex-column${this.reverse ? '' : '-reverse'}`;

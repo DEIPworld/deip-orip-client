@@ -7,7 +7,10 @@ import {
   camelizeObjectKeys
 } from '@/utils/helpers';
 
+import { ResearchGroupService } from '@deip/research-group-service'; // temp solution
+
 const usersService = UsersService.getInstance();
+const researchGroupService = ResearchGroupService.getInstance(); // temp solution
 
 const actionsMap = {
   team: 'getUsersByTeamId',
@@ -39,7 +42,26 @@ const ACTIONS = {
   getUsersProfiles({ commit }, { users }) {
     return usersService.getEnrichedProfiles(users)
       .then((res) => {
-        commit('storeUsersProfiles', res);
+        // temp solution
+        const allUsers = res;
+        const groups = res.filter((u) => u.account.is_research_group);
+
+        if (groups.length) {
+          Promise.all(
+            groups.map((g) => researchGroupService.getResearchGroup(g.account.name))
+          ).then((grs) => {
+            for (const group of grs) {
+              const target = allUsers
+                .findIndex((u) => u.account.name === group.external_id);
+              allUsers[target].teamRef = group.researchGroupRef;
+            }
+            commit('storeUsersProfiles', allUsers);
+          });
+        } else {
+          commit('storeUsersProfiles', allUsers);
+        }
+        // end
+        // commit('storeUsersProfiles', res);
       });
   },
 

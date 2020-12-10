@@ -7,7 +7,7 @@
         v-model="date"
         :label="label"
         :only-future="onlyFuture"
-        :field-props="{class: 'rounded-br-0 rounded-tr-0'}"
+        :field-props="{class: 'rounded-br-0 rounded-tr-0', ...attrs$}"
       />
     </v-spacer>
     <v-sheet min-width="112px" width="30%">
@@ -23,6 +23,7 @@
 
 <script>
   import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DTimeInput from '@/components/Deipify/DInput/DTimeInput';
@@ -30,7 +31,7 @@
   export default {
     name: 'DDateTimeInput',
     components: { DTimeInput, DInputDate },
-    mixins: [Proxyable],
+    mixins: [Proxyable, BindsAttrs],
     props: {
       label: {
         type: String,

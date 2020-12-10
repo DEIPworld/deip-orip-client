@@ -37,7 +37,11 @@ import { i18n } from './plugins/i18n';
 import { router } from './router';
 import { store } from './store';
 import App from './App';
+
+// ////////////////////////
+
 import AssetsFeature from '@/features/Assets';
+import FundraisingFeature from '@/features/Fundraising';
 
 // ////////////////////////
 
@@ -81,6 +85,7 @@ Vue.directive('custom', CustomDirective);
 // Featyures // NOTE: Try new feature logic
 
 Vue.use(AssetsFeature);
+Vue.use(FundraisingFeature);
 
 // ////////////////////////////////////////
 

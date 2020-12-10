@@ -130,7 +130,7 @@
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
-  import ContentDar from '@/features/Contents/components/Content/Dar/ContentDar';
+  import ContentDar from '@/features/Contents/components/Dar/ContentDar';
 
   const searchService = SearchService.getInstance();
   const researchContentService = ResearchContentService.getInstance();

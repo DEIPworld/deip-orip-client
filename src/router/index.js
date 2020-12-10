@@ -31,7 +31,7 @@ import ResearchContentDetails from '@/components/research-content-details/Resear
 //   from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 
-import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
+// import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
 import ResearchContentReferences
   from '@/components/research-content-details/ResearchContentReferences';
 
@@ -323,11 +323,12 @@ const router = new Router({
       meta: {
         withoutHeader: true
       }
-    }, {
-      path: '/:research_group_permlink/create-fundraise/:research_permlink',
-      name: 'CreateTokenSale',
-      component: CreateTokenSale
     },
+    // {
+    //   path: '/:research_group_permlink/create-fundraise/:research_permlink',
+    //   name: 'CreateTokenSale',
+    //   component: CreateTokenSale
+    // },
 
     ...sandboxRouting,
 

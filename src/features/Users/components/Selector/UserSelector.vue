@@ -1,72 +1,71 @@
 <template>
-  <div>
-    <d-autocomplete
-      ref="field"
-      v-model="internalValue"
+  <d-autocomplete
+    ref="field"
+    v-model="internalValue"
 
-      :label="label"
-      :items="usersList"
+    :label="label"
+    :items="usersList"
 
-      :item-text="userFullName"
-      :item-value="userExternalId"
+    :item-text="userFullName"
+    :item-value="userExternalId"
 
-      hide-details="auto"
+    hide-details="auto"
 
-      offset-y
-      offset-overflow
+    offset-y
+    offset-overflow
 
-      outlined
+    outlined
 
-      :name="label"
-      autocomplete="off"
-      :return-object="returnObject"
+    :name="label"
+    autocomplete="off"
+    :return-object="returnObject"
 
-      v-bind="fieldProps"
-    >
-      <template #item="{ item }">
-        <v-list-item-avatar :size="24">
-          <v-img :src="item.profile | avatarSrc(24)" />
-        </v-list-item-avatar>
-        <v-list-item-content class="text-body-2">
-          {{ item | fullname }}
-        </v-list-item-content>
-      </template>
+    v-bind="fieldProps"
+  >
+    <template #item="{ item }">
+      <v-list-item-avatar :size="24">
+        <v-img :src="item.profile | avatarSrc(24)" />
+      </v-list-item-avatar>
+      <v-list-item-content class="text-body-2">
+        {{ userFullName(item) }}
+      </v-list-item-content>
+    </template>
 
-      <template #selection="{ item }">
-        <v-chip
-          v-if="multiple"
-          :disabled="disabled"
-          outlined
-        >
-          <v-avatar left class="mr-2 ml-n2">
-            <img :src="item.profile | avatarSrc(24)" alt="">
-          </v-avatar>
+    <template #selection="{ item }">
+      <v-chip
+        v-if="multiple"
+        :disabled="disabled"
+        outlined
+      >
+        <v-avatar left class="mr-2 ml-n2">
+          <img :src="item.profile | avatarSrc(24)" alt="">
+        </v-avatar>
 
-          <div class="text-truncate spacer">
-            {{ item | fullname }}
-          </div>
-
-          <v-btn
-            icon
-            x-small
-            class="mr-n2 ml-2"
-            @click="$refs.field.onChipInput(item)"
-          >
-            <!--          @click="remove(item)" -->
-            <v-icon>clear</v-icon>
-          </v-btn>
-        </v-chip>
-
-        <div v-else class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">
-          <v-avatar size="24" class="mr-2">
-            <img :src="item.profile | avatarSrc(24)" alt="">
-          </v-avatar>
-          <div class="text-truncate">{{ item | fullname }}</div>
+        <div class="text-truncate spacer">
+          {{ userFullName(item) }}
         </div>
-      </template>
-    </d-autocomplete>
-  </div>
 
+        <v-btn
+          icon
+          x-small
+          class="mr-n2 ml-2"
+          @click="$refs.field.onChipInput(item)"
+        >
+          <!--          @click="remove(item)" -->
+          <v-icon>clear</v-icon>
+        </v-btn>
+      </v-chip>
+
+      <div v-else class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">
+        <v-avatar size="24" class="mr-2">
+          <img :src="item.profile | avatarSrc(24)" alt="">
+        </v-avatar>
+        <div class="text-truncate">
+          {{ userFullName(item) }}
+        </div>
+      </div>
+    </template>
+  </d-autocomplete>
 </template>
 
 <script>
@@ -150,14 +149,28 @@
           users: wrapInArray(this.users),
           exclude: this.exclude,
           ...this.$$dataContextProps
-        }).then(() => {
-          this.$setReady();
-          this.$emit('ready', this.usersList);
-        });
+        })
+          .then(() => {
+            this.$setReady();
+            this.$emit('ready', this.usersList);
+          });
       },
 
       userFullName(e) {
-        return e.profile ? this.$options.filters.fullname(e) : 'undefined';
+        console.log(e);
+
+        if (e.teamRef) {
+          console.log(1);
+          return e.teamRef.name;
+        }
+
+        if (e.profile) {
+          console.log(2);
+          return this.$options.filters.fullname(e);
+        }
+
+        console.log(3);
+        return 'undefined';
       },
 
       userExternalId(e) {

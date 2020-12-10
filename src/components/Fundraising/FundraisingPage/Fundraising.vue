@@ -240,7 +240,7 @@
       FundraisingProgressNeedle,
       DBoxItem
     },
-    mixins: [componentStoreFactoryOnce(fundraisingStore), assetsChore],
+    mixins: [componentStoreFactoryOnce(fundraisingStore, 'FundraisingDetails'), assetsChore],
     props: {
       research: {
         type: Object,
@@ -291,12 +291,12 @@
     },
     computed: {
       ...mapGetters({
-        tokenSale: 'Fundraising/tokenSale',
         userBalances: 'auth/userBalances',
         userAssets: 'auth/userAssets',
-        securityTokenBalances: 'Fundraising/securityTokenBalances',
-        transactionsHistory: 'Fundraising/transactionsHistory',
-        researchGroup: 'Fundraising/researchGroup'
+        tokenSale: 'FundraisingDetails/tokenSale',
+        securityTokenBalances: 'FundraisingDetails/securityTokenBalances',
+        transactionsHistory: 'FundraisingDetails/transactionsHistory',
+        researchGroup: 'FundraisingDetails/researchGroup'
       }),
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
@@ -409,10 +409,10 @@
     created() {
       const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
       Promise.all([
-        this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
-        this.$store.dispatch('Fundraising/loadResearchTokenSale', this.research.externalId),
-        this.$store.dispatch('Fundraising/loadTransactionsHistory', this.research.externalId),
-        this.$store.dispatch('Fundraising/loadResearchGroup', this.research.researchGroup.external_id)
+        this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', assetId),
+        this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
+        this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
+        this.$store.dispatch('FundraisingDetails/loadResearchGroup', this.research.researchGroup.external_id)
       ])
         .then(() => {
           if (!this.tokenSale) {
@@ -450,9 +450,9 @@
             const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
             Promise.all(
               [
-                this.$store.dispatch('Fundraising/loadResearchTokenSale', this.research.externalId),
-                this.$store.dispatch('Fundraising/loadSecurityTokenHolders', assetId),
-                this.$store.dispatch('Fundraising/loadTransactionsHistory', this.research.externalId),
+                this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
+                this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', assetId),
+                this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
                 this.$store.dispatch('auth/loadAccount'),
                 this.$store.dispatch('auth/loadBalances')
               ]

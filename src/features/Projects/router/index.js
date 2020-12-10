@@ -1,12 +1,14 @@
-import ProjectDetails from '@/features/Projects/components/Project/Details/ProjectDetails';
-import ProjectExpertise from '@/features/Projects/components/Project/Expertise/ProjectExpertise';
 import ProjectCreate from '@/features/Projects/components/Create/ProjectCreate';
-import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
+import ProjectDataProvider from '@/features/Projects/components/DataProvider/ProjectDataProvider';
+import ProjectDetails from '@/features/Projects/components/Details/ProjectDetails';
+import ProjectEdit from '@/features/Projects/components/Edit/ProjectEdit';
+import ProjectExpertise from '@/features/Projects/components/Expertise/ProjectExpertise';
+// import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
+import ProjectFundraising from '@/features/Projects/components/Fundraising/ProjectFundraising';
+
 import { contentRoutingFabric } from '@/features/Contents/router';
-import Project from '@/features/Projects/components/Project/Project';
-import ProjectFundraising from '@/features/Projects/components/Project/Fundraising/ProjectFundraising';
-import ProjectEdit from '@/features/Projects/components/Project/Edit/ProjectEdit';
 import { assetsRoutingFabric } from '@/features/Assets/router';
+import { fundraisingRoutingFabric } from '@/features/Fundraising/router';
 
 const routerView = { template: '<router-view />' };
 
@@ -27,7 +29,7 @@ export const projectRouting = [{
 
     {
       path: ':researchExternalId',
-      component: Project,
+      component: ProjectDataProvider,
       props(route) {
         return {
           projectId: route.params.researchExternalId
@@ -67,11 +69,17 @@ export const projectRouting = [{
           path: 'fundraising',
           component: ProjectFundraising
         },
+
+        // {
+        //   name: 'project.createTokenSale',
+        //   path: 'create-fundraise',
+        //   component: CreateTokenSale
+        // },
+
         {
-          name: 'project.createTokenSale',
-          path: 'create-fundraise',
-          component: CreateTokenSale
-        }
+          name: 'project.fundraising.create',
+          ...fundraisingRoutingFabric('project')
+        },
       ]
     }
   ]

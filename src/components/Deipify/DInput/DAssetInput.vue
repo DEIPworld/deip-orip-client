@@ -17,7 +17,7 @@
           :label="label"
           outlined
           hide-details="auto"
-          :error-messages="errors"
+          :error-messages="[...errors, ...errorMessages]"
           name="Amount"
           autocomplete="off"
           @change="update()"
@@ -80,6 +80,10 @@
       disableAssets: {
         type: Boolean,
         default: false
+      },
+      errorMessages: {
+        type: Array,
+        default: () => ([])
       }
     },
     data() {
