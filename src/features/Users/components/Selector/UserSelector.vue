@@ -23,7 +23,6 @@
     v-bind="fieldProps"
 
     :loading="!$ready"
-    :disabled="!$ready"
   >
     <template #item="{ item }">
       <v-list-item-avatar :size="24">
@@ -135,7 +134,8 @@
       fieldProps() {
         return {
           ...this.isMultipleProps,
-          ...this.validatableProps
+          ...this.validatableProps,
+          disabled: !this.$ready || this.validatableProps.disabled
         };
       }
     },

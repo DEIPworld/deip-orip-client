@@ -14,7 +14,7 @@
                   name="Units"
                   :rules="{
                     required: true,
-                    minmax: {
+                    minMax: {
                       min: MIN_TOKEN_UNITS_TO_SELL,
                       max: issuedTokens.amount
                     }
@@ -162,16 +162,6 @@
 
   const MIN_TOKEN_UNITS_TO_SELL = 100;
 
-  extend('minmax', {
-    params: ['min', 'max'],
-    validate(value, { min, max }) {
-      return value >= min && value <= max;
-    },
-    message(name, { min, max }) {
-      return `${name} should be from ${min} to ${max}`;
-    }
-  });
-
   extend('dateSmaller', {
     params: ['target'],
     validate(value, { target }) {
@@ -220,8 +210,6 @@
       DDateTimeInput,
       DBlock,
       DStack,
-      ValidationObserver,
-      ValidationProvider,
 
       DLayoutFullScreen
     },

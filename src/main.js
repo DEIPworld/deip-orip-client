@@ -38,6 +38,11 @@ import { router } from './router';
 import { store } from './store';
 import App from './App';
 
+
+// ////////////////////////
+
+import veeValidatorPlugin from '@/plugins/veeValidator';
+
 // ////////////////////////
 
 import AssetsFeature from '@/features/Assets';
@@ -55,6 +60,7 @@ Vue.use(VueTheMask);
 // Vue.use(VueCommonFilters);
 
 Vue.use(VuetifyExtended, { vuetify });
+Vue.use(veeValidatorPlugin);
 
 Vue.use(VueCurrencyFilter, {
   symbol: '$',

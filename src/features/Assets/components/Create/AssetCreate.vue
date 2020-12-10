@@ -3,7 +3,11 @@
     title="Issue tokens"
   >
     <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
-      <v-form v-if="$ready" :disabled="loading || projectTokenized" @submit.prevent="handleSubmit(createAsset)">
+      <v-form
+        v-if="$ready"
+        :disabled="loading || projectTokenized"
+        @submit.prevent="handleSubmit(createAsset)"
+      >
         <d-stack gap="32">
           <d-block title="Project token details" title-margin="16">
             <div class="text-body-2">
@@ -13,10 +17,9 @@
             <v-row>
               <v-col cols="8">
                 <validation-provider
-                  ref="validator"
                   v-slot="{ errors }"
                   name="Number of tokens"
-                  rules="required"
+                  rules="required|digits"
                 >
                   <v-text-field
                     v-model.number="formModel.maxSupply"
@@ -29,13 +32,15 @@
               </v-col>
               <v-col cols="4">
                 <validation-provider
-                  ref="validator1"
                   v-slot="{ errors }"
-                  name="Ticker"
+                  name="Ticker (abbreviation)"
                   :rules="{
                     required: true,
-                    minmaxLength: { min: 5, max: 6 },
-                    asset: { assets: existingAssets }
+                    minMax: { min: 5, max: 6 },
+                    unique: { list: existingAssets }
+                  }"
+                  :custom-messages="{
+                    unique: '{_field_} is taken. Try another.'
                   }"
                 >
                   <v-text-field
@@ -59,7 +64,6 @@
             <div class="text-body-2">
               Note: Only tokens that belong to a group can be used for fundraising.
             </div>
-            <!--        <pre>{{ project }}</pre>-->
             <d-timeline>
               <d-timeline-item :dot-top="16">
                 <v-row class="align-center">
@@ -92,33 +96,48 @@
                   </v-col>
                 </v-row>
               </d-timeline-item>
+
               <d-timeline-item
                 v-for="(item, index) of formModel.holders"
                 :key="`row-${index}`"
                 :dot-top="16"
                 :ctrl-height="48"
               >
-                <v-row class="align-center">
+                <v-row>
                   <v-col cols="6">
-                    <user-selector
-                      v-model="item.account"
-                      label="Shareholder"
-                      outlined
-                      hide-details="auto"
-                    />
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="Shareholder"
+                      rules="required"
+                    >
+                      <user-selector
+                        v-model="item.account"
+                        label="Shareholder"
+                        outlined
+                        hide-details="auto"
+                        :error-messages="errors"
+                      />
+                    </validation-provider>
                   </v-col>
                   <v-col cols="3">
-                    <v-text-field
-                      v-model="item.amount"
-                      label="Tokens"
-                      outlined
-                      hide-details="auto"
-                    />
+                    <validation-provider
+                      v-slot="{ errors }"
+                      name="Tokens"
+                      rules="integer|required"
+                    >
+                      <v-text-field
+                        v-model="item.amount"
+                        label="Tokens"
+                        outlined
+                        hide-details="auto"
+                        :error-messages="errors"
+                      />
+                    </validation-provider>
                   </v-col>
-                  <v-col class="text-body-2">
+                  <v-col class="text-body-2 d-flex align-center" style="height: 72px;">
                     {{ toPercent(item.amount) }}
                   </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="auto" class="mt-2 d-flex align-center" style="height: 72px;">
                     <v-btn icon @click="removeShareholder(item)">
                       <v-icon>clear</v-icon>
                     </v-btn>
@@ -138,9 +157,9 @@
               <v-col cols="auto">
                 <validation-provider
                   ref="s"
-                  v-slot="{ errors, validate }"
+                  v-slot="{ errors }"
                   name="Confirmation"
-                  :rules="{required: {allowFalse: false}}"
+                  :rules="{ required: { allowFalse: false } }"
                 >
                   <v-checkbox
                     v-model="formModel.terms"
@@ -174,7 +193,8 @@
                 <div class="text-body-2">
                   I understand that issued tokens will be distributed among shareholders,
                   effectively transferring ownership over the property related to the project.
-                  Holding a share does not grant access to participate on decisions related to the project.
+                  Holding a share does not grant access to participate on
+                  decisions related to the project.
                   It’s not possible to undo this action.
                 </div>
               </v-col>
@@ -219,48 +239,10 @@
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import { assetsChore } from '@/mixins/chores';
-  import { ValidationObserver, ValidationProvider, extend } from 'vee-validate';
-  // import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
   const shareholderModel = () => ({
     account: undefined,
     amount: undefined
-  });
-
-  extend('asset', {
-    params: ['assets'],
-    computesRequired: true,
-
-    validate(value, { assets }) {
-      const res = {
-        required: true,
-        valid: true
-      };
-
-      if (['', null, undefined, ...assets.map((a) => a.toLowerCase())].includes(value)) {
-        res.valid = false;
-      }
-
-      return res;
-    },
-
-    message(name, data) {
-      // eslint-disable-next-line no-underscore-dangle
-      if (data.assets.map((a) => a.toLowerCase()).includes(data._value_)) {
-        return 'This ticker (abbreviation) is taken. Try another';
-      }
-
-      // eslint-disable-next-line no-underscore-dangle
-      return `${data._field_} can't be empty`;
-    }
-  });
-
-  extend('minmaxLength', {
-    params: ['min', 'max'],
-    validate(value, { min, max }) {
-      return value.length >= min && value.length <= max;
-    },
-    message: '{_field_} length should be from {min} to {max} alpha characters in length'
   });
 
   export default {
@@ -272,10 +254,7 @@
       DTimeline,
       DStack,
       DBlock,
-      DLayoutFullScreen,
-
-      ValidationObserver,
-      ValidationProvider
+      DLayoutFullScreen
     },
     mixins: [assetsChore],
     data() {
@@ -286,7 +265,7 @@
             Z: {
               pattern: /[a-zA-Z]/,
               transform: (v) => v.toLocaleUpperCase()
-            },
+            }
           }
         },
         formModel: {
