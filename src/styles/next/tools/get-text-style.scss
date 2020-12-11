@@ -9,7 +9,7 @@
   @each $bp, $style in $target {
     //@if $bp != xs {
       @include bp-map($bp, $no-xs) {
-        @include query-loop($style);
+        @include query-loop($style, (font-size));
       }
     //}
   }

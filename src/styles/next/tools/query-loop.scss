@@ -1,10 +1,11 @@
-@mixin query-loop($query) {
+@use 'sass:list';
+
+@mixin query-loop($query, $important: ()) {
   @each $key, $val in $query {
     @if $val != false {
-      @if($key == font-size) {
+      @if(list.index($important, $key)) {
         #{$key}: $val !important;
-      }
-      @else {
+      } @else {
         #{$key}: $val;
       }
     }
