@@ -7,9 +7,11 @@
   )
 );
 
-@mixin bp-map($key) {
+@mixin bp-map($key, $no-xs: false) {
   @if $key == xs {
-    @content;
+    @if $no-xs == false {
+      @content;
+    }
   } @else {
     @include bp($key) {
       @content;

@@ -46,7 +46,13 @@ import veeValidatorPlugin from '@/plugins/veeValidator';
 // ////////////////////////
 
 import AssetsFeature from '@/features/Assets';
+import AuthFeature from '@/features/Auth';
 import FundraisingFeature from '@/features/Fundraising';
+// import ContentsFeature from '@/features/Contents'; // conflict
+import ProjectsFeature from '@/features/Projects';
+import ReferencesFeature from '@/features/References';
+import ReviewsFeature from '@/features/Reviews';
+import UsersFeature from '@/features/Users';
 
 // ////////////////////////
 
@@ -90,8 +96,14 @@ Vue.directive('custom', CustomDirective);
 
 // Featyures // NOTE: Try new feature logic
 
+Vue.use(AuthFeature);
 Vue.use(AssetsFeature);
+Vue.use(ProjectsFeature);
+// Vue.use(ContentsFeature); // conflict
 Vue.use(FundraisingFeature);
+Vue.use(ReferencesFeature);
+Vue.use(ReviewsFeature);
+Vue.use(UsersFeature);
 
 // ////////////////////////////////////////
 

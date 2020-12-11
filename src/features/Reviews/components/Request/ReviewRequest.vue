@@ -57,8 +57,6 @@
 </template>
 
 <script>
-  import { ValidationObserver, ValidationProvider } from 'vee-validate';
-
   import DStack from '@/components/Deipify/DStack/DStack';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import ContentSelector from '@/features/Contents/components/Selector/ContentSelector';
@@ -74,9 +72,6 @@
       ContentSelector,
       UserSelector,
       DStack,
-
-      ValidationObserver,
-      ValidationProvider
     },
     mixins: [dataContextSwitch],
 

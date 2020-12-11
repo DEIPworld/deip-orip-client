@@ -20,7 +20,7 @@
       &-#{$type} {
         margin: 0;
 
-        @include get-text-style($type);
+        @include get-text-style($type, true);
       }
     }
   }

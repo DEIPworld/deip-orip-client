@@ -3,13 +3,13 @@
 @use 'query-loop' as *;
 @use '../core/typography';
 
-@mixin get-text-style($key) {
+@mixin get-text-style($key, $no-xs: false) {
   $target: map.get(typography.$styles, $key);
 
   @each $bp, $style in $target {
     //@if $bp != xs {
-      @include bp-map($bp) {
-        @include query-loop($style, false);
+      @include bp-map($bp, $no-xs) {
+        @include query-loop($style);
       }
     //}
   }

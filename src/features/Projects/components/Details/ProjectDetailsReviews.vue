@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: make review request condition props or move to slot -->
   <reviews-list
     :project-id="project.externalId"
     :content-id="null"
