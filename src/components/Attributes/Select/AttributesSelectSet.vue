@@ -2,7 +2,7 @@
   <validation-provider
     v-slot="{ errors }"
     :name="attribute.title"
-    :rules="$$veeRules"
+    :rules="$$isRequired ? $$rules : null"
   >
     <d-autocomplete
       v-model="internalValue"

@@ -1,13 +1,8 @@
-import { ValidationProvider } from 'vee-validate';
-import { VeeFieldValidatable } from '@/mixins/veeFieldValidatable';
-
 import Proxyable from 'vuetify/lib/mixins/proxyable';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
 
 export const attributeSet = {
-  components: { ValidationProvider },
-
-  mixins: [Proxyable, VeeFieldValidatable],
+  mixins: [Proxyable],
 
   props: {
     attribute: {
@@ -23,7 +18,10 @@ export const attributeSet = {
 
   computed: {
     $$label() {
-      return `${this.attribute.title}${!this.$$isRequired && this.viewType !== 'filter' ? ' (optional)' : ''}`;
+      const ttl = this.attribute.title;
+      const opt = !this.$$isRequired && this.viewType !== 'filter' ? ' (optional)' : '';
+
+      return `${ttl}${opt}`;
     },
 
     $$isRequired() {
@@ -38,6 +36,19 @@ export const attributeSet = {
       }
 
       return true;
+    },
+
+    $$rules() {
+      return {
+        required: true
+      };
+    },
+
+    $$veeProps() {
+      return {
+        rules: this.$$isRequired ? this.$$rules : null,
+        name: this.attribute.title
+      };
     }
   },
 

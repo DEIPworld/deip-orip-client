@@ -3,7 +3,7 @@
     ref="validator"
     v-slot="{ errors, validate }"
     :name="attribute.title"
-    rules="required"
+    :rules="$$isRequired ? $$rules : null"
   >
     <input v-model="internalValue" type="hidden">
 
@@ -116,13 +116,6 @@
       };
     },
     computed: {
-      // isMultipleProps() {
-      //   return !this.attribute.isMultiple ? {
-      //     multipleActive: true,
-      //     selectable: true,
-      //     selectionType: 'independent'
-      //   } : {};
-      // },
 
       disciplinesTree() {
         function transform(obj) {
@@ -201,9 +194,6 @@
 
         this.oldValue = [...value];
 
-        // this.$refs.validator.validate(this.internalValue).then((ctx) => {
-        //   this.validationErrors = ctx.errors;
-        // });
       },
 
       getItemPath(id) {

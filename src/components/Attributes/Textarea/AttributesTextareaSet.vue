@@ -2,7 +2,7 @@
   <validation-provider
     v-slot="{ errors, validate }"
     :name="attribute.title"
-    :rules="$$veeRules"
+    :rules="$$isRequired ? $$rules : null"
   >
     <vex-wysiwyg
       v-model="internalValue"

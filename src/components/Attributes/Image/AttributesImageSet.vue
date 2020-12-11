@@ -8,6 +8,7 @@
     :initial-image="initialImage"
 
     :disabled="!$$isEditable"
+    :rules="$$isRequired ? $$rules : null"
   />
 </template>
 

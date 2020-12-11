@@ -2,7 +2,7 @@
   <validation-provider
     v-slot="{ errors }"
     :name="attribute.title"
-    :rules="$$veeRules"
+    :rules="$$isRequired ? $$rules : null"
   >
     <v-select
       v-model="internalValue"
