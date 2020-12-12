@@ -385,11 +385,11 @@
       },
       isDepositAvailable(assetId) {
         const symbol = this.assetsInfo[assetId].string_symbol;
-        return fiatAssetBackedTokens.some((s) => s == symbol);
+        return this.$hasModule(this.DEIP_MODULE.APP_ASSETS_DEPOSIT) && fiatAssetBackedTokens.some((s) => s == symbol);
       },
       isWithdrawAvailable(assetId) {
         const symbol = this.assetsInfo[assetId].string_symbol;
-        return fiatAssetBackedTokens.some((s) => s == symbol);
+        return this.$hasModule(this.DEIP_MODULE.APP_ASSETS_WITHDRAWAL) && fiatAssetBackedTokens.some((s) => s == symbol);
       },
       openWithdrawDialog(item) {
         this.depositDialog.owner = item.owner;

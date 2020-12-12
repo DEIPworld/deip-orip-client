@@ -188,7 +188,7 @@ export default {
     projects: 'Technologies',
     criteria: 'Attributes',
     layouts: 'Layouts',
-    model: 'Review model',
+    reviewModel: 'Review model',
     faq: 'FAQ',
     settings: 'Settings'
   }

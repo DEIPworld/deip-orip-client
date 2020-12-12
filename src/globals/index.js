@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import moment from 'moment';
 import { BlockchainService } from '@deip/blockchain-service';
+import { DEIP_MODULE } from '@/variables';
 
 const blockchainService = BlockchainService.getInstance();
 // regarding with DEIP PERCENTS
@@ -90,3 +91,4 @@ const getVimeoEmbedUrlFromVideoUrl = (url) => {
 
 Vue.prototype.MASTER_PASSWORD_MIN_LENGTH = 10;
 Vue.prototype.MASTER_PASSWORD_MAX_LENGTH = 100;
+Vue.prototype.DEIP_MODULE = DEIP_MODULE;

@@ -26,6 +26,7 @@
     <v-divider class="mt-4 mb-8" />
 
     <eci-history-and-stats
+      v-if="$hasModule(DEIP_MODULE.APP_ECI)"
       :account-name="userInfo.account.name"
       :filter-disciplines="disciplines"
     />
@@ -34,7 +35,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import EciHistoryAndStats from '@/components/EciMetrics/EciHistoryAndStats';
 

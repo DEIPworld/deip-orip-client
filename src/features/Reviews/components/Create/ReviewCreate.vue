@@ -76,7 +76,10 @@
               />
             </d-block>
 
-            <d-block title="Reward" title-margin="16">
+            <d-block 
+              v-if="$hasModule(DEIP_MODULE.APP_ECI)"
+              title="Reward" 
+              title-margin="16">
               <div class="text-body-2">
                 3000 ECI (approximately) in
                 {{

@@ -125,100 +125,101 @@
       isLoggedIn() { return accessService.isLoggedIn(); }, // $isLoggedIn
 
       mainMenu() {
-        if (this.$isLoggedIn && !this.isGrantsTransparencyDemo) {
-          return [
-            {
-              label: this.$t('topMenu.explore'),
-              to: { name: 'explore' }
-            },
-            // {
-            //   label: this.$t('topMenu.dashboard'),
-            //   to: { name: 'Dashboard' }
-            // },
-            {
+        if (this.$isLoggedIn) {
+          const routes = [];
+
+          routes.push({
+            label: this.$t('topMenu.explore'),
+            to: { name: 'explore' }
+          });
+
+          if (this.$hasModule(this.DEIP_MODULE.APP_ECI)) {
+            routes.push({
               label: this.$t('topMenu.overview'),
               to: { name: 'overview' }
-            },
-            {
+            });
+            
+            routes.push({
               label: this.$t('topMenu.participants'),
               to: { name: 'participants' }
-            },
-            // {
-            //   label: this.$t('topMenu.portfolio'),
-            //   to: { name: 'InvestorPortfolio' }
-            // },
-            {
-              label: this.$t('topMenu.wallet'),
-              to: {
-                name: 'userWallet',
-                params: { account: this.user.username }
-              }
-            },
-            {
-              label: this.$t('topMenu.transactions'),
-              to: {
-                name: 'transactions'
-              }
-            }
-          ];
-        }
+            });
+          }
 
-        if (this.$isLoggedIn && this.isGrantsTransparencyDemo) {
-          return [
-            {
-              label: this.$t('topMenu.explore'),
-              to: { name: 'explore' }
-            },
-            {
+          if (this.$hasModule(this.DEIP_MODULE.APP_GRANTS_MANAGEMENT)) {
+            routes.push({
               label: this.$t('topMenu.dashboard'),
               to: {
                 name: 'GrantProgramsAwardsDashboard',
                 params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' }
               }
-            },
-            {
+            });
+          }
+
+          if (this.$hasModule(this.DEIP_MODULE.APP_ASSETS_MANAGEMENT)) {
+            routes.push({
               label: this.$t('topMenu.wallet'),
               to: {
                 name: 'userWallet',
                 params: { account: this.user.username }
               }
+            });
+          }
+
+          routes.push({
+            label: this.$t('topMenu.transactions'),
+            to: {
+              name: 'transactions'
+            }
+          });
+
+          return routes;
+        } else {
+          return [
+            {
+              label: this.$t('topMenu.explore'),
+              to: { name: 'explore' }
+            },
+            {
+              label: this.$t('topMenu.signIn'),
+              to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
+            },
+            {
+              label: this.$t('topMenu.signUp'),
+              to: { name: 'SignUp' }
             }
           ];
         }
-
-        return [
-          {
-            label: this.$t('topMenu.explore'),
-            to: { name: 'explore' }
-          },
-          {
-            label: this.$t('topMenu.signIn'),
-            to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
-          },
-          {
-            label: this.$t('topMenu.signUp'),
-            to: { name: 'SignUp' }
-          }
-        ];
       },
 
       userMenu() {
-        if (this.isGrantsTransparencyDemo) {
 
-          const routes = [{
-              label: this.$t('topMenu.account'),
-              icon: 'person',
-              to: { name: 'account.summary' }
-            }, {
-              label: this.$t('topMenu.createProject'),
-              icon: 'mdi-clipboard-edit-outline',
-              to: { name: 'project.create' }
-            }, {
-              label: this.$t('topMenu.grantPrograms'),
-              icon: 'mdi-folder',
-              to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
-            }
-          ];
+        const routes = [];
+
+        routes.push({
+          label: this.$t('topMenu.account'),
+          icon: 'person',
+          to: { name: 'account.summary' }
+        });
+
+        if (this.$hasModule(this.DEIP_MODULE.APP_BLOCKCHAIN_EXPLORER)) {
+          routes.push({
+            label: this.$t('topMenu.blockchainExplorer'),
+            icon: 'link',
+            href: this.$env.DEIP_CHAIN_EXPLORER_URL,
+            target: '_blank'
+          });
+        }
+
+        if (this.isGrantsTransparencyDemo) {
+          routes.push(...[{
+            label: this.$t('topMenu.createProject'),
+            icon: 'mdi-clipboard-edit-outline',
+            to: { name: 'project.create' }
+          }, {
+            label: this.$t('topMenu.grantPrograms'),
+            icon: 'mdi-folder',
+            to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
+          }]);
 
           if (this.isGrantProgramOfficer) {
             routes.push({
@@ -227,23 +228,9 @@
               to: { name: 'CreateGrantProgram' }
             })
           }
-
-          return routes;
         }
 
-        return [
-          {
-            label: this.$t('topMenu.account'),
-            icon: 'person',
-            to: { name: 'account.summary' }
-          },
-          {
-            label: this.$t('topMenu.blockchainExplorer'),
-            icon: 'link',
-            href: window.env.DEIP_CHAIN_EXPLORER_URL,
-            target: '_blank'
-          }
-        ];
+        return routes;
       }
     },
 

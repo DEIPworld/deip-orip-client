@@ -28,7 +28,7 @@
     </d-block-widget>
 
     <d-block-widget
-      v-if="$route.params.content_permlink !== '!draft'"
+      v-if="$hasModule(DEIP_MODULE.APP_ECI) && $route.params.content_permlink !== '!draft'"
       title="Expertise Contribution Index"
     >
       <eci-stats
@@ -126,7 +126,7 @@
       </div>
     </d-block-widget>
 
-    <d-block-widget v-if="isPublished">
+    <!-- <d-block-widget v-if="isPublished">
       <v-btn
         block
         small
@@ -143,7 +143,7 @@
       >
         Blockchain Metadata
       </v-btn>
-    </d-block-widget>
+    </d-block-widget> -->
   </div>
 </template>
 

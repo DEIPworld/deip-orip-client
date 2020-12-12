@@ -14,7 +14,7 @@
     </v-btn>
 
     <div v-if="isGroupMember">
-      Review can be supported only by members of other groupTokens
+      Review can be supported only by members of other teams
     </div>
 
     <div v-else-if="!userHasResearchExpertise">

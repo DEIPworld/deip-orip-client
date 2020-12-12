@@ -167,16 +167,16 @@
         </slot>
       </v-col>
       <v-col v-if="!check(disableCreateRoute)" cols="auto">
-<!--        <v-btn-->
-<!--          color="primary"-->
-<!--          small-->
-<!--          :to="{-->
-<!--            name: 'project.content.review.create',-->
-<!--            params: $route.params-->
-<!--          }"-->
-<!--        >-->
-<!--          Add Review-->
-<!--        </v-btn>-->
+        <v-btn
+          color="primary"
+          small
+          :to="{
+            name: 'project.content.review.create',
+            params: $route.params
+          }"
+        >
+          Add Review
+         </v-btn>
       </v-col>
     </v-row>
     <v-divider />

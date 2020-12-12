@@ -210,6 +210,7 @@
                 color="primary"
                 outlined
                 :disabled="loading"
+                @click="cancel()"
               >
                 Cancel
               </v-btn>
@@ -345,6 +346,15 @@
       },
 
       redirect() {
+        this.$router.push({
+          name: 'project.details',
+          params: {
+            researchExternalId: this.project.externalId
+          }
+        });
+      },
+
+      cancel() {
         this.$router.push({
           name: 'project.details',
           params: {

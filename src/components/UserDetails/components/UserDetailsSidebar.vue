@@ -165,6 +165,7 @@
 
     <!--  TODO: need user disciplines  -->
     <d-block-widget
+      v-if="$hasModule(DEIP_MODULE.APP_ECI)"
       title="Expertise Contribution Index"
     >
       <eci-stats

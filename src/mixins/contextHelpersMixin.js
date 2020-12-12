@@ -11,6 +11,7 @@ export const contextHelpersMixin = {
 
     $tenant() { return this.$store.getters['auth/tenant']; },
     $tenantSettings() { return this.$tenant.profile.settings; },
+    $hasModule() { return (module) => { return this.$tenant.profile.settings.modules[module] }; },
 
     $isUser() { return this.$isLoggedIn; },
     $isGuest() { return !this.$isLoggedIn; }
