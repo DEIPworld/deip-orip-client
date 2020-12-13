@@ -9,6 +9,7 @@ export const DEIP_MODULE = {
   APP_BLOCKCHAIN_EXPLORER: 'app-blockchain-explorer',
 
   ADMIN_PANEL_MEMBERS_MANAGEMENT: 'admin-panel-members-management',
+  ADMIN_PANEL_MEMBERS_REGISTRATION: 'admin-panel-members-registration',
   ADMIN_PANEL_PROJECTS_MANAGEMENT: 'admin-panel-projects-management',
   ADMIN_PANEL_ATTRIBUTES_SETUP: 'admin-panel-attributes-setup',
   ADMIN_PANEL_FAQ_SETUP: 'admin-panel-faq-setup',

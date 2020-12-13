@@ -1,6 +1,9 @@
 <template>
   <admin-view v-if="$ready" :title="$t('adminRouting.members.title')">
-    <template #toolbarAction>
+    <template 
+      v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_MEMBERS_REGISTRATION)" 
+      #toolbarAction
+    >
       <v-btn outlined color="primary" :to="{name: 'admin.members.add'}">
         <v-icon left>
           person_add
@@ -11,7 +14,7 @@
     <template #toolbarExtension>
       <v-tabs v-model="tab">
         <v-tab>{{ $t('adminRouting.members.registeredTab') }}</v-tab>
-        <v-tab>
+        <v-tab v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_MEMBERS_REGISTRATION)" >
           {{ $t('adminRouting.members.waitingTab') }}
           <v-badge
             v-if="waitingMembers.length"
