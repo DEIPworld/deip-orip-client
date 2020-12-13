@@ -54,7 +54,7 @@
             v-if="content && content.external_id"
             :project-id="content.research_external_id"
             :content-id="content.external_id"
-            :disabled-creating="!isCreatingReviewAvailable || isResearchGroupMember"
+            :disable-create-route="!isCreatingReviewAvailable || isResearchGroupMember"
             :discipline-id="research.disciplines.map(({external_id}) => external_id)"
             :exclude-users="research.members"
           >
@@ -65,27 +65,25 @@
                 </div>
                 <div v-if="!userHasResearchExpertise || isReseachGroupMember">
                   {{
-                    $t('reviews.needExpertise', {
-                      disciplines: research.disciplines.map(d => d.name).join(', ')
-                    })
+                    $hasModule(DEIP_MODULE.APP_ECI)
+                      ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
+                      : $t('reviews.notMembers')
                   }}
                 </div>
                 <div v-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
-                  {{ $t('reviews.getForContribution',
-                        {
-                          countEci: 3000,
-                          disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
-                        })
+                  {{                
+                    $hasModule(DEIP_MODULE.APP_ECI)
+                      ? $t('reviews.eciForContribution', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                      : ''
                   }}
                 </div>
               </template>
 
               <div v-else-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
-                {{ $t('reviews.getForContribution',
-                      {
-                        countEci: 3000,
-                        disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
-                      })
+                {{ 
+                  $hasModule(DEIP_MODULE.APP_ECI)
+                    ? $t('reviews.eciForContribution', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                    : ''
                 }}
               </div>
 
@@ -95,9 +93,9 @@
 
               <div v-else-if="!userHasResearchExpertise || isReseachGroupMember">
                 {{
-                  $t('reviews.needExpertise', {
-                    disciplines: research.disciplines.map(d => d.name).join(', ')
-                  })
+                  $hasModule(DEIP_MODULE.APP_ECI)
+                    ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
+                    : $t('reviews.notMembers')
                 }}
               </div>
             </template>

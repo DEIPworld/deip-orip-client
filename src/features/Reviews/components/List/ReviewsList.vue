@@ -126,7 +126,7 @@
                       </div>
                     </template>
                     <div v-if="review.supporters.length">
-                      {{ review.supporters.length }} {{ $t('reviews.expertsSupp') }}
+                      {{ $t('reviews.expertsSupp', { supportersCount: review.supporters.length }) }}
                     </div>
                   </v-tooltip>
                 </div>
@@ -155,18 +155,17 @@
             {{ $t('reviews.noReviews') }}
           </div>
           <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
-            {{ $t('reviews.getForReview',
-                  {
-                    countEci: 3000,
-                    disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
-                  })
+            {{ 
+              $hasModule(DEIP_MODULE.APP_ECI)
+                ? $t('reviews.eciForReview', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                : ''
             }}
           </div>
           <div v-else-if="!userRelatedExpertise.length || isReseachGroupMember">
             {{
-              $t('reviews.needExpertise', {
-                disciplines: project.disciplines.map(d => d.name).join(', ')
-              })
+              $hasModule(DEIP_MODULE.APP_ECI)
+                ? $t('reviews.needExpertiseAndNotMembers', { disciplines: project.disciplines.map(d => d.name).join(', ') })
+                : $t('reviews.notMembers')
             }}
           </div>
         </slot>

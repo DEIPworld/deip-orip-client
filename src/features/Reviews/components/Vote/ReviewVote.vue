@@ -1,23 +1,22 @@
 <template>
   <div class="text-body-2">
     <div v-if="isGroupMember">
-      {{ $t('reviews.onlyNotMembers') }}
+      {{ $t('reviews.notMembers') }}
     </div>
 
     <div v-else-if="!userHasResearchExpertise">
       {{
-        $t('reviews.canSupport', {
-          disciplines: review.disciplines.map(d => d.name).join(', ')
-        })
+        $hasModule(DEIP_MODULE.APP_ECI)
+          ? $t('reviews.canSupport', { disciplines: review.disciplines.map(d => d.name).join(', ') })
+          : ''
       }}
     </div>
 
     <div v-else-if="!userHasVoted">
-      {{ $t('reviews.getForContribution',
-            {
-              countEci: 1000,
-              disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
-            })
+      {{ 
+        $hasModule(DEIP_MODULE.APP_ECI)
+          ? $t('reviews.eciForContribution', { countEci: 1000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+          : ''
       }}
     </div>
 
