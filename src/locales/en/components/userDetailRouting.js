@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   teams: 'Teams:',
   addGroup: 'Add group',
@@ -42,7 +44,7 @@ export default {
     acceptBtn: 'Accept',
     rejectBtn: 'Reject',
     reviewReq: 'Reviews',
-    reqYouReview: 'requests your review for "{title}" project'
+    reqYouReview: `requests your review for "{title}" ${project()}`
   },
   educationDialog: {
     title: 'Education',

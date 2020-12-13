@@ -73,7 +73,7 @@
       class="mt-3"
       :to="expertiseDetailsRoute"
     >
-      More details
+      {{ $t('defaultNaming.moreDetails') }}
     </v-btn>
   </v-skeleton-loader>
   <!-- TODO: temp solution-->

@@ -70,7 +70,7 @@
             }
           }"
         >
-          {{ tokenSaleData ? 'More details' : 'Info' }}
+          {{ tokenSaleData ? $t('defaultNaming.moreDetails') : $t('defaultNaming.info') }}
         </v-btn>
 
         <div v-else class="caption">

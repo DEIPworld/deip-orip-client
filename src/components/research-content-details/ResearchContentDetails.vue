@@ -15,7 +15,7 @@
 
           <d-stack gap="4">
             <div class="text-overline text--secondary">
-              project
+              {{ $t('researchContentDetails.project') }}
             </div>
             <div>
               <router-link
@@ -37,7 +37,7 @@
           <template v-if="isFilePackageContent">
             <d-stack gap="4">
               <div class="text-overline text--secondary">
-                Subject
+                {{ $t('researchContentDetails.subject') }}
               </div>
               <div class="text-h3">
                 <span class="font-weight-regular">
@@ -60,33 +60,45 @@
           >
             <template #create-messages>
               <template v-if="!contentReviewsList.length">
-                <div class="mb-2">No reviews yet.</div>
+                <div class="mb-2">
+                  {{ $t('reviews.noReviews') }}
+                </div>
                 <div v-if="!userHasResearchExpertise || isReseachGroupMember">
-                  To add review you need expertise in
-                  {{ research.disciplines.map(d => d.name).join(', ') }}
-                  and have no relations to this project or project’s group.
+                  {{
+                    $t('reviews.needExpertise', {
+                      disciplines: research.disciplines.map(d => d.name).join(', ')
+                    })
+                  }}
                 </div>
                 <div v-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
-                  You will get approximately 3000 ECI reward in
-                  {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
-                  for your contribution to this project
+                  {{ $t('reviews.getForContribution',
+                        {
+                          countEci: 3000,
+                          disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
+                        })
+                  }}
                 </div>
               </template>
 
               <div v-else-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
-                You will get approximately 3000 ECI reward in
-                {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
-                for your contribution to this project
+                {{ $t('reviews.getForContribution',
+                      {
+                        countEci: 3000,
+                        disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
+                      })
+                }}
               </div>
 
               <div v-else-if="userHasResearchExpertise && userHasReview">
-                You have reviewed this material already
+                {{ $t('reviews.reviewedAlready') }}
               </div>
 
               <div v-else-if="!userHasResearchExpertise || isReseachGroupMember">
-                To add review you need expertise in
-                {{ research.disciplines.map(d => d.name).join(', ') }}
-                and have no relations to this project or project’s group.
+                {{
+                  $t('reviews.needExpertise', {
+                    disciplines: research.disciplines.map(d => d.name).join(', ')
+                  })
+                }}
               </div>
             </template>
           </reviews-list>

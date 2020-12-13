@@ -1,15 +1,17 @@
+import { project } from './basicWords';
+
 export default {
   categories: {
-    title: 'Project categories',
+    title: `${project(true)} categories`,
     create: 'Create catergory',
     categoriesTable: {
       name: 'Name',
-      projects: 'Assigned projects'
+      projects: `Assigned ${project(false, true)}`
     },
     deleteDialog: {
       title: 'Delete category?',
       description: `Category  will be deleted permanently.
-        Assigned projects will stay without category`,
+        Assigned ${project(false, true)} will stay without category`,
       submitBtn: 'Delete'
     },
     categoryEdit: {
@@ -30,9 +32,9 @@ export default {
     },
     publishDialog: {
       title: 'Publish attribute?',
-      description: `Attribute will be set for each project and will appear on:
-        - project page,
-        - project application form,
+      description: `Attribute will be set for each ${project()} and will appear on:
+        - ${project()} page,
+        - ${project()} application form,
         - explore page.
         `,
       submitBtn: 'publish'
@@ -41,8 +43,8 @@ export default {
     unpublishDialog: {
       title: 'Unpublish attribute?',
       description: `Attribute will be removed from:
-        - project page,
-        - project application form,
+        - ${project()} page,
+        - ${project()} application form,
         - explore page.
         `,
       submitBtn: 'unpublish'
@@ -51,8 +53,8 @@ export default {
     deleteDialog: {
       title: 'Delete attribute?',
       description: `Attribute will be deleted permanently and will be removed from:
-        - project page,
-        - project application form,
+        - ${project()} page,
+        - ${project()} application form,
         - explore page.
         `,
       submitBtn: 'delete'
@@ -142,9 +144,9 @@ export default {
     }
   },
   projects: {
-    title: 'Technologies',
-    create: 'Submit new technology',
-    allTab: 'All projects',
+    title: `${project(true, true)}`,
+    create: `Submit new ${project()}`,
+    allTab: `All ${project(false, true)}`,
     waitingTab: 'Waiting for approval',
     publicTable: {
       title: 'Title',
@@ -154,7 +156,7 @@ export default {
     pendingTable: {
       title: 'Title',
       created: 'Created',
-      innovator: 'Project innovator'
+      innovator: `${project(true)} innovator`
     },
     researchDialog: {
       reject: 'Reject',
@@ -162,17 +164,17 @@ export default {
     },
     approveDialog: {
       title: 'Approve request?',
-      description: 'Project request will be approved and project will be published.',
+      description: `${project(true)} request will be approved and ${project()} will be published.`,
       submitBtn: 'Approve'
     },
     rejectDialog: {
       title: 'Reject request?',
-      description: 'Project request will not be approved and project will not be published.',
+      description: `${project(true)} request will not be approved and ${project()} will not be published.`,
       submitBtn: 'Reject'
     },
     deleteDialog: {
-      title: 'Delete project?',
-      description: 'Project will be hidden from platform permanently.',
+      title: `Delete ${project()}?`,
+      description: `${project(true)} will be hidden from platform permanently.`,
       submitBtn: 'Delete'
     }
   },
@@ -185,7 +187,7 @@ export default {
   },
   sidebar: {
     members: 'Members',
-    projects: 'Technologies',
+    projects: `${project(true, true)}`,
     criteria: 'Attributes',
     layouts: 'Layouts',
     reviewModel: 'Review model',

@@ -1,6 +1,8 @@
+import { project } from './basicWords';
+
 export default {
   contentUploadDialog: {
-    upload: 'Upload material for technology',
+    upload: `Upload material for ${project()}`,
     titleField: {
       label: 'Title',
       err: 'Content with the same name already exists'

@@ -1,8 +1,10 @@
+import { project } from './basicWords';
+
 export default {
   toolbarButton: 'Explorer',
   title: 'Open Research and Innovation Platform',
   collaboration: 'Collaboration',
-  tokenization: 'Project tokenization',
+  tokenization: `${project(true)} tokenization`,
   licensing: 'Licensing of intellectual property',
   investing: 'Crowd investing',
   form: {

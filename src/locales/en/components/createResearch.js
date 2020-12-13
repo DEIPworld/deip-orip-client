@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   domainBlock: {
     title: 'Domain',
@@ -16,7 +18,7 @@ export default {
     add: 'Add title and description',
     titleField: {
       label: 'Title',
-      err: 'Project with the same name already exists'
+      err: `${project(true)} with the same name already exists`
     },
     descriptionField: 'Description',
     linkField: 'Link to a video presentation',
@@ -26,23 +28,23 @@ export default {
   roadmapBlock: {
     title: 'Roadmap',
     roadmap: 'Roadmap',
-    roadmapText: 'Let’s create a roadmap for your project. Well-presented and detailed roadmap attracts more investors to help you to get the funding',
+    roadmapText: `Let’s create a roadmap for your ${project()}. Well-presented and detailed roadmap attracts more investors to help you to get the funding`,
     back: 'Back',
     next: 'Next step'
   },
   settingsBlock: {
     title: 'Settings',
-    settings: 'Project settings',
+    settings: `${project(true)} settings`,
     visibility: 'Visibility',
-    private: 'Private project',
-    public: 'Public project',
+    private: `Private ${project()}`,
+    public: `Public ${project()}`,
     partners: 'Partners',
     back: 'Back',
-    next: 'Create project'
+    next: `Create ${project()}`
   },
   sharesBlock: {
     title: 'Reward shares'
   },
-  success: 'Project "{title}" has been created successfully',
-  err: 'An error occurred while creating project, please try again later'
+  success: `${project(true)} "{title}" has been created successfully`,
+  err: `An error occurred while creating ${project()}, please try again later`
 };

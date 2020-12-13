@@ -10,32 +10,32 @@
       :loading="loading"
       @click="voteReview()"
     >
-      Support Review
+      {{ $t('reviews.suppRev') }}
     </v-btn>
 
     <div v-if="isGroupMember">
-      Review can be supported only by members of other teams
+      {{ $t('reviews.onlyNotMembers') }}
     </div>
 
     <div v-else-if="!userHasResearchExpertise">
-      Users with expertise in <span>{{
-        review.disciplines.map(d => d.name)
-          .join(', ')
-      }}</span>
-      can support this review only
+      {{
+        $t('reviews.canSupport', {
+          disciplines: review.disciplines.map(d => d.name).join(', ')
+        })
+      }}
     </div>
 
     <div v-else-if="!userHasVoted">
-      You will get
-      <span>approximately 1000 ECI reward in {{
-        userRelatedExpertise.map(exp => exp.discipline_name)
-          .join(', ')
-      }}</span>
-      for your contribution to this project
+      {{ $t('reviews.getForContribution',
+            {
+              countEci: 1000,
+              disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
+            })
+      }}
     </div>
 
     <div v-else-if="userHasVoted">
-      Review can be supported once
+      {{ $t('reviews.once') }}
     </div>
   </div>
 </template>

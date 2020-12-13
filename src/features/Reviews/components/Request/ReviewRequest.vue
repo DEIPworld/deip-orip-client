@@ -7,7 +7,7 @@
         small
         @click="startRequest"
       >
-        Request expert review
+        {{ $t('reviews.request') }}
       </v-btn>
     </slot>
 
@@ -15,7 +15,7 @@
       <v-form>
         <vex-dialog
           v-model="requestDialog"
-          title="Request expert review"
+          :title="$t('reviews.request')"
           :true-disabled="invalid || loading"
           :false-disabled="loading"
           @click:confirm="handleSubmit(createRequest)"
@@ -71,7 +71,7 @@
     components: {
       ContentSelector,
       UserSelector,
-      DStack,
+      DStack
     },
     mixins: [dataContextSwitch],
 

@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   explore: 'Explore',
   dashboard: 'Dashboard',
@@ -15,5 +17,5 @@ export default {
   account: 'Account',
   signOut: 'Sign Out',
   blockchainExplorer: 'Blockchain explorer',
-  createProject: 'Create Project'
+  createProject: `Create ${project(true)}`
 };

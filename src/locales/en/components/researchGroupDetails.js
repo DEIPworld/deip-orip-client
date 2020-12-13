@@ -1,7 +1,9 @@
+import { project } from './basicWords';
+
 export default {
   join: 'Join team',
   invite: 'Invite member',
-  start: 'Start a project',
+  start: `Start a ${project()}`,
   successDrop: 'Dropout Proposal has been created successfully!',
   errDrop: 'An error occurred while creating proposal, please try again later',
   transferDialog: {
@@ -53,24 +55,24 @@ export default {
     leftGroup: 'to left the group',
     user: 'User:',
     amount: 'Amount:',
-    project: 'Project:',
+    project: `${project(true)}:`,
     min: 'Min:',
     max: 'Max:',
     start: 'Start Date:',
     end: 'End Date:',
     type: 'Type:',
     updateGrMeta: 'Update group meta',
-    updatePrMeta: 'Update project meta',
+    updatePrMeta: `Update ${project()} meta`,
     authors: 'Authors:'
   },
   proposal: {
     transfer: 'Transfer tokens',
     fundraise: 'fundraise',
     updateGrMeta: 'Update group meta',
-    updatePrMeta: 'Update project meta'
+    updatePrMeta: `Update ${project()} meta`
   },
   addMemberDialog: {
-    title: 'Invite user to Project Group',
+    title: 'Invite user to Team',
     findPlaceholder: 'Find future member',
     letterLabel: 'Invitation letter',
     create: 'Create proposal',
@@ -79,7 +81,7 @@ export default {
   },
   joinRequestDialog: {
     join: 'Join Request',
-    tokensLabel: 'Project Group Tokens',
+    tokensLabel: 'Team Tokens',
     submitBtn: 'Approve and create proposal',
     reject: 'Reject',
     successSend: 'Invite proposal for "{username}" has been created successfully !',

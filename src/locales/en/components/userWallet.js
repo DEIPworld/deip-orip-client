@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   balance: 'Currencies',
   portfolio: 'Shares',
@@ -40,7 +42,7 @@ export default {
     amountField: 'Amount'
   },
   sendResearchTokensDialog: {
-    transfer: 'Transfer Project Share',
+    transfer: `Transfer ${project(true)} Share`,
     receiverField: 'Receiver',
     shareField: 'Share',
     submitBtn: 'Transfer'
