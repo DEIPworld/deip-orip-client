@@ -162,7 +162,8 @@ const actions = {
   loadAssets({ commit }) { // TODO: temp
     return assetsService.getAssetsByType(1)
       .then((res) => {
-        commit('storeAssets', res);
+        const assets = res.filter(r => r.string_symbol != Vue.$env.ASSET_UNIT); // filter out core asset for now
+        commit('storeAssets', assets);
       });
   },
 
