@@ -323,7 +323,7 @@ const actions = {
     // TODO: request server for tenant users
     deipRpc.api.lookupAccountsAsync('0', 10000)
       .then((accounts) => {
-        const blackList = ['regacc', 'hermes', 'initdelegate', username];
+        const blackList = [...this.SYSTEM_USERS, username];
         const experts = accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name)).map((a) => a.name);
         return usersService.getEnrichedProfiles(experts);
       })

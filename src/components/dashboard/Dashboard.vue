@@ -307,7 +307,7 @@
         selectedResearchToReview: null,
         isRequestingReview: false,
 
-        blackList: ['regacc', 'initdelegate'],
+        blackList: [...this.SYSTEM_USERS],
         isExpertsLoading: false,
         expertsSearch: '',
         selectedExpert: null,

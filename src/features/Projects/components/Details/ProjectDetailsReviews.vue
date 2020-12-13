@@ -7,8 +7,8 @@
     :exclude-users="project.members"
 
     :disable-content-route="isLicensingAccessLimited"
-    :disable-review-request-route="isLicensingAccessLimited"
-    :disable-create-route="isLicensingAccessLimited"
+    :disable-review-request-route="isLicensingAccessLimited || project.numberOfResearchContents == 0"
+    :disable-create-route="isLicensingAccessLimited || project.numberOfResearchContents == 0"
   />
 </template>
 

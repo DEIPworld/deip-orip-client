@@ -232,7 +232,7 @@
       deipRpc.api
         .lookupAccountsAsync('0', 10000)
         .then((accounts) => {
-          const blackList = ['regacc', 'hermes', 'initdelegate'];
+          const blackList = [...this.SYSTEM_USERS];
           const usernames = [];
           usernames.push(
             ...accounts

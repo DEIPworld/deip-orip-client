@@ -268,7 +268,7 @@
 
       experts() {
         const blackList = [
-          'regacc', 'hermes', 'initdelegate', this.user.username,
+          ...this.SYSTEM_USERS, this.user.username,
           ...this.membersList.map((m) => m.account.name)
         ];
         const existingReviewsForContent = this.contentReviewsList.filter((r) => r.research_content_id === this.content.id);

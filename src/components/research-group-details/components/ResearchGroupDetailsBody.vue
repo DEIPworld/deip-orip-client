@@ -187,7 +187,7 @@
       deipRpc.api.lookupAccountsAsync('0', 10000)
         .then((accounts) => {
           const blackList = [
-            'regacc', 'hermes', 'initdelegate',
+            ...this.SYSTEM_USERS,
             ...this.members.map((member) => member.account.name),
             ...this.invites.map((invite) => invite.user.account.name)
           ];
