@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-      :headers="pendingMembersHeaders"
+      :headers="membersHeaders"
       :items="items"
       disable-sort
       :hide-default-footer="items.length < 50"
@@ -10,22 +10,22 @@
       <template #item.researcher="{item}">
         <member-list-title :member="item" :desc-max-lines="1" class="py-4" />
       </template>
-      <template #item.expertiseStats.eci="{item}">
+      <template v-if="$hasModule(DEIP_MODULE.APP_ECI)" #item.expertiseStats.eci="{item}">
         <span class="text-caption font-weight-medium">
           {{ item.expertiseStats.eci | commaNumber }}
         </span>
       </template>
-      <template #item.expertiseStats.percentile_rank="{item}">
+      <template v-if="$hasModule(DEIP_MODULE.APP_ECI)" #item.expertiseStats.percentile_rank="{item}">
         <span class="text-caption font-weight-medium">
           {{ item.expertiseStats.percentile_rank }}
         </span>
       </template>
-      <template #item.expertiseStats.growth_rate="{item}">
+      <template v-if="$hasModule(DEIP_MODULE.APP_ECI)" #item.expertiseStats.growth_rate="{item}">
         <span class="text-caption" :class="$options.filters.numDirClass(item.expertiseStats.growth_rate)">
           {{ item.expertiseStats.growth_rate | numDir }}
         </span>
       </template>
-      <template #item.expertise="{item}">
+      <template v-if="$hasModule(DEIP_MODULE.APP_ECI)" #item.expertise="{item}">
         <span v-for="(discipline, i) in item.expertise" :key="i" class="text-caption text--secondary">{{ discipline.discipline_name }}{{ i + 1 < item.expertise.length ? ' · ' : '' }}</span>
       </template>
       <template #item.created="{item}">
@@ -84,31 +84,44 @@
     },
     data() {
       return {
-        pendingMembersHeaders: [
-          {
-            text: 'Member',
-            value: 'researcher'
-          },
-          {
-            text: 'Total ECI',
-            value: 'expertiseStats.eci',
-            align: 'end'
-          },
-          {
-            text: 'Percentile rank',
-            value: 'expertiseStats.percentile_rank',
-            align: 'end'
-          },
-          {
-            text: 'Growth rate',
-            value: 'expertiseStats.growth_rate',
-            align: 'end'
-          },
-          {
-            text: 'Expertise',
-            value: 'expertise',
-            align: 'start'
-          },
+      };
+    },
+    computed: {
+      ...mapGetters({
+        userPersonalGroup: 'auth/userPersonalGroup'
+      }),
+      membersHeaders() {
+        const columns = [{
+          text: 'Member',
+          value: 'researcher'
+        }];
+
+        if (this.$hasModule(this.DEIP_MODULE.APP_ECI)) {
+          columns.push(...[
+            {
+              text: 'Total ECI',
+              value: 'expertiseStats.eci',
+              align: 'end'
+            },
+            {
+              text: 'Percentile rank',
+              value: 'expertiseStats.percentile_rank',
+              align: 'end'
+            },
+            {
+              text: 'Growth rate',
+              value: 'expertiseStats.growth_rate',
+              align: 'end'
+            },
+            {
+              text: 'Expertise',
+              value: 'expertise',
+              align: 'start'
+            }
+          ]);
+        }
+
+        columns.push(...[
           {
             text: 'Member since',
             value: 'created',
@@ -123,13 +136,10 @@
             text: '',
             value: 'actions'
           }
-        ]
-      };
-    },
-    computed: {
-      ...mapGetters({
-        userPersonalGroup: 'auth/userPersonalGroup'
-      }),
+        ]);
+
+        return columns;
+      },
       isResearchGroupMember() {
         return this.$store.getters['auth/userIsResearchGroupMember'](this.group.id);
       },

@@ -9,9 +9,13 @@
       </div>
     </v-card-text>
 
-    <v-divider />
+    <v-divider v-if="$hasModule(DEIP_MODULE.APP_ECI)" />
 
-    <v-card-text class="text--primary spacer py-4 d-flex flex-column" style="min-height:150px">
+    <v-card-text
+      v-if="$hasModule(DEIP_MODULE.APP_ECI)"
+      class="text--primary spacer py-4 d-flex flex-column" 
+      style="min-height:150px">
+
       <member-list-item-stat-info :member="member" />
 
       <v-spacer />

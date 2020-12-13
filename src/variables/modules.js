@@ -2,7 +2,7 @@ export const DEIP_MODULE = {
   APP_ECI: 'eci',
   APP_EXPERT_REVIEW: 'app-expert-review',
   APP_CROWDFUNDING: 'app-crowdfunding',
-  APP_GRANTS_MANAGEMENT: 'app-assets-management',
+  APP_ASSETS_MANAGEMENT: 'app-assets-management',
   APP_ASSETS_WITHDRAWAL: 'app-assets-withdrawal',
   APP_ASSETS_DEPOSIT: 'app-assets-deposit',
   APP_GRANTS_MANAGEMENT: 'app-grants-management',
