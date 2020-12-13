@@ -17,7 +17,7 @@
           v-for="field in section.fields"
           :key="field.name"
           :field="setCommonProps(field)"
-          :value="model[field.name] || field.value"
+          :value="model[field.name] || field.value || ''"
           @upd="onInput"
         />
       </v-row>
