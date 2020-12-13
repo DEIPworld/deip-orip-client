@@ -176,6 +176,7 @@
           v-model="dialog.form.date"
           label="Request expiration date"
           class="mb-4"
+          only-future
         />
         <v-textarea
           v-model="dialog.form.memo"

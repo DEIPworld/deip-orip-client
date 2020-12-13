@@ -1,7 +1,10 @@
 import Vue from 'vue';
+import { project } from './basicWords';
 
 export default {
   all: 'All',
+  moreDetails: 'More details',
+  info: 'Info',
   apply: 'Apply',
   clear: 'Clear',
   cancel: 'Cancel',
@@ -15,7 +18,7 @@ export default {
   citations: 'Citations',
   hIndex: 'H-index',
   projects: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
-  noProjects: 'No Projects found for specified criteria',
+  noProjects: () => `No ${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'} found for specified criteria`,
   yourDomain: 'Your domain',
   allDomain: 'All domain',
   time: {
@@ -27,26 +30,26 @@ export default {
   },
   forms: {
     researchRequest: {
-      start: 'Start a project',
-      successReq: 'Project request has been applied successfully. We will notify you as soon as your project form will be approved.',
-      errReq: 'An error occurred while creating project, please try again later',
-      successUpdate: 'Project "{title}" has been updated successfully',
+      start: `Start a ${project(false)}`,
+      successReq: `${project(true)} request has been applied successfully. We will notify you as soon as your ${project(false)} form will be approved.`,
+      errReq: `An error occurred while creating ${project(false)}, please try again later`,
+      successUpdate: `${project(true)} "{title}" has been updated successfully`,
       basicBlock: {
         title: 'Basics',
-        nameField: 'Project name',
+        nameField: `${project(true)} name`,
         ideaField: 'What is your idea?',
         domainField: 'Domain',
-        locationField: 'Project location',
+        locationField: `${project(true)} location`,
         areaField: 'What area are you trying to impact?',
         solveField: 'How will this solve a current problem?'
       },
       readinesBlock: {
-        title: 'Project readines level'
+        title: `${project(true)} readines level`
       },
       fundingBlock: {
         title: 'Funding',
         fundingField: 'How much funding are you expecting?',
-        estimateField: 'What is your project estimate?'
+        estimateField: `What is your ${project(true)} estimate?`
       },
       addInfBlock: {
         title: 'Additional information',

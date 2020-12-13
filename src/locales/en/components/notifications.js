@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   markRead: 'Mark as read',
   excluded: 'excluded',
@@ -14,7 +16,7 @@ export default {
   to: 'to',
   propInvite: 'proposed to invite',
   approvedAppl: 'approved application for',
-  project: 'project',
+  project: `${project()}`,
   deletedAppl: 'deleted application for',
   editedAppl: 'edited application for',
   rejectedAppl: 'rejected application for',
@@ -24,15 +26,15 @@ export default {
   acceptedNew: 'accepted new',
   propUpload: 'proposed to upload',
   materialFor: 'material for',
-  projectIn: 'project in',
+  projectIn: `${project()} in`,
   updated: 'updated',
   teamData: 'team data',
   updatedTeam: 'updated team data',
   propUpdate: 'proposed to update',
   startedNew: 'started new',
   propStartNew: 'proposed to start new',
-  projectMeta: 'project meta',
-  projectMetaIn: 'project meta in',
+  projectMeta: `${project()} meta`,
+  projectMetaIn: `${project()} meta in`,
   scheduledFundraising: 'scheduled fundraising campaign for',
   propSchedule: 'proposed to schedule fundraising campaign for'
 };

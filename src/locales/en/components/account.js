@@ -1,12 +1,13 @@
+import { project } from './basicWords';
+
 export default {
   sidebar: {
     projectsBlock: {
-      title: 'Technologies',
-      teamsPr: 'Team\'s projects',
-      pr: 'Technologies',
-      myPr: 'My projects',
-      follPr: 'Following projects',
-      prReq: 'Project requests'
+      title: `${project(true, true)}`,
+      pr: `${project(true, true)}`,
+      myPr: `My ${project(false, true)}`,
+      follPr: `Following ${project(false, true)}`,
+      prReq: `${project(true)} requests`
     },
     groupsBlock: {
       title: 'Groups',
@@ -50,12 +51,12 @@ export default {
     }
   },
   projects: {
-    notFollPr: 'You’re not following any project yet',
-    aLotOfPr: 'We have a lot of incredible projects on our platform. Take a look',
-    browseBtn: 'Browse projects',
-    teamsTech: 'Team\'s Technologies',
-    myTech: 'My Technologies',
-    follTech: 'Following Technologies'
+    notFollPr: `You’re not following any ${project()} yet`,
+    aLotOfPr: `We have a lot of incredible ${project(false, true)} on our platform. Take a look`,
+    browseBtn: `Browse ${project(false, true)}`,
+    teamsTech: `Team's ${project(false, true)}`,
+    myTech: `My ${project(false, true)}`,
+    follTech: `Following ${project(false, true)}`
   },
   groups: {
     teams: 'Teams',
@@ -70,7 +71,7 @@ export default {
     },
     deleteDialog: {
       title: 'Delete request?',
-      description: 'Project will be hidden from platform permanently.',
+      description: `${project(true)} will be hidden from platform permanently.`,
       submitBtn: 'Delete'
     }
   },

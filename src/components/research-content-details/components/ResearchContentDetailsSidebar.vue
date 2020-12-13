@@ -2,7 +2,7 @@
   <div>
     <d-block-widget v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)">
       <div v-if="isProposed" class="text-body-1">
-        Draft is
+        {{ $t('researchContentDetails.sidebar.draft') }}
         <router-link
           class="link orange--text"
           :to="{
@@ -13,23 +13,23 @@
             hash: '#proposals'
           }"
         >
-          proposed
+          {{ $t('researchContentDetails.sidebar.proposed') }}
         </router-link>
-        as research content and locked for editing
+        {{ $t('researchContentDetails.sidebar.locked') }}
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="text-body-1 pb-4">
-          The proposal is expired. Unlock the material for a new proposal or removal
+          {{ $t('researchContentDetails.sidebar.expiredProposal') }}
         </div>
         <v-btn color="orange" block @click="unlockDraft()">
-          Unlock Draft
+          {{ $t('researchContentDetails.sidebar.unlockDraftBtn') }}
         </v-btn>
       </div>
     </d-block-widget>
 
     <d-block-widget
       v-if="$hasModule(DEIP_MODULE.APP_ECI) && $route.params.content_permlink !== '!draft'"
-      title="Expertise Contribution Index"
+      :title="$t('researchContentDetails.sidebar.eci')"
     >
       <eci-stats
         :content-id="content.external_id"
@@ -37,7 +37,7 @@
       />
     </d-block-widget>
 
-    <d-block-widget title="Authors">
+    <d-block-widget :title="$t('researchContentDetails.sidebar.authors')">
       <template v-if="isPublished">
         <div
           v-for="(author, index) in contentAuthorsList"
@@ -81,7 +81,10 @@
       </template>
     </d-block-widget>
 
-    <d-block-widget v-if="researchTableOfContent.length" title="Project table of content">
+    <d-block-widget
+      v-if="researchTableOfContent.length"
+      :title="$t('researchContentDetails.sidebar.contentTable')"
+    >
       <ol class="text-body-2">
         <li
           v-for="(item, index) in researchTableOfContent"
@@ -121,7 +124,7 @@
           <v-icon small class="mr-1">
             device_hub
           </v-icon>
-          References
+          {{ $t('researchContentDetails.sidebar.references') }}
         </router-link>
       </div>
     </d-block-widget>
@@ -141,7 +144,7 @@
           }
         }"
       >
-        Blockchain Metadata
+        {{ $t('researchContentDetails.sidebar.bchMetadata') }}
       </v-btn>
     </d-block-widget> -->
   </div>

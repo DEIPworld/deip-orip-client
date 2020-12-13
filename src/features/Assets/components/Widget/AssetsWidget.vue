@@ -6,12 +6,13 @@
         color="primary"
         small
         block
+        outlined
         :to="{
           name: 'project.asset.create',
           params: $route.params
         }"
       >
-        Issue tokens
+        {{ $t('assets.issueTokens') }}
       </v-btn>
     </template>
     <template v-else>
@@ -25,22 +26,30 @@
           color="primary"
           @click="details = true"
         >
-          More details
+          {{ $t('defaultNaming.moreDetails') }}
         </v-btn>
       </d-stack>
       <vex-dialog
         v-model="details"
         :max-width="580"
-        title="Shareholders"
+        :title="$t('assets.widget.shareholders')"
         :button-false-text="false"
         button-true-text="Ok"
       >
         <d-stack>
           <div class="text-body-1">
-            <span class="font-weight-medium">Shareholders:</span> {{ internalAsset.balances.length }}<br>
-            <span class="font-weight-medium">Tokens issued:</span> {{ listDataTotal.value }}<br>
-            <span class="font-weight-medium">Your tokens:</span> {{ listDataUserBalance.value }}<br>
-            <span class="font-weight-medium">Your share:</span> {{ listDataUserBalancePercent.value }}<br>
+            <span class="font-weight-medium">
+              {{ $t('assets.widget.shareholders') }}:
+            </span> {{ internalAsset.balances.length }}<br>
+            <span class="font-weight-medium">
+              {{ $t('assets.widget.tokensIssued') }}:
+            </span> {{ listDataTotal.value }}<br>
+            <span class="font-weight-medium">
+              {{ $t('assets.widget.yTokens') }}:
+            </span> {{ listDataUserBalance.value }}<br>
+            <span class="font-weight-medium">
+              {{ $t('assets.widget.yShare') }}:
+            </span> {{ listDataUserBalancePercent.value }}<br>
           </div>
           <users-list :users="shareholders" view-type="dataProvider">
             <template #default="{ users }">
@@ -48,13 +57,13 @@
                 <thead>
                   <tr>
                     <th class="text-left">
-                      Name
+                      {{ $t('assets.widget.name') }}
                     </th>
                     <th class="text-right">
-                      Shares
+                      {{ $t('assets.widget.shares') }}
                     </th>
                     <th class="text-right">
-                      Tokens
+                      {{ $t('assets.widget.tokens') }}
                     </th>
                   </tr>
                 </thead>

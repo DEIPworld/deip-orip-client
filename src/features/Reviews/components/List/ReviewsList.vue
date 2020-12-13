@@ -5,7 +5,7 @@
         :content="internalReviews.length"
         :value="internalReviews.length"
       >
-        Reviews
+        {{ $t('reviews.reviews') }}
       </v-badge>
     </template>
 
@@ -90,7 +90,7 @@
                 <template #title>
                   <div class="text-caption text--secondary">
                     <div class="font-weight-medium">
-                      Assessment
+                      {{ $t('reviews.assessment') }}
                     </div>
                   </div>
                 </template>
@@ -111,7 +111,7 @@
                       }
                     }"
                   >
-                    See review
+                    {{ $t('reviews.seeReview') }}
                   </v-btn>
                 </template>
 
@@ -126,7 +126,7 @@
                       </div>
                     </template>
                     <div v-if="review.supporters.length">
-                      {{ review.supporters.length }} experts supported this review
+                      {{ review.supporters.length }} {{ $t('reviews.expertsSupp') }}
                     </div>
                   </v-tooltip>
                 </div>
@@ -152,17 +152,22 @@
       <v-col>
         <slot name="create-messages">
           <div v-if="!internalReviews.length" class="mb-2">
-            No reviews yet.
+            {{ $t('reviews.noReviews') }}
           </div>
           <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
-            You will get approximately 3000 ECI reward in
-            {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}
-            for review on the materials associated with this project.
+            {{ $t('reviews.getForReview',
+                  {
+                    countEci: 3000,
+                    disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
+                  })
+            }}
           </div>
           <div v-else-if="!userRelatedExpertise.length || isReseachGroupMember">
-            To add review you need expertise in
-            {{ project.disciplines.map(d => d.name).join(', ') }}
-            and have no relations to this project or project’s group.
+            {{
+              $t('reviews.needExpertise', {
+                disciplines: project.disciplines.map(d => d.name).join(', ')
+              })
+            }}
           </div>
         </slot>
       </v-col>
@@ -176,7 +181,7 @@
           }"
         >
           Add Review
-         </v-btn>
+        </v-btn>
       </v-col>
     </v-row>
     <v-divider />

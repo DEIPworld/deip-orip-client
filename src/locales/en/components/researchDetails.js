@@ -1,3 +1,5 @@
+import { project } from './basicWords';
+
 export default {
   created: 'Created',
   edit: 'Edit',
@@ -8,7 +10,7 @@ export default {
   totalInv: 'Total investments',
   averageInv: 'Average investment',
   yourInv: 'Your investment',
-  timeline: 'Project Timeline',
+  timeline: `${project(true)} Timeline`,
   showEvents: 'Show more events',
   references: 'Browse references',
   reviews: 'Reviews',
@@ -23,7 +25,7 @@ export default {
   createdCont: 'Created on platform content',
   uploadedCont: 'Uploaded content',
   sidebar: {
-    join: 'Join Project group',
+    join: 'Join Team',
     letter: 'Provide a cover letter to your Join Request',
     letterField: 'Cover letter',
     send: 'Send',
@@ -33,8 +35,8 @@ export default {
     yourProfile: 'your profile page',
     joinResGroup: 'to join the research group',
     eciBlock: 'Expertise Contribution Index',
-    private: 'Private project',
-    public: 'Public project',
+    private: `Private ${project()}`,
+    public: `Public ${project()}`,
     expertBlock: {
       title: 'Expert Review',
       reqReview: 'Request Review',
@@ -50,7 +52,7 @@ export default {
     errJoinReq: 'An error occurred while sending join request, please try again later!'
   },
   contentFileDialog: {
-    upload: 'Upload material for project',
+    upload: `Upload material for ${project()}`,
     titleField: {
       label: 'Title',
       err: 'Content with the same name already exists'

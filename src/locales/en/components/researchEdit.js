@@ -1,9 +1,11 @@
+import { project } from './basicWords';
+
 export default {
-  title: 'Edit project',
+  title: `Edit ${project()}`,
   titleBlock: {
     title: 'Tilte:',
     titleField: {
-      err: 'Project with the same name already exists'
+      err: `${project(true)} with the same name already exists`
     }
   },
   descriptionBlock: {
@@ -11,13 +13,13 @@ export default {
   },
   visibilityBlock: {
     title: 'Visibility',
-    private: 'Private project',
-    public: 'Public project'
+    private: `Private ${project()}`,
+    public: `Public ${project()}`
   },
-  updateResearch: 'Update Project',
+  updateResearch: `Update ${project(true)}`,
   updateInfo: 'Update Info',
   updateImg: 'Update image',
-  back: 'Back to project',
+  back: `Back to ${project()}`,
   invalidLink: 'Invalid http(s) link',
   categoryBlock: {
     title: 'Category:',
@@ -28,7 +30,7 @@ export default {
     linkField: 'Link to a video presentation'
   },
   attributesBlock: {
-    title: 'Project attributes'
+    title: `${project()} attributes`
   },
   partnersBlock: {
     title: 'Partners'
@@ -45,15 +47,15 @@ export default {
   },
   successProp: 'Proposal has been sent successfully!',
   errProp: 'An error occurred during proposal sending',
-  successInfo: 'Project has been updated successfully',
+  successInfo: `${project(true)} has been updated successfully`,
   errInfo: 'An error occurred during change info',
   successImg: 'Background image has been updated successfully ! Refresh the page please',
   errImg: 'Sorry, an error occurred while uploading background image, please try again later',
-  shouldHaveGoal: 'Project should have the primary Goal',
+  shouldHaveGoal: `${project(true)} should have the primary Goal`,
   requiredGoal: 'Step Goal is required',
-  shouldHaveBudget: 'Project should have the estimated budget',
+  shouldHaveBudget: `${project(true)} should have the estimated budget`,
   requiredBudget: 'Step budget is required',
-  shouldHavePurpose: 'Project should have the budget purpose',
+  shouldHavePurpose: `${project(true)} should have the budget purpose`,
   requiredPurpose: 'Step purpose is required',
   specifiedDeadline: 'Goal deadline should be specified',
   notPastdeadline: 'Goal deadline can not be in the Past'

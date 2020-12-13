@@ -1,6 +1,6 @@
 <template>
   <d-layout-full-screen
-    title="Issue tokens"
+    :title="$t('assets.issueTokens')"
   >
     <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
       <v-form
@@ -9,9 +9,9 @@
         @submit.prevent="handleSubmit(createAsset)"
       >
         <d-stack gap="32">
-          <d-block title="Project token details" title-margin="16">
+          <d-block :title="$t('assets.create.tokenDetails')" title-margin="16">
             <div class="text-body-2">
-              Project: {{ project.title }}
+              {{ $t('assets.create.project') }}: {{ project.title }}
             </div>
 
             <v-row>
@@ -23,7 +23,7 @@
                 >
                   <v-text-field
                     v-model.number="formModel.maxSupply"
-                    label="Total number of tokens to issue"
+                    :label="$t('assets.create.totalNumber')"
                     outlined
                     hide-details="auto"
                     :error-messages="errors"
@@ -46,7 +46,7 @@
                   <v-text-field
                     v-model="formModel.symbol"
                     v-mask="assetMask"
-                    label="Ticker (abbreviation)"
+                    :label="$t('assets.create.tickerAbbreviation')"
                     outlined
                     hide-details="auto"
                     :error-messages="errors"
@@ -56,13 +56,13 @@
             </v-row>
 
             <div class="text-body-2">
-              Note: 2,000 to 20,000 tokens are usualy issued per project.
+              {{ $t('assets.create.issued') }}
             </div>
           </d-block>
 
           <d-block title="Shareholders" title-margin="16">
             <div class="text-body-2">
-              Note: Only tokens that belong to a group can be used for fundraising.
+              {{ $t('assets.create.usedForFund') }}
             </div>
             <d-timeline>
               <d-timeline-item :dot-top="16">
@@ -71,7 +71,7 @@
                     <user-selector
                       :users="teamTokens.account"
                       :value="teamTokens.account"
-                      label="Shareholder"
+                      :label="$t('assets.create.shareholder')"
                       outlined
                       hide-details="auto"
                       disabled
@@ -79,7 +79,7 @@
                   </v-col>
                   <v-col cols="3">
                     <v-text-field
-                      label="Tokens"
+                      :label="$t('assets.create.tokens')"
                       :value="teamTokens.amount"
                       outlined
                       hide-details="auto"
@@ -112,7 +112,7 @@
                     >
                       <user-selector
                         v-model="item.account"
-                        label="Shareholder"
+                        :label="$t('assets.create.shareholder')"
                         outlined
                         hide-details="auto"
                         :error-messages="errors"
@@ -127,7 +127,7 @@
                     >
                       <v-text-field
                         v-model="item.amount"
-                        label="Tokens"
+                        :label="$t('assets.create.tokens')"
                         outlined
                         hide-details="auto"
                         :error-messages="errors"
@@ -170,7 +170,7 @@
               </v-col>
               <v-col style="padding-top:2px">
                 <div class="text-body-2">
-                  I agree to the Terms and Conditions listed below
+                  {{ $t('assets.create.agree') }}
                 </div>
               </v-col>
             </v-row>
@@ -191,11 +191,7 @@
               </v-col>
               <v-col style="padding-top:2px">
                 <div class="text-body-2">
-                  I understand that issued tokens will be distributed among shareholders,
-                  effectively transferring ownership over the property related to the project.
-                  Holding a share does not grant access to participate on
-                  decisions related to the project.
-                  It’s not possible to undo this action.
+                  {{ $t('assets.create.text') }}
                 </div>
               </v-col>
             </v-row>
@@ -212,7 +208,7 @@
                 :disabled="loading"
                 @click="cancel()"
               >
-                Cancel
+                {{ $t('assets.create.cancel') }}
               </v-btn>
               <v-btn
                 color="primary"
@@ -220,7 +216,7 @@
                 :loading="loading"
                 @click="createAsset()"
               >
-                Submit
+                {{ $t('assets.create.submit') }}
               </v-btn>
             </d-stack>
           </div>

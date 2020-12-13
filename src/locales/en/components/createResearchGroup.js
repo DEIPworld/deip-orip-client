@@ -1,7 +1,7 @@
 export default {
   title: 'Create team',
   successCreate: '"{name}" research group has been created successfully !',
-  errCreate: 'An error occurred while creating Project Group, please try again later',
+  errCreate: 'An error occurred while creating Team, please try again later',
   nameBlock: {
     title: 'Team name',
     titleField: {

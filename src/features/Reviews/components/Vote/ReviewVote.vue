@@ -1,42 +1,41 @@
 <template>
   <div class="text-body-2">
+    <div v-if="isGroupMember">
+      {{ $t('reviews.onlyNotMembers') }}
+    </div>
+
+    <div v-else-if="!userHasResearchExpertise">
+      {{
+        $t('reviews.canSupport', {
+          disciplines: review.disciplines.map(d => d.name).join(', ')
+        })
+      }}
+    </div>
+
+    <div v-else-if="!userHasVoted">
+      {{ $t('reviews.getForContribution',
+            {
+              countEci: 1000,
+              disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ')
+            })
+      }}
+    </div>
+
+    <div v-else-if="userHasVoted">
+      {{ $t('reviews.once') }}
+    </div>
     <v-btn
       v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
       block
       color="primary"
       small
-      text
+      outlined
       class="mb-2 text-body-2"
       :loading="loading"
       @click="voteReview()"
     >
-      Support Review
+      {{ $t('reviews.suppRev') }}
     </v-btn>
-
-    <div v-if="isGroupMember">
-      Review can be supported only by members of other teams
-    </div>
-
-    <div v-else-if="!userHasResearchExpertise">
-      Users with expertise in <span>{{
-        review.disciplines.map(d => d.name)
-          .join(', ')
-      }}</span>
-      can support this review only
-    </div>
-
-    <div v-else-if="!userHasVoted">
-      You will get
-      <span>approximately 1000 ECI reward in {{
-        userRelatedExpertise.map(exp => exp.discipline_name)
-          .join(', ')
-      }}</span>
-      for your contribution to this project
-    </div>
-
-    <div v-else-if="userHasVoted">
-      Review can be supported once
-    </div>
   </div>
 </template>
 

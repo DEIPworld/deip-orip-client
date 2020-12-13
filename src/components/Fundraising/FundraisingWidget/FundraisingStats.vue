@@ -19,17 +19,17 @@
       </template>
 
       <div v-if="disabled" class="text-body-2">
-        Project has never fundraised before.
-        Please,
+        {{ $t('fundraising.neverFund') }}
+        {{ $t('fundraising.please') }}
         <router-link
           :to="{
             name: 'project.asset.create',
             params: $route.params
           }"
         >
-          issue project’s tokens
+          {{ $t('fundraising.issueTokens') }}
         </router-link>
-        to start Fundraising.
+        {{ $t('fundraising.toStart') }}
       </div>
 
       <template v-else>
@@ -57,6 +57,26 @@
             </v-row>
           </template>
         </div>
+
+        <div v-if="!(hasHistory || tokenSaleData)" class="caption">
+          {{ $t('fundraising.neverFund') }}
+        </div>
+        <v-btn
+          v-if="!tokenSaleData && isResearchMember"
+          block
+          small
+          outlined
+          color="primary"
+          :to="{
+            name: 'project.fundraising.create',
+            params: $route.params
+          }"
+        >
+          {{ $t('fundraising.start') }}
+        </v-btn>
+        <div v-else-if="!tokenSaleData && !isResearchMember" class="text-caption">
+          {{ $t('fundraising.finished') }}
+        </div>
         <v-btn
           v-if="hasHistory || tokenSaleData"
           block
@@ -70,23 +90,7 @@
             }
           }"
         >
-          {{ tokenSaleData ? 'More details' : 'Info' }}
-        </v-btn>
-
-        <div v-else class="caption">
-          Project has never fundraised before.
-        </div>
-        <v-btn
-          v-if="!tokenSaleData && isResearchGroupMember"
-          block
-          small
-          color="primary"
-          :to="{
-            name: 'project.fundraising.create',
-            params: $route.params
-          }"
-        >
-          Start new fundraise
+          {{ $t('defaultNaming.moreDetails') }}
         </v-btn>
       </template>
     </d-block-widget>
@@ -123,7 +127,6 @@
     computed: {
       ...mapGetters({
         tokenSaleData: 'FundraisingStats/tokenSale',
-        research: 'FundraisingStats/research',
         hasHistory: 'FundraisingStats/hasHistory'
       }),
       timeChipData() {
@@ -167,12 +170,8 @@
           }
         ];
       },
-      isResearchGroupMember() {
-        return this.research
-          ? this.$store.getters['auth/userIsResearchGroupMember'](
-            this.research.research_group_id
-          )
-          : false;
+      isResearchMember() {
+        return this.project ? this.project.members.includes(this.$currentUserName) : false;
       },
 
       disabled() {

@@ -339,11 +339,7 @@
       chartData() {
         const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
           const { amount } = this.$$fromAssetUnits(item.amount);
-          if (item.owner === this.research.researchGroup.external_id) { // TODO: resolve this for all group accounts in store
-            arr.push([this.researchGroup.name, amount]);
-          } else {
-            arr.push([this.$options.filters.accountFullname(item.user), amount]);
-          }
+          arr.push([this.$options.filters.accountFullname(item.user), amount]);
           return arr;
         }, []);
 
