@@ -1,18 +1,5 @@
 <template>
   <div class="text-body-2">
-    <v-btn
-      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
-      block
-      color="primary"
-      small
-      text
-      class="mb-2 text-body-2"
-      :loading="loading"
-      @click="voteReview()"
-    >
-      {{ $t('reviews.suppRev') }}
-    </v-btn>
-
     <div v-if="isGroupMember">
       {{ $t('reviews.onlyNotMembers') }}
     </div>
@@ -37,6 +24,18 @@
     <div v-else-if="userHasVoted">
       {{ $t('reviews.once') }}
     </div>
+    <v-btn
+      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
+      block
+      color="primary"
+      small
+      outlined
+      class="mb-2 text-body-2"
+      :loading="loading"
+      @click="voteReview()"
+    >
+      {{ $t('reviews.suppRev') }}
+    </v-btn>
   </div>
 </template>
 

@@ -1,13 +1,10 @@
 import { InvestmentsService } from '@deip/investments-service';
-import { ResearchService } from '@deip/research-service';
 import deipRpc from '@deip/rpc-client';
 
-const researchService = ResearchService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 
 const STATE = {
   tokenSale: undefined,
-  research: undefined,
   tokenSales: []
 };
 
@@ -19,18 +16,13 @@ const GETTERS = {
 
 const ACTIONS = {
   loadResearchTokenSale({ dispatch, commit }, researchId) {
-    return researchService.getResearch(researchId)
-      .then((research) => {
-        commit('setResearch', research);
-
-        return investmentsService.getCurrentTokenSaleByResearch(research.external_id)
-          .then((tokenSale) => {
-            commit('setResearchTokenSale', tokenSale);
-            if (!tokenSale) {
-              return dispatch('loadHistoryResearchTokenSale', research.external_id);
-            }
-          });
-      }, (err) => { console.error(err); });
+    return investmentsService.getCurrentTokenSaleByResearch(researchId)
+      .then((tokenSale) => {
+        commit('setResearchTokenSale', tokenSale);
+        if (!tokenSale) {
+          return dispatch('loadHistoryResearchTokenSale', researchId);
+        }
+      }), (err) => { console.error(err); };
   },
   loadHistoryResearchTokenSale({ commit }, researchId) {
     return deipRpc.api.getResearchTokenSalesByResearchAsync(researchId)
@@ -46,9 +38,6 @@ const MUTATIONS = {
   },
   setHistoryResearchTokenSale(state, tokenSales) {
     state.tokenSales = tokenSales;
-  },
-  setResearch(state, research) {
-    state.research = research;
   }
 };
 

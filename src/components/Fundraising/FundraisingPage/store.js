@@ -47,6 +47,7 @@ const ACTIONS = {
 
   loadSecurityTokenHolders({ commit }, securityTokenId) {
     const securityTokenHolders = [];
+    const indexes = [];
     return assetsService.getAccountsAssetBalancesByAsset(securityTokenId)
       .then((securityTokens) => {
         securityTokenHolders.push(...securityTokens);
@@ -55,9 +56,26 @@ const ACTIONS = {
       .then((users) => {
         // TODO: Fix this for group accounts
         for (let i = 0; i < securityTokenHolders.length; i++) {
-          const balance = securityTokenHolders[i]; 
+          const balance = securityTokenHolders[i];
           balance.user = users.find((user) => balance.owner === user.account.name);
         }
+        const groups = users.filter((a, i) => {
+          if (a.account.is_research_group) {
+            indexes.push(i);
+            return true;
+          }
+          return false;
+        });
+        return Promise.all(
+          groups.map(({ account }) => researchGroupService.getResearchGroup(account.name))
+        );
+      })
+      .then((groups) => {
+        indexes.forEach((i) => {
+          securityTokenHolders[i].user.account = groups.find(
+            (g) => g.external_id === securityTokenHolders[i].owner
+          );
+        });
         commit('setSecurityTokenBalancesList', securityTokenHolders);
       });
   },

@@ -6,6 +6,7 @@
         color="primary"
         small
         block
+        outlined
         :to="{
           name: 'project.asset.create',
           params: $route.params

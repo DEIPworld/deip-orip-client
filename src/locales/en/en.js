@@ -106,6 +106,14 @@ export default {
     reviewedAlready: 'You have reviewed this material already',
     request: 'Request expert review'
   },
+  fundraising: {
+    neverFund: `${project(true)} has never fundraised before. `,
+    please: 'Please',
+    issueTokens: `issue ${project(false, true)} tokens`,
+    toStart: 'to start Fundraising.',
+    start: 'Start new fundraise',
+    finished: 'Fundraising was finished. To know more about the results click on more details.'
+  },
 
   contents,
   topMenu,

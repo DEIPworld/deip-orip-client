@@ -69,6 +69,7 @@
       v-if="expertiseDetailsRoute"
       block
       small
+      text
       color="primary"
       class="mt-3"
       :to="expertiseDetailsRoute"

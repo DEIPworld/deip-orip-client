@@ -14,7 +14,7 @@
                   name="Units"
                   :rules="{
                     required: true,
-                    minMax: {
+                    minMaxValue: {
                       min: MIN_TOKEN_UNITS_TO_SELL,
                       max: issuedTokens.amount
                     }
