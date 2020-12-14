@@ -69,6 +69,7 @@
         </div>
       </d-dialog>
     </div>
+    <v-divider />
   </div>
 </template>
 

@@ -296,6 +296,7 @@
         if (this.dialog.exchange) {
           return this.allAssets.filter(
             (item) => item.stringSymbol !== this.dialog.form.fromAccount.asset_symbol
+              && item.stringSymbol !== this.$env.ASSET_UNIT
           );
         }
         return [];
@@ -355,6 +356,7 @@
         this.dialog.form.receiver = {};
         this.dialog.form.valid = false;
         this.dialog.form.fromAmount = '';
+        if (this.$refs.sendResearchTokensForm) this.$refs.sendResearchTokensForm.reset();
         this.dialog.form.fromAccount = item;
       },
 

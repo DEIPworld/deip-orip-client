@@ -8,7 +8,7 @@
 
     <!-- ### START User Profile Education\Employment Section ### -->
     <user-details-education />
-    <v-divider />
+
     <user-details-employment />
     <!-- ### END User Profile Education\Employment Section ### -->
 

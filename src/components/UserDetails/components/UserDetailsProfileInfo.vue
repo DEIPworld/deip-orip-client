@@ -96,7 +96,7 @@
             {{ $t('userDetailRouting.profileInfo.about') }}
           </div>
           <div class="text-body-2">
-            {{ userInfo.profile.bio }}
+            {{ userInfo.profile.bio || $t('userDetailRouting.profileInfo.noDetails') }}
           </div>
         </div>
       </div>

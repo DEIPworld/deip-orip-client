@@ -35,7 +35,8 @@ export default {
     regSince: 'Member since:',
     email: 'Add your email here',
     bio: 'Add short bio',
-    about: 'About'
+    about: 'About',
+    noDetails: 'No additional details to show'
   },
   sidebar: {
     invites: 'Invites',
