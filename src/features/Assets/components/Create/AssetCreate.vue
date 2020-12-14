@@ -19,7 +19,7 @@
                 <validation-provider
                   v-slot="{ errors }"
                   name="Number of tokens"
-                  rules="required|digits"
+                  rules="required|integer"
                 >
                   <v-text-field
                     v-model.number="formModel.maxSupply"
@@ -303,11 +303,11 @@
     },
 
     created() {
-      if (this.projectTokenized) {
-        this.redirect();
-      } else {
+      // if (this.projectTokenized) {
+      //   this.redirect();
+      // } else {
         this.$setReady();
-      }
+      // }
     },
 
     methods: {
