@@ -7,7 +7,9 @@
         row-layout-key="AdminProjectListRow"
         :title="$t('adminRouting.projects.title')"
       >
-        <template #title-append-after>
+        <template 
+          v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)"
+          #title-append-after>
           <v-btn
             outlined
             small
@@ -30,7 +32,11 @@
             <v-btn icon small @click.stop="editProject(project.externalId)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon small @click.stop="deleteProject(project.externalId)">
+            <v-btn 
+              v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)" 
+              icon 
+              small 
+              @click.stop="deleteProject(project.externalId)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </crud-actions>

@@ -3,7 +3,10 @@
     <d-layout-section-main>
       <d-block :title="$t('adminRouting.attributes.title')">
 
-        <template #title-append>
+        <template 
+          v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_ATTRIBUTES_REGISTARTION)" 
+          #title-append
+        >
           <v-btn small color="primary" :to="{name: 'admin.attributes.edit'}">
             <v-icon left>
               extension
@@ -30,7 +33,7 @@
             <crud-actions row>
 
 
-              <v-btn
+              <!-- <v-btn
                 v-if="!item.isRequired"
                 :color="item.isPublished ? 'success' : null"
                 icon
@@ -38,7 +41,7 @@
                 @click="openActionDialog(item.isPublished ? 'unpublish' : 'publish', item._id)"
               >
                 <v-icon>{{ item.isPublished ? 'flag' : 'outlined_flag' }}</v-icon>
-              </v-btn>
+              </v-btn> -->
 
               <v-btn icon small :to="{name: 'admin.attributes.edit', query:{id:item._id}}">
                 <v-icon>edit</v-icon>
@@ -47,11 +50,11 @@
               <v-btn
                 icon
                 small
-                :disabled="item.isRequired"
+                :disabled="item.isRequired || !$hasModule(DEIP_MODULE.ADMIN_PANEL_ATTRIBUTES_REGISTARTION)"
                 @click="openActionDialog('delete', item._id)"
                 class="ml-auto"
               >
-                <v-icon>{{ item.isRequired ? 'lock' : 'delete' }}</v-icon>
+                <v-icon>{{ item.isRequired || !$hasModule(DEIP_MODULE.ADMIN_PANEL_ATTRIBUTES_REGISTARTION) ? 'lock' : 'delete' }}</v-icon>
               </v-btn>
 
             </crud-actions>

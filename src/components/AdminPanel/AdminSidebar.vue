@@ -65,7 +65,7 @@
           });
         }
 
-        if (this.$hasModule(this.DEIP_MODULE.ADMIN_PANEL_ATTRIBUTES_SETUP)) {
+        if (this.$hasModule(this.DEIP_MODULE.ADMIN_PANEL_ATTRIBUTES_MANAGEMENT)) {
           menu.push({
             title: this.$t('adminRouting.sidebar.criteria'),
             icon: 'extension',
