@@ -93,7 +93,7 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ item.details.title }},
+          {{ item.details.source.offchain.title }},
           project:
           {{ item.extendedDetails.research.title }}
         </v-clamp>

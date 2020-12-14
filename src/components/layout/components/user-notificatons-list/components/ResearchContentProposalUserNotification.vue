@@ -31,7 +31,7 @@
       {{ $t('notifications.materialFor') }}
       "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
       {{ $t('notifications.projectIn') }}
-      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      <!-- "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" -->
     </template>
   </user-notifications-list-item>
 </template>

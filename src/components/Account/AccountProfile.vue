@@ -252,7 +252,7 @@
       },
 
       isSavingDisabled() {
-        return this.countFiles && JSON.stringify(this.formModel) === this.formModelCache;
+        return !this.countFiles && JSON.stringify(this.formModel) === this.formModelCache;
       }
     },
 
@@ -267,7 +267,7 @@
         editedBirthdayDate: this.currentUser.profile.birthdate
           ? moment(this.currentUser.profile.birthdate)
             .format('YYYY-MM-DD')
-          : null,
+          : '',
         category: this.currentUser.profile.category,
         occupation: this.currentUser.profile.occupation,
         webPage: this.currentUser.profile.webPages.length ? this.currentUser.profile.webPages[0].link : ''
