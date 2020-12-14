@@ -9,7 +9,7 @@
     @keydown.esc="choose(false)"
   >
     <v-card tile>
-      <v-toolbar>
+      <v-toolbar class="mb-n1">
         <v-toolbar-title class="text-h5" v-if="Boolean(title)">
           {{ title }}
         </v-toolbar-title>
@@ -25,7 +25,7 @@
         </v-btn>
       </v-toolbar>
 
-      <v-card-text class="text-body-2 text--primary pb-6">
+      <v-card-text class="text-body-2 text--primary pb-6 pt-1">
         {{ message }}
         <slot />
       </v-card-text>

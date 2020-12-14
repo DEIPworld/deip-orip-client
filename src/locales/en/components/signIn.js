@@ -8,7 +8,7 @@ export default {
   licensing: 'Licensing of intellectual property',
   investing: 'Crowd investing',
   form: {
-    logo: 'DEIP',
+    logo: 'Technology Transfer Office',
     title: 'Sign in to your account',
     titleAdmin: 'Sign in to your admin account',
     usernameField: 'Username',
