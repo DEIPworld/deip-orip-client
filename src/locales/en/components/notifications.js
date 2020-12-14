@@ -36,5 +36,5 @@ export default {
   projectMeta: `${project()} meta`,
   projectMetaIn: `${project()}`,
   scheduledFundraising: 'scheduled fundraising campaign for',
-  propSchedule: 'proposed to schedule fundraising campaign for'
+  propSchedule: 'scheduled fundraising campaign for'
 };

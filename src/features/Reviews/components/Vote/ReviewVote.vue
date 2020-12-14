@@ -24,7 +24,7 @@
       {{ $t('reviews.once') }}
     </div>
     <v-btn
-      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise)"
+      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise || isAuthor)"
       block
       color="primary"
       small
@@ -81,6 +81,9 @@
       },
       isGroupMember() {
         return this.members.some((item) => item.groupTokens.owner === this.$currentUserName);
+      },
+      isAuthor() {
+        return this.review.author === this.$currentUserName;
       }
     },
 
