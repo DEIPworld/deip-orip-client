@@ -116,15 +116,17 @@
           .then(() => {
             this.$notifier.showSuccess('Request for the review has been sent successfully');
             this.requestDialog = false;
-            this.loading = false;
           })
           .catch((err) => {
-            let errMsg = 'An error occurred while requesting the review. Please try again later';
-            if (err.response && err.response.data) {
-              errMsg = err.response.data;
-            }
-            this.$notifier.showError(errMsg);
+            this.$notifier.showError(
+              err.response && err.response.data
+                ? err.response.data
+                : 'An error occurred while requesting the review. Please try again later'
+            );
           })
+          .finally(() => {
+            this.loading = false;
+          });
       }
     }
   };
