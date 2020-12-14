@@ -66,7 +66,7 @@
             </div>
             <d-timeline>
               <d-timeline-item :dot-top="16">
-                <v-row class="align-center">
+                <v-row class="align-center" style="max-width: 702px;"> <!-- temp solution (need fix) -->
                   <v-col cols="6">
                     <user-selector
                       :users="teamTokens.account"
@@ -103,7 +103,7 @@
                 :dot-top="16"
                 :ctrl-height="48"
               >
-                <v-row>
+                <v-row style="max-width: 702px;"> <!-- temp solution (need fix) -->
                   <v-col cols="6">
                     <validation-provider
                       v-slot="{ errors }"
