@@ -63,7 +63,7 @@
 
             <references-selector
               v-model="references"
-              label="Add references to material posted at platform"
+              :label="$t('contents.contentUploadDialog.addRef')"
               multiple
             />
 

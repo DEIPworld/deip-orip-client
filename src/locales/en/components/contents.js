@@ -9,6 +9,7 @@ export default {
     },
     typeField: 'Content Type',
     authorsAttribute: 'Authors',
+    addRef: 'Add references to material posted on platform',
     createProp: 'Upload',
     uploadMat: 'Upload Material',
     cancel: 'Cancel',
