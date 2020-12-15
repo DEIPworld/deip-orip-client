@@ -23,6 +23,9 @@
     <div v-else-if="userHasVoted">
       {{ $t('reviews.once') }}
     </div>
+    <div v-else-if="isAuthor">
+      {{ $t('reviews.notSuppOwnRev') }}
+    </div>
     <v-btn
       v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise || isAuthor)"
       block

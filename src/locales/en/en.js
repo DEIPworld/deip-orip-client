@@ -104,7 +104,8 @@ export default {
     once: 'Review can be supported once by the user',
     needExpertiseAndNotMembers: `To add review you need expertise in {disciplines} and have no relations to this ${project()} or team that leads this ${project()}.`,
     reviewedAlready: 'You have reviewed this material already',
-    request: 'Request expert review'
+    request: 'Request expert review',
+    notSuppOwnRev: 'It\'s not allowed to support own review'
   },
   fundraising: {
     neverFund: `${project(true)} has never fundraised before. `,
