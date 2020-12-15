@@ -31,6 +31,7 @@
     <d-dialog
       v-model="dialog.isOpened"
       :disabled="dialog.isSending"
+      :confirm-button-disabled="isDisabled"
       :loading="dialog.isSending"
       :title="dialog.title"
       max-width="570px"
@@ -306,6 +307,12 @@
           return this.exchangeAccounts;
         }
         return this.allAccounts;
+      },
+      isDisabled() {
+        if (this.dialog.form.fromAccount.amount) {
+          return !this.$$fromAssetUnits(this.dialog.form.fromAccount.amount).amount;
+        }
+        return true;
       }
     },
 
@@ -352,10 +359,6 @@
           this.dialog.title = 'Transfer asset';
         }
 
-        this.dialog.form.memo = '';
-        this.dialog.form.receiver = {};
-        this.dialog.form.valid = false;
-        this.dialog.form.fromAmount = '';
         if (this.$refs.sendResearchTokensForm) this.$refs.sendResearchTokensForm.reset();
         this.dialog.form.fromAccount = item;
       },
