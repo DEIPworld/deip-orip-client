@@ -74,7 +74,7 @@
         >
           {{ $t('fundraising.start') }}
         </v-btn>
-        <div v-else-if="!tokenSaleData && !isResearchMember" class="text-caption">
+        <div v-else-if="!tokenSaleData && !isResearchMember && hasHistory" class="text-caption">
           {{ $t('fundraising.finished') }}
         </div>
         <v-btn
