@@ -100,7 +100,7 @@
           )
           .then((res) => {
             this.$store.dispatch('auth/loadGroups'); // reload user groups
-            this.$notifier.showSuccess(`"${this.formData.name}" research group has been created successfully !`);
+            this.$notifier.showSuccess(this.$t('notifier.teamCreatedSuccess', { team: this.formData.name }));
 
             return res;
           })

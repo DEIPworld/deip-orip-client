@@ -42,7 +42,7 @@
                 false
               )
                 .then((project) => {
-                  this.$notifier.showSuccess(`Project "${onchainData.title}" has been created successfully`);
+                  this.$notifier.showSuccess(this.$t('notifier.prCreatedSuccess', { title: onchainData.title }));
                   this.$$goToProject(project);
                 })
                 .catch((err) => {

@@ -22,6 +22,7 @@ import topMenu from './components/topMenu';
 import contents from './components/contents';
 import researchContentDetails from './components/researchContentDetails';
 import assets from './components/assets';
+import notifier from './components/notifier';
 
 export default {
   $vuetify: en,
@@ -135,5 +136,6 @@ export default {
   transactions,
   researchTokenSale,
   researchContentDetails,
-  assets
+  assets,
+  notifier
 };
