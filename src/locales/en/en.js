@@ -94,6 +94,7 @@ export default {
   reviews: {
     reviews: 'Reviews',
     seeReview: 'See review',
+    selectExpert: 'Select expert',
     assessment: 'Assessment',
     expertsSupp: '{supportersCount} experts supported this review',
     noReviews: 'No reviews yet.',
@@ -106,7 +107,8 @@ export default {
     needExpertiseAndNotMembers: `To add review you need expertise in {disciplines} and have no relations to this ${project()} or team that leads this ${project()}.`,
     reviewedAlready: 'You have reviewed this material already',
     request: 'Request expert review',
-    notSuppOwnRev: 'It\'s not allowed to support own review'
+    notSuppOwnRev: 'It\'s not allowed to support own review',
+    needNotMembers: `To add review you need to have no relations to this ${project()} or team that leads this ${project()}.`
   },
   fundraising: {
     neverFund: `${project(true)} has never fundraised before. `,

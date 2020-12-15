@@ -67,7 +67,7 @@
                   {{
                     $hasModule(DEIP_MODULE.APP_ECI)
                       ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
-                      : $t('reviews.notMembers')
+                      : $t('reviews.needNotMembers')
                   }}
                 </div>
                 <div v-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
@@ -95,7 +95,7 @@
                 {{
                   $hasModule(DEIP_MODULE.APP_ECI)
                     ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
-                    : $t('reviews.notMembers')
+                    : $t('reviews.needNotMembers')
                 }}
               </div>
             </template>

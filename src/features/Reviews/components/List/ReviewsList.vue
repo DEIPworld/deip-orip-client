@@ -165,7 +165,7 @@
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
                 ? $t('reviews.needExpertiseAndNotMembers', { disciplines: project.disciplines.map(d => d.name).join(', ') })
-                : $t('reviews.notMembers')
+                : $t('reviews.needNotMembers')
             }}
           </div>
         </slot>

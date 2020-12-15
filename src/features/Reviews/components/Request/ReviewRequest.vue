@@ -44,6 +44,7 @@
               <user-selector
                 v-model="formModel.reviewer"
                 v-bind="reviewerConditions"
+                :label="$t('reviews.selectExpert')"
                 :error-messages="errors"
               />
             </validation-provider>
