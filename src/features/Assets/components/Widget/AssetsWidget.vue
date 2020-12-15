@@ -15,11 +15,13 @@
         {{ $t('assets.issueTokens') }}
       </v-btn>
     </template>
+
     <template v-else>
       <d-stack gap="16">
         <users-list view-type="stack" :users="shareholders" />
         <d-dot-list :items="listData" />
         <v-btn
+          v-if="$isLoggedIn"
           block
           text
           small
