@@ -80,6 +80,7 @@
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import { wrapInArray } from 'vuetify/lib/util/helpers';
+  import { hasValue } from '@/utils/helpers';
 
   export default {
     name: 'UserSelector',
@@ -112,13 +113,24 @@
         type: [Array, String],
         default: () => ([])
       },
+      filter: { // temp solution
+        type: Object,
+        default: () => ({})
+      },
 
       ...Validatable.options.props
     },
     computed: {
       ...mapState({
-        usersList(state, getters) { return getters[`${this.storeNS}/usersList`]; }
+        rawUsersList(state, getters) { return getters[`${this.storeNS}/usersList`]; }
       }),
+
+      usersList() {
+        if (hasValue(this.filter)) {
+          return this.$where(this.rawUsersList, this.filter);
+        }
+        return this.rawUsersList;
+      },
 
       isMultipleProps() {
         return {
@@ -174,12 +186,12 @@
 
       userExternalId(e) {
 
-        if (e.account && e.account.is_research_group) {
-          return e.account.name;
-        }
-
         if (e.profile) {
           return e.profile._id;
+        }
+
+        if (e.account && e.account.is_research_group) {
+          return e.account.name;
         }
 
         return e;

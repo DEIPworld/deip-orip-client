@@ -96,7 +96,6 @@
                   </v-col>
                 </v-row>
               </d-timeline-item>
-
               <d-timeline-item
                 v-for="(item, index) of formModel.holders"
                 :key="`row-${index}`"
@@ -116,6 +115,7 @@
                         outlined
                         hide-details="auto"
                         :error-messages="errors"
+                        :filter="shareholdersFilter(item.account)"
                       />
                     </validation-provider>
                   </v-col>
@@ -303,11 +303,11 @@
     },
 
     created() {
-      // if (this.projectTokenized) {
-      //   this.redirect();
-      // } else {
+      if (this.projectTokenized) {
+        this.redirect();
+      } else {
         this.$setReady();
-      // }
+      }
     },
 
     methods: {
@@ -323,6 +323,14 @@
         if (idx !== -1) {
           this.formModel.holders.splice(idx, 1);
           this.formModel.holders = [...new Set(this.formModel.holders)];
+        }
+      },
+
+      shareholdersFilter(keepUser) {
+        return {
+          profile: {
+            '!_id':this.formModel.holders.map((h) => h.account).filter((u) => u !== keepUser)
+          }
         }
       },
 
