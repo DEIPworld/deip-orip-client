@@ -63,7 +63,7 @@
 
             <references-selector
               v-model="references"
-              label="Add references to material posted at DEIP"
+              label="Add references to material posted at platform"
               multiple
             />
 
