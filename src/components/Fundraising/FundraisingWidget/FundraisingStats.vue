@@ -62,7 +62,7 @@
           {{ $t('fundraising.neverFund') }}
         </div>
         <v-btn
-          v-if="!tokenSaleData && isResearchMember"
+          v-if="!tokenSaleData && isResearchMember && $isLoggedIn"
           block
           small
           outlined
@@ -78,7 +78,7 @@
           {{ $t('fundraising.finished') }}
         </div>
         <v-btn
-          v-if="hasHistory || tokenSaleData"
+          v-if="(hasHistory || tokenSaleData) && $isLoggedIn"
           block
           small
           text

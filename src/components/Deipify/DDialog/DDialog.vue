@@ -50,7 +50,7 @@
             <v-btn
               text
               color="primary"
-              :disabled="disabled"
+              :disabled="disabled || confirmButtonDisabled"
               :loading="loading"
               @click="confirmButtonClick"
             >
@@ -102,6 +102,10 @@
       },
 
       disabled: {
+        type: Boolean,
+        default: false
+      },
+      confirmButtonDisabled: {
         type: Boolean,
         default: false
       },

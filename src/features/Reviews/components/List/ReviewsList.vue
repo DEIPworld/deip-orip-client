@@ -97,6 +97,7 @@
 
                 <template #title-append>
                   <v-btn
+                    v-if="$isLoggedIn"
                     small
                     height="20"
                     :disabled="check(disableReviewRoute)"
@@ -155,7 +156,7 @@
             {{ $t('reviews.noReviews') }}
           </div>
           <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
-            {{ 
+            {{
               $hasModule(DEIP_MODULE.APP_ECI)
                 ? $t('reviews.eciForReview', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
                 : ''
@@ -165,7 +166,7 @@
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
                 ? $t('reviews.needExpertiseAndNotMembers', { disciplines: project.disciplines.map(d => d.name).join(', ') })
-                : $t('reviews.notMembers')
+                : $t('reviews.needNotMembers')
             }}
           </div>
         </slot>

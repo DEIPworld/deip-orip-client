@@ -7,7 +7,7 @@
     :exclude-users="project.members"
 
     :disable-content-route="isLicensingAccessLimited"
-    :disable-review-request-route="isLicensingAccessLimited || project.numberOfResearchContents == 0"
+    :disable-review-request-route="isLicensingAccessLimited || project.numberOfResearchContents === 0 || !$isLoggedIn"
     :disable-create-route="true"
   />
 </template>

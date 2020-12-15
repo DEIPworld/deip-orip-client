@@ -400,6 +400,7 @@
         this.$store.dispatch('Assets/createAsset', data)
           .then(() => {
             this.redirect();
+            this.$notifier.showSuccess('Tokens have been issued and shares have been distributed successfully!');
           })
           .catch((err) => {
             console.error(err);
