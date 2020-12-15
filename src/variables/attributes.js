@@ -53,7 +53,7 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.DISCIPLINE]: 'Discipline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
 
-  [ATTR_TYPES.RESEARCH_GROUP]: 'research-group',
+  [ATTR_TYPES.RESEARCH_GROUP]: 'Research group',
   [ATTR_TYPES.RESEARCH_GROUPS_LIST]: 'research-groups-list',
 
   [ATTR_TYPES.ROADMAP]: 'Roadmap',
