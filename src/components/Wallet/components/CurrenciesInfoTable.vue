@@ -422,7 +422,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction was failed');
+            this.$notifier.showError('Transaction failed');
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;
@@ -448,7 +448,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction was failed');
+            this.$notifier.showError('Transaction failed');
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;

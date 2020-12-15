@@ -394,7 +394,7 @@
               this.$notifier.showSuccess('Tokens successfully sent');
             })
             .catch((err) => {
-              this.$notifier.showError('Transaction was failed');
+              this.$notifier.showError('Transaction failed');
               console.error(err);
             })
             .finally(() => {
@@ -445,7 +445,7 @@
               this.$notifier.showSuccess('Exchange successfully sent');
             })
             .catch((err) => {
-              this.$notifier.showError('Transaction was failed');
+              this.$notifier.showError('Transaction failed');
               console.error(err);
             })
             .finally(() => {

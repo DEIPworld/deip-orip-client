@@ -53,7 +53,7 @@
       v-model="dialog"
       title="Send request"
       :max-width="540"
-      :true-disabled="!dialogModel.confirm"
+      :true-disabled="!dialogModel.confirm || !hasPaymentSourceBalance"
       :disabled="processing"
       :loading="processing"
       @click:confirm="() => sendExpressLicensingRequest()"
@@ -62,7 +62,7 @@
         <div class="text-body-2">
           <span class="font-weight-medium">License type:</span> {{ selected.name }}<br>
           <span class="font-weight-medium">License issue fee:</span> {{ $$toAssetUnits(selected.fee) }}<br>
-          <span class="font-weight-medium">Payment source:</span> {{ paymentSource }}
+          <span class="font-weight-medium">Payment source:</span> {{ paymentSourceInfo }}
         </div>
 
         <v-sheet max-width="380px">
@@ -145,7 +145,23 @@
     },
 
     computed: {
-      paymentSource() {
+      hasPaymentSourceBalance() {
+        if (!this.selected) return false;
+
+        const balance = this.$currentUser.balances
+          .find((b) => (
+            b.asset_id === this.selected.fee.assetId
+            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId)
+          );
+
+        if (!balance) return false;
+
+        const { amount } = this.$$fromAssetUnits(balance.amount);
+        const feeAmount = parseInt(this.selected.fee.amount);
+
+        return amount >= feeAmount;
+      },
+      paymentSourceInfo() {
         if (!this.selected) return false;
 
         const balance = this.$currentUser.balances
