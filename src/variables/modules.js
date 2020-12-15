@@ -11,7 +11,9 @@ export const DEIP_MODULE = {
   ADMIN_PANEL_MEMBERS_MANAGEMENT: 'admin-panel-members-management',
   ADMIN_PANEL_MEMBERS_REGISTRATION: 'admin-panel-members-registration',
   ADMIN_PANEL_PROJECTS_MANAGEMENT: 'admin-panel-projects-management',
-  ADMIN_PANEL_ATTRIBUTES_SETUP: 'admin-panel-attributes-setup',
+  ADMIN_PANEL_PROJECTS_REGISTRATION: 'admin-panel-projects-registration',
+  ADMIN_PANEL_ATTRIBUTES_MANAGEMENT: 'admin-panel-attributes-management',
+  ADMIN_PANEL_ATTRIBUTES_REGISTARTION: 'admin-panel-attributes-registration',  
   ADMIN_PANEL_FAQ_SETUP: 'admin-panel-faq-setup',
   ADMIN_PANEL_REVIEW_SETUP: 'admin-panel-review-setup',
   ADMIN_PANEL_LAYOUTS_SETUP: 'admin-panel-layouts-setup'
