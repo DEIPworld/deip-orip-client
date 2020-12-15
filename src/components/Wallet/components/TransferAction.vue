@@ -310,7 +310,8 @@
       },
       isDisabled() {
         if (this.dialog.form.fromAccount.amount) {
-          return !this.$$fromAssetUnits(this.dialog.form.fromAccount.amount).amount;
+          const { amount } = this.$$fromAssetUnits(this.dialog.form.fromAccount.amount);
+          return !amount || amount < this.dialog.form.fromAmount;
         }
         return true;
       }
