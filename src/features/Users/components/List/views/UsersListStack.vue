@@ -5,7 +5,7 @@
   >
 
     <v-sheet
-      v-for="(user, index) of users"
+      v-for="(user, index) of users.slice(0, 5)"
       :key="index"
       :class="$style.item"
     >
@@ -17,6 +17,18 @@
         </v-avatar>
       </router-link>
     </v-sheet>
+
+    <v-sheet
+      v-if="users.length > 5"
+      :class="$style.item"
+    >
+      <v-avatar size="40" color="grey lighten-3">
+        <div class="text-h6 text--secondary">
+          +{{ users.length - 5 }}
+        </div>
+      </v-avatar>
+    </v-sheet>
+
   </div>
 </template>
 
