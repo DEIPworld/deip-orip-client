@@ -28,7 +28,7 @@
       <v-select
         v-model="internalValue.assetId"
         class="rounded-bl-0 rounded-tl-0"
-        :items="assetsList"
+        :items="assetsListKeys"
         :hide-details="true"
         :disabled="disableAssets"
         outlined
@@ -103,9 +103,7 @@
       };
     },
     computed: {
-      assetsList() {
-        return this.assets.map((ass) => ass.string_symbol);
-      }
+      assetsListKeys() { return this.$store.getters['Assets/listKeys'](); }
     },
     methods: {
       update() {

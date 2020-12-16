@@ -138,9 +138,9 @@
     computed: {
       internalAsset() {
         if (this.asset) {
-          return this.$store.getters['Assets/one']({
-            stringSymbol: this.$$fromAssetUnits(this.asset).assetId
-          });
+          return this.$store.getters['Assets/one'](
+            this.$$fromAssetUnits(this.asset).assetId
+          );
         }
 
         return null;
@@ -193,7 +193,12 @@
 
       if (this.asset && !(this.internalAsset && this.internalAsset.balances)) {
         this.$store
-          .dispatch('Assets/getAsset', { symbol: this.$$fromAssetUnits(this.asset).assetId })
+          .dispatch(
+            'Assets/get',
+            {
+              symbol: this.$$fromAssetUnits(this.asset).assetId
+            }
+          )
           .then(() => {
             this.$setReady();
           });

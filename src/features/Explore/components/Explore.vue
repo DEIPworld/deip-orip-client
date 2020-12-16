@@ -11,7 +11,7 @@
             {{ $t('researchFeed.title') }}
           </div>
 
-          <div v-if="$isGuest">
+          <div v-if="!$isLoggedIn">
             <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
               {{ $t('researchFeed.signInBtn') }}
             </v-btn>

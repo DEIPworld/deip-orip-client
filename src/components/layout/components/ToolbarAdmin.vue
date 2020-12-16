@@ -94,7 +94,7 @@
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
+        user: 'Auth/currentUser',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),

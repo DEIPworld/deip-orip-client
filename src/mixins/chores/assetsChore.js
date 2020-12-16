@@ -1,18 +1,9 @@
-import { mapGetters } from 'vuex';
 import { isArray, isObject, isString } from '@/utils/helpers';
 
 export const assetsChore = {
-  computed: {
-    ...mapGetters({
-      allAssets: 'Assets/list',
-      assets: 'auth/assets'
-    })
-  },
-
   methods: {
     $$assetInfo(assetId) {
-      // return this.allAssets.find((ass) => ass.string_symbol);
-      return this.allAssets.find((ass) => (ass.stringSymbol === assetId || ass.id === assetId));
+      return this.$store.getters['Assets/one'](assetId);
     },
 
     $$fromAssetUnits(val) {
@@ -21,6 +12,7 @@ export const assetsChore = {
 
       if (val.indexOf('.') === -1) {
         const [stringAmount, assetId] = val.split(' ');
+        // eslint-disable-next-line radix
         const amount = parseInt(stringAmount);
         const precision = 0;
 

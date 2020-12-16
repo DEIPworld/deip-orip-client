@@ -1,12 +1,13 @@
 <template>
   <v-btn
-    v-if="$isUser"
+    v-if="$isLoggedIn"
     small
     outlined
     :loading="loading"
     :disabled="loading"
     @click="toggleBookmark()"
   >
+    {{bookmarkId}}
     <v-icon left>
       {{ bookmarkId ? 'mdi-bookmark-minus' : 'mdi-bookmark-plus-outline' }}
     </v-icon>
@@ -33,8 +34,8 @@
 
     computed: {
       bookmarkId() {
-        const bookmark = this.$currentUser.researchBookmarks.find(
-          (b) => b.researchId === this.project.externalId
+        const bookmark = this.$currentUser.bookmarks.find(
+          (b) => b.ref === this.project.externalId && b.type === 'research'
         );
 
         return bookmark ? bookmark._id : false;
@@ -53,7 +54,7 @@
 
         return this.bookmarkService()
           .then(() => {
-            this.$store.dispatch('auth/loadResearchBookmarks');
+            this.$store.dispatch('Auth/getUserBookmarks');
           })
           .catch((err) => {
             console.error(err);

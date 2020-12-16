@@ -263,7 +263,6 @@
         this.project.researchGroup.external_id,
         this.issuedTokens.assetId
       ]).then((res) => {
-        console.log(res)
         this.availableTokens = this.$$fromAssetUnits(res.amount);
       });
     },

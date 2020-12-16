@@ -53,6 +53,8 @@ import ProjectsFeature from '@/features/Projects';
 import ReferencesFeature from '@/features/References';
 import ReviewsFeature from '@/features/Reviews';
 import UsersFeature from '@/features/Users';
+import NotificationsFeature from '@/features/Notifications';
+import BookmarksFeature from '@/features/Bookmarks';
 
 // ////////////////////////
 
@@ -104,6 +106,8 @@ Vue.use(FundraisingFeature);
 Vue.use(ReferencesFeature);
 Vue.use(ReviewsFeature);
 Vue.use(UsersFeature);
+Vue.use(NotificationsFeature);
+Vue.use(BookmarksFeature);
 
 // ////////////////////////////////////////
 

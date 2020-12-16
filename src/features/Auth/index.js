@@ -1,12 +1,24 @@
 import { store } from '@/store';
 import { authStore } from '@/features/Auth/store';
+import { AccessService } from '@deip/access-service';
+
+const accessService = AccessService.getInstance();
 
 const install = (Vue, options = {}) => {
   if (install.installed) return;
-  // eslint-disable-next-line no-unused-vars
+
   install.installed = true;
 
   store.registerModule('Auth', authStore);
+
+  Vue.mixin({
+    computed: {
+      $isLoggedIn() { return accessService.isLoggedIn(); },
+
+      $currentUser() { return this.$isLoggedIn ? this.$store.getters['Auth/currentUser'] : false; },
+      $currentUserName() { return this.$isLoggedIn ? this.$currentUser.username : false; },
+    }
+  });
 };
 
 const AuthFeature = {

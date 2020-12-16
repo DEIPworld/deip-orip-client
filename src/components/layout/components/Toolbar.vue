@@ -113,7 +113,7 @@
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
+        user: 'Auth/currentUser', // TODO: switch to $currentUser
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings',
         isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
@@ -138,7 +138,7 @@
               label: this.$t('topMenu.overview'),
               to: { name: 'overview' }
             });
-            
+
             routes.push({
               label: this.$t('topMenu.participants'),
               to: { name: 'participants' }

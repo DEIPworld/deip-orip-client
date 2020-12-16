@@ -37,7 +37,7 @@
                   :rules="{
                     required: true,
                     minMax: { min: 5, max: 6 },
-                    unique: { list: existingAssets }
+                    unique: { list: assetsKeys }
                   }"
                   :custom-messages="{
                     unique: '{_field_} is taken. Try another.'
@@ -277,9 +277,11 @@
     },
     computed: {
       ...mapGetters({
-        project: 'Project/projectDetails',
-        assets: 'Assets/list'
+        project: 'Project/projectDetails'
       }),
+
+      assets() { return this.$store.getters['Assets/list'](); },
+      assetsKeys() { return this.$store.getters['Assets/listKeys'](); },
 
       teamTokens() {
         const tokensSpend = this.formModel.holders
@@ -293,12 +295,8 @@
         };
       },
 
-      existingAssets() {
-        return this.assets.map((a) => a.stringSymbol);
-      },
-
       projectTokenized() {
-        return !!(this.project.securityTokens && this.project.securityTokens.length)
+        return !!(this.project.securityTokens && this.project.securityTokens.length);
       }
     },
 
@@ -331,7 +329,7 @@
           profile: {
             '!_id':this.formModel.holders.map((h) => h.account).filter((u) => u !== keepUser)
           }
-        }
+        };
       },
 
       toPercent(amount) {
@@ -343,10 +341,6 @@
               symbolPosition: false
             }
           );
-      },
-
-      assetSymbolIsValid() {
-        return !this.$$assetInfo(this.formModel.symbol);
       },
 
       redirect() {
@@ -397,7 +391,7 @@
           }
         ];
 
-        this.$store.dispatch('Assets/createAsset', data)
+        this.$store.dispatch('Assets/create', data)
           .then(() => {
             this.redirect();
             this.$notifier.showSuccess('Tokens have been issued and shares have been distributed successfully!');

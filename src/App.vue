@@ -77,7 +77,10 @@
 
     created() {
       const preload = [
-        this.$store.dispatch('auth/loadAssets')
+        this.$store.dispatch('auth/loadAssets'),
+
+        this.$store.dispatch('Assets/fetch'),
+        this.$store.dispatch('Auth/getCurrentUser'),
       ];
 
       if (accessService.isLoggedIn()) {
@@ -101,9 +104,6 @@
         });
 
       this.isGrantsTransparencyDemo = this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY';
-
-
-      this.$store.dispatch('Assets/fetchAssets');
 
     },
 

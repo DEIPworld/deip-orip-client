@@ -1,99 +1,143 @@
 import { AssetsService } from '@deip/assets-service';
-import { camelizeObjectKeys } from '@/utils/helpers';
+import { camelizeObjectKeys, mergeCollection } from '@/utils/helpers';
+
 import where from 'filter-where';
-import renameKeys from 'object-rename-keys';
 
 const assetsService = AssetsService.getInstance();
 
 const STATE = {
-  data: []
+  data: [],
+  currentUserBalances: []
 };
 
 const GETTERS = {
-  list: (state) => state.data,
+  list: (state) => (query = {}) => state.data.filter(
+    where(query)
+  ),
 
-  one: (state) => (query) => {
-    const q = renameKeys(query, {
-      projectId: 'tokenizedResearch'
-    });
-    return state.data.find(where(q));
-  }
+  listKeys: (state, getters) => (query = {}) => getters.list(query)
+    .map((ass) => ass.stringSymbol),
+
+  one: (state) => (assetId, query = {}) => {
+    const conditions = {
+      ...(assetId ? { stringSymbol: assetId } : {}),
+      ...query
+    };
+    return state.data.find(where(conditions));
+  },
+
+  currentUserBalances: (state) => state.currentUserBalances
 };
 
 const ACTIONS = {
-  fetchAssets({ commit }) {
+  fetch({ commit }) {
     return assetsService.lookupAssets('', 10000)
       .then((data) => {
-        commit('storeList', data);
-      });
-  },
-
-  getAsset({ commit }, payload) {
-    return Promise.all([
-      assetsService.getAssetBySymbol(payload.symbol),
-      assetsService.getAccountsAssetBalancesByAsset(payload.symbol)
-    ])
-      .then(([asset, balances]) => {
-        commit('storeAsset', {
+        const assets = data.map((asset) => ({
           ...asset,
-          balances
-        });
+          balances: []
+        }));
+        const balancesPromises = assets
+          .filter((asset) => asset.tokenized_research)
+          .map((asset) => assetsService.getAccountsAssetBalancesByAsset(asset.string_symbol))
+
+        return Promise.all(balancesPromises)
+          .then((balances) => {
+            for (const balance of balances.flat(1)) {
+              const idx = assets
+                .findIndex((asset) => asset.string_symbol === balance.asset_symbol);
+              assets[idx].balances.push(balance);
+            }
+
+            commit('storeList', assets);
+          });
       });
   },
 
-  createAsset({ commit }, payload) {
+  // /////////////////////////
+
+  get({ dispatch }, payload) {
+    // for future use
+    return dispatch('getBySymbol', payload.symbol);
+  },
+
+  getBySymbol({ commit }, assetSymbol) {
+    return assetsService.getAssetBySymbol(assetSymbol)
+      .then((asset) => {
+        if (asset.tokenized_research) {
+          return assetsService
+            .getAccountsAssetBalancesByAsset(asset.string_symbol)
+            .then((balances) => {
+              commit('storeAsset', {
+                ...asset,
+                balances
+              });
+            });
+        }
+
+        return Promise.resolve(true)
+          .then(() => {
+            commit('storeAsset', {
+              ...asset,
+              balances: []
+            });
+          });
+      });
+  },
+
+  // /////////////////////////
+
+  create(context, payload) {
     return assetsService.createSecurityTokenAsset(...payload)
       .then((res) => res);
   },
+
+  // /////////////////////////
 
   getTeamBalance(context, payload) {
     return assetsService
       .getAccountAssetBalance(...payload)
       .then((res) => res);
-  }
+  },
 
-  // getAssetData({ commit }, payload) {
-  //   return assetsService.getAssetBySymbol(payload.symbol)
-  //     .then((res) => {
-  //       commit('storeAsset', res);
-  //       return !!res;
-  //     });
-  // },
-  //
-  // getAssetBalances({ commit }, payload) {
-  //   return assetsService.getAccountsAssetBalancesByAsset(payload.symbol)
-  //     .then((data) => {
-  //       commit('storeBalances', [payload.symbol, data]);
-  //     });
-  // }
+  getCurrentUserBalances({ commit }, username) {
+    return assetsService.getAccountAssetsBalancesByOwner(username)
+      .then((balances) => {
+        commit(
+          'storeCurrentUserBalance',
+          balances.filter((balance) => !balance.tokenized_research)
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 };
 
 const MUTATIONS = {
   storeList(state, payload) {
-    state.data = payload.map((asset) => camelizeObjectKeys(asset));
+    if (!payload) return;
+
+    state.data = mergeCollection(
+      state.data,
+      payload.map((asset) => camelizeObjectKeys(asset)),
+      { id: 'stringSymbol' }
+    );
   },
 
   storeAsset(state, payload) {
     if (!payload) return;
 
-    const res = camelizeObjectKeys(payload);
-    const index = state.data.findIndex((el) => el.stringSymbol === res.stringSymbol);
-    if (index !== -1) {
-      state.data[index] = { ...state.data[index], ...res };
-    } else {
-      state.data.push(res);
-    }
-  }
+    state.data = mergeCollection(
+      state.data,
+      camelizeObjectKeys(payload),
+      { id: 'stringSymbol' }
+    );
+  },
 
-  // storeBalances(state, balances) {
-  //   if (!(balances || balances.length)) return;
-  //
-  //   for (const balance of balances) {
-  //     const targetAsset = state.data.findIndex((el) => el.stringSymbol === balance.asset_symbol);
-  //     // Vue.set(state.users[index], 'avatar', avatar)
-  //     state.data[targetAsset].balances.push(camelizeObjectKeys(balance));
-  //   }
-  // }
+  storeCurrentUserBalance(state, payload) {
+    state.currentUserBalances = payload.map((balance) => camelizeObjectKeys(balance));
+  }
 };
 
 export const assetsStore = {
@@ -103,5 +147,3 @@ export const assetsStore = {
   mutations: MUTATIONS,
   namespaced: true
 };
-
-

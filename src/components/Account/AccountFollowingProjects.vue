@@ -4,7 +4,7 @@
       <d-layout-section-main>
 
         <projects-list
-          v-if="$currentUser.researchBookmarks.length"
+          v-if="$currentUser.bookmarks.filter((b) => b.type === 'research').length"
           :user-name="$currentUserName"
           type="following"
         />
