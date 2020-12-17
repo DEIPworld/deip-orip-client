@@ -20,7 +20,7 @@ const ACTIONS = {
   loadTransactions({ commit }, account) {
     return proposalsService.getAccountProposals(account)
       .then((proposals) => {
-        commit('setTransactions', proposals.filter(proposal => !!proposal.type));
+        commit('setTransactions', proposals.filter((proposal) => !!proposal.type));
       }, (err) => { console.error(err); });
   }
 };
