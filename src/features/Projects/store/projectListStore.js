@@ -85,23 +85,23 @@ const ACTIONS = {
   },
 
   getUserPublicProjects({ commit }, { userName }) {
-    return researchService.getUserResearchListing(userName)
+    return researchService.getUserPublicProjects(userName)
       .then((result) => {
-        commit('storeProjectsData', result.filter(where({ is_private: false })));
+        commit('storeProjectsData', result);
       });
   },
 
   getUserTeamsProjects({ commit }, { userName }) {
-    return researchService.getUserResearchListing(userName)
+    return researchService.getUserTeamsProjects(userName)
       .then((result) => {
-        commit('storeProjectsData', result.filter(where({ research_group: { is_personal: false } })));
+        commit('storeProjectsData', result);
       });
   },
 
   getUserPersonalProjects({ commit }, { userName }) {
-    return researchService.getUserResearchListing(userName)
+    return researchService.getUserPersonalProjects(userName)
       .then((result) => {
-        commit('storeProjectsData', result.filter(where({ research_group: { is_personal: true } })));
+        commit('storeProjectsData', result);
       });
   },
 
