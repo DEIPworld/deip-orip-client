@@ -50,27 +50,26 @@
       </template>
     </v-data-table>
     <v-divider v-if="items.length < 50" />
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.actionLabel"
+      :button-true-text="actionDialog.actionLabel"
       :loading="actionDialog.loading"
       @click:confirm="actionDialog.action()"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
   </div>
 </template>
 
 <script>
   import MemberListTitle from '@/components/MemberList/MemberListItem/MemberListItemPartials/MemberListTitle';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { mapGetters } from 'vuex';
   import { dropoutMember } from '@/components/MemberList/MemberListItem/dropoutMember';
 
   export default {
     name: 'MemberListTable',
-    components: { MemberListTitle, DDialog },
+    components: { MemberListTitle },
     mixins: [dropoutMember],
     props: {
       items: {

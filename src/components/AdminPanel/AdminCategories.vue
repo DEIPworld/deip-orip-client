@@ -27,14 +27,14 @@
       </template>
     </v-data-table>
 
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.actionLabel"
+      :button-true-text="actionDialog.actionLabel"
       @click:confirm="actionDialog.action()"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
   </admin-view>
 </template>
 
@@ -43,13 +43,12 @@
   import CrudActions from '@/components/layout/CrudActions';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminCategories',
-    components: { DDialog, CrudActions, AdminView },
+    components: { CrudActions, AdminView },
     data() {
       return {
         xxx: true,

@@ -75,18 +75,18 @@
       </div>
       <!-- </v-card> -->
 
-      <d-dialog
+      <vex-dialog
         v-model="inviteDetailsDialog.isShown"
         :loading="inviteDetailsDialog.proccess"
         :disabled="inviteDetailsDialog.proccess"
-        :confirm-button-title="$t('userDetailRouting.sidebar.acceptBtn')"
-        :cancel-button-title="$t('userDetailRouting.sidebar.rejectBtn')"
+        :button-true-text="$t('userDetailRouting.sidebar.acceptBtn')"
+        :button-false-text="$t('userDetailRouting.sidebar.rejectBtn')"
         :title="inviteDetailsDialog.groupName"
         @click:confirm="approveInvite"
         @click:cancel="rejectInvite"
       >
         {{ inviteDetailsDialog.groupName }} {{ $t('userDetailRouting.sidebar.invitedYou') }}
-      </d-dialog>
+      </vex-dialog>
     </d-block-widget>
 
     <d-block-widget v-if="isOwner && hasReviewRequests">
@@ -187,33 +187,23 @@
   // import deipRpc from '@deip/rpc-client';
 
   import { mapGetters } from 'vuex';
-  import { UserService } from '@deip/user-service';
   import { ProposalsService } from '@deip/proposals-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
-  import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import * as bankCardsService from '../../../utils/bankCard';
 
-  const expertiseContributionsService = ExpertiseContributionsService.getInstance();
-  const userService = UserService.getInstance();
   const proposalsService = ProposalsService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'UserDetailsSidebar',
 
     components: {
       EciStats,
-      DBlock,
       UserClaimExpertiseDialog,
       DBoxItem,
-      DDialog,
       DBlockWidget
     },
 

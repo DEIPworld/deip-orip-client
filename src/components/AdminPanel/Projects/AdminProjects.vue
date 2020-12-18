@@ -53,7 +53,6 @@
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
 
   import { TenantService } from '@deip/tenant-service';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
@@ -68,7 +67,6 @@
       ProjectsList,
       DLayoutSection,
       DLayoutSectionMain,
-      DDialog,
       ResearchRequestFormRead
     },
     data() {

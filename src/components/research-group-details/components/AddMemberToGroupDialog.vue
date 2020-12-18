@@ -1,8 +1,8 @@
 <template>
-  <d-dialog
+  <vex-dialog
     v-model="isOpen"
     :title="$t('researchGroupDetails.addMemberDialog.title')"
-    :confirm-button-title="$t('researchGroupDetails.addMemberDialog.create')"
+    :button-true-text="$t('researchGroupDetails.addMemberDialog.create')"
     :loading="isLoading"
     :disabled="isDisabled || isLoading"
     @click:confirm="sendProposal()"
@@ -48,12 +48,11 @@
       outlined
       rows="6"
     />
-  </d-dialog>
+  </vex-dialog>
 </template>
 
 <script>
   import _ from 'lodash';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { mapGetters } from 'vuex';
 
   import { ResearchGroupService } from '@deip/research-group-service';
@@ -62,8 +61,6 @@
 
   export default {
     name: 'AddMemberToGroupDialog',
-
-    components: { DDialog },
 
     props: {
       groupExternalId: { required: true, type: String },

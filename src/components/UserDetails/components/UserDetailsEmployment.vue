@@ -60,15 +60,15 @@
       </template>
     </v-simple-table>
     <div v-if="isOwner">
-      <d-dialog
+      <vex-dialog
         v-model="deleteEmploymentMeta.isShown"
-        :confirm-button-title="$t('userDetailRouting.detailsEmployment.deleteBtn')"
+        :button-true-text="$t('userDetailRouting.detailsEmployment.deleteBtn')"
         @click:confirm="deleteEmployment(deleteEmploymentMeta)"
       >
         <div class="pt-1">
           {{ $t('userDetailRouting.detailsEmployment.sureDelete') }}
         </div>
-      </d-dialog>
+      </vex-dialog>
     </div>
   </div>
 </template>
@@ -76,7 +76,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import CrudActions from '@/components/layout/CrudActions';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   import { UserService } from '@deip/user-service';
 
@@ -86,8 +85,7 @@
     name: 'UserDetailsEmployment',
 
     components: {
-      CrudActions,
-      DDialog
+      CrudActions
     },
     data() {
       return {

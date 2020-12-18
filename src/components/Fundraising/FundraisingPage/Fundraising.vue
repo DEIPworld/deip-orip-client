@@ -190,14 +190,14 @@
         </v-data-table>
       </d-block>
 
-      <d-dialog
+      <vex-dialog
         v-model="isOpenFundraisingDialog"
         title="Investment confirmation"
         :loading="isInvesting"
         @click:confirm="contributeToTokenSale()"
       >
         Do you confirm the investment of funds from your account?
-      </d-dialog>
+      </vex-dialog>
     </d-layout-section-main>
   </d-layout-section>
 </template>
@@ -210,7 +210,6 @@
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DForm from '@/components/Deipify/DForm/DForm';
   import FundraisingProgressNeedle from '@/components/Fundraising/FundraisingPage/components/FundraisingProgressNeedle';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { chartGradient, switchColor } from '@/plugins/charts';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
@@ -237,7 +236,6 @@
       DStack,
       DChartPie,
       DForm,
-      DDialog,
       FundraisingProgressNeedle,
       DBoxItem
     },

@@ -80,21 +80,21 @@
       </v-tab-item>
     </v-tabs-items>
 
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.confirmLabel"
+      :button-true-text="actionDialog.confirmLabel"
       @click:confirm="actionDialog.action"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
 
-    <d-dialog
+    <vex-dialog
       v-model="memberInfoDialog.isOpen"
       :hide-buttons="memberInfoDialog.hideButtons"
       :title="memberInfoDialog.title"
-      :confirm-button-title="$t('adminRouting.members.memberInfoDialog.submitBtn')"
-      :cancel-button-title="$t('adminRouting.members.memberInfoDialog.reject')"
+      :button-true-text="$t('adminRouting.members.memberInfoDialog.submitBtn')"
+      :button-false-text="$t('adminRouting.members.memberInfoDialog.reject')"
       @click:confirm="approveMemberInfoDialog(memberInfoDialog.data)"
       @click:cancel="rejectMemberInfoDialog(memberInfoDialog.data)"
     >
@@ -166,7 +166,7 @@
           </div>
         </d-info-block>
       </template>
-    </d-dialog>
+    </vex-dialog>
   </admin-view>
 </template>
 
@@ -175,7 +175,6 @@
   import CrudActions from '@/components/layout/CrudActions';
   import { TenantService } from '@deip/tenant-service';
   import { mapGetters } from 'vuex';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DInfoBlock from '@/components/Deipify/DInfoBlock/DInfoBlock';
 
   const tenantService = TenantService.getInstance();
@@ -184,7 +183,6 @@
     name: 'AdminMembers',
     components: {
       DInfoBlock,
-      DDialog,
       CrudActions,
       AdminView
     },
