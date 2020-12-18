@@ -198,6 +198,7 @@
   import TransferAction from '@/components/Wallet/components/TransferAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
+  import VCreditCard from 'v-credit-card';
 
   const assetsService = AssetsService.getInstance();
   const fiatAssetBackedTokens = ['EUR', 'USD'];
@@ -207,7 +208,8 @@
 
     components: {
       DDialog,
-      TransferAction
+      TransferAction,
+      VCreditCard
     },
 
     mixins: [assetsChore],
