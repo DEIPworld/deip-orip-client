@@ -6,7 +6,7 @@
       disable-sort
       :hide-default-footer="true"
     >
-      <template v-slot:item.amountAsset="{ item }">
+      <template #item.amountAsset="{ item }">
         <v-chip
           outlined
         >
@@ -14,11 +14,11 @@
         </v-chip>
       </template>
 
-      <template v-slot:item.amountValue="{ item }">
+      <template #item.amountValue="{ item }">
         {{ $$toAssetUnits($$fromAssetUnits(item.amount), true, {symbol: ''}) }}
       </template>
 
-      <template v-slot:item.actions="{ item }">
+      <template #item.actions="{ item }">
         <transfer-action
           :all-accounts="allAccounts"
           :asset="{
@@ -29,12 +29,13 @@
       </template>
       <template #item.actionMenu="{ item }">
         <v-menu
-          v-if="isDepositAvailable(item.asset_id) || isWithdrawAvailable(item.asset_id)"
+          v-if="isDepositAvailable(item.assetSymbol)
+            || isWithdrawAvailable(item.assetSymbol)"
           bottom
           left
           offset-y
         >
-          <template v-slot:activator="{ on }">
+          <template #activator="{ on }">
             <v-btn
               dark
               icon
@@ -49,13 +50,13 @@
 
           <v-list nav dense>
             <v-list-item
-              v-if="isDepositAvailable(item.asset_id)"
+              v-if="isDepositAvailable(item.assetSymbol)"
               @click="openDepositDialog(item)"
             >
               <v-list-item-title>{{ $t('userWallet.deposit') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
-              v-if="isWithdrawAvailable(item.asset_id)"
+              v-if="isWithdrawAvailable(item.assetSymbol)"
               @click="openWithdrawDialog(item)"
             >
               <v-list-item-title>{{ $t('userWallet.withdraw') }}</v-list-item-title>
@@ -64,14 +65,14 @@
         </v-menu>
       </template>
     </v-data-table>
-    <d-dialog
+    <vex-dialog
       v-model="depositDialog.isOpened"
       max-width="800px"
       :title="$t('userWallet.depositDialog.depositFunds')"
       :disabled="depositDialog.isDepositing || isDepositingDisabled"
       :loading="depositDialog.isDepositing"
-      :confirm-button-title="$t('userWallet.depositDialog.depositFunds')"
-      :cancel-button-title="$t('userWallet.cancel')"
+      :button-true-text="$t('userWallet.depositDialog.depositFunds')"
+      :button-false-text="$t('userWallet.cancel')"
       @click:confirm="deposit()"
     >
       <v-row>
@@ -104,15 +105,15 @@
           </div>
         </v-col>
       </v-row>
-    </d-dialog>
-    <d-dialog
+    </vex-dialog>
+    <vex-dialog
       v-model="withdrawDialog.isOpened"
       max-width="800px"
       :title="$t('userWallet.withdrawDialog.withdrawFunds')"
       :disabled="withdrawDialog.isWithdrawing || isWithdrawDisabled"
       :loading="withdrawDialog.isWithdrawing"
-      :confirm-button-title="$t('userWallet.withdrawDialog.withdrawFunds')"
-      :cancel-button-title="$t('userWallet.cancel')"
+      :button-true-text="$t('userWallet.withdrawDialog.withdrawFunds')"
+      :button-false-text="$t('userWallet.cancel')"
       @click:confirm="withdraw()"
     >
       <v-row>
@@ -128,7 +129,7 @@
             <label class="text-body-2">
               {{ $t('userWallet.withdrawDialog.idanField.label') }}
               <v-tooltip right>
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-icon small v-on="on">help</v-icon>
                 </template>
 
@@ -145,7 +146,7 @@
             <label class="text-body-2">
               {{ $t('userWallet.withdrawDialog.referenceField.label') }}
               <v-tooltip right>
-                <template v-slot:activator="{ on }">
+                <template #activator="{ on }">
                   <v-icon small v-on="on">help</v-icon>
                 </template>
 
@@ -188,16 +189,16 @@
           </div>
         </v-col>
       </v-row>
-    </d-dialog>
+    </vex-dialog>
   </div>
 </template>
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import TransferAction from '@/components/Wallet/components/TransferAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
+  import VCreditCard from 'v-credit-card';
 
   const assetsService = AssetsService.getInstance();
   const fiatAssetBackedTokens = ['EUR', 'USD'];
@@ -206,8 +207,8 @@
     name: 'CurrenciesInfoTable',
 
     components: {
-      DDialog,
-      TransferAction
+      TransferAction,
+      VCreditCard
     },
 
     mixins: [assetsChore],
@@ -384,12 +385,16 @@
         this.depositDialog.isOpened = true;
       },
       isDepositAvailable(assetId) {
-        const symbol = this.assetsInfo[assetId].string_symbol;
-        return this.$hasModule(this.DEIP_MODULE.APP_ASSETS_DEPOSIT) && fiatAssetBackedTokens.some((s) => s == symbol);
+        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].string_symbol : '';
+        return this.$hasModule(
+          this.DEIP_MODULE.APP_ASSETS_DEPOSIT
+        ) && fiatAssetBackedTokens.some((s) => s == symbol);
       },
       isWithdrawAvailable(assetId) {
-        const symbol = this.assetsInfo[assetId].string_symbol;
-        return this.$hasModule(this.DEIP_MODULE.APP_ASSETS_WITHDRAWAL) && fiatAssetBackedTokens.some((s) => s == symbol);
+        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].string_symbol : '';
+        return this.$hasModule(
+          this.DEIP_MODULE.APP_ASSETS_WITHDRAWAL
+        ) && fiatAssetBackedTokens.some((s) => s == symbol);
       },
       openWithdrawDialog(item) {
         this.depositDialog.owner = item.owner;
@@ -407,7 +412,7 @@
       withdraw() {
         this.withdrawDialog.isWithdrawing = true;
         return assetsService.transferAssets(
-          { privKey: this.$currentUser.privKey, username: this.$currentUserName },
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
           false,
           {
             from: this.depositDialog.owner,
@@ -436,9 +441,9 @@
           { privKey: '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa', username: 'kim' },
           false,
           {
-            from: "kim",
+            from: 'kim',
             to: this.depositDialog.owner,
-            amount:  this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
+            amount: this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
             memo: `deposit for ${this.depositDialog.owner}`,
             extensions: []
           }

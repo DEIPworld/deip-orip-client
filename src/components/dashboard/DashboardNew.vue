@@ -27,7 +27,7 @@
 
           <projects-list
             v-if="hasProjects"
-            :user-name="$currentUserName"
+            :user-name="$currentUser.username"
             @loaded:length="setProjectsLength"
           />
 
@@ -56,7 +56,7 @@
 
           <projects-list
             v-if="hasProjects"
-            :user-name="$currentUserName"
+            :user-name="$currentUser.username"
             type="following"
             @loaded:length="setFollowingProjectsLength"
           />

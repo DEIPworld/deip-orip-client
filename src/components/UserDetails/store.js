@@ -251,6 +251,8 @@ const actions = {
       });
   },
 
+  // /////////
+
   denyReviewRequest({ commit, getters }, { reviewRequestId }) {
     const { reviewRequests } = getters;
     const reviewRequestIndex = reviewRequests.findIndex((r) => r._id === reviewRequestId);

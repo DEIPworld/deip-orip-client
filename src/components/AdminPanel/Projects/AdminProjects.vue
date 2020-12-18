@@ -7,7 +7,7 @@
         row-layout-key="AdminProjectListRow"
         :title="$t('adminRouting.projects.title')"
       >
-        <template 
+        <template
           v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)"
           #title-append-after>
           <v-btn
@@ -32,10 +32,10 @@
             <v-btn icon small @click.stop="editProject(project.externalId)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn 
-              v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)" 
-              icon 
-              small 
+            <v-btn
+              v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)"
+              icon
+              small
               @click.stop="deleteProject(project.externalId)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
@@ -53,7 +53,6 @@
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
 
   import { TenantService } from '@deip/tenant-service';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
@@ -68,7 +67,6 @@
       ProjectsList,
       DLayoutSection,
       DLayoutSectionMain,
-      DDialog,
       ResearchRequestFormRead
     },
     data() {
@@ -96,7 +94,6 @@
     computed: {
       ...mapGetters({
         projects: 'adminPanel/publicProjects',
-        user: 'auth/user',
         tenant: 'auth/tenant'
       })
     },

@@ -59,7 +59,7 @@
       />
     </full-screen-modal>
 
-    <d-dialog
+    <vex-dialog
       v-model="researchViewDialog.isOpen"
       max-width="800"
       hide-buttons
@@ -69,16 +69,16 @@
         get-from="account/rejectedProjects"
         :research-id="researchViewDialog.data._id"
       />
-    </d-dialog>
+    </vex-dialog>
 
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.actionLabel"
+      :button-true-text="actionDialog.actionLabel"
       @click:confirm="actionDialog.action()"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
   </layout-section>
 </template>
 
@@ -90,14 +90,12 @@
   import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
   import { ResearchService } from '@deip/research-service';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AccountProjectRequests',
     components: {
-      DDialog,
       ResearchRequestFormEdit,
       FullScreenModal,
       LayoutSection,
@@ -160,14 +158,15 @@
       ...mapGetters({
         pendingProjects: 'account/pendingProjects',
         rejectedProjects: 'account/rejectedProjects',
-        user: 'auth/user',
         tenant: 'auth/tenant'
       })
     },
 
     created() {
-      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      this.$store.dispatch('account/getAllProjects', { username })
+      this.$store.dispatch(
+        'account/getAllProjects',
+        { username: this.$currentUser.username }
+        )
         .then(() => {
           this.$setReady();
         });
@@ -205,8 +204,8 @@
       },
 
       deleteRequest(proposalId) {
-        researchService.deleteResearchApplication(this.user.privKey, {
-          researcher: this.user.username,
+        researchService.deleteResearchApplication(this.$currentUser.privKey, {
+          researcher: this.$currentUser.username,
           proposalId
         })
           .catch((err) => console.error(err))
@@ -216,8 +215,11 @@
       },
 
       finishAction() {
-        const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-        this.$store.dispatch('account/getAllProjects', { username }).then(() => {
+        this.$store.dispatch(
+          'account/getAllProjects',
+          { username: this.$currentUser.username }
+        )
+          .then(() => {
           this.isDisabled = false;
           this.actionDialog.isOpen = false;
         });

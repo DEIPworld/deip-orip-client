@@ -217,7 +217,7 @@
       };
     },
     computed: {
-      notifications() { return this.$store.getters['auth/user'].notifications; },
+      notifications() { return this.$currentUser.notifications; },
 
       notificationType(notification) {
         return 'a';
@@ -233,15 +233,15 @@
 
     methods: {
       markNotificationAsRead(notification) {
-        userService.markUserNotificationAsRead(notification.username, notification._id)
-          .then(() => {
-            this.$store.dispatch('auth/loadNotifications');
-          });
+        this.$store.dispatch('Notifications/markAsRead', [
+          notification.username,
+          notification._id
+        ]);
       },
 
       pollNotifications() {
         if (accessService.isLoggedIn()) {
-          this.$store.dispatch('auth/loadNotifications');
+          this.$store.dispatch('Notifications/fetch', this.$currentUser.username);
         }
       }
     }

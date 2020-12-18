@@ -19,7 +19,7 @@
 
       <component
         :is="disableAllRoutes || disableContentRoute ? 'span' : 'router-link'"
-        v-if="$isLoggedIn"
+        v-if="$isUser"
         class="a"
         :to="{
           name: 'project.content.details',

@@ -15,6 +15,7 @@ import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import '@mdi/font/css/materialdesignicons.css';
+import 'v-credit-card/dist/VCreditCard.css';
 import 'vue-resize/dist/vue-resize.css';
 import './styles/common.less';
 
@@ -53,6 +54,9 @@ import ProjectsFeature from '@/features/Projects';
 import ReferencesFeature from '@/features/References';
 import ReviewsFeature from '@/features/Reviews';
 import UsersFeature from '@/features/Users';
+import NotificationsFeature from '@/features/Notifications';
+import BookmarksFeature from '@/features/Bookmarks';
+import TeamsFeature from '@/features/Teams';
 
 // ////////////////////////
 
@@ -98,12 +102,16 @@ Vue.directive('custom', CustomDirective);
 
 Vue.use(AuthFeature);
 Vue.use(AssetsFeature);
+Vue.use(TeamsFeature);
+
 Vue.use(ProjectsFeature);
 // Vue.use(ContentsFeature); // conflict
 Vue.use(FundraisingFeature);
 Vue.use(ReferencesFeature);
 Vue.use(ReviewsFeature);
 Vue.use(UsersFeature);
+Vue.use(NotificationsFeature);
+Vue.use(BookmarksFeature);
 
 // ////////////////////////////////////////
 

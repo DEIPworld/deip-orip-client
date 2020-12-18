@@ -64,7 +64,7 @@
         return [
           ...this.project.members,
           ...this.project.researchRef.expressLicenses.map((lic) => lic.owner)
-        ].includes(this.$currentUserName);
+        ].includes(this.$currentUser.username);
       }
     },
     methods: {

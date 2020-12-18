@@ -17,7 +17,7 @@
     </div>
 
     <div v-else-if="!userHasVoted">
-      {{ 
+      {{
         $hasModule(DEIP_MODULE.APP_ECI)
           ? $t('reviews.eciForContribution', { countEci: 1000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
           : ''
@@ -78,16 +78,16 @@
         return this.userExperise.some((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id === exp.discipline_id));
       },
       userHasVoted() {
-        return this.review.votes.some((vote) => vote.voter === this.$currentUserName);
+        return this.review.votes.some((vote) => vote.voter === this.$currentUser.username);
       },
       userRelatedExpertise() {
         return this.userExperise.filter((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id === exp.discipline_id));
       },
       isGroupMember() {
-        return this.members.some((item) => item.groupTokens.owner === this.$currentUserName);
+        return this.members.some((item) => item.groupTokens.owner === this.$currentUser.username);
       },
       isAuthor() {
-        return this.review.author === this.$currentUserName;
+        return this.review.author === this.$currentUser.username;
       }
     },
 
@@ -102,7 +102,7 @@
 
         const votesPromises = disciplinesExternalIds
           .map((disciplineExternalId) => researchContentReviewsService.voteForReview(this.$currentUser.privKey, {
-            voter: this.$currentUserName,
+            voter: this.$currentUser.username,
             reviewExternalId: review.externalId,
             disciplineExternalId,
             weight: '100.00 %',

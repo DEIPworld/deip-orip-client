@@ -21,7 +21,7 @@
         <users-list view-type="stack" :users="shareholders" />
         <d-dot-list :items="listData" />
         <v-btn
-          v-if="$isLoggedIn"
+          v-if="$isUser"
           block
           text
           small
@@ -138,9 +138,9 @@
     computed: {
       internalAsset() {
         if (this.asset) {
-          return this.$store.getters['Assets/one']({
-            stringSymbol: this.$$fromAssetUnits(this.asset).assetId
-          });
+          return this.$store.getters['Assets/one'](
+            this.$$fromAssetUnits(this.asset).assetId
+          );
         }
 
         return null;
@@ -151,7 +151,7 @@
       },
 
       currentUserBalance() {
-        const balance = this.getBalance(this.$currentUserName);
+        const balance = this.getBalance(this.$currentUser.username);
 
         return balance ? balance.amount : this.toAssetUnits(0);
       },
@@ -193,7 +193,12 @@
 
       if (this.asset && !(this.internalAsset && this.internalAsset.balances)) {
         this.$store
-          .dispatch('Assets/getAsset', { symbol: this.$$fromAssetUnits(this.asset).assetId })
+          .dispatch(
+            'Assets/get',
+            {
+              symbol: this.$$fromAssetUnits(this.asset).assetId
+            }
+          )
           .then(() => {
             this.$setReady();
           });

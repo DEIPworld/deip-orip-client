@@ -522,10 +522,10 @@
         const { approvals, rejectors } = item.proposal;
 
         const hasApprovals = approvals.some(([name,]) => {
-          return name == this.$currentUserName;
+          return name == this.$currentUser.username;
         });
         const hasRejections = rejectors.some(([name,]) => {
-          return name == this.$currentUserName;
+          return name == this.$currentUser.username;
         });
 
         return !hasApprovals && !hasRejections;
@@ -553,9 +553,9 @@
       sign(proposal) {
         const { proposal: { external_id } } = proposal;
         this.disableButtonsId = external_id;
-        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+        proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
-          activeApprovalsToAdd: [this.$currentUserName],
+          activeApprovalsToAdd: [this.$currentUser.username],
           activeApprovalsToRemove: [],
           ownerApprovalsToAdd: [],
           ownerApprovalsToRemove: [],
@@ -579,13 +579,13 @@
       reject(proposal) {
         const { proposal: { external_id, required_approvals }, type } = proposal;
         this.disableButtonsId = external_id;
-        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUserName }, {
+        proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
           account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
-            ? required_approvals.some(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
-                ? required_approvals.find(ra => this.$currentUser.groups.some(rg => rg.account.name == ra))
-                : this.$currentUserName
-            : this.$currentUserName,
+            ? required_approvals.some(ra => this.$currentUser.teams.some(rg => rg.account.name == ra))
+                ? required_approvals.find(ra => this.$currentUser.teams.some(rg => rg.account.name == ra))
+                : this.$currentUser.username
+            : this.$currentUser.username,
           authority: 2, // active auth
           extensions: []
         })

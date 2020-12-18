@@ -64,7 +64,6 @@
     computed: {
       ...mapGetters({
         userGroups: 'auth/userGroups',
-        userCoworkers: 'auth/userCoworkers'
       }),
 
       isMultipleProps() {

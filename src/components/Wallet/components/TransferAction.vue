@@ -28,17 +28,17 @@
       </v-icon>
       Exchange
     </v-btn>
-    <d-dialog
+    <vex-dialog
       v-model="dialog.isOpened"
       :disabled="dialog.isSending"
-      :confirm-button-disabled="isDisabled"
+      :true-disabled="isDisabled"
       :loading="dialog.isSending"
       :title="dialog.title"
       max-width="570px"
-      :confirm-button-title="
+      :button-true-text="
         dialog.exchange ? 'Exchange' : $t('userWallet.sendResearchTokensDialog.submitBtn')
       "
-      :cancel-button-title="$t('userWallet.cancel')"
+      :button-false-text="$t('userWallet.cancel')"
       @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
     >
       <v-form
@@ -187,12 +187,11 @@
           rows="8"
         />
       </v-form>
-    </d-dialog>
+    </vex-dialog>
   </div>
 </template>
 
 <script>
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
   import { UsersService } from '@deip/users-service';
@@ -210,7 +209,6 @@
     name: 'TransferAction',
 
     components: {
-      DDialog,
       DBoxItem,
       DDateTimeInput
     },
@@ -239,7 +237,7 @@
             return 'Receiver username is required';
           }
 
-          if (value === this.$currentUserName) {
+          if (value === this.$currentUser.username) {
             return 'Username shouldn\'t be yours';
           }
 
@@ -378,12 +376,12 @@
             { symbol: fromAccountData.stringSymbol, fractionCount: fromAccountData.precision }
           );
 
-          const isProposal = this.$currentUserName !== this.dialog.form.fromAccount.owner;
+          const isProposal = this.$currentUser.username !== this.dialog.form.fromAccount.owner;
 
           return assetsService.transferAssets(
             {
               privKey: this.$currentUser.privKey,
-              username: this.$currentUserName
+              username: this.$currentUser.username
             },
             isProposal,
             {
@@ -436,7 +434,7 @@
 
           assetsService.createAssetsExchangeProposal({
             privKey: this.$currentUser.privKey,
-            username: this.$currentUserName
+            username: this.$currentUser.username
           }, {
             party1: this.dialog.form.fromAccount.owner,
             party2: this.dialog.form.receiver.account.name,

@@ -1,13 +1,9 @@
-import DDialog from '@/components/Deipify/DDialog/DDialog';
 import { mapGetters } from 'vuex';
 import { ResearchGroupService } from '@deip/research-group-service';
 
 const researchGroupService = ResearchGroupService.getInstance();
 
 export const dropoutMember = {
-  components: {
-    DDialog
-  },
   data() {
     return {
       actionDialog: {

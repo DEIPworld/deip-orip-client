@@ -33,26 +33,26 @@
         </v-tab>
       </v-tabs>
 
-      <user-notifications-list v-if="$isLoggedIn" />
+      <user-notifications-list v-if="$isUser" />
 
       <v-menu
-        v-if="$isLoggedIn"
+        v-if="$isUser"
         bottom
         left
         offset-y
         min-width="220"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn icon v-on="on">
             <v-avatar size="32px" v-on="on">
-              <img
-                v-if="user.profile"
-                :src="user.profile | avatarSrc(64, 64, false)"
-              >
+              <v-img
+                v-if="$currentUser.profile"
+                :src="$currentUser.profile | avatarSrc(64, 64, false)"
+              />
               <v-gravatar
-                v-if="!user.profile && user.account"
-                :title="user.username"
-                :email="user.username + '@deip.world'"
+                v-if="!$currentUser.profile && $currentUser.account"
+                :title="$currentUser.username"
+                :email="$currentUser.username + '@deip.world'"
               />
             </v-avatar>
           </v-btn>
@@ -113,7 +113,6 @@
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings',
         isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
@@ -122,10 +121,10 @@
         isTreasuryCertifier: 'auth/isTreasuryCertifier',
         isGrantChiefOfficer: 'auth/isGrantChiefOfficer'
       }),
-      isLoggedIn() { return accessService.isLoggedIn(); }, // $isLoggedIn
+      isLoggedIn() { return accessService.isLoggedIn(); }, // $isUser
 
       mainMenu() {
-        if (this.$isLoggedIn) {
+        if (this.$isUser) {
           const routes = [];
 
           routes.push({
@@ -138,7 +137,7 @@
               label: this.$t('topMenu.overview'),
               to: { name: 'overview' }
             });
-            
+
             routes.push({
               label: this.$t('topMenu.participants'),
               to: { name: 'participants' }
@@ -160,7 +159,7 @@
               label: this.$t('topMenu.wallet'),
               to: {
                 name: 'userWallet',
-                params: { account: this.user.username }
+                params: { account: this.$currentUser.username }
               }
             });
           }

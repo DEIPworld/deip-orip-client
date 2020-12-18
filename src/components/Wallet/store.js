@@ -99,9 +99,15 @@ const actions = {
   },
 
   loadAssetsInfo({ commit }, account) {
-    return Promise.all(account.balances.map(({ asset_symbol }) => assetsService.getAssetBySymbol(asset_symbol)))
+    return Promise.all(account.balances.map(
+      ({ assetSymbol }) => assetsService.getAssetBySymbol(assetSymbol)
+    ))
       .then((data) => {
-        const assetsInfo = data.reduce((result, item) => { result[item.id] = item; return result; }, {});
+        const assetsInfo = data.reduce(
+          (result, item) => {
+            result[item.string_symbol || item.stringSymbol] = item; return result;
+          }, {}
+        );
         commit('SET_ASSETS_INFO', assetsInfo);
       })
       .catch((err) => console.error(err));

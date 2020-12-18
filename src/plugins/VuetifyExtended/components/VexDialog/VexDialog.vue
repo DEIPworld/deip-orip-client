@@ -27,7 +27,7 @@
 
       <v-divider />
 
-      <v-card-text class="text-body-2 text--primary pa-6">
+      <v-card-text class="text-body-2 text--primary pa-6 white-space-pre-line">
         {{ message }}
         <slot />
       </v-card-text>

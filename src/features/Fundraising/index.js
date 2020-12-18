@@ -1,5 +1,5 @@
 import { store } from '@/store';
-import { fundraisingStore } from '@/features/Fundraising/store/store';
+import { fundraisingStore } from '@/features/Fundraising/store';
 
 const install = (Vue, options = {}) => {
   if (install.installed) return;

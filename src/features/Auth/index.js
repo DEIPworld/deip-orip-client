@@ -3,10 +3,18 @@ import { authStore } from '@/features/Auth/store';
 
 const install = (Vue, options = {}) => {
   if (install.installed) return;
-  // eslint-disable-next-line no-unused-vars
+
   install.installed = true;
 
   store.registerModule('Auth', authStore);
+
+  Vue.mixin({
+    computed: {
+      $isUser() { return this.$store.getters['Auth/isUser']; },
+      $isGuest() { return !this.$isUser; },
+      $currentUser() { return this.$store.getters['Auth/currentUser']; }
+    }
+  });
 };
 
 const AuthFeature = {

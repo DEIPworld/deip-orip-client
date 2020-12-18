@@ -62,7 +62,7 @@
           {{ $t('fundraising.neverFund') }}
         </div>
         <v-btn
-          v-if="!tokenSaleData && isResearchMember && $isLoggedIn"
+          v-if="!tokenSaleData && isResearchMember && $isUser"
           block
           small
           outlined
@@ -78,7 +78,7 @@
           {{ $t('fundraising.finished') }}
         </div>
         <v-btn
-          v-if="(hasHistory || tokenSaleData) && $isLoggedIn"
+          v-if="(hasHistory || tokenSaleData) && $isUser"
           block
           small
           text
@@ -171,7 +171,7 @@
         ];
       },
       isResearchMember() {
-        return this.project ? this.project.members.includes(this.$currentUserName) : false;
+        return this.project ? this.project.members.includes(this.$currentUser.username) : false;
       },
 
       disabled() {

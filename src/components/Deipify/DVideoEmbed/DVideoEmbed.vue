@@ -16,10 +16,9 @@
 <script>
   import Measurable from 'vuetify/lib/mixins/measurable';
 
-  const videosMap = [
+  export const allowedVideoServices = [
     {
-      // reg: /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/i,
-      // reg: /^.*(?:(?:v|vi|be|videos|embed)\/(?!videoseries)|(?:v|ci)=)([\w-]{11})/i,
+      key: 'youtube',
       reg: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/i,
       url: 'https://www.youtube.com/embed/$5',
       params: {
@@ -30,6 +29,7 @@
       }
     },
     {
+      key: 'vimeo',
       reg: /^.*vimeo.com\/(\d+)($|\/|\b)/i,
       url: 'https://player.vimeo.com/video/$1',
       params: {
@@ -40,6 +40,7 @@
     },
 
     {
+      key: 'dailymotion',
       reg: /^.*(?:\/video|dai.ly)\/([A-Za-z0-9]+)([^#&?]*).*/i,
       url: 'https://www.dailymotion.com/embed/video/$1',
       params: {
@@ -48,6 +49,7 @@
     },
 
     {
+      key: 'coub',
       reg: /^.*coub.com\/(?:embed|view)\/([A-Za-z0-9]+)([^#&?]*).*/i,
       url: 'https://coub.com/embed/$1',
       params: {
@@ -84,7 +86,7 @@
       },
 
       videoUrl() {
-        const videoObj = videosMap.find((v) => v.reg.test(this.src));
+        const videoObj = allowedVideoServices.find((v) => v.reg.test(this.src));
 
         if (videoObj) {
           const params = { ...videoObj.params, ...this.params };
@@ -94,7 +96,9 @@
           return this.src.replace(videoObj.reg, videoObj.url) + and + query;
         }
 
-        throw new Error('No video settings find');
+        console.warn('No video settings find');
+
+        return null;
       }
     }
   };

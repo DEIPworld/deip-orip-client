@@ -65,15 +65,15 @@
       </d-block>
     </d-layout-section-main>
 
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.actionLabel"
+      :button-true-text="actionDialog.actionLabel"
       :loading="isDisabled"
       @click:confirm="actionDialog.action()"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
   </d-layout>
 </template>
 
@@ -81,7 +81,6 @@
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
   import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import CrudActions from '@/components/layout/CrudActions';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
@@ -95,8 +94,7 @@
       DLayoutSectionMain,
       DLayout,
       DBlock,
-      CrudActions,
-      DDialog
+      CrudActions
     },
     data() {
       return {

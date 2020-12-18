@@ -34,21 +34,21 @@
             <v-icon>delete</v-icon>
           </v-btn>
 
-                    <v-btn icon @click="xFaqTest(item._id)">
+                    <!-- <v-btn icon @click="xFaqTest(item._id)">
                       <v-icon>settings</v-icon>
-                    </v-btn>
+                    </v-btn> -->
         </div>
       </template>
     </side-actions-card>
 
-    <d-dialog
+    <vex-dialog
       v-model="actionDialog.isOpen"
       :title="actionDialog.title"
-      :confirm-button-title="actionDialog.actionLabel"
+      :button-true-text="actionDialog.actionLabel"
       @click:confirm="actionDialog.action()"
     >
       {{ actionDialog.description }}
-    </d-dialog>
+    </vex-dialog>
   </admin-view>
 </template>
 
@@ -57,14 +57,12 @@
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminFAQ',
     components: {
-      DDialog,
       SideActionsCard,
       AdminView
     },
@@ -88,22 +86,22 @@
     },
 
     methods: {
-      xFaqTest(id) {
-        this.$confirm(
-          'New dialog mega test message',
-          {
-            title: 'New dialog',
-            buttonTrueText: 'Kill all hummans'
-          }
-        )
-          .then((confirm) => {
-            if (confirm) {
-              console.info('process', id);
-            } else {
-              console.info('cancel', id);
-            }
-          });
-      },
+      // xFaqTest(id) {
+      //   this.$confirm(
+      //     'New dialog mega test message',
+      //     {
+      //       title: 'New dialog',
+      //       buttonTrueText: 'Kill all hummans'
+      //     }
+      //   )
+      //     .then((confirm) => {
+      //       if (confirm) {
+      //         console.info('process', id);
+      //       } else {
+      //         console.info('cancel', id);
+      //       }
+      //     });
+      // },
 
       updateFAQ(FAQsArr) {
         const updatedProfile = _.cloneDeep(this.tenant.profile);
