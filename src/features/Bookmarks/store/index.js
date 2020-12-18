@@ -14,7 +14,7 @@ const ACTIONS = {
   fetch({ commit }, username) {
     return userService.getResearchBookmarks(username)
       .then((bookmarks) => {
-        commit('storeData', bookmarks);
+        commit('setList', bookmarks);
       })
       .catch((err) => {
         console.error(err);
@@ -23,7 +23,7 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeData(state, payload) {
+  setList(state, payload) {
     state.data = payload;
   }
 };

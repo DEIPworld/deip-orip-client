@@ -18,7 +18,7 @@
 
       <v-spacer />
 
-      <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
+      <user-notifications-list v-if="isLoggedIn" />
 
       <v-sheet v-if="isLoggedIn" color="transparent">
         <v-menu bottom left offset-y>
@@ -26,13 +26,13 @@
             <v-btn icon v-on="on">
               <v-avatar size="32px" v-on="on">
                 <img
-                  v-if="user.profile"
-                  :src="user.profile | avatarSrc(64, 64, false)"
+                  v-if="$currentUser.profile"
+                  :src="$currentUser.profile | avatarSrc(64, 64, false)"
                 >
                 <v-gravatar
-                  v-if="!user.profile && user.account"
-                  :title="user.username"
-                  :email="user.username + '@deip.world'"
+                  v-if="!$currentUser.profile && $currentUser.account"
+                  :title="$currentUser.username"
+                  :email="$currentUser.username + '@deip.world'"
                 />
               </v-avatar>
             </v-btn>
@@ -50,7 +50,7 @@
             v-if="isGrantsTransparencyDemo"
             dense
           >
-            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
+            <v-list-item :to="{ name: 'UserDetails', params: { account_name: $currentUser.username } }">
               Profile
             </v-list-item>
             <v-divider />
@@ -94,7 +94,6 @@
 
     computed: {
       ...mapGetters({
-        user: 'Auth/currentUser',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),

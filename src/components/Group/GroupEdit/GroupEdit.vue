@@ -73,8 +73,8 @@
       },
 
       createGroup() {
-        const creator = this.$currentUserName;
-        const memo = this.$currentUser.account.memo_key;
+        const creator = this.$currentUser.username;
+        const memo = this.$currentUser.pubKey;
         const auth = {
           account_auths: [[creator, 1]],
           key_auths: [],

@@ -77,7 +77,7 @@
     },
 
     created() {
-      if (this.$route.name === 'userWallet' && this.$currentUserName !== this.$route.params.account) {
+      if (this.$route.name === 'userWallet' && this.$currentUser.username !== this.$route.params.account) {
         this.$router.back();
       }
       if (this.$route.name === 'userWallet') {

@@ -158,14 +158,15 @@
       ...mapGetters({
         pendingProjects: 'account/pendingProjects',
         rejectedProjects: 'account/rejectedProjects',
-        user: 'auth/user',
         tenant: 'auth/tenant'
       })
     },
 
     created() {
-      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      this.$store.dispatch('account/getAllProjects', { username })
+      this.$store.dispatch(
+        'account/getAllProjects',
+        { username: this.$currentUser.username }
+        )
         .then(() => {
           this.$setReady();
         });
@@ -203,8 +204,8 @@
       },
 
       deleteRequest(proposalId) {
-        researchService.deleteResearchApplication(this.user.privKey, {
-          researcher: this.user.username,
+        researchService.deleteResearchApplication(this.$currentUser.privKey, {
+          researcher: this.$currentUser.username,
           proposalId
         })
           .catch((err) => console.error(err))
@@ -214,8 +215,11 @@
       },
 
       finishAction() {
-        const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-        this.$store.dispatch('account/getAllProjects', { username }).then(() => {
+        this.$store.dispatch(
+          'account/getAllProjects',
+          { username: this.$currentUser.username }
+        )
+          .then(() => {
           this.isDisabled = false;
           this.actionDialog.isOpen = false;
         });

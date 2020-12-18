@@ -241,7 +241,7 @@
 
       pollNotifications() {
         if (accessService.isLoggedIn()) {
-          this.$store.dispatch('Notifications/fetch', this.$currentUserName);
+          this.$store.dispatch('Notifications/fetch', this.$currentUser.username);
         }
       }
     }

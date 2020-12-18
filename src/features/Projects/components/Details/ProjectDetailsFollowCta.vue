@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    v-if="$isLoggedIn"
+    v-if="$isUser"
     small
     outlined
     :loading="loading"
@@ -45,8 +45,8 @@
     methods: {
       bookmarkService() {
         return !this.bookmarkId
-          ? userService.createResearchBookmark(this.$currentUserName, this.project.externalId)
-          : userService.removeResearchBookmark(this.$currentUserName, this.bookmarkId);
+          ? userService.createResearchBookmark(this.$currentUser.username, this.project.externalId)
+          : userService.removeResearchBookmark(this.$currentUser.username, this.bookmarkId);
       },
 
       toggleBookmark() {

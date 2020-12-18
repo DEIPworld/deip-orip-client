@@ -10,7 +10,7 @@ const STATE = {
 const GETTERS = {
   currentUser: (state, getters, rootState, rootGetters) => {
     if (accessService.isLoggedIn()) {
-      const { account, profile } = rootGetters['Users/one'](state.currentUsername);
+      const { account, profile, teams } = rootGetters['Users/one'](state.currentUsername);
       const balances = rootGetters['Assets/currentUserBalances'];
       const notifications = rootGetters['Notifications/list'];
       const bookmarks = rootGetters['Bookmarks/list'];
@@ -23,12 +23,15 @@ const GETTERS = {
         profile,
         balances,
         notifications,
-        bookmarks
+        bookmarks,
+        teams
       };
     }
 
-    return {};
-  }
+    return null;
+  },
+
+  isUser: () => accessService.isLoggedIn()
 };
 
 const ACTIONS = {
@@ -36,7 +39,7 @@ const ACTIONS = {
     if (accessService.isLoggedIn()) {
       const { username } = accessService.getDecodedToken();
 
-      commit('storeUsername', username);
+      commit('setUsername', username);
 
       return Promise.all([
         dispatch('Users/get', username, { root: true }),
@@ -62,7 +65,7 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeUsername(state, payload) {
+  setUsername(state, payload) {
     state.currentUsername = payload;
   },
 

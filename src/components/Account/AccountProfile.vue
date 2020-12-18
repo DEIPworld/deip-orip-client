@@ -8,8 +8,8 @@
       @mouseout="onAvatarMouseOut"
     >
       <v-img
-        v-if="currentUser.profile && !tempAva"
-        :src="currentUser.profile | avatarSrc(320, 320, false)"
+        v-if="$currentUser.profile && !tempAva"
+        :src="$currentUser.profile | avatarSrc(320, 320, false)"
       />
 
       <v-img
@@ -18,8 +18,8 @@
       />
 
       <v-gravatar
-        v-if="!currentUser.profile && currentUser.account &&  !tempAva"
-        :email="currentUser.account.name + '@deip.world'"
+        v-if="!$currentUser.profile && $currentUser.account &&  !tempAva"
+        :email="$currentUser.username + '@deip.world'"
       />
 
       <vue-dropzone
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import moment from 'moment';
 
   import { UserService } from '@deip/user-service';
@@ -226,16 +225,12 @@
       };
     },
     computed: {
-      ...mapGetters({
-        currentUser: 'auth/user'
-      }),
-
-        dropzoneOptions() {
-        return this.currentUser != null ? {
+      dropzoneOptions() {
+        return this.$currentUser != null ? {
           url: `${window.env.DEIP_SERVER_URL}/api/user/upload-avatar`,
           paramName: 'user-avatar',
           headers: {
-            username: this.currentUser.username.toString(),
+            username: this.$currentUser.username.toString(),
             Authorization: `Bearer ${accessService.getAccessToken()}`
           },
           timeout: 0,
@@ -246,7 +241,7 @@
           autoProcessQueue: false,
           addRemoveLinks: false,
           dictDefaultMessage:
-            "<i class='v-icon material-icons theme--dark mb-n10' style='font-size:40px'>camera_alt</i>",
+            '<i class=\'v-icon material-icons theme--dark mb-n10\' style=\'font-size:40px\'>camera_alt</i>',
           acceptedFiles: ['image/png', 'image/jpeg'].join(',')
         } : null;
       },
@@ -258,19 +253,19 @@
 
     created() {
       this.formModel = {
-        city: this.currentUser.profile.location.city || ' ',
-        country: this.currentUser.profile.location.country || ' ',
-        bio: this.currentUser.profile.bio || ' ',
-        email: this.currentUser.profile.email || ' ',
-        firstName: this.currentUser.profile.firstName || ' ',
-        lastName: this.currentUser.profile.lastName || ' ',
-        editedBirthdayDate: this.currentUser.profile.birthdate
-          ? moment(this.currentUser.profile.birthdate)
+        city: this.$currentUser.profile.location.city || ' ',
+        country: this.$currentUser.profile.location.country || ' ',
+        bio: this.$currentUser.profile.bio || ' ',
+        email: this.$currentUser.profile.email || ' ',
+        firstName: this.$currentUser.profile.firstName || ' ',
+        lastName: this.$currentUser.profile.lastName || ' ',
+        editedBirthdayDate: this.$currentUser.profile.birthdate
+          ? moment(this.$currentUser.profile.birthdate)
             .format('YYYY-MM-DD')
           : '',
-        category: this.currentUser.profile.category,
-        occupation: this.currentUser.profile.occupation,
-        webPage: this.currentUser.profile.webPages.length ? this.currentUser.profile.webPages[0].link : ''
+        category: this.$currentUser.profile.category,
+        occupation: this.$currentUser.profile.occupation,
+        webPage: this.$currentUser.profile.webPages.length ? this.$currentUser.profile.webPages[0].link : ''
       };
 
       this.formModelCache = JSON.stringify(this.formModel);
@@ -290,7 +285,7 @@
         });
       },
       onAvatarMouseOver() {
-        if (this.currentUser.username === this.currentUser.account.name) {
+        if (this.$currentUser.username === this.$currentUser.account.name) {
           this.avatarUploadIsShown = true;
         }
       },
@@ -323,7 +318,7 @@
       cancel() {
         this.$router.push({
           name: 'UserDetails',
-          params: { account_name: this.currentUser.username }
+          params: { account_name: this.$currentUser.username }
         });
       },
       save() {
@@ -333,7 +328,7 @@
           } else if (JSON.stringify(this.formModel) !== this.formModelCache) {
             this.updateAccountData();
           }
-        })
+        });
       },
       updateAccountData() {
         this.isLoading = true;
@@ -352,28 +347,28 @@
         const birthdate = this.formModel.editedBirthdayDate;
 
         const update = {
-          ...this.currentUser.profile,
+          ...this.$currentUser.profile,
           ...{
-                location,
-                bio,
-                email,
-                firstName,
-                lastName,
-                birthdate,
-                category,
-                occupation,
-                webPages: [{
-                  type: 'webpage',
-                  label: 'default',
-                  link: webPage
-                }]
-              }
+            location,
+            bio,
+            email,
+            firstName,
+            lastName,
+            birthdate,
+            category,
+            occupation,
+            webPages: [{
+              type: 'webpage',
+              label: 'default',
+              link: webPage
+            }]
+          }
         };
 
-        userService.updateUserProfile(this.currentUser.username, update)
+        userService.updateUserProfile(this.$currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('account/loadUserAccount', {
-              username: this.currentUser.username
+              username: this.$currentUser.username
             });
 
             this.$store.dispatch('auth/loadUser');

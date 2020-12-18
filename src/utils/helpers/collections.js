@@ -1,10 +1,11 @@
 import { wrapInArray, mergeDeep } from 'vuetify/lib/util/helpers';
+import where from 'filter-where';
 
 const defaultOpts = { // as object for future extensions
   key: 'id'
 };
 
-export const mergeCollection = (
+export const collectionMerge = (
   c1 = [],
   c2 = [],
   opts = defaultOpts
@@ -26,3 +27,6 @@ export const mergeCollection = (
 
   return result;
 };
+
+export const collectionOne = (collection, query) => collection.find(where(query));
+export const collectionList = (collection, query) => collection.filter(where(query));

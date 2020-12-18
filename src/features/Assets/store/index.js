@@ -1,5 +1,10 @@
 import { AssetsService } from '@deip/assets-service';
-import { camelizeObjectKeys, mergeCollection } from '@/utils/helpers';
+import {
+  camelizeObjectKeys,
+  collectionList,
+  collectionMerge,
+  collectionOne
+} from '@/utils/helpers';
 
 import where from 'filter-where';
 
@@ -11,20 +16,15 @@ const STATE = {
 };
 
 const GETTERS = {
-  list: (state) => (query = {}) => state.data.filter(
-    where(query)
-  ),
+  list: (state) => (query = {}) => collectionList(state.data, query),
 
   listKeys: (state, getters) => (query = {}) => getters.list(query)
     .map((ass) => ass.stringSymbol),
 
-  one: (state) => (assetId, query = {}) => {
-    const conditions = {
-      ...(assetId ? { stringSymbol: assetId } : {}),
-      ...query
-    };
-    return state.data.find(where(conditions));
-  },
+  one: (state) => (assetId, query = {}) => collectionOne(state.data, {
+    ...(assetId ? { stringSymbol: assetId } : {}),
+    ...query
+  }),
 
   currentUserBalances: (state) => state.currentUserBalances
 };
@@ -49,7 +49,7 @@ const ACTIONS = {
               assets[idx].balances.push(balance);
             }
 
-            commit('storeList', assets);
+            commit('setList', assets);
           });
       });
   },
@@ -68,7 +68,7 @@ const ACTIONS = {
           return assetsService
             .getAccountsAssetBalancesByAsset(asset.string_symbol)
             .then((balances) => {
-              commit('storeAsset', {
+              commit('setOne', {
                 ...asset,
                 balances
               });
@@ -94,7 +94,7 @@ const ACTIONS = {
 
   // /////////////////////////
 
-  getTeamBalance(context, payload) {
+  getTeamBalances(context, payload) {
     return assetsService
       .getAccountAssetBalance(...payload)
       .then((res) => res);
@@ -104,7 +104,7 @@ const ACTIONS = {
     return assetsService.getAccountAssetsBalancesByOwner(username)
       .then((balances) => {
         commit(
-          'storeCurrentUserBalance',
+          'setCurrentUserBalance',
           balances.filter((balance) => !balance.tokenized_research)
         );
       })
@@ -115,27 +115,27 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeList(state, payload) {
+  setList(state, payload) {
     if (!payload) return;
 
-    state.data = mergeCollection(
+    state.data = collectionMerge(
       state.data,
       payload.map((asset) => camelizeObjectKeys(asset)),
       { id: 'stringSymbol' }
     );
   },
 
-  storeAsset(state, payload) {
+  setOne(state, payload) {
     if (!payload) return;
 
-    state.data = mergeCollection(
+    state.data = collectionMerge(
       state.data,
       camelizeObjectKeys(payload),
       { id: 'stringSymbol' }
     );
   },
 
-  storeCurrentUserBalance(state, payload) {
+  setCurrentUserBalance(state, payload) {
     state.currentUserBalances = payload.map((balance) => camelizeObjectKeys(balance));
   }
 };

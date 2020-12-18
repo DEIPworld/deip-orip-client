@@ -239,7 +239,7 @@
 
         const isProposal = !this.research.researchGroup.is_personal;
         researchContentService.createResearchContent(
-          { privKey: this.$currentUser.privKey, username: this.$currentUser.account.name },
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
           isProposal,
           {
             researchExternalId: this.research.externalId,

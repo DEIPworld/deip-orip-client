@@ -428,7 +428,6 @@
         program: 'agencyGrantProgramAwardCreate/program',
         allUsers: 'agencyGrantProgramAwardCreate/allUsers',
         awardee: 'agencyGrantProgramAwardCreate/awardee',
-        user: 'auth/user'
       }),
 
       breadcrumbs() {
@@ -675,7 +674,7 @@
         }
 
         return grantsService.createFundingOpportunityAward(
-          this.user.privKey, {
+          this.$currentUser.privKey, {
             awardNumber: this.fundings[0].awardNumber,
             fundingOpportunityNumber: this.program.funding_opportunity_number,
             award: this.toAssetUnits(this.fundings[0].purpose.awardAmount, grantAssetPrecision, granAssetSymbol),
@@ -684,7 +683,7 @@
             universityExternalId: this.universityProfile.external_id,
             universityOverhead: `10.00 %`, //`${this.fundings[0].overhead}.00 %`,
             subawardees,
-            creator: this.user.username,
+            creator: this.$currentUser.username,
             extensions: []
           }
         )

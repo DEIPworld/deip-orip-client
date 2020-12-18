@@ -56,6 +56,7 @@ import ReviewsFeature from '@/features/Reviews';
 import UsersFeature from '@/features/Users';
 import NotificationsFeature from '@/features/Notifications';
 import BookmarksFeature from '@/features/Bookmarks';
+import TeamsFeature from '@/features/Teams';
 
 // ////////////////////////
 
@@ -101,6 +102,8 @@ Vue.directive('custom', CustomDirective);
 
 Vue.use(AuthFeature);
 Vue.use(AssetsFeature);
+Vue.use(TeamsFeature);
+
 Vue.use(ProjectsFeature);
 // Vue.use(ContentsFeature); // conflict
 Vue.use(FundraisingFeature);

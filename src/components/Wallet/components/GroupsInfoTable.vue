@@ -99,7 +99,7 @@
       })
     },
     created() {
-      this.$store.dispatch('Wallet/loadAllGroups', this.$currentUserName)
+      this.$store.dispatch('Wallet/loadAllGroups', this.$currentUser.username)
         .then(() => { this.$setReady(); });
     },
     methods: {

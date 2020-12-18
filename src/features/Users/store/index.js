@@ -1,42 +1,40 @@
 import { UsersService } from '@deip/users-service';
-import { camelizeObjectKeys, mergeCollection } from '@/utils/helpers';
-import where from 'filter-where';
+import { ResearchGroupService } from '@deip/research-group-service';
+import {
+  camelizeObjectKeys,
+  collectionList,
+  collectionMerge,
+  collectionOne
+} from '@/utils/helpers';
 
 const usersService = UsersService.getInstance();
+const teamsService = ResearchGroupService.getInstance();
 
 const STATE = {
   data: []
 };
 
 const GETTERS = {
-  list: (state) => (query = {}) => state.data.filter(
-    where(query)
-  ),
+  list: (state) => (query = {}) => collectionList(state.data, query),
 
-  one: (state) => (username, query = {}) => {
-    const conditions = {
-      ...(username ? { username } : {}),
-      ...query
-    };
-    return state.data.find(where(conditions));
-  }
+  one: (state) => (username, query = {}) => collectionOne(state.data, {
+    ...(username ? { username } : {}),
+    ...query
+  })
 };
 
 const ACTIONS = {
-
-  get({ dispatch }, username) {
+  get({ commit }, username) {
     return Promise.all([
-      dispatch('getUserData', username)
-    ]);
-  },
-
-  getUserData({ commit }, username) {
-    return usersService.getUser(username)
-      .then(({ account, profile }) => {
-        commit('storeOne', {
+      usersService.getUser(username),
+      teamsService.getTeamsByUser(username)
+    ])
+      .then(([{ account, profile }, teams]) => {
+        commit('setOne', {
           username,
           account,
-          profile
+          profile,
+          teams
         });
       })
       .catch((err) => {
@@ -46,10 +44,10 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeOne(state, payload) {
+  setOne(state, payload) {
     if (!payload) return;
 
-    state.data = mergeCollection(
+    state.data = collectionMerge(
       state.data,
       camelizeObjectKeys(payload),
       { id: 'username' }

@@ -66,15 +66,9 @@
       };
     },
 
-    computed: {
-      ...mapGetters({
-        currentUser: 'auth/user'
-      })
-    },
-
     methods: {
       downloadPrivateKey() {
-        const { username } = this.currentUser;
+        const { username } = this.$currentUser;
         let ownerPrivateKey;
         if (deipRpc.auth.isWif(this.masterPassword)) {
           ownerPrivateKey = this.masterPassword;
@@ -87,7 +81,7 @@
         }
 
         const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
-        if (this.currentUser.pubKey !== ownerPublicKey) {
+        if (this.$currentUser.pubKey !== ownerPublicKey) {
           this.$notifier.showError('Password is invalid');
           return;
         }

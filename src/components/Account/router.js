@@ -27,19 +27,19 @@ export const accountRouting = [{
           path: '',
           name: 'account.summary',
           component: UserDetails,
-          props: () => ({ username: store.getters['auth/user'].account.name })
+          props: () => ({ username: store.getters['Auth/currentUser'].username })
         },
         {
           path: 'expertise',
           name: 'account.expertiseDetails',
           component: UserExpertiseDetails,
-          props: () => ({ username: store.getters['auth/user'].account.name })
+          props: () => ({ username: store.getters['Auth/currentUser'].username })
         },
         {
           path: 'edit-education',
           name: 'account.education',
           component: UserEditEducationDialog,
-          props: () => ({ username: store.getters['auth/user'].account.name }),
+          props: () => ({ username: store.getters['Auth/currentUser'].username }),
           meta: {
             hideSidebar: true
           }
@@ -48,7 +48,7 @@ export const accountRouting = [{
           path: 'edit-employment',
           name: 'account.employment',
           component: UserEditEmploymentDialog,
-          props: () => ({ username: store.getters['auth/user'].account.name }),
+          props: () => ({ username: store.getters['Auth/currentUser'].username }),
           meta: {
             hideSidebar: true
           }

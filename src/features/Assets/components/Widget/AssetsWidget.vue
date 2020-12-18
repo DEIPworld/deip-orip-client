@@ -21,7 +21,7 @@
         <users-list view-type="stack" :users="shareholders" />
         <d-dot-list :items="listData" />
         <v-btn
-          v-if="$isLoggedIn"
+          v-if="$isUser"
           block
           text
           small
@@ -151,7 +151,7 @@
       },
 
       currentUserBalance() {
-        const balance = this.getBalance(this.$currentUserName);
+        const balance = this.getBalance(this.$currentUser.username);
 
         return balance ? balance.amount : this.toAssetUnits(0);
       },

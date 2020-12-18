@@ -4,7 +4,7 @@
       <div class="text-h4 mb-8">
         {{ $t('transactions.title') }}
       </div>
-      <transactions-list :key="'group-proposals'" :account="$currentUserName" />
+      <transactions-list :key="'group-proposals'" :account="$currentUser.username" />
     </d-layout-section-main>
   </d-layout-section>
 </template>

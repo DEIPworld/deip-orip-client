@@ -17,7 +17,7 @@
             @click="selected = item"
           >
             <v-list-item-action class="mr-4 my-2">
-              <v-radio :value="item" :disabled="!$currentUser" />
+              <v-radio :value="item" :disabled="$isGuest" />
             </v-list-item-action>
 
             <v-list-item-content class="text-caption py-1 pr-2">
@@ -36,7 +36,7 @@
         </v-list>
       </v-radio-group>
       <v-btn
-        v-if="$currentUser"
+        v-if="$isUser"
         block
         small
         outlined
@@ -49,7 +49,7 @@
     </d-stack>
 
     <vex-dialog
-      v-if="Boolean(selected) && $currentUser"
+      v-if="Boolean(selected) && $isUser"
       v-model="dialog"
       title="Send request"
       :max-width="540"

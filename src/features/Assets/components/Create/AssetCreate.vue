@@ -368,7 +368,7 @@
         const data = [
           {
             privKey: this.$currentUser.privKey,
-            username: this.$currentUserName
+            username: this.$currentUser.username
           },
           {
             researchExternalId: this.project.externalId,

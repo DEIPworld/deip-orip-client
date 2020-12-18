@@ -59,8 +59,7 @@
 
     name: 'App',
     components: {
-      DSnackbar,
-      ToolbarAdmin
+      DSnackbar
     },
     data() {
       return {
@@ -70,7 +69,6 @@
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
         tenant: 'auth/tenant'
       })
     },

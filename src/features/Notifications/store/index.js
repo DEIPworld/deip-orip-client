@@ -14,7 +14,7 @@ const ACTIONS = {
   fetch({ commit }, username) {
     return userService.getNotificationsByUser(username)
       .then((notifications) => {
-        commit('storeData', notifications);
+        commit('setList', notifications);
       })
       .catch((err) => {
         console.error(err);
@@ -33,7 +33,7 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeData(state, payload) {
+  setList(state, payload) {
     state.data = payload;
   }
 };

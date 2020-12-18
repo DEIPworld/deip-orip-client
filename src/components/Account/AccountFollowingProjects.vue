@@ -5,7 +5,7 @@
 
         <projects-list
           v-if="$currentUser.bookmarks.filter((b) => b.type === 'research').length"
-          :user-name="$currentUserName"
+          :user-name="$currentUser.username"
           type="following"
         />
 

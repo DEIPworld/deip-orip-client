@@ -12,15 +12,7 @@
 
   export default {
     name: 'AccountView',
-    components: { AccountSidebar },
-
-    created() {
-      // this.$store.dispatch('account/loadUserAccount', {
-      //   username: decodeURIComponent(this.$store.getters['auth/user'].account.name)
-      // }).then(() => {
-      //   this.$setReady();
-      // });
-    }
+    components: { AccountSidebar }
   };
 </script>
 

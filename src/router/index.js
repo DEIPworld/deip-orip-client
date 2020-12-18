@@ -191,37 +191,11 @@ const router = new Router({
       path: '/:research_group_permlink/group-details/group-settings',
       name: 'ResearchGroupSettings',
       component: ResearchGroupSettings
-      // component: preliminaryDataLoader(ResearchGroupSettings, {
-      //   beforeEnter: (to, from, next) => {
-      //     if (store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === to.params.research_group_permlink)) {
-      //       next({
-      //         name: 'ResearchGroupDetails',
-      //         params: {
-      //           research_group_permlink: to.params.research_group_permlink
-      //         }
-      //       });
-      //     } else {
-      //       next()
-      //     }
-      //   }
-      // })
     }, {
       path: '/:account_name/create-research-group',
       name: 'CreateResearchGroup',
       component: CreateResearchGroup
     },
-    //  {
-    //   path: '/:research_group_permlink/wallet',
-    //   name: 'ResearchGroupWallet',
-    //   component: preliminaryDataLoader(ResearchGroupWallet, {
-    //     beforeEnter: (to, from, next) => {
-    //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-    //         permlink: decodeURIComponent(to.params.research_group_permlink)
-    //       });
-    //       loadPage(loadPagePromise, next);
-    //     }
-    //   })
-    // },
     {
       path: '/dashboard',
       name: 'Dashboard',
@@ -233,11 +207,6 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     },
-    // {
-    //   path: '/research-feed',
-    //   name: 'ResearchFeed',
-    //   component: ResearchFeed
-    // },
 
 
     { // TODO: delete
