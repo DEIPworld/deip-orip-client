@@ -14,6 +14,7 @@ import VClamp from 'vue-clamp/Clamp';
 import VueTheMask from 'vue-the-mask';
 
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import 'v-credit-card/dist/VCreditCard.css';
 import '@mdi/font/css/materialdesignicons.css';
 import 'vue-resize/dist/vue-resize.css';
 import './styles/common.less';
