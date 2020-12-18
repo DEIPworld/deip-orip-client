@@ -1,5 +1,5 @@
 export const DEIP_MODULE = {
-  APP_ECI: 'eci',
+  APP_ECI: 'app-eci',
   APP_EXPERT_REVIEW: 'app-expert-review',
   APP_CROWDFUNDING: 'app-crowdfunding',
   APP_ASSETS_MANAGEMENT: 'app-assets-management',
