@@ -11,7 +11,7 @@ export default {
   averageInv: 'Average investment',
   yourInv: 'Your investment',
   timeline: `${project(true)} Timeline`,
-  showEvents: 'Show more events',
+  showEvents: 'Show more steps',
   references: 'Browse references',
   reviews: 'Reviews',
   reviewTo: 'Review to',
@@ -22,8 +22,8 @@ export default {
   proposed: 'proposed',
   delete: 'Delete',
   view: 'View',
-  createdCont: 'Created on platform content',
-  uploadedCont: 'Uploaded content',
+  createdCont: 'Created on platform material',
+  uploadedCont: 'Uploaded material',
   sidebar: {
     join: 'Join Team',
     letter: 'Provide a cover letter to your Join Request',
@@ -48,16 +48,16 @@ export default {
     },
     successReqReview: 'Request for the review has been sent successfully',
     errReqReview: 'An error occurred while requesting the review. Please try again later',
-    successJoinReq: 'Join request has been sent successfully!',
-    errJoinReq: 'An error occurred while sending join request, please try again later!'
+    successJoinReq: 'Join request has been sent successfully',
+    errJoinReq: 'An error occurred while sending join request, please try again later'
   },
   contentFileDialog: {
     upload: `Upload material for ${project()}`,
     titleField: {
       label: 'Title',
-      err: 'Content with the same name already exists'
+      err: 'Material with the same name already exists'
     },
-    typeField: 'Content Type',
+    typeField: 'Material Type',
     authorsField: {
       hint: 'You can select multiple authors',
       placeholder: 'Authors'
@@ -68,8 +68,8 @@ export default {
     fileUploaded: 'This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.',
     success: 'New material has been uploaded successfully',
     errFile: 'Sorry, the file storage server is temporarily unavailable, please try again later',
-    errFileUpload: 'File upload has failed',
-    errUploadingContent: 'An error occurred while uploading content, please try again later'
+    errFileUpload: 'Material upload has failed',
+    errUploadingContent: 'An error occurred while uploading material, please try again later'
   },
   fundraisingBlock: {
     fundraising: 'Fundraising',
@@ -77,18 +77,18 @@ export default {
     start: 'Start:',
     left: 'left',
     end: 'End:',
-    salePercentage: 'Percentage On sale:',
+    salePercentage: 'Percentage on sale:',
     remainingPercentage: 'Remaining Percentage:',
     minGoal: 'Min Goal:',
     maxGoal: 'Max Goal:',
-    minReached: 'Min goal reached!',
+    minReached: 'Min goal reached',
     raisedGoal: 'Raised of {{ hardCap }} Goal',
     amountField: 'Amount',
     invest: 'Invest',
     saft: 'SAFT (Simple Agreement for Future Tokens)',
     agree: 'Agree',
     disagree: 'Disagree',
-    success: 'You have contributed to "{title}" fundraise successfully !',
+    success: 'You have contributed to "{title}" fundraise successfully',
     err: 'An error occurred while contributing to fundraise, please try again later'
   }
 };

@@ -29,8 +29,8 @@ export default {
     contentUpload: 'Content Upload',
     fundraising: 'Fundraising',
     teamUpdate: 'Team update',
-    inviteMember: 'Invite Member',
-    removeMember: 'Remove Member',
+    inviteMember: 'Invite member',
+    removeMember: 'Remove member',
     transfer: 'Transfer',
     licensing: 'Licensing',
     exchange: 'Exchange'
@@ -49,6 +49,6 @@ export default {
     failed: 'Failed',
     expired: 'Expired'
   },
-  voteSucc: 'You have voted for the transaction successfully!',
+  voteSucc: 'You have confirmed transaction successfully',
   voteFail: 'Oops! Something went wrong. Please try again later'
 }

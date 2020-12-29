@@ -40,7 +40,7 @@ export default {
     pending: 'Pending',
     approved: 'Approved by:',
     noApproval: 'No approvals yet',
-    success: 'You have voted for the transaction successfully!',
+    success: 'You have confirmed transaction successfully',
     header: {
       status: 'Status',
       proposal: 'Proposal',
@@ -73,11 +73,11 @@ export default {
     updatePrMeta: `Update ${project()} meta`
   },
   addMemberDialog: {
-    title: 'Invite user to Team',
-    findPlaceholder: 'Find future member',
-    letterLabel: 'Invitation letter',
-    create: 'Create proposal',
-    success: 'Invitation Proposal has been created successfully!',
+    title: 'Invite member to team',
+    findPlaceholder: 'Find teammate',
+    letterLabel: 'Add invitation letter',
+    create: 'Send proposal',
+    success: 'Invitation has been sent successfully',
     err: 'An error occurred while creating proposal, please try again later'
   },
   joinRequestDialog: {
@@ -85,8 +85,8 @@ export default {
     tokensLabel: 'Team Tokens',
     submitBtn: 'Approve and create proposal',
     reject: 'Reject',
-    successSend: 'Invite proposal for "{username}" has been created successfully !',
-    successDeny: 'You have denied join request from  "{username}" successfully !',
+    successSend: 'Invite proposal for "{username}" has been created successfully',
+    successDeny: 'You have denied join request from  "{username}" successfully',
     errSend: 'An error occurred while approving join request, please try again later'
   },
   assetsBlock: {

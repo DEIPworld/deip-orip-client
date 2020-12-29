@@ -61,7 +61,7 @@
     <div v-if="isOwner">
       <vex-dialog
         v-model="deleteEducationMeta.isShown"
-        :title="$t('userDetailRouting.detailsEducation.title')"
+        :title="$t('userDetailRouting.detailsEducation.deleteDialogTitle')"
         :button-true-text="$t('userDetailRouting.detailsEducation.deleteBtn')"
         @click:confirm="deleteEducation(deleteEducationMeta)"
       >
