@@ -9,10 +9,10 @@
         xl="8"
       >
         <div class="text-h6">
-          Data usage overview
+          {{ $t('researchContentDetails.references.dataOver') }}
         </div>
         <div class="py-6 text-subtitle-1 font-weight-medium">
-          Number of reference nodes: {{ referencesCount }}
+          {{ $t('researchContentDetails.references.refNumber', { referencesCount }) }}
         </div>
         <div ref="graphContainer" style="height: 400px">
           <references-dependency-graph
@@ -35,10 +35,15 @@
           <v-tabs v-model="activeTab">
             <v-tabs-slider />
             <v-tab href="#tab-file">
-              <span class="text-subtitle-1 capitalize">File Info</span>
+              <span class="text-subtitle-1 capitalize">
+                {{ $t('researchContentDetails.references.fileInfo') }}
+              </span>
             </v-tab>
             <v-tab href="#tab-references">
-              <span class="text-subtitle-1 capitalize">Data users <span v-if="outerReferences.length">({{ outerReferences.length }})</span></span>
+              <span class="text-subtitle-1 capitalize">
+                {{ $t('researchContentDetails.references.dataUsers') }}
+                <span v-if="outerReferences.length">({{ outerReferences.length }})</span>
+              </span>
             </v-tab>
 
             <v-tabs-items v-model="activeTab" class="tab-content overflow-x-hidden">
@@ -47,7 +52,9 @@
                 <div>
                   <v-row justify="space-between" align="center">
                     <v-col cols="4">
-                      <span class="text-body-2">Title:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.title') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8">
                       <router-link
@@ -71,7 +78,9 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="text-body-2">Data Type:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.dataType') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8">
                       <span>{{ getResearchContentType(researchContent.content_type).text }}</span>
@@ -84,7 +93,9 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="text-body-2">Authors:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.authors') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center" no-gutters>
@@ -106,7 +117,9 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="text-body-2">Organization:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.organization') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8">
                       <v-row no-gutters>
@@ -131,7 +144,9 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="text-body-2">Release date:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.releaseDate') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center">
@@ -150,7 +165,9 @@
                     align="center"
                   >
                     <v-col cols="4">
-                      <span class="text-body-2">Verified by:</span>
+                      <span class="text-body-2">
+                        {{ $t('researchContentDetails.references.verifiedBy') }}:
+                      </span>
                     </v-col>
                     <v-col cols="8" class="my-n1">
                       <div
@@ -214,7 +231,7 @@
                   align="center"
                 >
                   <div class="py-6">
-                    Shared material is not by anyone yet
+                    {{ $t('researchContentDetails.references.sharedMat') }}
                   </div>
                 </v-row>
               </v-tab-item>
@@ -235,7 +252,7 @@
       >
         <v-row column class="outer-references-by-org px-4">
           <div class="text-h6">
-            Usage by organization
+            {{ $t('researchContentDetails.references.usageOrg') }}
           </div>
           <div class="py-12">
             <d-chart-pie
@@ -259,7 +276,7 @@
       >
         <v-row column class="outer-references-by-content-type px-4">
           <div class="text-h6">
-            Usage by data type
+            {{ $t('researchContentDetails.references.usageType') }}
           </div>
           <div class="py-12">
             <d-chart-pie
@@ -282,7 +299,7 @@
       >
         <v-row column class="outer-references-by-discipline px-4">
           <div class="text-h6">
-            Usage by domain
+            {{ $t('researchContentDetails.references.usageDomain') }}
           </div>
           <div class="py-12">
             <d-chart-pie

@@ -30,7 +30,9 @@
           <tr v-for="(item, index) in userInfo.profile.employment" :key="`${index}-employment`">
             <td class="pl-0">
               <div class="text-body-2 py-3">
-                {{ moment(item.period.from).format('YYYY') }}{{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ' — present' }} {{ item.company }}
+                {{ moment(item.period.from).format('YYYY') }}
+                {{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ` — ${$t('userDetailRouting.detailsEmployment.present')}` }}
+                {{ item.company }}
               </div>
               <div class="">
                 {{ item.position }}

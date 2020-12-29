@@ -193,5 +193,12 @@ export default {
     reviewModel: 'Review model',
     faq: 'FAQ',
     settings: 'Settings'
+  },
+  toolbarAdmin: {
+    signOut: 'Sign Out',
+    profile: 'Profile',
+    accSettings: 'Account Settings',
+    createGrantProgram: 'Create Grant Program',
+    grantProgram: 'Grant Programs'
   }
 };

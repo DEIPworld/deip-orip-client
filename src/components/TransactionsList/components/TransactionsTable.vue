@@ -29,9 +29,13 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset)) }} to
-          {{ item.extendedDetails.party2.name ||
-            $options.filters.fullname(item.extendedDetails.party2) }}
+          {{ $t('transactionsList.transfer',
+                {
+                  asset: $$toAssetUnits($$fromAssetUnits(item.details.asset)),
+                  account: item.extendedDetails.party2.name ||
+                    $options.filters.fullname(item.extendedDetails.party2)
+                })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH === item.type"
@@ -55,8 +59,12 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ $$toAssetUnits(item.details.licencePlan.fee) }}, project:
-          {{ item.extendedDetails.research.title }}
+          {{ $t('transactionsList.licenseRequest',
+                {
+                  fee: $$toAssetUnits(item.details.licencePlan.fee),
+                  project: item.extendedDetails.research.title
+                })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST === item.type"
@@ -64,8 +72,13 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset1)) }} to
-          {{ $$toAssetUnits($$fromAssetUnits(item.details.asset2)) }}
+          {{
+            $t('transactionsList.exchangeRequest',
+               {
+                 asset1: $$toAssetUnits($$fromAssetUnits(item.details.asset1)),
+                 asset2: $$toAssetUnits($$fromAssetUnits(item.details.asset2))
+               })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.INVITE_MEMBER === item.type"
@@ -73,9 +86,12 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ item.extendedDetails.invitee | accountFullname }}
-          invited to join
-          {{ item.extendedDetails.researchGroup | accountFullname }}
+          {{
+            $t('transactionsList.inviteMember', {
+              invitee: $options.filters.accountFullname(item.extendedDetails.invitee),
+              researchGroup: $options.filters.accountFullname(item.extendedDetails.researchGroup)
+            })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER === item.type"
@@ -83,9 +99,12 @@
           :max-lines="2"
           class="mt-4"
         >
-          Remove {{ item.extendedDetails.member | accountFullname }}
-          from the
-          {{ item.extendedDetails.researchGroup | accountFullname }}
+          {{
+            $t('transactionsList.excludeMember', {
+              member: $options.filters.accountFullname(item.extendedDetails.member),
+              researchGroup: $options.filters.accountFullname(item.extendedDetails.researchGroup)
+            })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL === item.type"
@@ -93,9 +112,12 @@
           :max-lines="2"
           class="mt-4"
         >
-          {{ item.details.source.offchain.title }},
-          project:
-          {{ item.extendedDetails.research.title }}
+          {{
+            $t('transactionsList.createResearchMaterial', {
+              material: item.details.source.offchain.title,
+              project: item.extendedDetails.research.title
+            })
+          }}
         </v-clamp>
         <v-clamp
           v-if="LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE === item.type"
@@ -103,12 +125,13 @@
           :max-lines="2"
           class="mt-4"
         >
-          Min:
-          {{ $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.soft_cap)) }},
-          max:
-          {{ $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.hard_cap)) }},
-          project:
-          {{ item.extendedDetails.research.title }}
+          {{
+            $t('transactionsList.createTokenSale', {
+              min: $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.soft_cap)),
+              max: $$toAssetUnits($$fromAssetUnits(item.extendedDetails.researchTokenSale.hard_cap)),
+              project: item.extendedDetails.research.title
+            })
+          }}
         </v-clamp>
         <v-row
           v-if="!isAccountsBlockVisible(item)"
@@ -153,7 +176,7 @@
       <template #item.proposal.expiration_time="{ item }">
         <div class="white-space-nowrap mt-4">
           <div v-if="item.proposal.status === PROPOSAL_STATUS.PENDING">
-            Expires in {{ item.proposal.expiration_time | timeLeft }}
+            {{ $t('transactionsList.expiresIn') }} {{ item.proposal.expiration_time | timeLeft }}
           </div>
           <div v-else>
             {{ item.proposal.created_at | dateFormat('DD MMM YYYY, HH:mm', true) }}
@@ -174,7 +197,7 @@
             <v-icon left>
               done
             </v-icon>
-            Сonfirm
+            {{ $t('transactionsList.confirm') }}
           </v-btn>
           <v-btn
             outlined
@@ -187,7 +210,7 @@
             <v-icon left>
               clear
             </v-icon>
-            Decline
+            {{ $t('transactionsList.decline') }}licType
           </v-btn>
         </div>
       </template>
@@ -204,7 +227,7 @@
         <td class="pa-4 text--secondary text-caption">
           <div class="mb-6">
             <div v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === item.type">
-              <span class="font-weight-medium"> License type: </span>
+              <span class="font-weight-medium"> {{ $t('transactionsList.licType') }}: </span>
               {{ item.details.licencePlan.name }}
             </div>
             <div>
@@ -218,7 +241,7 @@
           </div>
           <div class="mb-6">
             <div class="mb-2 font-weight-medium">
-              Required parties
+              {{ $t('transactionsList.requiredParties') }}
             </div>
             <d-box-item
               v-for="(signer, i) in item.parties"
@@ -263,7 +286,7 @@
           </div>
           <div>
             <div class="mb-2 font-weight-medium">
-              Transaction signed by
+              {{ $t('transactionsList.signedBy') }}
             </div>
             <v-expansion-panels
               flat
@@ -311,16 +334,20 @@
                       <div class="text--secondary text-caption">
                         <div>
                           <span class="font-weight-medium">
-                            Transaction ID:
+                            {{ $t('transactionsList.transactionID') }}:
                           </span>
                           <span>{{ txInfo.trx_id || '—' }}</span>
                         </div>
                         <div>
-                          <span class="font-weight-medium"> Block: </span>
+                          <span class="font-weight-medium">
+                            {{ $t('transactionsList.block') }}:
+                          </span>
                           <span>{{ txInfo.block_num || '—' }}</span>
                         </div>
                         <div>
-                          <span class="font-weight-medium"> Timestamp: </span>
+                          <span class="font-weight-medium">
+                            {{ $t('transactionsList.timestamp') }}:
+                          </span>
                           {{ txInfo.timestamp
                             ? $options.filters.dateFormat(
                               txInfo.timestamp, 'DD MMM YYYY, HH:mm', true
@@ -342,7 +369,10 @@
             class="text-caption font-weight-bold pa-0 mt-8"
             @click="showDetails(item)"
           >
-            {{ !item.expand.length ? 'Show transactions details' : 'Hide transactions details' }}
+            {{ !item.expand.length ?
+              $t('transactionsList.showDetails')
+              : $t('transactionsList.hideDetails')
+            }}
           </v-btn>
         </td>
         <td :colspan="headers.length - 2" />
@@ -368,49 +398,6 @@
   const researchGroupService = ResearchGroupService.getInstance();
   const proposalsService = ProposalsService.getInstance();
   const expressLicensingService = ExpressLicensingService.getInstance();
-
-  const transactionTypes = {
-    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH]: {
-      icon: 'add_box',
-      text: 'Create Project'
-    },
-    [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH]: {
-      icon: 'update',
-      text: 'Project Update'
-    },
-    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: {
-      icon: 'note_add',
-      text: 'Content Upload'
-    },
-    [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: {
-      icon: 'payments',
-      text: 'Fundraising'
-    },
-    [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: {
-      icon: 'groups',
-      text: 'Team update'
-    },
-    [LOC_PROPOSAL_TYPES.INVITE_MEMBER]: {
-      icon: 'person_add',
-      text: 'Invite Member'
-    },
-    [LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER]: {
-      icon: 'person_remove',
-      text: 'Remove Member'
-    },
-    [LOC_PROPOSAL_TYPES.TRANSFER_ASSET]: {
-      icon: 'mdi-arrow-right-circle',
-      text: 'Transfer'
-    },
-    [LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST]: {
-      icon: 'work',
-      text: 'Licensing'
-    },
-    [LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST]: {
-      icon: 'swap_horizontal_circle',
-      text: 'Exchange'
-    }
-  };
 
   const chipColors = {
     [PROPOSAL_STATUS.APPROVED]: 'success',
@@ -443,17 +430,58 @@
     data() {
       return {
         expanded: [],
-        transactionTypes,
+        transactionTypes: {
+          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH]: {
+            icon: 'add_box',
+            text: this.$t('transactionsList.transactionTypes.createProject')
+          },
+          [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH]: {
+            icon: 'update',
+            text: this.$t('transactionsList.transactionTypes.projectUpdate')
+          },
+          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: {
+            icon: 'note_add',
+            text: this.$t('transactionsList.transactionTypes.contentUpload')
+          },
+          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: {
+            icon: 'payments',
+            text: this.$t('transactionsList.transactionTypes.fundraising')
+          },
+          [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: {
+            icon: 'groups',
+            text: this.$t('transactionsList.transactionTypes.teamUpdate')
+          },
+          [LOC_PROPOSAL_TYPES.INVITE_MEMBER]: {
+            icon: 'person_add',
+            text: this.$t('transactionsList.transactionTypes.inviteMember')
+          },
+          [LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER]: {
+            icon: 'person_remove',
+            text: this.$t('transactionsList.transactionTypes.removeMember')
+          },
+          [LOC_PROPOSAL_TYPES.TRANSFER_ASSET]: {
+            icon: 'mdi-arrow-right-circle',
+            text: this.$t('transactionsList.transactionTypes.transfer')
+          },
+          [LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST]: {
+            icon: 'work',
+            text: this.$t('transactionsList.transactionTypes.licensing')
+          },
+          [LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST]: {
+            icon: 'swap_horizontal_circle',
+            text: this.$t('transactionsList.transactionTypes.exchange')
+          }
+        },
         PROPOSAL_STATUS,
         LOC_PROPOSAL_TYPES,
         maxSignersCountToDisplay,
         disableButtonsId: '',
         txStatusChips: {
-          [PROPOSAL_STATUS.APPROVED]: this.$t('transactionsPage.signed'),
-          [PROPOSAL_STATUS.PENDING]: this.$t('transactionsPage.pending'),
-          [PROPOSAL_STATUS.REJECTED]: this.$t('transactionsPage.declined'),
-          [PROPOSAL_STATUS.FAILED]: this.$t('transactionsPage.failed'),
-          [PROPOSAL_STATUS.EXPIRED]: this.$t('transactionsPage.expired')
+          [PROPOSAL_STATUS.APPROVED]: this.$t('transactionsList.status.signed'),
+          [PROPOSAL_STATUS.PENDING]: this.$t('transactionsList.status.pending'),
+          [PROPOSAL_STATUS.REJECTED]: this.$t('transactionsList.status.declined'),
+          [PROPOSAL_STATUS.FAILED]: this.$t('transactionsList.status.failed'),
+          [PROPOSAL_STATUS.EXPIRED]: this.$t('transactionsList.status.expired')
         },
         txStatusChipIcons: {
           [PROPOSAL_STATUS.APPROVED]: 'check_circle',
@@ -468,25 +496,25 @@
       tableHeader() {
         const header = [
           {
-            text: 'Type',
+            text: this.$t('transactionsList.table.type'),
             value: 'type',
             align: 'left vertical-top',
             sortable: false
           },
           {
-            text: 'Target',
+            text: this.$t('transactionsList.table.target'),
             value: 'details',
             sortable: false,
             align: 'start vertical-top',
             width: '45%'
           },
           {
-            text: 'Status',
+            text: this.$t('transactionsList.table.status'),
             value: 'proposal.status',
             align: 'center vertical-top'
           },
           {
-            text: 'Expiration date',
+            text: this.$t('transactionsList.table.expirationDate'),
             value: 'proposal.expiration_time',
             align: 'center vertical-top',
             sortable: false
@@ -499,7 +527,7 @@
         ];
         if (this.haveActions) {
           header.splice(4, 0, {
-            text: 'Actions',
+            text: this.$t('transactionsList.table.actions'),
             value: 'actions',
             align: 'center vertical-top'
           });
@@ -521,12 +549,8 @@
       isActionsBlockVisible(item) {
         const { approvals, rejectors } = item.proposal;
 
-        const hasApprovals = approvals.some(([name,]) => {
-          return name == this.$currentUser.username;
-        });
-        const hasRejections = rejectors.some(([name,]) => {
-          return name == this.$currentUser.username;
-        });
+        const hasApprovals = approvals.some(([name]) => name == this.$currentUser.username);
+        const hasRejections = rejectors.some(([name]) => name == this.$currentUser.username);
 
         return !hasApprovals && !hasRejections;
       },
@@ -562,18 +586,18 @@
           keyApprovalsToAdd: [],
           keyApprovalsToRemove: [],
           extensions: []
-      })
-        .then(() => {
-          this.$emit('update-data');
-          this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
         })
-        .catch((err) => {
-          console.error(err);
-          this.$notifier.showError('Oops! Something went wrong. Please try again later');
-        })
-        .finally(() => {
-          this.disableButtonsId = '';
-        });
+          .then(() => {
+            this.$emit('update-data');
+            this.$notifier.showSuccess(this.$t('transactionsList.voteSucc'));
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError(this.$t('transactionsList.voteFail'));
+          })
+          .finally(() => {
+            this.disableButtonsId = '';
+          });
       },
 
       reject(proposal) {
@@ -582,20 +606,20 @@
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
           account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
-            ? required_approvals.some(ra => this.$currentUser.teams.some(rg => rg.account.name == ra))
-                ? required_approvals.find(ra => this.$currentUser.teams.some(rg => rg.account.name == ra))
-                : this.$currentUser.username
+            ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
+              ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
+              : this.$currentUser.username
             : this.$currentUser.username,
           authority: 2, // active auth
           extensions: []
         })
           .then(() => {
             this.$emit('update-data');
-            this.$notifier.showSuccess(this.$t('researchGroupDetails.proposalsTable.success'));
+            this.$notifier.showSuccess(this.$t('transactionsList.voteSucc'));
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Oops! Something went wrong. Please try again later');
+            this.$notifier.showError(this.$t('transactionsList.voteFail'));
           })
           .finally(() => {
             this.disableButtonsId = '';

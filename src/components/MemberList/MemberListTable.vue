@@ -91,29 +91,29 @@
       }),
       membersHeaders() {
         const columns = [{
-          text: 'Member',
+          text: this.$t('memberList.member'),
           value: 'researcher'
         }];
 
         if (this.$hasModule(this.DEIP_MODULE.APP_ECI)) {
           columns.push(...[
             {
-              text: 'Total ECI',
+              text: this.$t('memberList.eci'),
               value: 'expertiseStats.eci',
               align: 'end'
             },
             {
-              text: 'Percentile rank',
+              text: this.$t('memberList.percentile'),
               value: 'expertiseStats.percentile_rank',
               align: 'end'
             },
             {
-              text: 'Growth rate',
+              text: this.$t('memberList.growthRate'),
               value: 'expertiseStats.growth_rate',
               align: 'end'
             },
             {
-              text: 'Expertise',
+              text: this.$t('memberList.expertise'),
               value: 'expertise',
               align: 'start'
             }
@@ -122,12 +122,12 @@
 
         columns.push(...[
           {
-            text: 'Member since',
+            text: this.$t('memberList.memberSince'),
             value: 'created',
             align: 'start'
           },
           {
-            text: 'Location',
+            text: this.$t('memberList.location'),
             value: 'location',
             align: 'start'
           },

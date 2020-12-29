@@ -166,7 +166,7 @@
     <!--  TODO: need user disciplines  -->
     <d-block-widget
       v-if="$hasModule(DEIP_MODULE.APP_ECI)"
-      title="Expertise Contribution Index"
+      :title="$t('userDetailRouting.sidebar.eci')"
     >
       <eci-stats
         :account-name="userInfo.account.name"
@@ -309,9 +309,9 @@
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
             this.$store.dispatch('auth/loadGroups');
             this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
-            this.$notifier.showSuccess('"Invite has been approved successfully !"');
+            this.$notifier.showSuccess(this.$t('userDetailRouting.sidebar.inviteApprSucc'));
           }, (err) => {
-            this.$notifier.showError('An error occurred while accepting invite, please try again later');
+            this.$notifier.showError(this.$t('userDetailRouting.sidebar.inviteApprFail'));
             console.error(err);
           })
           .finally(() => {
@@ -335,9 +335,9 @@
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-            this.$notifier.showSuccess('"Invite has been rejected successfully !"');
+            this.$notifier.showSuccess(this.$t('userDetailRouting.sidebar.inviteRejSucc'));
           }, (err) => {
-            this.$notifier.showError('An error occurred while rejecting invite, please try again later');
+            this.$notifier.showError(this.$t('userDetailRouting.sidebar.inviteRejFail'));
             console.error(err);
           })
           .finally(() => {

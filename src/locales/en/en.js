@@ -8,9 +8,9 @@ import userDetailRouting from './components/userDetailRouting';
 import account from './components/account';
 import adminRouting from './components/adminRouting';
 import signUp from './components/signUp';
-import userWallet from './components/userWallet';
+import wallet from './components/wallet';
 import researchGroupDetails from './components/researchGroupDetails';
-import researchTokenSale from './components/researchTokenSale';
+import fundraising from './components/fundraising';
 import transactions from './components/transactions';
 import researchDetails from './components/researchDetails';
 import createResearch from './components/createResearch';
@@ -23,6 +23,11 @@ import contents from './components/contents';
 import researchContentDetails from './components/researchContentDetails';
 import assets from './components/assets';
 import notifier from './components/notifier';
+import votingForBlockProducers from './components/votingForBlockProducers';
+import transactionsList from './components/transactionsList';
+import reviewSetup from './components/reviewSetup';
+import memberList from './components/memberList';
+import licensing from './components/licensing';
 
 export default {
   $vuetify: en,
@@ -84,13 +89,6 @@ export default {
     afterCreatingAcc: `After creating an account/log in you can add new ${project(false, true)} or enjoy shared materials`,
     signIn: 'Sign in'
   },
-  transactionsPage: {
-    signed: 'Signed',
-    pending: 'Pending',
-    declined: 'Declined',
-    failed: 'Failed',
-    expired: 'Expired'
-  },
   reviews: {
     reviews: 'Reviews',
     seeReview: 'See review',
@@ -110,13 +108,14 @@ export default {
     notSuppOwnRev: 'It\'s not allowed to support own review',
     needNotMembers: `To add review you need to have no relations to this ${project()} or team that leads this ${project()}.`
   },
-  fundraising: {
-    neverFund: `${project(true)} has never fundraised before. `,
-    please: 'Please',
-    issueTokens: `issue ${project(false, true)} tokens`,
-    toStart: 'to start Fundraising.',
-    start: 'Start new fundraise',
-    finished: 'Fundraising was finished. To know more about the results click on more details.'
+  landing: {
+    searchByTech: 'Search by technology',
+    advancedSearch: 'Advanced Search'
+  },
+  draftList: {
+    draft: 'Draft',
+    type: 'Type',
+    title: 'Title'
   },
 
   contents,
@@ -134,10 +133,15 @@ export default {
   researchDetails,
   researchEdit,
   createResearch,
-  userWallet,
+  wallet,
   transactions,
-  researchTokenSale,
+  fundraising,
   researchContentDetails,
   assets,
-  notifier
+  notifier,
+  votingForBlockProducers,
+  transactionsList,
+  reviewSetup,
+  memberList,
+  licensing
 };

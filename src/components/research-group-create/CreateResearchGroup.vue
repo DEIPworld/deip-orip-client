@@ -84,7 +84,7 @@
                       extensions: []
                     },
                     {
-                      notes: `${this.formData.name} invites you to join them`,
+                      notes: this.$t('createResearchGroup.note', { name: this.formData.name }),
                     }
                   ));
 

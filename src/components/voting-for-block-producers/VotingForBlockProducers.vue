@@ -1,17 +1,23 @@
 <template>
   <div class="fill-height pa-12 xs12">
     <div class="text-h4 bold">
-      Top witnesses
+      {{ $t('votingForBlockProducers.topWitnesses') }}
     </div>
 
     <div class="c-pt-4 half-bold">
       <div v-if="!isExpertiseEmpty">
-        {{ VOTES_MAX_COUNT - user.account.witnesses_voted_for }} votes left. You can vote for {{ VOTES_MAX_COUNT }}
-        delegates
+        {{
+          $t('votingForBlockProducers.votesLeft',
+             {
+               votes: VOTES_MAX_COUNT - user.account.witnesses_voted_for,
+               delegates:VOTES_MAX_COUNT
+             }
+          )
+        }}
       </div>
 
       <div v-else>
-        You have no Expertise Tokens to vote for delegates
+        {{ $t('votingForBlockProducers.noExpertiseTokens') }}
       </div>
     </div>
 
@@ -20,18 +26,18 @@
         class="elevation-1 witnesses-table"
         :headers="[
           { text: '', sortable: false, width: '100px' },
-          { text: 'Witness', value: 'owner' },
-          { text: 'Info', sortable: false },
-          { text: 'Votes', value: 'votes' },
-          { text: 'Missed blocks', value: 'total_missed', align: 'center' },
-          { text: 'Last block', value: 'last_confirmed_block_num', align: 'center', sortable: false }
+          { text: $t('votingForBlockProducers.table.witness'), value: 'owner' },
+          { text: $t('votingForBlockProducers.table.info'), sortable: false },
+          { text: $t('votingForBlockProducers.table.votes'), value: 'votes' },
+          { text: $t('votingForBlockProducers.table.missedBlocks'), value: 'total_missed', align: 'center' },
+          { text: $t('votingForBlockProducers.table.lastBlock'), value: 'last_confirmed_block_num', align: 'center', sortable: false }
         ]"
         :items="witnesses"
         hide-default-footer
         :options.sync="pagination"
         must-sort
       >
-        <template v-slot:item="{item}">
+        <template #item="{item}">
           <tr>
             <td class="text-right">
               {{ item.votingIndex + 1 }}

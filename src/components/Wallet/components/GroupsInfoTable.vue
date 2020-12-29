@@ -72,17 +72,17 @@
             value: 'name'
           },
           {
-            text: 'Assets',
+            text: this.$t('wallet.assets'),
             value: 'tokenizedActives',
             align: 'end'
           },
           {
-            text: 'Tokens price',
+            text: this.$t('wallet.tokensPrice'),
             value: 'account.balances',
             align: 'end'
           },
           {
-            text: 'Total Revenue',
+            text: this.$t('wallet.totalRevenue'),
             value: 'revenueHistory',
             align: 'end'
           },

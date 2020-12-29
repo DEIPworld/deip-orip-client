@@ -6,6 +6,7 @@ export default {
   start: `Start a ${project()}`,
   successDrop: 'Dropout Proposal has been created successfully!',
   errDrop: 'An error occurred while creating proposal, please try again later',
+  quorumThreshold: 'Quorum threshold',
   transferDialog: {
     transfer: 'Transfer from Group balance',
     toLabel: 'To',
@@ -87,5 +88,13 @@ export default {
     successSend: 'Invite proposal for "{username}" has been created successfully !',
     successDeny: 'You have denied join request from  "{username}" successfully !',
     errSend: 'An error occurred while approving join request, please try again later'
+  },
+  assetsBlock: {
+    title: 'Assets',
+    table: {
+      assets: 'Assets',
+      tokensPrice: 'Tokens price',
+      totalRevenue: 'Total Revenue'
+    }
   }
 };

@@ -187,7 +187,7 @@
           this.coverLetter,
           this.publications.map((item) => item.value)
         ).then((claim) => {
-          this.$notifier.showSuccess('You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens');
+          this.$notifier.showSuccess(this.$t('userDetailRouting.claimExpertiseDialog.postedSucc'));
 
           setTimeout(() => {
             this.$emit('close');

@@ -1,5 +1,5 @@
 <template>
-  <d-block title="Assets">
+  <d-block :title="$t('researchGroupDetails.assetsBlock.title')">
     <div>
       <v-data-table
         v-custom="'hover-row'"
@@ -78,17 +78,17 @@
             value: 'name'
           },
           {
-            text: 'Assets',
+            text: this.$t('researchGroupDetails.assetsBlock.table.assets'),
             value: 'tokenizedActives',
             align: 'end'
           },
           {
-            text: 'Tokens price',
+            text: this.$t('researchGroupDetails.assetsBlock.table.tokensPrice'),
             value: 'account.balances',
             align: 'end'
           },
           {
-            text: 'Total Revenue',
+            text: this.$t('researchGroupDetails.assetsBlock.table.totalRevenue'),
             value: 'revenueHistory',
             align: 'end'
           },

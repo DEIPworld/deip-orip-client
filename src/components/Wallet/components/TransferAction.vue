@@ -13,7 +13,7 @@
       <v-icon left>
         mdi-bank-transfer
       </v-icon>
-      Transfer
+      {{ $t('wallet.transferAction.transfer') }}
     </v-btn>
     <v-btn
       outlined
@@ -26,7 +26,7 @@
       <v-icon left>
         payments
       </v-icon>
-      Exchange
+      {{ $t('wallet.transferAction.exchange') }}
     </v-btn>
     <vex-dialog
       v-model="dialog.isOpened"
@@ -36,9 +36,11 @@
       :title="dialog.title"
       max-width="570px"
       :button-true-text="
-        dialog.exchange ? 'Exchange' : $t('userWallet.sendResearchTokensDialog.submitBtn')
+        dialog.exchange ?
+          $t('wallet.transferAction.exchange')
+          : $t('wallet.transferAction.transfer')
       "
-      :button-false-text="$t('userWallet.cancel')"
+      :button-false-text="$t('wallet.cancel')"
       @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
     >
       <v-form
@@ -47,7 +49,9 @@
       >
         <v-select
           v-model="dialog.form.fromAccount"
-          :label="dialog.exchange ? 'From asset' : 'Asset'"
+          :label="dialog.exchange ?
+            $t('wallet.transferAction.fromAsset')
+            : $t('wallet.transferAction.asset')"
           :items="[...balances, ...accountData.balances]"
           outlined
           return-object
@@ -67,7 +71,7 @@
                   $$toAssetUnits(item.amount, true, {
                     symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
                   })
-                }} Available
+                }} {{ $t('wallet.transferAction.available') }}
               </div>
             </div>
           </template>
@@ -88,14 +92,14 @@
         </v-select>
         <v-text-field
           v-model="dialog.form.fromAmount"
-          label="Amount"
+          :label="$t('wallet.transferAction.amount')"
           :rules="dialog.form.rules.amount"
           outlined
         />
         <template v-if="dialog.exchange">
           <v-select
             v-model="dialog.form.toAccount"
-            label="To asset"
+            :label="$t('wallet.transferAction.toAsset')"
             :items="exchangeToAccounts"
             outlined
             return-object
@@ -108,7 +112,7 @@
           />
           <v-text-field
             v-model="dialog.form.toAmount"
-            label="Amount"
+            :label="$t('wallet.transferAction.amount')"
             :rules="dialog.form.rules.amount"
             outlined
           />
@@ -122,7 +126,9 @@
           :menu-props="{
             maxWidth: 520
           }"
-          :label="dialog.exchange ? 'Exchange recipient' : 'Recipient'"
+          :label="dialog.exchange ?
+            $t('wallet.transferAction.exchangeRecipient')
+            : $t('wallet.transferAction.recipient')"
           item-text="fullName"
           outlined
           return-object
@@ -175,7 +181,7 @@
         <d-date-time-input
           v-if="dialog.exchange"
           v-model="dialog.form.date"
-          label="Request expiration date"
+          :label="$t('wallet.transferAction.reqExpDate')"
           class="mb-4"
           only-future
         />
@@ -234,11 +240,11 @@
       const rules = {
         username: (value) => {
           if (!value) {
-            return 'Receiver username is required';
+            return this.$t('wallet.transferAction.receiverRequired');
           }
 
           if (value === this.$currentUser.username) {
-            return 'Username shouldn\'t be yours';
+            return this.$t('wallet.transferAction.otherName');
           }
 
           return true;
@@ -263,8 +269,8 @@
               username: [rules.username],
               amount: [
                 (value) => {
-                  if (isNaN(value)) return 'Should be valid float number';
-                  if (!value || value < 0) return 'Should be valid positive float number';
+                  if (isNaN(value)) return this.$t('wallet.transferAction.flNumber');
+                  if (!value || value < 0) return this.$t('wallet.transferAction.posFlNumber');
 
                   return true;
                 }
@@ -352,10 +358,10 @@
         this.dialog.exchange = exchange;
         this.dialog.isOpened = true;
         if (exchange) {
-          this.dialog.title = 'Exchnage asset';
+          this.dialog.title = this.$t('wallet.transferAction.exchnageAsset');
           this.dialog.form.toAmount = '';
         } else {
-          this.dialog.title = 'Transfer asset';
+          this.dialog.title = this.$t('wallet.transferAction.transferAsset');
         }
 
         if (this.$refs.sendResearchTokensForm) this.$refs.sendResearchTokensForm.reset();
@@ -393,10 +399,10 @@
             }
           )
             .then(() => {
-              this.$notifier.showSuccess('Tokens successfully sent');
+              this.$notifier.showSuccess(this.$t('wallet.transferAction.succTokSent'));
             })
             .catch((err) => {
-              this.$notifier.showError('Transaction failed');
+              this.$notifier.showError(this.$t('wallet.transFail'));
               console.error(err);
             })
             .finally(() => {
@@ -444,10 +450,10 @@
             extensions: []
           })
             .then(() => {
-              this.$notifier.showSuccess('Exchange successfully sent');
+              this.$notifier.showSuccess(this.$t('wallet.transferAction.succExcSent'));
             })
             .catch((err) => {
-              this.$notifier.showError('Transaction failed');
+              this.$notifier.showError(this.$t('wallet.transFail'));
               console.error(err);
             })
             .finally(() => {

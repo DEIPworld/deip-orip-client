@@ -8,19 +8,19 @@
         {{ pageTitle }}
       </div>
       <content-block
-        :title="$t('userWallet.balance')"
+        :title="$t('wallet.balance')"
       >
         <currencies-info-table :all-accounts="allAccounts" />
       </content-block>
 
       <content-block
-        :title="$t('userWallet.portfolio')"
+        :title="$t('wallet.portfolio')"
       >
         <shares-info-table :all-accounts="allAccounts" />
       </content-block>
       <content-block
         v-if="$route.name === 'userWallet'"
-        :title="$t('userWallet.groups')"
+        :title="$t('wallet.groups')"
       >
         <groups-info-table />
       </content-block>
@@ -67,12 +67,12 @@
       }),
       pageTitle() {
         if (this.$route.name === 'userWallet') {
-          return 'My Assets';
+          return this.$t('wallet.myAssets');
         }
         if (this.$route.name === 'groupWallet') {
-          return `Assets of ${this.groupData.name}`;
+          return this.$t('wallet.groupAssets', { group: this.groupData.name });
         }
-        return 'Assets';
+        return this.$t('wallet.assets');
       }
     },
 

@@ -1,7 +1,7 @@
 <template>
   <d-block v-if="$ready" ref="membersView">
     <template #title>
-      Members
+      {{ $t('memberList.members') }}
       <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
     </template>
 
@@ -16,7 +16,7 @@
 
     <v-data-iterator
       :items="members"
-      no-data-text="No Members found"
+      :no-data-text="$t('memberList.noMembFound')"
       :hide-default-footer="iteratorProps.hideDefaultFooter"
       :footer-props="iteratorProps.footerProps"
       :items-per-page="iteratorProps.itemsPerPage"

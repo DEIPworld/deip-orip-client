@@ -12,7 +12,8 @@ export default {
     addLink: 'Add a link to a publication',
     letterField: 'Provide a cover letter',
     linkField: 'Link to publication',
-    submitBtn: 'Claim Expertise Tokens'
+    submitBtn: 'Claim Expertise Tokens',
+    postedSucc: 'You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens'
   },
   detailsEducation: {
     title: 'Education',
@@ -20,7 +21,8 @@ export default {
     deleteBtn: 'Confirm',
     sureDelete: 'Are you sure you want to delete this entry ?',
     success: '"{educationalInstitution}" Institute has been deleted successfully!',
-    err: 'An error occurred while deleting "{educationalInstitution}" details, please try again later'
+    err: 'An error occurred while deleting "{educationalInstitution}" details, please try again later',
+    present: 'present'
   },
   detailsEmployment: {
     title: 'Employment',
@@ -28,7 +30,8 @@ export default {
     deleteBtn: 'Confirm',
     sureDelete: 'Are you sure you want to delete this entry ?',
     success: '"{company}" employment has been deleted successfully!',
-    err: 'An error occurred while deleting "{company}" employment details, please try again later'
+    err: 'An error occurred while deleting "{company}" employment details, please try again later',
+    present: 'present'
   },
   profileInfo: {
     location: 'Add location info',
@@ -45,7 +48,12 @@ export default {
     acceptBtn: 'Accept',
     rejectBtn: 'Reject',
     reviewReq: 'Reviews',
-    reqYouReview: `requests your review for "{title}" ${project()}`
+    reqYouReview: `requests your review for "{title}" ${project()}`,
+    eci: 'Expertise Contribution Index',
+    inviteApprSucc: 'Invite has been approved successfully !',
+    inviteRejSucc: 'Invite has been rejected successfully !',
+    inviteApprFail: 'An error occurred while accepting invite, please try again later',
+    inviteRejFail: 'An error occurred while rejecting invite, please try again later'
   },
   educationDialog: {
     title: 'Education',
@@ -72,7 +80,9 @@ export default {
       descriptionField: 'Description'
     },
     cancel: 'Cancel',
-    submitBtn: 'Save'
+    submitBtn: 'Save',
+    instSaveSucc: '"{institution}" Institute has been saved successfully!',
+    instSaveFail: 'An error occurred while saving "{institution}" details, please try again later'
   },
   employmentDialog: {
     title: 'Employment',
@@ -100,6 +110,8 @@ export default {
       descriptionField: 'Description'
     },
     cancel: 'Cancel',
-    submitBtn: 'Save'
+    submitBtn: 'Save',
+    emplSaveSucc: '"{company}" employment has been saved successfully!',
+    emplSaveFail: 'An error occurred while saving "{company}" details, please try again later'
   }
 };

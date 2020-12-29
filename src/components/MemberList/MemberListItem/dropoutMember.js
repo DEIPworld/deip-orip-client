@@ -36,15 +36,15 @@ export const dropoutMember = {
           extensions: []
         },
         {
-          notes: ""
+          notes: ''
         }
       )
         .then(() => {
-          this.$notifier.showSuccess('Dropout Proposal has been created successfully!');
+          this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
           this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
         })
         .catch((err) => {
-          this.$notifier.showError('An error occurred while creating proposal, please try again later');
+          this.$notifier.showError(this.$t('memberList.dropPropFail'));
           console.error(err);
         })
         .finally(() => {
@@ -56,9 +56,9 @@ export const dropoutMember = {
     showConfirmAction(member) {
       this.actionDialog = {
         isOpen: true,
-        title: 'You’re about to exclude',
-        description: `${member.profile.firstName} ${member.profile.lastName} from ${this.group.name} Research Group`,
-        actionLabel: 'Confirm',
+        title: this.$t('memberList.excDialog.title'),
+        description: this.$t('memberList.excDialog.text', { firstName: member.profile.firstName, lastName: member.profile.lastName, team: this.group.name }),
+        actionLabel: this.$t('memberList.excDialog.confirm'),
         loading: false,
         action: () => this.dropoutMember(member)
       };

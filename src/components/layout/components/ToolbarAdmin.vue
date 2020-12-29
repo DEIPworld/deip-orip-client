@@ -42,7 +42,7 @@
             dense
           >
             <v-list-item @click="signOut()">
-              Sign Out
+              {{ $t('adminRouting.toolbarAdmin.signOut') }}
             </v-list-item>
           </v-list>
 
@@ -51,21 +51,21 @@
             dense
           >
             <v-list-item :to="{ name: 'UserDetails', params: { account_name: $currentUser.username } }">
-              Profile
+              {{ $t('adminRouting.toolbarAdmin.profile') }}
             </v-list-item>
             <v-divider />
             <v-list-item :to="{ name: 'AccountSettings' }">
-              Account Settings
+              {{ $t('adminRouting.toolbarAdmin.accSettings') }}
             </v-list-item>
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
-              Create Grant Program
+              {{ $t('adminRouting.toolbarAdmin.createGrantProgram') }}
             </v-list-item>
             <v-list-item :to="{ name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }">
-              Grant Programs
+              {{ $t('adminRouting.toolbarAdmin.grantProgram') }}
             </v-list-item>
             <v-divider />
             <v-list-item @click="signOut()">
-              Sign Out
+              {{ $t('adminRouting.toolbarAdmin.signOut') }}
             </v-list-item>
           </v-list>
         </v-menu>

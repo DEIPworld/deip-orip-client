@@ -29,7 +29,9 @@
           <tr v-for="(item, index) in userInfo.profile.education" :key="`${index}-education`">
             <td class="pl-0">
               <div class="text-body-2 py-3">
-                {{ moment(item.period.from).format('YYYY') }}{{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ' — present' }} {{ item.educationalInstitution }}
+                {{ moment(item.period.from).format('YYYY') }}
+                {{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ` — ${$t('userDetailRouting.detailsEducation.present')}` }}
+                {{ item.educationalInstitution }}
               </div>
               <div class="">
                 {{ item.degree }}

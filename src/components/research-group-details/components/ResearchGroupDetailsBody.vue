@@ -50,13 +50,11 @@
     >
       <transition v-if="highlightProposalsSection" name="fade">
         <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
-          <!-- <research-group-details-proposals :key="'group-proposals'" /> -->
           <transactions-list :key="'group-proposals'" :account="group.external_id" />
         </div>
       </transition>
       <div v-else>
         <div class="pt-2 pb-6">
-          <!-- <research-group-details-proposals :key="'group-proposals'" /> -->
           <transactions-list :key="'group-proposals'" :account="group.external_id" />
         </div>
       </div>

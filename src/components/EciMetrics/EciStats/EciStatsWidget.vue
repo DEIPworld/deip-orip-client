@@ -40,20 +40,21 @@
                   {{ item.discipline.name }}
                 </v-col>
                 <v-col cols="auto">
-                  <d-simple-tooltip tooltip="Expertise Contribution Index">
-                    ECI {{ (item.eci || item.value ) | checkVal | commaNumber }}
+                  <d-simple-tooltip :tooltip="$t('defaultNaming.eci.eci')">
+                    {{ $t('defaultNaming.eci.eciShort') }}
+                    {{ (item.eci || item.value ) | checkVal | commaNumber }}
                   </d-simple-tooltip>
                 </v-col>
               </v-row>
               <v-row no-gutters class="text-overline">
                 <v-col>
-                  <d-simple-tooltip tooltip="Percentile rank">
+                  <d-simple-tooltip :tooltip="$t('defaultNaming.eci.percentileRank')">
                     {{ item.percentile_rank | checkVal }}
                   </d-simple-tooltip>
                 </v-col>
 
                 <v-col cols="auto" :class="item.growth_rate | numDirClass">
-                  <d-simple-tooltip tooltip="Growth rate">
+                  <d-simple-tooltip :tooltip="$t('defaultNaming.eci.growthRate')">
                     {{ item.growth_rate | numDir | checkVal }}
                   </d-simple-tooltip>
                 </v-col>
@@ -98,15 +99,15 @@
       stats() {
         return [
           {
-            label: 'Total ECI',
+            label: this.$t('defaultNaming.eci.totalECI'),
             value: this.$options.filters.checkVal(this.$options.filters.commaNumber(this.data.expertiseStats.eci))
           },
           {
-            label: 'Percentile rank',
+            label: this.$t('defaultNaming.eci.percentileRank'),
             value: this.$options.filters.checkVal(this.data.expertiseStats.percentile_rank)
           },
           {
-            label: 'Growth rate',
+            label: this.$t('defaultNaming.eci.growthRate'),
             value: this.$options.filters.checkVal(this.$options.filters.numDir(this.data.expertiseStats.growth_rate)),
             classList: this.$options.filters.numDirClass(this.data.expertiseStats.growth_rate)
           }

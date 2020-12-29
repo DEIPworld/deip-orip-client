@@ -53,13 +53,13 @@
               v-if="isDepositAvailable(item.assetSymbol)"
               @click="openDepositDialog(item)"
             >
-              <v-list-item-title>{{ $t('userWallet.deposit') }}</v-list-item-title>
+              <v-list-item-title>{{ $t('wallet.deposit') }}</v-list-item-title>
             </v-list-item>
             <v-list-item
               v-if="isWithdrawAvailable(item.assetSymbol)"
               @click="openWithdrawDialog(item)"
             >
-              <v-list-item-title>{{ $t('userWallet.withdraw') }}</v-list-item-title>
+              <v-list-item-title>{{ $t('wallet.withdraw') }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -68,11 +68,11 @@
     <vex-dialog
       v-model="depositDialog.isOpened"
       max-width="800px"
-      :title="$t('userWallet.depositDialog.depositFunds')"
+      :title="$t('wallet.depositDialog.depositFunds')"
       :disabled="depositDialog.isDepositing || isDepositingDisabled"
       :loading="depositDialog.isDepositing"
-      :button-true-text="$t('userWallet.depositDialog.depositFunds')"
-      :button-false-text="$t('userWallet.cancel')"
+      :button-true-text="$t('wallet.depositDialog.depositFunds')"
+      :button-false-text="$t('wallet.cancel')"
       @click:confirm="deposit()"
     >
       <v-row>
@@ -87,18 +87,18 @@
           <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
             <div>
               <label class="text-body-2">
-                {{ $t('userWallet.depositDialog.amountField.label') }}
+                {{ $t('wallet.depositDialog.amountField.label') }}
               </label>
               <v-text-field
                 v-model="depositDialog.amount"
                 outlined
-                :placehoder="$t('userWallet.depositDialog.amountField.placeholder')"
+                :placehoder="$t('wallet.depositDialog.amountField.placeholder')"
               />
             </div>
             <div class="my-4">
               <v-checkbox
                 v-model="depositDialog.termsConfirmed"
-                :label="$t('userWallet.depositDialog.confirmQualifiedField')"
+                :label="$t('wallet.depositDialog.confirmQualifiedField')"
                 hide-details
               />
             </div>
@@ -109,17 +109,17 @@
     <vex-dialog
       v-model="withdrawDialog.isOpened"
       max-width="800px"
-      :title="$t('userWallet.withdrawDialog.withdrawFunds')"
+      :title="$t('wallet.withdrawDialog.withdrawFunds')"
       :disabled="withdrawDialog.isWithdrawing || isWithdrawDisabled"
       :loading="withdrawDialog.isWithdrawing"
-      :button-true-text="$t('userWallet.withdrawDialog.withdrawFunds')"
-      :button-false-text="$t('userWallet.cancel')"
+      :button-true-text="$t('wallet.withdrawDialog.withdrawFunds')"
+      :button-false-text="$t('wallet.cancel')"
       @click:confirm="withdraw()"
     >
       <v-row>
         <v-col cols="6" class="pr-12" style="border-right: 2px solid #E0E0E0">
           <div class="mx-4 mt-2">
-            <label class="text-body-2">{{ $t('userWallet.withdrawDialog.nameField') }}</label>
+            <label class="text-body-2">{{ $t('wallet.withdrawDialog.nameField') }}</label>
             <v-text-field
               v-model="withdrawDialog.name"
               outlined
@@ -127,13 +127,13 @@
           </div>
           <div class="mx-4 mt-4">
             <label class="text-body-2">
-              {{ $t('userWallet.withdrawDialog.idanField.label') }}
+              {{ $t('wallet.withdrawDialog.idanField.label') }}
               <v-tooltip right>
                 <template #activator="{ on }">
                   <v-icon small v-on="on">help</v-icon>
                 </template>
 
-                <span>{{ $t('userWallet.withdrawDialog.idanField.tooltip') }}</span>
+                <span>{{ $t('wallet.withdrawDialog.idanField.tooltip') }}</span>
               </v-tooltip>
             </label>
             <v-text-field
@@ -144,13 +144,13 @@
           </div>
           <div class="mx-4 mt-4">
             <label class="text-body-2">
-              {{ $t('userWallet.withdrawDialog.referenceField.label') }}
+              {{ $t('wallet.withdrawDialog.referenceField.label') }}
               <v-tooltip right>
                 <template #activator="{ on }">
                   <v-icon small v-on="on">help</v-icon>
                 </template>
 
-                <span>{{ $t('userWallet.withdrawDialog.referenceField.tooltip') }}</span>
+                <span>{{ $t('wallet.withdrawDialog.referenceField.tooltip') }}</span>
               </v-tooltip>
             </label>
             <v-text-field
@@ -160,7 +160,7 @@
           </div>
           <div class="mx-4 mt-4">
             <label class="text-body-2">
-              {{ $t('userWallet.withdrawDialog.beneficiaryField') }}
+              {{ $t('wallet.withdrawDialog.beneficiaryField') }}
             </label>
             <v-textarea
               v-model="withdrawDialog.messageText"
@@ -173,7 +173,7 @@
         <v-col cols="6" class="pl-4">
           <div class="display-flex flex-column justify-end pl-12 pr-4 fill-height">
             <div>
-              <label class="text-body-2">{{ $t('userWallet.withdrawDialog.amountField') }}</label>
+              <label class="text-body-2">{{ $t('wallet.withdrawDialog.amountField') }}</label>
               <v-text-field
                 v-model="withdrawDialog.amount"
                 outlined
@@ -182,7 +182,7 @@
             <div class="my-4">
               <v-checkbox
                 v-model="withdrawDialog.termsConfirmed"
-                :label="$t('userWallet.withdrawDialog.confirmQualifiedField')"
+                :label="$t('wallet.withdrawDialog.confirmQualifiedField')"
                 hide-details
               />
             </div>
@@ -224,28 +224,28 @@
       return {
         translations: {
           name: {
-            label: this.$t('userWallet.translations.name.label'),
-            placeholder: this.$t('userWallet.translations.name.placeholder')
+            label: this.$t('wallet.translations.name.label'),
+            placeholder: this.$t('wallet.translations.name.placeholder')
           },
           card: {
-            label: this.$t('userWallet.translations.card.label'),
-            placeholder: this.$t('userWallet.translations.card.placeholder')
+            label: this.$t('wallet.translations.card.label'),
+            placeholder: this.$t('wallet.translations.card.placeholder')
           },
           expiration: {
-            label: this.$t('userWallet.translations.expiration.label')
+            label: this.$t('wallet.translations.expiration.label')
           },
           security: {
-            label: this.$t('userWallet.translations.security.label'),
-            placeholder: this.$t('userWallet.translations.security.placeholder')
+            label: this.$t('wallet.translations.security.label'),
+            placeholder: this.$t('wallet.translations.security.placeholder')
           }
         },
         tableHeaders: [
           {
-            text: 'Asset',
+            text: this.$t('wallet.asset'),
             value: 'amountAsset'
           },
           {
-            text: 'Amount',
+            text: this.$t('wallet.amount'),
             value: 'amountValue'
           },
           {
@@ -418,16 +418,16 @@
             from: this.depositDialog.owner,
             to: 'kim',
             amount: this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
-            memo: `withdraw for ${this.depositDialog.owner}`,
+            memo: this.$t('wallet.depositDialog.withdrawFor', { owner: this.depositDialog.owner }),
             extensions: []
           }
         )
           .then(() => {
-            this.$notifier.showSuccess('Funds have been withdrawn successfully!');
+            this.$notifier.showSuccess(this.$t('wallet.depositDialog.withdrawnSucc'));
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction failed');
+            this.$notifier.showError(this.$t('wallet.transFail'));
           })
           .finally(() => {
             this.withdrawDialog.isWithdrawing = false;
@@ -444,16 +444,16 @@
             from: 'kim',
             to: this.depositDialog.owner,
             amount: this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
-            memo: `deposit for ${this.depositDialog.owner}`,
+            memo: this.$t('wallet.depositDialog.depositFor', { owner: this.depositDialog.owner }),
             extensions: []
           }
         )
           .then(() => {
-            this.$notifier.showSuccess('Funds have been deposited successfully!');
+            this.$notifier.showSuccess(this.$t('wallet.depositDialog.depositSucc'));
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError('Transaction failed');
+            this.$notifier.showError(this.$t('wallet.transFail'));
           })
           .finally(() => {
             this.depositDialog.isDepositing = false;

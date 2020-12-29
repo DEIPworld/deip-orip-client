@@ -10,7 +10,7 @@
           class="mx-auto"
         >
           <div class="text-h5">
-            Search by technology
+            {{ $t('landing.searchByTech') }}
           </div>
           <v-form @submit.prevent="goToSearch">
             <v-text-field
@@ -29,7 +29,7 @@
                 color="primary"
                 :to="{name: 'explore'}"
               >
-                Advanced Search
+                {{ $t('landing.advancedSearch') }}
               </v-btn>
             </div>
           </v-form>
