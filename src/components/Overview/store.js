@@ -8,7 +8,8 @@ const criteriaTypes = {
   3: 'Excelence',
   4: 'Rationality',
   5: 'Technical Quality',
-  6: 'Replication'
+  6: 'Replication',
+  7: 'Commercialization'
 };
 
 const state = {
