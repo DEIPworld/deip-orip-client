@@ -110,13 +110,7 @@
         })
         .then((accounts) => {
           this.allAccounts = accounts.flat().map((a) => {
-            if (a.account.is_research_group) {
-              return { ...a, fullName: a.name };
-            }
-            if (a.profile) {
-              return { ...a, fullName: this.$options.filters.fullname(a) };
-            }
-            return {};
+            return { ...a, fullName: this.$options.filters.accountFullname(a) }
           });
         });
     }
