@@ -44,6 +44,7 @@
 
   import { assetsChore } from '@/mixins/chores';
   import { objectedModel } from '@/mixins/extendModel';
+  import { defaultAssetId } from '@/variables';
 
   // in place validation while wee under v4
 
@@ -87,9 +88,10 @@
       }
     },
     data() {
+      const defaultAsset = this.$store.getters['Assets/one'](defaultAssetId);
       const model = {
         amount: undefined,
-        assetId: this.$env.ASSET_UNIT
+        assetId: defaultAsset ? defaultAsset.stringSymbol : this.$env.ASSET_UNIT
       };
 
       return {
