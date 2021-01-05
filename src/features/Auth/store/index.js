@@ -17,7 +17,7 @@ const GETTERS = {
 
       return {
         username: state.currentUsername,
-        pubKey: account.memo_key,
+        pubKey: account.active.key_auths[0][0],
         privKey: accessService.getOwnerWif(),
         account,
         profile,
