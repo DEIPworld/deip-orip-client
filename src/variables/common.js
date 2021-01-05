@@ -20,3 +20,5 @@ export const LAYOUT_TYPES = createEnum({
 
 export const maxTitleLength = 255;
 export const maxDescriptionLength = 2048;
+
+export const defaultAssetId = 'EUR';
