@@ -375,8 +375,8 @@
       openDepositDialog(item) {
         this.depositDialog.owner = item.owner;
         this.depositDialog.amount = 0;
-        this.depositDialog.precision = this.$$assetInfo(item.asset_symbol).precision;
-        this.depositDialog.selectedCurrency = item.asset_symbol;
+        this.depositDialog.precision = this.$$assetInfo(item.assetSymbol).precision;
+        this.depositDialog.selectedCurrency = item.assetSymbol;
         this.depositDialog.cardData.name = '';
         this.depositDialog.cardData.cardNumber = '';
         this.depositDialog.cardData.expiration = '';
@@ -385,13 +385,13 @@
         this.depositDialog.isOpened = true;
       },
       isDepositAvailable(assetId) {
-        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].string_symbol : '';
+        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].stringSymbol : '';
         return this.$hasModule(
           this.DEIP_MODULE.APP_ASSETS_DEPOSIT
         ) && fiatAssetBackedTokens.some((s) => s == symbol);
       },
       isWithdrawAvailable(assetId) {
-        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].string_symbol : '';
+        const symbol = this.assetsInfo[assetId] ? this.assetsInfo[assetId].stringSymbol : '';
         return this.$hasModule(
           this.DEIP_MODULE.APP_ASSETS_WITHDRAWAL
         ) && fiatAssetBackedTokens.some((s) => s == symbol);
@@ -400,8 +400,8 @@
         this.depositDialog.owner = item.owner;
         this.withdrawDialog.amount = 0;
         this.withdrawDialog.stringAmount = item.amount;
-        this.withdrawDialog.precision = this.$$assetInfo(item.asset_symbol).precision;
-        this.withdrawDialog.selectedCurrency = item.asset_symbol;
+        this.withdrawDialog.precision = this.$$assetInfo(item.assetSymbol).precision;
+        this.withdrawDialog.selectedCurrency = item.assetSymbol;
         this.withdrawDialog.name = '';
         this.withdrawDialog.iban = '';
         this.withdrawDialog.refNum = '';

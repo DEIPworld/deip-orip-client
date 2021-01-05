@@ -20,16 +20,18 @@
 
       <div v-if="disabled" class="text-body-2">
         {{ $t('fundraising.neverFund') }}
-        {{ $t('fundraising.please') }}
-        <router-link
-          :to="{
-            name: 'project.asset.create',
-            params: $route.params
-          }"
-        >
-          {{ $t('fundraising.issueTokens') }}
-        </router-link>
-        {{ $t('fundraising.toStart') }}
+        <template v-if="isResearchMember">
+          {{ $t('fundraising.please') }}
+          <router-link
+            :to="{
+              name: 'project.asset.create',
+              params: $route.params
+            }"
+          >
+            {{ $t('fundraising.issueTokens') }}
+          </router-link>
+          {{ $t('fundraising.toStart') }}
+        </template>
       </div>
 
       <template v-else>

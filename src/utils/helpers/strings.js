@@ -8,12 +8,12 @@ export const padStart = (
   str,
   length,
   char = '0'
-) => char.repeat(Math.max(0, length - str.length)) + str;
+) => char.repeat(Math.max(0, length - str.toString().length)) + str;
 
 export const padEnd = (
   str,
   length,
   char = '0'
-) => str + char.repeat(Math.max(0, length - str.length));
+) => str + char.repeat(Math.max(0, length - str.toString().length));
 
 
