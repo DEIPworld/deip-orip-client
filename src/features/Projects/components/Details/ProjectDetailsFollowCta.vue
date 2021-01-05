@@ -53,7 +53,7 @@
 
         return this.bookmarkService()
           .then(() => {
-            this.$store.dispatch('Auth/getUserBookmarks');
+            this.$store.dispatch('Bookmarks/fetch', this.$currentUser.username);
           })
           .catch((err) => {
             console.error(err);
