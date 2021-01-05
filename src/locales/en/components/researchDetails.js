@@ -3,8 +3,8 @@ import { project } from './basicWords';
 export default {
   created: 'Created',
   edit: 'Edit',
-  follow: 'Follow',
-  unfollow: 'Unfollow',
+  addBookmark: 'Add bookmark',
+  removeBookmark: 'Remove bookmark',
   editor: 'Use editor',
   investors: 'Investors:',
   totalInv: 'Total investments',

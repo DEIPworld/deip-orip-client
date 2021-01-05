@@ -7,11 +7,10 @@
     :disabled="loading"
     @click="toggleBookmark()"
   >
-    {{bookmarkId}}
     <v-icon left>
       {{ bookmarkId ? 'mdi-bookmark-minus' : 'mdi-bookmark-plus-outline' }}
     </v-icon>
-    {{ bookmarkId ? 'Remove bookmark' : 'Add bookmark' }}
+    {{ bookmarkId ? $t('researchDetails.removeBookmark') : $t('researchDetails.addBookmark') }}
   </v-btn>
 </template>
 

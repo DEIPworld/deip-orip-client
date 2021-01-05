@@ -7,11 +7,9 @@
       <v-spacer v-if="isOwner" />
       <div v-if="isOwner">
         <v-btn
-          class=""
           outlined
           small
-          depressed
-          color="primary lighten-1"
+          color="primary"
           :to="{
             name: 'account.education'
           }"
