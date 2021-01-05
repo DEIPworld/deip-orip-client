@@ -9,7 +9,7 @@
       :hide-default-footer="balances.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
-      item-key="tokenized_research"
+      item-key="tokenizedResearch"
       disable-sort
       show-expand
       :expanded.sync="expanded"
@@ -145,7 +145,7 @@
         const token = item.research.security_tokens.find(
           (rst) => { 
             const { assetId } = this.$$fromAssetUnits(rst);
-            return assetId === item.asset_symbol;
+            return assetId === item.assetSymbol;
           }
         );
         const { amount: tokenValue } = this.$$fromAssetUnits(token);
@@ -166,7 +166,7 @@
         const securityToken = item.research.security_tokens.find(
           (securityToken) => {
             const { assetId } = this.$$fromAssetUnits(securityToken);
-            return item.asset_symbol === assetId;
+            return item.assetSymbol === assetId;
           }
         );
         const { amount: totalTokenAmount } = this.$$fromAssetUnits(securityToken);

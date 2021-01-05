@@ -33,6 +33,7 @@
       :disabled="dialog.isSending"
       :true-disabled="isDisabled"
       :loading="dialog.isSending"
+      :button-true-props="{ text: true, color: 'primary', loading: dialog.isSending }"
       :title="dialog.title"
       max-width="570px"
       :button-true-text="
@@ -56,7 +57,7 @@
           outlined
           return-object
           item-text="amount"
-          item-value="asset_symbol"
+          item-value="assetSymbol"
           :menu-props="{
             maxWidth: 525
           }"
@@ -64,7 +65,7 @@
           <template #selection="{ item }">
             <div class="d-flex justify-space-between w-100 align-center">
               <div>
-                {{ item.asset_symbol }}
+                {{ item.assetSymbol }}
               </div>
               <div class="text--secondary">
                 {{
@@ -78,7 +79,7 @@
           <template #item="{ item }">
             <div class="d-flex justify-space-between w-100">
               <div>
-                {{ item.asset_symbol }}
+                {{ item.assetSymbol }}
               </div>
               <div>
                 {{
@@ -286,7 +287,8 @@
     computed: {
       ...mapGetters({
         balances: 'Wallet/balances',
-        groupData: 'Wallet/groupData'
+        groupData: 'Wallet/groupData',
+        allAssets: 'auth/allAssets'
       }),
       accountData() {
         if (this.$route.name === 'userWallet') {
@@ -300,7 +302,7 @@
       exchangeToAccounts() {
         if (this.dialog.exchange) {
           return this.allAssets.filter(
-            (item) => item.stringSymbol !== this.dialog.form.fromAccount.asset_symbol
+            (item) => item.stringSymbol !== this.dialog.form.fromAccount.assetSymbol
               && item.stringSymbol !== this.$env.ASSET_UNIT
           );
         }
@@ -374,7 +376,7 @@
 
           let fromAmount = '0';
 
-          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.assetSymbol);
 
           fromAmount = this.$$toAssetUnits(
             this.dialog.form.fromAmount,
@@ -425,7 +427,7 @@
           let fromAmount = '0';
           let toAmount = '0';
 
-          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.asset_symbol);
+          const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.assetSymbol);
           const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.stringSymbol);
           fromAmount = this.$$toAssetUnits(
             this.dialog.form.fromAmount,

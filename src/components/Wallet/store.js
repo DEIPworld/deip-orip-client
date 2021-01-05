@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import deipRpc from '@deip/rpc-client';
 import moment from 'moment';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
 import { AssetsService } from '@deip/assets-service';
 import { ResearchService } from '@deip/research-service';
@@ -51,22 +52,24 @@ const actions = {
     let balances = [];
     return assetsService.getAccountAssetsBalancesByOwner(account)
       .then((assetsBalances) => {
-        const securityTokens = assetsBalances.filter((b) => !!b.tokenized_research);
+        const securityTokens = assetsBalances
+          .map((b) => camelizeObjectKeys(b))
+          .filter((b) => !!b.tokenizedResearch);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
-          (b) => researchService.getResearch(b.tokenized_research)
+          (b) => researchService.getResearch(b.tokenizedResearch)
         ));
       })
       .then((researches) => {
         balances = balances.map((b) => ({
           ...b,
-          research: researches.find((r) => r.external_id === b.tokenized_research)
+          research: researches.find((r) => r.external_id === b.tokenizedResearch)
         }));
 
         return Promise.all(
           balances.map((b) => investmentsService.getAccountRevenueHistoryByAsset(
             b.owner,
-            b.asset_symbol,
+            b.assetSymbol,
             1
           ))
         );
@@ -75,13 +78,13 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
-            (r) => r[0] && r[0].security_token.string_symbol === b.asset_symbol
+            (r) => r[0] && r[0].security_token.string_symbol === b.assetSymbol
           ) || []
         }));
 
         return Promise.all(
           balances.map((b) => investmentsService.getAssetRevenueHistory(
-            b.asset_symbol
+            b.assetSymbol
           ))
         );
       })
@@ -89,7 +92,7 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           securityTokenHistory: securityTokenHistory.find(
-            (s) => s[0] && s[0].security_token.string_symbol === b.asset_symbol
+            (s) => s[0] && s[0].security_token.string_symbol === b.assetSymbol
           ) || []
         }));
 
@@ -103,10 +106,11 @@ const actions = {
       ({ assetSymbol }) => assetsService.getAssetBySymbol(assetSymbol)
     ))
       .then((data) => {
-        const assetsInfo = data.reduce(
-          (result, item) => {
-            result[item.string_symbol || item.stringSymbol] = item; return result;
-          }, {}
+        const assetsInfo = data.map((a) => camelizeObjectKeys(a)).reduce(
+          (result, item) => ({
+            ...result,
+            [item.stringSymbol]: item
+          }), {}
         );
         commit('SET_ASSETS_INFO', assetsInfo);
       })
@@ -121,7 +125,9 @@ const actions = {
         return assetsService.getAccountAssetsBalancesByOwner(groupData.external_id);
       })
       .then((assetsBalances) => {
-        const currencies = assetsBalances.filter((b) => !b.tokenized_research);
+        const currencies = assetsBalances
+          .map((b) => camelizeObjectKeys(b))
+          .filter((b) => !b.tokenizedResearch);
         groupData.balances = currencies;
         commit('setGroupData', groupData);
         return dispatch('loadAssetsInfo', groupData);

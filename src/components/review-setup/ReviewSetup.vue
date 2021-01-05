@@ -113,11 +113,9 @@
             </v-col>
             <v-col cols="4" class="align-self-center d-flex">
               <div class="align-self-center">
-<!--                <review-assessment-squared-rating-->
-<!--                  v-model="item.value"-->
-<!--                  :readonly="false"-->
-<!--                  :value="item.value"-->
-<!--                />-->
+                <d-rating
+                  v-model="item.value"
+                />
               </div>
             </v-col>
             <v-col cols="3">
@@ -137,10 +135,11 @@
 
 <script>
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DRating from '@/components/Deipify/DRating/DRating';
 
   export default {
     name: 'ReviewSetup',
-    components: { LayoutSection },
+    components: { LayoutSection, DRating },
     data() {
       return {
         content: [
