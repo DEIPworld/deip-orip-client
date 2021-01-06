@@ -112,10 +112,10 @@ const ACTIONS = {
       .filter((b) => b.type === 'research')
       .map((b) => b.ref);
 
-    return researchService.getResearches(ids)
+    return ids.length ? researchService.getResearches(ids)
       .then((result) => {
         context.commit('storeProjectsData', result);
-      });
+      }) : [];
   },
 
   // team
