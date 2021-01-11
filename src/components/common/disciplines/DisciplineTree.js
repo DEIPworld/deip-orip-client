@@ -39,10 +39,10 @@ export default {
       path: 'medicine_and_health',
       children: {}
     },
-    aquaculture: {
-      label: 'Aquaculture',
-      id: '2519ef55e1b69f1a7e13275e3273950cce7e26a8',
-      path: 'aquaculture',
+    cybersecurity: {
+      label: 'Cybersecurity',
+      id: '4c55650601b3399bfbd9403bf8c12863dd6574ff',
+      path: 'cybersecurity',
       children: {}
     }
   }
