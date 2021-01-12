@@ -18,7 +18,7 @@
     "@deip/assets-service": "1.75.1",
     "@deip/auth-service": "1.36.0",
     "@deip/blockchain-service": "1.75.1",
-    "@deip/disciplines-service": "1.75.1",
+    "@deip/disciplines-service": "1.76.0",
     "@deip/expertise-contributions-service": "1.36.0",
     "@deip/express-licensing-service": "1.75.1",
     "@deip/grants-service": "1.61.0",
