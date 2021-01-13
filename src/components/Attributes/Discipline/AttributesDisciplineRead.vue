@@ -4,9 +4,9 @@
       <router-link
         :key="`link-${index}`"
         class="link text--secondary"
-        :to="goToDiscipline(item.id)"
+        :to="goToDiscipline(item.externalId)"
       >
-        {{ item.label }}
+        {{ item.name }}
       </router-link>
       <div
         v-if="index + 1 < disciplines.length"
@@ -21,7 +21,6 @@
 
 <script>
   import { attributeRead } from '@/components/Attributes/_mixins';
-  import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
   import { getNestedValue } from 'vuetify/lib/util/helpers';
   import { find as deepFind } from 'find-keypath';
 
@@ -29,19 +28,20 @@
     name: 'AttributesDisciplineRead',
     mixins: [attributeRead],
     computed: {
+      disciplinesTree() { return this.$store.getters['Disciplines/tree'](); },
       disciplines() {
         return this.attribute.value.map((d) => this.getItemObject(d));
       }
     },
     methods: {
       getItemPath(id) {
-        const path = deepFind(disciplineTreeService.disciplineTree.children, id);
+        const path = deepFind(this.disciplinesTree, id);
         path.pop();
         return path;
       },
       getItemObject(id) {
         return getNestedValue(
-          disciplineTreeService.disciplineTree.children,
+          this.disciplinesTree,
           this.getItemPath(id)
         );
       },

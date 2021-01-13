@@ -57,6 +57,7 @@ import UsersFeature from '@/features/Users';
 import NotificationsFeature from '@/features/Notifications';
 import BookmarksFeature from '@/features/Bookmarks';
 import TeamsFeature from '@/features/Teams';
+import DisciplinesFeature from '@/features/Disciplines';
 
 // ////////////////////////
 
@@ -112,6 +113,7 @@ Vue.use(ReviewsFeature);
 Vue.use(UsersFeature);
 Vue.use(NotificationsFeature);
 Vue.use(BookmarksFeature);
+Vue.use(DisciplinesFeature);
 
 // ////////////////////////////////////////
 

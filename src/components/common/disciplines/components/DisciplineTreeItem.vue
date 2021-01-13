@@ -1,13 +1,10 @@
 <template>
-  <div
-    :class="[!discipline.isTop ? 'mb-1' : '', discipline.isTop ? 'ml-n6' : '']"
-  >
+  <div>
     <v-list-item
-      v-if="!discipline.isTop"
       :input-value="isSelected || isHighlighted"
       @click="select(discipline)"
     >
-      {{ discipline.label }}
+      {{ discipline.name }}
     </v-list-item>
 
     <div v-if="discipline.children" v-show="isExpanded" class="pl-6">
@@ -33,7 +30,7 @@
 
     props: {
       discipline: {
-        type: Object,
+        type: [Array, Object],
         required: true
       },
       isMultipleSelect: {
@@ -58,19 +55,18 @@
     computed: {
       isSelected() {
         return this.isMultipleSelect
-          ? this.selected.some((d) => d.id == this.discipline.id)
-          : this.selected && this.selected.id === this.discipline.id;
+          ? this.selected.some((d) => d.externalId == this.discipline.externalId)
+          : this.selected && this.selected.externalId === this.discipline.externalId;
       },
       isExpanded() {
         return this.isSelected
-          || this.discipline.isTop
-          || !this.isMultipleSelect && this.selected && _.startsWith(this.selected.path, this.discipline.path);
+          || !this.isMultipleSelect && this.selected && this.discipline.children;
       },
       isHighlighted() {
         return !this.isMultipleSelect
           && this.isHighlightedParent
           && this.selected
-          && _.startsWith(this.selected.path, this.discipline.path);
+          && _.startsWith(this.selected.parentExternalId, this.discipline.externalId);
       }
     },
 

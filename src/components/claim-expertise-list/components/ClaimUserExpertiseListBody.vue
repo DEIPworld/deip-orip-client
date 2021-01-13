@@ -24,7 +24,7 @@
 
           <td>
             <div>
-              <span :class="[ isAbleToVote(item) ? 'bold green--text text--darken-3' : 'half-bold' ]">{{ item.discipline.label }}</span>
+              <span :class="[ isAbleToVote(item) ? 'bold green--text text--darken-3' : 'half-bold' ]">{{ item.discipline.name }}</span>
               <span v-if="item.status == 'approved'" class="text-caption grey--text">(approved)</span>
             </div>
           </td>

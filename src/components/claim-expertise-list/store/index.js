@@ -3,7 +3,6 @@ import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 import { DisciplinesService } from '@deip/disciplines-service';
 import { UsersService } from '@deip/users-service';
-import { getNodeById } from '../../common/disciplines/DisciplineTreeService';
 import SortFieldsSvc from '../services/SortFieldsSvc';
 
 const disciplinesService = DisciplinesService.getInstance();
@@ -28,7 +27,7 @@ const getters = {
     let handler = _.chain(state.claims);
 
     if (!_.isEmpty(state.selectedDisciplines)) {
-      handler = handler.filter((claim) => _.some(state.selectedDisciplines, (discipline) => discipline.id === claim.disciplineId));
+      handler = handler.filter((claim) => _.some(state.selectedDisciplines, (discipline) => discipline.externalId === claim.disciplineId));
     }
 
     handler = handler.orderBy(
@@ -42,7 +41,7 @@ const getters = {
 
 // actions
 const actions = {
-  loadAllClaims({ state, dispatch, commit }) {
+  loadAllClaims({ state, dispatch, commit, rootGetters }) {
     let claimList = [];
 
     return disciplinesService.getExpertiseClaims()
@@ -55,7 +54,7 @@ const actions = {
       })
       .then((users) => {
         claimList.forEach((claim) => {
-          claim.discipline = getNodeById(claim.disciplineId);
+          claim.discipline = rootGetters['Disciplines/one'](claim.disciplineId);
           claim.user = _.find(users, (user) => user.account.name === claim.username);
         });
 

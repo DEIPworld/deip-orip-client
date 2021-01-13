@@ -75,7 +75,6 @@
   import _ from 'lodash';
   import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
-  import { getNodeById } from '../../../common/disciplines/DisciplineTreeService';
 
   export default {
     name: 'ClaimUserExpertiseDetailsAllocationDialog',
@@ -93,14 +92,14 @@
         isLoading: false,
 
         amount: '',
-        description: '',
-        discipline: getNodeById(this.disciplineId)
+        description: ''
       };
     },
     computed: {
       ...mapGetters({
         user: 'auth/user'
-      })
+      }),
+      discipline() { return this.$store.getters['Disciplines/one'](this.disciplineId); }
     },
     watch: {
       isShown(newValue) {

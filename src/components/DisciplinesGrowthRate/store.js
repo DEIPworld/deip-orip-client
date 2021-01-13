@@ -1,23 +1,21 @@
-import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import where from 'filter-where';
 
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
-const state = {
+const STATE = {
   data: []
 };
 
-const getters = {
-  // data: () => getTopLevelNodes().map(({ id }) => state.disciplinesGrowthRate.find(({ external_id }) => id === external_id)),
-  list: () => state.data.filter(
+const GETTERS = {
+  list: (state, getters, rootState, rootGetters) => state.data.filter(
     where({
-      external_id: getTopLevelNodes().map(({ id }) => id)
+      external_id: rootGetters['Disciplines/topLevelList']().map(({ externalId }) => externalId)
     })
   )
 };
 
-const actions = {
+const ACTIONS = {
   get(context, payload = {}) {
     return expertiseContributionsService.getDisciplinesExpertiseStatsHistory(payload)
       .then((res) => {
@@ -26,7 +24,7 @@ const actions = {
   }
 };
 
-const mutations = {
+const MUTATIONS = {
   store(state, payload) {
     state.data = payload.map((a) => ({
       external_id: a[0],
@@ -37,8 +35,8 @@ const mutations = {
 
 export const disciplinesGrowthRateStore = {
   namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations
+  state: STATE,
+  getters: GETTERS,
+  actions: ACTIONS,
+  mutations: MUTATIONS
 };

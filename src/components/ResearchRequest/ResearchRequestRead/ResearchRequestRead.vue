@@ -13,7 +13,6 @@
   import { NAMING_MAP } from '@/components/ResearchRequest/maps';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
-  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
 
   const accessService = AccessService.getInstance();
 
@@ -33,19 +32,19 @@
       }
     },
 
-    computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      })
-    },
-
     data() {
       return {
         oldResearchId: null,
         research: null,
-        fieldKeys: Object.keys(NAMING_MAP),
-        domains: [...disciplinesService.getTopLevelNodes().map(((d) => ({ text: d.label, value: d.id })))]
+        fieldKeys: Object.keys(NAMING_MAP)
       };
+    },
+
+    computed: {
+      ...mapGetters({
+        tenant: 'auth/tenant'
+      }),
+      domains() { return [...this.$store.getters['Disciplines/topLevelList']().map(((d) => ({ text: d.name, value: d.externalId })))]; }
     },
 
     created() {

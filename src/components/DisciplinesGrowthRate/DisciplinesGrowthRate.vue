@@ -11,9 +11,9 @@
         v-model="filterModel.discipline"
         outlined
         hide-details
-        :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
-        item-text="label"
-        item-value="external_id"
+        :items="[{name: $t('defaultNaming.all'), externalId: ''}, ...disciplines]"
+        item-text="name"
+        item-value="externalId"
         :label="$t('defaultNaming.filters.domainField')"
       />
 
@@ -54,7 +54,6 @@
 
 <script>
   import { ECI_STAT_PERIOD_STEP_TYPE } from '@/variables';
-  import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DInputDate from '@/components/Deipify/DInput/DInputDate';
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
@@ -86,13 +85,7 @@
     },
 
     computed: {
-      disciplines() {
-        return getTopLevelNodes()
-          .map((d) => ({
-            external_id: d.id,
-            label: d.label
-          }));
-      }
+      disciplines() { return this.$store.getters['Disciplines/topLevelList'](); }
     },
 
     created() {
@@ -154,9 +147,9 @@
                   'Date',
                   ...this.disciplines
                     .filter((item) => (this.filterModel.discipline
-                      ? item.external_id === this.filterModel.discipline
+                      ? item.externalId === this.filterModel.discipline
                       : true))
-                    .map((item) => item.label)
+                    .map((item) => item.name)
                 ],
                 ...dataTable
               ];

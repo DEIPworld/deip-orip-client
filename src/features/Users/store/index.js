@@ -50,7 +50,7 @@ const MUTATIONS = {
     state.data = collectionMerge(
       state.data,
       camelizeObjectKeys(payload),
-      { id: 'username' }
+      { key: 'username' }
     );
   }
 };

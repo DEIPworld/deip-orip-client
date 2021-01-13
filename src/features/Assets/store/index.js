@@ -121,7 +121,7 @@ const MUTATIONS = {
     state.data = collectionMerge(
       state.data,
       payload.map((asset) => camelizeObjectKeys(asset)),
-      { id: 'stringSymbol' }
+      { key: 'stringSymbol' }
     );
   },
 
@@ -131,7 +131,7 @@ const MUTATIONS = {
     state.data = collectionMerge(
       state.data,
       camelizeObjectKeys(payload),
-      { id: 'stringSymbol' }
+      { key: 'stringSymbol' }
     );
   },
 

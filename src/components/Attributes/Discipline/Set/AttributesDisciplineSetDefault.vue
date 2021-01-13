@@ -46,8 +46,8 @@
           multiple-active
 
           :items="disciplinesTree"
-          item-key="id"
-          item-text="label"
+          item-key="externalId"
+          item-text="name"
 
           :search="search"
 
@@ -64,20 +64,20 @@
       class="pt-2 ma-n1"
     >
       <v-chip
-        v-for="id in sortedLabels"
-        :key="id"
+        v-for="externalId in sortedLabels"
+        :key="externalId"
         outlined
         class="ma-1"
         :disabled="!$$isEditable"
       >
         <div class="text-truncate">
-          {{ getItemObject(id).label }}
+          {{ getItemObject(externalId).name }}
         </div>
         <v-btn
           icon
           x-small
           class="mr-n2 ml-2"
-          @click="removeItem(id)"
+          @click="removeItem(externalId)"
         >
           <v-icon>clear</v-icon>
         </v-btn>
@@ -90,8 +90,6 @@
   import { attributeSet, attributeSetForceArray } from '@/components/Attributes/_mixins';
   import { find as deepFind } from 'find-keypath';
   import { arrayDiff, getNestedValue } from 'vuetify/lib/util/helpers';
-
-  import * as disciplineTreeService from '@/components/common/disciplines/DisciplineTreeService';
 
   import { extend } from 'vee-validate';
 
@@ -116,46 +114,16 @@
       };
     },
     computed: {
-
       disciplinesTree() {
-        function transform(obj) {
-          for (const item of Object.keys(obj)) {
-            const t = obj[item];
-            if (t.children && Object.keys(t.children).length) {
-              t.children = transform(t.children);
-            } else {
-              delete t.children;
-            }
-          }
-          return Object.values(obj);
-        }
-
-        return transform(disciplineTreeService.disciplineTree.children);
+        return this.$store.getters['Disciplines/tree']();
       },
 
       disciplinesList() {
-        const disciplines = [];
-
-        function transform(tree) {
-          for (const item of tree) {
-            const { children } = item;
-            disciplines.push({
-              id: item.id,
-              label: item.label
-            });
-            if (children) {
-              transform(children);
-            }
-          }
-        }
-
-        transform(this.disciplinesTree);
-
-        return disciplines;
+        return this.$store.getters['Disciplines/list']();
       },
 
       disciplinesListIds() {
-        return this.disciplinesList.map((d) => d.value);
+        return this.disciplinesList.map((d) => d.externalId);
       },
 
       withoutAnyChildren() {
@@ -207,10 +175,10 @@
 
       removeChilds(id) {
         const target = this.getItemObject(id);
-        this.removeItem(target.id);
+        this.removeItem(target.externalId);
         if (target.children && target.children.length) {
           for (const child of target.children) {
-            this.removeChilds(child.id);
+            this.removeChilds(child.externalId);
           }
         }
       },
@@ -220,8 +188,8 @@
 
         for (const value of path) {
           target = target[value];
-          if (target.id) {
-            this.addItem(target.id);
+          if (target.externalId) {
+            this.addItem(target.externalId);
           }
         }
       },

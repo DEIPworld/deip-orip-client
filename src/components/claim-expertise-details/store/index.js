@@ -1,4 +1,3 @@
-// import * as disciplineTreeService from '../../common/disciplines/DisciplineTreeService.js'
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
