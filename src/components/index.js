@@ -7,8 +7,6 @@ import './common/index';
 import './research-content-details/index';
 import './research-group-details/index';
 import './research-group-create/index';
-import './claim-expertise-details/index';
-import './claim-expertise-list/index';
 import './dashboard/index';
 import './agency-grant-program-create/index';
 import './agency-grant-programs/index';

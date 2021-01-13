@@ -175,10 +175,6 @@
       />
     </d-block-widget>
 
-    <user-claim-expertise-dialog
-      :is-shown="isClaimExpertiseDialogShown"
-      @close="closeClaimExpertiseDialog"
-    />
   </div>
 </template>
 
@@ -191,7 +187,6 @@
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
-  import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import * as bankCardsService from '../../../utils/bankCard';
 
@@ -202,7 +197,6 @@
 
     components: {
       EciStats,
-      UserClaimExpertiseDialog,
       DBoxItem,
       DBlockWidget
     },
@@ -227,8 +221,7 @@
         expertise: 'userDetails/expertise',
         eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline',
         invites: 'userDetails/invites',
-        reviewRequests: 'userDetails/reviewRequests',
-        isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
+        reviewRequests: 'userDetails/reviewRequests'
       }),
       isOwner() {
         return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
@@ -345,25 +338,14 @@
           });
       },
 
-      openClaimExpertiseDialog() {
-        this.$store.dispatch('userDetails/openExpertiseTokensClaimDialog');
-      },
-
-      closeClaimExpertiseDialog() {
-        this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog');
-      },
-
       clearLocalStorageItems() {
         bankCardsService.removeInvestorBankCard(this.currentUser.username);
       },
 
       denyReviewRequest(reviewRequestId) {
         return this.$store.dispatch('userDetails/denyReviewRequest', { reviewRequestId });
-      },
-
-      getEciPercentile() {
-        return 10;
       }
+      
     }
   };
 </script>

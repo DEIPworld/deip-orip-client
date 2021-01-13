@@ -27,30 +27,17 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-// import ResearchContentExpertise
-//   from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 
-// import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
-import ResearchContentReferences
-  from '@/components/research-content-details/ResearchContentReferences';
-
-import UserDetails from '@/components/UserDetails/UserDetails';
-import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
-
-import ClaimUserExpertiseDetails
-  from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
-import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
+import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import NoAccessPage from '@/components/NoAccessPage';
-import VotingForBlockProducers
-  from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
-// import ReviewSetup from '@/components/review-setup/ReviewSetup';
+
 
 import FAQ from '@/components/faq/FAQ';
-import UserApplicationAccepted
-  from '@/components/user-application-accepted/UserApplicationAccepted';
+import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
@@ -311,30 +298,9 @@ const router = new Router({
     ...overviewRouting,
     ...landingRouting,
     ...TransactionsRouting,
-    ...WalletRouting,
-
+    ...WalletRouting, 
+    
     {
-      path: '/claim-user-experience',
-      name: 'ClaimUserExpertiseList',
-      component: preliminaryDataLoader(ClaimUserExpertiseList, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
-          loadPage(loadPagePromise, next);
-        }
-      })
-    }, {
-      path: '/claim-user-experience/:account_name/:claim_id',
-      name: 'ClaimUserExpertiseDetails',
-      component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
-            username: to.params.account_name,
-            claimId: to.params.claim_id
-          });
-          loadPage(loadPagePromise, next);
-        }
-      })
-    }, {
       // TODO: deprecated
       path: '/no-access-page',
       name: 'NoAccessPage',

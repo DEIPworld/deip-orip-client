@@ -3,18 +3,6 @@ import { project } from './basicWords';
 export default {
   teams: 'Teams:',
   addGroup: 'Add group',
-  claimExpertiseDialog: {
-    incorrectUrl: 'Incorrect url format',
-    title: 'Claim for Expertise Tokens',
-    selectDiscipline: 'Select your discipline',
-    beAccurate: 'Please be accurate, you will need the community assistance to change the disciplines',
-    addLinks: 'Add links to your relevant publications in this discipline',
-    addLink: 'Add a link to a publication',
-    letterField: 'Provide a cover letter',
-    linkField: 'Link to publication',
-    submitBtn: 'Claim Expertise Tokens',
-    postedSucc: 'You have posted the claim successfully! Please wait for community approval before you obtain the expertise tokens'
-  },
   detailsEducation: {
     title: 'Education',
     add: 'Add',
