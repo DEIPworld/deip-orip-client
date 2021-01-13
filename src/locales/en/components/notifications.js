@@ -30,7 +30,7 @@ export default {
   updated: 'updated',
   teamData: 'team data',
   updatedTeam: 'updated team data',
-  propUpdate: 'update',
+  propUpdate: 'updated',
   startedNew: 'started new',
   propStartNew: 'proposed to start new',
   projectMeta: `${project()} meta`,

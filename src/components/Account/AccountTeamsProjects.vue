@@ -11,14 +11,14 @@
               {{ $t('account.projects.teamsTech') }}
             </template>
           </projects-list>
-          <!-- <projects-list
+          <projects-list
             :user-name="$currentUser.username"
             type="personal"
           >
             <template #title>
               {{ $t('account.projects.myTech') }}
             </template>
-          </projects-list> -->
+          </projects-list>
           <projects-list
             :user-name="$currentUser.username"
             type="following"
