@@ -28,6 +28,7 @@ import transactionsList from './components/transactionsList';
 import reviewSetup from './components/reviewSetup';
 import memberList from './components/memberList';
 import licensing from './components/licensing';
+import attributes from './components/attributes';
 
 export default {
   $vuetify: en,
@@ -143,5 +144,6 @@ export default {
   transactionsList,
   reviewSetup,
   memberList,
-  licensing
+  licensing,
+  attributes
 };

@@ -190,8 +190,9 @@
             x-small
             color="primary"
             class="mr-4"
-            :disabled="disableButtonsId === item.proposal.external_id"
-            :loading="disableButtonsId === item.proposal.external_id"
+            :disabled="disableButtons.id === item.proposal.external_id"
+            :loading="disableButtons.id === item.proposal.external_id
+              && disableButtons.btnType === 'sign'"
             @click="sign(item)"
           >
             <v-icon left>
@@ -203,14 +204,15 @@
             outlined
             x-small
             color="primary"
-            :disabled="disableButtonsId === item.proposal.external_id"
-            :loading="disableButtonsId === item.proposal.external_id"
+            :disabled="disableButtons.id === item.proposal.external_id"
+            :loading="disableButtons.id === item.proposal.external_id
+              && disableButtons.btnType === 'reject'"
             @click="reject(item)"
           >
             <v-icon left>
               clear
             </v-icon>
-            {{ $t('transactionsList.decline') }}licType
+            {{ $t('transactionsList.decline') }}
           </v-btn>
         </div>
       </template>
@@ -475,7 +477,10 @@
         PROPOSAL_STATUS,
         LOC_PROPOSAL_TYPES,
         maxSignersCountToDisplay,
-        disableButtonsId: '',
+        disableButtons: {
+          id: '',
+          btnType: ''
+        },
         txStatusChips: {
           [PROPOSAL_STATUS.APPROVED]: this.$t('transactionsList.status.signed'),
           [PROPOSAL_STATUS.PENDING]: this.$t('transactionsList.status.pending'),
@@ -576,7 +581,8 @@
 
       sign(proposal) {
         const { proposal: { external_id } } = proposal;
-        this.disableButtonsId = external_id;
+        this.disableButtons.id = external_id;
+        this.disableButtons.btnType = 'sign';
         proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
           activeApprovalsToAdd: [this.$currentUser.username],
@@ -596,13 +602,14 @@
             this.$notifier.showError(this.$t('transactionsList.voteFail'));
           })
           .finally(() => {
-            this.disableButtonsId = '';
+            this.disableButtons.id = '';
           });
       },
 
       reject(proposal) {
         const { proposal: { external_id, required_approvals }, type } = proposal;
-        this.disableButtonsId = external_id;
+        this.disableButtons.id = external_id;
+        this.disableButtons.btnType = 'reject';
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
           account: type == LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST

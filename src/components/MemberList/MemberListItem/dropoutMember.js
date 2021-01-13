@@ -42,6 +42,7 @@ export const dropoutMember = {
         .then(() => {
           this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
           this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
+          this.$emit('update');
         })
         .catch((err) => {
           this.$notifier.showError(this.$t('memberList.dropPropFail'));

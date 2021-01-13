@@ -151,7 +151,7 @@
           this.$refs.changePasswordForm.reset();
 
           accessService.setOwnerWif(newPrivateKey);
-          return this.$store.dispatch('auth/loadUser');
+          return this.$store.dispatch('Users/get', this.$currentUser.username, { root: true });
         }).catch((err) => {
           this.$notifier.showError('Oops! Something went wrong. Please try again later');
           console.error(err.message);

@@ -23,7 +23,12 @@
       @update:page="onPaginationUpdated"
     >
       <template #default="{items}">
-        <component :is="listComponent" :items="items" :group="group" />
+        <component
+          :is="listComponent"
+          :items="items"
+          :group="group"
+          @update="update"
+        />
       </template>
     </v-data-iterator>
   </d-block>
@@ -97,18 +102,21 @@
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
 
-      const payload = {
-        ...(this.group && this.group.id ? { groupId: this.group.id } : {})
-      };
-
-      this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
-        .then(() => {
-          this.members = this.$store.getters[`${this.storeNS}/members`];
-        })
+      this.update()
         .then(() => this.$setReady());
     },
 
     methods: {
+      update() {
+        const payload = {
+          ...(this.group && this.group.id ? { groupId: this.group.id } : {})
+        };
+
+        return this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
+          .then(() => {
+            this.members = this.$store.getters[`${this.storeNS}/members`];
+          });
+      },
       onPaginationUpdated() {
         setTimeout(() => window.scrollTo({
           top: this.$refs.membersView.offsetTop - 10,

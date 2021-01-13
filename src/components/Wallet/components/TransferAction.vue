@@ -470,7 +470,7 @@
       },
       updateBalances() {
         if (this.$route.name === 'userWallet') {
-          this.$store.dispatch('auth/loadBalances');
+          this.$store.dispatch('Assets/getCurrentUserBalances', this.$currentUser.username, { root: true });
         } else if (this.$route.name === 'groupWallet') {
           this.$store.dispatch('Wallet/loadBalanceData', this.$route.params.account)
             .then(() => { this.$setReady(); });
