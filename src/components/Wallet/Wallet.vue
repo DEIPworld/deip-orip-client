@@ -8,19 +8,19 @@
         {{ pageTitle }}
       </div>
       <content-block
-        :title="$t('userWallet.balance')"
+        :title="$t('wallet.balance')"
       >
         <currencies-info-table :all-accounts="allAccounts" />
       </content-block>
 
       <content-block
-        :title="$t('userWallet.portfolio')"
+        :title="$t('wallet.portfolio')"
       >
         <shares-info-table :all-accounts="allAccounts" />
       </content-block>
       <content-block
         v-if="$route.name === 'userWallet'"
-        :title="$t('userWallet.groups')"
+        :title="$t('wallet.groups')"
       >
         <groups-info-table />
       </content-block>
@@ -67,17 +67,17 @@
       }),
       pageTitle() {
         if (this.$route.name === 'userWallet') {
-          return 'My Assets';
+          return this.$t('wallet.myAssets');
         }
         if (this.$route.name === 'groupWallet') {
-          return `Assets of ${this.groupData.name}`;
+          return this.$t('wallet.groupAssets', { group: this.groupData.name });
         }
-        return 'Assets';
+        return this.$t('wallet.assets');
       }
     },
 
     created() {
-      if (this.$route.name === 'userWallet' && this.$currentUserName !== this.$route.params.account) {
+      if (this.$route.name === 'userWallet' && this.$currentUser.username !== this.$route.params.account) {
         this.$router.back();
       }
       if (this.$route.name === 'userWallet') {
@@ -110,13 +110,7 @@
         })
         .then((accounts) => {
           this.allAccounts = accounts.flat().map((a) => {
-            if (a.account.is_research_group) {
-              return { ...a, fullName: a.name };
-            }
-            if (a.profile) {
-              return { ...a, fullName: this.$options.filters.fullname(a) };
-            }
-            return {};
+            return { ...a, fullName: this.$options.filters.accountFullname(a) }
           });
         });
     }

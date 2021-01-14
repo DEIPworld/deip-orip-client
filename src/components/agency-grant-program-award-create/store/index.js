@@ -3,7 +3,6 @@ import deipRpc from '@deip/rpc-client';
 import { GrantsService } from '@deip/grants-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchGroupService } from '@deip/research-group-service';
-import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const grantsService = GrantsService.getInstance();
 const usersService = UsersService.getInstance();

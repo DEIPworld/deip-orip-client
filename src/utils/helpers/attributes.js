@@ -1,6 +1,6 @@
 import RecursiveIterator from 'recursive-iterator';
 import { mergeDeep } from 'vuetify/lib/util/helpers';
-import { isFile, isObject, isArray } from './data';
+import { isFile, isObject } from './verification';
 
 export const compactResearchAttributes = (
   attrs,

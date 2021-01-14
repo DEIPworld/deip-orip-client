@@ -267,9 +267,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('auth/loadProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${this.formData.company}" employment has been saved successfully!"`);
+            this.$notifier.showSuccess(this.$t('userDetailRouting.employmentDialog.emplSaveSucc', { company: this.formData.company }));
           }, (err) => {
-            this.$notifier.showError(`An error occurred while saving "${this.formData.company}" details, please try again later`);
+            this.$notifier.showError(this.$t('userDetailRouting.employmentDialog.emplSaveFail', { company: this.formData.company }));
             console.error(err);
           })
           .finally(() => {

@@ -106,15 +106,16 @@ const ACTIONS = {
   },
 
   getUserFollowingProjects(context) {
-    return Promise.all(
-      context
-        .rootGetters['auth/user']
-        .researchBookmarks.map(({ researchId }) => researchId)
-        .map((externalId) => researchService.getResearch(externalId))
-    )
+    const ids = context
+      .rootGetters['Auth/currentUser']
+      .bookmarks
+      .filter((b) => b.type === 'research')
+      .map((b) => b.ref);
+
+    return ids.length ? researchService.getResearches(ids)
       .then((result) => {
         context.commit('storeProjectsData', result);
-      });
+      }) : [];
   },
 
   // team

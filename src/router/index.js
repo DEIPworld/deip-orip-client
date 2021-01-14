@@ -27,30 +27,17 @@ import ResearchGroupSettings from '@/components/research-group-settings/Research
 
 
 import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-// import ResearchContentExpertise
-//   from '@/components/ResearchContentExpertise/ResearchContentExpertise';
 import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 
-// import CreateTokenSale from '@/components/token-sale-create/CreateTokenSale';
-import ResearchContentReferences
-  from '@/components/research-content-details/ResearchContentReferences';
-
-import UserDetails from '@/components/UserDetails/UserDetails';
-import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
-
-import ClaimUserExpertiseDetails
-  from '@/components/claim-expertise-details/ClaimUserExpertiseDetails';
-import ClaimUserExpertiseList from '@/components/claim-expertise-list/ClaimUserExpertiseList';
+import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import NoAccessPage from '@/components/NoAccessPage';
-import VotingForBlockProducers
-  from '@/components/voting-for-block-producers/VotingForBlockProducers';
+import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
-// import ReviewSetup from '@/components/review-setup/ReviewSetup';
+
 
 import FAQ from '@/components/faq/FAQ';
-import UserApplicationAccepted
-  from '@/components/user-application-accepted/UserApplicationAccepted';
+import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
@@ -191,37 +178,11 @@ const router = new Router({
       path: '/:research_group_permlink/group-details/group-settings',
       name: 'ResearchGroupSettings',
       component: ResearchGroupSettings
-      // component: preliminaryDataLoader(ResearchGroupSettings, {
-      //   beforeEnter: (to, from, next) => {
-      //     if (store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === to.params.research_group_permlink)) {
-      //       next({
-      //         name: 'ResearchGroupDetails',
-      //         params: {
-      //           research_group_permlink: to.params.research_group_permlink
-      //         }
-      //       });
-      //     } else {
-      //       next()
-      //     }
-      //   }
-      // })
     }, {
       path: '/:account_name/create-research-group',
       name: 'CreateResearchGroup',
       component: CreateResearchGroup
     },
-    //  {
-    //   path: '/:research_group_permlink/wallet',
-    //   name: 'ResearchGroupWallet',
-    //   component: preliminaryDataLoader(ResearchGroupWallet, {
-    //     beforeEnter: (to, from, next) => {
-    //       const loadPagePromise = store.dispatch('rgWallet/loadGroupWallet', {
-    //         permlink: decodeURIComponent(to.params.research_group_permlink)
-    //       });
-    //       loadPage(loadPagePromise, next);
-    //     }
-    //   })
-    // },
     {
       path: '/dashboard',
       name: 'Dashboard',
@@ -233,11 +194,6 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     },
-    // {
-    //   path: '/research-feed',
-    //   name: 'ResearchFeed',
-    //   component: ResearchFeed
-    // },
 
 
     { // TODO: delete
@@ -342,30 +298,9 @@ const router = new Router({
     ...overviewRouting,
     ...landingRouting,
     ...TransactionsRouting,
-    ...WalletRouting,
-
+    ...WalletRouting, 
+    
     {
-      path: '/claim-user-experience',
-      name: 'ClaimUserExpertiseList',
-      component: preliminaryDataLoader(ClaimUserExpertiseList, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('claimExpertiseList/loadAllClaims', {});
-          loadPage(loadPagePromise, next);
-        }
-      })
-    }, {
-      path: '/claim-user-experience/:account_name/:claim_id',
-      name: 'ClaimUserExpertiseDetails',
-      component: preliminaryDataLoader(ClaimUserExpertiseDetails, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('claimExpertiseDetails/loadClaimer', {
-            username: to.params.account_name,
-            claimId: to.params.claim_id
-          });
-          loadPage(loadPagePromise, next);
-        }
-      })
-    }, {
       // TODO: deprecated
       path: '/no-access-page',
       name: 'NoAccessPage',

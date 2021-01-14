@@ -1,5 +1,4 @@
 import { store } from '@/store';
-import { contentsStore } from '@/features/Contents/store';
 import { projectsStore } from '@/features/Projects/store';
 
 const install = (Vue, options = {}) => {

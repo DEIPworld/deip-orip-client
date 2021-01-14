@@ -45,11 +45,11 @@
         this.loading = true;
 
         const { onchainData } = parseFormData(formData);
-        const isProposal = onchainData.researchGroup != this.$currentUser.account.name;
+        const isProposal = onchainData.researchGroup != this.$currentUser.username;
         return researchService.updateResearch(
           {
             privKey: this.$currentUser.privKey,
-            username: this.$currentUser.account.name
+            username: this.$currentUser.username
           },
           isProposal,
           formData

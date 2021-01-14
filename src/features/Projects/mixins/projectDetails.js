@@ -10,7 +10,7 @@ export const projectDetails = {
   },
   computed: {
     isMember() {
-      return this.project.members.includes(this.$currentUserName);
+      return this.project.members.includes(this.$currentUser.username);
     },
 
     financeVisible() {
@@ -29,7 +29,7 @@ export const projectDetails = {
 
       const owners = this.project.researchRef.expressLicenses.map((lic) => lic.owner);
 
-      return ![...this.project.members, ...owners].includes(this.$currentUserName);
+      return ![...this.project.members, ...owners].includes(this.$currentUser.username);
     },
     licensingAccessProps() {
       return {

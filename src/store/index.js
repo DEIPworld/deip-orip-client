@@ -11,8 +11,6 @@ import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/s
 import { researchGroupStore } from '../components/research-group-details/store';
 import { rcdStore } from '../components/research-content-details/store';
 import { layoutStore } from '../components/layout/store';
-import { claimExpertiseDetailsStore } from '../components/claim-expertise-details/store';
-import { claimExpertiseListStore } from '../components/claim-expertise-list/store';
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store';
 import { dashboardStore } from '../components/dashboard/store';
 import { investorPortfolioStore } from '../components/investor-portfolio/store';
@@ -41,8 +39,6 @@ export const store = new Vuex.Store({
     rcd: rcdStore,
     userDetails: userDetailsStore,
     layout: layoutStore,
-    claimExpertiseDetails: claimExpertiseDetailsStore,
-    claimExpertiseList: claimExpertiseListStore,
     votingForBlockProducers: votingForBlockProducersStore,
     dashboard: dashboardStore,
     investorPortfolio: investorPortfolioStore,

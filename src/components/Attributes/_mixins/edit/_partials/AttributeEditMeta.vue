@@ -3,7 +3,7 @@
     <v-col cols="8">
       <v-text-field
         v-model="internalValue.title"
-        :label="`${fieldLabelKey} name`"
+        :label="$t('attributes.nameField', {label: fieldLabelKey})"
         hide-details="auto"
         outlined
       />
@@ -11,7 +11,7 @@
     <v-col cols="4">
       <v-text-field
         v-model="internalValue.shortTitle"
-        :label="`${fieldLabelKey} short name`"
+        :label="$t('attributes.shortNameField', {label: fieldLabelKey})"
         hide-details="auto"
         outlined
       />
@@ -19,7 +19,7 @@
     <v-col cols="12">
       <v-textarea
         v-model="internalValue.description"
-        :label="`${fieldLabelKey} description`"
+        :label="$t('attributes.descriptionField', {label: fieldLabelKey})"
         hide-details="auto"
         outlined
         auto-grow
@@ -38,7 +38,7 @@
     props: {
       fieldLabelKey: {
         type: String,
-        default: 'Attribute'
+        default() { return this.$t('attributes.fieldLabelKey'); }
       }
     }
   };

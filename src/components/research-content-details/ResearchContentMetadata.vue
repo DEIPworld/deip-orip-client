@@ -4,8 +4,12 @@
       <div v-if="contentMetadata">
         <div class="legacy-row legacy-justify-between legacy-align-items-end">
           <div class="text-h4 bold">
-            Block #{{ contentMetadata.blockNum }}
-            <span v-if="isGenesisBlock" class="text-caption grey--text">GENESIS</span>
+            {{
+              $t('researchContentDetails.metadata.blockNum', { blockNum: contentMetadata.blockNum })
+            }}
+            <span v-if="isGenesisBlock" class="text-caption grey--text">
+              {{ $t('researchContentDetails.metadata.genesis') }}
+            </span>
           </div>
 
           <!-- <qrcode value="Hello, World!" :options="{ size: 120 }"></qrcode> -->
@@ -13,11 +17,11 @@
 
         <div class="c-mt-4">
           <div class="bold">
-            Block ID
+            {{ $t('researchContentDetails.metadata.blockID') }}
           </div>
           <div class="legacy-row grey-border-stripe">
             <div class="pill width-7 white--text">
-              RIPEMD-160
+              {{ $t('researchContentDetails.metadata.ripemd') }}
             </div>
             <div class="legacy-col-grow pill-value">
               {{ contentMetadata.blockId }}
@@ -45,7 +49,7 @@
         <div class="c-mt-4">
           <div class="legacy-row">
             <div class="bold width-7">
-              Content
+              {{ $t('researchContentDetails.metadata.content') }}
             </div>
             <div class="bold c-pl-4">
               <router-link
@@ -58,7 +62,7 @@
           </div>
           <div class="legacy-row grey-border-stripe">
             <div class="pill width-7 white--text">
-              SHA256
+              {{ $t('researchContentDetails.metadata.SHA256') }}
             </div>
             <div class="legacy-col-grow pill-value">
               {{ contentMetadata.content.content }}
@@ -69,7 +73,7 @@
         <div class="c-mt-4">
           <div class="legacy-row">
             <div class="bold width-7">
-              Timestamp<br>(ISO 8601)
+              {{ $t('researchContentDetails.metadata.timestamp') }}
             </div>
             <div class="c-pl-4 c-pt-3">
               {{ new Date(contentMetadata.timestamp).toISOString() }}
@@ -80,7 +84,7 @@
         <div class="c-mt-8">
           <div class="legacy-row">
             <div class="bold width-7">
-              Signee
+              {{ $t('researchContentDetails.metadata.signee') }}
             </div>
 
             <div class="legacy-col-grow">
@@ -98,7 +102,7 @@
                   <div class="legacy-row-nowrap">
                     <div class="pill width-7">
                       <div class="white--text">
-                        ECC
+                        {{ $t('researchContentDetails.metadata.ecc') }}
                       </div>
                     </div>
                     <div class="legacy-col-grow pill-value">
@@ -109,7 +113,7 @@
                   <div class="legacy-row-nowrap">
                     <div class="pill width-7 display-flex">
                       <div class="grey--text text--darken-3 c-m-auto">
-                        Signature
+                        {{ $t('researchContentDetails.metadata.signature') }}
                       </div>
                     </div>
                     <div class="legacy-col-grow pill-value">
@@ -127,7 +131,7 @@
         <div v-if="!isGenesisBlock && contentMetadata.voters.lenght" class="c-mt-8">
           <div class="legacy-row">
             <div class="bold width-7">
-              Approved by
+              {{ $t('researchContentDetails.metadata.approvedBy') }}
             </div>
 
             <div class="legacy-col-grow">
@@ -145,7 +149,7 @@
                   <div class="legacy-row-nowrap">
                     <div class="pill width-7">
                       <div class="white--text">
-                        ECC
+                        {{ $t('researchContentDetails.metadata.ecc') }}
                       </div>
                     </div>
                     <div class="legacy-col-grow pill-value">
@@ -156,7 +160,7 @@
                   <div class="legacy-row-nowrap">
                     <div class="pill width-7 display-flex">
                       <div class="grey--text text--darken-3 c-m-auto">
-                        Signature
+                        {{ $t('researchContentDetails.metadata.signature') }}
                       </div>
                     </div>
                     <div class="legacy-col-grow pill-value">
@@ -173,11 +177,11 @@
 
         <div v-if="!isGenesisBlock" class="c-mt-4">
           <div class="bold">
-            Transaction ID
+            {{ $t('researchContentDetails.metadata.transactionID') }}
           </div>
           <div class="legacy-row grey-border-stripe">
             <div class="pill width-7 white--text">
-              RIPEMD-160
+              {{ $t('researchContentDetails.metadata.ripemd') }}
             </div>
             <div class="legacy-col-grow pill-value">
               {{ contentMetadata.transaction.id }}
@@ -187,12 +191,12 @@
 
         <div v-if="!isGenesisBlock" class="c-mt-4">
           <div class="bold">
-            Transaction HEX
+            {{ $t('researchContentDetails.metadata.transactionHEX') }}
           </div>
           <div class="legacy-row-nowrap grey-border-stripe">
             <div class="pill width-7 white--text display-flex">
               <div class="c-m-auto">
-                HEX
+                {{ $t('researchContentDetails.metadata.hex') }}
               </div>
             </div>
             <div class="legacy-col-grow pill-value">
@@ -203,11 +207,11 @@
 
         <div class="c-mt-4">
           <div class="bold">
-            Chain ID
+            {{ $t('researchContentDetails.metadata.chainID') }}
           </div>
           <div class="legacy-row grey-border-stripe">
             <div class="pill width-7 white--text">
-              SHA256
+              {{ $t('researchContentDetails.metadata.SHA256') }}
             </div>
             <div class="legacy-col-grow pill-value">
               {{ contentMetadata.chainId }}

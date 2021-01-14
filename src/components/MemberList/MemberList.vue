@@ -1,7 +1,7 @@
 <template>
   <d-block v-if="$ready" ref="membersView">
     <template #title>
-      Members
+      {{ $t('memberList.members') }}
       <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
     </template>
 
@@ -16,14 +16,19 @@
 
     <v-data-iterator
       :items="members"
-      no-data-text="No Members found"
+      :no-data-text="$t('memberList.noMembFound')"
       :hide-default-footer="iteratorProps.hideDefaultFooter"
       :footer-props="iteratorProps.footerProps"
       :items-per-page="iteratorProps.itemsPerPage"
       @update:page="onPaginationUpdated"
     >
       <template #default="{items}">
-        <component :is="listComponent" :items="items" :group="group" />
+        <component
+          :is="listComponent"
+          :items="items"
+          :group="group"
+          @update="update"
+        />
       </template>
     </v-data-iterator>
   </d-block>
@@ -97,18 +102,21 @@
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
 
-      const payload = {
-        ...(this.group && this.group.id ? { groupId: this.group.id } : {})
-      };
-
-      this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
-        .then(() => {
-          this.members = this.$store.getters[`${this.storeNS}/members`];
-        })
+      this.update()
         .then(() => this.$setReady());
     },
 
     methods: {
+      update() {
+        const payload = {
+          ...(this.group && this.group.id ? { groupId: this.group.id } : {})
+        };
+
+        return this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
+          .then(() => {
+            this.members = this.$store.getters[`${this.storeNS}/members`];
+          });
+      },
       onPaginationUpdated() {
         setTimeout(() => window.scrollTo({
           top: this.$refs.membersView.offsetTop - 10,

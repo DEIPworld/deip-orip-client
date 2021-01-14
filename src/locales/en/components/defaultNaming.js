@@ -84,5 +84,14 @@ export default {
     date: 'Date',
     rewardEci: 'Reward ECI',
     totalEci: 'Total ECI'
+  },
+  eci: {
+    eciShort: 'ECI',
+    eci: 'Expertise Contribution Index',
+    percentileRank: 'Percentile rank',
+    totalECI: 'Total ECI',
+    growthRate: 'Growth rate',
+    overview: 'Overview',
+
   }
 };

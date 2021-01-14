@@ -18,7 +18,7 @@
 
       <v-spacer />
 
-      <user-notifications-list v-if="isLoggedIn" :notifications="user.notifications" />
+      <user-notifications-list v-if="isLoggedIn" />
 
       <v-sheet v-if="isLoggedIn" color="transparent">
         <v-menu bottom left offset-y>
@@ -26,13 +26,13 @@
             <v-btn icon v-on="on">
               <v-avatar size="32px" v-on="on">
                 <img
-                  v-if="user.profile"
-                  :src="user.profile | avatarSrc(64, 64, false)"
+                  v-if="$currentUser.profile"
+                  :src="$currentUser.profile | avatarSrc(64, 64, false)"
                 >
                 <v-gravatar
-                  v-if="!user.profile && user.account"
-                  :title="user.username"
-                  :email="user.username + '@deip.world'"
+                  v-if="!$currentUser.profile && $currentUser.account"
+                  :title="$currentUser.username"
+                  :email="$currentUser.username + '@deip.world'"
                 />
               </v-avatar>
             </v-btn>
@@ -42,7 +42,7 @@
             dense
           >
             <v-list-item @click="signOut()">
-              Sign Out
+              {{ $t('adminRouting.toolbarAdmin.signOut') }}
             </v-list-item>
           </v-list>
 
@@ -50,22 +50,22 @@
             v-if="isGrantsTransparencyDemo"
             dense
           >
-            <v-list-item :to="{ name: 'UserDetails', params: { account_name: user.username } }">
-              Profile
+            <v-list-item :to="{ name: 'UserDetails', params: { account_name: $currentUser.username } }">
+              {{ $t('adminRouting.toolbarAdmin.profile') }}
             </v-list-item>
             <v-divider />
             <v-list-item :to="{ name: 'AccountSettings' }">
-              Account Settings
+              {{ $t('adminRouting.toolbarAdmin.accSettings') }}
             </v-list-item>
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
-              Create Grant Program
+              {{ $t('adminRouting.toolbarAdmin.createGrantProgram') }}
             </v-list-item>
             <v-list-item :to="{ name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }">
-              Grant Programs
+              {{ $t('adminRouting.toolbarAdmin.grantProgram') }}
             </v-list-item>
             <v-divider />
             <v-list-item @click="signOut()">
-              Sign Out
+              {{ $t('adminRouting.toolbarAdmin.signOut') }}
             </v-list-item>
           </v-list>
         </v-menu>
@@ -94,7 +94,6 @@
 
     computed: {
       ...mapGetters({
-        user: 'auth/user',
         tenant: 'auth/tenant',
         themeSettings: 'layout/themeSettings'
       }),

@@ -40,7 +40,6 @@ const state = {
   isLoadingUserGroups: false,
   isLoadingUserExpertise: false,
   isLoadingUserInvites: false,
-  isClaimExpertiseDialogShown: false,
   isLoadingResearchesRefDetails: false
 };
 
@@ -58,8 +57,7 @@ const getters = {
 
   isLoadingUserGroups: (state) => state.isLoadingUserGroups,
   isLoadingUserExpertise: (state) => state.isLoadingUserExpertise,
-  isLoadingUserInvites: (state) => state.isLoadingUserInvites,
-  isClaimExpertiseDialogShown: (state) => state.isClaimExpertiseDialogShown
+  isLoadingUserInvites: (state) => state.isLoadingUserInvites
 };
 
 // actions
@@ -251,6 +249,8 @@ const actions = {
       });
   },
 
+  // /////////
+
   denyReviewRequest({ commit, getters }, { reviewRequestId }) {
     const { reviewRequests } = getters;
     const reviewRequestIndex = reviewRequests.findIndex((r) => r._id === reviewRequestId);
@@ -267,14 +267,6 @@ const actions = {
       .then(() => {
         commit('SET_USER_REVIEW_REQUESTS', getters.reviewRequests.filter((r) => r._id !== reviewRequestId));
       });
-  },
-
-  openExpertiseTokensClaimDialog({ commit }) {
-    commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', true);
-  },
-
-  closeExpertiseTokensClaimDialog({ commit }) {
-    commit('SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE', false);
   },
 
   updateEciHistoryFilter({ commit, state, getters }, payload) {
@@ -335,9 +327,6 @@ const mutations = {
     state.isLoadingUserInvites = value;
   },
 
-  SET_EXPERTISE_TOKENS_CLAIM_DIALOG_VISIBILITY_STATE(state, value) {
-    state.isClaimExpertiseDialogShown = value;
-  },
 
   SET_RESEARCHES_REFS_DETAILS(state, researchesRef) {
     state.researchesRef = researchesRef;

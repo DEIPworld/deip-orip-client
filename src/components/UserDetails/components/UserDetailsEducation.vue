@@ -7,11 +7,9 @@
       <v-spacer v-if="isOwner" />
       <div v-if="isOwner">
         <v-btn
-          class=""
           outlined
           small
-          depressed
-          color="primary lighten-1"
+          color="primary"
           :to="{
             name: 'account.education'
           }"
@@ -29,7 +27,9 @@
           <tr v-for="(item, index) in userInfo.profile.education" :key="`${index}-education`">
             <td class="pl-0">
               <div class="text-body-2 py-3">
-                {{ moment(item.period.from).format('YYYY') }}{{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ' — present' }} {{ item.educationalInstitution }}
+                {{ moment(item.period.from).format('YYYY') }}
+                {{ item.period.to ? ` — ${moment(item.period.to).format('YYYY')}` : ` — ${$t('userDetailRouting.detailsEducation.present')}` }}
+                {{ item.educationalInstitution }}
               </div>
               <div class="">
                 {{ item.degree }}
@@ -59,15 +59,15 @@
       </template>
     </v-simple-table>
     <div v-if="isOwner">
-      <d-dialog
+      <vex-dialog
         v-model="deleteEducationMeta.isShown"
-        :confirm-button-title="$t('userDetailRouting.detailsEducation.deleteBtn')"
+        :button-true-text="$t('userDetailRouting.detailsEducation.deleteBtn')"
         @click:confirm="deleteEducation(deleteEducationMeta)"
       >
         <div class="pt-1">
           {{ $t('userDetailRouting.detailsEducation.sureDelete') }}
         </div>
-      </d-dialog>
+      </vex-dialog>
     </div>
     <v-divider />
   </div>
@@ -76,7 +76,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import CrudActions from '@/components/layout/CrudActions';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
   import { UserService } from '@deip/user-service';
 
@@ -86,8 +85,7 @@
     name: 'UserDetailsEducation',
 
     components: {
-      CrudActions,
-      DDialog
+      CrudActions
     },
     data() {
       return {

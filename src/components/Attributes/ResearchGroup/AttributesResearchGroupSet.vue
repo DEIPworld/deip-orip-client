@@ -1,19 +1,19 @@
 <template>
-  <d-block title="Select research group">
-    <v-radio-group v-model="isPersonal">
+  <d-block :title="$$label">
+    <v-radio-group v-model="isPersonal" :disabled="!$$isEditable">
       <d-stack horizontal>
-        <v-radio :value="true" label="Personal group" class="ma-0" />
-        <v-radio :value="false" label="All groups" class="ma-0" />
+        <v-radio :value="true" label="My project" class="ma-0" />
+        <v-radio :value="false" label="Team project" class="ma-0" />
       </d-stack>
     </v-radio-group>
 
     <d-autocomplete
-      v-model="internalValue"
-      :label="$$label"
+      v-model="researchGroup"
+      label="Team"
       :items="groups"
       item-text="name"
       item-value="external_id"
-      :disabled="isPersonal"
+      :disabled="isPersonal || !$$isEditable"
       outlined
       v-bind="isMultipleProps"
       name="Project team"
@@ -29,13 +29,16 @@
               text
               small
               :to="{
-                name: 'group.create',
+                name: 'CreateResearchGroup',
+                params: {
+                  account_name: $currentUser.username
+                },
                 query: {
-                  backTo: 'project.create'
+                  backRouterToken: 'project.create'
                 }
               }"
             >
-              Add new group
+              Add new team
             </v-btn>
           </div>
         </div>
@@ -58,13 +61,13 @@
     mixins: [attributeSet, nulledModel],
     data() {
       return {
+        researchGroup: undefined,
         isPersonal: true
       };
     },
     computed: {
       ...mapGetters({
         userGroups: 'auth/userGroups',
-        userCoworkers: 'auth/userCoworkers'
       }),
 
       isMultipleProps() {
@@ -84,14 +87,45 @@
       }
     },
     watch: {
+
       isPersonal: {
         handler(val) {
           if (val) {
-            this.internalValue = null;
+            this.internalValue = [this.personalGroup.external_id];
+            this.researchGroup = this.personalGroup.external_id;
           } else {
-            this.internalValue = undefined;
+            this.internalValue = this.groups.length ? [this.groups[0].external_id] : undefined;
+            this.researchGroup = this.groups.length ? this.groups[0].external_id : undefined;
           }
         }
+      },
+
+      researchGroup: {
+        handler(val) {
+          if (val) {
+            this.internalValue = [val]
+          } else {
+            if (val === null) {
+              this.internalValue = null;
+            } else {
+              this.internalValue = undefined;
+            }
+          }
+        }
+      }
+    },
+
+    mounted() {
+      if (this.$$isEditable) {
+
+        if (this.$$isHidden) {
+          this.internalValue = null;
+          this.researchGroup = null;
+        } else if (this.isPersonal) {
+          this.internalValue = [this.personalGroup.external_id];
+          this.researchGroup = this.personalGroup.external_id;
+        }
+
       }
     }
   };

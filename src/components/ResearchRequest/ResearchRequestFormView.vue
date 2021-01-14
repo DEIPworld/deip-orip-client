@@ -175,7 +175,6 @@
   import { mapGetters } from 'vuex';
   import { FormMixin } from '@/utils/FormMixin';
   import { AccessService } from '@deip/access-service';
-  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
   import { maxTitleLength, maxDescriptionLength } from '@/variables';
 
   const accessService = AccessService.getInstance();
@@ -225,14 +224,17 @@
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           titleLength: (value) => (!!value && value.length <= maxTitleLength) || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength }),
           descriptionLength: (value) => (!!value && value.length <= maxDescriptionLength) || this.$t('defaultNaming.fieldRules.descriptionMax', { maxDescriptionLength })
-        },
-        domains: [...disciplinesService.getTopLevelNodes().map(((d) => ({ text: d.label, value: d.id })))]
+        }
       };
     },
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant'
       }),
+
+      domains() {
+        return [...this.$store.getters['Disciplines/topLevelList']().map(((d) => ({ text: d.name, value: d.externalId })))];
+      },
 
       fieldState(e) {
         return {

@@ -3,12 +3,12 @@
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ label: $t('defaultNaming.all'), id: '' }, ...disciplines]"
+      :items="[{ name: $t('defaultNaming.all'), externalId: '' }, ...disciplines]"
       outlined
       hide-details
       :label="$t('defaultNaming.filters.domainField')"
-      item-text="label"
-      item-value="id"
+      item-text="name"
+      item-value="externalId"
     />
 
     <d-block
@@ -24,8 +24,8 @@
                 v-if="expanded || i < 4"
                 :key="'discipline-filter-' + i"
                 v-model="internalValue"
-                :label="discipline.label"
-                :value="discipline.id"
+                :label="discipline.name"
+                :value="discipline.externalId"
                 hide-details
                 class="mt-2 mb-0"
               />
@@ -38,8 +38,6 @@
 </template>
 
 <script>
-  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
@@ -60,10 +58,12 @@
       }
     },
 
-    data() {
-      return {
-        disciplines: [...disciplinesService.getTopLevelNodes().sort((a, b) => a.label.localeCompare(b.label))]
-      };
+    computed: {
+      disciplines() {
+        return [...this.$store.getters['Disciplines/topLevelList']().sort(
+          (a, b) => a.name.localeCompare(b.name)
+        )];
+      }
     }
   };
 </script>

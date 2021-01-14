@@ -6,7 +6,7 @@
       'eci-widget': 'heading@3',
     }"
   >
-    <d-block-widget title="Fundraising" class="ma-n4">
+    <d-block-widget :title="$t('fundraising.title')" class="ma-n4">
       <template #title-append>
         <v-chip
           v-if="tokenSaleData"
@@ -20,16 +20,18 @@
 
       <div v-if="disabled" class="text-body-2">
         {{ $t('fundraising.neverFund') }}
-        {{ $t('fundraising.please') }}
-        <router-link
-          :to="{
-            name: 'project.asset.create',
-            params: $route.params
-          }"
-        >
-          {{ $t('fundraising.issueTokens') }}
-        </router-link>
-        {{ $t('fundraising.toStart') }}
+        <template v-if="isResearchMember">
+          {{ $t('fundraising.please') }}
+          <router-link
+            :to="{
+              name: 'project.asset.create',
+              params: $route.params
+            }"
+          >
+            {{ $t('fundraising.issueTokens') }}
+          </router-link>
+          {{ $t('fundraising.toStart') }}
+        </template>
       </div>
 
       <template v-else>
@@ -62,7 +64,7 @@
           {{ $t('fundraising.neverFund') }}
         </div>
         <v-btn
-          v-if="!tokenSaleData && isResearchMember && $isLoggedIn"
+          v-if="!tokenSaleData && isResearchMember && $isUser"
           block
           small
           outlined
@@ -72,13 +74,13 @@
             params: $route.params
           }"
         >
-          {{ $t('fundraising.start') }}
+          {{ $t('fundraising.startNew') }}
         </v-btn>
         <div v-else-if="!tokenSaleData && !isResearchMember && hasHistory" class="text-caption">
           {{ $t('fundraising.finished') }}
         </div>
         <v-btn
-          v-if="(hasHistory || tokenSaleData) && $isLoggedIn"
+          v-if="(hasHistory || tokenSaleData) && $isUser"
           block
           small
           text
@@ -148,30 +150,30 @@
         if (!this.tokenSaleData) return [];
         return [
           {
-            label: 'Start',
+            label: this.$t('fundraising.start'),
             value: this.$options.filters.dateFormat(this.tokenSaleData.start_time, 'D MMM YYYY, HH:mm', true)
           },
           {
-            label: 'End',
+            label: this.$t('fundraising.end'),
             value: this.$options.filters.dateFormat(this.tokenSaleData.end_time, 'D MMM YYYY, HH:mm', true)
           },
           {
-            label: 'Total investment',
+            label: this.$t('fundraising.totalInvestment'),
             value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.total_amount))} ${this.token}`,
             hide: !this.fromAssetsToFloat(this.tokenSaleData.total_amount)
           },
           {
-            label: 'Min Goal',
+            label: this.$t('fundraising.minGoal'),
             value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.soft_cap))} ${this.token}`
           },
           {
-            label: 'Max Goal',
+            label: this.$t('fundraising.maxGoal'),
             value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.hard_cap))} ${this.token}`
           }
         ];
       },
       isResearchMember() {
-        return this.project ? this.project.members.includes(this.$currentUserName) : false;
+        return this.project ? this.project.members.includes(this.$currentUser.username) : false;
       },
 
       disabled() {

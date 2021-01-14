@@ -1,4 +1,5 @@
 export default {
+  title: 'Edit group info',
   dataForm: {
     logoBlock: {
       title: 'Update group logo:'

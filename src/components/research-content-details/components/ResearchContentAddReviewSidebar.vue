@@ -117,7 +117,7 @@
             extensions
           })
             .then((data) => {
-              this.$notifier.showSuccess('Your review has been published successfully !');
+              this.$notifier.showSuccess(this.$t('researchContentDetails.addRev.pubSucc'));
               this.$router.push({
                 name: 'ResearchContentDetails',
                 params: {
@@ -130,7 +130,7 @@
             })
             .catch((err) => {
               console.error(err);
-              this.$notifier.showError('An error occurred while adding review, please try again later');
+              this.$notifier.showError(this.$t('researchContentDetails.addRev.pubFail'));
             })
             .finally(() => {
               this.isLoading = false;

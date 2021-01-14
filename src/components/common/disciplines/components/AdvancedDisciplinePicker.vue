@@ -18,7 +18,7 @@
             :input-value="isUserLabelSelected(discipline)"
             @click="handleUserDiscipline(discipline)"
           >
-            {{ discipline.label }}
+            {{ discipline.name }}
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -41,7 +41,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import * as disciplineTreeService from '../DisciplineTreeService';
 
   export default {
     name: 'AdvancedDisciplinePicker',
@@ -78,12 +77,10 @@
       }),
 
       userDisciplines() {
-        return disciplineTreeService.getNodesByIdList(
-          this.user.expertTokens.map((token) => token.discipline_external_id)
+        return this.$store.getters['Disciplines/list'](
+          { externalId: [this.user.expertTokens.map((token) => token.discipline_external_id)] }
         );
-      },
-
-      disciplineTree() { return disciplineTreeService.disciplineTree; }
+      }
     },
 
     methods: {
@@ -97,10 +94,10 @@
         } else {
           const preselectedCopy = _.cloneDeep(this.preselected);
 
-          if (!_.find(preselectedCopy, (item) => item.id === discipline.id)) {
+          if (!_.find(preselectedCopy, (item) => item.id === discipline.externalId)) {
             preselectedCopy.push(discipline);
           } else {
-            _.remove(preselectedCopy, (item) => item.id === discipline.id);
+            _.remove(preselectedCopy, (item) => item.id === discipline.externalId);
           }
 
           this.$emit('select', preselectedCopy);
@@ -109,9 +106,9 @@
 
       isUserLabelSelected(discipline) {
         if (!this.isMultipleSelect) {
-          return !!this.preselected && this.preselected.id === discipline.id;
+          return !!this.preselected && this.preselected.id === discipline.externalId;
         }
-        return !!_.find(this.preselected, (item) => item.id === discipline.id);
+        return !!_.find(this.preselected, (item) => item.id === discipline.externalId);
       }
     }
   };

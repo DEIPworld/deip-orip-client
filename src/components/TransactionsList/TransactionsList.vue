@@ -10,7 +10,7 @@
           inline
           :content="`${proposalsDataTable(PROPOSAL_TAB.PENDING).length}`"
         >
-          {{$t('transactions.table.pending')}}
+          {{ $t('transactions.table.pending') }}
         </v-badge>
       </v-tab>
       <v-tab :key="2">
@@ -19,7 +19,7 @@
           inline
           :content="`${proposalsDataTable(PROPOSAL_TAB.HISTORY).length}`"
         >
-          {{$t('transactions.table.completed')}}
+          {{ $t('transactions.table.completed') }}
         </v-badge>
       </v-tab>
     </v-tabs>
@@ -121,7 +121,12 @@
 
           const partiesSummary = otherParties.length === 1
             ? this.$options.filters.accountFullname(otherParties[0].account)
-            : `${partiesCount} ${partiesCount > 1 ? 'Parties' : 'Party'}, ${signaturesCount} ${signaturesCount > 1 ? 'Signatures' : 'Signature'}`;
+            : `${partiesCount} ${partiesCount > 1
+              ? this.$t('transactionsList.parties')
+              : this.$t('transactionsList.party')},
+              ${signaturesCount} ${signaturesCount > 1
+                ? this.$t('transactionsList.signatures')
+            : this.$t('transactionsList.signature')}`;
 
           const header = { proposerParty, otherParties, partiesSummary };
 

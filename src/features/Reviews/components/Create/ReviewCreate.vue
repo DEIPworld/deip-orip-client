@@ -76,9 +76,9 @@
               />
             </d-block>
 
-            <d-block 
+            <d-block
               v-if="$hasModule(DEIP_MODULE.APP_ECI)"
-              title="Reward" 
+              title="Reward"
               title-margin="16">
               <div class="text-body-2">
                 3000 ECI (approximately) in
@@ -238,7 +238,7 @@
 
     created() {
       // TODO: rethink
-      return researchContentReviewsService.getReviewRequestsByExpert(this.$currentUserName, 'pending')
+      return researchContentReviewsService.getReviewRequestsByExpert(this.$currentUser.username, 'pending')
         .then((res) => {
           const request = res.find((r) => r.contentId === this.content.external_id);
           if (request) {
@@ -303,7 +303,7 @@
         const extensions = [];
 
         return researchContentReviewsService.createReview(this.$currentUser.privKey, {
-          author: this.$currentUserName,
+          author: this.$currentUser.username,
           researchContentExternalId: this.content.externalId,
           content: JSON.stringify(this.reviewData),
           weight,

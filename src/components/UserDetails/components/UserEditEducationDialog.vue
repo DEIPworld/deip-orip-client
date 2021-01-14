@@ -20,7 +20,7 @@
             offset-y
             min-width="290px"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-text-field
                 ref="dateFromInput"
                 v-model="formData.period.from"
@@ -47,7 +47,7 @@
             min-width="290px"
             :disabled="formData.isActive"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-text-field
                 ref="dateToInput"
                 v-model="formData.period.to"
@@ -247,9 +247,9 @@
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
             this.$store.dispatch('auth/loadProfile', { username: this.currentUser.username });
-            this.$notifier.showSuccess(`"${this.formData.educationalInstitution}" Institute has been saved successfully!"`);
+            this.$notifier.showSuccess(this.$t('userDetailRouting.educationDialog.instSaveSucc', { institution: this.formData.educationalInstitution }));
           }, (err) => {
-            this.$notifier.showError(`An error occurred while saving "${this.formData.educationalInstitution}" details, please try again later`);
+            this.$notifier.showError(this.$t('userDetailRouting.educationDialog.instSaveFail', { institution: this.formData.educationalInstitution }));
             console.error(err);
           })
           .finally(() => {

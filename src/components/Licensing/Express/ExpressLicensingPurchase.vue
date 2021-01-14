@@ -17,7 +17,7 @@
             @click="selected = item"
           >
             <v-list-item-action class="mr-4 my-2">
-              <v-radio :value="item" :disabled="!$currentUser" />
+              <v-radio :value="item" :disabled="$isGuest" />
             </v-list-item-action>
 
             <v-list-item-content class="text-caption py-1 pr-2">
@@ -36,7 +36,7 @@
         </v-list>
       </v-radio-group>
       <v-btn
-        v-if="$currentUser"
+        v-if="$isUser"
         block
         small
         outlined
@@ -44,14 +44,14 @@
         :disabled="!selected"
         @click="dialog = true"
       >
-        Buy a licence
+        {{ $t('licensing.buy') }}
       </v-btn>
     </d-stack>
 
     <vex-dialog
-      v-if="Boolean(selected) && $currentUser"
+      v-if="Boolean(selected) && $isUser"
       v-model="dialog"
-      title="Send request"
+      :title="$t('licensing.dialog.title')"
       :max-width="540"
       :true-disabled="!dialogModel.confirm || !hasPaymentSourceBalance"
       :disabled="processing"
@@ -60,15 +60,21 @@
     >
       <d-stack gap="32">
         <div class="text-body-2">
-          <span class="font-weight-medium">License type:</span> {{ selected.name }}<br>
-          <span class="font-weight-medium">License issue fee:</span> {{ $$toAssetUnits(selected.fee) }}<br>
-          <span class="font-weight-medium">Payment source:</span> {{ paymentSourceInfo }}
+          <span class="font-weight-medium">
+            {{ $t('licensing.dialog.licType') }}:
+          </span> {{ selected.name }}<br>
+          <span class="font-weight-medium">
+            {{ $t('licensing.dialog.licIssueFee') }}:
+          </span> {{ $$toAssetUnits(selected.fee) }}<br>
+          <span class="font-weight-medium">
+            {{ $t('licensing.dialog.paySource') }}:
+          </span> {{ paymentSourceInfo }}
         </div>
 
         <v-sheet max-width="380px">
           <d-date-time-input
             v-model="dialogModel.date"
-            label="Request expiration date"
+            :label="$t('licensing.dialog.dateField')"
             only-future
           />
         </v-sheet>
@@ -78,7 +84,7 @@
             v-model="dialogModel.confirm"
             class="ma-0 pa-0"
             hide-details="auto"
-            label="I agree to the Terms and Conditions listed below"
+            :label="$t('licensing.dialog.agreeField')"
           />
 
           <div class="pl-8">
@@ -170,7 +176,7 @@
             || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId)
           );
 
-        if (!balance) return 'No source';
+        if (!balance) return this.$t('licensing.dialog.noSource');
 
         const { amount } = balance;
         const asset = this.$$assetInfo(this.selected.fee.assetId);
@@ -207,7 +213,7 @@
           licencePlan: this.selected
         })
           .then((result) => {
-            this.$notifier.showSuccess('Request has been sent successfully!');
+            this.$notifier.showSuccess(this.$t('licensing.dialog.reqSentSucc'));
           })
           .catch((err) => {
             console.error(err);

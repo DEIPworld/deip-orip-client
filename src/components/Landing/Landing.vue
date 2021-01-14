@@ -10,7 +10,7 @@
           class="mx-auto"
         >
           <div class="text-h5">
-            Search by technology
+            {{ $t('landing.searchByTech') }}
           </div>
           <v-form @submit.prevent="goToSearch">
             <v-text-field
@@ -29,7 +29,7 @@
                 color="primary"
                 :to="{name: 'explore'}"
               >
-                Advanced Search
+                {{ $t('landing.advancedSearch') }}
               </v-btn>
             </div>
           </v-form>
@@ -41,9 +41,9 @@
             :key="`${i}-discipline`"
             class="ma-2"
             outlined
-            @click="goToDiscipline(item.external_id || item.id)"
+            @click="goToDiscipline(item.externalId)"
           >
-            {{ item.label }}
+            {{ item.name }}
           </v-chip>
         </div>
       </d-stack>
@@ -53,10 +53,6 @@
 </template>
 
 <script>
-  import { find as deepFind } from 'find-keypath';
-
-  import * as disciplinesService from '@/components/common/disciplines/DisciplineTreeService';
-
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DStack from '@/components/Deipify/DStack/DStack';
@@ -70,9 +66,11 @@
     },
     data() {
       return {
-        searchTerm: '',
-        disciplines: disciplinesService.getTopLevelNodes()
+        searchTerm: ''
       };
+    },
+    computed: {
+      disciplines() { return this.$store.getters['Disciplines/topLevelList'](); }
     },
     methods: {
       goToSearch() {

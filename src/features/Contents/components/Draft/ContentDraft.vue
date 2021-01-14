@@ -300,7 +300,7 @@
             researchContentService.createResearchContent(
               {
                 privKey: this.$currentUser.privKey,
-                username: this.$currentUserName
+                username: this.$currentUser.username
               },
               isProposal,
               {

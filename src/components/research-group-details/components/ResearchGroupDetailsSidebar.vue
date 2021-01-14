@@ -50,7 +50,7 @@
     </d-block-widget>
     <!-- ### END Project Group Details Section ### -->
 
-    <d-block-widget v-if="isResearchGroupMember">
+    <!-- <d-block-widget v-if="isResearchGroupMember">
       <template #title>
         <router-link
           class="a"
@@ -72,7 +72,7 @@
       >
         {{ $t('researchGroupDetails.sidebar.Transfer') }}
       </v-btn>
-    </d-block-widget>
+    </d-block-widget> -->
 
     <quorum-size-sidebar-section v-if="group.is_dao" />
 

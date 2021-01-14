@@ -20,11 +20,9 @@ export const getEnvConfig = () => {
       return env;
     })
     .then((data) => ({
-      install(_Vue) {
-        // eslint-disable-next-line no-param-reassign
-        _Vue.prototype.$env = data;
-        // eslint-disable-next-line no-param-reassign
-        _Vue.$env = data;
+      install(Vue) {
+        Vue.prototype.$env = data;
+        Vue.$env = data;
       }
     }));
   return promise;

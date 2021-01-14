@@ -41,14 +41,14 @@
           {
             label: 'Total licences fee',
             value: this.$$toAssetUnits({
-              assetId: 1,
+              assetId: 'USD',
               amount: this.totalFee
             })
           },
           {
             label: 'Average licences fee',
             value: this.$$toAssetUnits({
-              assetId: 1,
+              assetId: 'USD',
               amount: this.totalFee / (this.licenses.length || 1)
             })
           },

@@ -1,7 +1,7 @@
 <template>
   <div class="ma-n6">
     <template
-      v-if="project.members.includes($currentUserName)"
+      v-if="project.members.includes($currentUser.username)"
     >
       <d-block-widget
         title="Licensee"
@@ -12,7 +12,7 @@
       </d-block-widget>
     </template>
 
-    <template v-if="!project.members.includes($currentUserName) && attrHasData">
+    <template v-if="!project.members.includes($currentUser.username) && attrHasData">
       <template
         v-if="userLicenses.length"
       >
@@ -65,7 +65,7 @@
 
     computed: {
       userLicenses() {
-        return this.$where(this.project.researchRef.expressLicenses, { owner: this.$currentUserName });
+        return this.$where(this.project.researchRef.expressLicenses, { owner: this.$currentUser.username });
       }
     }
   };

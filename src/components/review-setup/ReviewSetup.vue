@@ -3,13 +3,13 @@
     <v-card flat class="full-height full-width">
       <v-row no-gutters>
         <v-col cols="12" class="text-h5 font-weight-bold">
-          Expertise Contribution Model Setup
+          {{ $t('reviewSetup.ecms') }}
         </v-col>
         <v-col
           cols="12"
           class="mt-12 text-subtitle-1"
         >
-          In order to make your work efficient and help you receive most accurate feedback Open Research and Innovation Platform gives you the opportunity to change review criteria for different content types. Your reviewers will see the criteria on the review page. By default criteria for every type are: Novelty, Tecechnical quality, Methodology. Allso you can change reward coefficient (which is by default 10%) in order to motivate peer-review process
+          {{ $t('reviewSetup.text') }}
         </v-col>
         <v-col
           cols="auto"
@@ -17,13 +17,15 @@
         >
           <v-row no-gutters class="mb-4">
             <v-col cols="3" class="text-uppercase grey--text">
-              Contribution type
+              {{ $t('reviewSetup.contType') }}
             </v-col>
             <v-col cols="6" class="text-uppercase grey--text pl-4">
-              Review criteria
+              {{ $t('reviewSetup.revCriteria') }}
             </v-col>
             <v-col cols="3" class="text-center">
-              <span class="max-width-150 text-uppercase grey--text">Reward coefficient</span>
+              <span class="max-width-150 text-uppercase grey--text">
+                {{ $t('reviewSetup.rewCoefficient') }}
+              </span>
             </v-col>
           </v-row>
           <v-row
@@ -82,17 +84,19 @@
           class="mt-12"
         >
           <div class="text-h6 mb-6">
-            Review criteria setup
+            {{ $t('reviewSetup.rcs') }}
           </div>
           <v-row no-gutters class="mb-4">
             <v-col cols="5" class="text-uppercase grey--text">
-              Criteria
+              {{ $t('reviewSetup.criteria') }}
             </v-col>
             <v-col cols="4" class="text-uppercase grey--text">
-              Valid values 2-5
+              {{ $t('reviewSetup.validVal') }}
             </v-col>
             <v-col cols="3" class="text-center">
-              <span class="max-width-100 text-center text-uppercase grey--text">Weight 0.1-1</span>
+              <span class="max-width-100 text-center text-uppercase grey--text">
+                {{ $t('reviewSetup.weight') }}
+              </span>
             </v-col>
           </v-row>
           <v-row
@@ -109,11 +113,9 @@
             </v-col>
             <v-col cols="4" class="align-self-center d-flex">
               <div class="align-self-center">
-<!--                <review-assessment-squared-rating-->
-<!--                  v-model="item.value"-->
-<!--                  :readonly="false"-->
-<!--                  :value="item.value"-->
-<!--                />-->
+                <d-rating
+                  v-model="item.value"
+                />
               </div>
             </v-col>
             <v-col cols="3">
@@ -133,10 +135,11 @@
 
 <script>
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import DRating from '@/components/Deipify/DRating/DRating';
 
   export default {
     name: 'ReviewSetup',
-    components: { LayoutSection },
+    components: { LayoutSection, DRating },
     data() {
       return {
         content: [

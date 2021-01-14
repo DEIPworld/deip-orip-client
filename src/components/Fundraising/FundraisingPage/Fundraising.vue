@@ -2,7 +2,7 @@
   <d-layout-section v-if="$ready">
     <d-layout-section-main>
       <div class="text-h4 mb-8">
-        {{$t('researchTokenSale.title')}}
+        {{$t('fundraising.title')}}
       </div>
       <v-row v-if="tokenSale">
         <v-col cols="12" md="7">
@@ -14,13 +14,13 @@
               <d-stack gap="6" class="caption">
                 <div>
                   <span class="font-weight-bold">
-                    {{$t('researchTokenSale.fundraisingStatsSection.startTime')}}
+                    {{$t('fundraising.fundraisingStatsSection.startTime')}}
                   </span>
                   {{ tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
                 <div>
                   <span class="font-weight-bold">
-                    {{$t('researchTokenSale.fundraisingStatsSection.endTime')}}
+                    {{$t('fundraising.fundraisingStatsSection.endTime')}}
                   </span>
                   {{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
@@ -47,7 +47,7 @@
               <div class="d-flex">
                 <fundraising-progress-needle
                   :tooltip="`${currentCap}`"
-                  text="Already collected"
+                  :text="$t('fundraising.alreadyCollected')"
                   class="mr-6"
                   reverse
                   :style="marginCurrentCapPercent"
@@ -66,13 +66,13 @@
                 />
                 <fundraising-progress-needle
                   :tooltip="`${fromAssetsToFloat(tokenSale.soft_cap)}`"
-                  text="Min Goal"
+                  :text="$t('fundraising.fundraisingControlSection.softCap')"
                   class="mr-6"
                   :style="marginMinCapPercent"
                 />
                 <fundraising-progress-needle
                   :tooltip="`${fromAssetsToFloat(tokenSale.hard_cap)}`"
-                  text="Max Goal"
+                  :text="$t('fundraising.fundraisingControlSection.hardCap')"
                   class="ml-auto mr-6"
                 />
               </div>
@@ -81,13 +81,13 @@
           <d-stack gap="12" class="caption text--secondary mb-6">
             <d-stack horizontal gap="6" class="text--secondary">
               <span class="font-weight-bold">
-                {{$t('researchTokenSale.fundraisingControlSection.collected')}}
+                {{$t('fundraising.fundraisingControlSection.collected')}}
               </span>
               <span>{{ toAsset(tokenSale.total_amount) }}</span>
             </d-stack>
             <div class="d-flex align-center">
               <d-stack horizontal gap="6" class="text--secondary mr-3">
-                <span class="font-weight-bold">{{$t('researchTokenSale.fundraisingControlSection.softCap')}}</span>
+                <span class="font-weight-bold">{{$t('fundraising.fundraisingControlSection.softCap')}}</span>
                 <span>{{ toAsset(tokenSale.soft_cap) }}</span>
               </d-stack>
               <v-chip
@@ -102,7 +102,7 @@
               </v-chip>
             </div>
             <d-stack horizontal gap="6" class="text--secondary">
-              <span class="font-weight-bold">{{$t('researchTokenSale.fundraisingControlSection.hardCap')}}</span>
+              <span class="font-weight-bold">{{$t('fundraising.fundraisingControlSection.hardCap')}}</span>
               <span>{{ toAsset(tokenSale.hard_cap) }}</span>
             </d-stack>
           </d-stack>
@@ -110,7 +110,7 @@
             <v-text-field
               ref="amountToContribute"
               v-model="formData.amountToContribute"
-              label="Amount of investment"
+              :label="$t('fundraising.amountOfInvest')"
               outlined
               hide-details
               :suffix="tokenSale.soft_cap.split(' ')[1]"
@@ -123,14 +123,14 @@
               :rules="[rules.required]"
               hide-details
               :disabled="!hasActiveTokenSale"
-              label="I agree to the Terms and Conditions listed below "
+              :label="$t('fundraising.agreeLabel')"
             />
             <a
               href="/assets/img/form-of-SAFT-for-token-pre-sale.pdf"
               target="_blank"
               class="text--secondary caption ml-8 mb-2 d-block"
             >
-              Terms and Conditions
+              {{ $t('fundraising.termsAndCond') }}
             </a>
             <v-btn
               color="primary"
@@ -139,13 +139,13 @@
               type="submit"
               :disabled="isContributionToTokenSaleDisabled || !hasActiveTokenSale"
             >
-              Invest
+              {{ $t('fundraising.invest') }}
             </v-btn>
           </d-form>
         </v-col>
       </v-row>
 
-      <d-block :title="$t('researchTokenSale.contributionsHistorySection.title')" class="mt-8">
+      <d-block :title="$t('fundraising.contributionsHistorySection.title')" class="mt-8">
         <v-divider />
         <v-data-table
           :hide-default-footer="transactionsHistory.length < 50"
@@ -162,7 +162,7 @@
               :color="chipColors[transactionTypes['TRANS']].bg"
               :text-color="chipColors[transactionTypes['TRANS']].textColor"
             >
-              Investment
+              {{ $t('fundraising.investment') }}
             </v-chip>
           </template>
           <template #item.sender.profile.firstName="{item}">
@@ -190,14 +190,14 @@
         </v-data-table>
       </d-block>
 
-      <d-dialog
+      <vex-dialog
         v-model="isOpenFundraisingDialog"
         title="Investment confirmation"
         :loading="isInvesting"
         @click:confirm="contributeToTokenSale()"
       >
-        Do you confirm the investment of funds from your account?
-      </d-dialog>
+        {{ $t('fundraising.doYouConfirm') }}
+      </vex-dialog>
     </d-layout-section-main>
   </d-layout-section>
 </template>
@@ -210,7 +210,6 @@
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
   import DForm from '@/components/Deipify/DForm/DForm';
   import FundraisingProgressNeedle from '@/components/Fundraising/FundraisingPage/components/FundraisingProgressNeedle';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
   import { chartGradient, switchColor } from '@/plugins/charts';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
@@ -237,7 +236,6 @@
       DStack,
       DChartPie,
       DForm,
-      DDialog,
       FundraisingProgressNeedle,
       DBoxItem
     },
@@ -251,7 +249,7 @@
     data() {
       return {
         rules: {
-          required: (value) => !!value || 'This field is required'
+          required: (value) => !!value || this.$t('defaultNaming.fieldRules.required')
         },
         formData: {
           agreeFundraising: false,
@@ -266,23 +264,23 @@
             sortable: false
           },
           {
-            text: 'Sender',
+            text: this.$t('fundraising.table.sender'),
             value: 'sender.profile.firstName',
             sortable: false
           },
           {
-            text: 'Date',
+            text: this.$t('fundraising.table.date'),
             value: 'timestamp',
             sortable: false
           },
           {
-            text: 'Fundraising Phase',
+            text: this.$t('fundraising.table.fundPhase'),
             value: 'op[1].research_token_sale_id',
             align: 'center',
             sortable: false
           },
           {
-            text: 'Amount',
+            text: this.$t('fundraising.table.amount'),
             value: 'op[1].amount',
             align: 'end',
             sortable: false
@@ -309,12 +307,12 @@
         let color = '';
         let iconClass = 'text--secondary';
         let icon = 'cancel';
-        let text = 'Goal is not achieved';
+        let text = this.$t('fundraising.goalNotAchiev');
         if (this.currentCap >= this.fromAssetsToFloat(this.tokenSale.soft_cap)) {
           color = 'success';
           iconClass = '';
           icon = 'check_circle';
-          text = 'Min goal reached!';
+          text = this.$t('fundraising.minGoalReached');
         }
         return {
           color,
@@ -438,9 +436,9 @@
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
 
-        investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.account.name }, {
+        investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           tokenSaleExternalId: this.tokenSale.external_id,
-          contributor: this.$currentUser.account.name,
+          contributor: this.$currentUser.username,
           amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),
           extensions: []
         })
@@ -460,12 +458,12 @@
             this.formData.amountToContribute = '';
             this.isOpenFundraisingDialog = false;
 
-            this.$notifier.showSuccess(`You have contributed to "${this.research.title}" fundraise successfully !`);
+            this.$notifier.showSuccess(this.$t('fundraising.contributedSucc', { project: this.research.title }));
           })
           .catch((err) => {
             console.error(err);
             this.isInvesting = false;
-            this.$notifier.showError('An error occurred while contributing to fundraise, please try again later');
+            this.$notifier.showError(this.$t('fundraising.contributedFail'));
           });
       },
       toAsset(val) {

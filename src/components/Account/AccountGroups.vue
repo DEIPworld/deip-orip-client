@@ -76,8 +76,10 @@
       })
     },
     created() {
-      const username = decodeURIComponent(this.$store.getters['auth/user'].account.name);
-      this.$store.dispatch('userDetails/loadUserDetailsPage', { username })
+      this.$store.dispatch(
+        'userDetails/loadUserDetailsPage',
+        { username: this.$currentUser.username }
+      )
         .then(() => {
           this.$setReady();
         });

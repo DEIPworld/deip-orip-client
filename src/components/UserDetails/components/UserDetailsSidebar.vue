@@ -75,18 +75,18 @@
       </div>
       <!-- </v-card> -->
 
-      <d-dialog
+      <vex-dialog
         v-model="inviteDetailsDialog.isShown"
         :loading="inviteDetailsDialog.proccess"
         :disabled="inviteDetailsDialog.proccess"
-        :confirm-button-title="$t('userDetailRouting.sidebar.acceptBtn')"
-        :cancel-button-title="$t('userDetailRouting.sidebar.rejectBtn')"
+        :button-true-text="$t('userDetailRouting.sidebar.acceptBtn')"
+        :button-false-text="$t('userDetailRouting.sidebar.rejectBtn')"
         :title="inviteDetailsDialog.groupName"
         @click:confirm="approveInvite"
         @click:cancel="rejectInvite"
       >
         {{ inviteDetailsDialog.groupName }} {{ $t('userDetailRouting.sidebar.invitedYou') }}
-      </d-dialog>
+      </vex-dialog>
     </d-block-widget>
 
     <d-block-widget v-if="isOwner && hasReviewRequests">
@@ -166,7 +166,7 @@
     <!--  TODO: need user disciplines  -->
     <d-block-widget
       v-if="$hasModule(DEIP_MODULE.APP_ECI)"
-      title="Expertise Contribution Index"
+      :title="$t('userDetailRouting.sidebar.eci')"
     >
       <eci-stats
         :account-name="userInfo.account.name"
@@ -175,10 +175,6 @@
       />
     </d-block-widget>
 
-    <user-claim-expertise-dialog
-      :is-shown="isClaimExpertiseDialogShown"
-      @close="closeClaimExpertiseDialog"
-    />
   </div>
 </template>
 
@@ -187,33 +183,21 @@
   // import deipRpc from '@deip/rpc-client';
 
   import { mapGetters } from 'vuex';
-  import { UserService } from '@deip/user-service';
   import { ProposalsService } from '@deip/proposals-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
-  import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import DDialog from '@/components/Deipify/DDialog/DDialog';
 
-  import UserClaimExpertiseDialog from '@/components/UserDetails/components/UserClaimExpertiseDialog';
-  import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import * as bankCardsService from '../../../utils/bankCard';
 
-  const expertiseContributionsService = ExpertiseContributionsService.getInstance();
-  const userService = UserService.getInstance();
   const proposalsService = ProposalsService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'UserDetailsSidebar',
 
     components: {
       EciStats,
-      DBlock,
-      UserClaimExpertiseDialog,
       DBoxItem,
-      DDialog,
       DBlockWidget
     },
 
@@ -237,8 +221,7 @@
         expertise: 'userDetails/expertise',
         eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline',
         invites: 'userDetails/invites',
-        reviewRequests: 'userDetails/reviewRequests',
-        isClaimExpertiseDialogShown: 'userDetails/isClaimExpertiseDialogShown'
+        reviewRequests: 'userDetails/reviewRequests'
       }),
       isOwner() {
         return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
@@ -319,9 +302,9 @@
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
             this.$store.dispatch('auth/loadGroups');
             this.$store.dispatch('userDetails/loadGroups', { username: this.currentUser.username });
-            this.$notifier.showSuccess('"Invite has been approved successfully !"');
+            this.$notifier.showSuccess(this.$t('userDetailRouting.sidebar.inviteApprSucc'));
           }, (err) => {
-            this.$notifier.showError('An error occurred while accepting invite, please try again later');
+            this.$notifier.showError(this.$t('userDetailRouting.sidebar.inviteApprFail'));
             console.error(err);
           })
           .finally(() => {
@@ -345,22 +328,14 @@
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
-            this.$notifier.showSuccess('"Invite has been rejected successfully !"');
+            this.$notifier.showSuccess(this.$t('userDetailRouting.sidebar.inviteRejSucc'));
           }, (err) => {
-            this.$notifier.showError('An error occurred while rejecting invite, please try again later');
+            this.$notifier.showError(this.$t('userDetailRouting.sidebar.inviteRejFail'));
             console.error(err);
           })
           .finally(() => {
             this.closeInviteDetailsDialog();
           });
-      },
-
-      openClaimExpertiseDialog() {
-        this.$store.dispatch('userDetails/openExpertiseTokensClaimDialog');
-      },
-
-      closeClaimExpertiseDialog() {
-        this.$store.dispatch('userDetails/closeExpertiseTokensClaimDialog');
       },
 
       clearLocalStorageItems() {
@@ -369,11 +344,8 @@
 
       denyReviewRequest(reviewRequestId) {
         return this.$store.dispatch('userDetails/denyReviewRequest', { reviewRequestId });
-      },
-
-      getEciPercentile() {
-        return 10;
       }
+      
     }
   };
 </script>

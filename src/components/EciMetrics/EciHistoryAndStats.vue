@@ -8,7 +8,7 @@
       :loading="!$ready"
     />
 
-    <d-block title="Overview" class="mt-12">
+    <d-block :title="$t('defaultNaming.eci.overview')" class="mt-12">
       <v-row class="align-center mt-n6">
         <v-col cols="3">
           <eci-history-contributions-chart
@@ -24,7 +24,7 @@
       </v-row>
     </d-block>
 
-    <d-block title="Expertise Contribution Index" class="mt-12">
+    <d-block :title="$t('defaultNaming.eci.eci')" class="mt-12">
       <eci-history-chart
         :data="expertiseHistory"
         :loading="!$ready"

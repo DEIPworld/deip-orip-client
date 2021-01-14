@@ -80,9 +80,9 @@
           <v-select
             v-model="distributionDiscipline"
             outlined
-            :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
-            item-text="label"
-            item-value="external_id"
+            :items="[{name: $t('defaultNaming.all'), externalId: ''}, ...disciplinesList]"
+            item-text="name"
+            item-value="externalId"
             :label="$t('overviewRouting.distributionImpact.domainField')"
           />
         </d-filter-block>
@@ -132,7 +132,6 @@
 
   import moment from 'moment';
   import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
-  import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
   import EciHistory from '@/components/EciMetrics/EciHistory/EciHistory';
 
@@ -170,13 +169,7 @@
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
-      disciplines() {
-        return getTopLevelNodes()
-          .map((d) => ({
-            external_id: d.id,
-            label: d.label
-          }));
-      },
+      disciplinesList() { return this.$store.getters['Disciplines/topLevelList'](); },
 
       //= ====================
 
@@ -297,15 +290,18 @@
             });
           });
         } else {
-          dataTable = this.disciplinesExpertiseStats
+          const stats = this.disciplinesExpertiseStats
             .find(
               (item) => item.discipline_external_id === this.distributionDiscipline
-            )
-            .assessment_criterias
-            .map((item) => [
-              this.criteriaTypes[item[0]],
-              item[1]
-            ]);
+            );
+          if (stats) {
+            dataTable = stats
+              .assessment_criterias
+              .map((item) => [
+                this.criteriaTypes[item[0]],
+                item[1]
+              ]);
+          }
         }
 
         this.distributionChartData = [['Criteria', 'Value'], ...dataTable];

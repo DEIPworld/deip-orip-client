@@ -203,8 +203,8 @@
         const onchainData = _.cloneDeep(this.onchainData);
 
         if (!onchainData.researchGroup) {
-          onchainData.creator = this.$currentUser.account.name;
-          onchainData.memo = this.$currentUser.account.memo_key;
+          onchainData.creator = this.$currentUser.username;
+          onchainData.memo = this.$currentUser.pubKey;
           onchainData.fee = this.toAssetUnits(0);
         }
 

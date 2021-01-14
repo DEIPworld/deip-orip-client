@@ -3,7 +3,7 @@
     <d-layout-section>
       <d-layout-section-main>
         <projects-list
-          :user-name="$currentUserName"
+          :user-name="$currentUser.username"
           type="personal"
         />
       </d-layout-section-main>

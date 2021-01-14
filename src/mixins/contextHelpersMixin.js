@@ -4,17 +4,11 @@ const accessService = AccessService.getInstance();
 
 export const contextHelpersMixin = {
   computed: {
-    $isLoggedIn() { return accessService.isLoggedIn(); }, // TODO: move outside
-
-    $currentUser() { return this.$isLoggedIn ? this.$store.getters['auth/user'] : false; },
-    $currentUserName() { return this.$isLoggedIn ? this.$currentUser.account.name : false; },
 
     $tenant() { return this.$store.getters['auth/tenant']; },
     $tenantSettings() { return this.$tenant.profile.settings; },
-    $hasModule() { return (module) => { return this.$tenant.profile.settings.modules[module] }; },
 
-    $isUser() { return this.$isLoggedIn; },
-    $isGuest() { return !this.$isLoggedIn; }
+    $hasModule() { return (module) => this.$tenant.profile.settings.modules[module]; },
   },
   methods: {
     $hasSlot(name) {

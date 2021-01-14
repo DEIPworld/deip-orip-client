@@ -9,7 +9,7 @@
     hide-default-footer
   >
     <template #item.type="{item}">
-      Draft
+      {{ $t('draftList.draft') }}
     </template>
 
     <template #item.title="{item}">
@@ -60,12 +60,12 @@
         isDeletingDraft: false,
         tableHeaders: [
           {
-            text: 'Type',
+            text: this.$t('draftList.type'),
             value: 'type',
             width: '0%'
           },
           {
-            text: 'Title',
+            text: this.$t('draftList.title'),
             value: 'title',
             width: '70%'
           },

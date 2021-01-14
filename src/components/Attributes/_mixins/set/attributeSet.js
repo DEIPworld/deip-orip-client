@@ -38,6 +38,10 @@ export const attributeSet = {
       return true;
     },
 
+    $$isHidden() {
+      return this.attribute.isHidden;
+    },
+
     $$rules() {
       return {
         required: true

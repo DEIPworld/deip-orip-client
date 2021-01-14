@@ -1,5 +1,8 @@
 <template>
-  <d-block-widget v-if="!isResearchGroupMember || !isEditMode" title="Quorum threshold">
+  <d-block-widget
+    v-if="!isResearchGroupMember || !isEditMode"
+    :title="$t('researchGroupDetails.quorumThreshold')"
+  >
     <div
       v-for="(proposalBlock, i) in proposalOrderMap"
       :key="`proposalBlock-${i}`"

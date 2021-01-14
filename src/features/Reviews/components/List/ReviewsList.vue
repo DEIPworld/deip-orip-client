@@ -97,7 +97,7 @@
 
                 <template #title-append>
                   <v-btn
-                    v-if="$isLoggedIn"
+                    v-if="$isUser"
                     small
                     height="20"
                     :disabled="check(disableReviewRoute)"

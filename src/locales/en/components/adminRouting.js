@@ -37,7 +37,7 @@ export default {
         - ${project()} application form,
         - explore page.
         `,
-      submitBtn: 'publish'
+      submitBtn: 'Publish'
 
     },
     unpublishDialog: {
@@ -47,7 +47,7 @@ export default {
         - ${project()} application form,
         - explore page.
         `,
-      submitBtn: 'unpublish'
+      submitBtn: 'Unpublish'
 
     },
     deleteDialog: {
@@ -57,7 +57,7 @@ export default {
         - ${project()} application form,
         - explore page.
         `,
-      submitBtn: 'delete'
+      submitBtn: 'Delete'
 
     },
     attributesEdit: {
@@ -193,5 +193,12 @@ export default {
     reviewModel: 'Review model',
     faq: 'FAQ',
     settings: 'Settings'
+  },
+  toolbarAdmin: {
+    signOut: 'Sign Out',
+    profile: 'Profile',
+    accSettings: 'Account Settings',
+    createGrantProgram: 'Create Grant Program',
+    grantProgram: 'Grant Programs'
   }
 };

@@ -2,7 +2,7 @@
   <div>
     <v-row no-gutters class="mb-1">
       <v-col class="text-caption" cols="auto">
-        Total ECI
+        {{ $t('memberList.eci') }}
       </v-col>
       <v-spacer />
       <v-col
@@ -16,7 +16,7 @@
 
     <v-row no-gutters class="mb-1">
       <v-col class="text-caption" cols="auto">
-        Percentile rank
+        {{ $t('memberList.percentile') }}
       </v-col>
       <v-spacer />
       <v-col
@@ -30,7 +30,7 @@
 
     <v-row no-gutters class="mb-1">
       <v-col class="text-caption" cols="auto">
-        Growth rate
+        {{ $t('memberList.growthRate') }}
       </v-col>
       <v-spacer />
       <v-col

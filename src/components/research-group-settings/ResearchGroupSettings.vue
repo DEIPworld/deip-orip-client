@@ -1,5 +1,5 @@
 <template>
-  <full-screen-view v-if="$ready" title="Edit group info">
+  <full-screen-view v-if="$ready" :title="$t('researchGroupSettings.title')">
     <research-group-settings-body />
   </full-screen-view>
 </template>

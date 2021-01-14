@@ -85,11 +85,6 @@
           }
         ]
       };
-    },
-    computed: {
-      ...mapGetters({
-        user: 'auth/user'
-      })
     }
   };
 </script>

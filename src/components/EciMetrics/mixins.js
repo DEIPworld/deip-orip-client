@@ -1,4 +1,3 @@
-import { getTopLevelNodes } from '@/components/common/disciplines/DisciplineTreeService';
 import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 import { ASSESSMENT_CRITERIA_TYPE, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
@@ -49,7 +48,7 @@ export const filterableMetrics = {
   props: {
     filterDisciplines: {
       type: [Array, Boolean],
-      default: () => getTopLevelNodes()
+      default() { return this.$store.getters['Disciplines/topLevelList'](); }
     },
     filterCriterias: {
       type: [Array, Boolean],
@@ -81,7 +80,7 @@ export const filterableMetrics = {
     internalDisciplines() {
       return this.filterDisciplines
         .map((d) => ({
-          external_id: d.external_id || d.id,
+          external_id: d.externalId || d.id,
           label: d.label || d.name
         }));
     },

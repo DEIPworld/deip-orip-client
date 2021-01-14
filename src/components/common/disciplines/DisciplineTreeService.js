@@ -1,37 +1,4 @@
 import _ from 'lodash';
-import disciplineTree from './DisciplineTree';
-
-const getNodeByIdRecursive = (node, id) => {
-  if (node.id === id) {
-    return node;
-  }
-
-  if (!node.children) {
-    return;
-  }
-
-  const children = _.values(node.children);
-
-  for (let i = 0; i < children.length; i++) {
-    const res = getNodeByIdRecursive(children[i], id);
-
-    if (res) {
-      return res;
-    }
-  }
-};
-
-const getNodeById = (id) => {
-  const node = getNodeByIdRecursive(disciplineTree, id);
-
-  return {
-    id: node.id,
-    label: node.label,
-    path: node.path
-  };
-};
-
-const getNodesByIdList = (idList) => idList.map((id) => getNodeById(id));
 
 const mapAreaToProgram = (program, researchAreas) => {
   // to do: prepare a better algo for the demo, must be revised in the future
@@ -55,12 +22,6 @@ const mapAreaToProgram = (program, researchAreas) => {
   program.subArea = subArea;
 };
 
-const getTopLevelNodes = () => Object.values(disciplineTree.children);
-
 export {
-  disciplineTree,
-  getNodeById,
-  getNodesByIdList,
-  mapAreaToProgram,
-  getTopLevelNodes
+  mapAreaToProgram
 };

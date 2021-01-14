@@ -259,11 +259,10 @@
     created() {
       this.availableTokens = this.issuedTokens.amount;
 
-      this.$store.dispatch('Assets/getTeamBalance', [
+      this.$store.dispatch('Assets/getTeamBalances', [
         this.project.researchGroup.external_id,
         this.issuedTokens.assetId
       ]).then((res) => {
-        console.log(res)
         this.availableTokens = this.$$fromAssetUnits(res.amount);
       });
     },
@@ -294,7 +293,7 @@
         const data = [
           {
             privKey: this.$currentUser.privKey,
-            username: this.$currentUser.account.name
+            username: this.$currentUser.username
           },
           isProposal,
           {

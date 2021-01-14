@@ -101,20 +101,14 @@
       };
     },
 
-    computed: {
-      ...mapGetters({
-        currentUser: 'auth/user'
-      })
-    },
-
     methods: {
       updateMasterPassword() {
-        const { username } = this.currentUser;
+        const { username } = this.$currentUser;
 
         let oldPrivateKey;
         if (
           deipRpc.auth.isWif(this.oldPassword)
-          && deipRpc.auth.wifToPublic(this.oldPassword) === this.currentUser.pubKey
+          && deipRpc.auth.wifToPublic(this.oldPassword) === this.$currentUser.pubKey
         ) { // if old private key is entered
           oldPrivateKey = this.oldPassword;
         } else { // if old password is entered or old password is in private key format
@@ -124,7 +118,7 @@
             'owner'
           );
           const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
-          if (this.currentUser.pubKey !== oldPublicKey) {
+          if (this.$currentUser.pubKey !== oldPublicKey) {
             this.$notifier.showError('Old password is invalid');
             return;
           }
@@ -157,7 +151,7 @@
           this.$refs.changePasswordForm.reset();
 
           accessService.setOwnerWif(newPrivateKey);
-          return this.$store.dispatch('auth/loadUser');
+          return this.$store.dispatch('Users/get', this.$currentUser.username, { root: true });
         }).catch((err) => {
           this.$notifier.showError('Oops! Something went wrong. Please try again later');
           console.error(err.message);

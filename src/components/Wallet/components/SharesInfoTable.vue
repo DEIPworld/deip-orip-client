@@ -9,7 +9,7 @@
       :hide-default-footer="balances.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
-      item-key="tokenized_research"
+      item-key="tokenizedResearch"
       disable-sort
       show-expand
       :expanded.sync="expanded"
@@ -35,7 +35,7 @@
           {{ toAsset(totalRevenue(item.revenueHistory)) }}
         </div>
         <div class="text-caption text--secondary mb-4 white-space-nowrap">
-          {{ toAsset(revenuePerToken(item)) }} per token
+          {{ toAsset(revenuePerToken(item)) }} {{ $t('wallet.perToken') }}
         </div>
       </template>
       <template #item.actions="{ item }">
@@ -49,7 +49,7 @@
       <template #expanded-item="{ item, headers }">
         <td :colspan="headers.length" class="pa-0">
           <div class="font-weight-bold mt-4">
-            Revenue per token
+            {{ $t('wallet.revPerToken') }}
           </div>
           <d-chart-column
             v-if="item.revenueHistoryChartData.length"
@@ -61,7 +61,7 @@
             }"
           />
           <div v-else>
-            No data
+            {{ $t('wallet.noData') }}
           </div>
         </td>
       </template>
@@ -98,23 +98,23 @@
         expanded: [],
         tableHeader: [
           {
-            text: 'Asset',
+            text: this.$t('wallet.asset'),
             value: 'research.title'
           },
           {
-            text: 'Tokens and share',
+            text: this.$t('wallet.tokensAndShare'),
             value: 'myShare.amount',
             align: 'end',
             class: 'white-space-nowrap'
           },
           {
-            text: 'Tokens price',
+            text: this.$t('wallet.tokensPrice'),
             value: 'group.account.balances',
             align: 'end vertical-top',
             class: 'pt-3'
           },
           {
-            text: 'Total Revenue',
+            text: this.$t('wallet.totalRevenue'),
             value: 'revenueHistory',
             align: 'end'
           },
@@ -145,7 +145,7 @@
         const token = item.research.security_tokens.find(
           (rst) => { 
             const { assetId } = this.$$fromAssetUnits(rst);
-            return assetId === item.asset_symbol;
+            return assetId === item.assetSymbol;
           }
         );
         const { amount: tokenValue } = this.$$fromAssetUnits(token);
@@ -166,7 +166,7 @@
         const securityToken = item.research.security_tokens.find(
           (securityToken) => {
             const { assetId } = this.$$fromAssetUnits(securityToken);
-            return item.asset_symbol === assetId;
+            return item.assetSymbol === assetId;
           }
         );
         const { amount: totalTokenAmount } = this.$$fromAssetUnits(securityToken);

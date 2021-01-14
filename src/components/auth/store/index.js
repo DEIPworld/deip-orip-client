@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
 import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
@@ -155,8 +156,8 @@ const actions = {
   loadAllAssets({ commit }) { // TODO: temp
     return assetsService.lookupAssets("", 10000)
       .then((allAssets) => {
-        commit('storeAllAssets', allAssets);
-      })
+        commit('storeAllAssets', allAssets.map((b) => camelizeObjectKeys(b)));
+      });
   },
 
   loadAssets({ commit }) { // TODO: temp
