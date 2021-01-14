@@ -1,15 +1,15 @@
 <template>
-  <d-block title="Select research group">
+  <d-block :title="$$label">
     <v-radio-group v-model="isPersonal" :disabled="!$$isEditable">
       <d-stack horizontal>
-        <v-radio :value="true" label="Default" class="ma-0" />
-        <v-radio :value="false" label="Select team" class="ma-0" />
+        <v-radio :value="true" label="My project" class="ma-0" />
+        <v-radio :value="false" label="Team project" class="ma-0" />
       </d-stack>
     </v-radio-group>
 
     <d-autocomplete
       v-model="researchGroup"
-      :label="$$label"
+      label="Team"
       :items="groups"
       item-text="name"
       item-value="external_id"
