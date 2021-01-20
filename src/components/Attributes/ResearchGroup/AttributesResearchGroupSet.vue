@@ -31,10 +31,7 @@
               :to="{
                 name: 'CreateResearchGroup',
                 params: {
-                  account_name: $currentUser.username
-                },
-                query: {
-                  backRouterToken: 'project.create'
+                  account_name: $currentUser ? $currentUser.username : ''
                 }
               }"
             >
