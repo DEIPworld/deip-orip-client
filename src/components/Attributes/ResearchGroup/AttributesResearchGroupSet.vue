@@ -29,9 +29,9 @@
               text
               small
               :to="{
-                name: 'group.create',
-                query: {
-                  backTo: 'project.create'
+                name: 'CreateResearchGroup',
+                params: {
+                  account_name: $currentUser ? $currentUser.username : ''
                 }
               }"
             >
