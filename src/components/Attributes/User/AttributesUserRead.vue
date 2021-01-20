@@ -10,7 +10,7 @@
           overlap
           bordered
           color="warning"
-          :value="pendingUser(user.account.name) && userRelatedToProject"
+          :value="pendingUser(user.account.name) && isUserRelatedToProject"
         >
           <template #badge>
             <v-avatar>
@@ -60,8 +60,8 @@
       }
     },
     computed: {
-      userRelatedToProject() {
-        return [
+      isUserRelatedToProject() {
+        return !this.$isGuest && [
           ...this.project.members,
           ...this.project.researchRef.expressLicenses.map((lic) => lic.owner)
         ].includes(this.$currentUser.username);
