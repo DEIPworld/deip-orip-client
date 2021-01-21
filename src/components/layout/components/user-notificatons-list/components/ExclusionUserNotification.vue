@@ -33,7 +33,7 @@
         this.$router.push({
           name: 'UserDetails',
           params: {
-            account_name: encodeURIComponent(this.notification.metadata.excludedProfile._id)
+            account_name: encodeURIComponent(this.notification.metadata.excluded.account.name)
           },
           hash: '#invites'
         });

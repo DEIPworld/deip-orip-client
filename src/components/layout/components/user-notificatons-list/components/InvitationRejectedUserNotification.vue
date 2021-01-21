@@ -29,12 +29,7 @@
     },
     computed: {
       inviteeProfile() {
-        return {
-          profile: this.notification.metadata.inviteeProfile,
-          account: {
-            name: this.notification.metadata.inviteeProfile._id
-          }
-        };
+        return this.notification.metadata.invitee;
       }
     },
 
@@ -43,7 +38,7 @@
         this.$router.push({
           name: 'UserDetails',
           params: {
-            account_name: encodeURIComponent(this.notification.metadata.inviteeProfile._id)
+            account_name: encodeURIComponent(this.notification.metadata.invitee.account.name)
           }
         });
 

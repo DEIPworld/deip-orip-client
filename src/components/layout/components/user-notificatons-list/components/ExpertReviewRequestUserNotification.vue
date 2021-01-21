@@ -30,20 +30,10 @@
     },
     computed: {
       expertProfile() {
-        return {
-          profile: this.notification.metadata.expertProfile,
-          account: {
-            name: this.notification.metadata.expertProfile._id
-          }
-        };
+        return this.notification.metadata.expert;
       },
       requestorProfile() {
-        return {
-          profile: this.notification.metadata.requestorProfile,
-          account: {
-            name: this.notification.metadata.requestorProfile._id
-          }
-        };
+        return this.notification.metadata.requestor;
       }
     },
 
