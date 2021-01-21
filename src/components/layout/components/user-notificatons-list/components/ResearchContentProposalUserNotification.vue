@@ -61,12 +61,7 @@
         return !this.notification.metadata.researchGroup.is_dao && this.notification.metadata.isProposalAutoAccepted;
       },
       proposalCreator() {
-        return {
-          profile: this.notification.metadata.creatorProfile,
-          account: {
-            name: this.notification.metadata.creatorProfile._id
-          }
-        };
+        return this.notification.metadata.emitter;
       }
     },
 

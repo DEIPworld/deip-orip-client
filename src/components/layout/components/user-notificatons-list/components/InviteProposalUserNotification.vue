@@ -51,20 +51,10 @@
         return !this.notification.metadata.researchGroup.is_dao && this.notification.metadata.isProposalAutoAccepted;
       },
       proposalCreator() {
-        return {
-          profile: this.notification.metadata.creatorProfile,
-          account: {
-            name: this.notification.metadata.creatorProfile._id
-          }
-        };
+        return this.notification.metadata.emitter;
       },
       inviteeProfile() {
-        return {
-          profile: this.notification.metadata.inviteeProfile,
-          account: {
-            name: this.notification.metadata.inviteeProfile._id
-          }
-        };
+        return this.notification.metadata.invitee;
       }
     },
 
@@ -74,7 +64,7 @@
           this.$router.push({
             name: 'UserDetails',
             params: {
-              account_name: encodeURIComponent(this.notification.metadata.inviteeProfile._id)
+              account_name: encodeURIComponent(this.notification.metadata.invitee.account.name)
             }
           });
         } else {

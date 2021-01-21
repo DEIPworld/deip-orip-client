@@ -30,12 +30,7 @@
     },
     computed: {
       reviewerProfile() {
-        return {
-          profile: this.notification.metadata.reviewerProfile,
-          account: {
-            name: this.notification.metadata.reviewerProfile._id
-          }
-        };
+        return this.notification.metadata.reviewer;
       }
     },
 
