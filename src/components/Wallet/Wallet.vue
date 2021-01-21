@@ -93,7 +93,7 @@
       deipRpc.api
         .lookupAccountsAsync('0', 10000)
         .then((accounts) => {
-          const blackList = [...this.SYSTEM_USERS];
+          const blackList = [...this.SYSTEM_USERS, this.$currentUser.username];
 
           const usersToInvite = accounts
             .filter(

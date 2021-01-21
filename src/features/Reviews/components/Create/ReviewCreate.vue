@@ -101,6 +101,7 @@
               >
                 <v-switch
                   v-model="formModel.confirm"
+                  :disabled="!requestAccepted"
                   label="Declare no competing interests exist"
                   class="ma-0 pa-0"
                   hide-details="auto"

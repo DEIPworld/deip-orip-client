@@ -192,7 +192,9 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeProjectsData(state, payload) {
-    state.projectsList = payload.map((item) => (camelizeObjectKeys(item)));
+    state.projectsList = payload.map((item) => (camelizeObjectKeys(item))).sort(
+      (p1, p2) => new Date(p1.createdAt) - new Date(p2.createdAt)
+    );
   }
 };
 

@@ -44,7 +44,7 @@
         <v-col cols="12">
           <v-textarea
             v-model="newResearchGroupDescription"
-            :rules="[rules.required, rules.descriptionLength]"
+            :rules="[rules.descriptionLength]"
             name="Description"
             :label="$t('researchGroupSettings.dataForm.nameBlock.descField')"
             outlined
@@ -245,7 +245,6 @@
           (this.newResearchGroupName !== this.groupName
             || this.newResearchGroupDescription !== this.groupDescription)
           && this.newResearchGroupName !== ''
-          && this.newResearchGroupDescription !== ''
           && this.newResearchGroupName.length < maxTitleLength
           && this.newResearchGroupDescription.length < maxDescriptionLength
         );
