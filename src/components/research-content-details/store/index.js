@@ -258,36 +258,20 @@ const actions = {
   loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
-    const rgtList = [];
     let researchExternalId;
-
-
 
     return researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
         researchExternalId = research.external_id;
-        return deipRpc.api.getResearchGroupTokensByResearchGroupAsync(research.research_group_id);
-      }).then((members) => {
-        rgtList.push(...members);
-        return usersService.getEnrichedProfiles(members.map((m) => m.owner));
-      }, (err) => {
-        console.error(err);
+        return usersService.getUsersByResearchGroup(research.research_group.external_id);
       })
       .then((users) => {
-        for (let i = 0; i < users.length; i++) {
-          const user = users[i];
-          user.rgt = rgtList.find((rgt) => rgt.owner === user.account.name);
-        }
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
         return researchContentService.getResearchContentByResearch(researchExternalId);
-      }, (err) => {
-        console.error(err);
       })
       .then((list) => {
         commit('SET_RESEARCH_CONTENT_LIST', list);
-      }, (err) => {
-        console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);

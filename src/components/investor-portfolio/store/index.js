@@ -144,15 +144,16 @@ const actions = {
       })
       .then((groups) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS', groups);
-        return Promise.all(groups.map((group) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id)));
+        return Promise.all(groups.map((group) => usersService.getUsersByResearchGroup(group.external_id)));
       })
-      .then((researchGroupsTokens) => {
-        const tokens = [].concat.apply([], researchGroupsTokens);
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_TOKENS', tokens);
-        return usersService.getEnrichedProfiles(tokens.reduce((unique, rt) => {
-          if (unique.some((name) => name == rt.owner)) return unique;
-          return [rt.owner, ...unique];
-        }, []));
+      .then((result) => {
+        const flatten1 = [].concat.apply([], result);
+        const flatten2 = [].concat.apply([], flatten1);
+
+        return flatten2.reduce((unique, user) => {
+          if (unique.some((name) => name == user.account.name)) return unique;
+          return [user.account.name, ...unique];
+        }, []);
       })
       .then((members) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS', members);

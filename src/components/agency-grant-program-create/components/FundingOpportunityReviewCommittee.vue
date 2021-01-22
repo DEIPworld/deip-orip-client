@@ -103,12 +103,13 @@
         researchGroupService.getResearchGroups(ids)
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
-            Promise.all(researchGroups.map(({ id }) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(id)))
-              .then((researchGroupTokens) => {
-                Promise.all(researchGroupTokens.map((item) => usersService.getEnrichedProfiles(item.map(({ owner }) => owner))))
-                  .then((membersLists) => this.allGroupList.forEach((g, i) => {
-                    g.enrichedMembers = membersLists[i];
-                  }));
+            
+            Promise.all(this.allGroupList.map((researchGroup) => usersService.getUsersByResearchGroup(researchGroup.external_id)))
+              .then((allMembers) => {
+                for (let i = 0; i < this.allGroupList.length; i++) {
+                  const researchGroup = this.allGroupList[i];
+                  researchGroup.enrichedMembers = allMembers[i];
+                }
               });
           });
       }

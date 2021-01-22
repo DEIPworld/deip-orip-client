@@ -32,7 +32,6 @@ const state = {
   bookmarkedResearchesOngoingTokenSalesContributions: [],
 
   researchGroups: [],
-  researchGroupsTokens: [],
   researchGroupsMembers: [],
 
   expertsList: [],
@@ -192,47 +191,33 @@ const actions = {
         ]);
       })
       .then(() => {
-        const rgtPromises = [];
-        const rgPromises = [];
 
-        [
+        const researchGroupIds = [
           ...state.investedResearches,
           ...state.investingResearches,
           ...state.myMembershipResearches,
           ...state.bookmarkedResearches
-        ].reduce((unique, research) => {
-          if (unique.some((researchExternalId) => researchExternalId == research.external_id)) return unique;
-          return [research.external_id, ...unique];
+        ]
+          .reduce((unique, research) => {
+            if (unique.some((rgId) => rgId == research.research_group.external_id)) return unique;
+            return [research.research_group.external_id, ...unique];
+          }, []);
+
+
+        return researchGroupService.getResearchGroups(researchGroupIds);
+      })
+      .then((researchGroups) => {
+        commit('SET_RESEARCH_GROUPS', researchGroups);
+        return usersService.getUsersByResearchGroup(researchGroups.map(researchGroup => researchGroup.external_id));
+      })
+      .then((result) => {
+        const flatten1 = [].concat.apply([], result);
+        const flatten2 = [].concat.apply([], flatten1);
+        const researchGroupsMembers = flatten2.reduce((unique, user) => {
+          if (unique.some((name) => name == user.account.name)) return unique;
+          return [user.account.name, ...unique];
         }, []);
 
-        [
-          ...state.investedResearches,
-          ...state.investingResearches,
-          ...state.myMembershipResearches,
-          ...state.bookmarkedResearches
-        ].reduce((unique, research) => {
-          if (unique.some((rgId) => rgId == research.research_group_id)) return unique;
-          return [research.research_group_id, ...unique];
-        }, []).forEach((rgId) => {
-          rgtPromises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(rgId));
-          rgPromises.push(researchGroupService.getResearchGroupById(rgId));
-        });
-
-        return Promise.all([
-          Promise.all(rgtPromises),
-          Promise.all(rgPromises)
-        ]);
-      })
-      .then(([researchGroupsTokens, researchGroups]) => {
-        const tokens = [].concat.apply([], researchGroupsTokens);
-        commit('SET_RESEARCH_GROUPS_TOKENS', tokens);
-        commit('SET_RESEARCH_GROUPS', researchGroups);
-        return usersService.getEnrichedProfiles(tokens.reduce((unique, rt) => {
-          if (unique.some((name) => name == rt.owner)) return unique;
-          return [rt.owner, ...unique];
-        }, []));
-      })
-      .then((researchGroupsMembers) => {
         commit('SET_RESEARCH_GROUPS_MEMBERS', researchGroupsMembers);
       })
       .finally(() => {
@@ -398,10 +383,6 @@ const mutations = {
 
   SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
     state.myMembershipResearchesOngoingTokenSalesContributions = list;
-  },
-
-  SET_RESEARCH_GROUPS_TOKENS(state, list) {
-    state.researchGroupsTokens = list;
   },
 
   SET_RESEARCH_GROUPS(state, list) {

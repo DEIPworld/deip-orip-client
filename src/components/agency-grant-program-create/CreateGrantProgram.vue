@@ -249,8 +249,7 @@
         .then((organization) => {
           const members = [];
 
-          deipRpc.api.getResearchGroupTokensByResearchGroupAsync(organization.id)
-            .then((rgtList) => usersService.getEnrichedProfiles(rgtList.map(({ owner }) => owner)))
+           usersService.getUsersByResearchGroup(organization.external_id)
             .then((members) => {
               this.organization = {
                 ...organization,

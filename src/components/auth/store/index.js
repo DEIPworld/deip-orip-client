@@ -25,7 +25,6 @@ const state = {
     profile: undefined,
     account: undefined,
     expertTokens: [],
-    groupTokens: [],
     groups: [],
     coworkers: [],
     joinRequests: [],
@@ -66,17 +65,14 @@ const getters = {
 
   userGroups: (state, getters) => {
     const groups = [];
-    for (let i = 0; i < state.user.groupTokens.length; i++) {
-      const rgt = state.user.groupTokens[i];
-      const group = state.user.groups.find((g) => g.id === rgt.research_group_id);
+    for (let i = 0; i < state.user.groups.length; i++) {
+      const group = state.user.groups[i];
       groups.push({
         id: group.id,
         external_id: group.external_id,
         permlink: group.permlink,
         name: group.name,
         quorum_percent: group.quorum_percent,
-        weight: rgt.amount,
-        rgtId: rgt.id,
         is_personal: group.is_personal,
         is_dao: group.is_dao,
         is_centralized: group.is_centralized,
@@ -250,65 +246,13 @@ const actions = {
       });
   },
 
-  loadGroups({
-    state, dispatch, commit, getters
-  }) {
+  loadGroups({ state, dispatch, commit, getters }) {
     const { user } = getters;
-    const groupTokens = [];
-    return deipRpc.api.getResearchGroupTokensByAccountAsync(user.username)
-      .then((tokensList) => {
-        const promises = [];
-        for (let i = 0; i < tokensList.length; i++) {
-          const rgt = tokensList[i];
-          groupTokens.push(rgt);
-          promises.push(researchGroupService.getResearchGroup(rgt.research_group.external_id))
-        }
-        return Promise.all(promises);
-      })
+
+    return researchGroupService.getResearchGroupsByUser(user.username)
       .then((groups) => {
         commit('SET_USER_GROUPS_LIST', groups);
-        commit('SET_USER_RESEARCH_GROUP_TOKENS_LIST', groupTokens);
       });
-  },
-
-  loadCoworkers({ state, commit, getters }, { notify, groupId } = {}) {
-    const groups = getters.userGroups;
-    const coworkers = [];
-
-    if (groups.length) {
-      const promises = [];
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        promises.push(deipRpc.api.getResearchGroupTokensByResearchGroupAsync(group.id));
-      }
-
-      Promise.all(promises)
-        .then((tokensList) => {
-          const flattened = tokensList.reduce(
-            (accumulator, currentValue) => accumulator.concat(currentValue), []
-          );
-
-          for (let i = 0; i < flattened.length; i++) {
-            const rgt = flattened[i];
-            if (rgt.owner !== state.user.username && coworkers.find((c) => c.owner === rgt.owner) === undefined) {
-              coworkers.push({ rgt });
-            }
-          }
-
-          return usersService.getEnrichedProfiles(coworkers.map((c) => c.rgt.owner));
-        })
-        .then((users) => {
-          coworkers.forEach((coworker, idx) => {
-            const user = users.find((u) => u.account.name === coworker.rgt.owner);
-            coworker.account = user.account;
-            coworker.profile = user.profile;
-          });
-          commit('SET_USER_COWORKERS_LIST', coworkers);
-        })
-        .finally(() => {
-          if (notify) notify();
-        });
-    } else if (notify) notify();
   },
 
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
@@ -350,10 +294,6 @@ const mutations = {
 
   SET_USER_GROUPS_LIST(state, list) {
     state.user.groups = list;
-  },
-
-  SET_USER_RESEARCH_GROUP_TOKENS_LIST(state, list) {
-    state.user.groupTokens = list;
   },
 
   SET_USER_RESEARCH_BOOKMARKS(state, list) {

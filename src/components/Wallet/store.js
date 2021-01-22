@@ -137,29 +137,11 @@ const actions = {
 
   loadAllGroups({ commit }, user) {
     const groupList = [];
-    return deipRpc.api.getResearchGroupTokensByAccountAsync(user)
-      .then((data) => {
-        const groups = data.filter((item) => !item.research_group.is_personal);
-        const groupsInfo = Promise.all(groups.map((groupToken) => researchGroupService.getResearchGroup(groupToken.research_group.external_id)));
-
-        const groupsShares = Promise.all(
-          groups.map(
-            (groupToken) => deipRpc.api.getResearchGroupTokensByResearchGroupAsync(
-              groupToken.research_group_id
-            )
-          )
-        );
-
-        return Promise.all([groupsInfo, groupsShares]);
-      })
-      .then(([groupsInfo, groupsShares]) => _.each(groupsInfo, (item, i) => {
-        item.shares = groupsShares[i];
-      }))
-      .then((groups) => {
+    return researchGroupService.getResearchGroupsByUser(user)
+      .then((result) => {
+        const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);
-        return Promise.all(
-          groups.map((item) => researchService.getResearchGroupResearchListing(item.external_id))
-        );
+        return Promise.all(groups.map((item) => researchService.getResearchGroupResearchListing(item.external_id)));
       })
       .then((researches) => {
         groupList.forEach((g) => {

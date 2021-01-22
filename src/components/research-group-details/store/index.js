@@ -23,7 +23,6 @@ const proposalsService = ProposalsService.getInstance();
 const state = {
   // proposals: [],
   group: undefined,
-  groupShares: [],
   members: [],
   revenueHistory: [],
   researchList: [],
@@ -67,7 +66,6 @@ const getters = {
       accountSecurityTokenBalance: state.accountSecurityTokenBalance
     };
   },
-  groupShares: (state) => state.groupShares,
   members: (state) => state.members,
   invites: (state) => state.invites,
   // proposalListFilter: (state) => state.proposalListFilter,
@@ -90,16 +88,10 @@ const actions = {
     return researchGroupService.getResearchGroupByPermlink(permlink)
       .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
-        // const proposalsLoad = new Promise((resolve, reject) => {
-        //   dispatch('loadResearchGroupProposals', {
-        //     account: state.group.account.name,
-        //     notify: resolve
-        //   });
-        // });
 
         const membersLoad = new Promise((resolve, reject) => {
           dispatch('loadResearchGroupMembers', {
-            groupId: state.group.id,
+            researchGroupExternalId: state.group.external_id,
             notify: resolve
           });
         });
@@ -158,36 +150,18 @@ const actions = {
       });
   },
 
-  // loadResearchGroupProposals({ commit }, { account, notify }) {
-  //   commit('SET_GROUP_PROPOSALS_LOADING_STATE', true);
-  //   proposalsService.getProposalsByCreator(account)
-  //     .then((data) => {
-  //       commit('SET_PROPOSALS', data);
-  //     })
-  //     .finally(() => {
-  //       commit('SET_GROUP_PROPOSALS_LOADING_STATE', false);
-  //       if (notify) notify();
-  //     });
-  // },
-
-  loadResearchGroupMembers({ commit, state }, { groupId, notify }) {
+  loadResearchGroupMembers({ commit, state }, { researchGroupExternalId, notify }) {
     const members = [];
     commit('SET_GROUP_MEMBERS_LOADING_STATE', true);
-
-    deipRpc.api.getResearchGroupTokensByResearchGroupAsync(groupId)
-      .then((rgtList) => {
-        commit('SET_GROUP_SHARES', rgtList);
-        rgtList.forEach((rgt) => {
-          members.push({ rgt });
-        });
-        return usersService.getEnrichedProfiles(members.map((member) => member.rgt.owner));
-      })
+    usersService.getUsersByResearchGroup(researchGroupExternalId)
       .then((users) => {
         const promises = [];
-        members.forEach((member) => {
-          const user = users.find((user) => user.account.name == member.rgt.owner);
-          member.account = user.account;
-          member.profile = user.profile;
+        users.forEach((user) => {
+          const member = {
+            account: user.account,
+            profile: user.profile
+          };
+          members.push(member);
           promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name));
         });
         return Promise.all(promises);
@@ -265,10 +239,6 @@ const mutations = {
 
   SET_RESEARCH_GROUP(state, group) {
     state.group = group;
-  },
-
-  SET_GROUP_SHARES(state, shares) {
-    state.groupShares = shares;
   },
 
   SET_GROUP_MEMBERS(state, members) {

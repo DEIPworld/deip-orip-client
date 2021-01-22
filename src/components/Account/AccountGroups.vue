@@ -50,7 +50,7 @@
                   :max-lines="2"
                   class="text-body-2"
                 >
-                  {{ group.shares.length }}
+                  {{ group.researchGroupRef.members.length }}
                 </v-clamp>
               </template>
             </d-box-item>
