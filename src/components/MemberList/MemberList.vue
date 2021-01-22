@@ -109,9 +109,8 @@
     methods: {
       update() {
         const payload = {
-          ...(this.group && this.group.id ? { groupId: this.group.id } : {})
+          ...(this.group && this.group.id ? { researchGroupExternalId: this.group.external_id } : {})
         };
-
         return this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
           .then(() => {
             this.members = this.$store.getters[`${this.storeNS}/members`];

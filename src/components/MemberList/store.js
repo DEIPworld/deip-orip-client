@@ -15,49 +15,31 @@ const GETTERS = {
 
 const ACTIONS = {
   loadMembers({ commit }, payload) {
-    let members = [];
-    let serviceMethod;
-
-    if (payload.groupId !== undefined) {
-      serviceMethod = deipRpc.api.getResearchGroupTokensByResearchGroupAsync(payload.groupId)
-        .then((rgtList) => {
-          rgtList.forEach((rgt) => {
-            members.push({ rgt });
-          });
-          return usersService.getEnrichedProfiles(members.map((member) => member.rgt.owner));
-        });
-    } else {
-      return commit('SET_MEMBERS', members);
-    }
-
-    return serviceMethod
-      .then((users) => {
-        const promises = [];
-        members = members.map((member) => {
-          const user = users.find((u) => u.account.name === member.rgt.owner);
-          promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name));
-          return {
-            ...member,
-            account: user.account,
-            profile: user.profile
-          };
-        });
-
-        return Promise.all(promises);
-      })
-      .then((expList) => {
-        members = members.map((member, idx) => (
-          {
-            ...member,
-            expertise: expList[idx]
+    const members = [];
+    if (payload.researchGroupExternalId !== undefined) {
+      return usersService.getUsersByResearchGroup(payload.researchGroupExternalId)
+        .then((users) => {
+          members.push(...users);
+          return Promise.all(members.map((member) => deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name)));
+        })
+        .then((expList) => {
+          for (let i = 0; i < members.length; i++) {
+            const member = members[i];
+            member.expertise = expList[i];
           }
-        ));
-        return Promise.all(members.map(({ account: { name } }) => expertiseContributionsService.getAccountExpertiseStats(name, {})));
-      })
-      .then((expertiseStats) => {
-        commit('SET_MEMBERS', members.map((item, i) => ({ ...item, expertiseStats: expertiseStats[i] })));
-      })
-      .catch((err) => console.error(err));
+          return Promise.all(members.map(({ account: { name } }) => expertiseContributionsService.getAccountExpertiseStats(name, {})));
+        })
+        .then((expertiseStats) => {
+          for (let i = 0; i < members.length; i++) {
+            const member = members[i];
+            member.expertiseStats = expertiseStats[i];
+          }
+          commit('SET_MEMBERS', members);
+        })
+        .catch((err) => console.error(err));
+    } else {
+      commit('SET_MEMBERS', members);
+    }
   }
 
 };
