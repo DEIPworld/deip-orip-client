@@ -53,7 +53,7 @@
         const $host = this.$refs.host.$el;
         const $fields = $host.querySelectorAll('.v-input');
         const width = $host.clientWidth - this.$refs.actions.clientWidth;
-        const delta = 4 * 24;
+        const delta = 5 * 24;
         const fieldWidth = ((width <= 1280 ? width : 1280) - delta) / 4;
 
         $fields.forEach((node, i) => {

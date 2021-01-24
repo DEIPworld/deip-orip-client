@@ -38,7 +38,7 @@
 
             <validation-provider
               v-slot="{ errors }"
-              name="Content"
+              name="Expert"
               rules="required"
             >
               <user-selector
@@ -52,9 +52,7 @@
         </vex-dialog>
       </v-form>
     </validation-observer>
-
   </div>
-
 </template>
 
 <script>
@@ -92,13 +90,15 @@
     },
 
     data() {
+      const formModel = {
+        contentId: this.contentId ? this.contentId : null,
+        reviewer: null
+      };
       return {
         requestDialog: false,
         loading: false,
-        formModel: {
-          contentId: this.contentId ? this.contentId : null,
-          reviewer: null
-        }
+        formModel,
+        copyFormModel: { ...formModel }
       };
     },
 
@@ -126,6 +126,8 @@
             );
           })
           .finally(() => {
+            this.formModel = { ...this.copyFormModel };
+            this.$refs.observer.reset();
             this.loading = false;
           });
       }

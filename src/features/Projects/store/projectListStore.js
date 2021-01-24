@@ -115,7 +115,7 @@ const ACTIONS = {
     return ids.length ? researchService.getResearches(ids)
       .then((result) => {
         context.commit('storeProjectsData', result);
-      }) : [];
+      }) : context.commit('storeProjectsData', []);
   },
 
   // team
