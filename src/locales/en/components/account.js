@@ -80,7 +80,10 @@ export default {
     oldPasswordField: 'Old password / Private Key',
     newPasswordField: 'New password',
     reEnterPasswordField: 'Re-Enter New password',
-    submitBtn: 'Change Password'
+    submitBtn: 'Change Password',
+    oldInvalid: 'Old password is invalid',
+    succChanged: 'Password successfully changed!',
+    errChaged: 'Oops! Something went wrong. Please try again later'
   },
   privateKey: {
     title: 'Download private key',

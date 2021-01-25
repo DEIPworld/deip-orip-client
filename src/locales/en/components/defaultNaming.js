@@ -20,7 +20,7 @@ export default {
   projects: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
   noProjects: () => `No ${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'} found for specified criteria`,
   yourDomain: 'Your domain',
-  allDomain: 'All domain',
+  allDomain: 'All domains',
   time: {
     months: 'months',
     days: 'days',
@@ -74,7 +74,7 @@ export default {
     endDate: 'End date should be greater than start date',
     masterPasswordMinLength: 'Master password should be at least 10 symbols',
     masterPasswordMaxLength: 'Master password max length is 100 symbols',
-    reEnterMasterPassword: 'Password doesn\'t match',
+    reEnterMasterPassword: 'Password didn\'t match. Try again.',
     titleMax: 'Title max length is {maxTitleLength} symbols',
     descriptionMax: 'Description max length is {maxDescriptionLength} symbols'
   },

@@ -182,7 +182,7 @@ export default {
     title: 'Settings',
     change: 'Change banner on Explore page',
     update: 'Update banner',
-    success: 'Banner image has been updated successfully ! Refresh the page to see thr changes',
+    success: 'Banner image has been updated successfully ! Refresh the page to see the change',
     err: 'Sorry, an error occurred while uploading banner image, please try again later'
   },
   sidebar: {

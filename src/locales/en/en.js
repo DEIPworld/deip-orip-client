@@ -98,16 +98,16 @@ export default {
     expertsSupp: '{supportersCount} experts supported this review',
     noReviews: 'No reviews yet.',
     suppRev: 'Support Review',
-    notMembers: `Review can be supported only by members who have no relations to this ${project()} or team that leads this ${project()}.`,
-    canSupport: 'Users with expertise in {disciplines} can support this review only',
+    notMembers: `Review can be supported only by members who have no relations with this ${project()} or team that leads this ${project()}.`,
+    canSupport: 'Users with expertise in {disciplines} can support this review',
     eciForContribution: `You will get approximately {countEci} ECI reward in {disciplines} for your contribution to this ${project()}`,
-    eciForReview: `You will get approximately {countEci} ECI reward in {disciplines} for review on the materials associated with this ${project()}.`,
+    eciForReview: `You will get approximately {countEci} ECI reward in {disciplines} for review of the materials associated with this ${project()}.`,
     once: 'Review can be supported once by the user',
-    needExpertiseAndNotMembers: `To add review you need expertise in {disciplines} and have no relations to this ${project()} or team that leads this ${project()}.`,
+    needExpertiseAndNotMembers: `To add review you need expertise in {disciplines} and have no relations with this ${project()} or team that leads this ${project()}.`,
     reviewedAlready: 'You have reviewed this material already',
     request: 'Request expert review',
-    notSuppOwnRev: 'It\'s not allowed to support own review',
-    needNotMembers: `To add review you need to have no relations to this ${project()} or team that leads this ${project()}.`
+    notSuppOwnRev: 'It\'s not allowed to support your own review',
+    needNotMembers: `To add review you need to have no relations with this ${project()} or team that leads this ${project()}.`
   },
   landing: {
     searchByTech: 'Search by technology',

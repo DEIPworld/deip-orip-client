@@ -5,18 +5,20 @@ export default {
   addGroup: 'Add group',
   detailsEducation: {
     title: 'Education',
+    deleteDialogTitle: 'Delete education ?',
     add: 'Add',
-    deleteBtn: 'Confirm',
-    sureDelete: 'Are you sure you want to delete this entry ?',
+    deleteBtn: 'Delete',
+    sureDelete: 'Education will be deleted permanently and will be removed from account page.',
     success: '"{educationalInstitution}" Institute has been deleted successfully!',
     err: 'An error occurred while deleting "{educationalInstitution}" details, please try again later',
     present: 'present'
   },
   detailsEmployment: {
     title: 'Employment',
+    deleteDialogTitle: 'Delete employment ?',
     add: 'Add',
-    deleteBtn: 'Confirm',
-    sureDelete: 'Are you sure you want to delete this entry ?',
+    deleteBtn: 'Delete',
+    sureDelete: 'Position will be deleted permanently and will be removed from account page.',
     success: '"{company}" employment has been deleted successfully!',
     err: 'An error occurred while deleting "{company}" employment details, please try again later',
     present: 'present'
@@ -90,8 +92,8 @@ export default {
       isPresentField: 'Is present'
     },
     positionBlock: {
-      title: 'Position',
-      positionField: 'Position'
+      title: 'Occupation',
+      positionField: 'Occupation'
     },
     descriptionBlock: {
       title: 'Description (optional)',
