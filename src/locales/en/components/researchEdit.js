@@ -22,8 +22,8 @@ export default {
   back: `Back to ${project()}`,
   invalidLink: 'Invalid http(s) link',
   categoryBlock: {
-    title: 'Category:',
-    categoryField: 'Category'
+    title: 'Domain:',
+    categoryField: 'Domain'
   },
   videoBlock: {
     title: 'Video Presentation:',
@@ -45,10 +45,10 @@ export default {
   backgroundBlock: {
     title: 'Background:'
   },
-  successProp: 'Proposal has been sent successfully!',
+  successProp: 'Information has been updated successfully',
   errProp: 'An error occurred during proposal sending',
   successInfo: `${project(true)} has been updated successfully`,
-  errInfo: 'An error occurred during change info',
+  errInfo: 'An error occurred during info update',
   successImg: 'Background image has been updated successfully ! Refresh the page please',
   errImg: 'Sorry, an error occurred while uploading background image, please try again later',
   shouldHaveGoal: `${project(true)} should have the primary Goal`,

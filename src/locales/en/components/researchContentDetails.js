@@ -43,7 +43,7 @@ export default {
     organization: 'Organization',
     releaseDate: 'Release date',
     verifiedBy: 'Verified by',
-    sharedMat: 'Shared material is not by anyone yet',
+    sharedMat: 'Material has not yet exploit by anyone',
     usageOrg: 'Usage by organization',
     usageType: 'Usage by data type',
     usageDomain: 'Usage by domain'

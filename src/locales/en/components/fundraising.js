@@ -3,7 +3,7 @@ import { project } from './basicWords';
 export default {
   title: 'Fundraising',
   fundraisingControlSection: {
-    collected: 'Already collected investments:',
+    collected: 'Already fundraised:',
     softCap: 'Min Goal:',
     hardCap: 'Max Goal:'
   },
