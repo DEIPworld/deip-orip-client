@@ -61,12 +61,14 @@
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
+  import { UsersService } from '@deip/users-service';
   import DForm from '@/components/Deipify/DForm/DForm';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import DInputPassword from '@/components/Deipify/DInput/DInputPassword';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
+  const usersService = UsersService.getInstance();
 
   const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
 
@@ -141,8 +143,9 @@
         this.disable = true;
 
         let privateKey;
-        deipRpc.api.getAccountsAsync([this.formData.username])
-          .then(([account]) => {
+        usersService.getUser(this.formData.username)
+          .then((res) => {
+            const { account } = res;
             if (!account) {
               throw new Error(this.$t('signIn.form.rules.invalidAccount'));
             }

@@ -240,22 +240,7 @@ const actions = {
         if (notify) notify();
       });
   }
-
-  // loadWitnesses({ commit, dispatch, state }, { notify }) {
-  //   return deipRpc.api.getActiveWitnessesAsync()
-  //     .then((items) => {
-  //       let witnesses = items.filter(w => w != "");
-  //       return Promise.all(witnesses.map(w => deipRpc.api.getWitnessByAccountAsync(w)));
-  //     })
-  //     .then(witnesses => {
-  //       commit('SET_WITNESSES_LIST', witnesses);
-  //     })
-  //     .catch(err => { console.error(err) })
-  //     .finally(() => {
-  //       if (notify) notify();
-  //     });
-  // }
-
+  
 };
 
 // mutations

@@ -95,8 +95,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
-
   import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
   import MemberList from '@/components/MemberList/MemberList';
@@ -181,21 +179,12 @@
 
     created() {
       this.highlightProposalsSection = this.$route.hash === '#proposals';
-      // TODO: request server for tenant users
-      deipRpc.api.lookupAccountsAsync('0', 10000)
-        .then((accounts) => {
-          const blackList = [
-            ...this.SYSTEM_USERS,
-            ...this.members.map((member) => member.account.name),
-            ...this.invites.map((invite) => invite.user.account.name)
-          ];
-          const usersToInvite = accounts
-            .filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name))
-            .map((a) => a.name);
-          return usersService.getEnrichedProfiles(usersToInvite);
-        })
+      usersService.getUsersListing()
         .then((users) => {
-          this.usersToInvite = users;
+          this.usersToInvite = users.filter(u => 
+            !this.invites.some((invite) => invite.user.account.name == u.account.name) &&
+            !this.members.some((member) => member.account.name == u.account.name)
+          );
         });
     },
 

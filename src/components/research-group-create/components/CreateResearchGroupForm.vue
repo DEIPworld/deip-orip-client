@@ -228,22 +228,7 @@
     },
     mounted() {
       this.creatorUsername = this.$store.getters['auth/user'].username;
-      // TODO: request server for tenant users
-      deipRpc.api
-        .lookupAccountsAsync('0', 10000)
-        .then((accounts) => {
-          const blackList = [...this.SYSTEM_USERS];
-          const usernames = [];
-          usernames.push(
-            ...accounts
-              .filter(
-                (a) => !a.is_research_group
-                  && !blackList.some((username) => username == a.name)
-              )
-              .map((a) => a.name)
-          );
-          return usersService.getEnrichedProfiles(usernames);
-        })
+      usersService.getUsersListing()
         .then((users) => {
           users.forEach((u) => {
             u.stake = u.account.name == this.creatorUsername ? 100 : 0;

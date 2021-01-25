@@ -70,11 +70,8 @@ const actions = {
     const currentUser = rootGetters['auth/user'];
     const isMyPage = currentUser.username == username;
 
-    const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserAccount', { username, notify: resolve });
-    });
-    const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserProfile', { username, notify: resolve });
+    const userLoad = new Promise((resolve, reject) => {
+      dispatch('loadUser', { username, notify: resolve });
     });
     const expertiseLoad = new Promise((resolve, reject) => {
       dispatch('loadExpertise', { username, notify: resolve });
@@ -92,8 +89,7 @@ const actions = {
     });
 
     return Promise.all([
-      accountLoad,
-      profileLoad,
+      userLoad,
       expertiseLoad,
       invitesLoad,
       reviewRequestsLoad,
@@ -101,26 +97,22 @@ const actions = {
     ]);
   },
 
-  loadAccountExpertiseDetailsPage({
-    state, dispatch, commit, rootGetters
-  }, { username }) {
-    const accountLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserAccount', { username, notify: resolve });
-    });
-    const profileLoad = new Promise((resolve, reject) => {
-      dispatch('loadUserProfile', { username, notify: resolve });
+  loadAccountExpertiseDetailsPage({ state, dispatch, commit, rootGetters }, { username }) {
+    const userLoad = new Promise((resolve, reject) => {
+      dispatch('loadUser', { username, notify: resolve });
     });
     const expertiseLoad = new Promise((resolve, reject) => {
       dispatch('loadExpertise', { username, notify: resolve });
     });
 
-    return Promise.all([accountLoad, profileLoad, expertiseLoad]);
+    return Promise.all([userLoad, expertiseLoad]);
   },
 
-  loadUserAccount({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getAccountsAsync([username])
-      .then(([account]) => {
-        commit('SET_USER_ACCOUNT', account);
+  loadUser({ commit }, { username, notify } = {}) {
+    return usersService.getUser(username)
+      .then((user) => {
+        commit('SET_USER_ACCOUNT', user.account);
+        commit('SET_USER_PROFILE', user.profile);
       })
       .finally(() => {
         if (notify) notify();
@@ -161,17 +153,6 @@ const actions = {
       })
       .finally(() => {
         commit('SET_USER_EXPERTISE_LOADING_STATE', false);
-        if (notify) notify();
-      });
-  },
-
-  loadUserProfile({ commit }, { username, notify } = {}) {
-    return usersService.getUserProfile(username)
-      .then((profile) => {
-        commit('SET_USER_PROFILE', profile || null);
-      }, (err) => {
-        console.error(err);
-      }).finally(() => {
         if (notify) notify();
       });
   },

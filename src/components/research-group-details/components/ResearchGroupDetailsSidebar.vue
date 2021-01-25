@@ -76,10 +76,6 @@
 
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
-    <transfer-group-deip-tokens-dialog
-      :is-open="options.isTransferTokensDialogOpen"
-      @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: false })"
-    />
   </div>
 </template>
 

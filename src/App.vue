@@ -47,7 +47,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { AccessService } from '@deip/access-service';
   import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
   import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';

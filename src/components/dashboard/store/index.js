@@ -305,15 +305,9 @@ const actions = {
   },
 
   loadExperts({ commit }, { username, notify } = {}) {
-    // TODO: request server for tenant users
-    deipRpc.api.lookupAccountsAsync('0', 10000)
-      .then((accounts) => {
-        const blackList = [...this.SYSTEM_USERS, username];
-        const experts = accounts.filter((a) => !a.is_research_group && !blackList.some((username) => username === a.name)).map((a) => a.name);
-        return usersService.getEnrichedProfiles(experts);
-      })
+    usersService.getUsersListing()
       .then((users) => {
-        commit('SET_EXPERTS', users);
+        commit('SET_EXPERTS', users.filter(u => u.account.name == username));
         return Promise.all(users.map((user) => deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name)));
       })
       .then((tokens) => {

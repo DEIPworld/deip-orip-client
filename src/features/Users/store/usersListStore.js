@@ -66,17 +66,9 @@ const ACTIONS = {
   },
 
   getUsersByTeamId({ commit }, { teamId }) {
-    return deipRpc.api.getResearchGroupMembershipTokensAsync(teamId)
-      .then((tokens) => {
-        const users = tokens.map((t) => t.owner);
-
-        return usersService.getEnrichedProfiles(users)
-          .then((res) => {
-            commit('storeUsersProfiles', res.map((user) => ({
-              ...user,
-              groupTokens: tokens.find((t) => t.owner === user.account.name)
-            })));
-          });
+    return usersService.getUsersByResearchGroup(teamId)
+      .then((users) => {
+        commit('storeUsersProfiles', users);
       });
   },
 

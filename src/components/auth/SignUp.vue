@@ -178,9 +178,11 @@
   import _ from 'lodash';
 
   import { AuthService } from '@deip/auth-service';
+  import { UsersService } from '@deip/users-service';
   import { mapGetters } from 'vuex';
 
   const authService = AuthService.getInstance();
+  const usersService = UsersService.getInstance();
 
   export default {
     name: 'SignUp',
@@ -288,14 +290,14 @@
           if (this.formData.username !== '') {
             this.isUsernameChecking = true;
 
-            return deipRpc.api.getAccountsAsync([this.formData.username])
-              .then((res) => {
-                this.isUsernameVerifyed = _.isEmpty(res[0]);
+            return usersService.getUser(this.formData.username)
+              .then((user) => {
+                this.isUsernameVerifyed = !user;
               }).catch((error) => {
                 this.isUsernameVerifyed = false;
               }).finally(() => {
                 this.isUsernameChecking = false;
-                const usernameInput = _.find(this.$refs.form.inputs, (input) => input.$attrs.name === 'username');
+                const usernameInput = this.$refs.form.inputs.find((input) => input.$attrs.name === 'username');
                 usernameInput.validate();
               });
           }

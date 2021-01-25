@@ -37,7 +37,6 @@
   import GroupsInfoTable from '@/components/Wallet/components/GroupsInfoTable';
   import CurrenciesInfoTable from '@/components/Wallet/components/CurrenciesInfoTable';
   import SharesInfoTable from '@/components/Wallet/components/SharesInfoTable';
-  import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
 
@@ -90,23 +89,12 @@
     },
 
     mounted() {
-      deipRpc.api
-        .lookupAccountsAsync('0', 10000)
-        .then((accounts) => {
-          const blackList = [...this.SYSTEM_USERS];
-
-          const usersToInvite = accounts
-            .filter(
-              (a) => (!a.is_research_group && !blackList.some((username) => username === a.name))
-            ).map((a) => a.name);
-          const groupsToInvite = accounts
-            .filter(
-              (a) => (a.is_research_group && !blackList.some((name) => name === a.name))
-            ).map((a) => researchGroupService.getResearchGroup(a.name));
-          return Promise.all([
-            usersService.getEnrichedProfiles(usersToInvite),
-            ...groupsToInvite
-          ]);
+      Promise.all([
+        usersService.getUsersListing(),
+        researchGroupService.getResearchGroupsListing()
+      ])
+        .then(([users, researchGroups]) => {
+          return [...users, ...researchGroups];
         })
         .then((accounts) => {
           this.allAccounts = accounts.flat().map((a) => {

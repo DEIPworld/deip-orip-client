@@ -266,7 +266,7 @@
 
         userService.updateUserProfile(this.currentUser.username, update)
           .then((res) => {
-            this.$store.dispatch('auth/loadProfile', { username: this.currentUser.username });
+            this.$store.dispatch('auth/loadUserData', { username: this.currentUser.username });
             this.$notifier.showSuccess(this.$t('userDetailRouting.employmentDialog.emplSaveSucc', { company: this.formData.company }));
           }, (err) => {
             this.$notifier.showError(this.$t('userDetailRouting.employmentDialog.emplSaveFail', { company: this.formData.company }));

@@ -67,9 +67,11 @@
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
+  import { UsersService } from '@deip/users-service';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
+  const usersService = UsersService.getInstance();
 
   const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
 
@@ -118,8 +120,9 @@
         this.isChecking = true;
 
         let privateKey;
-        return deipRpc.api.getAccountsAsync([this.username])
-          .then(([account]) => {
+        return usersService.getUser(this.username)
+          .then((res) => {
+            const { account } = res;
             if (!account) {
               throw new Error(this.$t('tenantSignIn.form.rules.invalidOrg'));
             }

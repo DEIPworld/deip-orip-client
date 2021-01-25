@@ -367,7 +367,7 @@
 
         userService.updateUserProfile(this.$currentUser.username, update)
           .then((res) => {
-            this.$store.dispatch('account/loadUserAccount', {
+            this.$store.dispatch('account/loadUser', {
               username: this.$currentUser.username
             });
 

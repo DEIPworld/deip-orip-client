@@ -135,8 +135,7 @@ const actions = {
 
   loadUser({ commit, dispatch }) {
     return Promise.all([
-      dispatch('loadProfile'),
-      dispatch('loadAccount'),
+      dispatch('loadUserData'),
       dispatch('loadExpertTokens'),
       dispatch('loadJoinRequests'),
       dispatch('loadResearchBookmarks'),
@@ -203,11 +202,12 @@ const actions = {
       });
   },
 
-  loadProfile({ state, commit, getters }, { notify } = {}) {
+  loadUserData({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
-    return usersService.getUserProfile(user.username)
-      .then((profile) => {
-        commit('SET_USER_PROFILE', profile);
+    return usersService.getUser(user.username)
+      .then((result) => {
+        commit('SET_USER_PROFILE', result.profile);
+        commit('SET_USER_ACCOUNT', result.account);
       }, (err) => {
         console.error(err);
       })
@@ -228,19 +228,6 @@ const actions = {
         commit('SET_USER_ASSETS', assets);
       })
       .catch((err) => { console.error(err); })
-      .finally(() => {
-        if (notify) notify();
-      });
-  },
-
-  loadAccount({ state, commit, getters }, { notify } = {}) {
-    const { user } = getters;
-    return deipRpc.api.getAccountsAsync([user.username])
-      .then((account) => {
-        commit('SET_USER_ACCOUNT', account[0]);
-      }, (err) => {
-        console.error(err);
-      })
       .finally(() => {
         if (notify) notify();
       });

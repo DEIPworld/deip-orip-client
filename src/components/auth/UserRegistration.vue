@@ -412,20 +412,16 @@
         if (this.formData.username !== '') {
           this.isUsernameChecking = true;
 
-          return deipRpc.api
-            .getAccountsAsync([this.formData.username])
-            .then((res) => {
-              this.isUsernameVerifyed = _.isEmpty(res[0]);
+          return usersService.getUser(this.formData.username)
+            .then((user) => {
+              this.isUsernameVerifyed = !user;
             })
             .catch((error) => {
               this.isUsernameVerifyed = false;
             })
             .finally(() => {
               this.isUsernameChecking = false;
-              const usernameInput = _.find(
-                this.$refs.form.inputs,
-                (input) => input.$attrs.name === 'username'
-              );
+              const usernameInput = this.$refs.form.inputs.find((input) => input.$attrs.name === 'username');
               usernameInput.validate();
             });
         }
