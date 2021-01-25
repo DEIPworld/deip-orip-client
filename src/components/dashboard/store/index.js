@@ -149,12 +149,6 @@ const actions = {
   loadDashboardPage({ commit, dispatch, state }, { username }) {
     commit('SET_DASHBOARD_PAGE_LOADING_STATE', true);
 
-    const investedResearchesLoad = new Promise((resolve, reject) => {
-      dispatch('loadInvestedResearches', { username, notify: resolve });
-    });
-    const investingResearchesLoad = new Promise((resolve, reject) => {
-      dispatch('loadInvestingResearches', { username, notify: resolve });
-    });
     const membershipResearchesLoad = new Promise((resolve, reject) => {
       dispatch('loadMembershipResearches', { username, notify: resolve });
     });
@@ -169,8 +163,6 @@ const actions = {
     });
 
     return Promise.all([
-      investedResearchesLoad,
-      investingResearchesLoad,
       membershipResearchesLoad,
       expertsLoad,
       myReviewRequestsLoad,
@@ -225,40 +217,6 @@ const actions = {
       });
   },
 
-  loadInvestedResearches({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getResearchTokensByAccountNameAsync(username)
-      .then((shares) => {
-        commit('SET_INVESTED_RESEARCH_SHARES', shares);
-        return Promise.all(shares.map((s) => researchService.getResearch(s.research_external_id)));
-      })
-      .then((items) => {
-        const researches = items.filter((r) => !!r);
-        commit('SET_INVESTED_RESEARCHES', researches);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
-  },
-
-  loadInvestingResearches({ commit }, { username, notify } = {}) {
-    return deipRpc.api.getResearchTokenSaleContributionsByContributorAsync(username)
-      .then((contributions) => {
-        commit('SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
-        return Promise.all(contributions.map((c) => deipRpc.api.getResearchTokenSaleByIdAsync(c.research_token_sale_id)));
-      })
-      .then((sales) => {
-        commit('SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((s) => researchService.getResearch(s.research_external_id)));
-      })
-      .then((items) => {
-        const researches = items.filter((r) => !!r);
-        commit('SET_INVESTING_RESEARCHES_TOKEN_SALES', researches);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
-  },
-
   loadMembershipResearches({ commit }, { username, notify } = {}) {
     return researchService.getUserResearchListing(username)
       .then((items) => {
@@ -269,7 +227,7 @@ const actions = {
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(ts.id)));
+        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
@@ -293,7 +251,7 @@ const actions = {
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => deipRpc.api.getResearchTokenSaleContributionsByResearchTokenSaleIdAsync(ts.id)));
+        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);

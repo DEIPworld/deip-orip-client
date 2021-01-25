@@ -449,7 +449,7 @@
                 this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
                 this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', assetId),
                 this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
-                this.$store.dispatch('auth/loadAccount'),
+                this.$store.dispatch('auth/loadUserData'),
                 this.$store.dispatch('auth/loadBalances')
               ]
             );

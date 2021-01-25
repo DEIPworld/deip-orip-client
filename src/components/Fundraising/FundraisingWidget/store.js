@@ -1,5 +1,4 @@
 import { InvestmentsService } from '@deip/investments-service';
-import deipRpc from '@deip/rpc-client';
 
 const investmentsService = InvestmentsService.getInstance();
 
@@ -25,7 +24,7 @@ const ACTIONS = {
       }), (err) => { console.error(err); };
   },
   loadHistoryResearchTokenSale({ commit }, researchId) {
-    return deipRpc.api.getResearchTokenSalesByResearchAsync(researchId)
+    return investmentsService.getResearchTokenSalesByResearch(researchId)
       .then((tokenSales) => {
         commit('setHistoryResearchTokenSale', tokenSales);
       });

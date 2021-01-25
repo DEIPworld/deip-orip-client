@@ -1,6 +1,4 @@
 import Vue from 'vue';
-import deipRpc from '@deip/rpc-client';
-
 import { UsersService } from '@deip/users-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchService } from '@deip/research-service';
@@ -157,18 +155,6 @@ const actions = {
       })
       .then((members) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS_MEMBERS', members);
-        return Promise.all(state.researches.map((research) => deipRpc.api.getResearchTokensByResearchIdAsync(research.id)));
-      })
-      .then((researchTokens) => {
-        const tokens = [].concat.apply([], researchTokens);
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS', tokens);
-        return usersService.getEnrichedProfiles(tokens.reduce((unique, share) => {
-          if (unique.some((name) => name == share.account_name)) return unique;
-          return [share.account_name, ...unique];
-        }, []));
-      })
-      .then((researchTokensHolders) => {
-        commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_TOKENS_HOLDERS', researchTokensHolders);
       })
       .catch((err) => {
         console.error(err);

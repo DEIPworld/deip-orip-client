@@ -138,7 +138,7 @@
           isApproving,
           []
         )
-          .then(() => this.$store.dispatch('auth/loadAccount'))
+          .then(() => this.$store.dispatch('auth/loadUserData'))
           .then(() => {
             const balance = this.user.account.expert_tokens_balance;
 

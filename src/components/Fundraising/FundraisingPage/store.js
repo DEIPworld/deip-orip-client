@@ -5,6 +5,7 @@ import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 
+
 const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const usersService = UsersService.getInstance();
@@ -78,10 +79,7 @@ const ACTIONS = {
   loadTransactionsHistory({ commit }, researchId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return researchService.getResearch(researchId)
-      .then((research) => {
-        return deipRpc.api.getContributionsHistoryByResearchAsync(research.id)
-      })
+    return investmentsService.getResearchTokenSaleContributionsByResearch(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
         return usersService.getEnrichedProfiles(transactionsList.map((t) => t.op[1].contributor));
@@ -96,8 +94,9 @@ const ACTIONS = {
         commit('setTransactionsHistory', transactions);
       });
   },
+
   loadLastResearchTokenSale({ commit }, researchId) {
-    return deipRpc.api.getResearchTokenSalesByResearchAsync(researchId)
+    return investmentsService.getResearchTokenSalesByResearch(researchId)
       .then((tokenSales) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);
