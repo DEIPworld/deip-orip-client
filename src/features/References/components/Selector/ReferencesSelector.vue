@@ -5,7 +5,7 @@
     item-text="title"
     item-value="externalId"
     v-bind="$$fieldProps"
-    :filter="(item, queryText, itemText) => itemText.toLowerCase().startsWith(queryText)"
+    :filter="filterSelector"
 
     :loading="!$ready"
     :disabled="!$ready"
