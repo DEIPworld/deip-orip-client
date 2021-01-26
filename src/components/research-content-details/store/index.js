@@ -229,14 +229,12 @@ const actions = {
         for (let i = 0; i < data.length; i++) {
           const discipline = data[i];
           disciplinesList.push(discipline);
-          expertsPromises.push(deipRpc.api.getExpertTokensByDisciplineAsync(discipline.external_id));
+          expertsPromises.push(expertiseContributionsService.getDisciplineExpertiseTokens(discipline.external_id));
         }
 
         return Promise.all([
           Promise.all(expertsPromises)
         ]);
-      }, (err) => {
-        console.error(err);
       })
       .then(([expertTokensPerDiscipline]) => {
         const expertsAccountNames = [];

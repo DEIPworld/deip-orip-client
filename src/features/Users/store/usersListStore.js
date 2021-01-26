@@ -1,16 +1,17 @@
 import deipRpc from '@deip/rpc-client';
 import { UsersService } from '@deip/users-service';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
-
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import {
   getActionByPath,
   camelizeObjectKeys
 } from '@/utils/helpers';
+import { ResearchGroupService } from '@deip/research-group-service';
 
-import { ResearchGroupService } from '@deip/research-group-service'; // temp solution
 
 const usersService = UsersService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance(); // temp solution
+const researchGroupService = ResearchGroupService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const actionsMap = {
   team: 'getUsersByTeamId',
@@ -77,7 +78,7 @@ const ACTIONS = {
     const excludeUsers = wrapInArray(exclude);
 
     return Promise.all(
-      disciplines.map((d) => deipRpc.api.getExpertTokensByDisciplineAsync(d))
+      disciplines.map((d) => expertiseContributionsService.getDisciplineExpertiseTokens(d))
     )
       .then((tokens) => {
         const users = [
