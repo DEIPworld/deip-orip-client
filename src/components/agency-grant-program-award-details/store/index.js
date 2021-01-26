@@ -302,7 +302,7 @@ const actions = {
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
 
-        return researchGroupService.getResearchGroupById(foa.organization_id);
+        return researchGroupService.getResearchGroup(foa.organization_external_id);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
@@ -318,15 +318,15 @@ const actions = {
       })
       .then((awardeeUsers) => {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
-        return Promise.all(state.award.awardees.map((r) => r.research_id)
+        return Promise.all(state.award.awardees.map((r) => r.research_external_id)
           .reduce((acc, researchId) => (acc.some((rId) => rId === researchId) ? acc : [researchId, ...acc]), [])
-          .map((rId) => researchService.getResearchById(rId)));
+          .map((rId) => researchService.getResearch(rId)));
       })
       .then((researchList) => {
         commit('SET_AWARDEE_RESEARCH_LIST', researchList);
-        return Promise.all(researchList.map((r) => r.research_group_id)
+        return Promise.all(researchList.map((r) => r.research_group.external_id)
           .reduce((acc, researchGroupId) => (acc.some((rgId) => rgId === researchGroupId) ? acc : [researchGroupId, ...acc]), [])
-          .map((rgId) => researchGroupService.getResearchGroupById(rgId)));
+          .map((rgId) => researchGroupService.getResearchGroup(rgId)));
       })
       .then((researchGroups) => {
         commit('SET_AWARDEE_RESEARCH_GROUPS_LIST', researchGroups);

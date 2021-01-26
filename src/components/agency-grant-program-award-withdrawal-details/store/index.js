@@ -165,23 +165,23 @@ const actions = {
       })
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
-        return researchGroupService.getResearchGroupById(state.foa.organization_id);
+        return researchGroupService.getResearchGroup(state.foa.organization_external_id);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
-        return researchService.getResearchById(state.awardee.research_id);
+        return researchService.getResearch(state.awardee.research_external_id);
       })
       .then((research) => {
         commit('SET_AWARDEE_RESEARCH', research);
-        return researchGroupService.getResearchGroupById(state.research.research_group_id);
+        return researchGroupService.getResearchGroup(state.research.research_group.external_id);
       })
       .then((researchGroup) => {
         commit('SET_AWARDEE_ORGANIZATION', researchGroup);
-        return researchGroupService.getResearchGroupById(state.award.university_id);
+        return researchGroupService.getResearchGroup(state.award.university_external_id);
       })
       .then((researchGroup) => {
         commit('SET_UNIVERSITY_ORGANIZATION', researchGroup);
-        return researchGroupService.getResearchGroupById(state.foa.treasury_id);
+        return researchGroupService.getResearchGroup(state.foa.treasury_external_id);
       })
       .then((researchGroup) => {
         commit('SET_TREASURY_ORGANIZATION', researchGroup);

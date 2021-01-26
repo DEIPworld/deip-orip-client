@@ -67,7 +67,7 @@ const getters = {
           .find((s) => s.research_id == research.id);
 
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
-        const isTop = researchService.getTopResearchesIds().some((id) => id === research.id);
+        const isTop = false;
 
         if (tokenSale) {
           const tokenSaleContributions = [
@@ -108,7 +108,7 @@ const getters = {
           .filter((member) => research.members.some((name) => name == member.account.name));
 
         const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
-        const isTop = researchService.getTopResearchesIds().some((id) => id == research.id);
+        const isTop = false;
 
         return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
       }, []);
