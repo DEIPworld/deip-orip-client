@@ -61,7 +61,7 @@
     },
     computed: {
       isUserRelatedToProject() {
-        return !this.$isGuest && [
+        return this.$isUser && [
           ...this.project.members,
           ...this.project.researchRef.expressLicenses.map((lic) => lic.owner)
         ].includes(this.$currentUser.username);

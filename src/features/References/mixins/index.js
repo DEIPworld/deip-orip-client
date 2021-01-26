@@ -27,6 +27,9 @@ export const referencesList = {
   },
 
   methods: {
+    filterSelector(item, queryText, itemText) {
+      return itemText.toLowerCase().startsWith(queryText.toLowerCase());
+    },
     updateData() {
       this.$setReady(false);
 

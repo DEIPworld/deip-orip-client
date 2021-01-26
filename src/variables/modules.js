@@ -7,6 +7,7 @@ export const DEIP_MODULE = {
   APP_ASSETS_DEPOSIT: 'app-assets-deposit',
   APP_GRANTS_MANAGEMENT: 'app-grants-management',
   APP_BLOCKCHAIN_EXPLORER: 'app-blockchain-explorer',
+  APP_USER_PERSONAL_WORKSPACE: 'app-user-personal-workspace',
 
   ADMIN_PANEL_MEMBERS_MANAGEMENT: 'admin-panel-members-management',
   ADMIN_PANEL_MEMBERS_REGISTRATION: 'admin-panel-members-registration',
