@@ -322,11 +322,9 @@ const actions = {
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
-          Promise.all(reviews.map((item) => deipRpc.api.getReviewVotesByReviewIdAsync(item.id))),
+          Promise.all(reviews.map((item) => researchContentReviewsService.getReviewVotes(item.external_id))),
           usersService.getEnrichedProfiles(reviews.map((r) => r.author))
         ]);
-      }, (err) => {
-        console.error(err);
       })
       .then(([votes, users]) => {
         const voters = [];
@@ -346,8 +344,6 @@ const actions = {
         }
 
         return usersService.getEnrichedProfiles(voters);
-      }, (err) => {
-        console.error(err);
       })
       .then((users) => {
         for (let i = 0; i < reviews.length; i++) {

@@ -84,7 +84,7 @@
         return this.userExperise.filter((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id === exp.discipline_id));
       },
       isGroupMember() {
-        return this.members.some((item) => item.groupTokens.owner === this.$currentUser.username);
+        return this.members.some((user) => user.account.name === this.$currentUser.username);
       },
       isAuthor() {
         return this.review.author === this.$currentUser.username;
