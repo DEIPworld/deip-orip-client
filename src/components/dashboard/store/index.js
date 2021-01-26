@@ -6,12 +6,14 @@ import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   isLoadingDashboardPage: false,
@@ -266,7 +268,7 @@ const actions = {
     usersService.getUsersListing()
       .then((users) => {
         commit('SET_EXPERTS', users.filter(u => u.account.name == username));
-        return Promise.all(users.map((user) => deipRpc.api.getExpertTokensByAccountNameAsync(user.account.name)));
+        return Promise.all(users.map((user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)));
       })
       .then((tokens) => {
         const flatten = [].concat.apply([], tokens);

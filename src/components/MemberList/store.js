@@ -20,7 +20,7 @@ const ACTIONS = {
       return usersService.getUsersByResearchGroup(payload.researchGroupExternalId)
         .then((users) => {
           members.push(...users);
-          return Promise.all(members.map((member) => deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name)));
+          return Promise.all(members.map((member) => expertiseContributionsService.getAccountExpertiseTokens(member.account.name)));
         })
         .then((expList) => {
           for (let i = 0; i < members.length; i++) {

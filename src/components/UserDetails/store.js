@@ -133,7 +133,7 @@ const actions = {
   loadExpertise({ commit }, { username, notify } = {}) {
     commit('SET_USER_EXPERTISE_LOADING_STATE', true);
     const disciplinesName = [];
-    return deipRpc.api.getExpertTokensByAccountNameAsync(username)
+    return expertiseContributionsService.getAccountExpertiseTokens(username)
       .then((data) => {
         disciplinesName.push(...data.map(({ discipline_name }) => discipline_name));
         return Promise.all(

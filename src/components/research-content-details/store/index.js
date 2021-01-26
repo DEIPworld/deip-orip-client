@@ -1,17 +1,14 @@
 import _ from 'lodash';
 import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
 import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-
 import { ProposalsService } from '@deip/proposals-service';
-
 import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-
+import { DisciplinesService } from '@deip/disciplines-service';
 import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const researchService = ResearchService.getInstance();
@@ -22,6 +19,7 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 const proposalsService = ProposalsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+const disciplinesService = DisciplinesService.getInstance();
 
 const state = {
   content: {},
@@ -196,7 +194,7 @@ const actions = {
             });
 
             const contentVotesLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentVotes', { researchId: contentObj.research_id, notify: resolve });
+              dispatch('loadResearchContentVotes', { researchId: contentObj.research_external_id, notify: resolve });
             });
 
             const researchGroupDetailsLoad = new Promise((resolve, reject) => {
@@ -223,7 +221,8 @@ const actions = {
   loadResearchContentVotes({ state, commit }, { researchId, notify }) {
     commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true);
     const disciplinesList = [];
-    deipRpc.api.getDisciplinesByResearchAsync(researchId)
+
+    disciplinesService.getDisciplinesByResearch(researchId)
       .then((data) => {
         const expertsPromises = [];
 

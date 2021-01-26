@@ -10,6 +10,7 @@ import { ResearchGroupService } from '@deip/research-group-service';
 import { TenantService } from '@deip/tenant-service';
 import { AssetsService } from '@deip/assets-service';
 import { BlockchainService } from '@deip/blockchain-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
@@ -18,6 +19,7 @@ const researchGroupService = ResearchGroupService.getInstance();
 const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const state = {
   loaded: false,
@@ -192,8 +194,7 @@ const actions = {
 
   loadExpertTokens({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
-
-    deipRpc.api.getExpertTokensByAccountNameAsync(user.username)
+    expertiseContributionsService.getAccountExpertiseTokens(user.username)
       .then((expertTokens) => {
         commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens);
       })

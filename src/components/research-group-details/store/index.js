@@ -162,7 +162,7 @@ const actions = {
             profile: user.profile
           };
           members.push(member);
-          promises.push(deipRpc.api.getExpertTokensByAccountNameAsync(member.account.name));
+          promises.push(expertiseContributionsService.getAccountExpertiseTokens(member.account.name));
         });
         return Promise.all(promises);
       })
