@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 import moment from 'moment';
 

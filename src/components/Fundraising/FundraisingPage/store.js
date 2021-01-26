@@ -1,4 +1,3 @@
-import deipRpc from '@deip/rpc-client';
 import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
 import { UsersService } from '@deip/users-service';

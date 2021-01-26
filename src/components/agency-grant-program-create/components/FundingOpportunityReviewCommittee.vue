@@ -49,7 +49,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { UsersService } from '@deip/users-service';
   import { ResearchGroupService } from '@deip/research-group-service';

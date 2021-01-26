@@ -24,8 +24,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
-  import deipRpc from '@deip/rpc-client';
-
   import { PROPOSAL_TYPES, proposalTypesLabels } from '@/variables';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 

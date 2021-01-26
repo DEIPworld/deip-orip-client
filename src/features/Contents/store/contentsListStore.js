@@ -1,4 +1,3 @@
-import deipRpc from '@deip/rpc-client';
 
 import {
   getActionByPath,

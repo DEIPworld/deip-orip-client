@@ -13,7 +13,6 @@
   import ResearchRequestFormView from '@/components/ResearchRequest/ResearchRequestFormView';
   import { ResearchRequestModelMixin } from '@/components/ResearchRequest/ResearchRequestModelMixin';
   import { ResearchService } from '@deip/research-service';
-  import deipRpc from '@deip/rpc-client';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
 
   const researchService = ResearchService.getInstance();

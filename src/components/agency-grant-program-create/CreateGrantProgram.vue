@@ -187,7 +187,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service';
   import { GrantsService } from '@deip/grants-service';
   import { UsersService } from '@deip/users-service';

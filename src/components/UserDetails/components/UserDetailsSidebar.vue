@@ -179,8 +179,6 @@
 </template>
 
 <script>
-  // import moment from 'moment';
-  // import deipRpc from '@deip/rpc-client';
 
   import { mapGetters } from 'vuex';
   import { ProposalsService } from '@deip/proposals-service';

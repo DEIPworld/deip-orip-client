@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
 
 import { ResearchGroupService } from '@deip/research-group-service';
 import { ProposalsService } from '@deip/proposals-service';

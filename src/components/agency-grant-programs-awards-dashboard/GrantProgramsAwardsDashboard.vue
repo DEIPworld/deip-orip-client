@@ -380,7 +380,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
-  import deipRpc from '@deip/rpc-client';
   import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
   import { GrantsService } from '@deip/grants-service';
   import LayoutHeader from '@/components/layout/components/LayoutHeader';

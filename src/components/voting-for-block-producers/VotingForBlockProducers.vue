@@ -99,8 +99,10 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
+  import { BlockchainService } from '@deip/blockchain-service';
   import _ from 'lodash';
+
+  const blockchainService = new BlockchainService();
 
   export default {
     name: 'VotingForBlockProducers',
@@ -131,13 +133,16 @@
       voteForWitness(witness, isApproving) {
         this.loadingWitnessesIds.push(witness.id);
 
-        deipRpc.broadcast.accountWitnessVoteAsync(
-          this.user.privKey,
-          this.user.username,
-          witness.owner,
-          isApproving,
-          []
-        )
+        blockchainService.voteForWitness({
+          privKey: this.user.privKey,
+          username: this.user.username,
+        },
+        {
+          voter: this.user.username,
+          witness: witness.owner,
+          isApproved: isApproving,
+          extensions: []
+        })
           .then(() => this.$store.dispatch('auth/loadUserData'))
           .then(() => {
             const balance = this.user.account.expert_tokens_balance;

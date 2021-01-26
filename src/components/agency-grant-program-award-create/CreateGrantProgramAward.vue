@@ -357,7 +357,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
   import { GrantsService } from '@deip/grants-service';

@@ -7,7 +7,6 @@ import {
   camelizeObjectKeys
 } from '@/utils/helpers';
 
-import deipRpc from '@deip/rpc-client';
 import { getAdditionalData } from '@/features/Reviews/utils/getAdditionalData';
 
 const researchContentService = ResearchContentService.getInstance();

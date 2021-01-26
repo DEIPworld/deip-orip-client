@@ -1,5 +1,3 @@
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
 import { ResearchGroupService } from '@deip/research-group-service';
 
 const researchGroupService = ResearchGroupService.getInstance();

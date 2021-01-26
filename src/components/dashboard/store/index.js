@@ -1,6 +1,3 @@
-import Vue from 'vue';
-import deipRpc from '@deip/rpc-client';
-
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';

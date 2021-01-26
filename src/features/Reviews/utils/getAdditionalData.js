@@ -1,4 +1,3 @@
-import deipRpc from '@deip/rpc-client';
 import { camelizeObjectKeys } from '@/utils/helpers';
 import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';

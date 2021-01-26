@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import deipRpc from '@deip/rpc-client';
 import moment from 'moment';
 import { camelizeObjectKeys } from '@/utils/helpers';
 

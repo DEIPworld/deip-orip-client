@@ -1,6 +1,3 @@
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
-
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { BlockchainService } from '@deip/blockchain-service';
 import { GrantsService } from '@deip/grants-service';

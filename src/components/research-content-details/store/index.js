@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
 import { ResearchService } from '@deip/research-service';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';

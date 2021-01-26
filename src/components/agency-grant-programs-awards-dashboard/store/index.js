@@ -1,5 +1,3 @@
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
 import moment from 'moment';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { ResearchGroupService } from '@deip/research-group-service';

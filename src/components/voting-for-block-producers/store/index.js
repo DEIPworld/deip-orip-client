@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
+import { BlockchainService } from '@deip/blockchain-service';
+
+const blockchainService = BlockchainService.getInstance();
 
 const state = {
   witnesses: []
@@ -14,9 +15,9 @@ const getters = {
 // actions
 const actions = {
   loadProducers({ commit }) {
-    return deipRpc.api.lookupWitnessAccountsAsync('', 100)
+    return blockchainService.getWitnessesListing('')
       .then((witnessesNames) => Promise.all(
-        witnessesNames.map((accountName) => deipRpc.api.getWitnessByAccountAsync(accountName))
+        witnessesNames.map((accountName) => blockchainService.getWitnessByAccount(accountName))
       ))
       .then((witnesses) => _.chain(witnesses).clone()
         .orderBy(['votes'], ['desc'])

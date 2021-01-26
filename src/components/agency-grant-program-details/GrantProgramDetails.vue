@@ -257,7 +257,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import { ResearchService } from '@deip/research-service';
 
   const researchService = ResearchService.getInstance();

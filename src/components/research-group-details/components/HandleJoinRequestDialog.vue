@@ -73,8 +73,6 @@
 </template>
 
 <script>
-  // import deipRpc from '@deip/rpc-client';
-
   import _ from 'lodash';
   import { mapGetters } from 'vuex';
 

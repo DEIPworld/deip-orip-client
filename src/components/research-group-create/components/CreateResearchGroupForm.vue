@@ -129,7 +129,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import { maxTitleLength, maxDescriptionLength } from '@/variables';
   import { FormMixin } from '@/utils/FormMixin';

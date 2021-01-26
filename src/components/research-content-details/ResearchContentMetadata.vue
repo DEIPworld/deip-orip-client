@@ -225,7 +225,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import deipRpc from '@deip/rpc-client';
 
   export default {
     name: 'ResearchContentMetadata',

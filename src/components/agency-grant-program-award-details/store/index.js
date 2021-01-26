@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
-import Vue from 'vue';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { GrantsService } from '@deip/grants-service';

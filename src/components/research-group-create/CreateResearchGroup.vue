@@ -11,9 +11,7 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { ResearchGroupService } from '@deip/research-group-service';
-
   import { CreateResearchGroupMixin } from '@/components/research-group-create/CreateResearchGroupMixin';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import CreateResearchGroupForm from './components/CreateResearchGroupForm';

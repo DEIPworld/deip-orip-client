@@ -1,4 +1,3 @@
-import deipRpc from '@deip/rpc-client';
 import { UsersService } from '@deip/users-service';
 import { wrapInArray } from 'vuetify/lib/util/helpers';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';

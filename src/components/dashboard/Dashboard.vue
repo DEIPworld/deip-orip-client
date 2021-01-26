@@ -293,7 +293,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import moment from 'moment';
   import { mapGetters } from 'vuex';
 
@@ -459,25 +458,7 @@
         this.isExpertsLoading = false;
       },
 
-      requestReview(review) {
-        this.isRequestingReview = true;
-        deipRpc.broadcast.requestReviewAsync(
-          this.user.privKey,
-          this.selectedResearchToReview.id,
-          [this.selectedExpert.account.name],
-          this.user.username
-        )
-          .then(() => {
-            this.$notifier.showError('Proposal was successfully created');
-            this.selectedExpert = null;
-            this.selectedResearchToReview = null;
-          }, (err) => {
-            alert(`The "${this.selectedResearchToReview.title}" research does not have an Announcement, please add it before requesting a review`);
-          })
-          .finally(() => {
-            this.isRequestingReview = false;
-          });
-      }
+      requestReview(review) {}
     }
   };
 </script>

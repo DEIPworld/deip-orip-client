@@ -57,7 +57,6 @@
 
 <script>
 
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { PROPOSAL_TYPES } from '@/variables';
 

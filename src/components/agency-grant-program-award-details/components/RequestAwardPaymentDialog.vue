@@ -134,7 +134,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import moment from 'moment';
   import vueDropzone from 'vue2-dropzone';

@@ -1,4 +1,3 @@
-import deipRpc from '@deip/rpc-client';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { UsersService } from '@deip/users-service';
 

@@ -361,7 +361,6 @@
 
 <script>
 
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
   import { AccessService } from '@deip/access-service';

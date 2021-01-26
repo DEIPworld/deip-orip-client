@@ -151,7 +151,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { mapGetters } from 'vuex';
   import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
   import { ResearchContentService } from '@deip/research-content-service';
