@@ -257,12 +257,9 @@ const actions = {
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return Promise.all([
-      tenantService.getTenantProfile(tenant),
-      researchGroupService.getResearchGroup(tenant)
-    ])
-      .then(([profile, account]) => {
-        commit('SET_TENANT', { profile, account });
+    return tenantService.getTenant(tenant)
+      .then((tenant) => {
+        commit('SET_TENANT', tenant);
       })
       .catch((err) => {
         console.error(err);

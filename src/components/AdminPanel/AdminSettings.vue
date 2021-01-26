@@ -10,7 +10,7 @@
           contain
           height="252"
           max-width="252"
-          :src="$options.filters.tenantBackgroundSrc(tenant.account)"
+          :src="$options.filters.tenantBackgroundSrc(tenant)"
         />
       </div>
       <div class="flex-grow-1">

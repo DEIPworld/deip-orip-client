@@ -1,7 +1,7 @@
 <template>
   <d-layout>
     <d-layout-section
-      :background="$options.filters.tenantBackgroundSrc($tenant.account)"
+      :background="$options.filters.tenantBackgroundSrc($tenant)"
       :min-height="300"
       align-content="end"
     >

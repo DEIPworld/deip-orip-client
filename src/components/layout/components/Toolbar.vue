@@ -13,7 +13,7 @@
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="d-block" :src="tenant.account | tenantLogoSrc(80, 80, false)">
+        <img height="40px" class="d-block" :src="tenant | tenantLogoSrc(80, 80, false)">
       </router-link>
 
       <v-spacer />
