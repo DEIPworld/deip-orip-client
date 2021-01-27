@@ -595,7 +595,7 @@
         return researchGroupService.getResearchGroupsByUser(funding.researcher.user.account.name)
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => researchService.getResearchesByResearchGroup(group.external_id)));
+            return Promise.all(groups.map((group) => researchGroupService.getResearchGroupResearchListing(group.external_id)));
           })
           .finally(() => {
             funding.isResearchGroupsLoading = false;
@@ -606,7 +606,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        return researchService.getResearchesByResearchGroup(funding.researchGroup.external_id)
+        return researchGroupService.getResearchGroupResearchListing(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);

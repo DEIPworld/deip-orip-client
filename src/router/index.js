@@ -348,8 +348,8 @@ const router = new Router({
         const user = store.getters['auth/user'];
         const rolePromise = user.profile
           ? Promise.resolve(user.profile.roles || [])
-          : usersService.getUserProfile(user.username)
-            .then((p) => p.roles || []);
+          : usersService.getUser(user.username)
+            .then((u) => u.profile.roles || []);
 
         rolePromise.then((roles) => {
           if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
