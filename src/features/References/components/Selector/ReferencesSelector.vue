@@ -5,6 +5,7 @@
     item-text="title"
     item-value="externalId"
     v-bind="$$fieldProps"
+    :filter="filterSelector"
 
     :loading="!$ready"
     :disabled="!$ready"

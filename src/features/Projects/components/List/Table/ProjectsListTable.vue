@@ -7,6 +7,7 @@
     <v-data-table
       :headers="headers"
       :items="projects"
+      disable-sort
       v-bind="iteratorProps"
       @update:page="onUpdatePage"
     >

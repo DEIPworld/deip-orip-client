@@ -629,7 +629,7 @@
             this.$notifier.showError(this.$t('transactionsList.voteFail'));
           })
           .finally(() => {
-            this.disableButtonsId = '';
+            this.disableButtons.id = '';
           });
       }
     }

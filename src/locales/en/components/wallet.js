@@ -3,7 +3,7 @@ export default {
   groupAssets: 'Assets of {group}',
   assets: 'Assets',
   tokensPrice: 'Tokens price',
-  totalRevenue: 'Total Revenue',
+  totalRevenue: 'Total revenue',
   balance: 'Currencies',
   portfolio: 'Shares',
   groups: 'Teams',
@@ -73,7 +73,7 @@ export default {
     posFlNumber: 'Should be valid positive float number',
     exchnageAsset: 'Exchnage asset',
     transferAsset: 'Transfer asset',
-    succTokSent: 'Tokens successfully sent',
+    succTokSent: 'Assets successfully sent',
     succExcSent: 'Exchange successfully sent'
   },
   translations: {

@@ -94,7 +94,7 @@
         researchGroupService.getResearchGroupsListing()
       ])
         .then(([users, researchGroups]) => {
-          return [...users, ...researchGroups];
+          return [...users.filter(u => u.account.name != this.$currentUser.username), ...researchGroups];
         })
         .then((accounts) => {
           this.allAccounts = accounts.flat().map((a) => {

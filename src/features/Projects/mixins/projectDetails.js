@@ -10,11 +10,11 @@ export const projectDetails = {
   },
   computed: {
     isMember() {
-      return this.project.members.includes(this.$currentUser.username);
+      return this.$isUser && this.project.members.includes(this.$currentUser.username);
     },
 
     financeVisible() {
-      return !!(this.isMember || this.project.securityTokens.length)
+      return !!(this.$isUser && (this.isMember || this.project.securityTokens.length));
     },
 
     isLicensingAccessLimited() {
@@ -25,6 +25,10 @@ export const projectDetails = {
 
       if (!hasExpressLicensing) {
         return false;
+      }
+
+      if (this.$isGuest) {
+        return true;
       }
 
       const owners = this.project.researchRef.expressLicenses.map((lic) => lic.owner);

@@ -1,24 +1,24 @@
 export default {
-  title: 'Edit group info',
+  title: 'Update team info',
   dataForm: {
     logoBlock: {
-      title: 'Update group logo:'
+      title: 'Update team logo:'
     },
     nameBlock: {
-      title: 'Group name',
+      title: 'Team name',
       nameField: {
         label: 'Name',
-        err: 'Group with the same name already exists'
+        err: 'Team with the same name already exists'
       },
       descField: 'Description'
     },
     descBlock: {
-      title: 'Group description:'
+      title: 'Team description:'
     },
-    successLogo: 'Logo has been updated successfully! Refresh the page please',
-    errLogo: 'Sorry, an error occurred while uploading logo image, please try again later',
-    successProposal: 'Proposal has been sent successfully!',
-    errProposal: 'An error occurred during proposal sending',
+    successLogo: 'Logo has been updated successfully! Please reload the page to see new logo',
+    errLogo: 'Sorry, an error occurred while uploading logo, please try again later',
+    successProposal: 'Team details updated successfully',
+    errProposal: 'An error occurred during info updating. Please try again later',
     cancel: 'Cancel',
     submitBtn: 'Save changes'
   },
@@ -27,7 +27,7 @@ export default {
       title: 'Quorum threshold:'
     },
     text: 'The proposal will be sent to group members and after it\'s approved the threshold will be changed',
-    successProposal: 'Proposal has been sent successfully!',
+    successProposal: 'Information has been updated successfully',
     errProposal: 'An error occurred during proposal sending',
     submitBtn: 'Update Quorum'
   }

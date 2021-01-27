@@ -271,11 +271,16 @@
     methods: {
 
       openMemberInfoDialog(item) {
-        const person = item.profile ? item.profile : item;
-        this.memberInfoDialog.title = this.$options.filters.fullname({ profile: person });
-        this.memberInfoDialog.data = person;
-        this.memberInfoDialog.isOpen = true;
-        this.memberInfoDialog.hideButtons = !(item.status && item.status === 'pending');
+        // const person = item.profile ? item.profile : item;
+        // this.memberInfoDialog.title = this.$options.filters.fullname({ profile: person });
+        // this.memberInfoDialog.data = person;
+        // this.memberInfoDialog.isOpen = true;
+        // this.memberInfoDialog.hideButtons = !(item.status && item.status === 'pending');
+        if (item.username === this.$currentUser.username) {
+          this.$router.push({ name: 'account.summary' });
+        } else {
+          this.$router.push({ name: 'UserDetails', params: { account_name: item.username } });
+        }
       },
       closeMemberInfoDialog() {
         this.memberInfoDialog.isOpen = false;

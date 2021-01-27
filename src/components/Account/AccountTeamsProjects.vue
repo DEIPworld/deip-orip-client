@@ -12,6 +12,7 @@
             </template>
           </projects-list>
           <projects-list
+            v-if="$hasModule(DEIP_MODULE.APP_USER_PERSONAL_WORKSPACE)"
             :user-name="$currentUser.username"
             type="personal"
           >

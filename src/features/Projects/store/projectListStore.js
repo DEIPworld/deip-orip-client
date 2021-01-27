@@ -115,7 +115,7 @@ const ACTIONS = {
     return ids.length ? researchService.getResearches(ids)
       .then((result) => {
         context.commit('storeProjectsData', result);
-      }) : [];
+      }) : context.commit('storeProjectsData', []);
   },
 
   // team
@@ -192,7 +192,9 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeProjectsData(state, payload) {
-    state.projectsList = payload.map((item) => (camelizeObjectKeys(item)));
+    state.projectsList = payload.map((item) => (camelizeObjectKeys(item))).sort(
+      (p1, p2) => new Date(p1.createdAt) - new Date(p2.createdAt)
+    );
   }
 };
 

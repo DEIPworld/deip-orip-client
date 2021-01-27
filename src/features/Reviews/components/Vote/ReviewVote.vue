@@ -33,7 +33,7 @@
       color="primary"
       small
       outlined
-      class="mb-2 text-body-2"
+      class="mt-2 text-body-2"
       :loading="loading"
       @click="voteReview()"
     >

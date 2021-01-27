@@ -9,7 +9,7 @@ const criteriaTypes = {
   4: 'Rationality',
   5: 'Technical Quality',
   6: 'Replication',
-  7: 'Aquaculture'
+  7: 'Commercialization'
 };
 
 const state = {

@@ -1,8 +1,11 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { ResearchService } from '@deip/research-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+import { ResearchContentService } from '@deip/research-content-service';
+
 import $ from 'cheerio';
 
+const researchContentService = ResearchContentService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const researchService = ResearchService.getInstance();
 
@@ -32,11 +35,42 @@ const STATE = {
 
 const ACTIONS = {
   getExpertiseHistory({ commit }, payload) {
-    return historyMethod(payload).then((res) => {
-      commit('storeExpertiseHistory', res);
-    }, (err) => {
-      console.error(err);
-    });
+    let expertises = [];
+    return historyMethod(payload)
+      .then((res) => {
+        expertises = [...res];
+        return Promise.all(expertises.reduce((arr, e) => {
+          if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION
+            || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW
+            || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT
+          ) {
+            return [
+              ...arr, researchContentService.getResearchContent(e.research_content.external_id)
+            ];
+          }
+          return arr;
+        }, []));
+      })
+      .then((res) => {
+        expertises = expertises.map((e) => {
+          if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
+            const exp = res.find((r) => r.external_id === e.research_content.external_id);
+            e.research_content.title = exp ? exp.title : '';
+            return e;
+          }
+          if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW
+            || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
+            const exp = res.find((r) => r.external_id === e.research_content.external_id);
+            e.review.contentRef = exp ? exp.title : '';
+            return e;
+          }
+          return e;
+        });
+        commit('storeExpertiseHistory', expertises);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 };
 
@@ -62,9 +96,7 @@ const GETTERS = {
           ...record,
           actionText: `${typeInfo ? typeInfo.text : 'Publication'} reviewed`,
           meta: {
-            title: $(record.review.content)
-              .first()
-              .text(),
+            title: record.review.contentRef,
             review: record.review,
             link
           }
@@ -85,9 +117,7 @@ const GETTERS = {
           ...record,
           actionText: 'Review supported',
           meta: {
-            title: $(record.review.content)
-              .first()
-              .text(),
+            title: record.review.contentRef,
             review: record.review,
             reviewVote: record.review_vote,
             link

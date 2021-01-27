@@ -47,12 +47,12 @@
                 {{ locationString }}
               </span>
             </div>
-            <div v-if="getEmploymentOrEducation(userInfo)">
+            <div v-if="education">
               <v-icon size="18" class="pr-1">
                 school
               </v-icon>
               <!-- {{ userInfo | employmentOrEducation }} -->
-              {{ userInfo.profile.education[userInfo.profile.education.length - 1].educationalInstitution }}
+              {{ education }}
             </div>
           </div>
           <div>
@@ -116,6 +116,15 @@
         userInfo: 'userDetails/userInfo'
       }),
 
+      education() {
+        if (this.userInfo.profile.education.length) {
+          return this.userInfo.profile.education[
+            this.userInfo.profile.education.length - 1
+          ].educationalInstitution;
+        }
+        return '';
+      },
+
       isOwner() {
         return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
       },
@@ -138,11 +147,6 @@
         return this.userInfo.profile != null;
       }
 
-    },
-    methods: {
-      getEmploymentOrEducation(user) {
-        return this.$options.filters.employmentOrEducation(user);
-      }
     }
   };
 </script>
