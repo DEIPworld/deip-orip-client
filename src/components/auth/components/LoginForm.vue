@@ -145,11 +145,11 @@
         let privateKey;
         usersService.getUser(this.formData.username)
           .then((res) => {
-            const { account } = res;
-            if (!account) {
+            if (!res || !res.account) {
               throw new Error(this.$t('signIn.form.rules.invalidAccount'));
             }
 
+            const { account } = res;
             if (
               deipRpc.auth.isWif(this.formData.password)
               && getPrivateKeyRole(this.formData.password, account)
