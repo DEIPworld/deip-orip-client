@@ -85,19 +85,14 @@
         preload.push(this.$store.dispatch('auth/loadUser'));
       }
 
-      const tenant = this.$env.TENANT || null;
-      if (tenant) {
-        preload.push(this.$store.dispatch('auth/loadTenant', { tenant }));
-      }
+      const tenant = this.$env.TENANT;
+      preload.push(this.$store.dispatch('auth/loadTenant', { tenant }));
+      preload.push(this.$store.dispatch('auth/loadNetworkInfo'));
 
       Promise.all(preload)
         .then(() => {
           this.setTheme();
-
-          if (this.tenant) {
-            document.title = `${this.tenant.profile.name} | DEIP`;
-          }
-
+          document.title = `${this.tenant.profile.name} | DEIP`;
           this.$setReady();
         });
 

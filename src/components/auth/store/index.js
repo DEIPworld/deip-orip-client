@@ -36,6 +36,7 @@ const state = {
     assets: []
   },
   tenant: undefined,
+  networkInfo: undefined,
   allAssets: [], // TODO: temp
   assets: [] // TODO: temp
 };
@@ -267,6 +268,16 @@ const actions = {
       .finally(() => {
         if (notify) notify();
       });
+  },
+
+  loadNetworkInfo({ state, commit, getters }) {
+    return tenantService.getNetworkInfo()
+      .then((network) => {
+        commit('SET_NETWORK_INFO', network);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 };
 
@@ -319,6 +330,10 @@ const mutations = {
 
   SET_USER_LOADED(state, payload) {
     state.loaded = payload;
+  },
+
+  SET_NETWORK_INFO(state, payload) {
+    state.networkInfo = payload;
   },
 
   storeAssets(state, payload) { // TODO: temp
