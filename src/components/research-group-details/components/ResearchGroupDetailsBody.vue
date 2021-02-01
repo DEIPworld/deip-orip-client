@@ -9,9 +9,9 @@
             icon
             small
             :to="{
-              name: 'ResearchGroupSettings',
+              name: 'teamSettings',
               params: {
-                research_group_permlink: encodeURIComponent(group.permlink)
+                teamId: group.external_id
               }
             }"
           >

@@ -56,16 +56,16 @@
       clickNotification() {
         if (this.isAcceptedByQuorum || this.isAutoAccepted) {
           this.$router.push({
-            name: 'ResearchGroupDetails',
+            name: 'teamDetails',
             params: {
-              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink)
+              teamId: this.notification.metadata.researchGroup.external_id
             }
           });
         } else {
           this.$router.push({
-            name: 'ResearchGroupDetails',
+            name: 'teamDetails',
             params: {
-              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink)
+              teamId: this.notification.metadata.researchGroup.external_id
             },
             hash: '#proposals'
           });

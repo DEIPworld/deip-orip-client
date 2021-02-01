@@ -262,16 +262,13 @@
       },
       cancel(proposal = false) {
         this.$refs.researchGroupLogo.removeAllFiles(this.group.external_id);
-        researchGroupService.getResearchGroup(this.group.external_id)
-          .then((researchGroup) => {
-            this.$router.push({
-              name: 'ResearchGroupDetails',
-              params: {
-                research_group_permlink: encodeURIComponent(researchGroup.permlink)
-              },
-              // hash: proposal ? '#proposals' : ''
-            });
-          })
+        this.$router.push({
+          name: 'teamDetails',
+          params: {
+            teamId: this.group.external_id
+          },
+          // hash: proposal ? '#proposals' : ''
+        });
       },
       logoUploadSuccess(file, response) {
         if (this.isSaveAvailable) {

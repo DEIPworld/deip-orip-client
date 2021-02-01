@@ -62,8 +62,8 @@
                         :to="{
                           name: 'project.content.details',
                           params: {
-                            contentExternalId: researchContent.external_id,
-                            researchExternalId: research.external_id,
+                            contentId: researchContent.external_id,
+                            projectId: research.external_id,
                           }
                         }"
                       >
@@ -215,8 +215,8 @@
                         :to="{
                           name: 'project.content.details',
                           params: {
-                            contentExternalId: ref.researchContent.external_id,
-                            researchExternalId: ref.research.external_id,
+                            contentId: ref.researchContent.external_id,
+                            projectId: ref.research.external_id,
                           }
                         }"
                       >

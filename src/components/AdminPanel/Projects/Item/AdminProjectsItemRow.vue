@@ -50,7 +50,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: this.researchExtended.external_id
+            projectId: this.researchExtended.external_id
           }
         });
       },

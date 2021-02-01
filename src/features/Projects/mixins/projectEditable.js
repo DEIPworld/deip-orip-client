@@ -26,7 +26,7 @@ export const projectEditable = {
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: project.external_id || project.externalId
+            projectId: project.external_id || project.externalId
           }
         });
       } else {

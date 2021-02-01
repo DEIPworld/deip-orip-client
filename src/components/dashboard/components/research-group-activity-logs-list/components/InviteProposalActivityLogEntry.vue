@@ -42,9 +42,9 @@
             to the "<router-link
               class="a"
               :to="{
-                name: 'ResearchGroupDetails',
+                name: 'teamDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink)
+                  teamId: log.metadata.researchGroup.external_id
                 }
               }"
             >{{ log.metadata.researchGroup.name }}</router-link>"
@@ -59,9 +59,9 @@
             to the "<router-link
               class="a"
               :to="{
-                name: 'ResearchGroupDetails',
+                name: 'teamDetails',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                  teamId: log.metadata.researchGroup.external_id,
                 }
               }"
             >{{ log.metadata.researchGroup.name }}</router-link>"

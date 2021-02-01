@@ -171,12 +171,12 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/:research_group_permlink/group-details',
-      name: 'ResearchGroupDetails',
+      path: '/:teamId/group-details',
+      name: 'teamDetails',
       component: ResearchGroupDetails
     }, {
-      path: '/:research_group_permlink/group-details/group-settings',
-      name: 'ResearchGroupSettings',
+      path: '/:teamId/group-details/group-settings',
+      name: 'teamSettings',
       component: ResearchGroupSettings
     }, {
       path: '/:account_name/create-research-group',
@@ -195,78 +195,29 @@ const router = new Router({
       }
     },
 
-
-    { // TODO: delete
-      path: '/:research_group_permlink/research/:research_permlink/:content_permlink',
-      name: 'ResearchContentDetails',
-      component: ResearchContentDetails
-    },
-
-    // { // TODO: delete
-    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/expertise',
-    //   name: 'ResearchContentExpertise',
-    //   component: ResearchContentExpertise
-    // },
-
-    {
-      path: '/:research_group_permlink/research/:research_permlink/:content_permlink/metadata',
-      name: 'ResearchContentMetadata',
-      component: preliminaryDataLoader(ResearchContentMetadata, {
-        beforeEnter: async (to, from, next) => {
-          const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
-            group_permlink: decodeURIComponent(to.params.research_group_permlink),
-            research_permlink: decodeURIComponent(to.params.research_permlink),
-            content_permlink: decodeURIComponent(to.params.content_permlink),
-            ref: to.query.ref
-          });
-          loadPage(loadPagePromise, next);
-        }
-      })
-    },
-    //   {
-    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/review/:review_id',
-    //   name: 'ResearchContentReview',
-    //   component: preliminaryDataLoader(ResearchContentReview, {
-    //     beforeEnter: (to, from, next) => {
-    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-    //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
-    //         research_permlink: decodeURIComponent(to.params.research_permlink),
-    //         content_permlink: decodeURIComponent(to.params.content_permlink),
+    // {
+    //   path: '/:teamId/research/:projectId/:contentId/metadata',
+    //   name: 'ResearchContentMetadata',
+    //   component: preliminaryDataLoader(ResearchContentMetadata, {
+    //     beforeEnter: async (to, from, next) => {
+    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
+    //         teamId: decodeURIComponent(to.params.teamId),
+    //         projectId: decodeURIComponent(to.params.projectId),
+    //         contentId: decodeURIComponent(to.params.contentId),
     //         ref: to.query.ref
     //       });
     //       loadPage(loadPagePromise, next);
     //     }
     //   })
     // },
-    // {
-    //   path: '/:research_group_permlink/research/:research_permlink/:content_permlink/add-review',
-    //   name: 'ReviewCreate',
-    //   component: preliminaryDataLoader(ReviewCreate, {
-    //     beforeEnter: (to, from, next) => {
-    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-    //         group_permlink: decodeURIComponent(to.params.research_group_permlink),
-    //         research_permlink: decodeURIComponent(to.params.research_permlink),
-    //         content_permlink: decodeURIComponent(to.params.content_permlink),
-    //         ref: to.query.ref
-    //       });
-    //       loadPage(loadPagePromise, next);
-    //     }
-    //   })
-    // },
-    // {
-    //   path: '/eci-model-setup',
-    //   name: 'ReviewSetup',
-    //   component: ReviewSetup
-    // },
     {
-      path: '/:research_group_permlink/research/:research_permlink/:content_permlink/references',
+      path: '/research/:projectId/:contentId/references',
       name: 'ResearchContentReferences',
       component: preliminaryDataLoader(ResearchContentReferences, {
         beforeEnter: (to, from, next) => {
           const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
-            group_permlink: decodeURIComponent(to.params.research_group_permlink),
-            research_permlink: decodeURIComponent(to.params.research_permlink),
-            content_permlink: decodeURIComponent(to.params.content_permlink),
+            projectId: to.params.projectId,
+            contentId: to.params.contentId,
             ref: to.query.ref
           });
           loadPage(loadPagePromise, next);
@@ -280,11 +231,6 @@ const router = new Router({
         withoutHeader: true
       }
     },
-    // {
-    //   path: '/:research_group_permlink/create-fundraise/:research_permlink',
-    //   name: 'CreateTokenSale',
-    //   component: CreateTokenSale
-    // },
 
     ...sandboxRouting,
 

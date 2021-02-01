@@ -57,8 +57,8 @@
                       :to="{
                         name: 'project.content.details',
                         params: {
-                          contentExternalId: review.contentData.externalId,
-                          researchExternalId: $route.params.researchExternalId,
+                          contentId: review.contentData.externalId,
+                          projectId: $route.params.projectId,
                         }
                       }"
                     >
@@ -106,9 +106,9 @@
                     :to="{
                       name: 'project.content.review.details',
                       params: {
-                        researchExternalId: $route.params.researchExternalId,
-                        contentExternalId: review.contentData.externalId,
-                        reviewExternalId: review.externalId,
+                        projectId: $route.params.projectId,
+                        contentId: review.contentData.externalId,
+                        reviewId: review.externalId,
                       }
                     }"
                   >

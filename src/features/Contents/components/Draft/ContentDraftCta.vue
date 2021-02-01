@@ -40,7 +40,7 @@
               name: 'project.content.draft',
               params: {
                 draftId: res.draft._id.replace('draft-', ''),
-                projectExternalId: res.draft.researchExternalId
+                projectId: res.draft.researchExternalId
               }
             });
           })

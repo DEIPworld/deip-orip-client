@@ -17,7 +17,7 @@ export const assetsRoutingFabric = (parent) => {
         component: AssetCreate,
         props(route) {
           return {
-            projectId: route.params.researchExternalId
+            projectId: route.params.projectId
           };
         }
       }

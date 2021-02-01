@@ -11,23 +11,23 @@ export const usersList = {
   },
   methods: {
     userDetailsRoute(user) {
-      if (this.$isUser && this.$currentUser.username === user.account.name) {
+      if (this.$isUser && this.$currentUser.username === user.username) {
         return { name: 'account.summary' };
       }
 
       if (user.account.is_research_group) {
         // return { name: 'group.detail' };
         return {
-          name: 'ResearchGroupDetails',
+          name: 'teamDetails',
           params: {
-            research_group_permlink: user.account.name
+            teamId: user.username
           }
         };
       }
 
       return {
         name: 'UserDetails',
-        params: { account_name: user.account.name }
+        params: { account_name: user.username }
       };
     }
   }

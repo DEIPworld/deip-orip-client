@@ -4,7 +4,7 @@
     @click-back="$router.push({
       name: 'project.content.details',
       params: {
-        contentExternalId: contentId
+        contentId: contentId
       }
     })"
   >
@@ -17,7 +17,7 @@
                 Project
               </div>
               <router-link
-                :to="{ name: 'project.details', params: { projectExternalId: project.external_id } }"
+                :to="{ name: 'project.details', params: { projectId: project.externalId } }"
                 class="link text--primary text-decoration-none"
               >
                 {{ project.title }}
@@ -272,8 +272,8 @@
             this.$router.push({
               name: 'project.content.details',
               params: {
-                projectExternalId: this.projectId,
-                contentExternalId: this.contentId
+                projectId: this.projectId,
+                contentId: this.contentId
               }
             });
           });
@@ -318,7 +318,7 @@
             this.$router.push({
               name: 'project.details',
               params: {
-                researchExternalId: this.project.externalId
+                projectId: this.project.externalId
               },
               hash: '#reviews'
             });

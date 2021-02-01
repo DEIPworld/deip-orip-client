@@ -259,10 +259,10 @@
               <router-link
                 tag="div"
                 class="text-decoration-none text--primary"
-                :to="signer.account.external_id
+                :to="signer.account.account.is_research_group
                   ? {
-                    name: 'ResearchGroupDetails',
-                    params: { research_group_permlink: encodeURIComponent(signer.account.permlink) }
+                    name: 'teamDetails',
+                    params: { teamId: signer.account.external_id }
                   }
                   : { name: 'UserDetails', params: { account_name: signer.account.account.name } }"
               >
@@ -318,12 +318,15 @@
                         <router-link
                           tag="div"
                           class="text-decoration-none"
-                          :to="signer.profile
-                            ? { name: 'UserDetails', params: { account_name: signer.account.name } }
-                            : {
-                              name: 'ResearchGroupDetails',
+                          :to="signer.account.is_research_group
+                            ? {
+                              name: 'teamDetails',
                               params:
-                                { research_group_permlink: encodeURIComponent(signer.permlink)}
+                                { teamId: signer.external_id}
+                            }
+                            : {
+                              name: 'UserDetails',
+                              params: { account_name: signer.account.name }
                             }"
                         >
                           <v-clamp autoresize :max-lines="1" class="text-h6">

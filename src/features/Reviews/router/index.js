@@ -25,18 +25,18 @@ export const reviewRoutingFabric = (parent) => {
         component: ReviewCreate,
         props(route) {
           return {
-            projectId: route.params.projectExternalId,
-            contentId: route.params.contentExternalId
+            projectId: route.params.projectId,
+            contentId: route.params.contentId
           };
         },
       },
 
       {
-        path: ':reviewExternalId',
+        path: ':reviewId',
         component: ReviewDataProvider,
         props(route) {
           return {
-            reviewId: route.params.reviewExternalId
+            reviewId: route.params.reviewId
           };
         },
         children: [

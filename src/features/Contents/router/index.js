@@ -26,11 +26,11 @@ export const contentRoutingFabric = (parent) => {
       },
 
       {
-        path: ':contentExternalId',
+        path: ':contentId',
         component: ContentDataProvider,
         props(route) {
           return {
-            contentId: route.params.contentExternalId
+            contentId: route.params.contentId
           };
         },
         children: [

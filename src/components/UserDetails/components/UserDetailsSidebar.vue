@@ -29,8 +29,8 @@
           >
             <router-link
               class="a full-width break-word font-weight-medium"
-              :to="{ name: 'ResearchGroupDetails', params: {
-                research_group_permlink: encodeURIComponent(invite.group.permlink),
+              :to="{ name: 'teamDetails', params: {
+                teamId: invite.group.external_id,
               }}"
             >
               <v-clamp
@@ -264,8 +264,8 @@
           {
             name: 'project.content.details',
             params: {
-              researchExternalId: review.research.external_id,
-              contentExternalId: review.content.external_id
+              projectId: review.research.external_id,
+              contentId: review.content.external_id
             }
           }
         );

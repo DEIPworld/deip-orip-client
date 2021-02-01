@@ -94,7 +94,7 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.researchExternalId)
+          this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.projectId)
         ])
           .then(() => {
             this.$setReady(true);
@@ -107,7 +107,7 @@
             name: 'project.content.draft',
             params: {
               draftId: draft._id.replace('draft-', ''),
-              projectExternalId: this.research.externalId
+              projectId: this.research.externalId
             }
           });
 
@@ -116,8 +116,8 @@
           this.$router.push({
             name: 'project.content.details',
             params: {
-              projectExternalId: this.research.externalId,
-              contentExternalId: draft.externalId
+              projectId: this.research.externalId,
+              contentId: draft.externalId
             },
             query: {
               ref: draft._id, draft: true

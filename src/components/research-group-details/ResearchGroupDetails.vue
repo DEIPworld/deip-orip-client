@@ -24,7 +24,7 @@
       Promise.all([
         this.$store.dispatch('auth/loadGroups'),
         this.$store.dispatch('researchGroup/loadResearchGroup', {
-          permlink: decodeURIComponent(this.$route.params.research_group_permlink)
+          teamId: this.$route.params.teamId
         })
       ])
         .then(() => this.$setReady());

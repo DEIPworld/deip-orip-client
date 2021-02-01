@@ -16,18 +16,18 @@
     },
 
     created() {
-      if (this.$store.getters['auth/user'].groups.some((item) => encodeURIComponent(item.permlink) === this.$route.params.research_group_permlink)) {
+      if (this.$store.getters['auth/user'].groups.some((item) => item.external_id === this.$route.params.teamId)) {
         this.$store.dispatch('researchGroupSettings/loadResearchGroup', {
-          permlink: decodeURIComponent(this.$route.params.research_group_permlink)
+          teamId: this.$route.params.teamId
         })
           .then(() => {
             this.$setReady();
           });
       } else {
         this.$router.push({
-          name: 'ResearchGroupDetails',
+          name: 'teamDetails',
           params: {
-            research_group_permlink: this.$route.params.research_group_permlink
+            teamId: this.$route.params.teamId
           }
         });
       }

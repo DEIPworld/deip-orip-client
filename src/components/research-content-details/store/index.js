@@ -148,40 +148,37 @@ const actions = {
 
   loadResearchContentDetails({ state, commit, dispatch },
     {
-      group_permlink, research_permlink, content_permlink, ref
+      projectId, contentId, ref
     }) {
     commit('RESET_STATE');
-    return dispatch('loadResearchDetails', { group_permlink, research_permlink })
+    return dispatch('loadResearchDetails', { projectId })
       .then(() => {
-        if (!content_permlink || content_permlink === '!draft') { // this is a draft that is not published yet
+        if (!contentId || contentId === '!draft') { // this is a draft that is not published yet
           commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
           const contentRefLoad = new Promise((resolve, reject) => {
             dispatch('loadResearchContentRef', {
-              researchExternalId: state.research.external_id,
+              projectId: state.research.external_id,
               refId: ref,
               hash: null,
               notify: resolve
             });
           });
-          const researchGroupDetailsLoad = new Promise((resolve, reject) => {
-            dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
-          });
 
-          return Promise.all([contentRefLoad, researchGroupDetailsLoad])
+          return Promise.all([contentRefLoad])
             .finally(() => {
               commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
             });
         }
 
         commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-        return researchContentService.getResearchContentByPermlink(group_permlink, research_permlink, content_permlink)
+        return researchContentService.getResearchContent(contentId)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
             const { content: hash } = contentObj;
 
             const contentRefLoad = new Promise((resolve, reject) => {
               dispatch('loadResearchContentRef', {
-                researchExternalId: state.research.external_id,
+                projectId: state.research.external_id,
                 refId: null,
                 hash,
                 notify: resolve
@@ -189,15 +186,11 @@ const actions = {
             });
 
             const contentReviewsLoad = new Promise((resolve, reject) => {
-              dispatch('loadContentReviews', { researchContentExternalId: contentObj.external_id, notify: resolve });
+              dispatch('loadContentReviews', { contentId: contentObj.external_id, notify: resolve });
             });
 
             const contentVotesLoad = new Promise((resolve, reject) => {
               dispatch('loadResearchContentVotes', { researchId: contentObj.research_external_id, notify: resolve });
-            });
-
-            const researchGroupDetailsLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchGroupDetails', { group_permlink, notify: resolve });
             });
 
             return Promise.all([
@@ -205,7 +198,6 @@ const actions = {
               contentRefLoad,
               contentReviewsLoad,
               contentVotesLoad,
-              researchGroupDetailsLoad,
               dispatch('loadResearchContentEciStatsRecords', { research_content_external_id: contentObj.external_id })
             ]);
           }, (err) => {
@@ -251,59 +243,56 @@ const actions = {
       });
   },
 
-  loadResearchDetails({ state, commit, dispatch }, { group_permlink, research_permlink, notify }) {
+  loadResearchDetails({ state, commit, dispatch }, { projectId }) {
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
-    let researchExternalId;
-
-    return researchService.getResearchByAbsolutePermlink(group_permlink, research_permlink)
+    return researchService.getResearch(projectId)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
-        researchExternalId = research.external_id;
         return usersService.getUsersByResearchGroup(research.research_group.external_id);
       })
       .then((users) => {
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
-        return researchContentService.getResearchContentByResearch(researchExternalId);
+        return researchContentService.getResearchContentByResearch(projectId);
       })
       .then((list) => {
         commit('SET_RESEARCH_CONTENT_LIST', list);
       })
       .finally(() => {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
       });
   },
 
-  loadResearchGroupDetails({ state, commit, dispatch }, { group_permlink, notify }) {
+  loadResearchGroupDetails({ state, commit, dispatch }, { teamId }) {
     commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true);
-    researchGroupService.getResearchGroupByPermlink(group_permlink)
-      .then((group) => {
-        commit('SET_RESEARCH_GROUP_DETAILS', group);
+    return researchGroupService.getResearchGroup(teamId)
+      .then((team) => {
+        commit('SET_RESEARCH_GROUP_DETAILS', team);
+        return team;
       }, (err) => {
         console.error(err);
       })
       .finally(() => {
         commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false);
-        if (notify) notify();
       });
   },
 
   loadResearchContentRef({ state, commit, dispatch }, {
-    refId, researchExternalId, hash, notify
+    refId, projectId, hash, notify
   }) {
     const refPromies = refId != null
       ? researchContentService.getContentRefById(refId)
-      : researchContentService.getContentRefByHash(researchExternalId, hash);
+      : researchContentService.getContentRefByHash(projectId, hash);
 
     refPromies
       .then((contentRef) => {
         commit('SET_RESEARCH_CONTENT_REF', contentRef);
-        return proposalsService.getProposalsByCreator(contentRef.researchGroupExternalId);
+        return dispatch('loadResearchGroupDetails', { teamId: contentRef.researchGroupExternalId });
       })
+      .then((team) => proposalsService.getProposalsByCreator(team.external_id))
       .then((proposals) => {
         const { contentRef } = state;
-        const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.research_external_id == researchExternalId);
+        const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.research_external_id == projectId);
         commit('SET_CONTENT_PROPOSAL', contentProposal || null);
       })
       .catch((err) => { console.error(err); })
@@ -314,10 +303,10 @@ const actions = {
     return refPromies;
   },
 
-  loadContentReviews({ state, dispatch, commit }, { researchContentExternalId, notify }) {
+  loadContentReviews({ state, dispatch, commit }, { contentId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
-    researchContentReviewsService.getReviewsByResearchContent(researchContentExternalId)
+    researchContentReviewsService.getReviewsByResearchContent(contentId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([

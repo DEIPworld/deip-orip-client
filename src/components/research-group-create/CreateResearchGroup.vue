@@ -95,11 +95,9 @@
                 .then(([invites, researchGroup]) => {
                   if (!this.backRouterToken) {
                     this.$router.push({
-                      name: 'ResearchGroupDetails',
+                      name: 'teamDetails',
                       params: {
-                        research_group_permlink: encodeURIComponent(
-                          researchGroup.permlink
-                        )
+                        teamId: researchGroup.external_id
                       }
                     });
                   } else {

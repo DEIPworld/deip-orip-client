@@ -5,7 +5,7 @@
     :to="{
       name: 'project.details',
       params: {
-        researchExternalId: project.externalId
+        projectId: project.externalId
       }
     }"
   >

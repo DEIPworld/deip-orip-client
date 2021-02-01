@@ -149,7 +149,7 @@
         type: String,
         default: null
       },
-      projectExternalId: {
+      projectId: {
         type: String,
         default: null
       }
@@ -346,7 +346,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: this.project.externalId
+            projectId: this.project.externalId
           }
         });
         this.$ls.remove(this.cache);
