@@ -28,11 +28,11 @@ export const projectRouting = [{
     },
 
     {
-      path: ':researchExternalId',
+      path: ':projectId',
       component: ProjectDataProvider,
       props(route) {
         return {
-          projectId: route.params.researchExternalId
+          projectId: route.params.projectId
         };
       },
 

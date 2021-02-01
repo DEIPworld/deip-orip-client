@@ -71,7 +71,7 @@
                 :to="{
                   name: 'project.details',
                   params: {
-                    researchExternalId: investment.research.external_id
+                    projectId: investment.research.external_id
                   }
                 }"
               >
@@ -120,7 +120,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: investment.research.external_id
+                  projectId: investment.research.external_id
                 }
               }"
             >

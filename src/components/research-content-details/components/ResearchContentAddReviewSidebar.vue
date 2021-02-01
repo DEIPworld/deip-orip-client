@@ -4,11 +4,10 @@
       <router-link
         class="a title"
         :to="{
-          name: 'ResearchContentDetails',
+          name: 'project.content.details',
           params: {
-            research_group_permlink: encodeURIComponent(research.research_group.permlink),
-            research_permlink: encodeURIComponent(research.permlink),
-            content_permlink: encodeURIComponent(content.permlink)
+            projectId: research.external_id,
+            contentId: content.external_id
           }
         }"
       >
@@ -119,11 +118,10 @@
             .then((data) => {
               this.$notifier.showSuccess(this.$t('researchContentDetails.addRev.pubSucc'));
               this.$router.push({
-                name: 'ResearchContentDetails',
+                name: 'project.content.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(this.research.research_group.permlink),
-                  research_permlink: encodeURIComponent(this.research.permlink),
-                  content_permlink: encodeURIComponent(this.content.permlink)
+                  projectId: this.research.external_id,
+                  contentId: this.content.external_id
                 },
                 hash: '#reviews'
               });

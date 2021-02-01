@@ -80,10 +80,10 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchGroup({ commit, dispatch, state }, { permlink }) {
+  loadResearchGroup({ commit, dispatch, state }, { teamId }) {
     commit('SET_GROUP_DETAILS_LOADING_STATE', true);
 
-    return researchGroupService.getResearchGroupByPermlink(permlink)
+    return researchGroupService.getResearchGroup(teamId)
       .then((data) => {
         commit('SET_RESEARCH_GROUP', data);
 

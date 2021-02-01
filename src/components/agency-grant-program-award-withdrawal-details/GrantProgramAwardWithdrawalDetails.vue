@@ -57,9 +57,9 @@
             <router-link
               class="a text-body-2"
               :to="{
-                name: 'ResearchGroupDetails',
+                name: 'teamDetails',
                 params: {
-                  research_group_permlink: awardee.organization.permlink
+                  teamId: awardee.organization.external_id
                 }
               }"
             >
@@ -91,9 +91,9 @@
             <router-link
               class="a text-body-2"
               :to="{
-                name: 'ResearchGroupDetails',
+                name: 'teamDetails',
                 params: {
-                  research_group_permlink: foa.organization.permlink
+                  teamId: foa.organization.external_id
                 }
               }"
             >

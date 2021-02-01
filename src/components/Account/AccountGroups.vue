@@ -22,9 +22,9 @@
             outlined
             class="full-height d-flex"
             :to="{
-              name: 'ResearchGroupDetails',
+              name: 'teamDetails',
               params: {
-                research_group_permlink: encodeURIComponent(group.permlink) }
+                teamId: group.external_id }
             }"
           >
             <d-box-item

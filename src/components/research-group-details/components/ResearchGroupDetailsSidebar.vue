@@ -50,30 +50,6 @@
     </d-block-widget>
     <!-- ### END Project Group Details Section ### -->
 
-    <!-- <d-block-widget v-if="isResearchGroupMember">
-      <template #title>
-        <router-link
-          class="a"
-          :to="{
-            name: 'ResearchGroupWallet',
-            params: { research_group_permlink: group.permlink }
-          }"
-        >
-          {{ $t('researchGroupDetails.sidebar.wallet') }}
-        </router-link>
-      </template>
-
-      <v-btn
-        class="ma-0"
-        :disabled="!defaultAssetBalance"
-        color="primary"
-        block
-        @click="$store.dispatch('researchGroup/changeOptions', { key: 'isTransferTokensDialogOpen', value: true })"
-      >
-        {{ $t('researchGroupDetails.sidebar.Transfer') }}
-      </v-btn>
-    </d-block-widget> -->
-
     <quorum-size-sidebar-section v-if="group.is_dao" />
 
   </div>

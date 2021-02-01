@@ -61,14 +61,14 @@
           this.$router.push({
             name: 'project.details',
             params: {
-              researchExternalId: this.notification.metadata.research.external_id
+              projectId: this.notification.metadata.research.external_id
             }
           });
         } else {
           this.$router.push({
-            name: 'ResearchGroupDetails',
+            name: 'teamDetails',
             params: {
-              research_group_permlink: encodeURIComponent(this.notification.metadata.researchGroup.permlink)
+              teamId: this.notification.metadata.researchGroup.external_id
             },
             hash: '#proposals'
           });

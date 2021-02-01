@@ -17,7 +17,7 @@ export const fundraisingRoutingFabric = (parent) => {
         component: FundraisingCreate,
         props(route) {
           return {
-            projectId: route.params.researchExternalId
+            projectId: route.params.projectId
           };
         }
       }

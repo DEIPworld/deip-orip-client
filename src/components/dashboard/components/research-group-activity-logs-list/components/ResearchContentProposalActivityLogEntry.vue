@@ -21,11 +21,10 @@
             New "<router-link
               class="a"
               :to="{
-                name: 'ResearchContentDetails',
+                name: 'project.content.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink),
-                  content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
+                  projectId: log.metadata.research.external_id,
+                  contentId: log.metadata.researchContent.external_id
                 }
               }"
             >{{ log.metadata.researchContent.title }}</router-link>"
@@ -34,7 +33,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research by quorum
@@ -52,11 +51,10 @@
             uploaded new "<router-link
               class="a"
               :to="{
-                name: 'ResearchContentDetails',
+                name: 'project.content.details',
                 params: {
-                  research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                  research_permlink: encodeURIComponent(log.metadata.research.permlink),
-                  content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
+                  projectId: log.metadata.research.external_id,
+                  contentId: log.metadata.researchContent.external_id
                 }
               }"
             >{{ log.metadata.researchContent.title }}</router-link>"
@@ -65,7 +63,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research
@@ -76,7 +74,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research

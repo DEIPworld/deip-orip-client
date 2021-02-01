@@ -42,8 +42,8 @@
         this.$router.push({
           name: 'project.content.details',
           params: {
-            researchExternalId: this.notification.metadata.research.external_id,
-            contentExternalId: this.notification.metadata.researchContent.external_id
+            projectId: this.notification.metadata.research.external_id,
+            contentId: this.notification.metadata.researchContent.external_id
           },
         });
 

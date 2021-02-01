@@ -11,7 +11,7 @@
         :to="{
           name: 'project.details',
           params: {
-            researchExternalId: selectedInvestment.research.external_id
+            projectId: selectedInvestment.research.external_id
           }
         }"
       >

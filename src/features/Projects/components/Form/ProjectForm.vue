@@ -13,6 +13,7 @@
               text
               color="primary"
               :disabled="isLoading"
+              @click="$router.back()"
             >
               Cancel
             </v-btn>

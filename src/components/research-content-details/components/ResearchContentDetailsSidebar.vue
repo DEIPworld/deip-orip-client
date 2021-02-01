@@ -6,9 +6,9 @@
         <router-link
           class="link orange--text"
           :to="{
-            name: 'ResearchGroupDetails',
+            name: 'teamDetails',
             params: {
-              research_group_permlink: encodeURIComponent(research.research_group.permlink)
+              teamId: research.research_group.external_id
             },
             hash: '#proposals'
           }"
@@ -28,7 +28,7 @@
     </d-block-widget>
 
     <d-block-widget
-      v-if="$hasModule(DEIP_MODULE.APP_ECI) && $route.params.content_permlink !== '!draft'"
+      v-if="$hasModule(DEIP_MODULE.APP_ECI) && $route.params.contentId !== '!draft'"
       :title="$t('researchContentDetails.sidebar.eci')"
     >
       <eci-stats
@@ -100,8 +100,8 @@
             :to="{
               name: 'project.content.details',
               params: {
-                contentExternalId: item.externalId,
-                researchExternalId: research.external_id,
+                contentId: item.externalId,
+                projectId: research.external_id,
               }
             }"
           >
@@ -116,9 +116,8 @@
           :to="{
             name: 'ResearchContentReferences',
             params: {
-              research_group_permlink: encodeURIComponent(research.research_group.permlink),
-              research_permlink: encodeURIComponent(research.permlink),
-              content_permlink: encodeURIComponent(content.permlink)
+              projectId: research.external_id,
+              contentId: content.external_id
             }}"
         >
           <v-icon small class="mr-1">
@@ -138,9 +137,8 @@
         :to="{
           name: 'ResearchContentMetadata',
           params: {
-            research_group_permlink: encodeURIComponent(research.research_group.permlink),
-            research_permlink: encodeURIComponent(research.permlink),
-            content_permlink: encodeURIComponent(content.permlink)
+            projectId: encodeURIComponent(research.permlink),
+            contentId: encodeURIComponent(content.permlink)
           }
         }"
       >

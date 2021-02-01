@@ -12,8 +12,8 @@ const GETTERS = {
 };
 
 const ACTIONS = {
-  getContentDetails({ commit }, contentExternalId) {
-    return researchContentService.getResearchContent(contentExternalId)
+  getContentDetails({ commit }, contentId) {
+    return researchContentService.getResearchContent(contentId)
       .then((content) => {
         commit('storeContentDetails', content);
       });

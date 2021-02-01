@@ -18,9 +18,8 @@
 
       permData() {
         return {
-          groupPermalink: this.project.researchGroup.permlink,
-          projectPermalink: this.project.permlink,
-          contentPermalink: this.content.permlink
+          projectId: this.project.externalId,
+          contentId: this.content.externalId
         };
       }
     }

@@ -59,9 +59,9 @@
     },
     methods: {
       imageUrl() {
-        if (this.$route.params.researchExternalId) {
+        if (this.$route.params.projectId) {
           return researchAttributeFileUrl(
-            this.$route.params.researchExternalId,
+            this.$route.params.projectId,
             this.attribute._id,
             this.internalValue
           );

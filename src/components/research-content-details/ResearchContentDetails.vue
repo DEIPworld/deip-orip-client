@@ -19,7 +19,7 @@
             </div>
             <div>
               <router-link
-                :to="{ name: 'project.details', params: { projectExternalId: research.external_id } }"
+                :to="{ name: 'project.details', params: { projectId: research.external_id } }"
                 class="link text--primary text-decoration-none"
               >
                 {{ research.title }}
@@ -228,9 +228,8 @@
 
     created() {
       this.$store.dispatch('rcd/loadResearchContentDetails', {
-        group_permlink: decodeURIComponent(this.permData.groupPermalink || this.$route.params.research_group_permlink),
-        research_permlink: decodeURIComponent(this.permData.projectPermalink || this.$route.params.research_permlink),
-        content_permlink: decodeURIComponent(this.permData.contentPermalink || this.$route.params.content_permlink),
+        projectId: this.permData.projectId || this.$route.params.projectId,
+        contentId: this.permData.contentId || this.$route.params.contentId,
         ref: this.$route.query.ref
       })
         .then(() => {
@@ -315,7 +314,7 @@
       //                   this.$router.push({
       //                     name: 'project.details',
       //                     params: {
-      //                       researchExternalId: this.research.external_id
+      //                       projectId: this.research.external_id
       //                     }
       //                   });
       //                 }, 1500);

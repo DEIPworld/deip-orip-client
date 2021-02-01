@@ -4,7 +4,7 @@
     :to="{
       name: 'project.edit',
       params: {
-        researchExternalId: project.externalId
+        projectId: project.externalId
       }
     }"
     small

@@ -26,9 +26,9 @@
           accepted invitation and now is a member of the "<router-link
             class="a"
             :to="{
-              name: 'ResearchGroupDetails',
+              name: 'teamDetails',
               params: {
-                research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
+                teamId: log.metadata.researchGroup.external_id,
               }
             }"
           >{{ log.metadata.researchGroup.name }}</router-link>"
