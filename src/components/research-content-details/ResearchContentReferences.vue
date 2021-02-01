@@ -421,12 +421,12 @@
 
       outerReferencesByOrgChart() {
         const outerReferencesByOrg = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-          const { researchGroup: { permlink: org } } = node;
+          const { researchGroup: { external_id: org } } = node;
           if (node.isOuter) {
             const item = acc[org];
             if (!item) {
               acc[org] = {
-                org: node.researchGroup.permlink,
+                org: node.researchGroup.external_id,
                 text: node.researchGroup.name,
                 count: 1
               };

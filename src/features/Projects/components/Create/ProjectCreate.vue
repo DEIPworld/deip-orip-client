@@ -55,6 +55,7 @@
             }
 
             this.$notifier.showError('Project exist');
+            this.loading = false;
             return true;
           });
       }

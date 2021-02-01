@@ -137,8 +137,8 @@
         :to="{
           name: 'ResearchContentMetadata',
           params: {
-            projectId: encodeURIComponent(research.permlink),
-            contentId: encodeURIComponent(content.permlink)
+            projectId: encodeURIComponent(research.external_id),
+            contentId: encodeURIComponent(content.external_id)
           }
         }"
       >
@@ -247,7 +247,6 @@
           return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
-            permlink: content.permlink,
             externalId: content.external_id
           }] : arr;
         }, []);

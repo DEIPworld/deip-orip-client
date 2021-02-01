@@ -105,9 +105,7 @@
           researchRef: { attributes: {} }
         },
 
-        storeDraftDebounce: undefined,
-
-        isPermlinkVerifyed: true
+        storeDraftDebounce: undefined
       };
     },
 
