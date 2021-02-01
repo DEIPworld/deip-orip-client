@@ -29,7 +29,7 @@ export const attributeSet = {
     },
 
     $$isEditable() {
-      const editState = !!this.$route.params.researchExternalId;
+      const editState = !!this.$route.params.projectId;
 
       if (editState) {
         return this.attribute.isEditable;

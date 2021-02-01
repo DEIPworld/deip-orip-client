@@ -86,9 +86,9 @@ const GETTERS = {
         const link = {
           name: 'project.content.review.details',
           params: {
-            researchExternalId: record.research.external_id,
-            contentExternalId: record.research_content.external_id,
-            reviewExternalId: record.review.external_id
+            projectId: record.research.external_id,
+            contentId: record.research_content.external_id,
+            reviewId: record.review.external_id
           }
         };
 
@@ -107,9 +107,9 @@ const GETTERS = {
         const link = {
           name: 'project.content.review.details',
           params: {
-            researchExternalId: record.research.external_id,
-            contentExternalId: record.research_content.external_id,
-            reviewExternalId: record.review.external_id
+            projectId: record.research.external_id,
+            contentId: record.research_content.external_id,
+            reviewId: record.review.external_id
           }
         };
 
@@ -132,8 +132,8 @@ const GETTERS = {
         const link = {
           name: 'project.content.details',
           params: {
-            researchExternalId: record.research.external_id,
-            contentExternalId: record.research_content.external_id
+            projectId: record.research.external_id,
+            contentId: record.research_content.external_id
           }
         };
 

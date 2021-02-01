@@ -1,5 +1,4 @@
 <template>
-
   <v-data-table
     v-if="contents.length"
     v-custom="'hover-row'"
@@ -16,7 +15,6 @@
     </template>
 
     <template #item.title="{item}">
-
       <component
         :is="disableAllRoutes || disableContentRoute ? 'span' : 'router-link'"
         v-if="$isUser"
@@ -24,8 +22,8 @@
         :to="{
           name: 'project.content.details',
           params: {
-            contentExternalId: item.externalId,
-            researchExternalId: $route.params.researchExternalId,
+            contentId: item.externalId,
+            projectId: $route.params.projectId,
           }
         }"
       >
@@ -46,9 +44,8 @@
           :to="{
             name: 'ResearchContentReferences',
             params: {
-              research_group_permlink: $store.getters['Project/projectDetails'].researchGroup.permlink,
-              content_permlink: item.permlink,
-              research_permlink: $store.getters['Project/projectDetails'].permlink,
+              contentId: item.externalId,
+              projectId: item.researchExternalId,
             }
           }"
         >

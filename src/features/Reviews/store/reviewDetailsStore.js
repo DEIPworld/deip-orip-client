@@ -15,8 +15,8 @@ const GETTERS = {
 };
 
 const ACTIONS = {
-  getReviewDetails({ commit }, reviewExternalId) {
-    return researchContentReviewsService.getReview(reviewExternalId)
+  getReviewDetails({ commit }, reviewId) {
+    return researchContentReviewsService.getReview(reviewId)
       .then((item) => {
         return getAdditionalDataOne(item)
           .then((res) => {

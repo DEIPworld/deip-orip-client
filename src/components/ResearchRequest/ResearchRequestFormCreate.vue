@@ -61,7 +61,7 @@
               this.$router.push({
                 name: 'project.details',
                 params: {
-                  research_permlink: research.external_id
+                  projectId: research.external_id
                 }
               });
             } else {

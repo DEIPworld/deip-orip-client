@@ -88,7 +88,7 @@
           :to="{
             name: 'project.fundraising',
             params: {
-              researchExternalId: $route.params.researchExternalId
+              projectId: $route.params.projectId
             }
           }"
         >

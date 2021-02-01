@@ -23,7 +23,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
@@ -42,7 +42,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research

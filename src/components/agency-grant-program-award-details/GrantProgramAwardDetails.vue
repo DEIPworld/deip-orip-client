@@ -101,8 +101,8 @@
             <v-col cols="9" class="pa-1">
               <router-link
                 class="a text-body-2"
-                :to="{ name: 'ResearchGroupDetails', params: {
-                  research_group_permlink: encodeURIComponent(awardee.organization.permlink)
+                :to="{ name: 'teamDetails', params: {
+                  teamId: awardee.organization.external_id
                 }}"
               >
                 {{ awardee.organization.name }}
@@ -133,8 +133,8 @@
             <v-col cols="9" class="pa-1">
               <router-link
                 class="a text-body-2"
-                :to="{ name: 'ResearchGroupDetails', params: {
-                  research_group_permlink: encodeURIComponent(foa.organization.permlink),
+                :to="{ name: 'teamDetails', params: {
+                  teamId: foa.organization.external_id,
                 }}"
               >
                 {{ foa.organization.name }}
@@ -237,7 +237,7 @@
                   </router-link>
                 </td>
                 <td>
-                  <router-link class="a text-body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink } }">
+                  <router-link class="a text-body-2" :to="{ name: 'teamDetails', params: { teamId: item.organization.external_id } }">
                     {{ item.organization.name }}
                   </router-link>
                 </td>

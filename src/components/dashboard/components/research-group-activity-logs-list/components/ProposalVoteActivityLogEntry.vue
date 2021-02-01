@@ -32,7 +32,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research
@@ -43,7 +43,7 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  researchExternalId: log.metadata.research.external_id
+                  projectId: log.metadata.research.external_id
                 }
               }"
             >{{ log.metadata.research.title }}</router-link>" research

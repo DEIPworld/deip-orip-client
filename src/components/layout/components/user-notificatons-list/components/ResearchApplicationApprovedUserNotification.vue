@@ -35,7 +35,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: this.notification.metadata.research.external_id
+            projectId: this.notification.metadata.research.external_id
           }
         });
         this.markAsRead();

@@ -29,23 +29,6 @@
           </div>
         </div>
 
-        <!--    <div class="c-mt-4">
-                <div class="legacy-row">
-                    <div class="bold width-7">Project</div>
-                    <div class="bold c-pl-4">
-                        <router-link class="a" :to="{ name: 'ProjectDetails', params: {
-                            research_group_permlink: $route.params.research_group_permlink,
-                            research_permlink: $route.params.research_permlink}}">
-                            {{ contentMetadata.research.title }}
-                        </router-link>
-                    </div>
-                </div>
-                <div class="legacy-row grey-border-stripe">
-                    <div class="pill width-7 white--text">Public ID</div>
-                    <div class="legacy-col-grow pill-value">{{contentMetadata.research.id}}</div>
-                </div>
-            </div> -->
-
         <div class="c-mt-4">
           <div class="legacy-row">
             <div class="bold width-7">
@@ -54,7 +37,7 @@
             <div class="bold c-pl-4">
               <router-link
                 class="a"
-                :to="`/${$route.params.research_group_permlink}/research/${$route.params.research_permlink}/${$route.params.content_permlink}`"
+                :to="`/${$route.params.teamId}/research/${$route.params.projectId}/${$route.params.contentId}`"
               >
                 {{ contentMetadata.content.title }}
               </router-link>

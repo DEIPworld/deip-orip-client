@@ -91,7 +91,7 @@
                     </td>
                     <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer">
                       <div>
-                        <router-link class="a text-body-1" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink }}">
+                        <router-link class="a text-body-1" :to="{ name: 'teamDetails', params: { teamId: item.organization.external_id }}">
                           {{ item.organization.name }}
                         </router-link>
                       </div>
@@ -335,7 +335,7 @@
                     </router-link>
                   </td>
                   <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier">
-                    <router-link class="a text-body-2" :to="{ name: 'ResearchGroupDetails', params: { research_group_permlink: item.organization.permlink }}">
+                    <router-link class="a text-body-2" :to="{ name: 'teamDetails', params: { teamId: item.organization.external_id }}">
                       {{ item.organization.name }}
                     </router-link>
                   </td>

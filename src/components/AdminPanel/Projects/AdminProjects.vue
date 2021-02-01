@@ -103,7 +103,7 @@
         this.$router.push({
           name: 'project.edit',
           params: {
-            researchExternalId: id
+            projectId: id
           }
         });
       },

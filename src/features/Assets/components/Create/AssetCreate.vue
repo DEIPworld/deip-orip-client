@@ -347,7 +347,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: this.project.externalId
+            projectId: this.project.externalId
           }
         });
       },
@@ -356,7 +356,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            researchExternalId: this.project.externalId
+            projectId: this.project.externalId
           }
         });
       },

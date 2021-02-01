@@ -26,11 +26,10 @@
           requested an expert review for the "<router-link
             class="a"
             :to="{
-              name: 'ResearchContentDetails',
+              name: 'project.content.details',
               params: {
-                research_group_permlink: encodeURIComponent(log.metadata.researchGroup.permlink),
-                research_permlink: encodeURIComponent(log.metadata.research.permlink),
-                content_permlink: encodeURIComponent(log.metadata.researchContent.permlink)
+                projectId: log.metadata.research.external_id,
+                contentId: log.metadata.researchContent.external_id
               }
             }"
           >{{ log.metadata.researchContent.title }}</router-link>" material from <platform-avatar
