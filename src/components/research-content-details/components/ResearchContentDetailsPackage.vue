@@ -62,7 +62,7 @@
         return ['.png', '.jpg', '.jpeg', '.pdf'].some((e) => e === ext);
       },
       getContentUrl(fileHash, download = false) {
-        return `${window.env.DEIP_SERVER_URL}/content/refs/research/package/${this.contentRef.researchExternalId}/${this.contentRef.hash}/${fileHash}?download=${download}&authorization=${accessService.getAccessToken()}`;
+        return `${window.env.DEIP_SERVER_URL}/content/refs/research/package/${this.contentRef._id}/${fileHash}?download=${download}&authorization=${accessService.getAccessToken()}`;
       }
     }
   };
