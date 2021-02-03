@@ -27,6 +27,12 @@ export default {
       path: 'environment',
       children: {}
     },
+    food_and_agriculture: {
+      label: 'Food and agriculture',
+      id: '95888eb8dff7d356d34d3223020e5653cce606fd',
+      path: 'food_and_agriculture',
+      children: {}
+    },
     health: {
       label: 'Health',
       id: '6086c355ccf09cf65c105cd216bd3411d8848da4',
