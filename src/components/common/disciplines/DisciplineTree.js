@@ -3,46 +3,52 @@ export default {
   id: '6c4bb3bcf1a88e3b51de88576d592f1f980c5bbb',
   path: '',
   children: {
-    biology: {
-      label: 'Biology',
-      id: '7c3d37cbfea2513a7e03e674448bbeee8ae3d862',
-      path: 'biology',
+    biotechnology: {
+      label: 'Biotechnology',
+      id: 'a91355b131391655a24a79854697baffe0d26ba2',
+      path: 'biotechnology',
       children: {}
     },
-    physics: {
-      label: 'Physics',
-      id: '9f0224709d86e02b9625b5ebf2786b80ba6bed17',
-      path: 'physics',
+    digital: {
+      label: 'Digital',
+      id: '60fb93ac61a74c3a41c851073e03fcd9eb11f906',
+      path: 'digital',
       children: {}
     },
-    chemistry: {
-      label: 'Chemistry',
-      id: '6a8b20f002a7dedf7b873dbc86e0b0051d4fa898',
-      path: 'chemistry',
+    energy: {
+      label: 'Energy',
+      id: '2422f57585df6b78722225bc4b8486193b7ec4fa',
+      path: 'energy',
       children: {}
     },
-    earth_sciences: {
-      label: 'Earth sciences',
-      id: 'a47bf84ac30d0843accb737d5924434ef3ed0517',
-      path: 'earth_sciences',
+    environment: {
+      label: 'Environment',
+      id: '06b7f1c0f27484a685391648e79acdfb4c87bcb7',
+      path: 'environment',
       children: {}
     },
-    space_sciences: {
-      label: 'Space sciences',
-      id: '8e2a3711649993a87848337b9b401dcf64425e2d',
-      path: 'space_sciences',
+    health: {
+      label: 'Health',
+      id: '6086c355ccf09cf65c105cd216bd3411d8848da4',
+      path: 'health',
       children: {}
     },
-    medicine_and_health: {
-      label: 'Medicine and health',
-      id: '721e75eb0535e152669b0c3fbbb9e21675483553',
-      path: 'medicine_and_health',
+    materials: {
+      label: 'Materials',
+      id: 'f704e7595f4bd4c83ea03254d1880cdca9ac80c3',
+      path: 'materials',
       children: {}
     },
-    aquaculture: {
-      label: 'Aquaculture',
-      id: '2519ef55e1b69f1a7e13275e3273950cce7e26a8',
-      path: 'aquaculture',
+    mechanics_and_electronics: {
+      label: 'Mechanics and Electronics',
+      id: 'd49fcfa88353e5207197f2cfdba1048dd2a528ac',
+      path: 'mechanics_and_electronics',
+      children: {}
+    },
+    mobility: {
+      label: 'Mobility',
+      id: 'bfa2fc1761a9828179dfab207453ebd322b7b2f5',
+      path: 'mobility',
       children: {}
     }
   }
