@@ -89,15 +89,15 @@
                   color="primary"
                   outlined
                   small
-                  :disabled="loading"
-                  :loading="loading"
+                  :disabled="loadingDraft || loadingPublish"
+                  :loading="loadingDraft"
                   @click="saveDraft()"
                 >
                   Save draft
                 </v-btn>
                 <v-btn
-                  :disabled="loading || invalid"
-                  :loading="loading"
+                  :disabled="loadingPublish || invalid || loadingDraft"
+                  :loading="loadingPublish"
                   color="primary"
                   small
                   @click="handleSubmit(createContent)"
@@ -162,7 +162,8 @@
         internalUsers: [],
         internalReferences: [],
 
-        loading: false,
+        loadingPublish: false,
+        loadingDraft: false,
         ready: false,
 
         formModel: {
@@ -269,7 +270,7 @@
       },
 
       saveDraft() {
-        this.loading = true;
+        this.loadingDraft = true;
 
         researchContentService.getResearchContentRef(this.draftId)
           .then((res) => {
@@ -282,13 +283,13 @@
             }
           })
           .finally(() => {
-            this.loading = false;
+            this.loadingDraft = false;
             this.$ls.set(this.cache, this.formModel);
           });
       },
 
       createContent() {
-        this.loading = true;
+        this.loadingPublish = true;
 
         return new Promise((resolve) => {
           this.$refs.contentDar.saveDocument(resolve);
@@ -337,7 +338,7 @@
                 }
               })
               .finally(() => {
-                this.loading = false;
+                this.loadingPublish = false;
               });
           });
       },
