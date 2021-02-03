@@ -147,7 +147,7 @@
         },
 
         dropzoneOptions: {
-          url: `${window.env.DEIP_SERVER_URL}/content/upload-files`,
+          url: `${window.env.DEIP_SERVER_URL}/api/research-content/package`,
           paramName: 'research-content',
           timeout: 0,
           maxFiles: 10,

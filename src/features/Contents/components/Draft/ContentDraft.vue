@@ -271,7 +271,7 @@
       saveDraft() {
         this.loading = true;
 
-        researchContentService.getContentRefById(this.draftId)
+        researchContentService.getResearchContentRef(this.draftId)
           .then((res) => {
             if (res.status === 'in-progress') {
               this.$refs.contentDar.saveDocument(() => {
@@ -293,7 +293,7 @@
         return new Promise((resolve) => {
           this.$refs.contentDar.saveDocument(resolve);
         })
-          .then(() => researchContentService.getContentRefById(this.draftId)) // double check
+          .then(() => researchContentService.getResearchContentRef(this.draftId)) // double check
           .then((contentRef) => {
             const isProposal = !this.project.researchGroup.is_personal;
 

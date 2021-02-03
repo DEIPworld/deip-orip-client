@@ -146,10 +146,7 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchContentDetails({ state, commit, dispatch },
-    {
-      projectId, contentId, ref
-    }) {
+  loadResearchContentDetails({ state, commit, dispatch }, { projectId, contentId, ref }) {
     commit('RESET_STATE');
     return dispatch('loadResearchDetails', { projectId })
       .then(() => {
@@ -159,7 +156,6 @@ const actions = {
             dispatch('loadResearchContentRef', {
               projectId: state.research.external_id,
               refId: ref,
-              hash: null,
               notify: resolve
             });
           });
@@ -174,13 +170,10 @@ const actions = {
         return researchContentService.getResearchContent(contentId)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
-            const { content: hash } = contentObj;
-
             const contentRefLoad = new Promise((resolve, reject) => {
               dispatch('loadResearchContentRef', {
                 projectId: state.research.external_id,
-                refId: null,
-                hash,
+                refId: contentId,
                 notify: resolve
               });
             });
@@ -277,14 +270,8 @@ const actions = {
       });
   },
 
-  loadResearchContentRef({ state, commit, dispatch }, {
-    refId, projectId, hash, notify
-  }) {
-    const refPromies = refId != null
-      ? researchContentService.getContentRefById(refId)
-      : researchContentService.getContentRefByHash(projectId, hash);
-
-    refPromies
+  loadResearchContentRef({ state, commit, dispatch }, { refId, projectId, notify }) {
+    return researchContentService.getResearchContentRef(refId)
       .then((contentRef) => {
         commit('SET_RESEARCH_CONTENT_REF', contentRef);
         return dispatch('loadResearchGroupDetails', { teamId: contentRef.researchGroupExternalId });
@@ -300,7 +287,6 @@ const actions = {
         commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
         if (notify) notify();
       });
-    return refPromies;
   },
 
   loadContentReviews({ state, dispatch, commit }, { contentId, notify }) {

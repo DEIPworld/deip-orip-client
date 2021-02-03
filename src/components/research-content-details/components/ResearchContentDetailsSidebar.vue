@@ -289,7 +289,7 @@
       },
 
       unlockDraft() {
-        researchContentService.unlockContentDraft(this.contentRef._id)
+        researchContentService.unlockResearchContentDraft(this.contentRef._id)
           .then(() => {
             location.reload();
           }, (err) => {

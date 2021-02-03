@@ -54,7 +54,7 @@
 
         const archiveId = this.darId;
         const storageType = 'fs';
-        const storageUrl = `${this.fileStorageBaseUrl}/content`;
+        const storageUrl = `${this.fileStorageBaseUrl}/api/research-content/texture`;
 
         return new Promise((resolve) => {
           const headers = {

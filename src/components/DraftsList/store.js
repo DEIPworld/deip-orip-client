@@ -24,7 +24,7 @@ const ACTIONS = {
   },
 
   deleteDraft({ state, commit }, draftId) {
-    return researchContentService.deleteContentDraft(draftId)
+    return researchContentService.deleteResearchContentDraft(draftId)
       .then(() => {
         commit('storeDrafts', state.list.filter(draft => draft._id != draftId));
       })

@@ -33,7 +33,7 @@
         this.loading = true;
 
         researchContentService
-          .createDarContent(this.projectId)
+          .createDarResearchContent(this.projectId)
           .then((res) => {
 
             this.$router.push({

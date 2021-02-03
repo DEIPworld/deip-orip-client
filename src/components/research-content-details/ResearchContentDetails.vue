@@ -272,9 +272,9 @@
       //             return new Promise((resolve, reject) => {
       //               bus.$emit('texture:saveDocument', resolve);
       //             })
-      //               .then(() => researchContentService.getContentRefById(this.contentRef._id));
+      //               .then(() => researchContentService.getResearchContentRef(this.contentRef._id));
       //           }
-      //           return researchContentService.getContentRefById(this.contentRef._id);
+      //           return researchContentService.getResearchContentRef(this.contentRef._id);
       //         };
       //
       //         saveDocument()
@@ -329,7 +329,7 @@
 
       // saveDraft() {
       //   this.isSavingDraft = true;
-      //   researchContentService.getContentRefById(this.contentRef._id)
+      //   researchContentService.getResearchContentRef(this.contentRef._id)
       //     .then((draft) => {
       //       if (draft.status == 'in-progress') {
       //         bus.$emit('texture:saveDocument', () => {
