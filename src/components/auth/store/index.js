@@ -73,7 +73,6 @@ const getters = {
       groups.push({
         id: group.id,
         external_id: group.external_id,
-        permlink: group.permlink,
         name: group.name,
         quorum_percent: group.quorum_percent,
         is_personal: group.is_personal,
@@ -89,7 +88,7 @@ const getters = {
     return groups;
   },
 
-  userPersonalGroup: (state, getters) => getters.userGroups.find((g) => g.permlink === getters.user.username),
+  userPersonalGroup: (state, getters) => getters.userGroups.find((g) => g.external_id === getters.user.username),
 
   userIsResearchGroupMember: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.id),
 

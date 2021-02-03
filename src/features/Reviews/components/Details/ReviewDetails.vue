@@ -207,13 +207,6 @@
         };
       },
 
-      permData() {
-        return {
-          groupPermalink: this.project.researchGroup.permlink,
-          projectPermalink: this.project.permlink,
-          contentPermalink: this.content.permlink
-        };
-      },
 
       reviewAssessment() {
         const disciplines = this.review.disciplines.map((d) => d.name);

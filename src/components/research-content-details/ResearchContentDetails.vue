@@ -116,7 +116,6 @@
         type="heading"
       >
         <research-content-details-sidebar />
-        <!--        <research-content-details-sidebar @setDraftAuthors="setDraftAuthors" />-->
       </v-skeleton-loader>
     </d-layout-section-sidebar>
   </d-layout-section>
@@ -126,8 +125,6 @@
   import { mapGetters } from 'vuex';
   import { bus } from '@/main';
 
-  import { ResearchContentService } from '@deip/research-content-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchService } from '@deip/research-service';
   import { SearchService } from '@deip/search-service';
 
@@ -137,23 +134,15 @@
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
   import ReviewsList from '@/features/Reviews/components/List/ReviewsList';
   import DStack from '@/components/Deipify/DStack/DStack';
-  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
-  import DLayout from '@/components/Deipify/DLayout/DLayout';
-  import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
   import ContentDar from '@/features/Contents/components/Dar/ContentDar';
 
   const searchService = SearchService.getInstance();
-  const researchContentService = ResearchContentService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
   const researchService = ResearchService.getInstance();
 
   export default {
     name: 'ResearchContentDetails',
     components: {
       ContentDar,
-      ReferencesSelector,
-      DLayout,
-      DSimpleTooltip,
       DStack,
       ReviewsList,
       DLayoutSectionSidebar,
@@ -171,7 +160,6 @@
     data() {
       return {
         isSavingDraft: false,
-        isPermlinkVerifyed: true,
         rules: {
           titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
@@ -242,134 +230,6 @@
     },
 
     methods: {
-      // openContentProposalDialog() {
-      //   const openDialog = (title) => {
-      //     this.proposeContent.title = title;
-      //     this.proposeContent.authors = this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
-      //     this.proposeContent.isOpen = true;
-      //   };
-      //   if (this.isDarContent) {
-      //     bus.$emit('texture:getArticleTitle', openDialog);
-      //   } else {
-      //     openDialog(this.contentRef.title);
-      //   }
-      // },
-      //
-      // closeContentProposalDialog() {
-      //   this.proposeContent.isOpen = false;
-      // },
-
-      // sendContentProposal() {
-      //   researchContentService.checkResearchContentExistenceByPermlink(this.research.external_id, this.proposeContent.title)
-      //     .then((exists) => {
-      //       this.isPermlinkVerifyed = !exists;
-      //
-      //       if (this.isPermlinkVerifyed) {
-      //         this.proposeContent.isLoading = true;
-      //
-      //         const saveDocument = () => {
-      //           if (this.isDarContent) {
-      //             return new Promise((resolve, reject) => {
-      //               bus.$emit('texture:saveDocument', resolve);
-      //             })
-      //               .then(() => researchContentService.getResearchContentRef(this.contentRef._id));
-      //           }
-      //           return researchContentService.getResearchContentRef(this.contentRef._id);
-      //         };
-      //
-      //         saveDocument()
-      //           .then((contentRef) => {
-      //             const isProposal = !this.research.research_group.is_personal;
-      //             researchContentService.createResearchContent(
-      //               {
-      //                 privKey: this.user.privKey,
-      //                 username: this.user.username
-      //               },
-      //               isProposal,
-      //               {
-      //                 researchExternalId: this.research.external_id,
-      //                 researchGroup: this.research.research_group.external_id,
-      //                 type: parseInt(this.proposeContent.type),
-      //                 title: this.proposeContent.title || contentRef.title,
-      //                 content: contentRef.hash,
-      //                 authors: this.proposeContent.authors.map((a) => a.account.name),
-      //                 references: [...this.contentRef.references],
-      //                 extensions: []
-      //               }
-      //             )
-      //               .then(() => {
-      //                 this.$notifier.showSuccess('New material has been uploaded successfully');
-      //               }, (err) => {
-      //                 console.error(err);
-      //                 if (err.response && err.response.status === 409) {
-      //                   alert('This file was already uploaded. Please vote for existing proposal or propose file again if its existing proposal has expired.');
-      //                 } else {
-      //                   this.$notifier.showError('An error occurred while creating proposal, please try again later');
-      //                 }
-      //               })
-      //               .finally(() => {
-      //                 this.proposeContent.isOpen = false;
-      //                 this.proposeContent.isLoading = false;
-      //                 setTimeout(() => {
-      //                   this.$router.push({
-      //                     name: 'project.details',
-      //                     params: {
-      //                       projectId: this.research.external_id
-      //                     }
-      //                   });
-      //                 }, 1500);
-      //               });
-      //           });
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       this.isPermlinkVerifyed = false;
-      //     });
-      // },
-
-      // saveDraft() {
-      //   this.isSavingDraft = true;
-      //   researchContentService.getResearchContentRef(this.contentRef._id)
-      //     .then((draft) => {
-      //       if (draft.status == 'in-progress') {
-      //         bus.$emit('texture:saveDocument', () => {
-      //           this.isSavingDraft = false;
-      //           this.$notifier.showSuccess('Document draft has been saved !');
-      //         });
-      //       } else {
-      //         this.isSavingDraft = false;
-      //         this.$notifier.showError('Document draft is locked for editing !');
-      //       }
-      //     });
-      // },
-
-      // setDraftAuthors(authors) {
-      //   if (!authors.length) return;
-      //   bus.$emit('texture:setAuthors', {
-      //     authors,
-      //     members: this.researchMembersList
-      //   });
-      //   this.$store.dispatch('rcd/setDraftAuthors', authors.map((a) => a.account.name));
-      // },
-
-      // isAuthorSelected(member) {
-      //   return this.proposeContent.authors.some((a) => a.account.name === member.account.name);
-      // },
-
-      // addReference(reference) {
-      //   bus.$emit('texture:addReference', { reference });
-      //   const refs = this.contentRef.references.slice();
-      //   refs.push(reference.external_id);
-      //   this.$store.dispatch('rcd/setDraftReferences', refs);
-      // },
-
-      // removeReference(reference) {
-      //   bus.$emit('texture:removeReference', { reference });
-      //   const refs = this.contentRef.references.slice()
-      //     .filter((r) => r != reference.external_id);
-      //   this.$store.dispatch('rcd/setDraftReferences', refs);
-      // },
-
       getResearchContentType(type) {
         return researchService.getResearchContentType(type);
       }

@@ -70,8 +70,8 @@ const actions = {
         const corePrograms = programs.map((item) => ({
           ...item,
           organizationExternalId: organization.external_id,
-          abbreviation: organization.permlink,
-          subAreaAbbreviation: organization.permlink
+          abbreviation: organization.external_id,
+          subAreaAbbreviation: organization.external_id
         }));
 
         corePrograms.forEach((p) => {

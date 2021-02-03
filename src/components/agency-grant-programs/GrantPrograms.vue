@@ -186,7 +186,7 @@
           {
             text: this.organizationProfile.name,
             disabled: false,
-            href: `/#/${this.organizationProfile.permlink}/group-details`
+            href: `/#/${this.organizationProfile.external_id}/group-details`
           },
           {
             text: 'Programs',
