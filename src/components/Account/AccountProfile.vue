@@ -253,8 +253,8 @@
 
     created() {
       this.formModel = {
-        city: this.$currentUser.profile.location.city || ' ',
-        country: this.$currentUser.profile.location.country || ' ',
+        city: this.$currentUser.profile.location ? this.$currentUser.profile.location.city : '',
+        country: this.$currentUser.profile.location? this.$currentUser.profile.location.country : '',
         bio: this.$currentUser.profile.bio || ' ',
         email: this.$currentUser.profile.email || ' ',
         firstName: this.$currentUser.profile.firstName || ' ',
