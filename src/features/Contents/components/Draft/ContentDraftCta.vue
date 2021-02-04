@@ -33,14 +33,14 @@
         this.loading = true;
 
         researchContentService
-          .createDarResearchContent(this.projectId)
-          .then((res) => {
+          .createResearchContentDraftDar(this.projectId)
+          .then((draft) => {
 
             this.$router.push({
               name: 'project.content.draft',
               params: {
-                draftId: res.draft._id.replace('draft-', ''),
-                projectId: res.draft.researchExternalId
+                draftId: draft._id.replace('draft-', ''),
+                projectId: draft.researchExternalId
               }
             });
           })
