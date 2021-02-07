@@ -36,6 +36,7 @@
                 outlined
                 :rules="[rules.titleLength]"
                 :label="$t('contents.contentUploadDialog.titleField.label')"
+                hide-details="auto"
               />
             </v-col>
 
@@ -46,6 +47,7 @@
                 outlined
                 :label="$t('contents.contentUploadDialog.typeField')"
                 item-value="id"
+                hide-details="auto"
               />
             </v-col>
 
@@ -55,7 +57,6 @@
                 :users="research.members"
                 :label="$t('contents.contentUploadDialog.authorsAttribute')"
                 multiple
-                class="mb-4"
               />
             </v-col>
 
@@ -72,6 +73,7 @@
                 v-model="formData.files"
                 multiple
                 :label="'Attach files'"
+                hide-details="auto"
               />
             </v-col>
           </v-row>

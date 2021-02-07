@@ -104,6 +104,14 @@
           to: { name: 'admin.settings' }
         });
 
+        if (this.$hasModule(this.DEIP_MODULE.ADMIN_PANEL_NETWORK_SETUP)) {
+          menu.push({
+            title: this.$t('adminRouting.sidebar.network'),
+            icon: 'language',
+            to: { name: 'admin.network' }
+          });
+        }
+
         return menu;
       }
     }

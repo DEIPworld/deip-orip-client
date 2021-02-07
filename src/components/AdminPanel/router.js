@@ -9,6 +9,7 @@ import AdminAttributesEdit from '@/components/AdminPanel/Attributes/AdminAttribu
 import AdminFAQ from '@/components/AdminPanel/AdminFAQ';
 import AdminFAQEdit from '@/components/AdminPanel/AdminFAQEdit';
 import AdminSettings from '@/components/AdminPanel/AdminSettings';
+import AdminNetwork from '@/components/AdminPanel/AdminNetwork';
 import AdminCategories from '@/components/AdminPanel/AdminCategories';
 import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
@@ -140,6 +141,11 @@ export const adminRouting = [
         path: 'settings',
         name: 'admin.settings',
         component: AdminSettings
+      },
+      {
+        path: 'network',
+        name: 'admin.network',
+        component: AdminNetwork
       }
     ]
   },

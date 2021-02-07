@@ -185,6 +185,12 @@ export default {
     success: 'Banner image has been updated successfully ! Refresh the page to see the change',
     err: 'Sorry, an error occurred while uploading banner image, please try again later'
   },
+  network: {
+    title: 'Network settings',
+    visibilitySectionTitle: 'Network visibility',
+    visibility: 'Projects, users and teams from the global network are visible',
+    update: 'Update settings'
+  },
   sidebar: {
     members: 'Members',
     projects: `${project(true, true)}`,
@@ -192,7 +198,8 @@ export default {
     layouts: 'Layouts',
     reviewModel: 'Review model',
     faq: 'FAQ',
-    settings: 'Settings'
+    settings: 'Settings',
+    network: 'Network'
   },
   toolbarAdmin: {
     signOut: 'Sign Out',

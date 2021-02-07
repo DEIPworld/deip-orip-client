@@ -17,5 +17,6 @@ export const DEIP_MODULE = {
   ADMIN_PANEL_ATTRIBUTES_REGISTARTION: 'admin-panel-attributes-registration',  
   ADMIN_PANEL_FAQ_SETUP: 'admin-panel-faq-setup',
   ADMIN_PANEL_REVIEW_SETUP: 'admin-panel-review-setup',
-  ADMIN_PANEL_LAYOUTS_SETUP: 'admin-panel-layouts-setup'
+  ADMIN_PANEL_LAYOUTS_SETUP: 'admin-panel-layouts-setup',
+  ADMIN_PANEL_NETWORK_SETUP: 'admin-panel-network-setup'
 }
