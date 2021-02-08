@@ -8,38 +8,12 @@
     @click:confirm="sendProposal()"
     @click:cancel="close()"
   >
-    <v-autocomplete
+    <user-selector
       v-model="selectedUser"
-      :items="users"
-      outlined
-      item-text="profile.firstName"
-      item-value="account"
-      :placeholder="$t('researchGroupDetails.addMemberDialog.findPlaceholder')"
-    >
-      <template slot="selection" slot-scope="data">
-        <div class="pl-2">
-          <platform-avatar
-            :user="data.item"
-            :size="30"
-            no-follow
-            no-follow-name
-            link-to-profile-class="pl-2"
-          />
-        </div>
-      </template>
-
-      <template slot="item" slot-scope="data">
-        <div>
-          <platform-avatar
-            :user="data.item"
-            :size="30"
-            no-follow
-            no-follow-name
-            link-to-profile-class="pl-2"
-          />
-        </div>
-      </template>
-    </v-autocomplete>
+      class="mb-4"
+      :label="$t('researchGroupDetails.addMemberDialog.findPlaceholder')"
+      :multiple="false"
+    />
 
     <v-textarea
       v-model="coverLetter"
@@ -52,10 +26,9 @@
 </template>
 
 <script>
-  import _ from 'lodash';
   import { mapGetters } from 'vuex';
-
   import { ResearchGroupService } from '@deip/research-group-service';
+  import UserSelector from '@/features/Users/components/Selector/UserSelector';
 
   const researchGroupService = ResearchGroupService.getInstance();
 
@@ -66,10 +39,12 @@
       groupExternalId: { required: true, type: String },
       users: { required: true, type: Array, default: () => [] }
     },
+    components: {
+      UserSelector
+    },
     data() {
       return {
         selectedUser: undefined,
-        tokensAmount: '',
         coverLetter: '',
         isLoading: false
       };
@@ -88,15 +63,12 @@
         }
       },
       isDisabled() {
-        return _.isEmpty(this.selectedUser)
-          // || _.isEmpty(this.tokensAmount)
-          || !_.isNumber(parseInt(this.tokensAmount));
+        return !this.selectedUser;
       }
     },
     watch: {
       isOpen(newVal, oldVal) {
         this.selectedUser = undefined;
-        this.tokensAmount = '';
         this.coverLetter = '';
       }
     },
@@ -107,12 +79,11 @@
 
       sendProposal() {
         this.isLoading = true;
-
         researchGroupService.createResearchGroupInvite(
           { privKey: this.user.privKey, username: this.user.username },
           {
             researchGroup: this.groupExternalId,
-            member: this.selectedUser.name,
+            member: this.selectedUser,
             rewardShare: '0.00 %',
             researches: [],
             extensions: []
