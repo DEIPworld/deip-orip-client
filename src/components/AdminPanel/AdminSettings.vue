@@ -17,6 +17,7 @@
                 class="mt-4"
                 v-model="formData.logo"
                 :label="tenant.profile.logo"
+                :disabled="isSubmitting"
                 hint="Logo image should be at least 80 x 80 px in dimension"
                 hide-details="auto"
               />
@@ -63,7 +64,6 @@
           </v-col>
         </d-form-block>
       </v-row>
-
       <v-row no-gutters>
         <v-col cols="12">
           <div class="text-right">
@@ -80,7 +80,6 @@
           </div>
         </v-col>
       </v-row>
-
     </v-form>
   </admin-view>
 </template>

@@ -184,14 +184,16 @@ export default {
     changeLogo: 'Change logo in Top bar',
     changeTabTitle: 'Change title in Browser tab',
     update: 'Update settings',
-    success: 'Settings has been updated successfully ! Refresh the page to see the change',
-    err: 'Sorry, an error occurred while updating the settings, please try again later'
+    success: 'Settings has been updated successfully! Refresh the page to see the change',
+    err: 'Sorry, an error occurred while updating settings, please try again later'
   },
   network: {
     title: 'Network settings',
     visibilitySectionTitle: 'Network visibility',
     visibility: 'Projects, users and teams from the global network are visible',
-    update: 'Update settings'
+    update: 'Update settings',
+    success: 'Settings has been updated successfully!',
+    err: 'Sorry, an error occurred while updating settings, please try again later'
   },
   sidebar: {
     members: 'Members',
