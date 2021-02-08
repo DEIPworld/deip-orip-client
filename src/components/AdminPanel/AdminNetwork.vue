@@ -73,13 +73,13 @@
       updateNetworkSettings(form) {
         return tenantService.updateNetworkSettings(form)
           .then(() => {
-            this.$notifier.showSuccess();
+            this.$notifier.showSuccess(this.$t('adminRouting.network.success'));
             const tenant = window.env.TENANT;
             this.$store.dispatch('auth/loadTenant', { tenant });
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showError();
+            this.$notifier.showError(this.$t('adminRouting.network.err'));
           })
       },
     },

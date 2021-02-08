@@ -92,7 +92,7 @@
       Promise.all(preload)
         .then(() => {
           this.setTheme();
-          document.title = `${this.tenant.profile.name} | DEIP`;
+          document.title = this.tenant.profile.name;
           this.$setReady();
         });
 

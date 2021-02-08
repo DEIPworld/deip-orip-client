@@ -1,73 +1,111 @@
 <template>
   <admin-view :title="$t('adminRouting.settings.title')">
-    <div class="text-h6 mb-6">
-      {{ $t('adminRouting.settings.change') }}
-    </div>
-    <div class="display-flex flex-wrap">
-      <div class="mr-6 mb-2">
-        <v-img
-          class="grey lighten-4"
-          contain
-          height="252"
-          max-width="252"
-          :src="$options.filters.tenantBackgroundSrc(tenant)"
-        />
-      </div>
-      <div class="flex-grow-1">
-        <vue-dropzone
-          id="tenant-banner-dropzone"
-          ref="tenantBanner"
-          class="py-1"
-          :options="bannerDropzoneOptions"
-          @vdropzone-success="bannerUploadSuccess"
-          @vdropzone-error="bannerUploadError"
-          @vdropzone-sending="bannerUploadSending"
-        />
-        <div class="py-4 text-right">
-          <v-btn
-            large
-            :disabled="isUploadingTenantBanner"
-            :loading="isUploadingTenantBanner"
-            class="ma-0"
-            color="primary"
-            @click="updateBanner()"
-          >
-            {{ $t('adminRouting.settings.update') }}
-          </v-btn>
-        </div>
-      </div>
-    </div>
+    <v-form ref="form" @submit.prevent="onSubmit"> 
+      <v-row class="my-4">
+        <d-form-block :title="$t('adminRouting.settings.changeLogo')" class="form-block">
+          <v-col cols="12">
+            <div class="logo-container">
+              <v-img
+                class="grey lighten-4"
+                contain
+                height="80%"
+                width="100%"
+                :src="$options.filters.tenantLogoSrc(tenant)"
+              />
+              <d-file-input
+                id="title"
+                class="mt-4"
+                v-model="formData.logo"
+                :label="tenant.profile.logo"
+                hint="Logo image should be at least 80 x 80 px in dimension"
+                hide-details="auto"
+              />
+            </div>
+          </v-col>
+        </d-form-block>
+      </v-row>
+      <v-row class="my-8"> 
+        <d-form-block :title="$t('adminRouting.settings.changeBanner')" class="form-block">
+          <v-col cols="12">
+            <div class="banner-container">
+              <v-img
+                class="grey lighten-4"
+                contain
+                height="80%"
+                width="100%"
+                :src="$options.filters.tenantBackgroundSrc(tenant)"
+              />
+              <d-file-input
+                id="banner"
+                class="mt-4"
+                v-model="formData.banner"
+                :label="tenant.profile.banner"
+                :disabled="isSubmitting"
+                hint="Background image should be at least 1440 x 430 px in dimension"
+                hide-details="auto"
+              />
+            </div>
+          </v-col>
+        </d-form-block>
+      </v-row>
+      <v-row> 
+        <d-form-block :title="$t('adminRouting.settings.changeTabTitle')" class="form-block">
+          <v-col cols="12">
+            <div>
+              <v-text-field
+                v-model="formData.title"
+                outlined
+                :label="tenant.profile.name"
+                :disabled="isSubmitting"
+                hide-details="auto"
+              />
+            </div>
+          </v-col>
+        </d-form-block>
+      </v-row>
+
+      <v-row no-gutters>
+        <v-col cols="12">
+          <div class="text-right">
+            <v-btn
+              large
+              type="submit"
+              :disabled="isSubmitting"
+              :loading="isSubmitting"
+              class="ma-0"
+              color="primary"
+            >
+              {{ $t('adminRouting.settings.update') }}
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+
+    </v-form>
   </admin-view>
 </template>
 
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
-  import VueDropzone from 'vue2-dropzone';
-  import { AccessService } from '@deip/access-service';
+  import DFileInput from '@/components/Deipify/DInput/DFileInput';
+  import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
+  import { TenantService } from '@deip/tenant-service';
   import { mapGetters } from 'vuex';
 
-  const accessService = AccessService.getInstance();
+  const tenantService = TenantService.getInstance();
 
   export default {
     name: 'AdminSettings',
-    components: { AdminView, VueDropzone },
+    components: { AdminView, DFileInput, DFormBlock },
 
     data() {
       return {
-        isUploadingTenantBanner: false,
-        bannerDropzoneOptions: {
-          url: `${env.DEIP_SERVER_URL}/tenant/banner`,
-          paramName: 'tenant-banner',
-          timeout: 0,
-          maxFiles: 1,
-          uploadMultiple: false,
-          createImageThumbnails: true,
-          autoProcessQueue: false,
-          dictDefaultMessage:
-            '<i class=\'v-icon material-icons mb-2\' style=\'font-size:40px\'>backup</i><div class=\'mb-2\'>Drop files here to upload</div><div class=\'mb-2\'>or</div><button class=\'primary v-btn v-size--small mb-2\'>BROWSE</button><div>Background image should be at least 1440 x 430 px in dimension (.png)</div>',
-          addRemoveLinks: true,
-          acceptedFiles: ['image/png', 'image/jpeg', 'image/jpg'].join(',')
-        }
+        formData: {
+          title: '',
+          banner: null,
+          logo: null
+        },
+        isSubmitting: false,
       };
     },
 
@@ -78,39 +116,58 @@
     },
 
     methods: {
-      bannerUploadSuccess(file, response) {
-        this.$refs.tenantBanner.removeAllFiles();
-        this.isUploadingTenantBanner = false;
-        this.$notifier.showSuccess(this.$t('adminRouting.settings.success'));
-      },
 
-      bannerUploadSending(file, xhr, formData) {
-        const accessToken = accessService.getAccessToken();
-        xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-        xhr.setRequestHeader('Tenant-Id', this.$env.TENANT);
-      },
+      onSubmit() {
+        const formData = new FormData();
 
-      bannerUploadError(file, message, xhr) {
-        console.error(message);
-
-        this.$refs.tenantBanner.removeAllFiles();
-        this.isUploadingTenantBanner = false;
-        this.$notifier.showError(this.$t('adminRouting.settings.err'));
-      },
-
-      updateBanner() {
-        if (this.$refs.tenantBanner.getQueuedFiles().length) {
-          this.isUploadingTenantBanner = true;
-          this.$refs.tenantBanner.processQueue();
+        if (this.formData.title) {
+          formData.append('title', this.formData.title);
         }
+        if (this.formData.banner) {
+          formData.append('banner', this.formData.banner);
+        }
+        if (this.formData.logo) {
+          formData.append('logo', this.formData.logo);
+        }
+
+        this.isSubmitting = true;
+        this.updateTenantSettings(formData)
+          .finally(() => {
+            this.isSubmitting = false;
+          })
       },
 
-      cancel() {
-        this.$refs.tenantBanner.removeAllFiles();
+      updateTenantSettings(form) {
+        return tenantService.updateTenantSettings(form)
+          .then(() => {
+            this.$notifier.showSuccess(this.$t('adminRouting.settings.success'));
+            const tenant = window.env.TENANT;
+            return this.$store.dispatch('auth/loadTenant', { tenant })
+          })
+          .then(() => {
+            document.title = this.tenant.profile.name;
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError(this.$t('adminRouting.settings.err'));
+          });
       }
     }
   };
 </script>
 
 <style scoped>
+  .form-block {
+    width: 100%;
+  }
+
+  .banner-container {
+    width: 100%;
+    height: 260px;
+  }
+  .logo-container {
+    width: 100%;
+    height: 80px;
+  }
+
 </style>

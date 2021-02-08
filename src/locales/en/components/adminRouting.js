@@ -180,10 +180,12 @@ export default {
   },
   settings: {
     title: 'Settings',
-    change: 'Change banner on Explore page',
-    update: 'Update banner',
-    success: 'Banner image has been updated successfully ! Refresh the page to see the change',
-    err: 'Sorry, an error occurred while uploading banner image, please try again later'
+    changeBanner: 'Change banner on Explore page',
+    changeLogo: 'Change logo in Top bar',
+    changeTabTitle: 'Change title in Browser tab',
+    update: 'Update settings',
+    success: 'Settings has been updated successfully ! Refresh the page to see the change',
+    err: 'Sorry, an error occurred while updating the settings, please try again later'
   },
   network: {
     title: 'Network settings',
