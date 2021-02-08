@@ -13,9 +13,9 @@ const researchGroupService = ResearchGroupService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const actionsMap = {
-  team: 'getUsersByTeamId',
-  discipline: 'getUsersByDiscipline',
-  list: 'getUsersProfiles',
+  team: 'getUsersByTeam',
+  list: 'getUsers',
+  tenant: 'getTenantUsers',
   all: 'getActiveUsers'
 };
 
@@ -26,7 +26,7 @@ const STATE = {
 };
 
 const GETTERS = {
-  usersList: (state) => _.sortBy(state.usersList, (u) => !u.account.is_research_group)
+  usersList: (state) => state.usersList
 };
 
 const ACTIONS = {
@@ -34,72 +34,37 @@ const ACTIONS = {
     let target = 'all';
     if (payload.users && payload.users.length) target = 'list';
     if (payload.teamId) target = 'team';
-    if (payload.disciplineId) target = 'discipline';
+    if (payload.tenantId) target = 'tenant';
 
     return dispatch(getAction(target), payload);
   },
 
-  getUsersProfiles({ commit }, { users }) {
-    return usersService.getEnrichedProfiles(users)
-      .then((res) => {
-        // temp solution
-        const allUsers = res;
-        const groups = res.filter((u) => u.account.is_research_group);
-
-        if (groups.length) {
-          Promise.all(
-            groups.map((g) => researchGroupService.getResearchGroup(g.account.name))
-          ).then((grs) => {
-            for (const group of grs) {
-              const target = allUsers
-                .findIndex((u) => u.account.name === group.external_id);
-              allUsers[target].teamRef = group.researchGroupRef;
-            }
-            commit('storeUsersProfiles', allUsers);
-          });
-        } else {
-          commit('storeUsersProfiles', allUsers);
-        }
-        // end
-        // commit('storeUsersProfiles', res);
+  getUsers({ commit }, { users }) {
+    return usersService.getUsers(users)
+      .then((items) => {
+        commit('storeUsersProfiles', items);
       });
   },
 
-  getUsersByTeamId({ commit }, { teamId }) {
+  getUsersByTeam({ commit }, { teamId }) {
     return usersService.getUsersByResearchGroup(teamId)
       .then((users) => {
         commit('storeUsersProfiles', users);
       });
   },
 
-  getUsersByDiscipline({ commit }, { disciplineId, exclude }) {
-    const disciplines = wrapInArray(disciplineId);
-    const excludeUsers = wrapInArray(exclude);
-
-    return Promise.all(
-      disciplines.map((d) => expertiseContributionsService.getDisciplineExpertiseTokens(d))
-    )
-      .then((tokens) => {
-        const users = [
-          ...new Set(
-            tokens
-              .flat()
-              .map((u) => u.account_name)
-          )
-        ]
-          .filter((u) => !excludeUsers.includes(u));
-
-        return usersService.getEnrichedProfiles(users)
-          .then((res) => {
-            commit('storeUsersProfiles', res);
-          });
+  getActiveUsers({ commit }) {
+    return usersService.getUsersListing("approved")
+      .then((res) => {
+        commit('storeUsersProfiles', res);
       });
   },
 
-  getActiveUsers({ commit }) {
-    return usersService.getActiveUsers()
-      .then((res) => {
-        commit('storeUsersProfiles', res);
+  getTenantUsers({ commit }, { tenantId }) {
+    return usersService.getUsersListing("approved")
+      .then((items) => {
+        const users = items.filter(item => item.profile.tenantId == tenantId);
+        commit('storeUsersProfiles', users);
       });
   }
 };

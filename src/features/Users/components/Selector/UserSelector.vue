@@ -29,7 +29,7 @@
         <v-img :src="item.profile | avatarSrc(24)" />
       </v-list-item-avatar>
       <v-list-item-content class="text-body-2">
-        {{ userFullName(item) }}
+        {{ item | accountFullname }}
       </v-list-item-content>
     </template>
 
@@ -44,7 +44,7 @@
         </v-avatar>
 
         <div class="text-truncate spacer">
-          {{ userFullName(item) }}
+          {{ item | accountFullname }}
         </div>
 
         <v-btn
@@ -63,7 +63,7 @@
           <img :src="item.profile | avatarSrc(24)" alt="">
         </v-avatar>
         <div class="text-truncate">
-          {{ userFullName(item) }}
+          {{ item | accountFullname }}
         </div>
       </div>
     </template>
@@ -159,10 +159,12 @@
     methods: {
       loadUsers() {
         this.$setReady(false);
-
+        const users = this.users && this.users.length ? wrapInArray(this.users) : undefined;
+        const tenantId = users ? undefined : this.$env.TENANT;
+        
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-          users: wrapInArray(this.users),
-          exclude: this.exclude,
+          users: users,
+          tenantId: tenantId,
           ...this.$$dataContextProps
         })
           .then(() => {
@@ -171,30 +173,29 @@
           });
       },
 
-      userFullName(e) {
-
-        if (e.teamRef) {
-          return e.teamRef.name;
+      unwrapUser(wrap) {
+        let user;
+        if (Array.isArray(wrap)) {
+          user = wrap[0];
+        } else {
+          user = wrap;
         }
 
-        if (e.profile) {
-          return this.$options.filters.fullname(e);
-        }
-
-        return 'undefined';
+        if (typeof user === 'string') {
+          return this.usersList.find(u => u.username == user);
+        }  else {
+          return user;
+        }   
       },
 
-      userExternalId(e) {
+      userFullName(wrap) {
+        const user = this.unwrapUser(wrap);
+        return this.$options.filters.accountFullname(user);
+      },
 
-        if (e.profile) {
-          return e.profile._id;
-        }
-
-        if (e.account && e.account.is_research_group) {
-          return e.account.name;
-        }
-
-        return e;
+      userExternalId(wrap) {
+        const user = this.unwrapUser(wrap);
+        return user.account.name;
       }
     }
   };

@@ -96,11 +96,11 @@
         if (!wrapInArray(this.usersData).length) {
           this.$setReady(false);
 
-          const users = wrapInArray(this.users);
-
+          const users = this.users && this.users.length ? wrapInArray(this.users) : undefined;
+          const teamId = users ? undefined : this.teamId;
           this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-            users,
-            teamId: this.teamId
+            users: users,
+            teamId: teamId
           })
             .then(() => {
               this.$setReady();

@@ -24,7 +24,7 @@ const getters = {
 // actions
 const actions = {
   loadRegisteredMembers({ commit }, { notify } = {}) {
-    return usersService.getActiveUsers()
+    return usersService.getUsersListing()
       .then((users) => {
         const approvedUsers = users.sort((a, b) => {
           const dateA = new Date(a.profile.created_at);
