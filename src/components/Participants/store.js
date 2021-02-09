@@ -8,7 +8,7 @@ const state = {
 
 // getters
 const getters = {
-  participants: (state) => state.participants
+  participants: (state) => state.participants.filter(p => !!p.user)
 };
 
 // actions
