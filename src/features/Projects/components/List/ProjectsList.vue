@@ -111,6 +111,10 @@
       teamId: {
         type: String,
         default: null
+      },
+      tenantId: {
+        type: String,
+        default: null
       }
     },
 
@@ -176,6 +180,7 @@
 
           userName: this.userName,
           teamId: this.teamId,
+          tenantId: this.tenantId,
 
           ...(this.withFilter ? { filter: this.filterPayload() } : {})
         };

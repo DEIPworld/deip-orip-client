@@ -4,6 +4,7 @@
       <projects-list
         ref="projectList"
         :view-types="[VIEW_TYPES.TABLE]"
+        :tenant-id="tenant.account.name"
         row-layout-key="AdminProjectListRow"
         :title="$t('adminRouting.projects.title')"
       >

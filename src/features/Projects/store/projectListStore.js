@@ -22,6 +22,9 @@ const actionsMap = {
     },
     team: {
       all: 'getTeamProjects'
+    },
+    tenant: {
+      all: 'getTenantProjects'
     }
   },
   applications: {
@@ -57,6 +60,7 @@ const ACTIONS = {
 
     if (payload.userName) target.push('user');
     else if (payload.teamId) target.push('team');
+    else if (payload.tenantId) target.push('tenant');
     else target.push('public');
 
     target.push(payload.type || 'all');
@@ -122,6 +126,15 @@ const ACTIONS = {
 
   getTeamProjects({ commit }, { teamId }) {
     return researchService.getResearchGroupResearchListing(teamId)
+      .then((result) => {
+        commit('storeProjectsData', result);
+      });
+  },
+
+  // tenant
+
+  getTenantProjects({ commit }, { tenantId }) {
+    return researchService.getTenantResearchListing(tenantId)
       .then((result) => {
         commit('storeProjectsData', result);
       });
