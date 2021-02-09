@@ -43,6 +43,7 @@
             >
               <user-selector
                 v-model="formModel.reviewer"
+                :tenant-id="$env.TENANT"
                 v-bind="reviewerConditions"
                 :label="$t('reviews.selectExpert')"
                 :error-messages="errors"

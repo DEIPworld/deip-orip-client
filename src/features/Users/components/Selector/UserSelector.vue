@@ -117,7 +117,10 @@
         type: Object,
         default: () => ({})
       },
-
+      tenantId: {
+        type: String,
+        default: null
+      },
       ...Validatable.options.props
     },
     computed: {
@@ -159,12 +162,10 @@
     methods: {
       loadUsers() {
         this.$setReady(false);
-        const users = this.users && this.users.length ? wrapInArray(this.users) : undefined;
-        const tenantId = users ? undefined : this.$env.TENANT;
         
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-          users: users,
-          tenantId: tenantId,
+          users: wrapInArray(this.users),
+          tenantId: this.tenantId,
           ...this.$$dataContextProps
         })
           .then(() => {

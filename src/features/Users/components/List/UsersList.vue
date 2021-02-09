@@ -53,6 +53,11 @@
       usersData: {
         type: [Array, Object],
         default: () => ([])
+      },
+
+      tenantId: {
+        type: String,
+        default: null
       }
     },
 
@@ -96,11 +101,10 @@
         if (!wrapInArray(this.usersData).length) {
           this.$setReady(false);
 
-          const users = this.users && this.users.length ? wrapInArray(this.users) : undefined;
-          const teamId = users ? undefined : this.teamId;
           this.$store.dispatch(`${this.storeNS}/getUsersList`, {
-            users: users,
-            teamId: teamId
+            users: wrapInArray(this.users),
+            teamId: this.teamId,
+            tenantId: this.tenantId
           })
             .then(() => {
               this.$setReady();

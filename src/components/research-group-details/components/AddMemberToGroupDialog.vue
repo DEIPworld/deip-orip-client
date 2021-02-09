@@ -10,6 +10,7 @@
   >
     <user-selector
       v-model="selectedUser"
+      :tenant-id="$env.TENANT"
       class="mb-4"
       :label="$t('researchGroupDetails.addMemberDialog.findPlaceholder')"
       :multiple="false"

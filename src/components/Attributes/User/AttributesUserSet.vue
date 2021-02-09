@@ -10,6 +10,7 @@
       :error-messages="errors"
       :disabled="!$$isEditable"
       :multiple="attribute.isMultiple"
+      :tenant-id="$env.TENANT"
     />
   </validation-provider>
 </template>
