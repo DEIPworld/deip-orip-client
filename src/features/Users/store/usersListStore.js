@@ -55,15 +55,14 @@ const ACTIONS = {
 
   getActiveUsers({ commit }) {
     return usersService.getUsersListing("approved")
-      .then((res) => {
-        commit('storeUsersProfiles', res);
+      .then((users) => {
+        commit('storeUsersProfiles', users);
       });
   },
 
   getTenantUsers({ commit }, { tenantId }) {
-    return usersService.getUsersListing("approved")
-      .then((items) => {
-        const users = items.filter(item => item.profile.tenantId == tenantId);
+    return usersService.getUsersByTenant(tenantId)
+      .then((users) => {
         commit('storeUsersProfiles', users);
       });
   }
