@@ -33,7 +33,7 @@
       },
       totalFee() {
         return this.licenses
-          .map((lic) => lic.licencePlan.fee.amount)
+          .map((lic) => lic.licensePlan.fee.amount)
           .reduce((a, b) => a + parseInt(b), 0);
       },
       list() {

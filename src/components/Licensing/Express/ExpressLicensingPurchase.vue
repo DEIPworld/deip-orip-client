@@ -210,7 +210,7 @@
           fee: this.$$toAssetUnits(this.selected.fee, false),
           expirationDate: this.dialogModel.date
         }, {
-          licencePlan: this.selected
+          licensePlan: this.selected
         })
           .then((result) => {
             this.$notifier.showSuccess(this.$t('licensing.dialog.reqSentSucc'));

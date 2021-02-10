@@ -81,7 +81,7 @@
               title="Reward"
               title-margin="16">
               <div class="text-body-2">
-                3000 ECI (approximately) in
+                ECI in
                 {{
                   userRelatedExpertise.map(exp => exp.discipline_name)
                     .join(', ')

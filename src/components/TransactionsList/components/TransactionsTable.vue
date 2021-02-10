@@ -61,7 +61,7 @@
         >
           {{ $t('transactionsList.licenseRequest',
                 {
-                  fee: $$toAssetUnits(item.details.licencePlan.fee),
+                  fee: $$toAssetUnits(item.details.licensePlan.fee),
                   project: item.extendedDetails.research.title
                 })
           }}
@@ -230,7 +230,7 @@
           <div class="mb-6">
             <div v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === item.type">
               <span class="font-weight-medium"> {{ $t('transactionsList.licType') }}: </span>
-              {{ item.details.licencePlan.name }}
+              {{ item.details.licensePlan.name }}
             </div>
             <div>
               <span class="font-weight-medium"> Receipt: </span>

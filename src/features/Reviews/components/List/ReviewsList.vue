@@ -158,7 +158,7 @@
           <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
-                ? $t('reviews.eciForReview', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                ? $t('reviews.eciForReview', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
                 : ''
             }}
           </div>

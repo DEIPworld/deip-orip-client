@@ -19,7 +19,7 @@
     <div v-else-if="!userHasVoted">
       {{
         $hasModule(DEIP_MODULE.APP_ECI)
-          ? $t('reviews.eciForContribution', { countEci: 1000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+          ? $t('reviews.eciForContribution', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
           : ''
       }}
     </div>

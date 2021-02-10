@@ -24,7 +24,7 @@ export const projectDetails = {
       const hasExpressLicensing = this.ifAttribute(expressLicensingId);
 
       if (!hasExpressLicensing) {
-        return false;
+        return this.project.tenantId != this.$env.TENANT;
       }
 
       if (this.$isGuest) {
