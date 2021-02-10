@@ -21,7 +21,7 @@
     "@deip/disciplines-service": "1.82.0",
     "@deip/expertise-contributions-service": "1.81.0",
     "@deip/express-licensing-service": "1.82.0",
-    "@deip/grants-service": "1.78.0",
+    "@deip/grants-service": "1.83.0",
     "@deip/http-service": "1.78.0",
     "@deip/investments-service": "1.82.0",
     "@deip/lib-crypto": "1.21.0",
