@@ -1,4 +1,5 @@
 import moment from 'moment';
+import Vue from 'vue';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { ResearchGroupService } from '@deip/research-group-service';
 import { GrantsService } from '@deip/grants-service';
@@ -175,9 +176,9 @@ const getters = {
 // actions
 const actions = {
 
-  loadAgencyAwardsDashboardPage({ commit, dispatch, state }, { orgExternalId }) {
+  loadAgencyAwardsDashboardPage({ commit, dispatch, state }) {
     commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
-    return researchGroupService.getResearchGroup(orgExternalId)
+    return researchGroupService.getResearchGroup(Vue.$env.TENANT)
       .then((organization) => {
         commit('SET_CURRENT_ORGANIZATION', organization);
         return Promise.all([

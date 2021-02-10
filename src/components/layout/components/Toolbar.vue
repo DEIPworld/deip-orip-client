@@ -148,8 +148,7 @@
             routes.push({
               label: this.$t('topMenu.dashboard'),
               to: {
-                name: 'GrantProgramsAwardsDashboard',
-                params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' }
+                name: 'GrantProgramsAwardsDashboard'
               }
             });
           }
@@ -217,7 +216,7 @@
           }, {
             label: this.$t('topMenu.grantPrograms'),
             icon: 'mdi-folder',
-            to: { name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }
+            to: { name: 'GrantPrograms' }
           }]);
 
           if (this.isGrantProgramOfficer) {

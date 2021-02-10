@@ -118,7 +118,6 @@
                 :to="{
                   name: 'GrantProgramDetails',
                   params: {
-                    agency: foa.organization.external_id,
                     foa: foa.funding_opportunity_number
                   }
                 }"

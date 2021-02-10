@@ -112,24 +112,24 @@ const getters = {
   tenant: (state) => state.tenant,
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
-      && getters.tenant
-      && r.researchGroupExternalId == getters.tenant.account.external_id),
+    && getters.tenant
+    && r.researchGroupExternalId == getters.tenant.account.name),
 
   isGrantProgramOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-program-officer'
       && getters.tenant
-      && r.researchGroupExternalId == getters.tenant.account.external_id),
+      && r.researchGroupExternalId == getters.tenant.account.name),
 
   isGrantChiefOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-chief-officer'
     && getters.tenant
-    && r.researchGroupExternalId == getters.tenant.account.external_id),
+    && r.researchGroupExternalId == getters.tenant.account.name),
 
   isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
       && getters.tenant
-      && r.researchGroupExternalId == getters.tenant.account.external_id),
+    && r.researchGroupExternalId == getters.tenant.account.name),
 
   isTreasuryCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'treasury-certifier'
-      && getters.tenant
-      && r.researchGroupExternalId == getters.tenant.account.external_id)
+    && getters.tenant
+    && r.researchGroupExternalId == getters.tenant.account.name)
 };
 
 // actions

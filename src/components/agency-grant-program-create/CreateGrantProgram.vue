@@ -310,7 +310,7 @@
             foaNumber: this.foa.number.toLowerCase(),
             grantor: this.user.username,
             amount: this.toAssetUnits(this.foa.totalProgramFunding, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
-            targetDisciplines: this.foa.disciplines.map(({ id }) => id),
+            targetDisciplines: this.foa.disciplines.map(({ externalId }) => externalId),
             distributionModel,
             extensions: []
           }

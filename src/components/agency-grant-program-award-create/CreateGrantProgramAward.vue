@@ -595,7 +595,7 @@
         return researchGroupService.getResearchGroupsByUser(funding.researcher.user.account.name)
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => researchGroupService.getResearchGroupResearchListing(group.external_id)));
+            return Promise.all(groups.map((group) => researchService.getResearchGroupResearchListing(group.external_id)));
           })
           .finally(() => {
             funding.isResearchGroupsLoading = false;
@@ -606,7 +606,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        return researchGroupService.getResearchGroupResearchListing(funding.researchGroup.external_id)
+        return researchService.getResearchGroupResearchListing(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);
@@ -688,8 +688,7 @@
           .then(() => {
             this.$notifier.showSuccess('Funding proposal has been created succesfully!');
             this.$router.push({
-              name: 'GrantProgramsAwardsDashboard',
-              params: { agency: this.organizationProfile.external_id }
+              name: 'GrantProgramsAwardsDashboard'
             });
           })
           .catch((err) => {

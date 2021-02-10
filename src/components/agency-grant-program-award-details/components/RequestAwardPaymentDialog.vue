@@ -6,6 +6,7 @@
       transition="scale-transition"
       max-width="700px"
     >
+    <v-form ref="form" @submit.prevent="onSubmit">
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click="close()">
@@ -18,7 +19,7 @@
           <!--  <v-select
             outlined
             ref="paymentAward"
-            v-model="awardee"
+            v-model="formData.awardee"
             :items="awards"
             label="Award ID"
             return-object
@@ -40,7 +41,7 @@
 
           <v-text-field
             ref="paymentNumber"
-            v-model="paymentNumber"
+            v-model="formData.paymentNumber"
             outlined
             label="Payment Number"
             :rules="[
@@ -52,7 +53,7 @@
 
           <v-text-field
             ref="paymentAmount"
-            v-model="paymentAmount"
+            v-model="formData.paymentAmount"
             v-mask="'##############'"
             label="Amount"
             outlined
@@ -71,7 +72,7 @@
             date-placeholder="Payment Date"
             :date-hint="awardee ? `Award period: ${moment(new Date(awardee.from)).format('MM/YY')} - ${moment(new Date(awardee.to)).format('MM/YY')}` : ''"
             :date-persistent-hint="true"
-            :datetime="paymentDate"
+            :datetime="formData.paymentDate"
             :rules="[
               rules.greaterThanNow,
               rules.withinAwardPeriod
@@ -82,7 +83,7 @@
 
           <v-textarea
             ref="description"
-            v-model="description"
+            v-model="formData.description"
             class="c-mt-2"
             label="Payment purpose"
             rows="2"
@@ -93,23 +94,12 @@
           />
 
           <div>
-            <div v-if="dropzoneOptions">
-              <vue-dropzone
-                id="attachments-dropzone"
-                ref="paymentAttachments"
-                :options="dropzoneOptions"
-                @vdropzone-success-multiple="vdropzoneSuccessMultiple"
-                @vdropzone-sending-multiple="vdropzoneSendingMultiple"
-                @vdropzone-error-multiple="vdropzoneErrorMultiple"
-              />
-            </div>
-            <div v-else>
-              <div id="attachments-dropzone" class="vue-dropzone dropzone non-clickable">
-                <div class="dz-default dz-message">
-                  <span>Drop files here to upload</span>
-                </div>
-              </div>
-            </div>
+            <d-file-input
+              v-model="formData.files"
+              multiple
+              :label="'Attach files'"
+              hide-details="auto"
+            />
           </div>
         </v-card-text>
 
@@ -120,15 +110,16 @@
           </v-btn>
           <v-btn
             color="primary"
+            type="submit"
             outlined
             :disabled="isSubmitDisabled || isLoading"
             :loading="isLoading"
-            @click="requestPayment()"
           >
             Submit
           </v-btn>
         </v-card-actions>
       </v-card>
+    </v-form>
     </v-dialog>
   </div>
 </template>
@@ -136,13 +127,11 @@
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
-  import vueDropzone from 'vue2-dropzone';
   import { BlockchainService } from '@deip/blockchain-service';
-  import { AccessService } from '@deip/access-service';
   import { GrantsService } from '@deip/grants-service';
+  import DFileInput from '@/components/Deipify/DInput/DFileInput';
 
   const blockchainService = BlockchainService.getInstance();
-  const accessService = AccessService.getInstance();
   const grantsService = GrantsService.getInstance();
 
   const PAYMENT_NUMBER_MIN_LENGTH = 3;
@@ -151,17 +140,21 @@
   export default {
     name: 'RequestAwardPaymentDialog',
     components: {
-      vueDropzone
+      DFileInput
     },
     props: {
       meta: { required: true, default: undefined, type: Object }
     },
     data() {
       return {
-        paymentAmount: undefined,
-        paymentDate: undefined,
-        paymentNumber: undefined,
-        description: undefined,
+        formData: {
+          description: undefined,
+          paymentAmount: undefined,
+          paymentDate: undefined,
+          paymentNumber: undefined,
+          files: []
+        },
+
         isLoading: false,
         rules: {
           greaterThanNow: (val) => Date.parse(val) > Date.now() || 'Date should be greater than now',
@@ -190,18 +183,7 @@
             return /^[0-9]*$/.test(v) || 'Numbers are only allowed';
           }
         },
-
-        dropzoneOptions: {
-          url: `${window.env.DEIP_SERVER_URL}/api/award-withdrawal-requests/upload-attachments`,
-          paramName: 'award-withdrawal-request-attachment',
-          timeout: 0,
-          maxFiles: 10,
-          parallelUploads: 10, // important to keep the same as maxFiles due to server session
-          uploadMultiple: true,
-          thumbnailWidth: 150,
-          autoProcessQueue: false,
-          addRemoveLinks: true
-        }
+        
       };
     },
 
@@ -214,7 +196,7 @@
       }),
 
       isSubmitDisabled() {
-        return !this.awardee || !this.paymentAmount || !this.paymentDate || !this.description;
+        return !this.awardee || !this.formData.paymentAmount || !this.formData.paymentDate || !this.formData.description;
       },
 
       amountHint() {
@@ -236,21 +218,16 @@
           if (this.$refs.description) {
             this.$refs.description.reset();
           }
-          this.paymentDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
+          this.formData.paymentDate = moment().add(10, 'minutes').format('YYYY-MM-DD HH:mm');
         }
       }
     },
 
-    created() {
-    },
     methods: {
 
       close() {
         this.isLoading = false;
         this.meta.isOpen = false;
-        if (this.$refs.paymentAttachments) {
-          this.$refs.paymentAttachments.removeAllFiles();
-        }
       },
 
       allowedPaymentDates(val) {
@@ -262,57 +239,38 @@
         return true;
       },
 
-      requestPayment() {
-        this.isLoading = true;
-        const queuedFiles = this.$refs.paymentAttachments.getQueuedFiles();
-        if (queuedFiles.length) {
-          this.$refs.paymentAttachments.processQueue();
-        } else {
-          this.sendRequest('');
-        }
-      },
-
       setPaymentDate(value) {
-        this.paymentDate = value;
+        this.formData.paymentDate = value;
       },
 
-      vdropzoneSendingMultiple(file, xhr, formData) {
-        const accessToken = accessService.getAccessToken();
-        xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-        xhr.setRequestHeader('Upload-Session', `${(new Date()).getTime()}-${accessToken.split('.')[2]}`);
-        xhr.setRequestHeader('Research-Id', this.awardee.research_id.toString());
-        xhr.setRequestHeader('Payment-Number', this.paymentNumber);
-        xhr.setRequestHeader('Award-Number', this.awardee.award_number);
-        xhr.setRequestHeader('Subaward-Number', this.awardee.subaward_number);
-      },
 
-      vdropzoneSuccessMultiple(files, res) {
-        const attachmentsRef = res;
-        if (!attachmentsRef.hash) {
-          throw new Error('File upload has failed');
-        }
-        this.sendRequest(attachmentsRef.hash);
-      },
-
-      vdropzoneErrorMultiple(files, message, xhr) {
-        this.$notifier.showError('Sorry, the file storage server is temporarily unavailable, please try again later');
-        this.close();
-      },
-
-      sendRequest(hash) {
+      onSubmit() {
         const granAssetSymbol = blockchainService.getAssetSymbol(this.foa.amount);
         const grantAssetPrecision = blockchainService.getAssetPrecision(this.foa.amount);
 
-        grantsService.createAwardWithdrawalRequest(this.user.privKey, {
-          paymentNumber: this.paymentNumber,
-          awardNumber: this.awardee.award_number,
-          subawardNumber: this.awardee.isSubawardee ? this.awardee.subaward_number : undefined,
-          requester: this.user.username,
-          amount: this.toAssetUnits(this.paymentAmount, grantAssetPrecision, granAssetSymbol),
-          description: this.description,
-          attachment: hash,
-          extensions: []
-        })
+        const formData = new FormData();
+        
+        formData.append('researchExternalId', this.awardee.research_external_id);
+        formData.append('paymentNumber', this.formData.paymentNumber);
+        formData.append('awardNumber', this.awardee.award_number);
+        formData.append('subawardNumber', this.awardee.subaward_number);
+        formData.append('requester', this.user.username);
+        formData.append('amount', this.toAssetUnits(this.formData.paymentAmount, grantAssetPrecision, granAssetSymbol));
+        formData.append('description', this.formData.description);
+        for (let i = 0; i < this.formData.files.length; i++) {
+          formData.append(`file-${i + 1}`, this.formData.files[i]);
+        }
+
+        this.isLoading = true;
+        this.sendRequest(formData)
+          .finally(() => {
+            this.isLoading = false;
+            this.close();
+          });
+      },
+
+      sendRequest(form) {
+        return grantsService.createAwardWithdrawalRequest({ privKey: this.user.privKey, username: this.user.username }, form)
           .then(() => {
             const reload = new Promise((resolve, reject) => {
               this.$store.dispatch('agencyGrantProgramAwardDetails/loadAwardDetails', {
@@ -328,11 +286,7 @@
           })
           .catch((err) => {
             console.error(err);
-            this.$notifier.showSuccess('An error occurred while sending the payment request, please try again later.');
-          })
-          .finally(() => {
-            this.isLoading = false;
-            this.close();
+            this.$notifier.showError('An error occurred while sending the payment request, please try again later.');
           });
       }
     }

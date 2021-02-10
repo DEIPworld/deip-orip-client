@@ -1,6 +1,6 @@
+import Vue from 'vue';
 import { GrantsService } from '@deip/grants-service';
 import { ResearchGroupService } from '@deip/research-group-service';
-
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const grantsService = GrantsService.getInstance();
@@ -33,10 +33,9 @@ const getters = {
 const actions = {
 
   // pages
-  loadGrantProgramsPage({ state, dispatch, commit }, { orgExternalId, areaCode, subAreaCode }) {
+  loadGrantProgramsPage({ state, dispatch, commit }, { areaCode, subAreaCode }) {
     commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
-
-    return researchGroupService.getResearchGroup(orgExternalId)
+    return researchGroupService.getResearchGroup(Vue.$env.TENANT)
       .then((researchGroup) => {
         commit('SET_ORGANIZATION_PROFILE', researchGroup);
         const organizationProgramsLoad = new Promise((resolve, reject) => {

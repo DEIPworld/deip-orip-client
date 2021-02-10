@@ -14,7 +14,7 @@
     transition="scale-transition"
     max-width="600px"
   >
-    <v-form ref="form" @submit="onSubmit">
+    <v-form ref="form" @submit.prevent="onSubmit">
       <v-card class="pa-6">
         <v-card-title>
           <div class="text-h5">
@@ -199,8 +199,7 @@
         this.isLoading = false;
       },
 
-      onSubmit(e) {
-        e.preventDefault();
+      onSubmit() {
         this.publishResearchContentPackage();
       },
 

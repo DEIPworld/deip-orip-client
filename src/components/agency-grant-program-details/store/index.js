@@ -51,12 +51,11 @@ const getters = {
 
 // actions
 const actions = {
-  loadGrantProgramDetailsPage({ state, dispatch, commit }, { orgExternalId, foaId }) {
+  loadGrantProgramDetailsPage({ state, dispatch, commit }, { foaId }) {
     commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-    return researchGroupService.getResearchGroup(orgExternalId)
-      .then((org) => researchGroupService.getResearchGroup(org.external_id))
-      .then((organizationProfile) => {
-        commit('SET_ORGANIZATION_PROFILE', organizationProfile);
+    return researchGroupService.getResearchGroup(Vue.$env.TENANT)
+      .then((organization) => {
+        commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadOrganizationProgramDetails', { foaId });
         return Promise.all([organizationProgramDetailsLoad]);
       })
@@ -100,10 +99,10 @@ const actions = {
 
   loadAppliedForGrantResearches({ state, dispatch, commit }, { grantAttributeId, grantAttributeValue }) {
     const filter = {
-      researchAttributes: [{
-        researchAttributeId: grantAttributeId,
-        values: [grantAttributeValue]
-      }]
+      // researchAttributes: [{
+      //   researchAttributeId: grantAttributeId,
+      //   values: [grantAttributeValue]
+      // }]
     }
 
     return researchService.getPublicResearchListing(filter)

@@ -102,13 +102,11 @@ const router = new Router({
         viewTitle: 'Sign Up'
       }
     }, {
-      path: '/:agency/grants/dashboard',
+      path: '/grants/dashboard',
       name: 'GrantProgramsAwardsDashboard',
       component: GrantProgramsAwardsDashboard,
       beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage', {
-          orgExternalId: to.params.agency
-        });
+        const loadPagePromise = store.dispatch('agencyGrantProgramAwardsDashboard/loadAgencyAwardsDashboardPage');
         loadPage(loadPagePromise, next);
       }
     }, {
@@ -136,35 +134,32 @@ const router = new Router({
       }
     },
     {
-      path: '/:agency/programs',
+      path: '/grants/programs',
       name: 'GrantPrograms',
       component: GrantPrograms,
       beforeEnter: (to, from, next) => {
         const loadPagePromise = store.dispatch('agencyGrantPrograms/loadGrantProgramsPage', {
-          orgExternalId: to.params.agency,
           areaCode: to.query.areaCode,
           subAreaCode: to.query.subAreaCode
         });
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/:agency/programs/:foa',
+      path: '/grants/programs/:foa',
       name: 'GrantProgramDetails',
       component: GrantProgramDetails,
       beforeEnter: (to, from, next) => {
         const loadPagePromise = store.dispatch('agencyGrantProgramDetails/loadGrantProgramDetailsPage', {
-          orgExternalId: to.params.agency,
           foaId: decodeURIComponent(to.params.foa)
         });
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/:agency/programs/:foa/award-proposal',
+      path: '/grants/programs/:foa/award-proposal',
       name: 'CreateGrantProgramAward',
       component: CreateGrantProgramAward,
       beforeEnter: (to, from, next) => {
         const loadPagePromise = store.dispatch('agencyGrantProgramAwardCreate/loadProgramAwardProposalPage', {
-          orgExternalId: to.params.agency,
           foaId: decodeURIComponent(to.params.foa),
           awardee: to.query.awardee ? JSON.parse(to.query.awardee) : null
         });
@@ -303,10 +298,7 @@ const router = new Router({
             if (!tenant) {
               throw new Error('Granting agency must be specified for the Demo');
             }
-            next({
-              name: 'GrantProgramsAwardsDashboard',
-              params: { agency: tenant.account.external_id }
-            });
+            next({ name: 'GrantProgramsAwardsDashboard' });
           } else {
             next({ name: 'landing' });
           }

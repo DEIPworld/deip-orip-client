@@ -170,7 +170,6 @@
                 :to="{
                   name: 'CreateGrantProgramAward',
                   params: {
-                    agency: organizationProfile.external_id,
                     foa: decodeURIComponent(program.funding_opportunity_number)
                   }
                 }"
@@ -196,7 +195,6 @@
                     :to="{
                       name: 'CreateGrantProgramAward',
                       params: {
-                        agency: organizationProfile.external_id,
                         foa: decodeURIComponent(program.funding_opportunity_number),
                       },
                       query: {

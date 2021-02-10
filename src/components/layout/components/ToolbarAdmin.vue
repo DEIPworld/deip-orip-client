@@ -60,7 +60,7 @@
             <v-list-item :to="{ name: 'CreateGrantProgram' }">
               {{ $t('adminRouting.toolbarAdmin.createGrantProgram') }}
             </v-list-item>
-            <v-list-item :to="{ name: 'GrantPrograms', params: { agency: '58e3bfd753fcb860a66b82635e43524b285ab708' } }">
+            <v-list-item :to="{ name: 'GrantPrograms' }">
               {{ $t('adminRouting.toolbarAdmin.grantProgram') }}
             </v-list-item>
             <v-divider />
