@@ -392,7 +392,8 @@
 
   const tabPreferenceMap = {
     alice: awardsTab,
-    thomas: paymentsTab,
+    thomas: awardsTab,
+    rachel: awardsTab,
     peter: awardsTab,
     bob: awardsTab,
     john: awardsTab,
