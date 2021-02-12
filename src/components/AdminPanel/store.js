@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { UsersService } from '@deip/users-service';
 import { TenantService } from '@deip/tenant-service';
 
@@ -24,7 +25,7 @@ const getters = {
 // actions
 const actions = {
   loadRegisteredMembers({ commit }, { notify } = {}) {
-    return usersService.getUsersListing()
+    return usersService.getUsersByTenant(Vue.$env.TENANT)
       .then((users) => {
         const approvedUsers = users.sort((a, b) => {
           const dateA = new Date(a.profile.created_at);

@@ -12,7 +12,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getDrafts({ commit }, projectId) {
-    return researchContentService.getResearchContentByResearch(projectId)
+    return researchContentService.getResearchContentAndDraftsByResearch(projectId)
       .then((list) => {
         const drafts = list
           .filter((researchContent) => researchContent.isDraft)

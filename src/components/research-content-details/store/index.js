@@ -146,7 +146,7 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchContentDetails({ state, commit, dispatch }, { projectId, contentId, ref }) {
+  loadResearchContentDetails({ state, commit, dispatch }, { projectId, contentId, ref, isReferencesPage }) {
     commit('RESET_STATE');
     return dispatch('loadResearchDetails', { projectId })
       .then(() => {
@@ -156,7 +156,8 @@ const actions = {
             dispatch('loadResearchContentRef', {
               projectId: state.research.external_id,
               refId: ref,
-              notify: resolve
+              notify: resolve,
+              isReferencesPage: false
             });
           });
 
@@ -185,14 +186,20 @@ const actions = {
             const contentVotesLoad = new Promise((resolve, reject) => {
               dispatch('loadResearchContentVotes', { researchId: contentObj.research_external_id, notify: resolve });
             });
+            isReferencesPage
 
-            return Promise.all([
-              dispatch('loadResearchContentReferences', contentObj.id),
+            const loading = [
               contentRefLoad,
               contentReviewsLoad,
               contentVotesLoad,
               dispatch('loadResearchContentEciStatsRecords', { research_content_external_id: contentObj.external_id })
-            ]);
+            ];
+
+            if (isReferencesPage) {
+              loading.push(dispatch('loadResearchContentReferences', contentObj.id));
+            }
+
+            return Promise.all(loading);
           }, (err) => {
             console.error(err);
           })
@@ -246,7 +253,7 @@ const actions = {
       })
       .then((users) => {
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
-        return researchContentService.getResearchContentByResearch(projectId);
+        return researchContentService.getResearchContentAndDraftsByResearch(projectId);
       })
       .then((list) => {
         commit('SET_RESEARCH_CONTENT_LIST', list);

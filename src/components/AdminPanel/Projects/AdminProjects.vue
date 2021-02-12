@@ -54,12 +54,14 @@
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
 
   import { TenantService } from '@deip/tenant-service';
+  import { ResearchService } from '@deip/research-service';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import { VIEW_TYPES } from '@/variables';
 
   const tenantService = TenantService.getInstance();
+  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AdminProjects',
@@ -111,7 +113,7 @@
 
       deleteProject(id) {
         this.$confirm(
-          'Technology will be deleted permanently and will be removed from platform.',
+          'Technology will be deleted permanently and will be removed from the platform.',
           {
             title: 'Remove technology?',
             buttonTrueText: 'Delete'
@@ -119,10 +121,7 @@
         )
           .then((confirmed) => {
             if (confirmed) {
-              const clone = _.cloneDeep(this.tenant.profile);
-              clone.settings.researchBlacklist.push(id);
-
-              tenantService.updateTenantProfile(clone)
+              researchService.deleteResearch(id)
                 .then(() => {
                   this.$notifier.showSuccess();
                   this.$refs.projectList.getData();

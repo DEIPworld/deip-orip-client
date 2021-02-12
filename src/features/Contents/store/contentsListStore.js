@@ -34,10 +34,9 @@ const ACTIONS = {
   getContentsByProject({ commit }, { projectId }) {
     const researchContents = [];
 
-    return researchContentService.getResearchContentByResearch(projectId)
+    return researchContentService.getResearchContentAndDraftsByResearch(projectId)
       .then((list) => {
         researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
-
         return Promise.all(
           researchContents.map(
             (content) => researchContentReviewsService.getReviewsByResearchContent(content.external_id)

@@ -213,7 +213,8 @@ const router = new Router({
           const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
             projectId: to.params.projectId,
             contentId: to.params.contentId,
-            ref: to.query.ref
+            ref: to.query.ref,
+            isReferencesPage: true
           });
           loadPage(loadPagePromise, next);
         }

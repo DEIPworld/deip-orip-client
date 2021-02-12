@@ -163,7 +163,6 @@
         rules: {
           titleLength: (value) => value.length <= maxTitleLength || this.$t('defaultNaming.fieldRules.titleMax', { maxTitleLength })
         },
-        allReferencesList: [],
         proposeContent: {
           title: '',
           type: null,
@@ -218,14 +217,11 @@
       this.$store.dispatch('rcd/loadResearchContentDetails', {
         projectId: this.permData.projectId || this.$route.params.projectId,
         contentId: this.permData.contentId || this.$route.params.contentId,
-        ref: this.$route.query.ref
+        ref: this.$route.query.ref,
+        isReferencesPage: false
       })
         .then(() => {
           this.$setReady();
-        });
-      searchService.getAllResearchContents()
-        .then((contents) => {
-          this.allReferencesList.push(...contents);
         });
     },
 
