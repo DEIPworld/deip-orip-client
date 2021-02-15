@@ -49,6 +49,14 @@ export const modulesAttributes = (ctx) => {
     {
       list: [
         {
+          component: 'TenantBadge',
+          name: 'Network tenant',
+          icon: 'mdi-account-network-outline',
+          props: {
+            tenantId: '@research.tenantId'
+          }
+        },
+        {
           component: 'span',
           name: 'Creation date',
           text: '@research.createdAt',

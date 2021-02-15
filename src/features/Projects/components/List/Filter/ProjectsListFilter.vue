@@ -15,6 +15,12 @@
         name="Filter search term"
         autocomplete="off"
       />
+
+      <tenant-selector
+        v-model="filterModel.tenantIds"
+        class="mt-2"
+        multiple
+      />
     </d-block-widget>
 
     <d-filter-term-components v-model="filterModel.researchAttributes" class="mb-6" />
@@ -26,9 +32,11 @@
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
+  import TenantSelector from '@/features/Tenant/components/Selector/TenantSelector';
 
   const defaultFilter = () => ({
     searchTerm: '',
+    tenantIds: [],
     disciplines: [],
     organizations: [],
     researchAttributes: {}
@@ -38,8 +46,8 @@
     name: 'ProjectsListFilter',
 
     components: {
+      TenantSelector,
       DBlockWidget,
-      DBlock,
       DFilterTermComponents,
       DFilterSidebar
     },

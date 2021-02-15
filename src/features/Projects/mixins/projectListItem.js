@@ -1,12 +1,15 @@
 import { componentsRenderer } from '@/mixins/renderer';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
+import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
 import { extendAttrModules, hasValue, researchAttributesToObject } from '@/utils/helpers';
 
 export const ProjectListItemRenderer = {
   name: 'ProjectListItemRenderer',
   components: {
-    AttributesRead
+    AttributesRead,
+
+    TenantBadge
   },
   mixins: [componentsRenderer],
   props: {
