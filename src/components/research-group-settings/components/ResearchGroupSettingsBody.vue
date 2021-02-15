@@ -32,11 +32,6 @@
             :rules="[rules.required, rules.titleLength]"
             :label="$t('researchGroupSettings.dataForm.nameBlock.nameField.label')"
             outlined
-            :error-messages="
-              isPermlinkVerifyed === false ?
-                $t('researchGroupSettings.dataForm.nameBlock.nameField.err') :
-                ''
-            "
           />
         </v-col>
       </d-form-block>
@@ -154,7 +149,6 @@
     data() {
       return {
         avatarUploadIsShown: false,
-        isPermlinkVerifyed: true,
         isLoading: false,
         isChangingQuorumLoading: false,
         groupName: '',
@@ -313,55 +307,41 @@
         }
       },
       updateResearchGroup() {
-        researchGroupService
-          .checkResearchGroupExistenceByPermlink(this.newResearchGroupName)
-          .then((exists) => {
-            if (this.newResearchGroupName !== this.groupName) {
+        if (this.newResearchGroupName !== this.groupName) {
+          this.isLoading = true;
+
+          const isProposal = !this.group.is_personal;
+          researchGroupService.updateResearchGroupAccount(
+            { privKey: this.user.privKey, username: this.user.username }, 
+            isProposal, 
+            {
+              researchGroup: this.group.external_id,
+              accountOwnerAuth: undefined,
+              accountActiveAuth: undefined,
+              accountActiveAuthOverrides: undefined,
+              accountMemoPubKey: undefined,
+              accountJsonMetadata: undefined,
+              accountExtensions: []
+            },
+            {
+              researchGroupName: this.newResearchGroupName,
+              researchGroupDescription: this.newResearchGroupDescription
+            }
+          )
+            .then(() => {
+              this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
+              this.cancel(isProposal);
+            })
+            .catch((err) => {
+              console.error(err);
+
+              this.$notifier.showError(this.$t('researchGroupSettings.dataForm.errProposal'));
+            })
+            .finally(() => {
               this.isLoading = false;
-              this.isPermlinkVerifyed = !exists;
-            } else {
-              this.isPermlinkVerifyed = true;
-            }
-            if (this.isPermlinkVerifyed) {
-              this.isLoading = true;
-
-              const isProposal = !this.group.is_personal;
-              researchGroupService.updateResearchGroupAccount(
-                { privKey: this.user.privKey, username: this.user.username }, 
-                isProposal, 
-                {
-                  researchGroup: this.group.external_id,
-                  accountOwnerAuth: undefined,
-                  accountActiveAuth: undefined,
-                  accountActiveAuthOverrides: undefined,
-                  accountMemoPubKey: undefined,
-                  accountJsonMetadata: undefined,
-                  accountExtensions: []
-                }, 
-                {
-                  researchGroupName: this.newResearchGroupName,
-                  researchGroupDescription: this.newResearchGroupDescription
-                }
-              )
-                .then(() => {
-                  this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
-                  this.cancel(isProposal);
-                })
-                .catch((err) => {
-                  console.error(err);
-
-                  this.$notifier.showError(this.$t('researchGroupSettings.dataForm.errProposal'));
-                })
-                .finally(() => {
-                  this.isLoading = false;
-                  this.cancel();
-                });
-            }
-          })
-          .catch((error) => {
-            this.isLoading = false;
-            this.isPermlinkVerifyed = false;
-          });
+              this.cancel();
+            });
+        }
       }
     }
   };

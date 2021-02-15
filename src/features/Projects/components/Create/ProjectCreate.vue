@@ -25,38 +25,26 @@
 
         const { onchainData } = parseFormData(formData);
 
-        return this.$$verifyProject(
-          onchainData.researchGroup,
-          onchainData.title
+        const isProposal = onchainData.researchGroup != null && onchainData.researchGroup != this.$currentUser.username;
+        return researchService.createResearch(
+          {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          isProposal,
+          formData,
+          false
         )
-          .then((verified) => {
-            if (verified) {
-              const isProposal = onchainData.researchGroup != null && onchainData.researchGroup != this.$currentUser.username;
-              return researchService.createResearch(
-                {
-                  privKey: this.$currentUser.privKey,
-                  username: this.$currentUser.username
-                },
-                isProposal,
-                formData,
-                false
-              )
-                .then((project) => {
-                  this.$notifier.showSuccess(this.$t('notifier.prCreatedSuccess', { title: onchainData.title }));
-                  this.$$goToProject(project);
-                })
-                .catch((err) => {
-                  console.error(err);
-                  this.$notifier.showError('An error occurred while creating project, please try again later');
-                })
-                .finally(() => {
-                  this.loading = false;
-                });
-            }
-
-            this.$notifier.showError('Project exist');
+          .then((project) => {
+            this.$notifier.showSuccess(this.$t('notifier.prCreatedSuccess', { title: onchainData.title }));
+            this.$$goToProject(project);
+          })
+          .catch((err) => {
+            console.error(err);
+            this.$notifier.showError('An error occurred while creating project, please try again later');
+          })
+          .finally(() => {
             this.loading = false;
-            return true;
           });
       }
     }

@@ -7,11 +7,9 @@ export const CreateResearchGroupMixin = {
     return {
       formProcessing: false,
       backRouterToken: undefined,
-      isPermlinkVerifyed: true,
 
       formData: {
         name: '',
-        permlink: '',
         description: '',
         members: [],
 

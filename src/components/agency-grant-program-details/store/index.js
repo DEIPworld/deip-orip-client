@@ -74,7 +74,7 @@ const actions = {
     return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
       .then((programInfo) => {
         program = programInfo;
-        return usersService.getEnrichedProfiles(program.officers);
+        return usersService.getUsers(program.officers);
       })
       .then((profiles) => {
         program.officers = profiles;

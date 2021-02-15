@@ -196,7 +196,7 @@ const actions = {
             ];
 
             if (isReferencesPage) {
-              loading.push(dispatch('loadResearchContentReferences', contentObj.id));
+              loading.push(dispatch('loadResearchContentReferences', contentObj.external_id));
             }
 
             return Promise.all(loading);
@@ -233,7 +233,7 @@ const actions = {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList);
-        return usersService.getEnrichedProfiles(_.uniq(expertsAccountNames));
+        return usersService.getUsers(_.uniq(expertsAccountNames));
       }).then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
@@ -304,7 +304,7 @@ const actions = {
         reviews.push(...items);
         return Promise.all([
           Promise.all(reviews.map((item) => researchContentReviewsService.getReviewVotes(item.external_id))),
-          usersService.getEnrichedProfiles(reviews.map((r) => r.author))
+          usersService.getUsers(reviews.map((r) => r.author))
         ]);
       })
       .then(([votes, users]) => {
@@ -324,7 +324,7 @@ const actions = {
           }
         }
 
-        return usersService.getEnrichedProfiles(voters);
+        return usersService.getUsers(voters);
       })
       .then((users) => {
         for (let i = 0; i < reviews.length; i++) {
@@ -344,7 +344,7 @@ const actions = {
 
   loadResearchContentReferences({ state, dispatch, commit }, researchContentId) {
     let graph = {};
-    return researchService.getResearchContentReferencesGraph(researchContentId)
+    return researchContentService.getResearchContentReferencesGraph(researchContentId)
       .then((graphData) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(

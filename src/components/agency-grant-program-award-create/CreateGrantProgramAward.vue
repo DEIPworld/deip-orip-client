@@ -592,7 +592,7 @@
         funding.foundResearch = [];
         funding.isResearchGroupsLoading = true;
 
-        return researchGroupService.getResearchGroupsByUser(funding.researcher.user.account.name)
+        return researchGroupService.getTeamsByUser(funding.researcher.user.account.name)
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
             return Promise.all(groups.map((group) => researchService.getResearchGroupResearchListing(group.external_id)));

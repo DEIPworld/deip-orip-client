@@ -172,7 +172,7 @@ const actions = {
         return [comment.username, ...unique];
       }, []);
 
-    return usersService.getEnrichedProfiles(distinct)
+    return usersService.getUsers(distinct)
       .then((authors) => {
         commit('SET_INVESTMENT_PORTFOLIO_COMMENT_AUTHORS', authors);
       })

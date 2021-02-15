@@ -237,7 +237,7 @@ const actions = {
   loadGroups({ state, dispatch, commit, getters }) {
     const { user } = getters;
 
-    return researchGroupService.getResearchGroupsByUser(user.username)
+    return researchGroupService.getTeamsByUser(user.username)
       .then((groups) => {
         commit('SET_USER_GROUPS_LIST', groups);
       });
