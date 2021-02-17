@@ -203,7 +203,7 @@
             :disabled="disableButtons.id === item.proposal.external_id"
             :loading="disableButtons.id === item.proposal.external_id
               && disableButtons.btnType === 'sign'"
-            @click="sign(item)"
+            @click="sign(item, item.type === LOC_PROPOSAL_TYPES.RESEARCH_NDA)"
           >
             <v-icon left>
               done
@@ -596,19 +596,20 @@
         }
       },
 
-      sign(proposal) {
+      sign(proposal, approveByTenant = false) {
         const { proposal: { external_id } } = proposal;
         this.disableButtons.id = external_id;
         this.disableButtons.btnType = 'sign';
+        
+        const activeApprovalsToAdd = [this.$currentUser.username];
+        
+        if (approveByTenant) {
+          activeApprovalsToAdd.push(this.$env.TENANT);
+        }
+
         proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
-          activeApprovalsToAdd: [this.$currentUser.username],
-          activeApprovalsToRemove: [],
-          ownerApprovalsToAdd: [],
-          ownerApprovalsToRemove: [],
-          keyApprovalsToAdd: [],
-          keyApprovalsToRemove: [],
-          extensions: []
+          activeApprovalsToAdd: activeApprovalsToAdd
         })
           .then(() => {
             this.$emit('update-data');
