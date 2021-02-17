@@ -133,6 +133,16 @@
             })
           }}
         </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.RESEARCH_NDA === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{
+            $t('transactionsList.projectNda', { project: item.extendedDetails.research.title })
+          }}
+        </v-clamp>
         <v-row
           v-if="!isAccountsBlockVisible(item)"
           no-gutters
@@ -475,6 +485,10 @@
           [LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST]: {
             icon: 'swap_horizontal_circle',
             text: this.$t('transactionsList.transactionTypes.exchange')
+          },
+          [LOC_PROPOSAL_TYPES.RESEARCH_NDA]: {
+            icon: 'work',
+            text: this.$t('transactionsList.transactionTypes.projectNda')
           }
         },
         PROPOSAL_STATUS,

@@ -12,6 +12,7 @@ export default {
   excludeMember: 'Remove {member} from the {researchGroup}',
   createResearchMaterial: `{material}, ${project()}: {project}`,
   createTokenSale: `Min: {min}, max: {max}, ${project()}: {project}`,
+  projectNda: `${project()}: {project}`,
   expiresIn: 'Expires in',
   confirm: 'Confirm',
   decline: 'Decline',
@@ -33,7 +34,8 @@ export default {
     removeMember: 'Remove member',
     transfer: 'Transfer',
     licensing: 'Licensing',
-    exchange: 'Exchange'
+    exchange: 'Exchange',
+    projectNda: 'Grant access'
   },
   table: {
     type: 'Type',
