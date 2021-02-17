@@ -45,7 +45,12 @@ const modules = [
           title: setAs(String)
         }),
         children: []
-      }
+      },
+      {
+        component: 'VSpacer',
+        name: 'Spacer',
+        icon: 'mdi-keyboard-space'
+      },
     ]
   }
 ];

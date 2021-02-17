@@ -17,7 +17,7 @@ import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
 import CrudActions from '@/components/layout/CrudActions';
 
 import {
-  VDivider, VSheet, VIcon, VBtn, VRow, VCol
+  VDivider, VSheet, VIcon, VBtn, VRow, VCol, VSpacer
 } from 'vuetify/lib/components';
 import RecursiveIterator from 'recursive-iterator';
 
@@ -42,7 +42,8 @@ const rendererCommon = {
     VIcon,
     VBtn,
     VRow,
-    VCol
+    VCol,
+    VSpacer
   },
   props: {
     schema: {
