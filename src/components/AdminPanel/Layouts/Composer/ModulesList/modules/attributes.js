@@ -1,4 +1,5 @@
 import { ATTR_ICONS, ATTR_TYPES, LAYOUT_TYPES } from '@/variables';
+
 import {
   extendModuleObject,
   setAs, setComponentAttrs, setComponentProps
@@ -18,6 +19,10 @@ const propsForRead = {
   }),
   [ATTR_TYPES.STEPPER]: setComponentAttrs({
     viewType: setAs(Array, ['default', 'small'])
+  }),
+  [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: setComponentAttrs({
+    viewType: setAs(Array, ['default', 'widget']),
+    title: setAs(String, 'Content access')
   })
 };
 
@@ -29,7 +34,7 @@ const extenders = {
     model: `researchRef.attributes.${attr._id}`,
     ...(propsForSet[attr.type] ? _.cloneDeep(propsForSet[attr.type]) : {}),
     props: {
-      attribute: `@attributes.${attr._id}`,
+      attribute: `@attributes.${attr._id}`
     }
   }),
 
@@ -38,7 +43,8 @@ const extenders = {
     ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
     ...{
       props: {
-        attribute: `@research.researchRef.attributes.${attr._id}`
+        attribute: `@research.researchRef.attributes.${attr._id}`,
+        project: '@research'
       }
     }
   })
@@ -50,7 +56,7 @@ export const modulesAttributes = (ctx) => {
       list: [
         {
           component: 'TenantBadge',
-          name: 'Network tenant',
+          name: 'Tenant',
           icon: 'mdi-account-network-outline',
           props: {
             tenantId: '@research.tenantId'

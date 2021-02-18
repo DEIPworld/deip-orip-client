@@ -7,11 +7,14 @@ const componentTypeRender = {
     genComponent() {
       const self = this;
 
+      const project = this.project || this.$attrs.project;
+
       return this.$createElement(this.attributeComponent, {
         props: {
           value: this.internalValue,
           attribute: this.attribute,
-          viewType: this.viewType
+          viewType: this.viewType,
+          ...(project ? { project } : {})
         },
         class: {
           'visually-hidden': this.attribute.isHidden
@@ -51,7 +54,7 @@ export const attributeTypeComponent = {
   }
 };
 
-export const attributeViewTypeComponent = {
+export const attributeViewTypeComponentFactory = (defaultViewType) => ({
   mixins: [componentTypeRender],
 
   props: {
@@ -67,7 +70,7 @@ export const attributeViewTypeComponent = {
 
   computed: {
     attributeComponent() {
-      const defaultView = `${this.$options.name}${pascalCase('default')}`;
+      const defaultView = `${this.$options.name}${pascalCase(defaultViewType)}`;
 
       if (this.viewType) {
         const requestedView = `${this.$options.name}${pascalCase(this.viewType)}`;
@@ -81,4 +84,6 @@ export const attributeViewTypeComponent = {
   render() {
     return this.genComponent();
   }
-};
+});
+
+export const attributeViewTypeComponent = attributeViewTypeComponentFactory('default');

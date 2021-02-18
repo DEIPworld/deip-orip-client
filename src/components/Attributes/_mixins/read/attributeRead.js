@@ -30,7 +30,8 @@ export const attributeRead = {
           props: {
             autoresize: true,
             // eslint-disable-next-line radix
-            maxLines: parseInt(this.clamped)
+            maxLines: parseInt(this.clamped),
+            viewType: this.viewType
           },
           class: {
             'visually-hidden': this.attribute.isHidden

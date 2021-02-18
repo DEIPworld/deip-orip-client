@@ -288,13 +288,7 @@
           username: this.currentUser.username
         }, {
           externalId: proposalId,
-          activeApprovalsToAdd: [this.currentUser.username],
-          activeApprovalsToRemove: [],
-          ownerApprovalsToAdd: [],
-          ownerApprovalsToRemove: [],
-          keyApprovalsToAdd: [],
-          keyApprovalsToRemove: [],
-          extensions: []
+          activeApprovalsToAdd: [this.currentUser.username]
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });

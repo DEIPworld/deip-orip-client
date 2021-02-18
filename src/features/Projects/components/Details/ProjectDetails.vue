@@ -15,6 +15,7 @@
   import { mapGetters } from 'vuex';
   import ProjectDetailsRenderer from '@/features/Projects/components/Details/renderer';
   import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
+  import { collectionMerge } from '@deip/toolbox';
 
   export default {
     name: 'ProjectDetails',
@@ -38,13 +39,24 @@
       },
 
       researchExtended() {
+        const allAttrs = this.$tenantSettings.researchAttributes
+          .map((attr) => ({
+            researchAttributeId: attr._id,
+            value: attr.defaultValue
+          }));
+
+        const constructedAttrs = collectionMerge(
+          allAttrs,
+          this.research.researchRef.attributes,
+          { key: 'researchAttributeId' }
+        );
         return {
           ...this.research,
           ...{
             createdAt: this.$options.filters.dateFormat(this.research.createdAt, 'D MMM YYYY', true),
             researchRef: {
               ...this.research.researchRef,
-              attributes: researchAttributesToObject(this.research.researchRef.attributes)
+              attributes: researchAttributesToObject(constructedAttrs)
             }
           }
         };

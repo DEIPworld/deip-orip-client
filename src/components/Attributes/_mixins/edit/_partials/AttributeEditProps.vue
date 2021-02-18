@@ -31,7 +31,8 @@
       switchers() {
         return [
           ...this.genSwitch(this.canBeFilterable, 'isFilterable', 'Use in filter'),
-          ...this.genSwitch(this.canBeMultiple, 'isMultiple', 'Multiple choice')
+          ...this.genSwitch(this.canBeMultiple, 'isMultiple', 'Multiple choice'),
+          // ...this.genSwitch(true, 'isHidden', 'Hidden')
         ];
       }
     },

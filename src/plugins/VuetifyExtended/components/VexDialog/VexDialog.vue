@@ -49,6 +49,7 @@
             v-if="Boolean(buttonTrueText)"
             v-bind="buttonTrueProps"
             :disabled="disabled || trueDisabled"
+            :loading="loading"
             @click="confirmButtonClick"
           >
             {{ buttonTrueText }}

@@ -6,8 +6,8 @@
     :discipline-id="project.disciplines.map(({external_id}) => external_id)"
     :exclude-users="project.members"
 
-    :disable-content-route="isLicensingAccessLimited"
-    :disable-review-request-route="isLicensingAccessLimited || project.numberOfResearchContents === 0 || $isGuest"
+    :disable-content-route="!contentAssessAllowed"
+    :disable-review-request-route="!contentAssessAllowed || project.numberOfResearchContents === 0 || $isGuest"
     :disable-create-route="true"
   />
 </template>

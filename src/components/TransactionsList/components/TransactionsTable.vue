@@ -133,6 +133,16 @@
             })
           }}
         </v-clamp>
+        <v-clamp
+          v-if="LOC_PROPOSAL_TYPES.RESEARCH_NDA === item.type"
+          autoresize
+          :max-lines="2"
+          class="mt-4"
+        >
+          {{
+            $t('transactionsList.projectNda', { project: item.extendedDetails.research.title })
+          }}
+        </v-clamp>
         <v-row
           v-if="!isAccountsBlockVisible(item)"
           no-gutters
@@ -475,6 +485,10 @@
           [LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST]: {
             icon: 'swap_horizontal_circle',
             text: this.$t('transactionsList.transactionTypes.exchange')
+          },
+          [LOC_PROPOSAL_TYPES.RESEARCH_NDA]: {
+            icon: 'work',
+            text: this.$t('transactionsList.transactionTypes.projectNda')
           }
         },
         PROPOSAL_STATUS,
@@ -583,18 +597,28 @@
       },
 
       sign(proposal) {
-        const { proposal: { external_id } } = proposal;
+        const { proposal: { external_id, approvals }, type } = proposal;
+        const currentTenantId = this.$tenant.id;
         this.disableButtons.id = external_id;
         this.disableButtons.btnType = 'sign';
+        
+        const activeApprovalsToAdd = [this.$currentUser.username];
+        if (type === LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
+          const { tenantId: researchTenantId } = proposal.extendedDetails.research;
+          if (researchTenantId != currentTenantId) {
+            if (!approvals.some(approval => approval == researchTenantId)) {
+              activeApprovalsToAdd.push(researchTenantId);
+            }
+          } else {
+            if (!approvals.some(approval => approval == currentTenantId)) {
+              activeApprovalsToAdd.push(currentTenantId);
+            }
+          }
+        }
+
         proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
-          activeApprovalsToAdd: [this.$currentUser.username],
-          activeApprovalsToRemove: [],
-          ownerApprovalsToAdd: [],
-          ownerApprovalsToRemove: [],
-          keyApprovalsToAdd: [],
-          keyApprovalsToRemove: [],
-          extensions: []
+          activeApprovalsToAdd: activeApprovalsToAdd
         })
           .then(() => {
             this.$emit('update-data');

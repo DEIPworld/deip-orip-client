@@ -1,11 +1,14 @@
 <template>
-  <component
-    :is="attributeComponent"
-    v-model="internalValue"
-    :attribute="attribute"
-    :class="{'visually-hidden': attribute.isHidden}"
-    v-bind="attrs$"
-  />
+  <div>
+    <!-- {{attributeComponent}}-->
+    <component
+      :is="attributeComponent"
+      v-model="internalValue"
+      :attribute="attribute"
+      :class="{'visually-hidden': attribute.isHidden}"
+      v-bind="attrs$"
+    />
+  </div>
 </template>
 
 <script>
@@ -29,6 +32,7 @@
   import { AttributesVideoUrlSet } from '@/components/Attributes/VideoUrl';
   import { AttributesImageSet } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingSet } from '@/components/Attributes/ExpressLicensing';
+  import { AttributesNetworkContentAccessSet } from '@/components/Attributes/NetworkContentAccess';
 
   export default {
     name: 'AttributesSet',
@@ -47,7 +51,8 @@
       AttributesUserSet,
       AttributesVideoUrlSet,
       AttributesImageSet,
-      AttributesExpressLicensingSet
+      AttributesExpressLicensingSet,
+      AttributesNetworkContentAccessSet
     },
 
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
