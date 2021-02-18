@@ -220,7 +220,7 @@ const actions = {
         for (let i = 0; i < data.length; i++) {
           const discipline = data[i];
           disciplinesList.push(discipline);
-          expertsPromises.push(expertiseContributionsService.getDisciplineExpertiseTokens(discipline.external_id));
+          expertsPromises.push(expertiseContributionsService.getDisciplineExpertiseTokens(discipline.externalId));
         }
 
         return Promise.all([

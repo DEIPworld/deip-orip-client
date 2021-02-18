@@ -48,7 +48,7 @@ const ACTIONS = {
       const newPayload = deepmerge(
         payload,
         {
-          filter: { discipline: d.external_id }
+          filter: { discipline: d.external_id || d.externalId }
         }
       );
 
