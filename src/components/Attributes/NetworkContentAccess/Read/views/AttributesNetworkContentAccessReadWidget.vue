@@ -146,25 +146,23 @@
       sendRequest() {
         this.processing = true;
 
-        const parties = [
-          this.$currentUser.username,
-          this.project.researchGroup.external_id,
-          this.$tenant.id,
-          this.project.tenantId
-        ].filter((v, i, a) => a.indexOf(v) === i);
+        const parties = this.$tenant.id == this.project.tenantId 
+          ? [this.$currentUser.username, this.project.researchGroup.external_id]
+          : [this.$currentUser.username, this.project.researchGroup.external_id, this.$tenant.id, this.project.tenantId];
 
+        const creator = this.$currentUser.username;
         return researchNdaService.createResearchNda({
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username
         }, {
-          creator: this.$currentUser.username,
+          creator,
           parties,
           description: '7ec7e331d6a8c9ac68516b4c70bd0ae77e78cc2de3d6472387369478a79c8dac',
           researchExternalId: this.project.externalId,
           startTime: undefined,
           endTime: this.dialogModel.endTime,
           extensions: [],
-          tenant: this.$tenant.id
+          approvers: this.$tenant.id == this.project.tenantId ? [creator] : [creator, this.$tenant.id]
         })
           .then(() => {
             this.closeDialog();

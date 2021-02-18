@@ -203,7 +203,7 @@
             :disabled="disableButtons.id === item.proposal.external_id"
             :loading="disableButtons.id === item.proposal.external_id
               && disableButtons.btnType === 'sign'"
-            @click="sign(item, item.type === LOC_PROPOSAL_TYPES.RESEARCH_NDA)"
+            @click="sign(item)"
           >
             <v-icon left>
               done
@@ -596,15 +596,24 @@
         }
       },
 
-      sign(proposal, approveByTenant = false) {
-        const { proposal: { external_id } } = proposal;
+      sign(proposal) {
+        const { proposal: { external_id, approvals }, type } = proposal;
+        const currentTenantId = this.$tenant.id;
         this.disableButtons.id = external_id;
         this.disableButtons.btnType = 'sign';
         
         const activeApprovalsToAdd = [this.$currentUser.username];
-        
-        if (approveByTenant) {
-          activeApprovalsToAdd.push(this.$env.TENANT);
+        if (type === LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
+          const { tenantId: researchTenantId } = proposal.extendedDetails.research;
+          if (researchTenantId != currentTenantId) {
+            if (!approvals.some(approval => approval == researchTenantId)) {
+              activeApprovalsToAdd.push(researchTenantId);
+            }
+          } else {
+            if (!approvals.some(approval => approval == currentTenantId)) {
+              activeApprovalsToAdd.push(currentTenantId);
+            }
+          }
         }
 
         proposalsService.updateProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
