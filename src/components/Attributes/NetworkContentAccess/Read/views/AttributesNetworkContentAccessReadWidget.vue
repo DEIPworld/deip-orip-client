@@ -11,7 +11,7 @@
 <!--    {{ project.externalId }} <br>-->
 
     <template v-if="accessGranted">
-      ok
+      Access granted
     </template>
 
     <template v-else>
