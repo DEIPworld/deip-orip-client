@@ -5,8 +5,8 @@
 
       :project-id="project.externalId"
 
-      :disable-all-routes="isLicensingAccessLimited"
-      v-bind="licensingAccessProps"
+      :disable-all-routes="!contentAssessAllowed"
+      v-bind="accessContainerProps"
     />
 
     <drafts-list

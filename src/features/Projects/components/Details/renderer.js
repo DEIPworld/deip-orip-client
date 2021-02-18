@@ -5,7 +5,7 @@ import AttributesRead from '@/components/Attributes/AttributesRead';
 import { researchAttributeFileUrl } from '@/utils/helpers';
 
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
-import  FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
+import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
 
 import ProjectDetailsEditCta from '@/features/Projects/components/Details/ProjectDetailsEditCta';
 import ProjectDetailsFollowCta
@@ -21,6 +21,7 @@ import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLice
 import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
 import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
 import { projectDetails } from '@/features/Projects/mixins/projectDetails';
+import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
 
 export default {
   name: 'ProjectDetailsRenderer',
@@ -35,6 +36,7 @@ export default {
     AttributesRead,
 
     FundraisingStats,
+    TenantBadge,
 
     // Licensing
     ExpressLicensingLicensee,

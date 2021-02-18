@@ -1,28 +1,25 @@
 <template>
-  <div>
-<!--    <d-meta-item-->
-<!--      icon="mdi-account-network-outline"-->
-<!--      :title="tenant.profile.name"-->
-<!--    />-->
-    <v-chip
-      v-if="$ready"
-      small
-      :to="{
+  <component :is="tag" v-if="tenant && $ready">
+    <template v-if="asText">
+      {{ tenant.profile.name }}
+    </template>
+
+    <template v-else>
+      <v-chip
+        small
+        :to="{
         name: 'explore',
         query: {
           rFilter: JSON.stringify({tenantIds: [tenant.id]})
         }
       }"
-    >
-<!--      <v-avatar left class="mr-2 ml-n2">-->
-<!--        <v-img :src="tenant | tenantLogoSrc(24)" />-->
-<!--      </v-avatar>-->
-
-      <div class="text-truncate spacer">
-        {{ tenant.profile.name }}
-      </div>
-    </v-chip>
-  </div>
+      >
+        <div class="text-truncate spacer">
+          {{ tenant.profile.name }}
+        </div>
+      </v-chip>
+    </template>
+  </component>
 
 </template>
 
@@ -42,6 +39,16 @@
       tenantId: {
         type: String,
         default: ''
+      },
+
+      asText: {
+        type: Boolean,
+        default: false
+      },
+
+      tag: {
+        type: String,
+        default: 'div'
       }
     },
     computed: {

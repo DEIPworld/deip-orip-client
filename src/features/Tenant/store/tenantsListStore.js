@@ -27,7 +27,6 @@ const ACTIONS = {
   fetch({ commit }) {
     return tenantService.getNetworkTenants()
       .then((res) => {
-        console.log(res)
         commit('setData', res);
       });
   },
@@ -35,7 +34,6 @@ const ACTIONS = {
   get({ commit }, tenantId) {
     return tenantService.getNetworkTenant(tenantId)
       .then((res) => {
-        console.log(res)
         commit('setData', res);
       });
   }
@@ -54,7 +52,6 @@ const MUTATIONS = {
       payloadData,
       { id: 'id' }
     );
-    console.log(22,state.data)
   }
 };
 

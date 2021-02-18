@@ -3,7 +3,6 @@ export const ATTR_TYPES = {
   TEXTAREA: 'textarea',
 
   SELECT: 'select',
-  // MULTI_SELECT: 'multi-select',
 
   SWITCH: 'switch',
   CHECKBOX: 'checkbox',
@@ -15,7 +14,6 @@ export const ATTR_TYPES = {
   STEPPER: 'stepper',
 
   USER: 'user',
-  // USERS_LIST: 'users-list',
 
   DISCIPLINE: 'discipline',
   DISCIPLINES_LIST: 'disciplines-list',
@@ -27,6 +25,7 @@ export const ATTR_TYPES = {
   PARTNERS: 'partners',
 
   EXPRESS_LICENSING: 'express-licensing',
+  NETWORK_CONTENT_ACCESS: 'network-content-access',
   IMAGE: 'image',
   FILE: 'file'
 };
@@ -36,7 +35,6 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.TEXTAREA]: 'Text area',
 
   [ATTR_TYPES.SELECT]: 'Select list',
-  // [ATTR_TYPES.MULTI_SELECT]: 'Multiple select',
 
   [ATTR_TYPES.SWITCH]: 'Switch',
   [ATTR_TYPES.CHECKBOX]: 'Checkbox',
@@ -48,7 +46,6 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.STEPPER]: 'Level select',
 
   [ATTR_TYPES.USER]: 'User select',
-  // [ATTR_TYPES.USERS_LIST]: 'Multiple users select',
 
   [ATTR_TYPES.DISCIPLINE]: 'Discipline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
@@ -60,6 +57,8 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.PARTNERS]: 'Partners',
 
   [ATTR_TYPES.EXPRESS_LICENSING]: 'Express licensing',
+  [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: 'Interconnection access',
+
   [ATTR_TYPES.IMAGE]: 'Image upload',
   [ATTR_TYPES.FILE]: 'File upload'
 };
@@ -69,7 +68,6 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.TEXTAREA]: 'mdi-form-textarea',
 
   [ATTR_TYPES.SELECT]: 'mdi-form-select',
-  // [ATTR_TYPES.MULTI_SELECT]: 'mdi-format-list-checkbox',
 
   [ATTR_TYPES.SWITCH]: 'mdi-toggle-switch-outline',
   [ATTR_TYPES.CHECKBOX]: 'mdi-check-box-outline',
@@ -81,7 +79,6 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.STEPPER]: 'mdi-format-list-numbered',
 
   [ATTR_TYPES.USER]: 'mdi-account-outline',
-  // [ATTR_TYPES.USERS_LIST]: 'mdi-account-multiple-outline',
 
   [ATTR_TYPES.DISCIPLINE]: 'mdi-flask-empty-outline',
   [ATTR_TYPES.DISCIPLINES_LIST]: 'mdi-flask-empty-plus-outline',
@@ -93,6 +90,8 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.PARTNERS]: 'mdi-account-tie-outline',
 
   [ATTR_TYPES.EXPRESS_LICENSING]: 'mdi-file-certificate-outline',
+  [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: 'mdi-account-key-outline',
+
   [ATTR_TYPES.IMAGE]: 'mdi-file-image-outline',
   [ATTR_TYPES.FILE]: 'mdi-file-outline'
 };

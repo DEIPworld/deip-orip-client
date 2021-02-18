@@ -1,7 +1,7 @@
 <template>
   <component
     :is="attributeComponent"
-    v-if="Object.keys(attribute).length"
+    v-if="Object.keys(attribute).length && attribute.value"
     :attribute="attribute"
 
     v-bind="attrs$"
@@ -28,6 +28,7 @@
   import { AttributesVideoUrlRead } from '@/components/Attributes/VideoUrl';
   import { AttributesImageRead } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingRead } from '@/components/Attributes/ExpressLicensing';
+  import { AttributesNetworkContentAccessRead } from '@/components/Attributes/NetworkContentAccess';
 
   export default {
     name: 'AttributesRead',
@@ -46,7 +47,8 @@
       AttributesUserRead,
       AttributesVideoUrlRead,
       AttributesImageRead,
-      AttributesExpressLicensingRead
+      AttributesExpressLicensingRead,
+      AttributesNetworkContentAccessRead
     },
     mixins: [attributeTypeComponent, BindsAttrs],
     props: {
