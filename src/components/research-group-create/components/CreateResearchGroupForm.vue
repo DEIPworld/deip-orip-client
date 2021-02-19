@@ -9,10 +9,6 @@
           :label="$t('createResearchGroup.nameBlock.titleField.label')"
           :rules="[rules.required, rules.titleLength]"
           :hint="$t('createResearchGroup.nameBlock.titleField.hint')"
-          :error-messages="isPermlinkVerifyed === false ?
-            $t('createResearchGroup.nameBlock.titleField.err') :
-            ''
-          "
         />
       </v-col>
     </d-form-block>
@@ -206,10 +202,6 @@
       loading: {
         type: Boolean,
         default: false
-      },
-      isPermlinkVerifyed: {
-        type: Boolean,
-        default: true
       }
     },
     data() {

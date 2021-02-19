@@ -312,7 +312,7 @@ const actions = {
       .then((paymentRequests) => {
         commit('SET_AWARD_PAYMENT_REQUESTS_LIST', paymentRequests);
 
-        return usersService.getEnrichedProfiles(state.award.awardees
+        return usersService.getUsers(state.award.awardees
           .map((r) => r.awardee)
           .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })

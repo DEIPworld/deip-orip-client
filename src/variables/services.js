@@ -1,6 +1,6 @@
 import { PROPOSAL_TYPES, PROPOSAL_STATUS } from '@deip/proposals-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@deip/expertise-contributions-service';
-import { researchContentTypes } from '@deip/research-service';
+import { researchContentTypes } from '@deip/research-content-service';
 import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/grants-service';
 import { ASSESSMENT_CRITERIA_TYPE } from '@deip/research-content-reviews-service';
 import { createEnum } from '@deip/toolbox';

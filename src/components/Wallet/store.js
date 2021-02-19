@@ -135,7 +135,7 @@ const actions = {
 
   loadAllGroups({ commit }, user) {
     const groupList = [];
-    return researchGroupService.getResearchGroupsByUser(user)
+    return researchGroupService.getTeamsByUser(user)
       .then((result) => {
         const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);

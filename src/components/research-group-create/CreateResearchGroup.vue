@@ -4,7 +4,6 @@
       v-model="formData"
       :disabled="formProcessing"
       :loading="formProcessing"
-      :is-permlink-verifyed="isPermlinkVerifyed"
       @submit="finish"
     />
   </full-screen-view>
@@ -27,95 +26,85 @@
       finish(success) {
         if (!success) return;
 
-        researchGroupService
-          .checkResearchGroupExistenceByPermlink(this.formData.name)
-          .then((exists) => {
-            this.isPermlinkVerifyed = !exists;
-            if (this.isPermlinkVerifyed) {
-              this.formProcessing = true;
+        this.formProcessing = true;
 
-              const invitees = this.formData.members
-                .filter((m) => m.account.name !== this.user.username)
-                .map((m) => ({
-                  account: m.account.name,
-                  rgt: m.stake * this.DEIP_1_PERCENT,
-                  notes: ''
-                }));
+        const invitees = this.formData.members
+          .filter((m) => m.account.name !== this.user.username)
+          .map((m) => ({
+            account: m.account.name,
+            rgt: m.stake * this.DEIP_1_PERCENT,
+            notes: ''
+          }));
 
-              const creator = this.user.username;
-              const memo = this.user.account.memo_key;
-              const auth = {
-                account_auths: [[creator, 1]],
-                key_auths: [],
-                weight_threshold: 1
-              };
+        const creator = this.user.username;
+        const memo = this.user.account.memo_key;
+        const auth = {
+          account_auths: [[creator, 1]],
+          key_auths: [],
+          weight_threshold: 1
+        };
 
-              researchGroupService.createResearchGroup(
-                this.user.privKey,
-                {
-                  fee: this.toAssetUnits(0),
-                  creator: creator,
-                  accountOwnerAuth: auth,
-                  accountActiveAuth: auth,
-                  accountMemoPubKey: memo,
-                  accountJsonMetadata: undefined,
-                  accountExtensions: []
-                },
-                {
-                  researchGroupName: this.formData.name,
-                  researchGroupDescription: this.formData.description,
-                  researchGroupThresholdOverrides: []
+        researchGroupService.createResearchGroup(
+          this.user.privKey,
+          {
+            fee: this.toAssetUnits(0),
+            creator: creator,
+            accountOwnerAuth: auth,
+            accountActiveAuth: auth,
+            accountMemoPubKey: memo,
+            accountJsonMetadata: undefined,
+            accountExtensions: []
+          },
+          {
+            researchGroupName: this.formData.name,
+            researchGroupDescription: this.formData.description,
+            researchGroupThresholdOverrides: []
+          }
+        )
+          .then((res) => {
+            this.formProcessing = false;
+            this.$store.dispatch('auth/loadGroups'); // reload user groups
+            this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
+            const { 'external_id': researchGroupExternalId } = res;
+            const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInvite(
+              { privKey: this.user.privKey, username: this.user.username },
+              {
+                researchGroup: researchGroupExternalId,
+                member: invitee.account,
+                rewardShare: '0.00 %',
+                researches: [],
+                extensions: []
+              },
+              {
+                notes: this.$t('createResearchGroup.note', { name: this.formData.name }),
+              }
+            ));
+
+            return Promise.all([
+              Promise.all(invitesPromises),
+              researchGroupService.getResearchGroup(researchGroupExternalId),
+              this.$store.dispatch('auth/loadGroups')
+            ]);
+          })
+          .then(([invites, researchGroup]) => {
+            if (!this.backRouterToken) {
+              this.$router.push({
+                name: 'teamDetails',
+                params: {
+                  teamId: researchGroup.external_id
                 }
-              )
-                .then((res) => {
-                  this.formProcessing = false;
-                  this.$store.dispatch('auth/loadGroups'); // reload user groups
-                  this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name: this.formData.name }));
-                  const { 'external_id': researchGroupExternalId } = res;
-                  const invitesPromises = invitees.map((invitee) => researchGroupService.createResearchGroupInvite(
-                    { privKey: this.user.privKey, username: this.user.username },
-                    {
-                      researchGroup: researchGroupExternalId,
-                      member: invitee.account,
-                      rewardShare: '0.00 %',
-                      researches: [],
-                      extensions: []
-                    },
-                    {
-                      notes: this.$t('createResearchGroup.note', { name: this.formData.name }),
-                    }
-                  ));
-
-                  return Promise.all([
-                    Promise.all(invitesPromises),
-                    researchGroupService.getResearchGroup(researchGroupExternalId),
-                    this.$store.dispatch('auth/loadGroups')
-                  ]);
-                })
-                .then(([invites, researchGroup]) => {
-                  if (!this.backRouterToken) {
-                    this.$router.push({
-                      name: 'teamDetails',
-                      params: {
-                        teamId: researchGroup.external_id
-                      }
-                    });
-                  } else {
-                    if (this.backRouterToken.name === 'project.create') {
-                      this.backRouterToken.query.externalId = researchGroup.external_id;
-                    }
-                    this.$router.push(this.backRouterToken);
-                  }
-                })
-                .catch((err) => {
-                  console.error(err);
-                  this.isLoading = false;
-                  this.$notifier.showError(this.$t('createResearchGroup.errCreate'));
-                });
+              });
+            } else {
+              if (this.backRouterToken.name === 'project.create') {
+                this.backRouterToken.query.externalId = researchGroup.external_id;
+              }
+              this.$router.push(this.backRouterToken);
             }
           })
-          .catch((error) => {
-            this.isPermlinkVerifyed = false;
+          .catch((err) => {
+            console.error(err);
+            this.isLoading = false;
+            this.$notifier.showError(this.$t('createResearchGroup.errCreate'));
           });
       }
     }

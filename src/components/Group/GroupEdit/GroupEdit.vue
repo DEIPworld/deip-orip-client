@@ -8,7 +8,6 @@
           label="Title"
           :rules="[rules.required, rules.titleLength]"
           hint="Name of your team"
-          :error-messages="isPermlinkVerifyed === false ? 'Group with the same name already exists' : ''"
         />
 
         <v-textarea
@@ -41,7 +40,6 @@
     components: { DStack, DForm, DLayoutFullScreen },
     data() {
       return {
-        isPermlinkVerifyed: true,
         formProcessing: false,
 
         formData: {
@@ -58,20 +56,6 @@
       };
     },
     methods: {
-      checkPermlink() {
-        return researchGroupService
-          .checkResearchGroupExistenceByPermlink(this.formData.name)
-          .then((exists) => {
-            this.isPermlinkVerifyed = !exists;
-            return exists;
-          })
-          .catch((err) => {
-            console.error(err);
-            this.isLoading = false;
-            this.$notifier.showError();
-          });
-      },
-
       createGroup() {
         const creator = this.$currentUser.username;
         const memo = this.$currentUser.pubKey;
@@ -82,22 +66,22 @@
         };
 
         return researchGroupService.createResearchGroup(
-            this.$currentUser.privKey,
-            {
-              fee: this.toAssetUnits(0),
-              creator,
-              accountOwnerAuth: auth,
-              accountActiveAuth: auth,
-              accountMemoPubKey: memo,
-              accountJsonMetadata: undefined,
-              accountExtensions: []
-            },
-            {
-              researchGroupName: this.formData.name,
-              researchGroupDescription: this.formData.description,
-              researchGroupThresholdOverrides: []
-            }
-          )
+          this.$currentUser.privKey,
+          {
+            fee: this.toAssetUnits(0),
+            creator,
+            accountOwnerAuth: auth,
+            accountActiveAuth: auth,
+            accountMemoPubKey: memo,
+            accountJsonMetadata: undefined,
+            accountExtensions: []
+          },
+          {
+            researchGroupName: this.formData.name,
+            researchGroupDescription: this.formData.description,
+            researchGroupThresholdOverrides: []
+          }
+        )
           .then((res) => {
             this.$store.dispatch('auth/loadGroups'); // reload user groups
             this.$notifier.showSuccess(this.$t('notifier.teamCreatedSuccess', { team: this.formData.name }));
@@ -117,14 +101,9 @@
 
       onSubmit(valid) {
         if (valid) {
-          this.checkPermlink()
-            .then((exist) => {
-              if (!exist) {
-                this.createGroup()
-                  .then(() => {
+          this.createGroup()
+            .then(() => {
 
-                  });
-              }
             });
         }
       }

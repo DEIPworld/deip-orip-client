@@ -149,12 +149,12 @@
   import ReviewVote from '@/features/Reviews/components/Vote/ReviewVote';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { isJsonString, researchAttributesToObject } from '@/utils/helpers';
-  import { ResearchService } from '@deip/research-service';
+  import { ResearchContentService } from '@deip/research-content-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
-  const researchService = ResearchService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ReviewDetails',
@@ -229,7 +229,7 @@
 
     methods: {
       getResearchContentType(type) {
-        return researchService.getResearchContentType(type);
+        return researchContentService.getResearchContentType(type);
       },
 
       onVote() {

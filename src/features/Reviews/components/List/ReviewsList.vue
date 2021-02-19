@@ -194,7 +194,7 @@
 
   import { mapGetters, mapState } from 'vuex';
 
-  import { ResearchService } from '@deip/research-service';
+  import { ResearchContentService } from '@deip/research-content-service';
   import UsersList from '@/features/Users/components/List/UsersList';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
@@ -203,7 +203,7 @@
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
-  const researchService = ResearchService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ReviewsList',
@@ -297,7 +297,7 @@
       },
 
       getResearchContentType(type) {
-        return researchService.getResearchContentType(type);
+        return researchContentService.getResearchContentType(type);
       },
 
       check(target) {
