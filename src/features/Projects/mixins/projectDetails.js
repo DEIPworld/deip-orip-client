@@ -64,7 +64,7 @@ export const projectDetails = {
   },
   computed: {
     isMember() {
-      return this.$isUser && this.project.members.includes(this.$currentUser.username);
+      return !this.$isGuest && this.project.members.includes(this.$currentUser.username);
     },
 
     financeVisible() {

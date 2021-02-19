@@ -11,7 +11,8 @@ export const usersList = {
   },
   methods: {
     userDetailsRoute(user) {
-      if (this.$isUser && this.$currentUser.username === user.username) {
+
+      if (!this.$isGuest && this.$currentUser.username === user.account.name) {
         return { name: 'account.summary' };
       }
 
