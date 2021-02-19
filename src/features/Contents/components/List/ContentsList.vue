@@ -10,8 +10,7 @@
   >
     <template #item.type="{item}">
       <div class="text-no-wrap">
-        {{item.contentType}}
-        <!-- {{ $$contentType(item.contentType).text }} -->
+        {{ $$contentType(item.contentType).text }}
       </div>
     </template>
 

@@ -12,7 +12,7 @@ export default {
   excludeMember: 'Remove {member} from the {researchGroup}',
   createResearchMaterial: `{material}, ${project()}: {project}`,
   createTokenSale: `Min: {min}, max: {max}, ${project()}: {project}`,
-  projectNda: `${project()}: {project}`,
+  projectNda: `${project(true)}: {project}`,
   expiresIn: 'Expires in',
   confirm: 'Confirm',
   decline: 'Decline',
