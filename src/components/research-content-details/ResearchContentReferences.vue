@@ -321,11 +321,11 @@
 
   import crypto from '@deip/lib-crypto';
 
-  import { ResearchService } from '@deip/research-service';
+  import { ResearchContentService } from '@deip/research-content-service';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
 
-  const researchService = ResearchService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ResearchContentReferences',
@@ -476,7 +476,7 @@
       mockSignature(id) {
         return crypto.hexify(crypto.sha256(new TextEncoder('utf-8').encode(`${id}`).buffer));
       },
-      getResearchContentType(type) { return researchService.getResearchContentType(type); }
+      getResearchContentType(type) { return researchContentService.getResearchContentType(type); }
     }
   };
 </script>

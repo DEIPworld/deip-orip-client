@@ -125,8 +125,7 @@
   import { mapGetters } from 'vuex';
   import { bus } from '@/main';
 
-  import { ResearchService } from '@deip/research-service';
-  import { SearchService } from '@deip/search-service';
+  import { ResearchContentService } from '@deip/research-content-service';
 
   import { researchContentTypes, maxTitleLength } from '@/variables';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
@@ -136,8 +135,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import ContentDar from '@/features/Contents/components/Dar/ContentDar';
 
-  const searchService = SearchService.getInstance();
-  const researchService = ResearchService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ResearchContentDetails',
@@ -227,7 +225,7 @@
 
     methods: {
       getResearchContentType(type) {
-        return researchService.getResearchContentType(type);
+        return researchContentService.getResearchContentType(type);
       }
     }
   };

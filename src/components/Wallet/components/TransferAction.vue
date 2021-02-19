@@ -329,7 +329,9 @@
         this.exchangeAccounts = [];
         const blackList = [...this.SYSTEM_USERS, this.$currentUser.username];
         assetsService.getAccountsAssetBalancesByAsset($event.stringSymbol)
-          .then((accounts) => usersService.getEnrichedProfiles(accounts.map(({ owner }) => owner).filter((owner) => !blackList.some(u => u == owner))))
+          .then((accounts) => usersService.getUsers(
+            accounts.map(({ owner }) => owner).filter((owner) => !blackList.some(u => u == owner))
+          ))
           .then((accounts) => {
             const usersAccounts = [];
             const groupsAccount = [];

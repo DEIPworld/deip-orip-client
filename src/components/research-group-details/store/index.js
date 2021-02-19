@@ -183,7 +183,7 @@ const actions = {
     return researchGroupService.getResearchGroupPendingInvites(researchGroupExternalId)
       .then((invites) => {
         pendingInvites.push(...invites);
-        return usersService.getEnrichedProfiles(pendingInvites.map((invite) => invite.invitee));
+        return usersService.getUsers(pendingInvites.map((invite) => invite.invitee));
       })
       .then((users) => {
         for (let i = 0; i < pendingInvites.length; i++) {
@@ -211,7 +211,7 @@ const actions = {
     researchGroupService.getJoinRequestsByGroup(groupId)
       .then((requests) => {
         joinRequests.push(...requests);
-        return usersService.getEnrichedProfiles(joinRequests.map((request) => request.username));
+        return usersService.getUsers(joinRequests.map((request) => request.username));
       }, (err) => {
         console.error(err);
       })

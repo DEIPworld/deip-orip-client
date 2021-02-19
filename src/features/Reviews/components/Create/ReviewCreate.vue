@@ -155,11 +155,11 @@
   import { mapGetters } from 'vuex';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
-  import { ResearchService } from '@deip/research-service';
+  import { ResearchContentService } from '@deip/research-content-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
-  const researchService = ResearchService.getInstance();
+  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ReviewCreate',
@@ -253,7 +253,7 @@
     methods: {
 
       getProjectContentType(type) {
-        return researchService.getResearchContentType(type);
+        return researchContentService.getResearchContentType(type);
       },
 
       acceptReviewRequest() {

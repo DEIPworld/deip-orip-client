@@ -157,7 +157,7 @@ const actions = {
         commit('SET_AWARD', award);
         const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
-        return usersService.getEnrichedProfiles([awardee.source != '' ? awardee.source : awardee.awardee]);
+        return usersService.getUsers([awardee.source != '' ? awardee.source : awardee.awardee]);
       })
       .then(([pi]) => {
         commit('SET_AWARD_PI', pi);
@@ -227,7 +227,7 @@ const actions = {
             trxSigners.push(record.rejector);
           }
         }
-        return usersService.getEnrichedProfiles(trxSigners);
+        return usersService.getUsers(trxSigners);
       })
       .then((users) => {
         commit('SET_AWARD_WITHDRAWAL_SIGNERS_LIST', users);

@@ -1,16 +1,16 @@
-import { ResearchService } from '@deip/research-service';
+import { ResearchContentService } from '@deip/research-content-service';
 import { componentStoreFactory } from '@/mixins/registerStore';
 import { contentListStore } from '@/features/Contents/store';
 import { mapState } from 'vuex';
 
-const researchService = ResearchService.getInstance();
+const researchContentService = ResearchContentService.getInstance();
 
 export const contentCommon = {
   name: 'contentCommon',
 
   methods: {
     $$contentType(type) {
-      return researchService.getResearchContentType(type);
+      return researchContentService.getResearchContentType(type);
     },
 
     $$hasReviews(content) {

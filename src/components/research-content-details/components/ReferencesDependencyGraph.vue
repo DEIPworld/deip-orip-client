@@ -121,7 +121,7 @@
         };
 
         const innerReferencesTreeModels = [root, ...this.data.nodes.filter((ref) => ref.isInner)].map((ref) => ({
-          id: ref.researchContent.id,
+          id: ref.researchContent.external_id,
           parent: ref.to,
           name: ref.researchContent.title,
           children: []
@@ -132,7 +132,7 @@
         const innerReferencesTreeRoot = innerReferencesTreemap(innerReferencesTreeNodes);
 
         const outerReferencesTreeModels = [root, ...this.data.nodes.filter((ref) => ref.isOuter)].map((ref) => ({
-          id: ref.researchContent.id,
+          id: ref.researchContent.external_id,
           parent: ref.to,
           name: ref.researchContent.title,
           children: []
@@ -158,7 +158,7 @@
 
         const nodes = this.data.nodes.map((node, i) => {
           if (node.isInner) {
-            const { x, y } = getCoords(node.researchContent.id, innerReferencesTreeRoot);
+            const { x, y } = getCoords(node.researchContent.external_id, innerReferencesTreeRoot);
             return { ...node, x, y: -y };
           }
           if (node.isRoot) {
@@ -166,7 +166,7 @@
             return { ...node, x, y };
           }
           if (node.isOuter) {
-            const { x, y } = getCoords(node.researchContent.id, outerReferencesTreeRoot);
+            const { x, y } = getCoords(node.researchContent.external_id, outerReferencesTreeRoot);
             return { ...node, x, y };
           }
         });
@@ -335,7 +335,7 @@
           .data(this.nodes)
           .enter().append('g')
           .attr('class', 'ref-node')
-          .attr('id', (d) => `ref-node-${d.researchContent.id}`);
+          .attr('id', (d) => `ref-node-${d.researchContent.external_id}`);
 
         node.append('circle')
           .attr('r', 30)
@@ -386,7 +386,7 @@
           .attr('width', this.refInfoWidth)
           .attr('height', this.refInfoHeight)
           .attr('visibility', 'hidden')
-          .attr('id', (d) => `ref-info-${d.researchContent.id}`)
+          .attr('id', (d) => `ref-info-${d.researchContent.external_id}`)
           .attr('class', 'ref-info')
           .on('mousedown', () => {
             d3.event.stopPropagation();
@@ -422,7 +422,7 @@
         titleLinkBox.append('xhtml:a')
           .attr('href', (d) => (true
             ? `/#/p/${d.research.external_id}/c/${d.researchContent.external_id}`
-            : `/#/p/${d.research.external_id}?accessRequestTo=${d.researchContent.id}`) // redirect to Project page to request access
+            : `/#/p/${d.research.external_id}?accessRequestTo=${d.researchContent.external_id}`) // redirect to Project page to request access
           )
           .attr('target', '_blank')
           .attr('class', 'a ref-info-title-link')
@@ -712,8 +712,8 @@
         this.simulation.restart();
       },
       nodeClick(d) {
-        const refNode = this.selections.graph.select(`#ref-node-${d.researchContent.id}`);
-        const refInfoDialog = this.selections.graph.select(`#ref-info-${d.researchContent.id}`);
+        const refNode = this.selections.graph.select(`#ref-node-${d.researchContent.external_id}`);
+        const refInfoDialog = this.selections.graph.select(`#ref-info-${d.researchContent.external_id}`);
         const isHidden = refInfoDialog.attr('visibility') === 'hidden';
         this.selections.graph.selectAll('.ref-info').attr('visibility', 'hidden');
 

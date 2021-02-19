@@ -119,7 +119,7 @@ const actions = {
   },
 
   loadGroups({ commit }, { username, notify } = {}) {
-    return researchGroupService.getResearchGroupsByUser(username)
+    return researchGroupService.getTeamsByUser(username)
       .then((groups) => {
         commit('SET_RESEARCH_GROUPS', groups);
       })
@@ -201,7 +201,7 @@ const actions = {
         });
         return Promise.all(detailsPromises);
       })
-      .then(() => usersService.getEnrichedProfiles(reviewRequests.map((r) => r.requestor)))
+      .then(() => usersService.getUsers(reviewRequests.map((r) => r.requestor)))
       .then((users) => {
         const requests = reviewRequests.map((r) => (
           { ...r, requestorProfile: users.find(((u) => u.account.name === r.requestor)) }

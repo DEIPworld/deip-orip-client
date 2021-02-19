@@ -50,7 +50,7 @@ const ACTIONS = {
     return assetsService.getAccountsAssetBalancesByAsset(securityTokenId)
       .then((securityTokens) => {
         securityTokenHolders.push(...securityTokens);
-        return usersService.getEnrichedProfiles(securityTokens.map((m) => m.owner));
+        return usersService.getUsers(securityTokens.map((m) => m.owner));
       })
       .then((users) => {
         // TODO: Fix this for group accounts
@@ -81,7 +81,7 @@ const ACTIONS = {
     return investmentsService.getResearchTokenSaleContributionsByResearch(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
-        return usersService.getEnrichedProfiles(transactionsList.map((t) => t.op[1].contributor));
+        return usersService.getUsers(transactionsList.map((t) => t.op[1].contributor));
       })
       .then((users) => {
         for (let i = 0; i < transactions.length; i++) {

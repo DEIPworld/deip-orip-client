@@ -213,7 +213,7 @@ const actions = {
         const flatten = [].concat.apply([], paymentRequests);
         commit('SET_PAYMENT_REQUESTS_LIST', flatten);
 
-        return usersService.getEnrichedProfiles(state.awardeesList
+        return usersService.getUsers(state.awardeesList
           .map((r) => r.awardee)
           .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })

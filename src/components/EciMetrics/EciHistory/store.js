@@ -1,5 +1,4 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import { ResearchService } from '@deip/research-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 import { ResearchContentService } from '@deip/research-content-service';
 
@@ -7,7 +6,6 @@ import $ from 'cheerio';
 
 const researchContentService = ResearchContentService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
-const researchService = ResearchService.getInstance();
 
 const historyMethod = (payload) => {
   let serviceMethod;
@@ -80,7 +78,7 @@ const GETTERS = {
 
     return [...records].map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-        const typeInfo = researchService
+        const typeInfo = researchContentService
           .getResearchContentType(record.research_content.content_type);
 
         const link = {
@@ -126,7 +124,7 @@ const GETTERS = {
       }
 
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-        const typeInfo = researchService
+        const typeInfo = researchContentService
           .getResearchContentType(record.research_content.content_type);
 
         const link = {
