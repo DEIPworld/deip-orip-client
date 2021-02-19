@@ -11,7 +11,12 @@
 <!--    {{ project.externalId }} <br>-->
 
     <template v-if="accessGranted">
-      Access granted
+      <div class="d-flex text-body-2 align-center">
+        <v-icon class="mr-2">
+          mdi-lock-open-outline
+        </v-icon>
+        Access granted
+      </div>
     </template>
 
     <template v-else>
@@ -38,9 +43,8 @@
         >
           <d-stack>
             <div class="text-body-2">
-              <span class="font-weight-medium">Access to technology content:</span>
-              Contact on-demand
-              <tenant-badge :tenant-id="project.tenantId" as-text tag="span" />
+              <span class="font-weight-medium">Access to technology:</span>
+              {{ project.title }}
             </div>
             <validation-provider
               v-slot="{ errors }"
@@ -65,6 +69,7 @@
               />
               <a
                 href="/assets/NDA.pdf"
+                target="_blank"
                 class="ml-8 text-caption text--secondary"
               >
                 NDA.pdf</a>
@@ -80,7 +85,6 @@
 <script>
   import DStack from '@/components/Deipify/DStack/DStack';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
-  import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
 
   import { projectContext } from '@/features/Projects/mixins/projectDetails';
   import { attributeRead } from '@/components/Attributes/_mixins';
@@ -101,7 +105,6 @@
 
     components: {
       DBlockWidget,
-      TenantBadge,
       DDateTimeInput,
       DStack
     },
@@ -146,7 +149,7 @@
       sendRequest() {
         this.processing = true;
 
-        const parties = this.$tenant.id == this.project.tenantId 
+        const parties = this.$tenant.id == this.project.tenantId
           ? [this.$currentUser.username, this.project.researchGroup.external_id]
           : [this.$currentUser.username, this.project.researchGroup.external_id, this.$tenant.id, this.project.tenantId];
 

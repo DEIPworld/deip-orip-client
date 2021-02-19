@@ -71,14 +71,12 @@ export const projectDetails = {
       return !!(this.$isUser && (this.isMember || this.project.securityTokens.length));
     },
 
-    accessAllowedByOwnership() {
-      return this.project.members.includes(this.$currentUser.username);
+    hasLicense() {
+      return this.$$ifAttributesByType(ATTR_TYPES.EXPRESS_LICENSING);
     },
 
-    accessAllowedByUserRole() {
-      return [
-        this.$isUser
-      ].some((entry) => entry === true);
+    accessAllowedByOwnership() {
+      return this.project.members.includes(this.$currentUser.username);
     },
 
     accessAllowedByRequest() {
@@ -86,7 +84,7 @@ export const projectDetails = {
     },
 
     accessAllowedByLicense() {
-      if (!this.$$ifAttributesByType(ATTR_TYPES.EXPRESS_LICENSING)) {
+      if (!this.hasLicense) {
         return this.project.tenantId === this.$env.TENANT;
       }
 
@@ -105,10 +103,22 @@ export const projectDetails = {
       ].some((entry) => entry === true);
     },
 
+    accessContainerMessage() {
+      // Only license options are available - Unlock the materials by purchasing a license
+      // Only get access option is available - Unlock the materials by getting permission
+      // Both - Unlock the materials by either purchasing a license or by getting permission
+
+      if (this.hasLicense) {
+        return 'Unlock the materials by either purchasing a license or by getting permission';
+      }
+
+      return 'Unlock the materials by getting permission';
+    },
+
     accessContainerProps() {
       return {
         ...(!this.contentAssessAllowed ? {
-          'data-access-message': 'Become available after licensing',
+          'data-access-message': this.accessContainerMessage,
           class: 'limit-access'
         } : {})
       };
