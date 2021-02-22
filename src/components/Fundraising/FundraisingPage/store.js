@@ -56,17 +56,19 @@ const ACTIONS = {
         // TODO: Fix this for group accounts
         for (let i = 0; i < securityTokenHolders.length; i++) {
           const balance = securityTokenHolders[i];
-          balance.user = users.find((user) => balance.owner === user.account.name);
+          balance.user = users.find((user) => balance.owner === user.account.name) || {};
         }
-        const groups = users.filter((a) => a.account.is_research_group);
+        const securityTokenGroups = securityTokenHolders.filter(
+          ({ owner }) => users.some(({ username }) => username !== owner)
+        );
         return Promise.all(
-          groups.map(({ account }) => researchGroupService.getResearchGroup(account.name))
+          securityTokenGroups.map(({ owner }) => researchGroupService.getResearchGroup(owner))
         );
       })
       .then((groups) => {
         securityTokenHolders.forEach((s) => {
-          if (s.user.account.is_research_group) {
-            s.user.account = groups.find(
+          if (!s.user.account) {
+            s.user = groups.find(
               (g) => g.external_id === s.owner
             );
           }

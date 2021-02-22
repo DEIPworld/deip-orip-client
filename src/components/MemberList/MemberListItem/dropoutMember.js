@@ -30,7 +30,7 @@ export const dropoutMember = {
           username: this.user.username
         },
         {
-          member: member.rgt.owner,
+          member: member.username,
           researchGroup: this.group.external_id,
           isExclusion: true,
           extensions: []
