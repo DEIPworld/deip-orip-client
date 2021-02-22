@@ -1,11 +1,13 @@
 <template>
   <research-content-details
+    v-if="contentAssessAllowed"
     :perm-data="permData"
   />
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
+  import { projectDetails, projectContext } from '@/features/Projects/mixins/projectDetails';
 
   export default {
     name: 'ContentDetails',
@@ -21,7 +23,24 @@
           projectId: this.project.externalId,
           contentId: this.content.externalId
         };
+      },
+      // temp solution
+      ...projectDetails.computed
+    },
+    created() {
+      // temp solution
+      if (!this.contentAssessAllowed) {
+        this.$router.push({
+          name: 'project.details',
+          params: {
+            projectId: this.project.externalId
+          }
+        });
       }
+    },
+    // temp solution
+    methods: {
+      ...projectContext.methods
     }
   };
 </script>
