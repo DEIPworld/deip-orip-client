@@ -58,7 +58,6 @@
           <div class="spacer mx-4">
             <v-slider
               v-model="sliderVal"
-              class="flex-grow-0 flex-shrink-0"
               :min="sliderMin"
               :max="sliderMax"
               :step="0.001"
