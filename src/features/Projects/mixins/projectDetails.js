@@ -80,7 +80,11 @@ export const projectDetails = {
     },
 
     accessAllowedByRequest() {
-      return this.project.researchRef.grantedAccess.includes(this.$currentUser.username);
+      return this.project.researchRef.grantedAccess
+        .some((entry) => [
+          this.$currentUser.username,
+          ...this.$currentUser.teams.map((g) => g.external_id)
+        ].includes(entry));
     },
 
     accessAllowedByLicense() {
