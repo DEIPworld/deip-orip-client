@@ -4,12 +4,6 @@
     :title="title"
   >
 
-<!--    {{ projectHasLicense }} <br>-->
-<!--    {{ accessGranted }} <br>-->
-<!--    {{ hideForInternals }} <br>-->
-<!--    {{ project.researchRef.grantedAccess }} <br>-->
-<!--    {{ project.externalId }} <br>-->
-
     <template v-if="accessGranted">
       <div class="d-flex text-body-2 align-center">
         <v-icon class="mr-2">
@@ -133,7 +127,11 @@
       },
 
       accessGranted() {
-        return this.project.researchRef.grantedAccess.includes(this.$currentUser.username);
+        return this.project.researchRef.grantedAccess
+          .some((entry) => [
+            this.$currentUser.username,
+            ...this.$currentUser.teams.map((g) => g.external_id)
+          ].includes(entry));
       },
 
       hideForInternals() {
@@ -149,9 +147,17 @@
       sendRequest() {
         this.processing = true;
 
-        const parties = this.$tenant.id == this.project.tenantId
-          ? [this.$currentUser.username, this.project.researchGroup.external_id]
-          : [this.$currentUser.username, this.project.researchGroup.external_id, this.$tenant.id, this.project.tenantId];
+        const parties = this.$tenant.id === this.project.tenantId
+          ? [
+            this.$currentUser.username,
+            this.project.researchGroup.external_id
+          ]
+          : [
+            this.$currentUser.username,
+            this.project.researchGroup.external_id,
+            this.$tenant.id,
+            this.project.tenantId
+          ];
 
         const creator = this.$currentUser.username;
         return researchNdaService.createResearchNda({

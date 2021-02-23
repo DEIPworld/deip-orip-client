@@ -5,6 +5,7 @@
     </div>
 
     <v-app-bar
+      v-if="$ready"
       app
       fixed
       flat
@@ -13,7 +14,7 @@
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="d-block" :src="tenant | tenantLogoSrc(80, 80, false)">
+        <img height="40px" class="d-block" :src="tenant | tenantLogoSrc(80, 80, false)" />
       </router-link>
 
       <v-spacer />
@@ -237,6 +238,12 @@
         accessService.clearAccessToken();
         this.$router.go('/sign-in');
       }
+    },
+
+    created() {
+      this.$nextTick(() => {
+        this.$setReady();
+      });
     }
   };
 </script>

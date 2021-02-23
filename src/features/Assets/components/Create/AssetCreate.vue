@@ -68,21 +68,34 @@
               <d-timeline-item :dot-top="16">
                 <v-row class="align-center" style="max-width: 702px;"> <!-- temp solution (need fix) -->
                   <v-col cols="6">
-                    <user-selector
-                      :users="teamTokens.account"
-                      :value="teamTokens.account"
-                      :label="$t('assets.create.shareholder')"
-                      outlined
-                      hide-details="auto"
+                    <v-select
+                      :items="[teamData]"
+                      item-text="name"
+                      item-value="external_id"
+                      :value="teamData.external_id"
                       disabled
-                    />
+                      outlined
+                      :label="$t('assets.create.shareholder')"
+                      :hide-details="true"
+                    >
+                      <template #selection="{ item }">
+                        <div class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">
+                          <v-avatar size="24" class="mr-2">
+                            <img :src="item.external_id | researchGroupLogoSrc(24)" alt="">
+                          </v-avatar>
+                          <div class="text-truncate">
+                            {{ item.name }}
+                          </div>
+                        </div>
+                      </template>
+                    </v-select>
                   </v-col>
                   <v-col cols="3">
                     <v-text-field
                       :label="$t('assets.create.tokens')"
                       :value="teamTokens.amount"
                       outlined
-                      hide-details="auto"
+                      :hide-details="true"
                       disabled
                     />
                   </v-col>
@@ -96,6 +109,7 @@
                   </v-col>
                 </v-row>
               </d-timeline-item>
+
               <d-timeline-item
                 v-for="(item, index) of formModel.holders"
                 :key="`row-${index}`"
@@ -237,6 +251,10 @@
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import { assetsChore } from '@/mixins/chores';
 
+  import { ResearchGroupService } from '@deip/research-group-service';
+
+  const researchGroupService = ResearchGroupService.getInstance();
+
   const shareholderModel = () => ({
     account: undefined,
     amount: undefined
@@ -272,6 +290,7 @@
           terms: false,
           confirm: false
         },
+        teamData: {},
         loading: false
       };
     },
@@ -290,7 +309,9 @@
           .reduce((a, b) => a + b, 0);
 
         return {
-          account: this.project.researchGroup.external_id,
+          account: {
+            name: this.project.researchGroup.external_id
+          },
           amount: this.formModel.maxSupply - tokensSpend
         };
       },
@@ -304,7 +325,11 @@
       if (this.projectTokenized) {
         this.redirect();
       } else {
-        this.$setReady();
+        researchGroupService.getResearchGroup(this.project.researchGroup.external_id)
+          .then((res) => {
+            this.teamData = { ...this.teamData, ...res };
+            this.$setReady();
+          });
       }
     },
 

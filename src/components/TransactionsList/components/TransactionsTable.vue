@@ -586,7 +586,7 @@
         const signatures = Object.keys(parties).reduce((acc, key) => {
           const party = parties[key];
           const { account: { account: { is_research_group: isResearchGroup } } } = party;
-          return [...acc, party];
+          return [...acc, ...party.signers];
         }, []);
 
         if (!item.expand.length) {
@@ -634,8 +634,13 @@
       },
 
       reject(proposal) {
-        const { proposal: { external_id, required_approvals }, type } = proposal;
+        const {
+          proposal: { external_id, required_approvals },
+          type,
+          extendedDetails: { research: { research_group: { external_id: groupExternalId } } }
+        } = proposal;
         this.disableButtons.id = external_id;
+        console.log(proposal)
         this.disableButtons.btnType = 'reject';
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,
@@ -643,6 +648,7 @@
             ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
               ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
               : this.$currentUser.username
+            : type === LOC_PROPOSAL_TYPES.RESEARCH_NDA ? groupExternalId
             : this.$currentUser.username,
           authority: 2, // active auth
           extensions: []
