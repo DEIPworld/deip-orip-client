@@ -169,7 +169,7 @@
           description: '7559a289fa49afe62e4f37fe1c9097d3cb7834c98a2f42da5443242e8929a5d3',
           researchExternalId: this.project.externalId,
           startTime: undefined,
-          endTime: new Date(new Date().getTime() + 86400000 * 365 * 1000).toISOString().split('.')[0], // 1000 years
+          endTime: new Date(new Date().getTime() + 86400000 * 365 * 50).toISOString().split('.')[0], // 50 years
           extensions: [],
           requestEndTime: this.dialogModel.endTime,
           approvers: this.$tenant.id == this.project.tenantId ? [creator] : [creator, this.$tenant.id]

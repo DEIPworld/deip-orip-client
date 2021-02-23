@@ -228,10 +228,25 @@
       </template>
       <template #item.proposal.status="{ item }">
         <div class="d-flex mt-4">
-          <v-icon :color="statusChipData.color[item.proposal.status]" size="14" class="mr-1">
-            {{ statusChipData.icon[item.proposal.status] }}
-          </v-icon>
-          {{ statusChipData.text[item.proposal.status] }}
+          <div v-if="item.proposal.status == PROPOSAL_STATUS.FAILED">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <span>
+                  <v-icon v-on="on" :color="statusChipData.color[item.proposal.status]" size="14" class="mr-1">
+                    {{ statusChipData.icon[item.proposal.status] }}
+                  </v-icon>
+                  {{ statusChipData.text[item.proposal.status] }}
+                </span>
+              </template>
+              <span>{{ item.proposal.fail_reason }}</span>
+            </v-tooltip>
+          </div>
+          <div v-else>
+            <v-icon :color="statusChipData.color[item.proposal.status]" size="14" class="mr-1">
+              {{ statusChipData.icon[item.proposal.status] }}
+            </v-icon>
+            {{ statusChipData.text[item.proposal.status] }}
+          </div>
         </div>
       </template>
       <template #expanded-item="{ item, headers }">

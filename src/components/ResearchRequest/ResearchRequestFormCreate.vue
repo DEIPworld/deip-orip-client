@@ -41,8 +41,6 @@
         formData.append('researcher', researcher); // the current user
         formData.append('researcherPubKey', researcherPubKey); // the current user's pubKey
         formData.append('tenant', tenantAccount); // tenant account
-        const applicationLifetime = new Date(new Date().getTime() + 86400000 * 14).toISOString().split('.')[0]; // 14 days
-        formData.append('proposalExpirationTime', applicationLifetime);
 
         formData.append('researchAbstract', '');
         formData.append('researchIsPrivate', false);
