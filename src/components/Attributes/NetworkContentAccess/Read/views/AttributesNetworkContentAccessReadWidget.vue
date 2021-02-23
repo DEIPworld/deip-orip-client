@@ -160,11 +160,12 @@
         }, {
           creator,
           parties,
-          description: '7ec7e331d6a8c9ac68516b4c70bd0ae77e78cc2de3d6472387369478a79c8dac',
+          description: '7559a289fa49afe62e4f37fe1c9097d3cb7834c98a2f42da5443242e8929a5d3',
           researchExternalId: this.project.externalId,
           startTime: undefined,
-          endTime: this.dialogModel.endTime,
+          endTime: new Date(new Date().getTime() + 86400000 * 365 * 1000).toISOString().split('.')[0], // 1000 years
           extensions: [],
+          requestEndTime: this.dialogModel.endTime,
           approvers: this.$tenant.id == this.project.tenantId ? [creator] : [creator, this.$tenant.id]
         })
           .then(() => {
