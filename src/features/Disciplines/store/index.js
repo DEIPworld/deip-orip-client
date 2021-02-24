@@ -35,7 +35,7 @@ const GETTERS = {
       }
     }
 
-    return map.get('');
+    return map;
   }
 };
 

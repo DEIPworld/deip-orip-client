@@ -127,7 +127,7 @@
       },
 
       withoutAnyChildren() {
-        return !this.disciplinesTree
+        return !this.disciplinesList
           .filter((node) => (node.children && node.children.length))
           .length;
       },
