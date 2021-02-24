@@ -5,7 +5,7 @@
     :label="label"
     :items="tenantsList"
 
-    item-text="profile.name"
+    item-text="profile.shortName"
     item-value="id"
 
     hide-details="auto"
@@ -46,7 +46,7 @@
 <!--        <v-img :src="item | tenantLogoSrc(24)" />-->
 <!--      </v-list-item-avatar>-->
 <!--      <v-list-item-content class="text-body-2">-->
-<!--        {{ item.profile.name }}-->
+<!--        {{ item.profile.shortName }}-->
 <!--      </v-list-item-content>-->
 <!--    </template>-->
 
@@ -61,7 +61,7 @@
 <!--        </v-avatar>-->
 
 <!--        <div class="text-truncate spacer">-->
-<!--          {{ item.profile.name }}-->
+<!--          {{ item.profile.shortName }}-->
 <!--        </div>-->
 
 <!--        <v-btn-->
@@ -80,7 +80,7 @@
 <!--          <img :src="item | tenantLogoSrc(24)" alt="">-->
 <!--        </v-avatar>-->
 <!--        <div class="text-truncate">-->
-<!--          {{ item.profile.name }}-->
+<!--          {{ item.profile.shortName }}-->
 <!--        </div>-->
 <!--      </div>-->
 <!--    </template>-->

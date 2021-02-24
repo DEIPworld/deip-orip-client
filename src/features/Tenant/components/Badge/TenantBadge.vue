@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" v-if="tenant && $ready">
     <template v-if="asText">
-      {{ tenant.profile.name }}
+      {{ tenant.profile.shortName }}
     </template>
 
     <template v-else>
@@ -15,7 +15,7 @@
       }"
       >
         <div class="text-truncate spacer">
-          {{ tenant.profile.name }}
+          {{ tenant.profile.shortName }}
         </div>
       </v-chip>
     </template>
