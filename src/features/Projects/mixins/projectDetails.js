@@ -113,7 +113,7 @@ export const projectDetails = {
       // Both - Unlock the materials by either purchasing a license or by getting permission
 
       if (this.hasLicense) {
-        return 'Unlock the materials by either purchasing a license or by getting permission';
+        return 'Unlock the materials either by purchasing a license or by getting permission';
       }
 
       return 'Unlock the materials by getting permission';
