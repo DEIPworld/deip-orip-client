@@ -1,4 +1,7 @@
+import { arrayToTree } from "performant-array-to-tree";
+
 import { DisciplinesService } from '@deip/disciplines-service';
+
 import {
   camelizeObjectKeys,
   collectionList,
@@ -22,20 +25,11 @@ const GETTERS = {
   tree: (state) => (query = {}) => {
     const array = collectionList(state.data, query);
 
-    const map = new Map();
-
-    for (const item of array) {
-      if (map.has(item.parentExternalId)) map.get(item.parentExternalId).push(item);
-      else map.set(item.parentExternalId, [item]);
-    }
-
-    for (const items of map.values()) {
-      for (const item of items) {
-        if (map.has(item.externalId)) item.children = map.get(item.externalId);
-      }
-    }
-
-    return map;
+    return arrayToTree(array, {
+      id: 'externalId',
+      parentId: 'parentExternalId',
+      dataField: null
+    });
   }
 };
 
