@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div :class="{'visually-hidden': attribute.isHidden}">
     <!-- {{attributeComponent}}-->
     <component
       :is="attributeComponent"
       v-model="internalValue"
       :attribute="attribute"
-      :class="{'visually-hidden': attribute.isHidden}"
       v-bind="attrs$"
     />
   </div>

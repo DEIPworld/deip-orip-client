@@ -17,6 +17,7 @@
       />
 
       <tenant-selector
+        v-if="isGlobalNetwork"
         v-model="filterModel.tenantIds"
         class="mt-2"
         multiple
@@ -64,6 +65,13 @@
         resetFilterModel: defaultFilter(),
         filterModel: defaultFilter()
       };
+    },
+
+    computed: {
+      isGlobalNetwork() {
+        // temp solution
+        return this.$tenant.profile.network.scope.some((id) => id === 'all');
+      }
     },
 
     created() {

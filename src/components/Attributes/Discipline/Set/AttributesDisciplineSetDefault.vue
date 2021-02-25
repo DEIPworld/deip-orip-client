@@ -27,6 +27,9 @@
 
           outlined
 
+          :append-icon="'mdi-menu-down'"
+          :class="{'icon-upended': open}"
+
           v-bind="attrs"
           v-on="on"
         />
@@ -210,3 +213,13 @@
     }
   };
 </script>
+
+<style lang="scss" scoped>
+  .icon-upended {
+    ::v-deep .v-input__icon--append{
+      .v-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+</style>

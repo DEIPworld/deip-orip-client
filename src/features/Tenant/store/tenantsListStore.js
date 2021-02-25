@@ -50,7 +50,7 @@ const MUTATIONS = {
     state.data = collectionMerge(
       state.data,
       payloadData,
-      { id: 'id' }
+      { key: 'id' }
     );
   }
 };
