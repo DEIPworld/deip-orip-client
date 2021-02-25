@@ -111,7 +111,7 @@
     props: {
       label: {
         type: String,
-        default: 'Select tenant'
+        default: 'Select institution'
       },
       multiple: {
         type: Boolean,
