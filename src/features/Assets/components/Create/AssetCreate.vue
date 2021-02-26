@@ -309,9 +309,7 @@
           .reduce((a, b) => a + b, 0);
 
         return {
-          account: {
-            name: this.project.researchGroup.external_id
-          },
+          account: this.project.researchGroup.external_id,
           amount: this.formModel.maxSupply - tokensSpend
         };
       },
@@ -415,6 +413,8 @@
             }))
           }
         ];
+
+        console.log(data)
 
         this.$store.dispatch('Assets/create', data)
           .then(() => {

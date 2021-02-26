@@ -6,6 +6,7 @@ export const getEnvConfig = () => {
   const promise = axios.get('/env')
     .then((res) => {
       const env = res.data;
+      console.log(env)
 
       AppConfigService.getInstance().init({ env });
       window.env = res.data; // TODO: temp solution

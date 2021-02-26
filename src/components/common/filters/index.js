@@ -51,7 +51,7 @@ Vue.filter('employmentOrEducation', (enrichedProfile) => {
 });
 
 
-Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = false) => {
+Vue.filter('avatarSrc', (profile, width = 48, height, isRound = false, noCache = false) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
   const profileId = profile ? profile._id : 'initdelegate';
@@ -76,7 +76,7 @@ Vue.filter('avatarSrc', (profile, width, height, isRound = false, noCache = fals
 });
 
 
-Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height = 80, isRound = false, noCache = true) => {
+Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height, isRound = false, noCache = true) => {
 
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
@@ -102,7 +102,7 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 360, height
 });
 
 
-Vue.filter('accountFullname', (model, width, height, isRound = false, noCache = true) => {
+Vue.filter('accountFullname', (model) => {
   const { account, profile } = model;
   const { is_research_group: isResearchGroup } = account;
   const { name: researchGroupTitle } = model;
@@ -110,12 +110,12 @@ Vue.filter('accountFullname', (model, width, height, isRound = false, noCache = 
 
   const path = isUser
     ? Vue.filter('fullname')({ profile, account })
-    : researchGroupTitle
+    : researchGroupTitle;
 
   return path;
 });
 
-Vue.filter('accountAvatarSrc', (model, width, height, isRound = false, noCache = true) => {
+Vue.filter('accountAvatarSrc', (model, width = 48, height, isRound = false, noCache = true) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
 
