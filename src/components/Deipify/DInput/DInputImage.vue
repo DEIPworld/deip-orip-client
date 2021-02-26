@@ -7,6 +7,13 @@
       <v-responsive
         :aspect-ratio="aspectRatio"
       >
+
+        <template v-if="$hasSlot('mask') && isInited && croppa.hasImage()">
+          <v-sheet class="d-mage-input__mask" color="transparent">
+            <slot name="mask"></slot>
+          </v-sheet>
+        </template>
+
         <croppa
           v-model="croppa"
           :accept="'image/*'"
@@ -39,21 +46,25 @@
         <v-divider />
 
         <v-sheet color="grey lighten-4 pa-2 d-flex align-center">
-          <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(1)">
-            <v-icon>rotate_right</v-icon>
-          </v-btn>
 
-          <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(-1)">
-            <v-icon>rotate_left</v-icon>
-          </v-btn>
+          <template v-if="!noRotate">
+            <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(1)">
+              <v-icon>rotate_right</v-icon>
+            </v-btn>
+            <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.rotate(-1)">
+              <v-icon>rotate_left</v-icon>
+            </v-btn>
+          </template>
 
-          <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.flipX()">
-            <v-icon>flip</v-icon>
-          </v-btn>
+          <template v-if="!noFlip">
+            <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.flipX()">
+              <v-icon>flip</v-icon>
+            </v-btn>
+            <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.flipY()">
+              <v-icon>mdi-flip-vertical</v-icon>
+            </v-btn>
+          </template>
 
-          <v-btn icon :disabled="!croppa.hasImage()" @click="croppa.flipY()">
-            <v-icon>mdi-flip-vertical</v-icon>
-          </v-btn>
 
           <div class="spacer mx-4">
             <v-slider
@@ -87,11 +98,19 @@
   import { fileNameFromUrl } from '@/utils/helpers';
   import 'vue-croppa/dist/vue-croppa.css';
   import mime from 'mime';
+  import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
+  // import parsePath from 'parse-path';
+
+  // const imageNameFromUrl = (url) => {
+  //   const { pathname } = parsePath(url);
+  //   const arr = pathname.split('/');
+  // }
 
   export default {
     name: 'DInputImage',
 
     components: {
+      DSimpleTooltip,
       Croppa
     },
 
@@ -102,13 +121,29 @@
         type: String,
         default: null
       },
+      initialImageName: {
+        type: String,
+        default: null
+      },
+
       aspectRatio: {
         type: Number,
         default: 16 / 9
       },
+
       label: {
         type: String,
         default: null
+      },
+
+      noFlip: {
+        type: Boolean,
+        default: false
+      },
+
+      noRotate: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -149,7 +184,7 @@
       onInitialImageLoaded() {
         if (!this.chosedFile) {
           this.chosedFile = {
-            name: fileNameFromUrl(this.initialImage)
+            name: this.initialImageName || fileNameFromUrl(this.initialImage)
           };
         }
       },
@@ -193,3 +228,22 @@
     }
   };
 </script>
+
+<style lang="scss">
+  .d-mage-input {
+    &__mask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      z-index: 1;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+</style>

@@ -33,6 +33,37 @@
         @vdropzone-file-added="fileAdded"
       />
     </v-avatar>
+
+<!--    <v-sheet max-width="260px">-->
+<!--      <d-input-image-->
+<!--        label="Avatar"-->
+
+<!--        :aspect-ratio="1"-->
+
+<!--        :initial-image="$currentUser.profile | avatarSrc(320, 320, false)"-->
+<!--        :initial-image-name="`avatar-${$currentUser.account.name}.png`"-->
+
+<!--        no-flip-->
+<!--        no-rotate-->
+<!--      >-->
+<!--        <template #mask>-->
+<!--          <svg-->
+<!--            viewBox="0 0 320 320"-->
+<!--            fill="rgba(0,0,0,.5)"-->
+<!--          >-->
+<!--            <path-->
+<!--              fill-rule="evenodd"-->
+<!--              clip-rule="evenodd"-->
+<!--              d="M160 0H0V160V320H160H320V160V0H160ZM160 0C248.366 0 320 71.6344 320 160C320 248.366 248.366 320 160 320C71.6344 320 0 248.366 0 160C0 71.6344 71.6344 0 160 0Z"-->
+<!--            />-->
+<!--          </svg>-->
+<!--        </template>-->
+<!--      </d-input-image>-->
+<!--    </v-sheet>-->
+
+
+
+
     <form-generator :model="formModel" :schema="schema">
       <template #actions>
         <v-btn
@@ -58,6 +89,7 @@
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import { AccessService } from '@deip/access-service';
   import vueDropzone from 'vue2-dropzone';
+  import DInputImage from '@/components/Deipify/DInput/DInputImage';
 
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
@@ -65,6 +97,7 @@
   export default {
     name: 'AccountProfile',
     components: {
+      DInputImage,
       FullScreenView,
       FormGenerator,
       vueDropzone
