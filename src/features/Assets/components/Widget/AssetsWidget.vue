@@ -18,7 +18,25 @@
 
     <template v-else>
       <d-stack gap="16">
-        <users-list view-type="stack" :users="shareholders" />
+        <teams-data-provider
+          v-slot="{ team }"
+          :teams="shareholders[0]"
+        >
+          <div class="d-flex">
+            <v-sheet class="mr-n2">
+              <router-link
+                :to="{ name: 'teamDetails', params: { teamId: team.externalId } }"
+              >
+                <v-avatar size="40">
+                  <v-img :src="team.externalId | researchGroupLogoSrc(40)" />
+                </v-avatar>
+              </router-link>
+            </v-sheet>
+            <users-list view-type="stack" :users="shareholders" />
+          </div>
+        </teams-data-provider>
+
+
         <d-dot-list :items="listData" />
         <v-btn
           v-if="$isUser"
@@ -55,49 +73,80 @@
           </div>
           <users-list :users="shareholders" view-type="dataProvider">
             <template #default="{ users }">
-              <v-simple-table>
-                <thead>
-                  <tr>
-                    <th class="text-left">
-                      {{ $t('assets.widget.name') }}
-                    </th>
-                    <th class="text-right">
-                      {{ $t('assets.widget.shares') }}
-                    </th>
-                    <th class="text-right">
-                      {{ $t('assets.widget.tokens') }}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="user in users"
-                    :key="user.account.name"
-                  >
-                    <td>
-                      <v-sheet color="transparent" class="d-flex align-center">
-                        <v-avatar size="40" class="mr-4 my-2">
-                          <v-img :src="user | accountAvatarSrc(64, 64, false)" />
-                        </v-avatar>
-                        <v-clamp
-                          autoresize
-                          :max-lines="2"
-                          class="text-body-2 font-weight-medium"
-                        >
-                          <template v-if="user.teamRef">{{ user.teamRef.name }}</template>
-                          <template v-else>{{ user | accountFullname }}</template>
-                        </v-clamp>
-                      </v-sheet>
-                    </td>
-                    <td class="text-right white-space-nowrap">
-                      {{ toPercent(getBalance(user.account.name).amount) }}
-                    </td>
-                    <td class="text-right white-space-nowrap">
-                      {{ getBalance(user.account.name).amount }}
-                    </td>
-                  </tr>
-                </tbody>
-              </v-simple-table>
+              <teams-data-provider
+                v-slot="{ team }"
+                :teams="shareholders[0]"
+              >
+                <v-simple-table>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        {{ $t('assets.widget.name') }}
+                      </th>
+                      <th class="text-right">
+                        {{ $t('assets.widget.shares') }}
+                      </th>
+                      <th class="text-right">
+                        {{ $t('assets.widget.tokens') }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+
+                    <tr>
+                      <td>
+                        <v-sheet color="transparent" class="d-flex align-center">
+                          <v-avatar size="40" class="mr-4 my-2">
+                            <v-img :src="team.externalId | researchGroupLogoSrc(40)" />
+                          </v-avatar>
+                          <v-clamp
+                            autoresize
+                            :max-lines="2"
+                            class="text-body-2 font-weight-medium"
+                          >
+                            {{ team.name }}
+                          </v-clamp>
+                        </v-sheet>
+                      </td>
+                      <td class="text-right white-space-nowrap">
+                        {{ toPercent(getBalance(team.externalId).amount) }}
+                      </td>
+                      <td class="text-right white-space-nowrap">
+                        {{ getBalance(team.externalId).amount }}
+                      </td>
+                    </tr>
+
+
+                    <tr
+                      v-for="user in users"
+                      :key="user.account.name"
+                    >
+                      <td>
+                        <v-sheet color="transparent" class="d-flex align-center">
+                          <v-avatar size="40" class="mr-4 my-2">
+                            <v-img :src="user | accountAvatarSrc(64, 64, false)" />
+                          </v-avatar>
+                          <v-clamp
+                            autoresize
+                            :max-lines="2"
+                            class="text-body-2 font-weight-medium"
+                          >
+                            <template v-if="user.teamRef">{{ user.teamRef.name }}</template>
+                            <template v-else>{{ user | accountFullname }}</template>
+                          </v-clamp>
+                        </v-sheet>
+                      </td>
+                      <td class="text-right white-space-nowrap">
+                        {{ toPercent(getBalance(user.account.name).amount) }}
+                      </td>
+                      <td class="text-right white-space-nowrap">
+                        {{ getBalance(user.account.name).amount }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </v-simple-table>
+              </teams-data-provider>
             </template>
           </users-list>
         </d-stack>
@@ -113,10 +162,12 @@
   import { assetsChore } from '@/mixins/chores';
   import DStack from '@/components/Deipify/DStack/DStack';
   import UsersList from '@/features/Users/components/List/UsersList';
+  import TeamsDataProvider from '@/features/Teams/components/TeamsDataProvider';
 
   export default {
     name: 'AssetsWidget',
     components: {
+      TeamsDataProvider,
       UsersList,
       DStack,
       DDotList

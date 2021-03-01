@@ -1,4 +1,14 @@
-import { collectionList, collectionOne } from '@/utils/helpers';
+import {
+  camelizeObjectKeys,
+  collectionList,
+  collectionMerge,
+  collectionOne,
+  wrapInArray
+} from '@deip/toolbox';
+
+import { ResearchGroupService } from '@deip/research-group-service';
+
+const researchGroupService = ResearchGroupService.getInstance();
 
 const STATE = {
   data: []
@@ -7,15 +17,51 @@ const STATE = {
 const GETTERS = {
   list: (state) => (query = {}) => collectionList(state.data, query),
 
-  one: (state) => (teamId, query = {}) => collectionOne(state.data, {
-    ...(teamId ? { teamId } : {}),
+  one: (state) => (externalId, query = {}) => collectionOne(state.data, {
+    externalId,
     ...query
   })
 };
 
-const ACTIONS = {};
+const ACTIONS = {
+  fetch({ commit }) {
+    return researchGroupService
+      .getResearchGroupsListing()
+      .then((teams) => {
+        commit('setList', teams);
+      });
+  },
 
-const MUTATIONS = {};
+  get({ commit }, payload) {
+    return researchGroupService
+      .getResearchGroups(wrapInArray(payload))
+      .then((teams) => {
+        commit('setList', teams);
+      });
+  }
+};
+
+const MUTATIONS = {
+  setList(state, payload) {
+    if (!payload) return;
+
+    state.data = collectionMerge(
+      state.data,
+      payload.map((asset) => camelizeObjectKeys(asset)),
+      { key: 'externalId' }
+    );
+  },
+
+  setOne(state, payload) {
+    if (!payload) return;
+
+    state.data = collectionMerge(
+      state.data,
+      camelizeObjectKeys(payload),
+      { key: 'externalId' }
+    );
+  },
+};
 
 export const teamsStore = {
   state: STATE,
