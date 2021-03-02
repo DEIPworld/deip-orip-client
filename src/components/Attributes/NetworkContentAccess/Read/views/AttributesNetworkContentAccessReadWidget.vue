@@ -34,6 +34,7 @@
           :loading="processing"
 
           @click:confirm="handleSubmit(sendRequest)"
+          @close="clearDialogData()"
         >
           <d-stack>
             <div class="text-body-2">
@@ -90,7 +91,7 @@
   const researchNdaService = ResearchNdaService.getInstance();
 
   const dialogModel = () => ({
-    endTime: null,
+    endTime: '',
     agree: false
   });
 
@@ -140,9 +141,12 @@
     },
 
     methods: {
+      clearDialogData() {
+        this.dialogModel = { ...dialogModel() };
+        this.$refs.observer.reset();
+      },
       closeDialog() {
         this.isOpen = false;
-        this.dialogModel = dialogModel();
       },
       sendRequest() {
         this.processing = true;
@@ -172,7 +176,9 @@
           endTime: new Date(new Date().getTime() + 86400000 * 365 * 50).toISOString().split('.')[0], // 50 years
           extensions: [],
           requestEndTime: this.dialogModel.endTime,
-          approvers: this.$tenant.id == this.project.tenantId ? [creator] : [creator, this.$tenant.id]
+          approvers: this.$tenant.id === this.project.tenantId
+            ? [creator]
+            : [creator, this.$tenant.id]
         })
           .then(() => {
             this.closeDialog();
