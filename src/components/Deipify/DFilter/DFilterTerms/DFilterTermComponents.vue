@@ -9,6 +9,7 @@
       v-model="internalValue[attribute._id]"
       :attribute="attribute"
       view-type="filter"
+      style="display: grid"
     />
   </d-stack>
 </template>

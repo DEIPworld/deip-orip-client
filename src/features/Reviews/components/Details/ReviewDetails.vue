@@ -57,7 +57,7 @@
                   view-type="brief"
                   avatar-size="80"
                 >
-                  <template #item-info="{ user, hasLocation }">
+                  <template #item-info="{ user, hasLocation, hasEmplOrEduc }">
                     <div v-if="user.profile" class="pt-1 text-body-2">
                       <d-stack v-if="hasLocation(user.profile)" horizontal gap="9">
                         <v-icon small>
@@ -65,7 +65,7 @@
                         </v-icon>
                         <div>{{ user | userLocation }}</div>
                       </d-stack>
-                      <d-stack horizontal gap="9">
+                      <d-stack v-if="hasEmplOrEduc(user.profile)" horizontal gap="9">
                         <v-icon small>
                           mdi-school
                         </v-icon>
