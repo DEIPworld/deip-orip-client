@@ -5,19 +5,19 @@
     @click="clickNotification(notification)"
   >
     <template v-if="$currentUser.username !== notification.metadata.creator.username">
-      Request for
-      <span class="primary--text half-bold">"{{ notification.metadata.research.title }}"</span>
-      technology was granted to
+      {{ $t('notifications.accessTo') }}
+      <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
+      {{ $t('notifications.grantedTo') }}
       <span class="primary--text half-bold">{{ notification.metadata.creator | fullname }}</span>
-      from
+      {{ $t('notifications.from') }}
       <span class="primary--text half-bold">
-        "{{ notification.metadata.tenant.profile.shortName }}"
+        '{{ notification.metadata.tenant.profile.shortName }}'
       </span>
     </template>
     <template v-else>
-      Access to
-      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
-      technology was granted.
+      {{ $t('notifications.accessTo') }}
+      <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
+      {{ $t('notifications.granted') }}
     </template>
   </user-notifications-list-item>
 </template>

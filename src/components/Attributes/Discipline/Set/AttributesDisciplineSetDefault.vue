@@ -8,6 +8,7 @@
     <input v-model="internalValue" type="hidden">
 
     <v-menu
+      ref="menu"
       v-model="open"
       :close-on-content-click="false"
       offset-y
@@ -35,8 +36,12 @@
         />
       </template>
 
-      <v-sheet>
+      <v-sheet class="py-2">
+        <div v-if="noSearchData" class="py-3 px-4">
+          {{ $t('defaultNaming.noData') }}
+        </div>
         <v-treeview
+          ref="treeview"
           :value="internalValue"
           :active="internalValue"
 
@@ -111,6 +116,7 @@
         open: false,
         oldValue: [],
         menuTop: false,
+        noSearchData: false,
 
         validationErrors: []
       };
@@ -145,6 +151,26 @@
           return lhsi > rhsi ? 1 : lhsi < rhsi ? -1 : 0;
         });
         return sorted;
+      }
+    },
+
+    watch: {
+      search() {
+        this.$nextTick(() => {
+          this.$refs.menu.updateDimensions();
+          if (this.$refs.treeview.$children.length) {
+            this.noSearchData = false;
+          } else {
+            this.noSearchData = true;
+          }
+        });
+      },
+      open() {
+        if (!this.open) {
+          setTimeout(() => {
+            this.search = '';
+          }, 50);
+        }
       }
     },
 

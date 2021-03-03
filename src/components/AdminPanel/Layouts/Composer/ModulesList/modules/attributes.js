@@ -65,7 +65,7 @@ export const modulesAttributes = (ctx) => {
         {
           component: 'span',
           name: 'Creation date',
-          text: '@research.createdAt',
+          text: '@research.researchRef.created_at',
           icon: 'mdi-calendar-text'
         },
         ...ctx.$tenantSettings.researchAttributes
