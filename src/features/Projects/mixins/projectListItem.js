@@ -3,6 +3,7 @@ import { componentsRenderer } from '@/mixins/renderer';
 import AttributesRead from '@/components/Attributes/AttributesRead';
 import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
 import { extendAttrModules, hasValue, researchAttributesToObject } from '@/utils/helpers';
+import { collectionMerge } from '@deip/toolbox';
 
 export const ProjectListItemRenderer = {
   name: 'ProjectListItemRenderer',
@@ -54,12 +55,27 @@ export const projectListItem = {
     },
 
     $$projectExtended() {
+      console.log(this.project)
+      const allAttrs = this.$tenantSettings.researchAttributes
+        .map((attr) => ({
+          researchAttributeId: attr._id,
+          value: attr.defaultValue
+        }));
+
+      const constructedAttrs = collectionMerge(
+        allAttrs,
+        this.project.researchRef.attributes,
+        { key: 'researchAttributeId' }
+      );
+
+
       return {
         ...this.project,
         ...{
-          createdAt: this.$options.filters.dateFormat(this.project.createdAt, 'D MMM YYYY', true),
           researchRef: {
-            attributes: researchAttributesToObject(this.project.researchRef.attributes)
+            ...this.project.researchRef,
+            attributes: researchAttributesToObject(constructedAttrs),
+            created_at: this.$options.filters.dateFormat(this.project.researchRef.created_at, 'D MMM YYYY', true)
           }
         }
       };

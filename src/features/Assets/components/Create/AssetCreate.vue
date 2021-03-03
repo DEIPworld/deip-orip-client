@@ -414,8 +414,6 @@
           }
         ];
 
-        console.log(data)
-
         this.$store.dispatch('Assets/create', data)
           .then(() => {
             this.redirect();

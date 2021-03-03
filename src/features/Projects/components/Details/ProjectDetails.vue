@@ -53,10 +53,11 @@
         return {
           ...this.research,
           ...{
-            createdAt: this.$options.filters.dateFormat(this.research.createdAt, 'D MMM YYYY', true),
+
             researchRef: {
               ...this.research.researchRef,
-              attributes: researchAttributesToObject(constructedAttrs)
+              attributes: researchAttributesToObject(constructedAttrs),
+              created_at: this.$options.filters.dateFormat(this.research.researchRef.created_at, 'D MMM YYYY', true)
             }
           }
         };

@@ -616,7 +616,7 @@
         const currentTenantId = this.$tenant.id;
         this.disableButtons.id = external_id;
         this.disableButtons.btnType = 'sign';
-        
+
         const activeApprovalsToAdd = [this.$currentUser.username];
         if (type === LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
           const { tenantId: researchTenantId } = proposal.extendedDetails.research;
@@ -655,7 +655,6 @@
           extendedDetails: { research: { research_group: { external_id: groupExternalId } } }
         } = proposal;
         this.disableButtons.id = external_id;
-        console.log(proposal)
         this.disableButtons.btnType = 'reject';
         proposalsService.deleteProposal({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
           externalId: external_id,

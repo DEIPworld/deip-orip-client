@@ -9,6 +9,11 @@ export const attributeRead = {
       default: () => ({})
     },
 
+    project: {
+      type: Object,
+      default: () => ({})
+    },
+
     viewType: {
       type: String,
       default: undefined
@@ -16,6 +21,8 @@ export const attributeRead = {
   },
   computed: {
     attributeInfo() {
+      // const { tenantId } = this.project.researchRef;
+      // console.log(this.$store.getters['Tenants/one'](tenantId))
       const id = this.attribute._id || this.attribute.researchAttributeId;
       return this.$$tenantAttributes.find(({ _id }) => _id === id);
     },
