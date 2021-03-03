@@ -10,7 +10,7 @@
             <v-icon small>
               today
             </v-icon>
-            Created {{ research.createdAt | dateFormat('D MMM YYYY', true) }}
+            Created {{ research.researchRef.created_at | dateFormat('D MMM YYYY', true) }}
           </div>
         </v-sheet>
       </d-layout-section-main>
