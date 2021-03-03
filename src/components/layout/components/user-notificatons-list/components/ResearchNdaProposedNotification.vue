@@ -5,12 +5,12 @@
     @click="clickNotification(notification)"
   >
     <span class="primary--text half-bold">{{ notification.metadata.emitter | fullname }}</span>
-    from
+    {{ $t('notifications.from') }}
     <span class="primary--text half-bold">
-      "{{ notification.metadata.tenant.profile.shortName }}"
+      '{{ notification.metadata.tenant.profile.shortName }}'
     </span>
-    requested access to
-    <span class="primary--text half-bold">"{{ notification.metadata.research.title }}"</span>
+    {{ $t('notifications.reqAccess') }}
+    <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
     {{ $t('notifications.project') }}
   </user-notifications-list-item>
 </template>

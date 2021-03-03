@@ -36,5 +36,11 @@ export default {
   projectMeta: `${project()} meta`,
   projectMetaIn: `${project()}`,
   scheduledFundraising: 'scheduled fundraising campaign for',
-  propSchedule: 'scheduled fundraising campaign for'
+  propSchedule: 'scheduled fundraising campaign for',
+  grantedTo: `${project()} was granted to`,
+  granted: `${project()} was granted.`,
+  accessTo: 'Access to',
+  rejectedTo: `${project()} was rejected to`,
+  rejected: `${project()} was rejected.`,
+  reqAccess: 'requested access to'
 };
