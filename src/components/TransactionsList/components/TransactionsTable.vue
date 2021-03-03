@@ -283,7 +283,7 @@
             >
               <router-link
                 tag="div"
-                class="text-decoration-none text--primary"
+                class="text-decoration-none text--primary cursor-pointer"
                 :to="signer.account.account.is_research_group
                   ? {
                     name: 'teamDetails',
@@ -342,7 +342,7 @@
                       >
                         <router-link
                           tag="div"
-                          class="text-decoration-none"
+                          class="text-decoration-none cursor-pointer"
                           :to="signer.account.is_research_group
                             ? {
                               name: 'teamDetails',
