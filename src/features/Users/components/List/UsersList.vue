@@ -7,7 +7,7 @@
     <slot v-bind="{ users: usersListComputed }" />
 
     <template #item-info="{ user }">
-      <slot name="item-info" v-bind="{ user, hasLocation }" />
+      <slot name="item-info" v-bind="{ user, hasLocation, hasEmplOrEduc }" />
     </template>
     <template #item-avatar="{ user, avatar }">
       <slot name="item-avatar" v-bind="{ user, avatar }" />
@@ -95,6 +95,11 @@
           userProfile.location
           && (userProfile.location.country || userProfile.location.city)
         );
+      },
+
+      hasEmplOrEduc(userProfile) {
+        return (userProfile.education && userProfile.education.length)
+          || (userProfile.employment && userProfile.employment.length);
       },
 
       getUsers() {

@@ -206,11 +206,11 @@
             value: 'created_at',
             sortable: false
           },
-          {
-            text: this.$t('adminRouting.members.registeredTable.category'),
-            value: 'profile.category',
-            sortable: false
-          },
+          // {
+          //   text: this.$t('adminRouting.members.registeredTable.category'),
+          //   value: 'profile.category',
+          //   sortable: false
+          // },
           {
             text: this.$t('adminRouting.members.registeredTable.country'),
             value: 'profile.location.country',

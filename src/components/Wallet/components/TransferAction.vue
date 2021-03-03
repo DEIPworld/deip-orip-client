@@ -125,7 +125,7 @@
           append-icon="search"
           :loading="loadingAccounts"
           :menu-props="{
-            maxWidth: 520
+            maxWidth: 525
           }"
           :label="dialog.exchange ?
             $t('wallet.transferAction.exchangeRecipient')

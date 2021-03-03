@@ -10,6 +10,9 @@
 
     :loading="!$ready"
     :disabled="!$ready"
+    :menu-props="{
+      maxWidth: 370
+    }"
   />
 </template>
 

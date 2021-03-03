@@ -29,12 +29,14 @@
                 view-type="brief"
                 avatar-size="80"
               >
-                <template #item-info="{ user, hasLocation }">
+                <template #item-info="{ user, hasLocation, hasEmplOrEduc }">
                   <div v-if="user.profile" class="pt-1 text--secondary text-caption">
-                    <span>{{ user | employmentOrEducation }}</span>
+                    <span v-if="hasEmplOrEduc(user.profile)">
+                      {{ user | employmentOrEducation }} ,
+                    </span>
                     <span
                       v-if="hasLocation(user.profile)"
-                    >, {{ user | userLocation }}</span>
+                    >{{ user | userLocation }}</span>
                   </div>
                 </template>
               </users-list>

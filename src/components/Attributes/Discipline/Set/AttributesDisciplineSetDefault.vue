@@ -12,7 +12,7 @@
       :close-on-content-click="false"
       offset-y
       offset-overflow
-      max-height="560"
+      max-height="300"
     >
       <template #activator="{ on, attrs }">
         <v-text-field
@@ -54,7 +54,6 @@
 
           :search="search"
 
-          class="py-2"
           :class="{'v-treeview--without-children': withoutAnyChildren}"
 
           @input="onInput($event); validate($event);"

@@ -116,6 +116,21 @@
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
+          <research-nda-proposed-notification
+            v-else-if="notification.type === RESEARCH_NDA_PROPOSED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-nda-signed-notification
+            v-else-if="notification.type === RESEARCH_NDA_SIGNED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
+          <research-nda-rejected-notification
+            v-else-if="notification.type === RESEARCH_NDA_REJECTED"
+            :notification="notification"
+            @markAsRead="markNotificationAsRead"
+          />
         </div>
         <v-divider
           v-if="i + 1 < notifications.length"
@@ -165,6 +180,12 @@
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationEditedUserNotification';
   import ResearchApplicationDeletedUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationDeletedUserNotification';
+  import ResearchNdaProposedNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchNdaProposedNotification';
+  import ResearchNdaSignedNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchNdaSignedNotification';
+  import ResearchNdaRejectedNotification
+    from '@/components/layout/components/user-notificatons-list/components/ResearchNdaRejectedNotification';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
 
@@ -191,7 +212,10 @@
       ResearchApplicationApprovedUserNotification,
       ResearchApplicationRejectedUserNotification,
       ResearchApplicationEditedUserNotification,
-      ResearchApplicationDeletedUserNotification
+      ResearchApplicationDeletedUserNotification,
+      ResearchNdaProposedNotification,
+      ResearchNdaSignedNotification,
+      ResearchNdaRejectedNotification
     },
     // props: {
     //   notifications: { type: Array, required: true, default: () => [] }
@@ -213,7 +237,10 @@
         RESEARCH_APPLICATION_APPROVED: 'research-application-approved',
         RESEARCH_APPLICATION_REJECTED: 'research-application-rejected',
         RESEARCH_APPLICATION_EDITED: 'research-application-edited',
-        RESEARCH_APPLICATION_DELETED: 'research-application-deleted'
+        RESEARCH_APPLICATION_DELETED: 'research-application-deleted',
+        RESEARCH_NDA_PROPOSED: 'research-nda-request',
+        RESEARCH_NDA_SIGNED: 'research-nda-signed',
+        RESEARCH_NDA_REJECTED: 'research-nda-rejected'
       };
     },
     computed: {
