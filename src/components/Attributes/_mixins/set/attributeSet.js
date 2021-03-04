@@ -56,6 +56,12 @@ export const attributeSet = {
     }
   },
 
+  created() {
+    if (!this.value && this.attribute.defaultValue) {
+      this.internalValue = this.attribute.defaultValue;
+    }
+  },
+
   render(h) {
     const self = this;
     return h('div', {
