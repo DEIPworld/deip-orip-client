@@ -57,7 +57,7 @@ export const attributeSet = {
   },
 
   created() {
-    if (!this.value && this.attribute.defaultValue) {
+    if (!this.value && this.attribute.defaultValue !== null) {
       this.internalValue = this.attribute.defaultValue;
     }
   },
