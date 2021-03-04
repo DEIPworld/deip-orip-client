@@ -5,8 +5,8 @@ export const attributesChore = {
     }
   },
   methods: {
-    $$getAttributeInfo(id) {
-      return this.$$tenantAttributes.find((a) => a._id === id);
+    $$getAttributeInfo(id, attributes = this.$$tenantAttributes) {
+      return attributes.find((a) => a._id === id);
     }
   }
 };

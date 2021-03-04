@@ -55,7 +55,6 @@ export const projectListItem = {
     },
 
     $$projectExtended() {
-      console.log(this.project)
       const allAttrs = this.$tenantSettings.researchAttributes
         .map((attr) => ({
           researchAttributeId: attr._id,

@@ -21,10 +21,11 @@ export const attributeRead = {
   },
   computed: {
     attributeInfo() {
-      // const { tenantId } = this.project.researchRef;
-      // console.log(this.$store.getters['Tenants/one'](tenantId))
+      const { tenantId } = this.project.researchRef;
+      const { researchAttributes } = this.$store.getters['Tenants/one'](tenantId).profile.settings
+
       const id = this.attribute._id || this.attribute.researchAttributeId;
-      return this.$$tenantAttributes.find(({ _id }) => _id === id);
+      return this.$$getAttributeInfo(id, researchAttributes);
     },
     attrHasData() {
       return this.attribute && hasValue(this.attribute.value);
