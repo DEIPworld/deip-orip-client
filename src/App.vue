@@ -48,9 +48,10 @@
 <script>
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
-  import ToolbarAdmin from '@/components/layout/components/ToolbarAdmin';
+  import { tenantsListStore } from '@/features/Tenant/store/tenantsListStore';
   import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';
   import deepmerge from 'deepmerge';
+  import { componentStoreFactoryOnce } from '@/mixins/registerStore';
 
   const accessService = AccessService.getInstance();
 
@@ -60,6 +61,9 @@
     components: {
       DSnackbar
     },
+    mixins: [
+      componentStoreFactoryOnce(tenantsListStore, 'Tenants')
+    ],
     data() {
       return {
         isGrantsTransparencyDemo: false
@@ -77,7 +81,7 @@
         this.$store.dispatch('auth/loadAssets'),
 
         this.$store.dispatch('Assets/fetch'),
-        // this.$store.dispatch('Tenants/fetch'),
+        this.$store.dispatch('Tenants/fetch'),
         this.$store.dispatch('Disciplines/fetch'),
         this.$store.dispatch('Auth/getCurrentUser'),
       ];
