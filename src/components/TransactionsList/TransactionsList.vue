@@ -164,6 +164,7 @@
         const otherParties = Object
           .keys(parties)
           .reduce((acc, key) => [...acc, parties[key]], [])
+          .filter((party) => !party.isHidden)
           .filter((party) => !party.isProposer)
           .map((party) => ({
             account: party.account,
