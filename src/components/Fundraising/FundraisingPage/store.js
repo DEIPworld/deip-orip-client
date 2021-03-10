@@ -59,7 +59,7 @@ const ACTIONS = {
           balance.user = users.find((user) => balance.owner === user.account.name) || {};
         }
         const securityTokenGroups = securityTokenHolders.filter(
-          ({ owner }) => users.some(({ username }) => username !== owner)
+          ({ owner }) => !users.some(({ username }) => username === owner)
         );
         return Promise.all(
           securityTokenGroups.map(({ owner }) => researchGroupService.getResearchGroup(owner))
