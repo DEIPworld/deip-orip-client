@@ -46,7 +46,7 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { transactionsListStore } from '@/components/TransactionsList/store';
   import { mapGetters } from 'vuex';
-  import TransactionsTable from '@/components/TransactionsList/components/TransactionsTable';
+  import TransactionsTable from '@/components/TransactionsList/TransactionsTable';
 
   const PROPOSAL_TAB = {
     PENDING: 1,
@@ -150,9 +150,11 @@
         const proposerParty = {
           account: proposer.account,
           signers: proposer.signers.map(({ signer, txInfo }) => (
-            { ...signer, hasSignature: !!txInfo, isResearchGroup: signer.account.is_research_group }
+            {
+              ...signer, hasSignature: !!txInfo, isResearchGroup: signer?.account?.is_research_group
+            }
           )),
-          isResearchGroup: proposer.account.account.is_research_group
+          isResearchGroup: proposer?.account?.account?.is_research_group
         };
 
         return proposerParty;
@@ -172,10 +174,10 @@
               {
                 ...signer,
                 hasSignature: !!txInfo,
-                isResearchGroup: signer.account.is_research_group
+                isResearchGroup: signer?.account?.is_research_group
               }
             )),
-            isResearchGroup: party.account.account.is_research_group
+            isResearchGroup: party?.account?.account?.is_research_group
           }));
 
         return otherParties;
