@@ -1,6 +1,7 @@
 import { project } from './basicWords';
 
 export default {
+  transaction: 'Transaction',
   parties: 'Parties',
   party: 'Party',
   signatures: 'Signatures',
