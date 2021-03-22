@@ -14,7 +14,7 @@ export const projectContext = {
     },
 
     $$isTenantUser() {
-      return this.project.tenantId === this.$currentUser.profile.tenantId;
+      return this.$isUser && this.project.tenantId === this.$currentUser.profile.tenantId;
     }
   },
   methods: {

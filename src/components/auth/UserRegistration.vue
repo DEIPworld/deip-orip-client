@@ -227,6 +227,7 @@
 <script>
   import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service';
+  import { UsersService } from '@deip/users-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
   import { AuthService } from '@deip/auth-service';
@@ -236,6 +237,7 @@
 
   const tenantService = TenantService.getInstance();
   const authService = AuthService.getInstance();
+  const usersService = UsersService.getInstance();
 
   export default {
     name: 'UserRegistration',
