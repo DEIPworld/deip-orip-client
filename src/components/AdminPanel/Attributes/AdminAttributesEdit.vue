@@ -45,14 +45,16 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TenantService } from '@deip/tenant-service';
-  import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
+  import { AttributesService } from '@deip/attributes-service';
+
+  import { ATTR_TYPES, ATTR_LABELS, SYSTEM_ATTRS } from '@/variables';
 
   import { defaultAttributeModel } from '@/components/Attributes/_mixins/edit';
   import AttributesEdit from '@/components/Attributes/AttributesEdit';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
-  const tenantService = TenantService.getInstance();
+  const attributesService = AttributesService.getInstance();
 
   export default {
     name: 'AdminAttributesEdit',
@@ -60,6 +62,7 @@
       DLayoutFullScreen,
       AttributesEdit,
     },
+    mixins: [attributesChore],
     props: {
       title: {
         type: String,
@@ -84,18 +87,22 @@
     },
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
-        researchAttributes: 'adminPanel/researchAttributes'
+        tenant: 'auth/tenant'
       }),
 
       attrsList() {
         return Object.keys(this.ATTR_LABELS)
-          .map((key) => ({ value: key, text: this.ATTR_LABELS[key] }));
+          .reduce((arr, key) => {
+            if (!SYSTEM_ATTRS[key]) {
+              return [...arr, { value: key, text: this.ATTR_LABELS[key] }];
+            }
+            return arr;
+          }, []);
       }
     },
     created() {
       if (this.$route.query.id) {
-        const attribute = this.researchAttributes.find(({ _id }) => _id === this.$route.query.id);
+        const attribute = this.$$projectAttributes.find(({ _id }) => _id === this.$route.query.id);
         if (attribute) {
           this.formData = _.cloneDeep(attribute);
         }
@@ -110,16 +117,14 @@
         const isNewAttribute = !this.formData._id;
 
         const promise = isNewAttribute
-          ? tenantService.createTenantResearchAttribute(this.formData)
-          : tenantService.updateTenantResearchAttribute(this.formData);
+          ? attributesService.createAttribute(this.formData)
+          : attributesService.updateAttribute(this.formData);
 
         promise
           .then(() => {
             this.$notifier.showSuccess();
 
-            const tenant = window.env.TENANT;
-
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            this.$store.dispatch('Attributes/fetch');
 
             this.isSaving = false;
             setTimeout(() => this.$router.push({ name: 'admin.attributes' }), 500);

@@ -4,6 +4,7 @@ import AttributesRead from '@/components/Attributes/AttributesRead';
 import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
 import { extendAttrModules, hasValue, researchAttributesToObject } from '@/utils/helpers';
 import { collectionMerge } from '@deip/toolbox';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 
 export const ProjectListItemRenderer = {
   name: 'ProjectListItemRenderer',
@@ -37,6 +38,7 @@ export const projectListItem = {
   components: {
     ProjectListItemRenderer
   },
+  mixins: [attributesChore],
   props: {
     project: {
       type: Object,
@@ -55,7 +57,7 @@ export const projectListItem = {
     },
 
     $$projectExtended() {
-      const allAttrs = this.$tenantSettings.researchAttributes
+      const allAttrs = this.$$projectAttributes
         .map((attr) => ({
           researchAttributeId: attr._id,
           value: attr.defaultValue

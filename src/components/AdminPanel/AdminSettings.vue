@@ -10,13 +10,13 @@
                 contain
                 height="80%"
                 width="100%"
-                :src="$options.filters.tenantLogoSrc(tenant)"
+                :src="$options.filters.tenantLogoSrc($tenant)"
               />
               <d-file-input
                 id="title"
                 class="mt-4"
                 v-model="formData.logo"
-                :label="tenant.profile.logo"
+                :label="$tenant.profile.logo"
                 :disabled="isSubmitting"
                 hint="Logo image should be at least 80 x 80 px in dimension"
                 hide-details="auto"
@@ -34,13 +34,13 @@
                 contain
                 height="80%"
                 width="100%"
-                :src="$options.filters.tenantBackgroundSrc(tenant)"
+                :src="$options.filters.tenantBackgroundSrc($tenant)"
               />
               <d-file-input
                 id="banner"
                 class="mt-4"
                 v-model="formData.banner"
-                :label="tenant.profile.banner"
+                :label="$tenant.profile.banner"
                 :disabled="isSubmitting"
                 hint="Background image should be at least 1440 x 430 px in dimension"
                 hide-details="auto"
@@ -56,7 +56,7 @@
               <v-text-field
                 v-model="formData.title"
                 outlined
-                :label="tenant.profile.name"
+                :label="$tenant.profile.name"
                 :disabled="isSubmitting"
                 hide-details="auto"
               />
@@ -108,12 +108,6 @@
       };
     },
 
-    computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      })
-    },
-
     methods: {
 
       onSubmit() {
@@ -144,7 +138,7 @@
             return this.$store.dispatch('auth/loadTenant', { tenant })
           })
           .then(() => {
-            document.title = this.tenant.profile.name;
+            document.title = this.$tenant.profile.name;
           })
           .catch((err) => {
             console.error(err);

@@ -80,7 +80,6 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
         faqs: 'adminPanel/faqs'
       })
     },
@@ -104,7 +103,7 @@
       // },
 
       updateFAQ(FAQsArr) {
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
+        const updatedProfile = _.cloneDeep(this.$tenant.profile);
         updatedProfile.settings.faq = FAQsArr;
         tenantService.updateTenantProfile(updatedProfile)
           .then(() => {

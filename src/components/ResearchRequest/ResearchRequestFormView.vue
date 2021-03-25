@@ -70,7 +70,7 @@
     </d-form-block>
 
     <d-form-block :title="$t('defaultNaming.forms.researchRequest.readinesBlock.title')">
-      <template v-for="(item, i) in tenant.profile.settings.researchAttributes">
+      <template v-for="(item, i) in $$projectAttributes">
         <v-col
           v-if="item.isPublished"
           :key="`${i}-stepper`"
@@ -176,6 +176,7 @@
   import { FormMixin } from '@/utils/FormMixin';
   import { AccessService } from '@deip/access-service';
   import { maxTitleLength, maxDescriptionLength } from '@/variables';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   const accessService = AccessService.getInstance();
 
@@ -185,7 +186,7 @@
       DFileInput,
       DFormBlock
     },
-    mixins: [FormMixin],
+    mixins: [FormMixin, attributesChore],
     model: {
       prop: 'formData'
     },

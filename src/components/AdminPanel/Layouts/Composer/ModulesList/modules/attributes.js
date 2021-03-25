@@ -68,7 +68,7 @@ export const modulesAttributes = (ctx) => {
           text: '@research.researchRef.created_at',
           icon: 'mdi-calendar-text'
         },
-        ...ctx.$tenantSettings.researchAttributes
+        ...ctx.$$projectAttributes
           .map((attr) => ({
             icon: ATTR_ICONS[attr.type],
             name: attr.shortTitle || attr.title,

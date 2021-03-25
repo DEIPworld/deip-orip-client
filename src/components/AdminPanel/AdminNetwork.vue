@@ -55,12 +55,6 @@
       }
     },
 
-    computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      })
-    },
-
     methods: {
       onSubmit() {
         this.isSubmitting = true;
@@ -86,7 +80,7 @@
 
     created() {
       // temp
-      this.formData.globalNetworkIsVisible = this.tenant.profile.network.scope.some(id => id === 'all');
+      this.formData.globalNetworkIsVisible = this.$tenant.profile.network.scope.some(id => id === 'all');
     },
   };
 </script>

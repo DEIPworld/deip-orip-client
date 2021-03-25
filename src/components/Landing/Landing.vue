@@ -56,6 +56,7 @@
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'Landing',
@@ -64,6 +65,7 @@
       DLayoutSectionMain,
       DLayoutSection
     },
+    mixins: [attributesChore],
     data() {
       return {
         searchTerm: ''
@@ -88,7 +90,7 @@
 
       goToDiscipline(id) {
         const dAttr = this.$where(
-          this.$tenantSettings.researchAttributes,
+          this.$$projectAttributes,
           {
             blockchainFieldMeta: {
               field: 'disciplines'

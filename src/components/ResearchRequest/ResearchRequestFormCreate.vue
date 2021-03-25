@@ -36,7 +36,7 @@
         const researcher = this.user.username;
         const researcherPrivKey = this.user.privKey;
         const researcherPubKey = this.user.account.active.key_auths[0][0];
-        const tenantAccount = this.tenant.account.external_id;
+        const tenantAccount = this.$tenant.account.external_id;
 
         formData.append('researcher', researcher); // the current user
         formData.append('researcherPubKey', researcherPubKey); // the current user's pubKey

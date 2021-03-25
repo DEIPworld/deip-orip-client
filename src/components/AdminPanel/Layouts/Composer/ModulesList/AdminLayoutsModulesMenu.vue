@@ -38,9 +38,11 @@
 
 <script>
   import { ATTR_TYPES } from '@/variables';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'AdminLayoutsModulesMenu',
+    mixins: [attributesChore],
     props: {
       module: {
         type: Object,
@@ -60,7 +62,7 @@
           : null;
       },
       attrInfo() {
-        return this.$tenantSettings.researchAttributes.find((attr) => attr._id === this.attrId);
+        return this.$$projectAttributes.find((attr) => attr._id === this.attrId);
       },
 
       attrIsRead() {

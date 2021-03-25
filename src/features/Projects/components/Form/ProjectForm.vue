@@ -51,6 +51,8 @@
     isArray, replaceFileWithName, hasValue, expandResearchAttributes
   } from '@/utils/helpers';
 
+  import { attributesChore } from '@/mixins/chores/attributesChore';
+
   import { debounce } from 'vuetify/lib/util/helpers';
 
   import { mapGetters } from 'vuex';
@@ -68,7 +70,7 @@
       ResearchFormRenderer
     },
 
-    mixins: [changeable],
+    mixins: [changeable, attributesChore],
 
     props: {
       project: {
@@ -150,7 +152,7 @@
 
       filesAttrs() {
         return this.$where(
-          this.$tenantSettings.researchAttributes,
+          this.$$projectAttributes,
           {
             type: [ATTR_TYPES.IMAGE]
           }
@@ -163,7 +165,7 @@
       },
 
       onchainData() {
-        const onchainFields = this.$tenantSettings.researchAttributes
+        const onchainFields = this.$$projectAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
             const value = this.formModel.researchRef.attributes[attr._id];

@@ -55,11 +55,8 @@
       return {};
     },
     computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      }),
       faqs() {
-        return this.tenant.profile.settings.faq.filter(({ isPublished }) => isPublished);
+        return this.$tenant.profile.settings.faq.filter(({ isPublished }) => isPublished);
       }
     }
   };

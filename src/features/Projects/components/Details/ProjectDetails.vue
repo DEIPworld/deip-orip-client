@@ -16,10 +16,12 @@
   import ProjectDetailsRenderer from '@/features/Projects/components/Details/renderer';
   import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
   import { collectionMerge } from '@deip/toolbox';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'ProjectDetails',
     components: { ProjectDetailsRenderer },
+    mixins: [attributesChore],
     computed: {
       ...mapGetters({
         research: 'Project/projectDetails'
@@ -39,7 +41,7 @@
       },
 
       researchExtended() {
-        const allAttrs = this.$tenantSettings.researchAttributes
+        const allAttrs = this.$$projectAttributes
           .map((attr) => ({
             researchAttributeId: attr._id,
             value: attr.defaultValue

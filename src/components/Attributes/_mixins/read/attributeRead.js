@@ -22,7 +22,7 @@ export const attributeRead = {
   computed: {
     attributeInfo() {
       const { tenantId } = this.project.researchRef;
-      const { researchAttributes } = this.$store.getters['Tenants/one'](tenantId).profile.settings
+      const researchAttributes = this.$store.getters['Attributes/list']({ tenantId: [tenantId, null] });
 
       const id = this.attribute._id || this.attribute.researchAttributeId;
       return this.$$getAttributeInfo(id, researchAttributes);

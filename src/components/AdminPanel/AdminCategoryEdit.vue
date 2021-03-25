@@ -62,19 +62,14 @@
         isSaving: false
       };
     },
-    computed: {
-      ...mapGetters({
-        tenant: 'auth/tenant'
-      })
-    },
     methods: {
       save() {
         if (!this.$refs.form.validate()) return;
 
         this.isSaving = true;
 
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
-        updatedProfile.settings.researchCategories = [{ text: this.categoryTitle }, ...this.tenant.profile.settings.researchCategories];
+        const updatedProfile = _.cloneDeep(this.$tenant.profile);
+        updatedProfile.settings.researchCategories = [{ text: this.categoryTitle }, ...this.$tenant.profile.settings.researchCategories];
         tenantService.updateTenantProfile(updatedProfile)
           .then(() => {
             this.$notifier.showSuccess();
