@@ -112,6 +112,19 @@
 
         <v-col cols="6" class="py-0">
           <v-select
+            v-model="formData.role"
+            :items="roles"
+            item-text="label"
+            item-value="role"
+            :disabled="isSaving"
+            outlined
+            label="Role"
+            :rules="[rules.required]"
+          />
+        </v-col>
+        
+        <v-col cols="6" class="py-0">
+          <v-select
             v-model="formData.category"
             :items="category"
             :disabled="isSaving"
@@ -313,9 +326,15 @@
           city: '',
           country: '',
           phoneNumber: '',
+          role: '',
           isHiddenMasterPassword: true
         }
       };
+    },
+    computed: {
+      roles() {
+        return this.$tenantSettings.roles;
+      }
     },
     methods: {
       create(data) {
@@ -341,7 +360,8 @@
           address,
           city,
           country,
-          phoneNumber
+          phoneNumber,
+          role
         } = this.formData;
 
         const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
@@ -391,7 +411,8 @@
               label: 'ar3c_member',
               id
             }
-          ]
+          ],
+          role
         })
           .then(() => {
             this.isSaving = false;
