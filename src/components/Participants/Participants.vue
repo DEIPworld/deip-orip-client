@@ -9,14 +9,14 @@
             @reset="resetFilter"
           >
             <div class="px-6 pt-6">
-              <v-text-field
+              <!-- <v-text-field
                 v-model="filterModel.searchTerm"
                 outlined
                 class="mb-6"
                 prepend-inner-icon="search"
                 hide-details
                 :label="$t('participantstRouting.searchNamesField')"
-              />
+              /> -->
 
               <d-filter-term-disciplines
                 v-model="filterModel.discipline"

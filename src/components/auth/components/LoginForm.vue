@@ -46,7 +46,7 @@
       </d-form-block>
     </d-form>
 
-    <div v-if="showSignUp" class="mt-4 text-subtitle-2">
+    <div v-if="$hasModule(DEIP_MODULE.APP_PAGE_SIGN_UP) && showSignUp" class="mt-4 text-subtitle-2">
       {{ $t('signIn.form.bottomText') }}
       <router-link class="a" :to="{name: 'SignUp'}">
         {{ $t('signIn.form.bottomTextLink') }}

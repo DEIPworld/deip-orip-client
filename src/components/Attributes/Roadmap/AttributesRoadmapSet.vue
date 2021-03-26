@@ -37,7 +37,7 @@
               />
             </validation-provider>
           </v-col>
-          <v-col cols="6">
+          <!-- <v-col cols="6">
             <d-asset-input
               v-model="item.budget"
               label="Estimated budget (optional)"
@@ -53,7 +53,7 @@
               name="Roadmap budget purpose"
               autocomplete="off"
             />
-          </v-col>
+          </v-col> -->
           <v-col cols="12">
             <v-textarea
               v-model="item.details"

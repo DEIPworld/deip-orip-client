@@ -125,20 +125,23 @@
       isLoggedIn() { return accessService.isLoggedIn(); }, // $isUser
 
       mainMenu() {
-        if (this.$isUser) {
-          const routes = [];
+        const routes = [];
 
+        if (this.$isUser) {
+          
           routes.push({
             label: this.$t('topMenu.explore'),
             to: { name: 'explore' }
           });
 
-          if (this.$hasModule(this.DEIP_MODULE.APP_ECI)) {
+          if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_ECI_OVERVIEW)) {
             routes.push({
               label: this.$t('topMenu.overview'),
               to: { name: 'overview' }
             });
+          }
 
+          if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_ECI_PARTICIPIANTS)) {
             routes.push({
               label: this.$t('topMenu.participants'),
               to: { name: 'participants' }
@@ -148,46 +151,46 @@
           if (this.$hasModule(this.DEIP_MODULE.APP_GRANTS_MANAGEMENT)) {
             routes.push({
               label: this.$t('topMenu.dashboard'),
-              to: {
-                name: 'GrantProgramsAwardsDashboard'
-              }
+              to: { name: 'GrantProgramsAwardsDashboard' }
             });
           }
 
-          if (this.$hasModule(this.DEIP_MODULE.APP_ASSETS_MANAGEMENT)) {
+          if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_ASSETS)) {
             routes.push({
               label: this.$t('topMenu.wallet'),
-              to: {
-                name: 'userWallet',
-                params: { account: this.$currentUser.username }
-              }
+              to: { name: 'userWallet', params: { account: this.$currentUser.username } }
             });
           }
 
+          if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_MULTISIG_TRANSACTIONS)) {
+            routes.push({
+              label: this.$t('topMenu.transactions'),
+              to: { name: 'transactions' }
+            });
+          }
+
+        } else {
+
           routes.push({
-            label: this.$t('topMenu.transactions'),
-            to: {
-              name: 'transactions'
-            }
+            label: this.$t('topMenu.explore'),
+            to: { name: 'explore' }
           });
 
-          return routes;
-        } else {
-          return [
-            {
-              label: this.$t('topMenu.explore'),
-              to: { name: 'explore' }
-            },
-            {
-              label: this.$t('topMenu.signIn'),
-              to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
-            },
-            {
+          routes.push(            {
+            label: this.$t('topMenu.signIn'),
+            to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
+          });
+
+          if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_SIGN_UP)) {
+            routes.push(            {
               label: this.$t('topMenu.signUp'),
               to: { name: 'SignUp' }
-            }
-          ];
+            });
+          }
+
         }
+
+        return routes;
       },
 
       userMenu() {

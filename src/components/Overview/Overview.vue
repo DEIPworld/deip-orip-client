@@ -1,7 +1,7 @@
 <template>
   <app-layout>
     <layout-section>
-      <v-row>
+      <!-- <v-row>
         <v-col cols="4">
           <d-block
             :title="$t('overviewRouting.eciValue')"
@@ -109,7 +109,7 @@
             style="max-width: 400px;"
           />
         </v-skeleton-loader>
-      </d-block>
+      </d-block> -->
 
       <eci-history />
     </layout-section>

@@ -39,11 +39,11 @@
 
     <v-divider class="my-12" />
 
-    <research-group-asset class="mb-12" />
+    <research-group-asset v-if="$hasModule(DEIP_MODULE.APP_PAGE_ASSETS)" class="mb-12" />
 
     <!-- ### START Research Group Proposals Section ### -->
     <d-block
-      v-if="isResearchGroupMember && !group.is_personal"
+      v-if="$hasModule(DEIP_MODULE.APP_PAGE_MULTISIG_TRANSACTIONS) && isResearchGroupMember && !group.is_personal"
       id="proposals"
       class="mb-12"
       :title="$t('researchGroupDetails.proposalsTable.title')"

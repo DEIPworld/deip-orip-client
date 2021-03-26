@@ -116,8 +116,17 @@
       if (this.$$isEditable) {
 
         if (this.$$isHidden) {
-          this.internalValue = null;
-          this.researchGroup = null;
+          this.internalValue = this.internalValue 
+            ? Array.isArray(this.internalValue) 
+              ? this.internalValue 
+              : [this.internalValue]
+            : null;
+          this.researchGroup = this.internalValue 
+            ? Array.isArray(this.internalValue) 
+              ? this.internalValue[0]
+              : this.internalValue
+            : null;
+
         } else if (this.isPersonal) {
           this.internalValue = [this.personalGroup.external_id];
           this.researchGroup = this.personalGroup.external_id;

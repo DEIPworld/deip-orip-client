@@ -7,7 +7,7 @@
     color="primary"
     @click="createDarDraft()"
   >
-    Use editor
+    {{ $t('researchDetails.editor') }}
   </v-btn>
 </template>
 
