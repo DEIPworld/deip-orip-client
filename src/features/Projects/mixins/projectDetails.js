@@ -107,9 +107,9 @@ export const projectDetails = {
 
       return [
         this.accessAllowedByMembership,
-        this.accessAllowedByRole(['admin'])
-        // this.accessAllowedByRequest,
-        // this.accessAllowedByLicense,
+        // this.accessAllowedByRole(['admin'])
+        this.accessAllowedByRequest,
+        this.accessAllowedByLicense,
       ].some((entry) => entry === true);
     },
 
@@ -122,7 +122,7 @@ export const projectDetails = {
         return 'Unlock the materials either by purchasing a license or by getting permission';
       }
 
-      return 'Materials available for project members only';
+      return 'Unlock the materials by getting permission';
     },
 
     accessContainerProps() {
