@@ -1,7 +1,7 @@
 <template>
   <project-form
     :project="projectExtended"
-    title="Edit technology"
+    :title="$t('researchEdit.title')"
     :loading="loading"
     @submit="updateProject"
   />

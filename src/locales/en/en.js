@@ -80,7 +80,7 @@ export default {
     }
   },
   researchFeed: {
-    title: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
+    title: () => `${project(true, true)}`,
     startProjectBtn: `Start a ${project()}`,
     signInBtn: 'Sign in',
     signInText: `After creating an account/log in you can add new ${project(false, true)} or enjoy shared materials`
@@ -110,8 +110,9 @@ export default {
     needNotMembers: `To add review you need to have no relations with this ${project()} or team that leads this ${project()}.`
   },
   landing: {
-    searchByTech: 'Search by technology',
-    advancedSearch: 'Advanced Search'
+    searchByTech: `Search by ${project(false)}`,
+    advancedSearch: 'Advanced Search',
+    find: `Find ${project(false, true)}`
   },
   draftList: {
     draft: 'Draft',

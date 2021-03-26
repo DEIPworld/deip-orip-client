@@ -17,7 +17,7 @@
               v-model="searchTerm"
               outlined
               hide-details
-              label="Find technologies"
+              :label="$t('landing.find')"
               append-icon="search"
               @click:append="goToSearch"
             />
