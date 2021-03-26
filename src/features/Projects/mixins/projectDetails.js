@@ -71,16 +71,16 @@ export const projectDetails = {
       return !!(this.$isUser && (this.isMember || this.project.securityTokens.length));
     },
 
-    hasLicense() {
+    hasLicenseModule() {
       return this.$$ifAttributesByType(ATTR_TYPES.EXPRESS_LICENSING);
     },
 
-    accessAllowedByOwnership() {
-      return this.project.members.includes(this.$currentUser.username);
+    accessAllowedByMembership() {
+      return this.$isUser && this.project.members.includes(this.$currentUser.username);
     },
 
     accessAllowedByRequest() {
-      return this.project.researchRef.grantedAccess
+      return this.$isUser && this.project.researchRef.grantedAccess
         .some((entry) => [
           this.$currentUser.username,
           ...this.$currentUser.teams.map((g) => g.external_id)
@@ -88,22 +88,28 @@ export const projectDetails = {
     },
 
     accessAllowedByLicense() {
-      if (!this.hasLicense) {
+      if (!this.hasLicenseModule) {
         return this.project.tenantId === this.$env.TENANT;
       }
 
-      return this.project.researchRef.expressLicenses
+      return this.$isUser && this.project.researchRef.expressLicenses
         .map((lic) => lic.owner)
         .includes(this.$currentUser.username);
+    },
+
+    accessAllowedByRole() {
+      return (roles) => this.$isUser && this.$currentUser.profile.roles
+        .some(({ role, researchGroupExternalId }) => roles.some((r) => this.project.tenantId == researchGroupExternalId && r == role));
     },
 
     contentAssessAllowed() {
       if (this.$isGuest) return false;
 
       return [
-        this.accessAllowedByOwnership,
-        this.accessAllowedByRequest,
-        this.accessAllowedByLicense,
+        this.accessAllowedByMembership,
+        this.accessAllowedByRole(['admin'])
+        // this.accessAllowedByRequest,
+        // this.accessAllowedByLicense,
       ].some((entry) => entry === true);
     },
 
@@ -112,11 +118,11 @@ export const projectDetails = {
       // Only get access option is available - Unlock the materials by getting permission
       // Both - Unlock the materials by either purchasing a license or by getting permission
 
-      if (this.hasLicense) {
+      if (this.hasLicenseModule) {
         return 'Unlock the materials either by purchasing a license or by getting permission';
       }
 
-      return 'Unlock the materials by getting permission';
+      return 'Materials available for project members only';
     },
 
     accessContainerProps() {
