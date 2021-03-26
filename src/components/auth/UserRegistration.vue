@@ -26,7 +26,7 @@
           />
         </v-col>
 
-        <!-- <v-col cols="6" class="py-0">
+        <v-col cols="6" class="py-0">
           <v-menu
             v-model="editedBirthdayMenu"
             :close-on-content-click="false"
@@ -61,7 +61,7 @@
             :rules="[rules.required]"
             :disabled="isSaving"
           />
-        </v-col> -->
+        </v-col>
       </v-row>
 
       <div class="text-h6 mb-6">
@@ -110,7 +110,7 @@
           />
         </v-col>
 
-        <v-col cols="6" class="py-0">
+        <!-- <v-col cols="6" class="py-0">
           <v-select
             v-model="formData.role"
             :items="roles"
@@ -121,9 +121,9 @@
             label="Role"
             :rules="[rules.required]"
           />
-        </v-col>
+        </v-col> -->
         
-        <!-- <v-col cols="6" class="py-0">
+        <v-col cols="6" class="py-0">
           <v-select
             v-model="formData.category"
             :items="category"
@@ -132,10 +132,10 @@
             label="Category"
             :rules="[rules.required]"
           />
-        </v-col> -->
+        </v-col>
       </v-row>
 
-      <!-- <div class="text-h6 mb-6">
+      <div class="text-h6 mb-6">
         Occupation information
       </div>
 
@@ -221,7 +221,7 @@
             your information in accordance with these terms.
           </div>
         </v-col>
-      </v-row> -->
+      </v-row>
 
       <div class="text-right mt-5">
         <v-btn

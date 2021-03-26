@@ -39,10 +39,10 @@
                   {{ item.label }}
                 </div>
 
-                <!-- <div class="text-caption text--secondary">
+                <div class="text-caption text--secondary">
                   {{ item.budget }}
                   {{ item.purpose }}
-                </div> -->
+                </div>
               </d-stack>
             </d-timeline-item>
           </v-item>

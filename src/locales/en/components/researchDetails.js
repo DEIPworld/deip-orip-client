@@ -5,7 +5,7 @@ export default {
   edit: 'Edit',
   addBookmark: 'Add bookmark',
   removeBookmark: 'Remove bookmark',
-  editor: 'Add link to deliverable',
+  editor: 'Use editor',
   investors: 'Investors:',
   totalInv: 'Total investments',
   averageInv: 'Average investment',

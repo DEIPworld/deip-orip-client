@@ -202,14 +202,6 @@
 
   .deip-texture {
 
-    [data-section="abstract"] {
-      display: none !important;
-    }
-
-    [data-section="subtitle"] {
-      display: none !important;
-    }
-
     .sc-manuscript {
       display: grid;
       grid-gap: 32px;
