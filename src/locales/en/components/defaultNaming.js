@@ -18,8 +18,8 @@ export default {
   citations: 'Citations',
   hIndex: 'H-index',
   noData: 'No data availale',
-  projects: () => `${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'}`,
-  noProjects: () => `No ${Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'Projects' : 'Technologies'} found for specified criteria`,
+  projects: () => `${project(true, true)}`,
+  noProjects: () => `${project(true, true)} found for specified criteria`,
   yourDomain: 'Your domain',
   allDomain: 'All domains',
   time: {
