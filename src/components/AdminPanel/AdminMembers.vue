@@ -14,7 +14,7 @@
     <template #toolbarExtension>
       <v-tabs v-model="tab">
         <v-tab>{{ $t('adminRouting.members.registeredTab') }}</v-tab>
-        <v-tab v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_MEMBERS_REGISTRATION)" >
+        <!-- <v-tab v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_MEMBERS_REGISTRATION)" >
           {{ $t('adminRouting.members.waitingTab') }}
           <v-badge
             v-if="waitingMembers.length"
@@ -22,7 +22,7 @@
             color="green"
             inline
           />
-        </v-tab>
+        </v-tab> -->
       </v-tabs>
     </template>
 
