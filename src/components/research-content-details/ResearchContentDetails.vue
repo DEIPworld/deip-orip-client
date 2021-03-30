@@ -50,7 +50,7 @@
           </template>
 
 
-          <reviews-list
+          <!-- <reviews-list
             v-if="content && content.external_id"
             :project-id="content.research_external_id"
             :content-id="content.external_id"
@@ -99,7 +99,7 @@
                 }}
               </div>
             </template>
-          </reviews-list>
+          </reviews-list> -->
 
         </d-stack>
 

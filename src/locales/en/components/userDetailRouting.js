@@ -1,7 +1,7 @@
 import { project } from './basicWords';
 
 export default {
-  teams: 'Teams:',
+  teams: 'Teams',
   addGroup: 'Add group',
   detailsEducation: {
     title: 'Education',

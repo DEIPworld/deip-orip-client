@@ -5,7 +5,7 @@
     outlined
     color="primary" 
     @click="open()">
-    Upload content
+    Upload deliverable
   </v-btn>
   <v-dialog
     v-if="research"

@@ -19,7 +19,7 @@ export default {
   hIndex: 'H-index',
   noData: 'No data availale',
   projects: () => `${project(true, true)}`,
-  noProjects: () => `${project(true, true)} found for specified criteria`,
+  noProjects: () => `No ${project(false, true)} found for specified criteria`,
   yourDomain: 'Your domain',
   allDomain: 'All domains',
   time: {

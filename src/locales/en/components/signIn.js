@@ -8,7 +8,7 @@ export default {
   licensing: 'Licensing of intellectual property',
   investing: 'Crowd investing',
   form: {
-    logo: 'Technology Transfer Office',
+    logo: 'ACTION Accelerator Pilot',
     title: 'Sign in to your account',
     titleAdmin: 'Sign in to your admin account',
     usernameField: 'Username',

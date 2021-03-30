@@ -62,11 +62,11 @@
             style="width: 100%; height: 24px;"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
 
-      <disciplines-growth-rate class="mt-12" />
+      <disciplines-growth-rate />
 
-      <d-block
+      <!-- <d-block
         class="mt-12"
         :title="$t('overviewRouting.distributionImpact.title')"
         :subtitle="$t('overviewRouting.subtitle')"
@@ -111,7 +111,7 @@
         </v-skeleton-loader>
       </d-block> -->
 
-      <eci-history />
+      <eci-history class="mt-12" />
     </layout-section>
   </app-layout>
 </template>

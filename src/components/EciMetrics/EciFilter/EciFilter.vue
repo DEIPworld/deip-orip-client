@@ -23,14 +23,14 @@
       hide-details="auto"
       outlined
     />
-    <v-select
+    <!-- <v-select
       v-model="filterModel.criteria"
       class="my-0 py-0"
       :items="criterias"
       :label="$t('defaultNaming.filters.assessmentCriteria')"
       hide-details="auto"
       outlined
-    />
+    /> -->
     <d-input-date
       v-model="filterModel.date"
       :label="$t('defaultNaming.filters.periodField')"

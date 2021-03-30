@@ -28,7 +28,7 @@
                 class="mb-6"
                 single-choice
               />
-              <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice />
+              <!-- <d-filter-term-assessment-criterias v-model="filterModel.criteria" single-choice /> -->
             </div>
           </d-filter-sidebar>
         </template>

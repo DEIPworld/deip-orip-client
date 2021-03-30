@@ -1,7 +1,7 @@
 <template>
   <layout-section v-if="$ready">
     <d-block :title="$t('account.groups.teams')">
-      <template #title-append>
+      <!-- <template #title-append>
         <v-btn
           color="primary"
           small
@@ -15,7 +15,7 @@
         >
           {{ $t('account.groups.addNewTeam') }}
         </v-btn>
-      </template>
+      </template> -->
       <v-row>
         <v-col v-for="(group, i) in groups.filter((g) => !g.is_personal)" :key="`${i}-group`" cols="4">
           <v-card

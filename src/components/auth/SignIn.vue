@@ -40,7 +40,7 @@
           <div class="text-h2 font-weight-bold">
             {{ $t('signIn.title') }}
           </div>
-          <div class="text-subtitle-1 mt-12">
+          <!-- <div class="text-subtitle-1 mt-12">
             <v-icon small>
               mdi-message-reply-text
             </v-icon>
@@ -63,7 +63,7 @@
               mdi-account-multiple-plus
             </v-icon>
             <span class="ml-4">{{ $t('signIn.investing') }}</span>
-          </div>
+          </div> -->
         </v-sheet>
       </v-col>
     </v-row>

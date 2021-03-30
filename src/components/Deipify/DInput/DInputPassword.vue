@@ -25,7 +25,7 @@
 
     computed: {
       // eslint-disable-next-line vue/no-dupe-keys
-      appendIcon() { return this.isHidden ? 'visibility' : 'visibility_off'; },
+      appendIcon() { return this.isHidden ? 'visibility_off' : 'visibility'; },
       // eslint-disable-next-line vue/no-dupe-keys
       type() { return this.isHidden ? 'password' : 'text'; }
     },

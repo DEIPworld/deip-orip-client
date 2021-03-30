@@ -210,6 +210,14 @@
       display: none !important;
     }
 
+    .se-toc-pane {
+      display: none;
+    }
+
+    .se-content-section {
+      margin-left: 50px;
+    }
+
     .sc-manuscript {
       display: grid;
       grid-gap: 32px;
