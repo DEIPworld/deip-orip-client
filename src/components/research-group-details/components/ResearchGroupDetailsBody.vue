@@ -62,7 +62,7 @@
     <!-- ### END Project Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
-      <template #title-append-after>
+      <!-- <template #title-append-after>
         <v-btn
           v-if="isResearchGroupMember"
           color="primary"
@@ -73,7 +73,7 @@
         >
           {{ $t('researchGroupDetails.invite') }}
         </v-btn>
-      </template>
+      </template> -->
     </member-list>
 
     <!-- ### START Project Group Project List Section ### -->

@@ -11,6 +11,7 @@
       :disabled="!$$isEditable"
       :multiple="attribute.isMultiple"
       :tenant-id="$env.TENANT"
+      :filter="researchesFilter"
     />
   </validation-provider>
 </template>
@@ -22,6 +23,11 @@
   export default {
     name: 'AttributesUsersListSet',
     components: { UserSelector },
-    mixins: [attributeSetForceArray]
+    mixins: [attributeSetForceArray],
+    methods: {
+      researchesFilter(user) {
+        return user.profile.roles.some(({ role }) => role === 'team-member') && user.teams.some(teamId => teamId === "4444444444444444444444444444444444444444");
+      }
+    }
   };
 </script>

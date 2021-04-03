@@ -45,7 +45,7 @@
         {{ member | userLocation }}
       </div>
     </v-card-text>
-    <v-btn
+    <!-- <v-btn
       v-if="isExcludingMemberAvailable(member.account.name)"
       icon
       small
@@ -55,7 +55,7 @@
       @click="showConfirmAction(member)"
     >
       <v-icon>close</v-icon>
-    </v-btn>
+    </v-btn> -->
   </v-card>
 </template>
 

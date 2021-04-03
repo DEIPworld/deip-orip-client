@@ -122,7 +122,7 @@ export const projectDetails = {
         return 'Unlock the materials either by purchasing a license or by getting permission';
       }
 
-      return 'Materials are available for projects members only';
+      return 'Materials are available for project members only';
     },
 
     accessContainerProps() {
