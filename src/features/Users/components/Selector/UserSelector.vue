@@ -114,7 +114,7 @@
         default: () => ([])
       },
       filter: { // temp solution
-        type: Object,
+        type: [Object, Function],
         default: () => ({})
       },
       tenantId: {

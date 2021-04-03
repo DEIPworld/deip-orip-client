@@ -3,6 +3,7 @@ import kindOf from 'kind-of';
 export const isArray = (val) => kindOf(val) === 'array';
 export const isObject = (val) => kindOf(val) === 'object';
 export const isFile = (val) => kindOf(val) === 'file';
+export const isFunction = (val) => kindOf(val) === 'function';
 
 export const isBoolean = (val) => kindOf(val) === 'boolean';
 export const isString = (val) => kindOf(val) === 'string';
@@ -45,6 +46,10 @@ export const hasValue = (value) => {
     } else {
       res.push(false);
     }
+  }
+
+  if (isFunction(value)) {
+    res.push(true);
   }
 
   return res.includes(true);
