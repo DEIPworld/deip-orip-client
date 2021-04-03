@@ -5,21 +5,21 @@
     @click="clickNotification(notification)"
   >
     <template v-if="isAutoAccepted">
-      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      <span class="primary--text half-bold">{{ proposalCreator | accountFullname }}</span>
       {{ $t('notifications.invited') }}
-      <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
+      <span class="primary--text half-bold">{{ invitee | accountFullname }}</span>
       {{ $t('notifications.to') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
     <template v-else-if="isAcceptedByQuorum">
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
       {{ $t('notifications.invited') }}
-      <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
+      <span class="primary--text half-bold">{{ invitee | accountFullname }}</span>
     </template>
     <template v-else>
-      <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
+      <span class="primary--text half-bold">{{ proposalCreator | accountFullname }}</span>
       {{ $t('notifications.propInvite') }}
-      <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
+      <span class="primary--text half-bold">{{ invitee | accountFullname }}</span>
       {{ $t('notifications.to') }}
       "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
     </template>
@@ -53,7 +53,7 @@
       proposalCreator() {
         return this.notification.metadata.emitter;
       },
-      inviteeProfile() {
+      invitee() {
         return this.notification.metadata.invitee;
       }
     },
