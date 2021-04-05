@@ -62,8 +62,8 @@
     <!-- ### END Project Group Proposals Section ### -->
 
     <member-list namespace="memberDetails" :group="group" class="mb-12">
-      <!-- <template #title-append-after>
-        <v-btn
+      <template #title-append-after>
+        <!-- <v-btn
           v-if="isResearchGroupMember"
           color="primary"
           class="mt-4"
@@ -72,8 +72,8 @@
           @click="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: true })"
         >
           {{ $t('researchGroupDetails.invite') }}
-        </v-btn>
-      </template> -->
+        </v-btn> -->
+      </template>
     </member-list>
 
     <!-- ### START Project Group Project List Section ### -->

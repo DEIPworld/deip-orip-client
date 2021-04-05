@@ -39,14 +39,14 @@
         </span>
       </template>
       <template v-if="isGroupMembersActionsColumnAvailable" #item.actions="{item}">
-        <v-btn
+        <!-- <v-btn
           v-if="isExcludingMemberAvailable(item.account.name)"
           icon
           small
           @click="showConfirmAction(item)"
         >
           <v-icon>clear</v-icon>
-        </v-btn>
+        </v-btn> -->
       </template>
     </v-data-table>
     <v-divider v-if="items.length < 50" />
