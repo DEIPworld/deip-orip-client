@@ -173,8 +173,8 @@ export default {
       submitBtn: 'Reject'
     },
     deleteDialog: {
-      title: `Delete ${project()}?`,
-      description: `${project(true)} will be hidden from platform permanently.`,
+      title: `Remove ${project()} ?`,
+      description: `${project(true)} will be deleted permanently and will be removed from the platform.`,
       submitBtn: 'Delete'
     }
   },
