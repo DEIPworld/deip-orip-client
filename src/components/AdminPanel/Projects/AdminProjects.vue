@@ -113,10 +113,10 @@
 
       deleteProject(id) {
         this.$confirm(
-          'Technology will be deleted permanently and will be removed from the platform.',
+          this.$t('adminRouting.projects.deleteDialog.description'),
           {
-            title: 'Remove technology?',
-            buttonTrueText: 'Delete'
+            title: this.$t('adminRouting.projects.deleteDialog.title'),
+            buttonTrueText: this.$t('adminRouting.projects.deleteDialog.submitBtn')
           }
         )
           .then((confirmed) => {

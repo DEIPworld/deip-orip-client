@@ -1,12 +1,12 @@
 <template>
-  <div v-if="contributions.length">
+  <div v-if="internalContributions.length">
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ label: $t('defaultNaming.all'), value: '' }, ...contributions]"
+      :items="[{ text: $t('defaultNaming.all'), value: '' }, ...internalContributions]"
       outlined
       :label="$t('defaultNaming.filters.contributionType')"
-      item-text="label"
+      item-text="text"
       item-value="value"
       hide-details
     />
@@ -16,15 +16,15 @@
       :title="$t('defaultNaming.filters.contributionType')"
       widget="compact"
     >
-      <d-list-expand :active="contributions.length > 4">
+      <d-list-expand :active="internalContributions.length > 4">
         <template #default="{expanded}">
           <div class="mt-n2">
-            <template v-for="(contribution, i) in contributions">
+            <template v-for="(contribution, i) in internalContributions">
               <v-checkbox
                 v-if="expanded || i < 4"
                 :key="'discipline-filter-' + i"
                 v-model="internalValue"
-                :label="contribution.label"
+                :label="contribution.text"
                 :value="contribution.value"
                 hide-details
                 class="mt-2 mb-0"
@@ -40,9 +40,8 @@
 <script>
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
-  import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
-  import { sentenceCase } from 'change-case';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
+  import { filterableMetrics, metricsMixin } from '@/components/EciMetrics/mixins';
 
   export default {
     name: 'DFilterTermContributions',
@@ -52,7 +51,11 @@
       DListExpand
     },
 
-    mixins: [Proxyable],
+    mixins: [
+      Proxyable,       
+      metricsMixin,
+      filterableMetrics
+    ],
 
     props: {
       singleChoice: {
@@ -63,12 +66,6 @@
 
     data() {
       return {
-        contributions: Object.keys(EXPERTISE_CONTRIBUTION_TYPE)
-          .filter((x) => isNaN(x) && x !== 'UNKNOWN')
-          .map((key) => ({
-            label: sentenceCase(key),
-            value: EXPERTISE_CONTRIBUTION_TYPE[key]
-          }))
       };
     }
   };
