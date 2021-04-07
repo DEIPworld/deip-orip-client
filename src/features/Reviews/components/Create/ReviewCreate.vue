@@ -150,9 +150,9 @@
 <script>
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { ValidationObserver, ValidationProvider } from 'vee-validate';
-
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import { mapGetters } from 'vuex';
+  import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { ResearchContentService } from '@deip/research-content-service';
@@ -163,6 +163,7 @@
 
   export default {
     name: 'ReviewCreate',
+    mixins: [reviewsChore],
     components: {
       ReviewAssessment,
       DStack,
@@ -214,11 +215,10 @@
       },
 
       isReviewPublishingDisabled() {
-        const criterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.contentType);
-
+        const assessmentCriterias = this.$$getAssessmentCriterias(this.content.contentType);
         const { assessmentCriteria } = this.formModel;
 
-        return criterias
+        return assessmentCriterias
           .some((criteria) => assessmentCriteria[criteria.id] === undefined
             || assessmentCriteria[criteria.id] === 0);
       },
