@@ -150,9 +150,9 @@
 <script>
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { ValidationObserver, ValidationProvider } from 'vee-validate';
-
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import { mapGetters } from 'vuex';
+  import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { ResearchContentService } from '@deip/research-content-service';
@@ -163,6 +163,7 @@
 
   export default {
     name: 'ReviewCreate',
+    mixins: [reviewsChore],
     components: {
       ReviewAssessment,
       DStack,
@@ -185,21 +186,16 @@
     },
 
     data() {
-      const questions = [
-        'Do you recommend the submission for funding?',
-        'Describe the strength or weaknesses of the submissions',
-        'How well does the submission align with the mission?'
-      ];
 
       return {
         formModel: {
-          reviewData: questions.map(() => []),
+          reviewData: [],
           assessmentCriteria: {},
           confirm: false
         },
         loading: false,
 
-        questions,
+        questions: [],
 
         requestAccepted: true,
         requestData: {}
@@ -219,12 +215,10 @@
       },
 
       isReviewPublishingDisabled() {
-        const criterias = researchContentReviewsService
-          .getAssessmentCriteriasForResearchContent(this.content.contentType);
-
+        const assessmentCriterias = this.$$getAssessmentCriterias(this.content.contentType);
         const { assessmentCriteria } = this.formModel;
 
-        return criterias
+        return assessmentCriterias
           .some((criteria) => assessmentCriteria[criteria.id] === undefined
             || assessmentCriteria[criteria.id] === 0);
       },
@@ -239,6 +233,10 @@
 
     created() {
       // TODO: rethink
+      const questions = this.$tenantSettings.reviewQuestions.map(q => q.question);
+      this.questions.push(...questions);
+      this.formModel.reviewData.push(...questions.map(() => []));
+
       return researchContentReviewsService.getReviewRequestsByExpert(this.$currentUser.username, 'pending')
         .then((res) => {
           const request = res.find((r) => r.researchContentExternalId === this.content.externalId);

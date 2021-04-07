@@ -23,7 +23,7 @@
       <div>
         <template v-for="(review, index) of internalReviews">
           <v-row :key="`review-${index}`" class="text-body-2" no-gutters>
-            <v-col cols="12" md="wide">
+            <v-col cols="3" md="wide">
               <users-list
                 :users="review.author"
                 view-type="brief"
@@ -42,9 +42,9 @@
               </users-list>
             </v-col>
 
-            <v-sheet width="64" />
+            <v-sheet width="16" />
 
-            <v-col cols="12" md="wide">
+            <v-col cols="3" md="wide">
               <d-stack gap="8">
                 <template v-if="review.contentData">
                   <div class="text-caption text--secondary">
@@ -85,9 +85,9 @@
               </d-stack>
             </v-col>
 
-            <v-sheet width="64" />
+            <v-sheet width="16" />
 
-            <v-col cols="12" md="wide">
+            <v-col cols="6" md="wide">
               <d-block :title-margin="8">
                 <template #title>
                   <div class="text-caption text--secondary">

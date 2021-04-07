@@ -47,16 +47,16 @@
   import { mapGetters } from 'vuex';
   import { bus } from '@/main';
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-  import { AccessService } from '@deip/access-service';
+  import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
-  const accessService = AccessService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
+    mixins: [reviewsChore],
     components: { ReviewAssessment, DBlockWidget, DBlock },
     data() {
       return {
@@ -76,8 +76,8 @@
       },
 
       isReviewPublishingDisabled() {
-        const criterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
-        return criterias.some((criteria) => this.assessmentCriteria[criteria.id] === undefined || this.assessmentCriteria[criteria.id] == 0);
+        const assessmentCriterias = this.$$getAssessmentCriterias(this.content.content_type);
+        return assessmentCriterias.some((criteria) => this.assessmentCriteria[criteria.id] === undefined || this.assessmentCriteria[criteria.id] == 0);
       }
     },
 
@@ -86,7 +86,6 @@
         bus.$emit('reviewEditor:exportHtml', (html) => {
           this.isLoading = true;
           const reviewData = html;
-          const researchContentCriterias = researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.content.content_type);
           const researchContentExternalId = this.content.external_id;
           const weight = '100.00 %';
           const scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {

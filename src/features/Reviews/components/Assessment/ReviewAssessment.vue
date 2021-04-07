@@ -21,19 +21,15 @@
 
 <script>
   import chunk from 'chunk';
-
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DDotList from '@/components/Deipify/DDotList/DDotList';
-
   import { gutterable } from '@/mixins/gutterable';
   import DRating from '@/components/Deipify/DRating/DRating';
-
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  import { reviewsChore } from '@/mixins/chores';
 
   export default {
     name: 'ReviewAssessment',
     components: { DRating, DDotList },
-    mixins: [gutterable],
+    mixins: [gutterable, reviewsChore],
 
     props: {
       value: {
@@ -68,7 +64,7 @@
             form[field] = this.value[field];
             return form;
           }, {}),
-        criterias: researchContentReviewsService.getAssessmentCriteriasForResearchContent(this.contentType)
+        criterias: []
       };
     },
 
@@ -117,7 +113,11 @@
         },
         deep: true
       }
+    },
 
-    }
+    created() {
+      const assesmentCriterias = this.$$getAssessmentCriterias(this.contentType);
+      this.criterias = assesmentCriterias;
+    },
   };
 </script>
