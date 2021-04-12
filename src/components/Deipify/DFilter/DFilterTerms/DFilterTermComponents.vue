@@ -1,6 +1,6 @@
 <template>
   <d-stack :gap="24" class="px-6">
-    <!--    <pre>{{JSON.stringify($tenantSettings.researchAttributes, null, 2)}}</pre>-->
+    <!--    <pre>{{JSON.stringify($$projectAttributes, null, 2)}}</pre>-->
     <!--    <pre>{{JSON.stringify(researchAttributes, null, 2)}}</pre>-->
 
     <attributes-set
@@ -18,6 +18,7 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
   import AttributesSet from '@/components/Attributes/AttributesSet';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'DFilterTermComponents',
@@ -27,7 +28,7 @@
       AttributesSet
     },
 
-    mixins: [Proxyable],
+    mixins: [Proxyable, attributesChore],
 
     data() {
       return {
@@ -37,7 +38,7 @@
 
     created() {
       this.researchAttributes = this.$where(
-        this.$tenantSettings.researchAttributes,
+        this.$$projectAttributes,
         (attr) => attr.isFilterable
       );
     }

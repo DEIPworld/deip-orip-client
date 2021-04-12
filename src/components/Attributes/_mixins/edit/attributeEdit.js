@@ -1,4 +1,5 @@
 import Proxyable from 'vuetify/lib/mixins/proxyable';
+import { ATTRIBUTE_SCOPE } from '@/variables';
 
 export const defaultAttributeModel = () => ({
   blockchainFieldMeta: null,
@@ -6,6 +7,7 @@ export const defaultAttributeModel = () => ({
   title: '',
   shortTitle: '',
   description: '',
+  scope: ATTRIBUTE_SCOPE.PROJECT,
 
   defaultValue: null,
   valueOptions: [],

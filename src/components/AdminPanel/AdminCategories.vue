@@ -85,7 +85,6 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
         categories: 'adminPanel/categories'
       })
     },
@@ -112,7 +111,7 @@
       deleteCategory(categoryId) {
         const updatedCategories = this.categories.filter(({ _id }) => _id !== categoryId);
 
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
+        const updatedProfile = _.cloneDeep(this.$tenant.profile);
         updatedProfile.settings.researchCategories = updatedCategories;
         tenantService.updateTenantProfile(updatedProfile)
           .then(() => {

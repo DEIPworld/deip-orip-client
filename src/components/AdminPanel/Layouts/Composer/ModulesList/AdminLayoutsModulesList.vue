@@ -124,6 +124,7 @@
   import AdminLayoutsModulesMarkers
     from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesMarkers';
   import AdminLayoutsModulesMenu from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesMenu';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'AdminLayoutsModulesList',
@@ -134,6 +135,7 @@
       DStack,
       draggable
     },
+    mixins: [attributesChore],
     props: {
       layoutType: {
         type: [String, Number],
@@ -188,7 +190,7 @@
       //       text: '@research.createdAt',
       //       icon: 'mdi-calendar-text'
       //     },
-      //     ...this.$tenantSettings.researchAttributes
+      //     ...this.$$projectAttributes
       //       .map((attr) => ({
       //         icon: ATTR_ICONS[attr.type],
       //         name: attr.shortTitle || attr.title,

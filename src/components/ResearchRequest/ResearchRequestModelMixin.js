@@ -1,7 +1,9 @@
 import kindOf from 'kind-of';
 import { mapGetters } from 'vuex';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 
 export const ResearchRequestModelMixin = {
+  mixins: [attributesChore],
   props: {
     researchId: {
       type: String,
@@ -19,7 +21,6 @@ export const ResearchRequestModelMixin = {
 
   computed: {
     ...mapGetters({
-      tenant: 'auth/tenant',
       user: 'auth/user'
     })
   },
@@ -87,7 +88,7 @@ export const ResearchRequestModelMixin = {
   },
 
   created() {
-    this.$store.getters['auth/tenant'].profile.settings.researchAttributes.forEach((item) => {
+    this.$$projectAttributes.forEach((item) => {
       if (item.isPublished) {
         this.formData.attributes.push({
           researchAttributeId: item._id,

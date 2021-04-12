@@ -14,7 +14,13 @@ export const collectionMerge = (
   const col2 = wrapInArray(c2);
 
   const { key } = opts;
-  const result = [...col1];
+  const result = [];
+
+  if (col1 > col2) {
+    result.push(...col2);
+  } else {
+    result.push(...col1);
+  }
 
   for (const item of col2) {
     const idx = col1.findIndex((i) => i[key] === item[key]);

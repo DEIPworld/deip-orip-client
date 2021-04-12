@@ -89,7 +89,6 @@
     },
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
         faqs: 'adminPanel/faqs'
       })
     },
@@ -111,7 +110,7 @@
 
         const { _id } = this.formData;
 
-        const updatedProfile = _.cloneDeep(this.tenant.profile);
+        const updatedProfile = _.cloneDeep(this.$tenant.profile);
         if (_id) {
           updatedProfile.settings.faq = updatedProfile.settings.faq.map((item) => (item._id === _id ? this.formData : item));
         } else {

@@ -19,7 +19,7 @@
 
         <v-data-table
           :headers="attributesTable"
-          :items="researchAttributes"
+          :items="$$projectAttributes"
           :items-per-page="50"
         >
 
@@ -79,14 +79,16 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TenantService } from '@deip/tenant-service';
+  import { AttributesService } from '@deip/attributes-service';
+
   import { ATTR_TYPES, ATTR_LABELS } from '@/variables';
   import CrudActions from '@/components/layout/CrudActions';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
-  const tenantService = TenantService.getInstance();
+  const attributesService = AttributesService.getInstance();
 
   export default {
     name: 'AdminAttributes',
@@ -96,6 +98,7 @@
       DBlock,
       CrudActions
     },
+    mixins: [attributesChore],
     data() {
       return {
         ATTR_TYPES,
@@ -136,8 +139,7 @@
     },
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
-        researchAttributes: 'adminPanel/researchAttributes'
+        tenant: 'auth/tenant'
       })
     },
     methods: {
@@ -179,15 +181,14 @@
         }, 300);
       },
       publishAttribute(id) {
-        const researchAttribute = this.researchAttributes.find((step) => step._id === id);
-        tenantService.updateTenantResearchAttribute({
+        const researchAttribute = this.$$projectAttributes.find((step) => step._id === id);
+        attributesService.deleteAttribute({
           ...researchAttribute,
           isPublished: true
         })
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            this.$store.dispatch('Attributes/fetch');
           })
           .catch((err) => {
             console.error(err);
@@ -196,15 +197,14 @@
           .finally(() => this.closeActionDialog());
       },
       unpublishAttribute(id) {
-        const researchAttribute = this.researchAttributes.find((step) => step._id === id);
-        tenantService.updateTenantResearchAttribute({
+        const researchAttribute = this.$$projectAttributes.find((step) => step._id === id);
+        attributesService.deleteAttribute({
           ...researchAttribute,
           isPublished: false
         })
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            this.$store.dispatch('Attributes/fetch');
           })
           .catch((err) => {
             console.error(err);
@@ -213,11 +213,10 @@
           .finally(() => this.closeActionDialog());
       },
       deleteAttribute(id) {
-        tenantService.deleteTenantResearchAttribute(id)
+        attributesService.deleteAttribute(id)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            this.$store.dispatch('Attributes/fetch');
           })
           .catch((err) => {
             console.error(err);

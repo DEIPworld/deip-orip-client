@@ -30,6 +30,22 @@ export const ATTR_TYPES = {
   FILE: 'file'
 };
 
+export const SYSTEM_ATTRS = {
+  [ATTR_TYPES.USER]: true,
+  [ATTR_TYPES.DISCIPLINE]: true,
+  [ATTR_TYPES.DISCIPLINES_LIST]: true,
+  [ATTR_TYPES.RESEARCH_GROUP]: true,
+  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: true,
+  [ATTR_TYPES.EXPRESS_LICENSING]: true,
+  [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: true
+};
+
+export const ATTRIBUTE_SCOPE = {
+  PROJECT: 1,
+  USER: 2,
+  TEAM: 3
+};
+
 export const ATTR_LABELS = {
   [ATTR_TYPES.TEXT]: 'Text field',
   [ATTR_TYPES.TEXTAREA]: 'Text area',

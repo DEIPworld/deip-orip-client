@@ -49,6 +49,7 @@
 <script>
   import AttributesSet from '@/components/Attributes/AttributesSet';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'FundingOpportunityTitle',
@@ -57,6 +58,8 @@
       DStack,
       AttributesSet
     },
+
+    mixins: [attributesChore],
 
     props: {
       foa: { type: Object, required: true },
@@ -93,7 +96,7 @@
     },
 
     created() {
-      this.grantSelector = this.$tenantSettings.researchAttributes.find((attr) => { 
+      this.grantSelector = this.$$projectAttributes.find((attr) => { 
         return attr._id == this.$env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID;
       });
     }

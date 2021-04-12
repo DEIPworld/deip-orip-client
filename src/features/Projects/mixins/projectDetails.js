@@ -1,7 +1,9 @@
 import { hasValue } from '@/utils/helpers';
 import { ATTR_TYPES } from '@/variables';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 
 export const projectContext = {
+  mixins: [attributesChore],
   props: {
     project: {
       type: Object,
@@ -31,7 +33,7 @@ export const projectContext = {
     },
 
     $$ifAttributesByType(type) {
-      const attrIds = this.$tenantSettings.researchAttributes
+      const attrIds = this.$$projectAttributes
         .filter((attr) => attr.type === type)
         .map((attr) => attr._id);
 

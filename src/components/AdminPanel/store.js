@@ -17,9 +17,7 @@ const getters = {
 
   faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq,
 
-  categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories,
-
-  researchAttributes: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchAttributes,
+  categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories
 };
 
 // actions

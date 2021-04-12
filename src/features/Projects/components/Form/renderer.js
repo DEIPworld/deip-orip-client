@@ -6,6 +6,7 @@ import AttributesSet from '@/components/Attributes/AttributesSet';
 import ContentsList from '@/features/Contents/components/List/ContentsList';
 import DraftsList from '@/components/DraftsList/DraftsList';
 import { tenantAttributesToObject } from '@/utils/helpers';
+import { attributesChore } from '@/mixins/chores/attributesChore';
 
 export default {
   name: 'ProjectFormRenderer',
@@ -15,10 +16,10 @@ export default {
     ContentsList,
     DraftsList
   },
-  mixins: [componentsRenderer, Proxyable],
+  mixins: [componentsRenderer, Proxyable, attributesChore],
   computed: {
     attributes() {
-      return tenantAttributesToObject(this.$tenantSettings.researchAttributes);
+      return tenantAttributesToObject(this.$$projectAttributes);
     }
   }
 };

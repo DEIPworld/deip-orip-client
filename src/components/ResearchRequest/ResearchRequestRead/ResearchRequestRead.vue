@@ -13,6 +13,7 @@
   import { NAMING_MAP } from '@/components/ResearchRequest/maps';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   const accessService = AccessService.getInstance();
 
@@ -21,6 +22,7 @@
     components: {
       ResearchRequestReadView
     },
+    mixins: [attributesChore],
     props: {
       researchId: {
         type: String,
@@ -73,7 +75,7 @@
 
             if (key === 'attributes') {
               data = research[key].reduce((acc, attr) => {
-                const researchAttribute = this.tenant.profile.settings.researchAttributes.find((c) => c._id === attr.researchAttributeId);
+                const researchAttribute = this.$$projectAttributes.find((c) => c._id === attr.researchAttributeId);
                 if (attr.value !== null) {
                   let value = researchAttribute.valueOptions.find(opt => opt.value == attr.value);
                   let valueIdx = researchAttribute.valueOptions.indexOf(value);
