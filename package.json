@@ -16,7 +16,7 @@
     "@deip/access-service": "1.97.0",
     "@deip/app-config-service": "1.97.0",
     "@deip/assets-service": "1.98.0",
-    "@deip/attributes-service": "1.102.0",
+    "@deip/attributes-service": "1.103.0",
     "@deip/auth-service": "1.97.0",
     "@deip/blockchain-service": "1.98.0",
     "@deip/disciplines-service": "1.98.0",
