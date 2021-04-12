@@ -1,5 +1,6 @@
 import { UsersService } from '@deip/users-service';
 import { ResearchGroupService } from '@deip/research-group-service';
+import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import {
   camelizeObjectKeys,
   collectionList,
@@ -9,6 +10,7 @@ import {
 
 const usersService = UsersService.getInstance();
 const teamsService = ResearchGroupService.getInstance();
+const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const STATE = {
   data: []
@@ -27,14 +29,16 @@ const ACTIONS = {
   get({ commit }, username) {
     return Promise.all([
       usersService.getUser(username),
-      teamsService.getTeamsByUser(username)
+      teamsService.getTeamsByUser(username),
+      expertiseContributionsService.getAccountExpertiseTokens(username)
     ])
-      .then(([{ account, profile }, teams]) => {
+      .then(([{ account, profile }, teams, expertise]) => {
         commit('setOne', {
           username,
           account,
           profile,
-          teams
+          teams: teams.map((t) => camelizeObjectKeys(t)),
+          expertise: expertise.map((e) => camelizeObjectKeys(e))
         });
       })
       .catch((err) => {

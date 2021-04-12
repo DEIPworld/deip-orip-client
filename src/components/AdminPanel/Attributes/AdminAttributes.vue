@@ -144,27 +144,27 @@
     },
     methods: {
 
-      openActionDialog(type, researchAttributeId) {
+      openActionDialog(type, attributeId) {
         const types = {
           publish: {
             title: this.$t('adminRouting.attributes.publishDialog.title'),
             description: this.$t('adminRouting.attributes.publishDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.publishDialog.submitBtn'),
-            action: () => { this.publishAttribute(researchAttributeId); }
+            action: () => { this.publishAttribute(attributeId); }
 
           },
           unpublish: {
             title: this.$t('adminRouting.attributes.unpublishDialog.title'),
             description: this.$t('adminRouting.attributes.unpublishDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.unpublishDialog.submitBtn'),
-            action: () => { this.unpublishAttribute(researchAttributeId); }
+            action: () => { this.unpublishAttribute(attributeId); }
 
           },
           delete: {
             title: this.$t('adminRouting.attributes.deleteDialog.title'),
             description: this.$t('adminRouting.attributes.deleteDialog.description'),
             actionLabel: this.$t('adminRouting.attributes.deleteDialog.submitBtn'),
-            action: () => { this.deleteAttribute(researchAttributeId); }
+            action: () => { this.deleteAttribute(attributeId); }
 
           }
         };

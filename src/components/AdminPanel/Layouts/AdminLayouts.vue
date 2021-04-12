@@ -48,7 +48,7 @@
       layouts() {
         return {
           ...baseLayouts(),
-          ..._.cloneDeep(this.$tenantSettings.researchLayouts)
+          ..._.cloneDeep(this.$tenantSettings.layouts)
         };
       }
     }

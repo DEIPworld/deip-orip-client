@@ -2,7 +2,7 @@ import { componentsRenderer } from '@/mixins/renderer';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
 import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
-import { extendAttrModules, hasValue, researchAttributesToObject } from '@/utils/helpers';
+import { extendAttrModules, hasValue, tenantAttributesToObject } from '@/utils/helpers';
 import { collectionMerge } from '@deip/toolbox';
 import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -48,7 +48,7 @@ export const projectListItem = {
 
   computed: {
     layoutSchema() {
-      const { layout } = this.$tenantSettings.researchLayouts[this.layoutKey];
+      const { layout } = this.$tenantSettings.layouts[this.layoutKey];
 
       return extendAttrModules(
         layout,
@@ -59,14 +59,14 @@ export const projectListItem = {
     $$projectExtended() {
       const allAttrs = this.$$projectAttributes
         .map((attr) => ({
-          researchAttributeId: attr._id,
+          attributeId: attr._id,
           value: attr.defaultValue
         }));
 
       const constructedAttrs = collectionMerge(
         allAttrs,
         this.project.researchRef.attributes,
-        { key: 'researchAttributeId' }
+        { key: 'attributeId' }
       );
 
 
@@ -75,7 +75,7 @@ export const projectListItem = {
         ...{
           researchRef: {
             ...this.project.researchRef,
-            attributes: researchAttributesToObject(constructedAttrs),
+            attributes: tenantAttributesToObject(constructedAttrs),
             created_at: this.$options.filters.dateFormat(this.project.researchRef.created_at, 'D MMM YYYY', true)
           }
         }

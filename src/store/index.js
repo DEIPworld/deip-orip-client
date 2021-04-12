@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 
 import { authStore } from '@/components/auth/store';
 import { accountStore } from '@/components/Account/store';
-import { userDetailsStore } from '@/components/UserDetails/store';
 
 import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
@@ -37,7 +36,6 @@ export const store = new Vuex.Store({
 
     researchGroup: researchGroupStore,
     rcd: rcdStore,
-    userDetails: userDetailsStore,
     layout: layoutStore,
     votingForBlockProducers: votingForBlockProducersStore,
     dashboard: dashboardStore,

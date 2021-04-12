@@ -32,6 +32,7 @@
   import { AttributesImageSet } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingSet } from '@/components/Attributes/ExpressLicensing';
   import { AttributesNetworkContentAccessSet } from '@/components/Attributes/NetworkContentAccess';
+  import { AttributesDateSet } from '@/components/Attributes/Date';
 
   export default {
     name: 'AttributesSet',
@@ -51,7 +52,8 @@
       AttributesVideoUrlSet,
       AttributesImageSet,
       AttributesExpressLicensingSet,
-      AttributesNetworkContentAccessSet
+      AttributesNetworkContentAccessSet,
+      AttributesDateSet
     },
 
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],

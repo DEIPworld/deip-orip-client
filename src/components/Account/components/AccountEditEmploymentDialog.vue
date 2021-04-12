@@ -1,17 +1,37 @@
 <template>
-  <full-screen-view :title="$t('userDetailRouting.educationDialog.title')">
+  <full-screen-view :title="$t('userDetailRouting.employmentDialog.title')">
     <v-form ref="form" v-model="isFormValid">
-      <d-form-block :title="$t('userDetailRouting.educationDialog.educationalBlock.title')">
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.companyBlock.title')">
         <v-col cols="5">
           <v-text-field
-            v-model="formData.educationalInstitution"
+            v-model="formData.company"
             outlined
-            :label="$t('userDetailRouting.educationDialog.educationalBlock.educationalField')"
-            :rules="[ rules.required ]"
+            :label="$t('userDetailRouting.employmentDialog.companyBlock.companyField')"
+            :rules="[rules.required]"
           />
         </v-col>
       </d-form-block>
-      <d-form-block :title="$t('userDetailRouting.educationDialog.datesBlock.title')">
+
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.locationBlock.title')">
+        <v-col cols="5">
+          <v-text-field
+            v-model="formData.location.city"
+            outlined
+            :label="$t('userDetailRouting.employmentDialog.locationBlock.cityField')"
+            :rules="[rules.required]"
+          />
+        </v-col>
+        <v-col cols="5">
+          <v-text-field
+            v-model="formData.location.country"
+            outlined
+            :label="$t('userDetailRouting.employmentDialog.locationBlock.countryField')"
+            :rules="[rules.required]"
+          />
+        </v-col>
+      </d-form-block>
+
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.periodBlock.title')">
         <v-col cols="5">
           <v-menu
             v-model="dateFromMenu"
@@ -20,18 +40,18 @@
             offset-y
             min-width="290px"
           >
-            <template #activator="{ on }">
+            <template v-slot:activator="{ on }">
               <v-text-field
                 ref="dateFromInput"
                 v-model="formData.period.from"
                 outlined
-                :label="$t('userDetailRouting.educationDialog.datesBlock.fromField')"
+                :label="$t('userDetailRouting.employmentDialog.periodBlock.fromField')"
                 append-icon="event"
-                readonly
                 :rules="[
                   rules.required,
                   rules.startDateValidation
                 ]"
+                readonly
                 v-on="on"
               />
             </template>
@@ -47,12 +67,12 @@
             min-width="290px"
             :disabled="formData.isActive"
           >
-            <template #activator="{ on }">
+            <template v-slot:activator="{ on }">
               <v-text-field
                 ref="dateToInput"
                 v-model="formData.period.to"
                 outlined
-                :label="$t('userDetailRouting.educationDialog.datesBlock.toField')"
+                :label="$t('userDetailRouting.employmentDialog.periodBlock.toField')"
                 append-icon="event"
                 :disabled="formData.isActive"
                 :rules="[
@@ -70,41 +90,33 @@
         <v-col cols="12">
           <v-checkbox
             v-model="formData.isActive"
-            class="ma-0 pa-0 pb-4"
-            :label="$t('userDetailRouting.educationDialog.datesBlock.inProgressField')"
+            class="ma-0 pa-0"
+            :label="$t('userDetailRouting.employmentDialog.periodBlock.isPresentField')"
             hide-details
-            style="max-width: 140px"
+            style="max-width: 125px"
           />
         </v-col>
       </d-form-block>
-      <d-form-block :title="$t('userDetailRouting.educationDialog.obtainedBlock.title')">
+
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.positionBlock.title')">
         <v-col cols="5">
           <v-text-field
-            v-model="formData.degree"
+            v-model="formData.position"
             outlined
-            :label="$t('userDetailRouting.educationDialog.obtainedBlock.obtainedField')"
-            :rules="[ rules.required ]"
+            :label="$t('userDetailRouting.employmentDialog.positionBlock.positionField')"
+            :rules="[rules.required]"
           />
         </v-col>
       </d-form-block>
-      <d-form-block :title="$t('userDetailRouting.educationDialog.studyBlock.title')">
-        <v-col cols="5">
-          <v-text-field
-            v-model="formData.area"
-            outlined
-            :label="$t('userDetailRouting.educationDialog.studyBlock.studyField')"
-            :rules="[ rules.required ]"
-          />
-        </v-col>
-      </d-form-block>
-      <d-form-block :title="$t('userDetailRouting.educationDialog.descriptionBlock.title')">
+
+      <d-form-block :title="$t('userDetailRouting.employmentDialog.descriptionBlock.title')">
         <v-col cols="12">
           <v-textarea
             v-model="formData.description"
             outlined
             :rows="6"
             auto-grow
-            :label="$t('userDetailRouting.educationDialog.descriptionBlock.descriptionField')"
+            :label="$t('userDetailRouting.employmentDialog.descriptionBlock.descriptionField')"
           />
         </v-col>
       </d-form-block>
@@ -114,11 +126,11 @@
           <v-btn
             class="ma-0"
             color="primary"
-            text
             :disabled="isProcessing"
+            text
             @click.native="$router.back()"
           >
-            {{ $t('userDetailRouting.educationDialog.cancel') }}
+            {{ $t('userDetailRouting.employmentDialog.cancel') }}
           </v-btn>
           <v-btn
             class="ma-0"
@@ -127,7 +139,7 @@
             :loading="isProcessing"
             @click="save()"
           >
-            {{ $t('userDetailRouting.educationDialog.submitBtn') }}
+            {{ $t('userDetailRouting.employmentDialog.submitBtn') }}
           </v-btn>
         </slot>
       </div>
@@ -138,15 +150,15 @@
 <script>
   import _ from 'lodash';
   import moment from 'moment';
-  import { mapGetters } from 'vuex';
-  import { UserService } from '@deip/user-service';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
+  import { UserService } from '@deip/user-service';
+  import { expandAttributes, compactAttributes } from '@/utils/helpers';
 
   const userService = UserService.getInstance();
 
   export default {
-    name: 'UserEditEducationDialog',
+    name: 'UserEditEmploymentDialog',
     components: {
       FullScreenView,
       DFormBlock
@@ -154,19 +166,22 @@
     data() {
       return {
         formData: {
-          educationalInstitution: undefined,
-          period: {
-            from: undefined,
-            to: undefined
+          company: undefined,
+          location: {
+            city: undefined,
+            country: undefined
           },
-          degree: undefined,
-          area: undefined,
           description: undefined,
-          isActive: undefined
+          isActive: false,
+          period: {
+            to: undefined,
+            from: undefined
+          },
+          position: undefined
         },
-        isProcessing: false,
         dateFromMenu: false,
         dateToMenu: false,
+        isProcessing: false,
 
         isFormValid: false,
 
@@ -190,13 +205,11 @@
         }
       };
     },
+
     computed: {
-      ...mapGetters({
-        currentUser: 'auth/user'
-      })
-      // disabled() {
-      //   return !this.isFormValid;
-      // }
+      attrId() {
+        return this.$route.query.attr || this.$$userAttributes.find(({ type }) => type === 'employment')._id;
+      }
     },
     watch: {
       'formData.isActive': function () {
@@ -209,32 +222,46 @@
     },
     created() {
       if (this.$route.query.index) {
-        const userEducation = this.$store.getters['auth/user'].profile.education[this.$route.query.index];
+        const userEmployment = this.$currentUser.profile.attributes.find(
+          ({ attributeId }) => attributeId === this.attrId
+        ).value[this.$route.query.index];
         this.formData = {
-          educationalInstitution: userEducation.educationalInstitution,
-          period: {
-            from: moment(userEducation.period.from).format('YYYY-MM'),
-            to: moment(userEducation.period.to).format('YYYY-MM')
+          company: userEmployment.company,
+          location: {
+            city: userEmployment.location.city,
+            country: userEmployment.location.country
           },
-          degree: userEducation.degree,
-          area: userEducation.area,
-          description: userEducation.description,
-          isActive: userEducation.isActive
+          description: userEmployment.description,
+          isActive: userEmployment.isActive,
+          period: {
+            to: moment(userEmployment.period.to).format('YYYY-MM'),
+            from: moment(userEmployment.period.from).format('YYYY-MM')
+          },
+          position: userEmployment.position
         };
       }
     },
     methods: {
       save() {
         if (!this.$refs.form.validate()) return;
+        const userAttributes = expandAttributes(this.$currentUser.profile.attributes);
 
         this.isProcessing = true;
         const update = {};
-        if (!this.$route.query.index) { // new education
-          const educationList = this.currentUser.profile.education.map((e) => e)
-            .concat([this.formData]);
-          Object.assign(update, this.currentUser.profile, { education: educationList });
-        } else { // edited education
-          const educationList = this.currentUser.profile.education.reduce(
+        if (!this.$route.query.index) { // new employment
+          userAttributes[this.attrId] = userAttributes[this.attrId]
+            ? userAttributes[this.attrId] = [
+              ...userAttributes[this.attrId], this.formData
+            ]
+            : userAttributes[this.attrId] = [this.formData];
+          Object.assign(update, {
+            ...this.$currentUser.profile,
+            attributes: [
+              ...compactAttributes(userAttributes)
+            ]
+          });
+        } else { // edited employment
+          userAttributes[this.attrId] = userAttributes[this.attrId].reduce(
             (accum, current, i) => {
               if (i == this.$route.query.index) {
                 return accum.concat(this.formData);
@@ -242,14 +269,22 @@
               return accum.concat(current);
             }, []
           );
-          Object.assign(update, this.currentUser.profile, { education: educationList });
+          Object.assign(update, {
+            ...this.$currentUser.profile,
+            attributes: [
+              ...compactAttributes(userAttributes)
+            ]
+          });
         }
-        userService.updateUserProfile(this.currentUser.username, update)
+
+        const formData = new FormData();
+        formData.append('profile', JSON.stringify(update));
+        userService.updateUserProfile(this.$currentUser.username, formData)
           .then((res) => {
-            this.$store.dispatch('auth/loadUserData', { username: this.currentUser.username });
-            this.$notifier.showSuccess(this.$t('userDetailRouting.educationDialog.instSaveSucc', { institution: this.formData.educationalInstitution }));
+            this.$notifier.showSuccess(this.$t('userDetailRouting.employmentDialog.emplSaveSucc', { company: this.formData.company }));
+            return this.$store.dispatch('Auth/getCurrentUser');
           }, (err) => {
-            this.$notifier.showError(this.$t('userDetailRouting.educationDialog.instSaveFail', { institution: this.formData.educationalInstitution }));
+            this.$notifier.showError(this.$t('userDetailRouting.employmentDialog.emplSaveFail', { company: this.formData.company }));
             console.error(err);
           })
           .finally(() => {
@@ -262,5 +297,4 @@
 </script>
 
 <style lang="less" scoped>
-
 </style>

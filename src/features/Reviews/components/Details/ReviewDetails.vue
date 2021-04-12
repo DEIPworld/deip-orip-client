@@ -148,7 +148,7 @@
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewVote from '@/features/Reviews/components/Vote/ReviewVote';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import { isJsonString, researchAttributesToObject } from '@/utils/helpers';
+  import { isJsonString, tenantAttributesToObject } from '@/utils/helpers';
   import { ResearchContentService } from '@deip/research-content-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
@@ -185,7 +185,7 @@
             createdAt: this.$options.filters.dateFormat(this.projectRaw.createdAt, 'D MMM YYYY', true),
             researchRef: {
               ...this.projectRaw.researchRef,
-              attributes: researchAttributesToObject(this.projectRaw.researchRef.attributes)
+              attributes: tenantAttributesToObject(this.projectRaw.researchRef.attributes)
             }
           }
         };

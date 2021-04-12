@@ -14,7 +14,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import ProjectDetailsRenderer from '@/features/Projects/components/Details/renderer';
-  import { extendAttrModules, researchAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, tenantAttributesToObject } from '@/utils/helpers';
   import { collectionMerge } from '@deip/toolbox';
   import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -28,7 +28,7 @@
       }),
 
       layoutSchema() {
-        const schema = this.$tenantSettings.researchLayouts.projectDetails.layout;
+        const schema = this.$tenantSettings.layouts.projectDetails.layout;
         return extendAttrModules(
           schema,
           {
@@ -43,14 +43,14 @@
       researchExtended() {
         const allAttrs = this.$$projectAttributes
           .map((attr) => ({
-            researchAttributeId: attr._id,
+            attributeId: attr._id,
             value: attr.defaultValue
           }));
 
         const constructedAttrs = collectionMerge(
           allAttrs,
           this.research.researchRef.attributes,
-          { key: 'researchAttributeId' }
+          { key: 'attributeId' }
         );
         return {
           ...this.research,
@@ -58,7 +58,7 @@
 
             researchRef: {
               ...this.research.researchRef,
-              attributes: researchAttributesToObject(constructedAttrs),
+              attributes: tenantAttributesToObject(constructedAttrs),
               created_at: this.$options.filters.dateFormat(this.research.researchRef.created_at, 'D MMM YYYY', true)
             }
           }

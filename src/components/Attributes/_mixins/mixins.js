@@ -41,8 +41,10 @@ export const attributeTypeComponent = {
         t = this.type;
       } else if (this.attribute.type) {
         t = this.attribute.type;
-      } else if (this.attribute.researchAttributeId) {
-        t = this.$$projectAttributes.find(({ _id }) => _id === this.attribute.researchAttributeId).type;
+      } else if (this.attribute.attributeId || this.attribute.attributeId) {
+        const attr = this.$$projectAttributes.find(({ _id }) => _id === this.attribute.attributeId)
+        || this.$$userAttributes.find(({ _id }) => _id === this.attribute.attributeId);
+        t = attr.type;
       } else {
         throw new Error('Unknown attribute');
       }

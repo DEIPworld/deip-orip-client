@@ -10,7 +10,7 @@
 
 <script>
   import { attributeRead } from '@/components/Attributes/_mixins';
-  import { researchAttributeFileUrl } from '@/utils/helpers';
+  import { researchAttributeFileUrl, userAttributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageRead',
@@ -19,6 +19,10 @@
       project: {
         type: Object,
         default: () => ({})
+      },
+      username: {
+        type: String,
+        default: () => ''
       },
       aspectRatio: {
         type: [String, Number],
@@ -44,12 +48,19 @@
         return q;
       },
       imageUrl() {
-        return researchAttributeFileUrl(
-          this.project.externalId,
-          this.attribute.researchAttributeId,
-          this.attribute.value,
-          true
-        ) + this.query;
+        if (this.project.externalId) {
+          return researchAttributeFileUrl(
+            this.project.externalId,
+            this.attribute.attributeId,
+            this.attribute.value,
+            true
+          ) + this.query;
+        }
+        if (this.username) {
+          return userAttributeFileUrl(this.username, 160) + this.query;
+        }
+
+        return '';
       }
     }
   };

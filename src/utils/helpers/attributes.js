@@ -1,10 +1,13 @@
+import { AccessService } from '@deip/access-service';
 import RecursiveIterator from 'recursive-iterator';
 import { mergeDeep } from 'vuetify/lib/util/helpers';
 import { isFile, isObject } from './verification';
 
-export const compactResearchAttributes = (
+const accessService = AccessService.getInstance();
+
+export const compactAttributes = (
   attrs,
-  idKey = 'researchAttributeId',
+  idKey = 'attributeId',
   valueKey = 'value'
 ) => Object.keys(attrs)
   .map((id) => ({
@@ -12,16 +15,14 @@ export const compactResearchAttributes = (
     [valueKey]: attrs[id]
   }));
 
-export const expandResearchAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.researchAttributeId]: attr.value } }), {});
+export const expandAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId]: attr.value } }), {});
 
 // TODO: switch to expand
-export const researchAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.researchAttributeId]: attr } }), {});
-
-export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr._id]: attr } }), {});
+export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId || attr._id]: attr } }), {});
 
 export const researchAttributeFileUrl = (
   researchExternalId,
-  researchAttributeId,
+  attributeId,
   filename,
   isImage = false,
   download = false
@@ -32,7 +33,7 @@ export const researchAttributeFileUrl = (
     '/research/',
     researchExternalId,
     '/attribute/',
-    researchAttributeId,
+    attributeId,
     '/file/',
     filename,
     '?download=',
@@ -41,6 +42,31 @@ export const researchAttributeFileUrl = (
     isImage
   ];
   return parts.join('');
+};
+
+export const userAttributeFileUrl = (
+  username = 'initdelegate', width = 48, height, isRound = false, noCache = false
+) => {
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+
+  const pathArray = [
+    window.env.DEIP_SERVER_URL,
+    '/api/user/avatar/',
+    username,
+    '/?authorization=',
+    accessService.getAccessToken(),
+    '&width=',
+    internalWidth,
+    '&height=',
+    internalHeight,
+    '&round=',
+    isRound,
+    '&noCache=',
+    noCache
+  ];
+
+  return pathArray.join('');
 };
 
 export const extendAttrModules = (schema, obj = {}) => {

@@ -73,7 +73,7 @@
       layoutData() {
         return {
           ...baseLayouts()[this.layoutKey],
-          ..._.cloneDeep(this.$tenantSettings.researchLayouts[this.layoutKey])
+          ..._.cloneDeep(this.$tenantSettings.layouts[this.layoutKey])
         };
       },
 
@@ -93,14 +93,14 @@
 
         const clonedProfile = _.cloneDeep(this.$tenant.profile);
 
-        clonedProfile.settings.researchLayouts[this.layoutKey] = {
+        clonedProfile.settings.layouts[this.layoutKey] = {
           ...this.layoutData,
           ...{
             layout: this.schema
           }
         };
 
-        // clonedProfile.settings.researchLayouts = baseLayouts();
+        // clonedProfile.settings.layouts = baseLayouts();
 
         tenantService.updateTenantProfile(clonedProfile)
           .then(() => {

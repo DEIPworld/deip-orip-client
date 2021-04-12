@@ -43,7 +43,6 @@ import { AccessService } from '@deip/access-service';
 import { UsersService } from '@deip/users-service';
 
 import { accountRouting } from '@/components/Account/router';
-import { userDetailRouting } from '@/components/UserDetails/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import { ParticipantstRouting } from '@/components/Participants/router';
 import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
@@ -52,6 +51,7 @@ import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
 import { projectRouting } from '@/features/Projects/router';
+import { userRouting } from '@/features/Users/router';
 import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
@@ -231,9 +231,9 @@ const router = new Router({
     ...sandboxRouting,
 
     ...projectRouting,
+    ...userRouting,
     ...groupRouting,
 
-    ...userDetailRouting,
     ...accountRouting,
     ...adminRouting,
     ...ParticipantstRouting,

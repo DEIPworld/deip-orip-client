@@ -1,13 +1,13 @@
 import AccountView from '@/components/Account/AccountView';
-import AccountProfile from '@/components/Account/AccountProfile';
+import AccountProfile from '@/components/Account/AccountProfile/AccountProfile';
 import AccountPassword from '@/components/Account/AccountPassword';
 import AccountPrivateKey from '@/components/Account/AccountPrivateKey';
-import UserDetails from '@/components/UserDetails/UserDetails';
-import UserExpertiseDetails from '@/components/UserDetails/UserExpertiseDetails';
-import UserEditEducationDialog from '@/components/UserDetails/components/UserEditEducationDialog';
-import UserEditEmploymentDialog from '@/components/UserDetails/components/UserEditEmploymentDialog';
+import UserDetails from '@/features/Users/components/User/Details/UserDetails';
+import UserExpertiseDetails from '@/features/Users/components/User/Details/UserExpertiseDetails';
 import { store } from '@/store';
 import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
+import AccountEditEducationDialog from '@/components/Account/components/AccountEditEducationDialog';
+import AccountEditEmploymentDialog from '@/components/Account/components/AccountEditEmploymentDialog';
 import AccountTeamsProjects from '@/components/Account/AccountTeamsProjects';
 import AccountPersonalProjects from '@/components/Account/AccountPersonalProjects';
 import AccountFollowingProjects from '@/components/Account/AccountFollowingProjects';
@@ -38,7 +38,7 @@ export const accountRouting = [{
         {
           path: 'edit-education',
           name: 'account.education',
-          component: UserEditEducationDialog,
+          component: AccountEditEducationDialog,
           props: () => ({ username: store.getters['Auth/currentUser'].username }),
           meta: {
             hideSidebar: true
@@ -47,7 +47,7 @@ export const accountRouting = [{
         {
           path: 'edit-employment',
           name: 'account.employment',
-          component: UserEditEmploymentDialog,
+          component: AccountEditEmploymentDialog,
           props: () => ({ username: store.getters['Auth/currentUser'].username }),
           meta: {
             hideSidebar: true

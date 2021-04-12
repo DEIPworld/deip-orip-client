@@ -15,7 +15,7 @@
 <script>
   import { attributeSet } from '@/components/Attributes/_mixins';
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
-  import { isString, researchAttributeFileUrl } from '@/utils/helpers';
+  import { isString, researchAttributeFileUrl, userAttributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageSet',
@@ -23,7 +23,7 @@
     mixins: [attributeSet],
     props: {
       aspectRatio: {
-        type: Number,
+        type: [Number, String],
         default: 16 / 9
       }
     },
@@ -64,6 +64,12 @@
             this.$route.params.projectId,
             this.attribute._id,
             this.internalValue
+          );
+        }
+        if (this.$route.name.includes('account')) {
+          return userAttributeFileUrl(
+            this.$currentUser.username,
+            182
           );
         }
         return null;
