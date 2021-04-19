@@ -68,7 +68,7 @@ const researchContentTypes = [...Object.values(contentTypesMap)].sort((a, b) => 
 const getResearchContentType = (type) => {
   return researchContentTypes.some((t) => t.type === type) 
     ? researchContentTypes.find((t) => t.type === type)
-    : contentTypesMap[0];
+    : researchContentTypes[0];
 }
 
 export {
