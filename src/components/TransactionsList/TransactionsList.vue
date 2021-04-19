@@ -151,10 +151,18 @@
           account: proposer.account,
           signers: proposer.signers.map(({ signer, txInfo }) => (
             {
-              ...signer, hasSignature: !!txInfo, isResearchGroup: signer?.account?.is_research_group
+              ...signer, 
+              hasSignature: !!txInfo, 
+              // isResearchGroup: signer?.account?.is_research_group,
+              isResearchGroup: signer && signer.account  
+                ? signer.account.is_research_group
+                : false
             }
           )),
-          isResearchGroup: proposer?.account?.account?.is_research_group
+          // isResearchGroup: proposer?.account?.account?.is_research_group
+          isResearchGroup: proposer && proposer.account 
+            ? proposer.account.is_research_group 
+            : false
         };
 
         return proposerParty;
@@ -174,10 +182,16 @@
               {
                 ...signer,
                 hasSignature: !!txInfo,
-                isResearchGroup: signer?.account?.is_research_group
+                // isResearchGroup: signer?.account?.is_research_group
+                isResearchGroup: signer && signer.account 
+                  ? signer.account.is_research_group
+                  : false
               }
             )),
-            isResearchGroup: party?.account?.account?.is_research_group
+            // isResearchGroup: party?.account?.account?.is_research_group
+            isResearchGroup: party && party.account && party.account.account 
+              ? party.account.account.is_research_group
+              : false
           }));
 
         return otherParties;

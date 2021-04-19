@@ -115,8 +115,10 @@
               ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
                 ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
                 : this.$currentUser.username
-              : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA ? this.transaction?.extendedDetails?.research?.research_group?.external_id
-                : this.$currentUser.username,
+              : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA ? this.transaction && this.transaction.extendedDetails && this.transaction.extendedDetails.research && this.transaction.extendedDetails.research.research_group 
+                  ? this.transaction.extendedDetails.research.research_group.external_id
+                  : false
+              : this.$currentUser.username,
             authority: 2, // active auth
             extensions: []
           }
