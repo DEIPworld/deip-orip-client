@@ -151,8 +151,8 @@
   import { isJsonString, researchAttributesToObject } from '@/utils/helpers';
   import { ResearchContentService } from '@deip/research-content-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
-
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
+  import { getResearchContentType } from '@/variables'
 
   const researchContentService = ResearchContentService.getInstance();
 
@@ -229,7 +229,7 @@
 
     methods: {
       getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+        return getResearchContentType(type);
       },
 
       onVote() {

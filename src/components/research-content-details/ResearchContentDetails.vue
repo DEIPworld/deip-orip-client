@@ -127,7 +127,7 @@
 
   import { ResearchContentService } from '@deip/research-content-service';
 
-  import { researchContentTypes, maxTitleLength } from '@/variables';
+  import { researchContentTypes, getResearchContentType, maxTitleLength } from '@/variables';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
@@ -225,7 +225,7 @@
 
     methods: {
       getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+        return getResearchContentType(type);
       }
     }
   };

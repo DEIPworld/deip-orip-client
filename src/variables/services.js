@@ -65,11 +65,17 @@ contentTypesMap = Object.keys(contentTypesMap).reduce((obj, key) => {
 
 const researchContentTypes = [...Object.values(contentTypesMap)].sort((a, b) => a.order - b.order);
 
+const getResearchContentType = (type) => {
+  return researchContentTypes.some((t) => t.type === type) 
+    ? researchContentTypes.find((t) => t.type === type)
+    : contentTypesMap[0];
+}
 
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
   researchContentTypes,
+  getResearchContentType,
   EXPERTISE_CONTRIBUTION_TYPE,
   AWARD_STATUS,
   AWARD_RECIPIENT_STATUS,

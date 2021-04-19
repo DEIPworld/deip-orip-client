@@ -204,6 +204,7 @@
   import ReviewRequest from '@/features/Reviews/components/Request/ReviewRequest';
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
+  import { getResearchContentType } from '@/variables'
 
   const researchContentService = ResearchContentService.getInstance();
 
@@ -299,7 +300,7 @@
       },
 
       getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+        return getResearchContentType(type);
       },
 
       check(target) {

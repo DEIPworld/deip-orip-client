@@ -157,6 +157,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import { ResearchContentService } from '@deip/research-content-service';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
+  import { getResearchContentType } from '@/variables'
 
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
@@ -251,7 +252,7 @@
     methods: {
 
       getProjectContentType(type) {
-        return researchContentService.getResearchContentType(type);
+        return getResearchContentType(type);
       },
 
       acceptReviewRequest() {

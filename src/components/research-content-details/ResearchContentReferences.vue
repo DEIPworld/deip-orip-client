@@ -324,6 +324,7 @@
   import { ResearchContentService } from '@deip/research-content-service';
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
+  import { getResearchContentType } from '@/variables'
 
   const researchContentService = ResearchContentService.getInstance();
 
@@ -476,7 +477,7 @@
       mockSignature(id) {
         return crypto.hexify(crypto.sha256(new TextEncoder('utf-8').encode(`${id}`).buffer));
       },
-      getResearchContentType(type) { return researchContentService.getResearchContentType(type); }
+      getResearchContentType(type) { return getResearchContentType(type); }
     }
   };
 </script>

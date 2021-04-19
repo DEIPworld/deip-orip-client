@@ -1,5 +1,5 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+import { EXPERTISE_CONTRIBUTION_TYPE, getResearchContentType } from '@/variables';
 import { ResearchContentService } from '@deip/research-content-service';
 
 import $ from 'cheerio';
@@ -78,8 +78,7 @@ const GETTERS = {
 
     return [...records].map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-        const typeInfo = researchContentService
-          .getResearchContentType(record.research_content.content_type);
+        const typeInfo = getResearchContentType(record.research_content.content_type);
 
         const link = {
           name: 'project.content.review.details',
@@ -124,8 +123,7 @@ const GETTERS = {
       }
 
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-        const typeInfo = researchContentService
-          .getResearchContentType(record.research_content.content_type);
+        const typeInfo = getResearchContentType(record.research_content.content_type);
 
         const link = {
           name: 'project.content.details',
