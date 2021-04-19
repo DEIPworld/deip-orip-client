@@ -26,7 +26,7 @@
     mixins: [attributeSetForceArray],
     methods: {
       researchesFilter(user) {
-        return user.profile.roles.some(({ role }) => role === 'team-member') && user.teams.some(teamId => teamId === "4444444444444444444444444444444444444444");
+        return user.profile.roles.some(({ role }) => role === 'team-member') && user.teams.some(teamId => teamId === "fc712435c8d6d4ce569ba49b4c8cb07441e5aa65");
       }
     }
   };
