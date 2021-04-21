@@ -91,13 +91,13 @@ export const ResearchRequestModelMixin = {
     this.$$projectAttributes.forEach((item) => {
       if (item.isPublished) {
         this.formData.attributes.push({
-          researchAttributeId: item._id,
+          attributeId: item._id,
           type: 'stepper',
           value: null
         });
       } else {
         this.formData.attributes.push({
-          researchAttributeId: item._id,
+          attributeId: item._id,
           type: 'stepper',
           value: null
         });

@@ -9,7 +9,7 @@
 
 <script>
   // WIP !!!
-  import { expandResearchAttributes, parseFormData } from '@/utils/helpers';
+  import { expandAttributes, parseFormData } from '@/utils/helpers';
   import { projectEditable } from '@/features/Projects/mixins';
   import ProjectForm from '@/features/Projects/components/Form/ProjectForm';
   import { mapGetters } from 'vuex';
@@ -33,7 +33,7 @@
           ...{
             researchRef: {
               ...this.project.researchRef,
-              ...{ attributes: expandResearchAttributes(this.project.researchRef.attributes) }
+              ...{ attributes: expandAttributes(this.project.researchRef.attributes) }
             }
           }
         };

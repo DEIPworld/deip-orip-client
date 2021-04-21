@@ -15,7 +15,7 @@
     mixins: [projectItem],
     computed: {
       layoutSchema() {
-        const { layout } = this.$tenantSettings.researchLayouts.AdminProjectListRow;
+        const { layout } = this.$tenantSettings.layouts.AdminProjectListRow;
 
         const row = _.cloneDeep(layout[0]);
 

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="isProfileAvailable && (isEmploymentSpecified || isOwner)" class="py-2">
-    <div class="d-flex mb-1">
+  <div v-if="isEmploymentSpecified || isOwner">
+    <div class="d-flex" :class="{'mb-1': isEmploymentSpecified}">
       <div class="text-h6 text-left align-self-center">
         {{ $t('userDetailRouting.detailsEmployment.title') }}
       </div>
@@ -11,7 +11,10 @@
           small
           color="primary"
           :to="{
-            name: 'account.employment'
+            name: 'account.employment',
+            query: {
+              attr: attribute.attributeId
+            }
           }"
         >
           {{ $t('userDetailRouting.detailsEmployment.add') }}
@@ -25,7 +28,7 @@
     <v-simple-table>
       <template #default>
         <tbody>
-          <tr v-for="(item, index) in userInfo.profile.employment" :key="`${index}-employment`">
+          <tr v-for="(item, index) in attribute.value" :key="`${index}-employment`">
             <td class="pl-0">
               <div class="text-body-2 py-3">
                 {{ moment(item.period.from).format('YYYY') }}
@@ -44,6 +47,7 @@
                   :to="{
                     name: 'account.employment',
                     query: {
+                      attr: attribute.attributeId,
                       index: `${index}`
                     }
                   }"
@@ -75,8 +79,9 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
   import CrudActions from '@/components/layout/CrudActions';
+  import { userDetails } from '@/features/Users/mixins/userDetails';
+  import { expandAttributes, compactAttributes } from '@/utils/helpers';
 
   import { UserService } from '@deip/user-service';
 
@@ -88,6 +93,13 @@
     components: {
       CrudActions
     },
+    mixins: [userDetails],
+    props: {
+      attribute: {
+        type: Object,
+        default: () => ({})
+      }
+    },
     data() {
       return {
         deleteEmploymentMeta: {
@@ -98,19 +110,8 @@
       };
     },
     computed: {
-      ...mapGetters({
-        currentUser: 'auth/user',
-        userInfo: 'userDetails/userInfo'
-      }),
-
-      isOwner() {
-        return this.currentUser && this.currentUser.account.name === this.userInfo.account.name;
-      },
       isEmploymentSpecified() {
-        return this.userInfo && this.userInfo.profile && this.userInfo.profile.employment.length;
-      },
-      isProfileAvailable() {
-        return this.userInfo.profile != null;
+        return this.attribute.value && this.attribute.value.length;
       }
     },
     methods: {
@@ -121,7 +122,10 @@
       },
 
       deleteEmployment({ item, index }) {
-        const employmentList = this.userInfo.profile.employment.reduce(
+        const userAttributes = expandAttributes(this.$currentUser.profile.attributes);
+        userAttributes[this.attribute.attributeId] = userAttributes[
+          this.attribute.attributeId
+        ].reduce(
           (accum, current, i) => {
             if (i == index) {
               return accum;
@@ -130,14 +134,22 @@
           }, []
         );
 
-        const update = { ...this.userInfo.profile, employment: employmentList };
+        const update = {
+          ...this.$currentUser.profile,
+          attributes: [
+            ...compactAttributes(userAttributes)
+          ]
+        };
 
-        userService.updateUserProfile(this.currentUser.username, update)
+        const formData = new FormData();
+        formData.append('profile', JSON.stringify(update));
+
+        userService.updateUserProfile(this.$currentUser.username, formData)
           .then((res) => {
-            this.$store.dispatch('userDetails/loadUser', { username: this.currentUser.username });
             this.$notifier.showSuccess(
               this.$t('userDetailRouting.detailsEmployment.success', { company: item.company })
             );
+            return this.$store.dispatch('Users/get', this.$currentUser.username);
           }, (err) => {
             this.$notifier.showError(
               this.$t('userDetailRouting.detailsEmployment.err', { company: item.company })

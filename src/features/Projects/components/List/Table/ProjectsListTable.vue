@@ -42,7 +42,7 @@
     },
     computed: {
       headers() {
-        const { layout } = this.$tenantSettings.researchLayouts[this.rowLayoutKey];
+        const { layout } = this.$tenantSettings.layouts[this.rowLayoutKey];
         const row = _.cloneDeep(layout[0]);
 
         if (row) {

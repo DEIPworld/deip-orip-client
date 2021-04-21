@@ -71,7 +71,7 @@ export default {
       return attr
         ? researchAttributeFileUrl(
           this.research.externalId,
-          attr.researchAttributeId,
+          attr.attributeId,
           attr.value,
           true
         )

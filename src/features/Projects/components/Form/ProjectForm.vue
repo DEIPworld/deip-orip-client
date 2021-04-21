@@ -45,10 +45,10 @@
 
   import {
     camelizeObjectKeys,
-    compactResearchAttributes,
+    compactAttributes,
     extendAttrModules,
     extractFilesFromAttributes,
-    isArray, replaceFileWithName, hasValue, expandResearchAttributes
+    isArray, replaceFileWithName, hasValue, expandAttributes
   } from '@/utils/helpers';
 
   import { attributesChore } from '@/mixins/chores/attributesChore';
@@ -128,7 +128,7 @@
 
       layoutSchema() {
         return extendAttrModules(
-          this.$tenantSettings.researchLayouts.projectEditForm.layout,
+          this.$tenantSettings.layouts.projectEditForm.layout,
           { attrs: { project: this.formModel } }
         );
       },
@@ -191,7 +191,7 @@
 
       offchainMeta() {
         return {
-          attributes: compactResearchAttributes(
+          attributes: compactAttributes(
             replaceFileWithName(this.formModel.researchRef.attributes)
           )
         };

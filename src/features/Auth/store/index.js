@@ -10,7 +10,9 @@ const STATE = {
 const GETTERS = {
   currentUser: (state, getters, rootState, rootGetters) => {
     if (accessService.isLoggedIn()) {
-      const { account, profile, teams } = rootGetters['Users/one'](state.currentUsername);
+      const {
+        account, profile, teams, expertise
+      } = rootGetters['Users/one'](state.currentUsername);
       const balances = rootGetters['Assets/currentUserBalances'];
       const notifications = rootGetters['Notifications/list'];
       const bookmarks = rootGetters['Bookmarks/list'];
@@ -24,7 +26,8 @@ const GETTERS = {
         balances,
         notifications,
         bookmarks,
-        teams
+        teams,
+        expertise
       };
     }
 

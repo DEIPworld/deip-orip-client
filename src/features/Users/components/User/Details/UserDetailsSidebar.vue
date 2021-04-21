@@ -171,7 +171,6 @@
       <eci-stats
         :account-name="userInfo.account.name"
         :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
-        :separated="!!(isOwner && (hasInvites || hasReviewRequests))"
       />
     </d-block-widget>
 
@@ -186,7 +185,7 @@
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
 
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
-  import * as bankCardsService from '../../../utils/bankCard';
+  import * as bankCardsService from '../../../../../utils/bankCard';
 
   const proposalsService = ProposalsService.getInstance();
 

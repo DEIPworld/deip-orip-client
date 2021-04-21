@@ -55,7 +55,7 @@
       // TODO: check
       onChange(key, value) {
         this.$emit('change', {
-          researchAttributeId: key,
+          attributeId: key,
           value
         });
       }

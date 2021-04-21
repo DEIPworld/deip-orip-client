@@ -100,7 +100,7 @@ const actions = {
   loadAppliedForGrantResearches({ state, dispatch, commit }, { grantAttributeId, grantAttributeValue }) {
     const filter = {
       // researchAttributes: [{
-      //   researchAttributeId: grantAttributeId,
+      //   attributeId: grantAttributeId,
       //   values: [grantAttributeValue]
       // }]
     }

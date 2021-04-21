@@ -18,112 +18,37 @@
 
     <v-row no-gutters class="full-height">
       <v-col class="d-flex align-center justify-center">
-        <v-sheet max-width="800" class="pa-12 mx-auto">
+        <v-sheet max-width="800" width="100%" class="pa-12 mx-auto">
           <div class="text-h5 font-weight-bold mb-10">
             {{ $t('signUp.free.form.title') }}
           </div>
-          <v-form
-            v-show="!isServerValidated"
-            ref="form"
-            v-model="isFormValid"
-          >
-            <v-text-field
-              v-model="formData.email"
-              outlined
-              :label="$t('signUp.free.form.emailField')"
-              :rules="[rules.required, rules.email]"
-              :disabled="isSaving"
-            />
-
-            <v-text-field
-              v-model="formData.firstName"
-              outlined
-              :label="$t('signUp.free.form.firstNameFiled')"
-              :rules="[rules.required, rules.nameChars]"
-              :disabled="isSaving"
-            />
-
-            <v-text-field
-              v-model="formData.lastName"
-              outlined
-              :label="$t('signUp.free.form.lastNameFiled')"
-              :rules="[rules.required, rules.nameChars]"
-              :disabled="isSaving"
-            />
-
-            <v-text-field
-              v-model="formData.username"
-              outlined
-              name="username"
-              :label="$t('signUp.free.form.usernameField')"
-              :rules="[
-                rules.required,
-                rules.unique,
-                rules.usernameFormat
-              ]"
-              :loading="isUsernameChecking"
-              :disabled="isSaving"
-              @input="usernameChanged"
-            />
-
-            <v-text-field
-              v-model="formData.masterPassword"
-              outlined
-              class="mt-4"
-              :label="$t('signUp.free.form.passwordField')"
-              :disabled="isSaving"
-              :rules="[rules.required, rules.masterPassword]"
-              :append-icon="formData.isHiddenMasterPassword ? 'visibility_off' : 'visibility'"
-              :type="formData.isHiddenMasterPassword ? 'password' : 'text'"
-              @click:append="formData.isHiddenMasterPassword = !formData.isHiddenMasterPassword"
-              @input="$refs.reEnterMasterPassword.validate()"
-            />
-
-            <v-text-field
-              ref="reEnterMasterPassword"
-              v-model="formData.reEnterMasterPassword"
-              outlined
-              class="mt-2"
-              :label="$t('signUp.free.form.rePasswordField')"
-              :disabled="isSaving"
-              :rules="[rules.required, rules.reEnterMasterPassword]"
-              :append-icon="formData.isHiddenReEnterMasterPassword ? 'visibility_off' : 'visibility'"
-              :type="formData.isHiddenReEnterMasterPassword ? 'password' : 'text'"
-              @click:append="formData.isHiddenReEnterMasterPassword = !formData.isHiddenReEnterMasterPassword"
-            />
-
-            <div class="text-justify caption grey--text">
-              {{ $t('signUp.free.form.savedKeyText') }}
-            </div>
-
-            <v-checkbox
-              v-model="formData.isMasterPasswordSaved"
-              class="my-2 pa-0"
-              :label="$t('signUp.free.form.savedKeyCheckbox')"
-              :disabled="isSaving"
-              hide-details
-            />
-
-            <div class="pb-4 text-justify caption grey--text" v-html="$t('signUp.free.form.privacyText', {link:'https://deip.world/pdf/PRIVACY-POLICY-January-22-2020.pdf'})" />
-
-            <v-btn
-              block
-              color="primary"
-              :loading="isSaving"
-              :disabled="!formData.isMasterPasswordSaved || isSaving"
-              @click="finishRegistration()"
-            >
-              {{ $t('signUp.free.form.submitBtn') }}
-            </v-btn>
-            <div class="primary--text text-center mt-2">
-              {{ $t('signUp.free.form.bottomText') }}
-              <router-link
-                :to="{ name: 'SignIn' }"
-              >
-                {{ $t('signUp.free.form.bottomTextLink') }}
-              </router-link>
-            </div>
-          </v-form>
+          <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
+            <v-form :disabled="isLoading" @submit.prevent="handleSubmit(finishRegistration)">
+              <registration-form-renderer
+                v-model="formModel"
+                :schema="layoutSchema"
+              />
+              <d-stack :gap="8" class="pt-4">
+                <v-btn
+                  block
+                  type="submit"
+                  color="primary"
+                  :loading="isLoading"
+                  :disabled="!formModel.isMasterPasswordSaved || isLoading || invalid"
+                >
+                  {{ $t('signUp.free.form.submitBtn') }}
+                </v-btn>
+                <div class="primary--text text-center mt-2">
+                  {{ $t('signUp.free.form.bottomText') }}
+                  <router-link
+                    :to="{ name: 'SignIn' }"
+                  >
+                    {{ $t('signUp.free.form.bottomTextLink') }}
+                  </router-link>
+                </div>
+              </d-stack>
+            </v-form>
+          </validation-observer>
         </v-sheet>
       </v-col>
 
@@ -173,7 +98,17 @@
 <script>
   import deipRpc from '@deip/rpc-client';
   import UserRegistration from '@/components/auth/UserRegistration';
+  import RegistrationFormRenderer from '@/components/auth/renderer';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
+  import DStack from '@/components/Deipify/DStack/DStack';
+
+  import {
+    camelizeObjectKeys,
+    compactAttributes,
+    extendAttrModules,
+    extractFilesFromAttributes,
+    isArray, replaceFileWithName, hasValue, expandAttributes
+  } from '@/utils/helpers';
 
   import _ from 'lodash';
 
@@ -188,29 +123,28 @@
     name: 'SignUp',
     components: {
       UserRegistration,
-      FullScreenView
+      FullScreenView,
+      RegistrationFormRenderer,
+      DStack
     },
 
     data() {
       return {
-        isFormValid: false,
-        isUsernameVerifyed: undefined,
-        isUsernameChecking: false,
-        isSaving: false,
-        isServerValidated: false, // true only when server accepts all information
 
-        formData: {
+        formModel: {
           email: '',
-          firstName: '',
-          lastName: '',
+          attributes: {},
           username: '',
           masterPassword: '',
-          isHiddenMasterPassword: true,
           reEnterMasterPassword: '',
-          isHiddenReEnterMasterPassword: true,
           isMasterPasswordSaved: false
         },
 
+        isFormValid: false,
+        isUsernameVerifyed: undefined,
+        isUsernameChecking: false,
+        isLoading: false,
+        isServerValidated: false, // true only when server accepts all information
         rules: {
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           unique: (value) => !!value && this.isUsernameVerifyed !== false || this.$t('signUp.free.form.rules.unique'),
@@ -243,19 +177,25 @@
     computed: {
       ...mapGetters({
         tenant: 'auth/tenant'
-      })
+      }),
+      layoutSchema() {
+        const schema = this.$tenantSettings.layouts.signUp.layout;
+        return extendAttrModules(
+          schema
+        );
+      }
     },
 
     methods: {
       finishRegistration() {
-        if (!this.$refs.form.validate()) return;
-
-        this.isSaving = true;
+        this.isLoading = true;
 
         const {
-          email, firstName, lastName, username,
+          email,
+          attributes,
+          username,
           masterPassword
-        } = this.formData;
+        } = this.formModel;
 
         const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
           username,
@@ -265,17 +205,16 @@
 
         return authService.signUp({
           email,
-          firstName,
-          lastName,
+          attributes: compactAttributes(attributes),
           username,
           pubKey
         }).then(() => {
-          this.isSaving = false;
+          this.isLoading = false;
           this.isServerValidated = true;
           this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formData.username }));
           this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
         }).catch((err) => {
-          this.isSaving = false;
+          this.isLoading = false;
           const message = err.response && err.response.data
             || this.$t('signUp.free.form.err');
 

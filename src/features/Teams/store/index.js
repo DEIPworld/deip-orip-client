@@ -38,6 +38,13 @@ const ACTIONS = {
       .then((teams) => {
         commit('setList', teams);
       });
+  },
+
+  getUserTeams({ commit }, username) {
+    return researchGroupService.getTeamsByUser(username)
+      .then((teams) => {
+        commit('setList', teams);
+      });
   }
 };
 

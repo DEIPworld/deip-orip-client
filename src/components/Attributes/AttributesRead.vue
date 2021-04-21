@@ -29,6 +29,8 @@
   import { AttributesImageRead } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingRead } from '@/components/Attributes/ExpressLicensing';
   import { AttributesNetworkContentAccessRead } from '@/components/Attributes/NetworkContentAccess';
+  import { AttributesDateRead } from '@/components/Attributes/Date';
+  import { AttributesEducationRead } from '@/components/Attributes/Education';
 
   export default {
     name: 'AttributesRead',
@@ -48,7 +50,9 @@
       AttributesVideoUrlRead,
       AttributesImageRead,
       AttributesExpressLicensingRead,
-      AttributesNetworkContentAccessRead
+      AttributesNetworkContentAccessRead,
+      AttributesDateRead,
+      AttributesEducationRead
     },
     mixins: [attributeTypeComponent, BindsAttrs],
     props: {

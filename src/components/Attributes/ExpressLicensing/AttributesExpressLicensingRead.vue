@@ -30,7 +30,7 @@
         :title="attributeInfo.title"
       >
         <express-licensing-purchase
-          :attribute-id="attribute.researchAttributeId"
+          :attribute-id="attribute.attributeId"
           :licenses="attribute.value"
           :project="project"
         />

@@ -59,7 +59,7 @@
   import ProjectsListTable from '@/features/Projects/components/List/Table/ProjectsListTable';
   import { mapState } from 'vuex';
   import ProjectsListFilter from '@/features/Projects/components/List/Filter/ProjectsListFilter';
-  import { compactResearchAttributes, isArray } from '@/utils/helpers';
+  import { compactAttributes, isArray } from '@/utils/helpers';
   import { wrapInArray } from 'vuetify/lib/util/helpers';
 
   export default {
@@ -198,9 +198,9 @@
       filterPayload() {
         const storeFilter = this.$ls.get(this.storageFilterKey);
 
-        const attributes = compactResearchAttributes(
+        const attributes = compactAttributes(
           storeFilter.researchAttributes,
-          'researchAttributeId',
+          'attributeId',
           'values'
         )
           .filter((attr) => !!wrapInArray(attr.values).length)

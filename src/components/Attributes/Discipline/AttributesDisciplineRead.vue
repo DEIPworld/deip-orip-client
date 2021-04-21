@@ -48,7 +48,7 @@
       goToDiscipline(id) {
         const q = {
           researchAttributes: {
-            [this.attribute.researchAttributeId]: [id]
+            [this.attribute.attributeId]: [id]
           }
         };
 

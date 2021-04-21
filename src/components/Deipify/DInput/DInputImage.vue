@@ -127,7 +127,7 @@
       },
 
       aspectRatio: {
-        type: Number,
+        type: [Number, String],
         default: 16 / 9
       },
 

@@ -29,6 +29,8 @@
   import { AttributesExpressLicensingEdit } from '@/components/Attributes/ExpressLicensing';
   import { AttributesCheckboxEdit } from '@/components/Attributes/Checkbox';
   import { AttributesNetworkContentAccessEdit } from '@/components/Attributes/NetworkContentAccess';
+  import { AttributesDateEdit } from '@/components/Attributes/Date';
+  import { AttributesEducationEdit } from '@/components/Attributes/Education';
   import { ATTR_TYPES } from '@/variables';
 
   export default {
@@ -49,7 +51,9 @@
       AttributesVideoUrlEdit,
       AttributesImageEdit,
       AttributesExpressLicensingEdit,
-      AttributesNetworkContentAccessEdit
+      AttributesNetworkContentAccessEdit,
+      AttributesDateEdit,
+      AttributesEducationEdit
     },
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
     props: {

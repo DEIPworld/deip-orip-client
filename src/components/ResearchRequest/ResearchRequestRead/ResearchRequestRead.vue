@@ -75,7 +75,7 @@
 
             if (key === 'attributes') {
               data = research[key].reduce((acc, attr) => {
-                const researchAttribute = this.$$projectAttributes.find((c) => c._id === attr.researchAttributeId);
+                const researchAttribute = this.$$projectAttributes.find((c) => c._id === attr.attributeId);
                 if (attr.value !== null) {
                   let value = researchAttribute.valueOptions.find(opt => opt.value == attr.value);
                   let valueIdx = researchAttribute.valueOptions.indexOf(value);
