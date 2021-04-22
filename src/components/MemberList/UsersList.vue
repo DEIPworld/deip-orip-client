@@ -1,8 +1,8 @@
 <template>
-  <d-block v-if="$ready" ref="membersView">
+  <d-block ref="usersView">
     <template #title>
       {{ $t('memberList.members') }}
-      <v-badge offset-y="-8" offset-x="4" :content="members.length || '0'" />
+      <v-badge offset-y="-8" offset-x="4" :content="users.length || '0'" />
     </template>
 
     <template #title-append>
@@ -14,23 +14,21 @@
       <slot name="subtitle" />
     </template>
 
-    <v-data-iterator
-      :items="members"
-      :no-data-text="$t('memberList.noMembFound')"
-      :hide-default-footer="iteratorProps.hideDefaultFooter"
-      :footer-props="iteratorProps.footerProps"
-      :items-per-page="iteratorProps.itemsPerPage"
-      @update:page="onPaginationUpdated"
+    <component
+      :is="viewTypeComponent"
+      :users="users"
+      :loading="!$ready"
+      :row-layout-key="rowLayoutKey"
+      :card-layout-key="cardLayoutKey"
     >
-      <template #default="{items}">
-        <component
-          :is="listComponent"
-          :items="items"
-          :group="group"
-          @update="update"
-        />
+      <template #itemCardActions="{ user }">
+        <slot name="itemCardActions" :user="user" />
       </template>
-    </v-data-iterator>
+
+      <template #itemRowActions="{ user }">
+        <slot name="itemRowActions" :user="user" />
+      </template>
+    </component>
   </d-block>
 </template>
 
@@ -41,24 +39,24 @@
   import DToggleView from '@/components/Deipify/DToggleView/DToggleView';
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
 
-  import MemberListGrid from '@/components/MemberList/MemberListGrid';
-  import MemberListTable from '@/components/MemberList/MemberListTable';
-  import { memberListStore } from '@/components/MemberList/store';
+  import UsersListGrid from '@/components/MemberList/Grid/UsersListGrid';
+  import UsersListTable from '@/components/MemberList/Table/UsersListTable';
+  import { usersListStore } from '@/components/MemberList/store';
   import { componentStoreFactory } from '@/mixins/registerStore';
 
   export default {
-    name: 'MemberList',
+    name: 'UsersList',
 
     components: {
-      MemberListTable,
-      MemberListGrid,
+      UsersListTable,
+      UsersListGrid,
 
       DToggleView,
       DBlock,
       DFilterSidebar
     },
 
-    mixins: [componentStoreFactory(memberListStore)],
+    mixins: [componentStoreFactory(usersListStore)],
 
     props: {
       namespace: {
@@ -68,6 +66,14 @@
       group: {
         type: Object,
         default: undefined
+      },
+      rowLayoutKey: {
+        type: String,
+        default: 'userListRow'
+      },
+      cardLayoutKey: {
+        type: String,
+        default: 'userListCard'
       }
     },
 
@@ -76,25 +82,20 @@
         storageViewModelKey: undefined,
         storageFilterModelKey: undefined,
 
+        viewTypeComponents: {
+          [VIEW_TYPES.TABLE]: 'UsersListTable',
+          [VIEW_TYPES.GRID]: 'UsersListGrid'
+        },
+
         viewModel: undefined,
 
-        members: []
+        users: []
       };
     },
 
     computed: {
-      listComponent() {
-        return this.viewModel === VIEW_TYPES.GRID ? 'member-list-grid' : 'member-list-table';
-      },
-
-      iteratorProps() {
-        return {
-          itemsPerPage: 12,
-          hideDefaultFooter: this.members.length < 12,
-          footerProps: {
-            'items-per-page-options': [12, 24, 48, -1]
-          }
-        };
+      viewTypeComponent() {
+        return this.viewTypeComponents[this.viewModel];
       }
     },
 
@@ -111,14 +112,14 @@
         const payload = {
           ...(this.group && this.group.id ? { researchGroupExternalId: this.group.external_id } : {})
         };
-        return this.$store.dispatch(`${this.storeNS}/loadMembers`, payload)
+        return this.$store.dispatch(`${this.storeNS}/loadUsers`, payload)
           .then(() => {
-            this.members = this.$store.getters[`${this.storeNS}/members`];
+            this.users = this.$store.getters[`${this.storeNS}/users`];
           });
       },
       onPaginationUpdated() {
         setTimeout(() => window.scrollTo({
-          top: this.$refs.membersView.offsetTop - 10,
+          top: this.$refs.usersView.offsetTop - 10,
           behavior: 'smooth'
         }), 0);
       },

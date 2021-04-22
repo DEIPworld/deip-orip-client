@@ -1,13 +1,30 @@
-  import Vue from 'vue';
+import Vue from 'vue';
 import moment from 'moment';
 import where from 'filter-where';
 import { AccessService } from '@deip/access-service';
 
 const accessService = AccessService.getInstance();
 
-Vue.filter('fullname', (enrichedProfile) => (enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.firstName
-  ? `${enrichedProfile.profile.firstName} ${enrichedProfile.profile.lastName || ''}`
-  : enrichedProfile.account.name));
+// temp solution //
+const firstNameAttrId = '606712cb9f80ae5a1899c8f5';
+const lastNameAttrId = '606712cb9f80ae5a1899c8f6';
+
+Vue.filter('fullname', (enrichedProfile) => {
+  if (enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.attributes) {
+    const attrs = enrichedProfile.profile.attributes;
+    if (attrs[firstNameAttrId] && attrs[firstNameAttrId].value) {
+      return `${attrs[firstNameAttrId].value} ${attrs[lastNameAttrId] ? attrs[lastNameAttrId].value : ''}`;
+    }
+    if (Array.isArray(attrs)) {
+      const firstNameAttr = attrs.find((a) => a._id === firstNameAttrId);
+      if (firstNameAttr) {
+        const lastNameAttr = attrs.find((a) => a._id === lastNameAttrId);
+        return `${firstNameAttr.value} ${lastNameAttr ? lastNameAttr.value : ''}`;
+      }
+    }
+  }
+  return enrichedProfile.account.name;
+});
 
 Vue.filter('userLocation', (enrichedProfile) => {
   const hasCity = enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.location && enrichedProfile.profile.location.city;
@@ -50,7 +67,6 @@ Vue.filter('employmentOrEducation', (enrichedProfile) => {
   return `${education ? education.educationalInstitution : ''}${education && employment ? ', ' : ''}${employment ? employment.company : ''}`;
 });
 
-
 Vue.filter('avatarSrc', (profile, width = 48, height, isRound = false, noCache = false) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
@@ -75,9 +91,7 @@ Vue.filter('avatarSrc', (profile, width = 48, height, isRound = false, noCache =
   return pathArray.join('');
 });
 
-
 Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height, isRound = false, noCache = true) => {
-
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
   const id = researchGroupExternalId || null;
@@ -100,7 +114,6 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height,
 
   return pathArray.join('');
 });
-
 
 Vue.filter('accountFullname', (model) => {
   const { account, profile } = model;
@@ -125,7 +138,7 @@ Vue.filter('accountAvatarSrc', (model, width = 48, height, isRound = false, noCa
 
   const path = isUser
     ? Vue.filter('avatarSrc')({ _id: id }, internalWidth, internalHeight, isRound, noCache)
-    : Vue.filter('researchGroupLogoSrc')(id, internalWidth, internalHeight, isRound, noCache)
+    : Vue.filter('researchGroupLogoSrc')(id, internalWidth, internalHeight, isRound, noCache);
 
   return path;
 });

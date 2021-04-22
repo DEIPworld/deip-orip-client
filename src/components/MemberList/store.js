@@ -5,51 +5,52 @@ const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const STATE = {
-  members: []
+  users: []
 };
 
 const GETTERS = {
-  members: (state) => state.members
+  users: (state) => state.users
 };
 
 const ACTIONS = {
-  loadMembers({ commit }, payload) {
-    const members = [];
+  loadUsers({ commit }, payload) {
+    const usersList = [];
     if (payload.researchGroupExternalId !== undefined) {
       return usersService.getUsersByResearchGroup(payload.researchGroupExternalId)
         .then((users) => {
-          members.push(...users);
-          return Promise.all(members.map((member) => expertiseContributionsService.getAccountExpertiseTokens(member.account.name)));
+          usersList.push(...users);
+          return Promise.all(usersList.map(
+            (user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)
+          ));
         })
         .then((expList) => {
-          for (let i = 0; i < members.length; i++) {
-            const member = members[i];
-            member.expertise = expList[i];
+          for (let i = 0; i < usersList.length; i++) {
+            const user = usersList[i];
+            user.expertise = expList[i];
           }
-          return Promise.all(members.map(({ account: { name } }) => expertiseContributionsService.getAccountExpertiseStats(name, {})));
+          return Promise.all(usersList.map(({ account: { name } }) => expertiseContributionsService.getAccountExpertiseStats(name, {})));
         })
         .then((expertiseStats) => {
-          for (let i = 0; i < members.length; i++) {
-            const member = members[i];
-            member.expertiseStats = expertiseStats[i];
+          for (let i = 0; i < usersList.length; i++) {
+            const user = usersList[i];
+            user.expertiseStats = expertiseStats[i];
           }
-          commit('SET_MEMBERS', members);
+          commit('SET_USERS', usersList);
         })
         .catch((err) => console.error(err));
-    } else {
-      commit('SET_MEMBERS', members);
     }
+    return commit('SET_USERS', usersList);
   }
 
 };
 
 const MUTATIONS = {
-  SET_MEMBERS(state, members) {
-    state.members = members;
+  SET_USERS(state, users) {
+    state.users = users;
   }
 };
 
-export const memberListStore = {
+export const usersListStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

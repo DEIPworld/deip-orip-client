@@ -12,7 +12,7 @@ export default {
   dropPropFail: 'An error occurred while creating proposal, please try again later',
   excDialog: {
     title: 'You’re about to exclude',
-    text: '{firstName} {lastName} from {team}',
+    text: '{fullname} from {team}',
     confirm: 'Confirm'
   }
 }
