@@ -16,9 +16,9 @@ Vue.filter('fullname', (enrichedProfile) => {
       return `${attrs[firstNameAttrId].value} ${attrs[lastNameAttrId] ? attrs[lastNameAttrId].value : ''}`;
     }
     if (Array.isArray(attrs)) {
-      const firstNameAttr = attrs.find((a) => a._id === firstNameAttrId);
+      const firstNameAttr = attrs.find((a) => a.attributeId === firstNameAttrId);
       if (firstNameAttr) {
-        const lastNameAttr = attrs.find((a) => a._id === lastNameAttrId);
+        const lastNameAttr = attrs.find((a) => a.attributeId === lastNameAttrId);
         return `${firstNameAttr.value} ${lastNameAttr ? lastNameAttr.value : ''}`;
       }
     }
