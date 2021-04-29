@@ -61,7 +61,7 @@
     </d-block>
     <!-- ### END Project Group Proposals Section ### -->
 
-    <member-list namespace="memberDetails" :group="group" class="mb-12">
+    <users-list namespace="memberDetails" :group="group" class="mb-12">
       <template #title-append-after>
         <v-btn
           v-if="isResearchGroupMember"
@@ -74,7 +74,30 @@
           {{ $t('researchGroupDetails.invite') }}
         </v-btn>
       </template>
-    </member-list>
+      <template #itemRowActions="{ user }">
+        <v-btn
+          v-if="isExcludingMemberAvailable(user.username)"
+          icon
+          small
+          @click.stop="showConfirmAction(user)"
+        >
+          <v-icon>close</v-icon>
+        </v-btn>
+      </template>
+      <template #itemCardActions="{ user }">
+        <v-btn
+          v-if="isExcludingMemberAvailable(user.username)"
+          icon
+          small
+          absolute
+          right
+          top
+          @click.stop="showConfirmAction(user)"
+        >
+          <v-icon>close</v-icon>
+        </v-btn>
+      </template>
+    </users-list>
 
     <!-- ### START Project Group Project List Section ### -->
 
@@ -89,6 +112,15 @@
       @onClose="$store.dispatch('researchGroup/changeOptions', { key: 'isAddMemberDialogOpen', value: false })"
       @onSuccess="$store.dispatch('TransactionsList/loadTransactions', group.external_id)"
     />
+    <vex-dialog
+      v-model="actionDialog.isOpen"
+      :title="actionDialog.title"
+      :button-true-text="actionDialog.actionLabel"
+      :loading="actionDialog.loading"
+      @click:confirm="actionDialog.action()"
+    >
+      {{ actionDialog.description }}
+    </vex-dialog>
     <!-- ### END Project Group Project List Section ### -->
   </div>
 </template>
@@ -97,7 +129,7 @@
   import { mapGetters } from 'vuex';
   import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
-  import MemberList from '@/components/MemberList/MemberList';
+  import UsersList from '@/components/MemberList/UsersList';
   import ResearchGroupRequests from '@/components/research-group-details/components/ResearchGroupRequests';
   import ResearchGroupAsset from '@/components/research-group-details/components/ResearchGroupAsset';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
@@ -111,7 +143,7 @@
     name: 'ResearchGroupDetailsBody',
     components: {
       ProjectsList,
-      MemberList,
+      UsersList,
       ResearchGroupRequests,
       ResearchGroupAsset,
       TransactionsList,
@@ -125,11 +157,13 @@
         proposalsSectionTransitionTrigger: false,
         usersToInvite: [],
 
-        dropoutMemberMeta: {
-          isShown: false,
-          item: null,
-          index: null,
-          isConfirming: false
+        actionDialog: {
+          isOpen: false,
+          title: null,
+          description: null,
+          actionLabel: null,
+          loading: false,
+          action: () => false
         },
         isLoadingDropoutBtn: false,
         isDisabledDropoutBtn: false
@@ -190,45 +224,47 @@
 
     methods: {
       dropoutMember(member) {
-        this.dropoutMemberMeta.isConfirming = true;
+        this.actionDialog.loading = true;
         researchGroupService.leaveResearchGroup(
           {
             privKey: this.user.privKey,
             username: this.user.username
           },
           {
-            member: member.item.owner,
+            member: member.username,
             researchGroup: this.group.external_id,
             isExclusion: true,
             extensions: []
           },
           {
-            notes: ""
+            notes: ''
           }
         )
           .then(() => {
-            this.$notifier.showSuccess(this.$t('researchGroupDetails.successDrop'));
+            this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
             this.$store.dispatch('TransactionsList/loadTransactions', this.group.external_id);
+            this.$emit('update');
           })
           .catch((err) => {
-            this.$notifier.showError(this.$t('researchGroupDetails.errDrop'));
+            this.$notifier.showError(this.$t('memberList.dropPropFail'));
             console.error(err);
           })
           .finally(() => {
-            this.dropoutMemberMeta.isConfirming = false;
-            this.dropoutMemberMeta.isShown = false;
+            this.actionDialog.loading = false;
+            this.actionDialog.isOpen = false;
             this.$vuetify.goTo('#proposals');
           });
       },
 
-      showConfirmAction(member) {
-        const memberData = {
-          firstName: member.profile.firstName,
-          lastName: member.profile.lastName,
-          owner: member.rgt.owner
+      showConfirmAction(user) {
+        this.actionDialog = {
+          isOpen: true,
+          title: this.$t('memberList.excDialog.title'),
+          description: this.$t('memberList.excDialog.text', { fullname: this.$options.filters.fullname(user), team: this.group.name }),
+          actionLabel: this.$t('memberList.excDialog.confirm'),
+          loading: false,
+          action: () => this.dropoutMember(user)
         };
-        this.dropoutMemberMeta.item = memberData;
-        this.dropoutMemberMeta.isShown = true;
       },
 
       isExcludingMemberAvailable(username) {

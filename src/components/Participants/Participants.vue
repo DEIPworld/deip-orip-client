@@ -75,7 +75,7 @@
                   <v-col class="text-caption font-weight-medium ml-2">
                     <div>{{ user | fullname }}</div>
                     <div>
-                      {{ user.profile && user.profile.employment[0] ? user.profile.employment[0].position : '' }}
+                      <!-- {{ user.profile && user.profile.employment[0] ? user.profile.employment[0].position : '' }} -->
                     </div>
                   </v-col>
                 </v-row>
