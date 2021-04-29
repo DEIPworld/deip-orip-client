@@ -282,12 +282,9 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.updateProposal({
-          privKey: this.currentUser.privKey,
-          username: this.currentUser.username
-        }, {
-          externalId: proposalId,
-          activeApprovalsToAdd: [this.currentUser.username]
+        proposalsService.updateProposal(this.$currentUser, {
+          proposalId: proposalId,
+          activeApprovalsToAdd: [this.$currentUser.username]
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
@@ -308,14 +305,10 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.deleteProposal({
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUser.username
-        }, {
-          externalId: proposalId,
+        proposalsService.declineProposal(this.$currentUser, {
+          proposalId: proposalId,
           account: this.$currentUser.username,
-          authority: 2, // active auth
-          extensions: []
+          authority: 2 // active auth
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });

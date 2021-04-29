@@ -82,12 +82,11 @@
           }
         }
 
-        proposalsService.updateProposal(
-          { privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
-            externalId: external_id,
-            activeApprovalsToAdd
-          }
-        )
+        const promise = type === this.LOC_PROPOSAL_TYPES.INVITE_MEMBER || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH
+          ? proposalsService.updateProposal(this.$currentUser, { proposalId: external_id, activeApprovalsToAdd })
+          : proposalsService.updateProposalLegacy(this.$currentUser, { externalId: external_id, activeApprovalsToAdd })
+        
+        promise
           .then(() => {
             this.$emit('update-data');
             this.$notifier.showSuccess(this.$t('transactionsList.voteSucc'));
@@ -108,23 +107,32 @@
         } = this.transaction;
         this.disableButtons.status = true;
         this.disableButtons.btnType = actions.reject;
-        proposalsService.deleteProposal(
-          { privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+
+        const account = type == this.LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
+          ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
+            ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
+            : this.$currentUser.username
+          : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA ? 
+            // this.transaction?.extendedDetails?.research?.research_group?.external_id
+            this.transaction && this.transaction.extendedDetails && this.transaction.extendedDetails.research && this.transaction.extendedDetails.research.research_group 
+              ? this.transaction.extendedDetails.research.research_group.external_id
+              : this.$currentUser.username
+          : this.$currentUser.username;
+
+        const promise = type === this.LOC_PROPOSAL_TYPES.INVITE_MEMBER || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH
+          ? proposalsService.declineProposal(this.$currentUser, { 
+            proposalId: external_id,
+            account: account,
+            authorityType: 2
+          })
+          : proposalsService.deleteProposalLegacy(this.$currentUser, {
             externalId: external_id,
-            account: type == this.LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
-              ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
-                ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
-                : this.$currentUser.username
-              : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA ? 
-                // this.transaction?.extendedDetails?.research?.research_group?.external_id
-                this.transaction && this.transaction.extendedDetails && this.transaction.extendedDetails.research && this.transaction.extendedDetails.research.research_group 
-                  ? this.transaction.extendedDetails.research.research_group.external_id
-                  : this.$currentUser.username
-              : this.$currentUser.username,
+            account: account,
             authority: 2, // active auth
             extensions: []
-          }
-        )
+          });
+        
+        promise
           .then(() => {
             this.$emit('update-data');
             this.$notifier.showSuccess(this.$t('transactionsList.voteSucc'));

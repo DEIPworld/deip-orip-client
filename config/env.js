@@ -14,6 +14,8 @@ const config = {
     DEIP_CHAIN_EXPLORER_URL: process.env.DEIP_CHAIN_EXPLORER_URL,
     SIG_SEED: process.env.SIG_SEED,
     CHAIN_ID: process.env.CHAIN_ID,
+    PROTOCOL: process.env.PROTOCOL ? parseInt(process.env.PROTOCOL) : 0,
+    IS_TESTNET: process.env.IS_TESTNET === 'true',
     ASSET_UNIT: process.env.ASSET_UNIT,
     TENANT: process.env.TENANT,
     DEMO: process.env.DEMO,

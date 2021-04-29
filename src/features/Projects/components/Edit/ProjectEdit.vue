@@ -13,9 +13,9 @@
   import { projectEditable } from '@/features/Projects/mixins';
   import ProjectForm from '@/features/Projects/components/Form/ProjectForm';
   import { mapGetters } from 'vuex';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
 
-  const researchService = ResearchService.getInstance();
+  const projectService = new ProjectService();
 
   export default {
     name: 'ProjectEdit',
@@ -44,16 +44,22 @@
       updateProject(formData) {
         this.loading = true;
 
-        const { onchainData } = parseFormData(formData);
-        const isProposal = onchainData.researchGroup != this.$currentUser.username;
-        return researchService.updateResearch(
-          {
-            privKey: this.$currentUser.privKey,
-            username: this.$currentUser.username
-          },
-          isProposal,
-          formData
-        )
+        const onchainData = JSON.parse(formData.get("onchainData"));
+        const offchainMeta = JSON.parse(formData.get("offchainMeta"));
+
+        return projectService.updateProject(this.$currentUser, {
+          projectId: onchainData.externalId,
+          teamId: onchainData.researchGroup,
+          isPrivate: !!onchainData.isPrivate,
+          members: onchainData.members,
+          reviewShare: onchainData.reviewShare,
+          compensationShare: onchainData.compensationShare,
+          updater: this.$currentUser.username,
+          attributes: offchainMeta.attributes,
+          formData: formData // files
+        }, {
+          isProposal: onchainData.researchGroup != this.$currentUser.username
+        })
           .then(() => {
             this.$notifier.showSuccess(this.$t('notifier.prUpSuccess'));
             this.$$goToProject(this.project);

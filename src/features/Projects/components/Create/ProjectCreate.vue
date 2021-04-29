@@ -7,13 +7,11 @@
 </template>
 
 <script>
-  import { ResearchService } from '@deip/research-service';
-
-  import { parseFormData } from '@/utils/helpers';
+  import { ProjectService } from '@deip/project-service';
   import ProjectForm from '@/features/Projects/components/Form/ProjectForm';
   import { projectEditable } from '@/features/Projects/mixins';
 
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
 
   export default {
     name: 'ProjectCreate',
@@ -23,18 +21,21 @@
       createProject(formData) {
         this.loading = true;
 
-        const { onchainData } = parseFormData(formData);
+        const onchainData = JSON.parse(formData.get("onchainData"));
+        const offchainMeta = JSON.parse(formData.get("offchainMeta"));
 
-        const isProposal = onchainData.researchGroup != null && onchainData.researchGroup != this.$currentUser.username;
-        return researchService.createResearch(
-          {
-            privKey: this.$currentUser.privKey,
-            username: this.$currentUser.username
-          },
-          isProposal,
-          formData,
-          false
-        )
+        return projectService.createProject(this.$currentUser, {
+          teamId: onchainData.researchGroup,
+          creator: this.$currentUser.username,
+          domains: onchainData.disciplines,
+          isPrivate: !!onchainData.isPrivate,
+          members: onchainData.members,
+          attributes: offchainMeta.attributes,
+          memoKey: this.$currentUser.account.memo_key,
+          formData: formData // files
+        }, {
+          isProposal: onchainData.researchGroup != this.$currentUser.username
+        })
           .then((project) => {
             this.$notifier.showSuccess(this.$t('notifier.prCreatedSuccess', { title: onchainData.title }));
             this.$$goToProject(project);
