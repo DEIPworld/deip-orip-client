@@ -8,6 +8,7 @@ const accessService = AccessService.getInstance();
 // temp solution //
 const firstNameAttrId = '606712cb9f80ae5a1899c8f5';
 const lastNameAttrId = '606712cb9f80ae5a1899c8f6';
+const teamNameAttrId = '6082c4d594bce65929ea2ec2';
 
 Vue.filter('fullname', (enrichedProfile) => {
   if (enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.attributes) {
@@ -118,7 +119,13 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height,
 Vue.filter('accountFullname', (model) => {
   const { account, profile } = model;
   const { is_research_group: isResearchGroup } = account;
-  const { name: researchGroupTitle } = model;
+  let researchGroupTitle = '';
+  if (isResearchGroup) {
+    const teamAttrName = model.researchGroupRef.attributes.find(
+      ({ attributeId }) => attributeId === teamNameAttrId
+    );
+    researchGroupTitle = teamAttrName ? teamAttrName.value : '';
+  }
   const isUser = !isResearchGroup;
 
   const path = isUser

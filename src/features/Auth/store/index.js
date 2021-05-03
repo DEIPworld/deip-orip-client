@@ -16,6 +16,8 @@ const GETTERS = {
       const balances = rootGetters['Assets/currentUserBalances'];
       const notifications = rootGetters['Notifications/list'];
       const bookmarks = rootGetters['Bookmarks/list'];
+      const reviewRequests = rootGetters['ReviewRequests/list'];
+      const invites = rootGetters['Invites/list'];
 
       return {
         username: state.currentUsername,
@@ -27,7 +29,9 @@ const GETTERS = {
         notifications,
         bookmarks,
         teams,
-        expertise
+        expertise,
+        reviewRequests,
+        invites
       };
     }
 
@@ -48,7 +52,9 @@ const ACTIONS = {
         dispatch('Users/get', username, { root: true }),
         dispatch('Assets/getCurrentUserBalances', username, { root: true }),
         dispatch('Notifications/fetch', username, { root: true }),
-        dispatch('Bookmarks/fetch', username, { root: true })
+        dispatch('Bookmarks/fetch', username, { root: true }),
+        dispatch('ReviewRequests/fetch', username, { root: true }),
+        dispatch('Invites/fetch', username, { root: true })
       ]).then(() => {
         commit('setLoaded', true);
       });

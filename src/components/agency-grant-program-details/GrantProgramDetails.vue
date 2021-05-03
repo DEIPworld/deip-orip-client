@@ -307,7 +307,7 @@
 
       breadcrumbs() {
         return [
-          { text: this.organizationProfile.name, disabled: false, href: `/#/${this.organizationProfile.external_id}/group-details` },
+          { text: this.organizationProfile.name, disabled: false, href: `/#/g/${this.organizationProfile.external_id}` },
           { text: 'Programs', disabled: false, href: `/#/${this.organizationProfile.external_id}/programs` },
           // { text: this.program.area.abbreviation, disabled: true },
           // { text: this.program.subArea.abbreviation, disabled: true },

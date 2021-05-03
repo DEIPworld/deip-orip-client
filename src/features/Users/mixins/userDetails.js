@@ -13,6 +13,12 @@ export const userDetails = {
   computed: {
     isOwner() {
       return this.$currentUser.username === this.user.username;
+    },
+    hasInvites() {
+      return this.user.invites && this.user.invites.length;
+    },
+    hasReviewRequests() {
+      return this.user.reviewRequests && this.user.reviewRequests.length;
     }
   },
   methods: {

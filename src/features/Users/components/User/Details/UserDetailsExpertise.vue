@@ -38,7 +38,7 @@
   import EciHistoryAndStats from '@/components/EciMetrics/EciHistoryAndStats';
 
   export default {
-    name: 'UserExpertiseDetails',
+    name: 'UserDetailsExpertise',
     components: { EciHistoryAndStats, LayoutSection },
 
     computed: {

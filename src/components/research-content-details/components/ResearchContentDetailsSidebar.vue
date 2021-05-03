@@ -6,7 +6,7 @@
         <router-link
           class="link orange--text"
           :to="{
-            name: 'teamDetails',
+            name: 'team.details',
             params: {
               teamId: research.research_group.external_id
             },

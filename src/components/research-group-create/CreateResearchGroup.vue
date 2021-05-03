@@ -89,7 +89,7 @@
           .then(([invites, researchGroup]) => {
             if (!this.backRouterToken) {
               this.$router.push({
-                name: 'teamDetails',
+                name: 'team.details',
                 params: {
                   teamId: researchGroup.external_id
                 }

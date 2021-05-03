@@ -42,7 +42,7 @@
             to the "<router-link
               class="a"
               :to="{
-                name: 'teamDetails',
+                name: 'team.details',
                 params: {
                   teamId: log.metadata.researchGroup.external_id
                 }
@@ -59,7 +59,7 @@
             to the "<router-link
               class="a"
               :to="{
-                name: 'teamDetails',
+                name: 'team.details',
                 params: {
                   teamId: log.metadata.researchGroup.external_id,
                 }

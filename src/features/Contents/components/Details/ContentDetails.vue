@@ -8,9 +8,12 @@
 <script>
   import { mapGetters } from 'vuex';
   import { projectDetails, projectContext } from '@/features/Projects/mixins/projectDetails';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   export default {
     name: 'ContentDetails',
+
+    mixins: [attributesChore],
 
     computed: {
       ...mapGetters({

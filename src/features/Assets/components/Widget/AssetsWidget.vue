@@ -25,7 +25,7 @@
           <div class="d-flex">
             <v-sheet class="mr-n2">
               <router-link
-                :to="{ name: 'teamDetails', params: { teamId: team.externalId } }"
+                :to="{ name: 'team.details', params: { teamId: team.externalId } }"
               >
                 <v-avatar size="40">
                   <v-img :src="team.externalId | researchGroupLogoSrc(40)" />

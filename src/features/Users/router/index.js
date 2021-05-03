@@ -1,5 +1,5 @@
 import UserDetails from '@/features/Users/components/User/Details/UserDetails';
-import UserExpertiseDetails from '@/features/Users/components/User/Details/UserExpertiseDetails';
+import UserDetailsExpertise from '@/features/Users/components/User/Details/UserDetailsExpertise';
 import UsersDataProvider from '@/features/Users/components/DataProvider/UsersDataProvider';
 
 export const userRouting = [{
@@ -22,8 +22,8 @@ export const userRouting = [{
         },
         {
           path: 'expertise',
-          name: 'UserExpertiseDetails',
-          component: UserExpertiseDetails
+          name: 'UserDetailsExpertise',
+          component: UserDetailsExpertise
         }
       ]
     }

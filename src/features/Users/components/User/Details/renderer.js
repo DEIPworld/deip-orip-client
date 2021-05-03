@@ -7,6 +7,8 @@ import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 import UserDetailsEditCta from '@/features/Users/components/User/Details/UserDetailsEditCta';
 import UserDetailsEducation from '@/features/Users/components/User/Details/UserDetailsEducation';
 import UserDetailsEmployment from '@/features/Users/components/User/Details/UserDetailsEmployment';
+import AccountReviewRequests from '@/components/Account/components/AccountReviewRequests';
+import AccountInvites from '@/components/Account/components/AccountInvites';
 
 import { userDetails } from '@/features/Users/mixins/userDetails';
 import ProjectsList from '@/features/Projects/components/List/ProjectsList';
@@ -22,7 +24,9 @@ export default {
     EciStats,
     AttributesRead,
     UserDetailsEducation,
-    UserDetailsEmployment
+    UserDetailsEmployment,
+    AccountReviewRequests,
+    AccountInvites
   },
   mixins: [
     componentsRenderer,
