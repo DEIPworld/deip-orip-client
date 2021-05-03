@@ -57,7 +57,7 @@
             <router-link
               class="a text-body-2"
               :to="{
-                name: 'teamDetails',
+                name: 'team.details',
                 params: {
                   teamId: awardee.organization.external_id
                 }
@@ -91,7 +91,7 @@
             <router-link
               class="a text-body-2"
               :to="{
-                name: 'teamDetails',
+                name: 'team.details',
                 params: {
                   teamId: foa.organization.external_id
                 }

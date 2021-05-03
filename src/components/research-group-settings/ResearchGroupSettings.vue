@@ -25,7 +25,7 @@
           });
       } else {
         this.$router.push({
-          name: 'teamDetails',
+          name: 'team.details',
           params: {
             teamId: this.$route.params.teamId
           }

@@ -58,11 +58,11 @@
     mixins: [attributeTypeComponent, Proxyable, BindsAttrs],
     props: {
       type: {
-        type: String,
+        type: [String, Number],
         default: ATTR_TYPES.TEXT,
         validator(val) {
           return Object.values(ATTR_TYPES)
-            .indexOf(val) !== -1;
+            .indexOf(ATTR_TYPES[val]) !== -1;
         }
       }
     }

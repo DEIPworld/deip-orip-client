@@ -52,6 +52,7 @@ import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
 import { sandboxRouting } from '@/components/_Sandbox/router';
 import { projectRouting } from '@/features/Projects/router';
 import { userRouting } from '@/features/Users/router';
+import { teamRouting } from '@/features/Teams/router';
 import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
@@ -166,14 +167,6 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/:teamId/group-details',
-      name: 'teamDetails',
-      component: ResearchGroupDetails
-    }, {
-      path: '/:teamId/group-details/group-settings',
-      name: 'teamSettings',
-      component: ResearchGroupSettings
-    }, {
       path: '/:account_name/create-research-group',
       name: 'CreateResearchGroup',
       component: CreateResearchGroup
@@ -232,6 +225,17 @@ const router = new Router({
 
     ...projectRouting,
     ...userRouting,
+    ...teamRouting,
+
+    // {
+    //   path: '/:teamId/group-details',
+    //   name: 'teamDetails',
+    //   component: ResearchGroupDetails
+    // }, {
+    //   path: '/:teamId/group-details/group-settings',
+    //   name: 'teamSettings',
+    //   component: ResearchGroupSettings
+    // },
     ...groupRouting,
 
     ...accountRouting,

@@ -8,6 +8,9 @@ export const attributesChore = {
     $$userAttributes() {
       return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTRIBUTE_SCOPE.USER });
     },
+    $$teamAttributes() {
+      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTRIBUTE_SCOPE.TEAM });
+    },
     $$networkProjectAttributes() {
       return this.$store.getters['Attributes/list']({ scope: ATTRIBUTE_SCOPE.PROJECT });
     },

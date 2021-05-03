@@ -67,7 +67,7 @@ const MUTATIONS = {
       camelizeObjectKeys(payload),
       { key: 'externalId' }
     );
-  },
+  }
 };
 
 export const teamsStore = {

@@ -35,7 +35,7 @@
             class="text-decoration-none text--primary cursor-pointer"
             :to="signer.account.account.is_research_group
               ? {
-                name: 'teamDetails',
+                name: 'team.details',
                 params: { teamId: signer.account.external_id }
               }
               : { name: 'UserDetails', params: { account_name: signer.account.account.name } }"
@@ -96,7 +96,7 @@
                       class="text-decoration-none cursor-pointer"
                       :to="signer.account.is_research_group
                         ? {
-                          name: 'teamDetails',
+                          name: 'team.details',
                           params:
                             { teamId: signer.external_id}
                         }

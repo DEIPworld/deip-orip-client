@@ -110,7 +110,7 @@
     methods: {
       update() {
         const payload = {
-          ...(this.group && this.group.id ? { researchGroupExternalId: this.group.external_id } : {})
+          ...(this.group && this.group.id ? { researchGroupExternalId: this.group.external_id || this.group.externalId } : {})
         };
         return this.$store.dispatch(`${this.storeNS}/loadUsers`, payload)
           .then(() => {

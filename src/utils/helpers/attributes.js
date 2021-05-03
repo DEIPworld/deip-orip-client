@@ -69,6 +69,32 @@ export const userAttributeFileUrl = (
   return pathArray.join('');
 };
 
+export const teamAttributeFileUrl = (
+  researchGroupExternalId, width = 48, height, isRound = false, noCache = true
+) => {
+  const internalWidth = width * 2;
+  const internalHeight = height ? height * 2 : internalWidth;
+  const id = researchGroupExternalId || null;
+
+  const pathArray = [
+    window.env.DEIP_SERVER_URL,
+    '/api/groups/logo/',
+    id,
+    '/?authorization=',
+    accessService.getAccessToken(),
+    '&width=',
+    internalWidth,
+    '&height=',
+    internalHeight,
+    '&round=',
+    isRound,
+    '&noCache=',
+    noCache
+  ];
+
+  return pathArray.join('');
+};
+
 export const extendAttrModules = (schema, obj = {}) => {
   const clone = _.cloneDeep(schema);
 

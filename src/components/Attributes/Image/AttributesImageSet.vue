@@ -15,7 +15,7 @@
 <script>
   import { attributeSet } from '@/components/Attributes/_mixins';
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
-  import { isString, researchAttributeFileUrl, userAttributeFileUrl } from '@/utils/helpers';
+  import { isString, researchAttributeFileUrl, userAttributeFileUrl, teamAttributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageSet',
@@ -71,6 +71,9 @@
             this.$currentUser.username,
             182
           );
+        }
+        if (this.$route.params.teamId) {
+          return teamAttributeFileUrl(this.$route.params.teamId, 182);
         }
         return null;
       }

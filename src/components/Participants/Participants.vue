@@ -58,7 +58,7 @@
                   {
                     name: 'account.expertiseDetails'
                   }:{
-                    name: 'UserExpertiseDetails',
+                    name: 'UserDetailsExpertise',
                     params: {account_name: user.account.name}
                   }"
                 class="a"

@@ -3,7 +3,7 @@ import AccountProfile from '@/components/Account/AccountProfile/AccountProfile';
 import AccountPassword from '@/components/Account/AccountPassword';
 import AccountPrivateKey from '@/components/Account/AccountPrivateKey';
 import UserDetails from '@/features/Users/components/User/Details/UserDetails';
-import UserExpertiseDetails from '@/features/Users/components/User/Details/UserExpertiseDetails';
+import UserDetailsExpertise from '@/features/Users/components/User/Details/UserDetailsExpertise';
 import { store } from '@/store';
 import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
 import AccountEditEducationDialog from '@/components/Account/components/AccountEditEducationDialog';
@@ -32,7 +32,7 @@ export const accountRouting = [{
         {
           path: 'expertise',
           name: 'account.expertiseDetails',
-          component: UserExpertiseDetails,
+          component: UserDetailsExpertise,
           props: () => ({ username: store.getters['Auth/currentUser'].username })
         },
         {

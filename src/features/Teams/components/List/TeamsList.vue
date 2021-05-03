@@ -27,7 +27,7 @@
           outlined
           class="full-height d-flex"
           :to="{
-            name: 'teamDetails',
+            name: 'team.details',
             params: {
               teamId: team.externalId }
           }"
@@ -42,7 +42,7 @@
               :max-lines="2"
               class="text-h6"
             >
-              {{ team.name }}
+              {{ team | accountFullname }}
             </v-clamp>
             <template #action>
               <v-icon>
@@ -95,6 +95,7 @@
         if (this.common) {
           return teams.filter((t) => !t.isPersonal);
         }
+
         return teams;
       },
       isOwner() {

@@ -434,7 +434,7 @@
           {
             text: this.organizationProfile.name,
             disabled: false,
-            href: `/#/${this.organizationProfile.external_id}/group-details`
+            href: `/#/g/${this.organizationProfile.external_id}`
           },
           {
             text: 'Programs',

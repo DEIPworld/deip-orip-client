@@ -77,7 +77,7 @@
           });
         } else {
           this.$router.push({
-            name: 'teamDetails',
+            name: 'team.details',
             params: {
               teamId: this.notification.metadata.researchGroup.external_id
             },

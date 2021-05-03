@@ -1,5 +1,6 @@
 import { attributesChore } from '@/mixins/chores/attributesChore';
 import { pascalCase } from 'change-case';
+import { ATTR_TYPES } from '@/variables';
 
 const componentTypeRender = {
   name: 'componentTypeRender',
@@ -38,12 +39,12 @@ export const attributeTypeComponent = {
       let t;
 
       if (this.type) {
-        t = this.type;
+        t = ATTR_TYPES[this.type];
       } else if (this.attribute.type) {
-        t = this.attribute.type;
+        t = ATTR_TYPES[this.attribute.type];
       } else if (this.attribute.attributeId) {
         const attr = this.$$networkAttributes.find(({ _id }) => _id === this.attribute.attributeId);
-        t = attr.type;
+        t = ATTR_TYPES[attr.type];
       } else {
         throw new Error('Unknown attribute');
       }

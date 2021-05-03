@@ -123,7 +123,7 @@
 
         if (this.$route.name === 'UserDetails') {
           return {
-            name: 'UserExpertiseDetails',
+            name: 'UserDetailsExpertise',
             params: {
               account_name: this.$route.params.account_name
             }

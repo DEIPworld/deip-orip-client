@@ -1,36 +1,6 @@
-export const ATTR_TYPES = {
-  TEXT: 'text',
-  TEXTAREA: 'textarea',
+import { ATTR_TYPES } from '@deip/attributes-service';
 
-  SELECT: 'select',
-
-  SWITCH: 'switch',
-  CHECKBOX: 'checkbox',
-
-  //= ============================
-
-  URL: 'url',
-  VIDEO_URL: 'video-url',
-  STEPPER: 'stepper',
-
-  USER: 'user',
-
-  DISCIPLINE: 'discipline',
-  DISCIPLINES_LIST: 'disciplines-list',
-
-  RESEARCH_GROUP: 'research-group',
-  RESEARCH_GROUPS_LIST: 'research-groups-list',
-
-  ROADMAP: 'roadmap',
-  PARTNERS: 'partners',
-
-  EXPRESS_LICENSING: 'express-licensing',
-  NETWORK_CONTENT_ACCESS: 'network-content-access',
-  IMAGE: 'image',
-  FILE: 'file'
-};
-
-export const SYSTEM_ATTRS = {
+const SYSTEM_ATTRS = {
   [ATTR_TYPES.USER]: true,
   [ATTR_TYPES.DISCIPLINE]: true,
   [ATTR_TYPES.DISCIPLINES_LIST]: true,
@@ -40,13 +10,13 @@ export const SYSTEM_ATTRS = {
   [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: true
 };
 
-export const ATTRIBUTE_SCOPE = {
+const ATTRIBUTE_SCOPE = {
   PROJECT: 1,
   USER: 2,
   TEAM: 3
 };
 
-export const ATTR_LABELS = {
+const ATTR_LABELS = {
   [ATTR_TYPES.TEXT]: 'Text field',
   [ATTR_TYPES.TEXTAREA]: 'Text area',
 
@@ -79,7 +49,7 @@ export const ATTR_LABELS = {
   [ATTR_TYPES.FILE]: 'File upload'
 };
 
-export const ATTR_ICONS = {
+const ATTR_ICONS = {
   [ATTR_TYPES.TEXT]: 'mdi-form-textbox',
   [ATTR_TYPES.TEXTAREA]: 'mdi-form-textarea',
 
@@ -111,3 +81,11 @@ export const ATTR_ICONS = {
   [ATTR_TYPES.IMAGE]: 'mdi-file-image-outline',
   [ATTR_TYPES.FILE]: 'mdi-file-outline'
 };
+
+export {
+  ATTR_TYPES,
+  SYSTEM_ATTRS,
+  ATTRIBUTE_SCOPE,
+  ATTR_LABELS,
+  ATTR_ICONS
+}

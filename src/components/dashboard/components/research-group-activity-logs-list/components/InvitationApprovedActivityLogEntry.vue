@@ -26,7 +26,7 @@
           accepted invitation and now is a member of the "<router-link
             class="a"
             :to="{
-              name: 'teamDetails',
+              name: 'team.details',
               params: {
                 teamId: log.metadata.researchGroup.external_id,
               }

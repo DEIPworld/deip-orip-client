@@ -257,7 +257,7 @@
       cancel(proposal = false) {
         this.$refs.researchGroupLogo.removeAllFiles(this.group.external_id);
         this.$router.push({
-          name: 'teamDetails',
+          name: 'team.details',
           params: {
             teamId: this.group.external_id
           },

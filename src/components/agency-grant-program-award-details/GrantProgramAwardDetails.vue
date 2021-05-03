@@ -101,7 +101,7 @@
             <v-col cols="9" class="pa-1">
               <router-link
                 class="a text-body-2"
-                :to="{ name: 'teamDetails', params: {
+                :to="{ name: 'team.details', params: {
                   teamId: awardee.organization.external_id
                 }}"
               >
@@ -132,7 +132,7 @@
             <v-col cols="9" class="pa-1">
               <router-link
                 class="a text-body-2"
-                :to="{ name: 'teamDetails', params: {
+                :to="{ name: 'team.details', params: {
                   teamId: foa.organization.external_id,
                 }}"
               >
@@ -236,7 +236,7 @@
                   </router-link>
                 </td>
                 <td>
-                  <router-link class="a text-body-2" :to="{ name: 'teamDetails', params: { teamId: item.organization.external_id } }">
+                  <router-link class="a text-body-2" :to="{ name: 'team.details', params: { teamId: item.organization.external_id } }">
                     {{ item.organization.name }}
                   </router-link>
                 </td>
