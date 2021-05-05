@@ -14,6 +14,8 @@ const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 
+import { camelizeObjectKeys } from '@/utils/helpers';
+
 const STATE = {
   teamDetails: undefined,
   revenueHistory: [],
