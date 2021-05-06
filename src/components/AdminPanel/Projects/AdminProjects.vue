@@ -54,14 +54,15 @@
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
 
   import { TenantService } from '@deip/tenant-service';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import { VIEW_TYPES } from '@/variables';
 
   const tenantService = TenantService.getInstance();
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
+
 
   export default {
     name: 'AdminProjects',
@@ -121,7 +122,7 @@
         )
           .then((confirmed) => {
             if (confirmed) {
-              researchService.deleteResearch(id)
+              projectService.deleteProject(id)
                 .then(() => {
                   this.$notifier.showSuccess();
                   this.$refs.projectList.getData();
