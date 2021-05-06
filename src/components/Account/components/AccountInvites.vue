@@ -147,7 +147,7 @@
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username
         }, {
-          externalId: proposalId,
+          proposalId: proposalId,
           activeApprovalsToAdd: [this.$currentUser.username]
         })
           .then(() => {
@@ -168,14 +168,13 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.deleteProposal({
+        proposalsService.declineProposal({
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username
         }, {
-          externalId: proposalId,
+          proposalId: proposalId,
           account: this.$currentUser.username,
-          authority: 2, // active auth
-          extensions: []
+          authorityType: 2 // active auth
         })
           .then(() => {
             this.$store.dispatch('Invites/fetch', this.$currentUser.username, { root: true });
