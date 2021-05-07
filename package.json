@@ -8,7 +8,7 @@
     "lint": "npx vue-cli-service lint",
     "checkUpdateDeip": "npx ncu \"/^@deip\\/.*$/\"",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
-    "linkModules": "node ./linkDevModules.js",
+    "linkModules": "node ./scripts/linkDevModules.js",
     "start": "npm run serve",
     "updateDeip": "npx ncu \"/^@deip\\/.*$/\" -u"
   },
