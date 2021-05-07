@@ -19,13 +19,16 @@
       </template>
 
       <template #item.actions="{ item }">
-        <transfer-action
-          :all-accounts="allAccounts"
-          :asset="{
-            ...item, balances: accountData.balances, type: 'currency'
-          }"
-          :disabled="!isTransferAvailable"
-        />
+        <div class="d-flex justify-end">
+          <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" v-if="isDepositAvailable(item.assetSymbol)" />
+          <transfer-action
+            :all-accounts="allAccounts"
+            :asset="{
+              ...item, balances: accountData.balances, type: 'currency'
+            }"
+            :disabled="!isTransferAvailable"
+          />
+        </div>
       </template>
       <template #item.actionMenu="{ item }">
         <v-menu
@@ -196,6 +199,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import TransferAction from '@/components/Wallet/components/TransferAction';
+  import DepositFundsAction from '@/components/Wallet/components/DepositFundsAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
   import VCreditCard from 'v-credit-card';
@@ -207,6 +211,7 @@
     name: 'CurrenciesInfoTable',
 
     components: {
+      DepositFundsAction,
       TransferAction,
       VCreditCard
     },
