@@ -42,10 +42,15 @@
   import { mapActions, mapGetters } from 'vuex';
   import { defaultAssetId } from '@/variables';
   import { AssetsService } from '@deip/assets-service';
+  import { AccessService } from '@deip/access-service';
   import { assetsChore } from '@/mixins/chores';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
+  import deipRpc from '@deip/rpc-client';
+  import crypto from '@deip/lib-crypto';
+  import axios from 'axios';
 
   const assetsService = AssetsService.getInstance();
+  const accessService = AccessService.getInstance();
 
   export default {
     name: 'DepositFundsAction',
@@ -76,6 +81,7 @@
           isDepositing: false,
           form: {
             valid: false,
+            account: null,
             value: null,
             rules: {
               amount: [
@@ -96,15 +102,35 @@
         this.isOpened = true;
       },
       deposit() {
-        console.log("Deposit funds");
+        const payload = {
+          amount: parseInt(this.form.value.amount), 
+          currency: this.form.value.assetId,
+          account: this.form.account,
+          timestamp: Date.now()
+        };
+        const payloadStr = JSON.stringify(payload, Object.keys(payload).sort());
+        const privateKey = crypto.PrivateKey.from(this.$currentUser.privKey);
+        const sigBuff = privateKey.sign(new TextEncoder('utf-8').encode(payloadStr).buffer);
+        const sigHex = crypto.hexify(sigBuff);
+        axios.post(`${this.$env.DEIP_SERVER_URL}/webhook/assets/deposit?authorization=${accessService.getAccessToken()}`, {
+          ...payload,
+          sigHex
+        })
+        .then(({ data }) => {
+          window.location.href = data.redirectUrl;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
       }
     },
 
     created() {
       this.form.value = {
         amount: 0,
-        assetId: this.assetId
+        assetId: this.assetId,
       };
+      this.form.account = this.account;
     },
   };
 </script>
