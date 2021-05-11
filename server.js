@@ -15,6 +15,10 @@ router.get('/env', (ctx) => {
 });
 
 app.use(router.routes()).use(router.allowedMethods());
-app.listen(PORT);
+app.listen(PORT, HOST, () => {
+  console.log(`Running on http://${HOST}:${PORT}`);
+});
 
-console.log(`listening on port ${PORT}`);
+app.on('error', function (err, ctx) {
+  console.log('Serving error', err);
+});
