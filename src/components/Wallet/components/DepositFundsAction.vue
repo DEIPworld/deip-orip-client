@@ -45,7 +45,6 @@
   import { AccessService } from '@deip/access-service';
   import { assetsChore } from '@/mixins/chores';
   import DAssetInput from '@/components/Deipify/DInput/DAssetInput';
-  import deipRpc from '@deip/rpc-client';
   import crypto from '@deip/lib-crypto';
   import axios from 'axios';
 
@@ -78,22 +77,12 @@
     data() {
       return {
         isOpened: false,
-          isDepositing: false,
-          form: {
-            valid: false,
-            account: null,
-            value: null,
-            rules: {
-              amount: [
-                (value) => {
-                  if (isNaN(value)) return this.$t('wallet.transferAction.flNumber');
-                  if (!value || value < 0) return this.$t('wallet.transferAction.posFlNumber');
-
-                  return true;
-                }
-              ]
-            }
-          }
+        isDepositing: false,
+        form: {
+          valid: false,
+          account: null,
+          value: null
+        }
       };
     },
 
@@ -102,6 +91,11 @@
         this.isOpened = true;
       },
       deposit() {
+        if (!this.form.value.amount || parseInt(this.form.value.amount) < 1) {
+          return;
+        }
+        
+        this.isDepositing = true;
         const payload = {
           amount: parseInt(this.form.value.amount), 
           currency: this.form.value.assetId,
@@ -121,13 +115,16 @@
         })
         .catch((err) => {
           console.error(err);
+        })
+        .finally(() => {
+          this.isDepositing = false;
         });
       }
     },
 
     created() {
       this.form.value = {
-        amount: 0,
+        amount: 1,
         assetId: this.assetId,
       };
       this.form.account = this.account;
