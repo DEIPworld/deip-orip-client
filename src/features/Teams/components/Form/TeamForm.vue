@@ -105,7 +105,6 @@
     data() {
       return {
         lazyFormModel: {
-          researchGroupThresholdOverrides: [],
           researchGroupRef: { attributes: {} }
         },
 
@@ -123,21 +122,6 @@
           this.lazyFormModel = val;
         }
       },
-
-      // TODO: change groups fetch
-
-      // ...mapGetters({
-      //   userGroups: 'auth/userGroups'
-      // }),
-
-      // userGroup() {
-      //   return this.$where(this.userGroups, { is_personal: true })[0];
-      // },
-
-      // isProposal() {
-      //   return this.onchainData.researchGroup !== null
-      //     && this.onchainData.researchGroup !== this.userGroup.external_id;
-      // },
 
       // FORMDATA
 

@@ -6,7 +6,9 @@ import { ResearchService } from '@deip/research-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const assetsService = AssetsService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchGroupService = ResearchGroupService.getInstance();
@@ -48,7 +50,7 @@ const GETTERS = {
 // actions
 const ACTIONS = {
   getTeamDetails({ commit, dispatch, state }, teamId) {
-    return researchGroupService.getResearchGroup(teamId)
+    return teamService.getTeam(teamId)
       .then((data) => {
         commit('setTeam', data);
 

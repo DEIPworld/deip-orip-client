@@ -1,8 +1,8 @@
-import { ResearchGroupService } from '@deip/research-group-service';
 import { UserService } from '@deip/user-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const userService = UserService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 
 const STATE = {
   data: []
@@ -21,7 +21,7 @@ const ACTIONS = {
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
           invites.push(invite);
-          promises.push(researchGroupService.getResearchGroup(invite.researchGroupExternalId));
+          promises.push(teamService.getTeam(invite.researchGroupExternalId));
         }
         return Promise.all(promises);
       })

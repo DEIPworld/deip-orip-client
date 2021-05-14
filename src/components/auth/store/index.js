@@ -11,7 +11,9 @@ import { TenantService } from '@deip/tenant-service';
 import { AssetsService } from '@deip/assets-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const accessService = AccessService.getInstance();
 const usersService = UsersService.getInstance();
 const userService = UserService.getInstance();
@@ -237,7 +239,7 @@ const actions = {
   loadGroups({ state, dispatch, commit, getters }) {
     const { user } = getters;
 
-    return researchGroupService.getTeamsByUser(user.username)
+    return teamService.getTeamsByUser(user.username)
       .then((groups) => {
         commit('SET_USER_GROUPS_LIST', groups);
       });
