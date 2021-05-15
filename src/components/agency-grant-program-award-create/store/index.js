@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import { GrantsService } from '@deip/grants-service';
 import { UsersService } from '@deip/users-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const grantsService = GrantsService.getInstance();
 const usersService = UsersService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   organization: undefined,
@@ -36,7 +36,7 @@ const actions = {
     const universityOrg = "c8a87b12c23f53866acd397f43b591fd4e631419";
 
     commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', true);
-    return researchGroupService.getResearchGroup(Vue.$env.TENANT)
+    return teamService.getTeam(Vue.$env.TENANT)
       .then((organization) => {
         commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
@@ -78,7 +78,7 @@ const actions = {
   },
 
   loadUniversity({ state, dispatch, commit }, { universityExternalId }) {
-    return researchGroupService.getResearchGroup(universityExternalId)
+    return teamService.getTeam(universityExternalId)
       .then((university) => {
         commit('SET_UNIVERSITY', university);
       }, (err) => { console.error(err); });

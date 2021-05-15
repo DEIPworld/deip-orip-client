@@ -2,12 +2,12 @@ import Vue from 'vue';
 import { UsersService } from '@deip/users-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchService } from '@deip/research-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const usersService = UsersService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchService = ResearchService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 
 const defaultListId = 'all';
 
@@ -138,7 +138,7 @@ const actions = {
             if (unique.some((rgId) => rgId == research.research_group.external_id)) return unique;
             return [research.research_group.external_id, ...unique];
           }, [])
-          .map((rgId) => researchGroupService.getResearchGroup(rgId)));
+          .map((rgId) => teamService.getTeam(rgId)));
       })
       .then((groups) => {
         commit('SET_INVESTMENT_PORTFOLIO_RESEARCH_GROUPS', groups);

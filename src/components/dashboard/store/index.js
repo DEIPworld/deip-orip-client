@@ -1,13 +1,13 @@
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
-import { ResearchGroupService } from '@deip/research-group-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -195,7 +195,7 @@ const actions = {
           }, []);
 
 
-        return researchGroupService.getResearchGroups(researchGroupIds);
+        return teamService.getTeams(researchGroupIds);
       })
       .then((researchGroups) => {
         commit('SET_RESEARCH_GROUPS', researchGroups);

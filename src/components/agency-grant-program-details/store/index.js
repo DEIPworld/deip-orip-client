@@ -2,14 +2,14 @@ import Vue from 'vue';
 import { UsersService } from '@deip/users-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { GrantsService } from '@deip/grants-service';
-import { ResearchGroupService } from '@deip/research-group-service';
 import { ResearchService } from '@deip/research-service';
+import { TeamService } from '@deip/team-service';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
+const teamService = TeamService.getInstance();
 const usersService = UsersService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const grantsService = GrantsService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 const researchService = ResearchService.getInstance();
 
 const state = {
@@ -53,7 +53,7 @@ const getters = {
 const actions = {
   loadGrantProgramDetailsPage({ state, dispatch, commit }, { foaId }) {
     commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
-    return researchGroupService.getResearchGroup(Vue.$env.TENANT)
+    return teamService.getTeam(Vue.$env.TENANT)
       .then((organization) => {
         commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadOrganizationProgramDetails', { foaId });

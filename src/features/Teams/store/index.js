@@ -6,9 +6,9 @@ import {
   wrapInArray
 } from '@deip/toolbox';
 
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 
-const researchGroupService = ResearchGroupService.getInstance();
+const teamService = TeamService.getInstance();
 
 const STATE = {
   data: []
@@ -25,23 +25,23 @@ const GETTERS = {
 
 const ACTIONS = {
   fetch({ commit }) {
-    return researchGroupService
-      .getResearchGroupsListing()
+    return teamService
+      .getTeamsListing()
       .then((teams) => {
         commit('setList', teams);
       });
   },
 
   get({ commit }, payload) {
-    return researchGroupService
-      .getResearchGroups(wrapInArray(payload))
+    return teamService
+      .getTeams(wrapInArray(payload))
       .then((teams) => {
         commit('setList', teams);
       });
   },
 
   getUserTeams({ commit }, username) {
-    return researchGroupService.getTeamsByUser(username)
+    return teamService.getTeamsByUser(username)
       .then((teams) => {
         commit('setList', teams);
       });

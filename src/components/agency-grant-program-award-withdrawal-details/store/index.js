@@ -2,13 +2,13 @@ import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { BlockchainService } from '@deip/blockchain-service';
 import { GrantsService } from '@deip/grants-service';
 import { UsersService } from '@deip/users-service';
-import { ResearchGroupService } from '@deip/research-group-service';
 import { ResearchService } from '@deip/research-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const grantsService = GrantsService.getInstance();
 const usersService = UsersService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 const researchService = ResearchService.getInstance();
 
 const state = {
@@ -165,7 +165,7 @@ const actions = {
       })
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
-        return researchGroupService.getResearchGroup(state.foa.organization_external_id);
+        return teamService.getTeam(state.foa.organization_external_id);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
@@ -173,15 +173,15 @@ const actions = {
       })
       .then((research) => {
         commit('SET_AWARDEE_RESEARCH', research);
-        return researchGroupService.getResearchGroup(state.research.research_group.external_id);
+        return teamService.getTeam(state.research.research_group.external_id);
       })
       .then((researchGroup) => {
         commit('SET_AWARDEE_ORGANIZATION', researchGroup);
-        return researchGroupService.getResearchGroup(state.award.university_external_id);
+        return teamService.getTeam(state.award.university_external_id);
       })
       .then((researchGroup) => {
         commit('SET_UNIVERSITY_ORGANIZATION', researchGroup);
-        return researchGroupService.getResearchGroup(state.foa.treasury_external_id);
+        return teamService.getTeam(state.foa.treasury_external_id);
       })
       .then((researchGroup) => {
         commit('SET_TREASURY_ORGANIZATION', researchGroup);

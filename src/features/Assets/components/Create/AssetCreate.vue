@@ -251,9 +251,9 @@
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import { assetsChore } from '@/mixins/chores';
 
-  import { ResearchGroupService } from '@deip/research-group-service';
+  import { TeamService } from '@deip/team-service';
 
-  const researchGroupService = ResearchGroupService.getInstance();
+  const teamService = TeamService.getInstance();
 
   const shareholderModel = () => ({
     account: undefined,
@@ -323,7 +323,7 @@
       if (this.projectTokenized) {
         this.redirect();
       } else {
-        researchGroupService.getResearchGroup(this.project.researchGroup.external_id)
+        teamService.getTeam(this.project.researchGroup.external_id)
           .then((res) => {
             this.teamData = { ...this.teamData, ...res };
             this.$setReady();
