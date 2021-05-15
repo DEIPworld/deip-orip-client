@@ -8,11 +8,11 @@ const inquirer = require('inquirer');
 const prompt = inquirer.createPromptModule();
 
 const globModules = glob.sync(
-  path.join(__dirname, '..', 'deip-client-modules', 'packages', '*', '*'),
-  {
-    ignore: path.join(__dirname, '..', 'deip-client-modules', 'packages', 'components', '*')
-  }
+  path.join(__dirname, '..', '..', 'deip-modules', 'packages', '*', '*')
 );
+
+const modulesToRemove = ['vue', 'vuetify'];
+const modulesToRemoveNamesGlob = `+(${modulesToRemove.join('|')})`;
 
 const promptModules = globModules.reduce((a, pth) => {
   a.push({
@@ -55,18 +55,33 @@ prompt([{
     }]);
   })
   .then((answer) => {
-    for (const module of answer.modules) {
+    const linkModulesPromises = answer.modules.map((module) => {
       const name = JSON.parse(fs.readFileSync(path.join(module, 'package.json'), 'utf8'))
         .name
         .split('/')[1];
-      const dest = path.join(__dirname, 'node_modules', '@deip', name);
+      const dest = path.join(__dirname, '..', 'node_modules', '@deip', name);
 
-      symlinkDir(module, dest)
+      return symlinkDir(module, dest)
         .then(() => {
-          rimraf(path.join(__dirname, 'node_modules', '@deip', `.ignored_${name}`), {}, () => {
+          rimraf(path.join(__dirname, '..', 'node_modules', '@deip', `.ignored_${name}`), {}, () => {
             console.info(`@deip/${name} linked`);
+
+            const modulesToRemoveGlob = path.join(__dirname, '..', 'node_modules', '@deip', name, 'node_modules', modulesToRemoveNamesGlob);
+            if (glob.sync(modulesToRemoveGlob).length) {
+              rimraf(modulesToRemoveGlob, {}, () => {
+                console.info(`${modulesToRemove} removed from @deip/${name}`);
+              });
+            }
           });
-        })
-        .catch((err) => console.error(err));
-    }
-  });
+        });
+    });
+
+    return Promise.all(linkModulesPromises);
+  })
+  .then(() => {
+    const globalPath = path.join(__dirname, '..', '..', 'deip-modules', 'node_modules', modulesToRemoveNamesGlob);
+    rimraf(globalPath, {}, () => {
+      console.info(`${modulesToRemove} removed from @deip`);
+    });
+  })
+  .catch((err) => console.error(err));

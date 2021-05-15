@@ -201,13 +201,13 @@
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
   import { UsersService } from '@deip/users-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
+  import { TeamService } from '@deip/team-service';
 
+  const teamService = TeamService.getInstance();
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
   import { mapGetters } from 'vuex';
 
-  const researchGroupService = ResearchGroupService.getInstance();
   const usersService = UsersService.getInstance();
   const assetsService = AssetsService.getInstance();
 
@@ -346,7 +346,7 @@
               fullName: this.$options.filters.accountFullname(a)
             })));
             return Promise.all(
-              groupsAccount.map((g) => researchGroupService.getResearchGroup(g.account.name))
+              groupsAccount.map((g) => teamService.getTeam(g.account.name))
             );
           })
           .then((groupAccounts) => {

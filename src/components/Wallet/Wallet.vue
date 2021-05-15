@@ -37,11 +37,11 @@
   import GroupsInfoTable from '@/components/Wallet/components/GroupsInfoTable';
   import CurrenciesInfoTable from '@/components/Wallet/components/CurrenciesInfoTable';
   import SharesInfoTable from '@/components/Wallet/components/SharesInfoTable';
-  import { ResearchGroupService } from '@deip/research-group-service';
   import { UsersService } from '@deip/users-service';
+  import { TeamService } from '@deip/team-service';
 
+  const teamService = TeamService.getInstance();
   const usersService = UsersService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'Wallet',
@@ -91,7 +91,7 @@
     mounted() {
       Promise.all([
         usersService.getUsersListing(),
-        researchGroupService.getResearchGroupsListing()
+        teamService.getTeamsListing()
       ])
         .then(([users, researchGroups]) => {
           return [...users.filter(u => u.account.name != this.$currentUser.username), ...researchGroups];

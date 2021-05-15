@@ -1,12 +1,19 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const serve = require('koa-static');
+const cors = require('@koa/cors');
 
 const app = new Koa();
 const router = new Router();
 
 const PORT = process.env.PORT || 80;
 const HOST = process.env.HOST || '0.0.0.0';
+
+app.use(cors({
+  origin: "*",
+  allowHeaders: "*",
+  allowMethods: "*"
+}));
 
 app.use(serve(`${__dirname}/dist`));
 router.get('/env', (ctx) => {

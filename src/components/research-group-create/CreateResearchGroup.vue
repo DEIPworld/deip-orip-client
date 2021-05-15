@@ -11,10 +11,12 @@
 
 <script>
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { TeamService } from '@deip/team-service';
   import { CreateResearchGroupMixin } from '@/components/research-group-create/CreateResearchGroupMixin';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import CreateResearchGroupForm from './components/CreateResearchGroupForm';
 
+  const teamService = TeamService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
@@ -82,7 +84,7 @@
 
             return Promise.all([
               Promise.all(invitesPromises),
-              researchGroupService.getResearchGroup(researchGroupExternalId),
+              teamService.getTeam(researchGroupExternalId),
               this.$store.dispatch('auth/loadGroups')
             ]);
           })

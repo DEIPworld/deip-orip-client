@@ -1,5 +1,5 @@
 import { UsersService } from '@deip/users-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import {
   camelizeObjectKeys,
@@ -9,7 +9,7 @@ import {
 } from '@/utils/helpers';
 
 const usersService = UsersService.getInstance();
-const teamsService = ResearchGroupService.getInstance();
+const teamService = TeamService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const STATE = {
@@ -29,7 +29,7 @@ const ACTIONS = {
   get({ commit }, username) {
     return Promise.all([
       usersService.getUser(username),
-      teamsService.getTeamsByUser(username),
+      teamService.getTeamsByUser(username),
       expertiseContributionsService.getAccountExpertiseTokens(username)
     ])
       .then(([{ account, profile }, teams, expertise]) => {

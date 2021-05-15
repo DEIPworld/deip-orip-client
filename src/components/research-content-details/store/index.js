@@ -1,22 +1,22 @@
 import _ from 'lodash';
 import { ResearchService } from '@deip/research-service';
-import { ResearchGroupService } from '@deip/research-group-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ProposalsService } from '@deip/proposals-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { TeamService } from '@deip/team-service';
 import { DisciplinesService } from '@deip/disciplines-service';
 import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
+const teamService = TeamService.getInstance();
 const researchService = ResearchService.getInstance();
 const usersService = UsersService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const disciplinesService = DisciplinesService.getInstance();
 
@@ -265,7 +265,7 @@ const actions = {
 
   loadResearchGroupDetails({ state, commit, dispatch }, { teamId }) {
     commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true);
-    return researchGroupService.getResearchGroup(teamId)
+    return teamService.getTeam(teamId)
       .then((team) => {
         commit('SET_RESEARCH_GROUP_DETAILS', team);
         return team;
@@ -348,7 +348,7 @@ const actions = {
       .then((graphData) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(
-          ({ researchGroup }) => researchGroupService.getResearchGroup(researchGroup.external_id)
+          ({ researchGroup }) => teamService.getTeam(researchGroup.external_id)
         ));
       })
       .then((researchGroups) => {

@@ -2,10 +2,9 @@ import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
 import { UsersService } from '@deip/users-service';
 import { ResearchService } from '@deip/research-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 
-
-const researchGroupService = ResearchGroupService.getInstance();
+const teamService = TeamService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const usersService = UsersService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -27,7 +26,7 @@ const GETTERS = {
 
 const ACTIONS = {
   loadResearchGroup({ commit }, accountExternalId) {
-    return researchGroupService.getResearchGroup(accountExternalId)
+    return teamService.getTeam(accountExternalId)
       .then((researchGroup) => {
         commit('setResearchGroup', researchGroup);
       });
@@ -62,7 +61,7 @@ const ACTIONS = {
           ({ owner }) => !users.some(({ username }) => username === owner)
         );
         return Promise.all(
-          securityTokenGroups.map(({ owner }) => researchGroupService.getResearchGroup(owner))
+          securityTokenGroups.map(({ owner }) => teamService.getTeam(owner))
         );
       })
       .then((groups) => {

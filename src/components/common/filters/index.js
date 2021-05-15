@@ -8,7 +8,7 @@ const accessService = AccessService.getInstance();
 // temp solution //
 const firstNameAttrId = '606712cb9f80ae5a1899c8f5';
 const lastNameAttrId = '606712cb9f80ae5a1899c8f6';
-const teamNameAttrId = '6082c4d594bce65929ea2ec2';
+const teamNameAttrId = '6092cdf54572573b895a8139';
 
 Vue.filter('fullname', (enrichedProfile) => {
   if (enrichedProfile && enrichedProfile.profile && enrichedProfile.profile.attributes) {

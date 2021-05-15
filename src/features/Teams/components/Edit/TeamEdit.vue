@@ -9,16 +9,23 @@
 </template>
 
 <script>
-  import { extendAttrModules, expandAttributes } from '@/utils/helpers';
+  import { extendAttrModules, expandAttributes, parseFormData } from '@/utils/helpers';
   import TeamForm from '@/features/Teams/components/Form/TeamForm';
   import { mapGetters } from 'vuex';
   import { ResearchGroupService } from '@deip/research-group-service';
+  import { TeamService } from '@deip/team-service';
 
+  const teamService = TeamService.getInstance();
   const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'TeamCreate',
     components: { TeamForm },
+    data() {
+      return {
+        loading: false
+      }
+    },
     computed: {
       ...mapGetters({
         team: 'Team/teamDetails'
@@ -44,20 +51,21 @@
       editTeam(formData) {
         this.loading = true;
 
+        const { onchainData: { name }, offchainMeta: { attributes } } = parseFormData(formData);
+
         const isProposal = !this.team.isPersonal;
-        researchGroupService.updateResearchGroupAccount(
-          { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-          isProposal,
+        teamService.updateTeamAccount(
+          this.$currentUser,
           {
-            researchGroupExternalId: this.team.externalId,
+            updater: this.$currentUser.username,
+            teamId: this.team.externalId,
             accountOwnerAuth: undefined,
             accountActiveAuth: undefined,
-            accountActiveAuthOverrides: undefined,
-            accountMemoPubKey: undefined,
-            accountJsonMetadata: undefined,
-            accountExtensions: []
+            memoKey: undefined,
+            attributes,
+            formData
           },
-          formData
+          { isProposal }
         )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));

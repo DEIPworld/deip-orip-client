@@ -51,10 +51,10 @@
 <script>
   import { mapGetters } from 'vuex';
   import { UsersService } from '@deip/users-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
+  import { TeamService } from '@deip/team-service';
 
+  const teamService = TeamService.getInstance();
   const usersService = UsersService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();  
 
   export default {
     name: 'FundingOpportunityReviewCommittee',
@@ -99,7 +99,7 @@
         return this.foa.reveiwCommittee == null;
       },
       getReviewCommittes(ids) {
-        researchGroupService.getResearchGroups(ids)
+        teamService.getTeams(ids)
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
             

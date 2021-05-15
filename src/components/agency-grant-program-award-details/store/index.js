@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
-import { ResearchGroupService } from '@deip/research-group-service';
 import { GrantsService } from '@deip/grants-service';
 import { UsersService } from '@deip/users-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { ResearchService } from '@deip/research-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const usersService = UsersService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 const grantsService = GrantsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const researchService = ResearchService.getInstance();
@@ -302,7 +302,7 @@ const actions = {
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
 
-        return researchGroupService.getResearchGroup(foa.organization_external_id);
+        return teamService.getTeam(foa.organization_external_id);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
@@ -326,7 +326,7 @@ const actions = {
         commit('SET_AWARDEE_RESEARCH_LIST', researchList);
         return Promise.all(researchList.map((r) => r.research_group.external_id)
           .reduce((acc, researchGroupId) => (acc.some((rgId) => rgId === researchGroupId) ? acc : [researchGroupId, ...acc]), [])
-          .map((rgId) => researchGroupService.getResearchGroup(rgId)));
+          .map((rgId) => teamService.getTeam(rgId)));
       })
       .then((researchGroups) => {
         commit('SET_AWARDEE_RESEARCH_GROUPS_LIST', researchGroups);

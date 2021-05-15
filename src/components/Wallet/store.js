@@ -5,13 +5,13 @@ import { AssetsService } from '@deip/assets-service';
 import { ResearchService } from '@deip/research-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { BlockchainService } from '@deip/blockchain-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { TeamService } from '@deip/team-service';
 
+const teamService = TeamService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchService = ResearchService.getInstance();
 const assetsService = AssetsService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
 
 const state = {
   researches: [],
@@ -117,7 +117,7 @@ const actions = {
 
   loadBalanceData({ commit, dispatch }, account) {
     let groupData = {};
-    return researchGroupService.getResearchGroup(account)
+    return teamService.getTeam(account)
       .then((group) => {
         groupData = group;
         return assetsService.getAccountAssetsBalancesByOwner(groupData.external_id);
@@ -135,7 +135,7 @@ const actions = {
 
   loadAllGroups({ commit }, user) {
     const groupList = [];
-    return researchGroupService.getTeamsByUser(user)
+    return teamService.getTeamsByUser(user)
       .then((result) => {
         const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);
