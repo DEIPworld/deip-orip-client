@@ -38,7 +38,8 @@ const state = {
   tenant: undefined,
   networkTenants: [],
   allAssets: [], // TODO: temp
-  assets: [] // TODO: temp
+  assets: [], // TODO: temp,
+  tenantResearchersGroup: undefined // TODO: temp
 };
 
 // getters
@@ -110,6 +111,7 @@ const getters = {
   userAssets: (state) => state.user.assets,
 
   tenant: (state) => state.tenant,
+  tenantResearchersGroup: (state) => state.tenantResearchersGroup,
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
     && getters.tenant
@@ -260,7 +262,13 @@ const actions = {
     return tenantService.getTenant(tenant)
       .then((tenant) => {
         commit('SET_TENANT', tenant);
+        return researchGroupService.getResearchGroup("712bb20463fc64978f201cad1b6649465c80b02b");
       })
+      .then((tenantResearchersGroup) => {
+        commit('SET_TENANT_RESEARCHERS_GROUP', tenantResearchersGroup);
+      })
+
+
       .catch((err) => {
         console.error(err);
       })
@@ -317,6 +325,10 @@ const mutations = {
 
   SET_TENANT(state, tenant) {
     state.tenant = tenant;
+  },
+
+  SET_TENANT_RESEARCHERS_GROUP(state, tenantResearchersGroup) {
+    state.tenantResearchersGroup = tenantResearchersGroup;
   },
 
   SET_USER_BALANCES(state, balances) {

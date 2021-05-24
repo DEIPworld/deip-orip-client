@@ -2,8 +2,6 @@ import { ExpertiseContributionsService } from '@deip/expertise-contributions-ser
 import { EXPERTISE_CONTRIBUTION_TYPE, getResearchContentType } from '@/variables';
 import { ResearchContentService } from '@deip/research-content-service';
 
-import $ from 'cheerio';
-
 const researchContentService = ResearchContentService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
