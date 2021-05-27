@@ -97,7 +97,7 @@
         
         this.isDepositing = true;
         const payload = {
-          amount: parseInt(this.form.value.amount), 
+          amount: parseInt(this.form.value.amount) * 100, // cents
           currency: this.form.value.assetId,
           account: this.form.account,
           timestamp: Date.now()
