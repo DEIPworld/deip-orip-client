@@ -78,12 +78,12 @@
 
     created() {
       const preload = [
-        // this.$store.dispatch('auth/loadAssets'),
+        this.$store.dispatch('auth/loadAssets'),
 
-        // this.$store.dispatch('Assets/fetch'),
+        this.$store.dispatch('Assets/fetch'),
         this.$store.dispatch('Tenants/fetch'),
-        // this.$store.dispatch('Attributes/fetch'),
-        // this.$store.dispatch('Disciplines/fetch'),
+        this.$store.dispatch('Attributes/fetch'),
+        this.$store.dispatch('Disciplines/fetch'),
         this.$store.dispatch('Auth/getCurrentUser'),
       ];
 
