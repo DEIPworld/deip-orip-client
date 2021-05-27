@@ -7,7 +7,7 @@ import { ProposalsService } from '@deip/proposals-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
-import { DisciplinesService } from '@deip/disciplines-service';
+import { DomainsService } from '@deip/domains-service';
 import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const teamService = TeamService.getInstance();
@@ -18,7 +18,7 @@ const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
-const disciplinesService = DisciplinesService.getInstance();
+const domainsService = DomainsService.getInstance();
 
 const state = {
   content: {},
@@ -213,7 +213,7 @@ const actions = {
     commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true);
     const disciplinesList = [];
 
-    disciplinesService.getDisciplinesByResearch(researchId)
+    domainsService.getDomainsByProject(researchId)
       .then((data) => {
         const expertsPromises = [];
 

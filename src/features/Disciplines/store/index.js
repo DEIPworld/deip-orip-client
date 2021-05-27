@@ -1,6 +1,6 @@
 import { arrayToTree } from "performant-array-to-tree";
 
-import { DisciplinesService } from '@deip/disciplines-service';
+import { DomainsService } from '@deip/domains-service';
 
 import {
   camelizeObjectKeys,
@@ -9,7 +9,7 @@ import {
   collectionOne
 } from '@/utils/helpers';
 
-const disciplinesService = DisciplinesService.getInstance();
+const domainsService = DomainsService.getInstance();
 
 const STATE = {
   data: []
@@ -35,7 +35,7 @@ const GETTERS = {
 
 const ACTIONS = {
   fetch({ commit }) {
-    return disciplinesService.getAllDisciplines()
+    return domainsService.getAllDomains()
       .then((disciplines) => {
         commit('setList', disciplines);
       });
