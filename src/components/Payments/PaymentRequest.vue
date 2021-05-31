@@ -30,13 +30,13 @@
         <div v-if="deposit.status == DEPOSIT_REQUEST_STATUS.APPROVED" >
           Payment {{deposit._id}} has been processed successfully, you can see your updated balance at the <router-link
             class="a full-width break-word font-weight-medium"
-            :to="{ name: 'userWallet', params: { account: deposit.account } }"
+            :to="{ name: deposit.username == deposit.account ? 'userWallet' : 'groupWallet', params: { account: deposit.account } }"
           >Assets</router-link> page
         </div>
         <div v-else-if="deposit.status == DEPOSIT_REQUEST_STATUS.PENDING">
           Payment {{deposit._id}} is being processed currently, it may take a while to get it completed. See the <router-link
             class="a full-width break-word font-weight-medium"
-            :to="{ name: 'userWallet', params: { account: deposit.account } }"
+            :to="{ name: deposit.username == deposit.account ? 'userWallet' : 'groupWallet', params: { account: deposit.account } }"
           >Assets</router-link> page to check your balance.
         </div>
         <div v-else-if="deposit.status == DEPOSIT_REQUEST_STATUS.REJECTED">
