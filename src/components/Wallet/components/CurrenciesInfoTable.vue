@@ -52,12 +52,12 @@
           </template>
 
           <v-list nav dense>
-            <v-list-item
+            <!-- <v-list-item
               v-if="isDepositAvailable(item.assetSymbol)"
               @click="openDepositDialog(item)"
             >
               <v-list-item-title>{{ $t('wallet.deposit') }}</v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
             <v-list-item
               v-if="isWithdrawAvailable(item.assetSymbol)"
               @click="openWithdrawDialog(item)"

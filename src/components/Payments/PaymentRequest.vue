@@ -27,12 +27,25 @@
         :max-width="800"
         no-gutters
       >
-        <div v-if="errorText" class="red--text text--darken-1">
-          {{ errorText }}
+        <div v-if="deposit.status == DEPOSIT_REQUEST_STATUS.APPROVED" >
+          Payment {{deposit._id}} has been processed successfully, you can see your updated balance at the <router-link
+            class="a full-width break-word font-weight-medium"
+            :to="{ name: 'userWallet', params: { account: deposit.account } }"
+          >Assets</router-link> page
         </div>
-        <div class="text-body-2 white-space-pre-line py-2">
+        <div v-else-if="deposit.status == DEPOSIT_REQUEST_STATUS.PENDING">
+          Payment {{deposit._id}} is being processed currently, it may take a while to get it completed. See the <router-link
+            class="a full-width break-word font-weight-medium"
+            :to="{ name: 'userWallet', params: { account: deposit.account } }"
+          >Assets</router-link> page to check your balance.
+        </div>
+        <div v-else-if="deposit.status == DEPOSIT_REQUEST_STATUS.REJECTED">
+          Payment {{deposit._id}} has failed to proceed, please contact to system Administrator to check payment request
+        </div>
+        <div v-if="errorText" class="red--text text--darken-1">{{errorText}}</div>
+        <!-- <div class="text-body-2 white-space-pre-line py-2">
           {{ JSON.stringify(deposit, null, 2) }}
-        </div>
+        </div> -->
       </content-block>
     </layout-section>
   </div>
@@ -69,6 +82,7 @@
         .then(({ data }) => {
           this.deposit = data;
           this.errorText = this.$route.query.errorText || '';
+          console.log(this.deposit);
         })
         .catch((err) => {
           console.error(err);
