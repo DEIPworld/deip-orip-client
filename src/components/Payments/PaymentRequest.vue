@@ -24,7 +24,6 @@
     <v-divider />
     <layout-section>
       <content-block
-        :max-width="800"
         no-gutters
       >
         <div v-if="deposit.status == DEPOSIT_REQUEST_STATUS.APPROVED" >
