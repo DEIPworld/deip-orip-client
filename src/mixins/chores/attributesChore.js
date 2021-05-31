@@ -1,18 +1,18 @@
-import { ATTRIBUTE_SCOPE } from '@/variables';
+import { ATTR_SCOPES } from '@/variables';
 
 export const attributesChore = {
   computed: {
     $$projectAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTRIBUTE_SCOPE.PROJECT });
+      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.PROJECT });
     },
     $$userAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTRIBUTE_SCOPE.USER });
+      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.USER });
     },
     $$teamAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTRIBUTE_SCOPE.TEAM });
+      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.TEAM });
     },
     $$networkProjectAttributes() {
-      return this.$store.getters['Attributes/list']({ scope: ATTRIBUTE_SCOPE.PROJECT });
+      return this.$store.getters['Attributes/list']({ scope: ATTR_SCOPES.PROJECT });
     },
     $$networkAttributes() {
       return this.$store.getters['Attributes/list']();
