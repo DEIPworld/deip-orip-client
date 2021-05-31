@@ -19,6 +19,7 @@
       </template>
 
       <template #item.actions="{ item }">
+        <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" v-if="isDepositAvailable(item.assetSymbol)" />
         <transfer-action
           :all-accounts="allAccounts"
           :asset="{
@@ -49,12 +50,12 @@
           </template>
 
           <v-list nav dense>
-            <v-list-item
+            <!-- <v-list-item
               v-if="isDepositAvailable(item.assetSymbol)"
               @click="openDepositDialog(item)"
             >
               <v-list-item-title>{{ $t('wallet.deposit') }}</v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
             <v-list-item
               v-if="isWithdrawAvailable(item.assetSymbol)"
               @click="openWithdrawDialog(item)"
@@ -196,6 +197,7 @@
 <script>
   import { mapActions, mapGetters } from 'vuex';
   import TransferAction from '@/components/Wallet/components/TransferAction';
+  import DepositFundsAction from '@/components/Wallet/components/DepositFundsAction';
   import { AssetsService } from '@deip/assets-service';
   import { assetsChore } from '@/mixins/chores';
   import VCreditCard from 'v-credit-card';
@@ -207,6 +209,7 @@
     name: 'CurrenciesInfoTable',
 
     components: {
+      DepositFundsAction,
       TransferAction,
       VCreditCard
     },

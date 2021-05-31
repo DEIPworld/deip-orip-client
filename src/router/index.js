@@ -37,6 +37,7 @@ import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio
 
 
 import FAQ from '@/components/faq/FAQ';
+import PaymentRequest from '@/components/Payments/PaymentRequest';
 import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import { AccessService } from '@deip/access-service';
@@ -277,8 +278,11 @@ const router = new Router({
       path: '/faq',
       name: 'FAQ',
       component: FAQ
-    },
-    {
+    }, {
+      path: '/payment-request',
+      name: 'PaymentRequest',
+      component: PaymentRequest
+    }, {
       path: '/user-application-accepted',
       name: 'UserApplicationAccepted',
       component: UserApplicationAccepted
@@ -346,6 +350,7 @@ router.beforeEach((to, from, next) => {
 
     'NoAccessPage',
     'FAQ',
+    'PaymentRequest',
     'UserApplicationAccepted',
     'project.details'
   ];
