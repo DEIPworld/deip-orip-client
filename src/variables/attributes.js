@@ -1,4 +1,4 @@
-import { ATTR_TYPES } from '@deip/attributes-service';
+import { ATTR_TYPES, ATTR_SCOPES } from '@deip/attributes-service';
 
 const SYSTEM_ATTRS = {
   [ATTR_TYPES.USER]: true,
@@ -10,11 +10,6 @@ const SYSTEM_ATTRS = {
   [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: true
 };
 
-const ATTRIBUTE_SCOPE = {
-  PROJECT: 1,
-  USER: 2,
-  TEAM: 3
-};
 
 const ATTR_LABELS = {
   [ATTR_TYPES.TEXT]: 'Text field',
@@ -85,7 +80,7 @@ const ATTR_ICONS = {
 export {
   ATTR_TYPES,
   SYSTEM_ATTRS,
-  ATTRIBUTE_SCOPE,
+  ATTR_SCOPES,
   ATTR_LABELS,
   ATTR_ICONS
 }

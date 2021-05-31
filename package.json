@@ -16,7 +16,7 @@
     "@deip/access-service": "1.111.2",
     "@deip/app-config-service": "1.111.2",
     "@deip/assets-service": "1.111.2",
-    "@deip/attributes-service": "1.111.2",
+    "@deip/attributes-service": "1.111.3",
     "@deip/auth-service": "1.111.2",
     "@deip/blockchain-service": "1.111.2",
     "@deip/command-models": "1.111.2",
