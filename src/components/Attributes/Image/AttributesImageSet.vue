@@ -69,11 +69,15 @@
         if (this.$route.name.includes('account')) {
           return userAttributeFileUrl(
             this.$currentUser.username,
+            this.attribute._id,
+            this.internalValue,
+            true,
+            false,
             182
           );
         }
         if (this.$route.params.teamId) {
-          return teamAttributeFileUrl(this.$route.params.teamId, 182);
+          return teamAttributeFileUrl(this.$route.params.teamId, this.attribute._id, this.internalValue, true, false, 182);
         }
         return null;
       }
