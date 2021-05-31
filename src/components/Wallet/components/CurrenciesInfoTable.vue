@@ -19,7 +19,7 @@
       </template>
 
       <template #item.actions="{ item }">
-        <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" v-if="isDepositAvailable(item.assetSymbol)" />
+        <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" />
         <transfer-action
           :all-accounts="allAccounts"
           :asset="{
