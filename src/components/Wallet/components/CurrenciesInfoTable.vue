@@ -19,14 +19,16 @@
       </template>
 
       <template #item.actions="{ item }">
-        <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" />
-        <transfer-action
-          :all-accounts="allAccounts"
-          :asset="{
-            ...item, balances: accountData.balances, type: 'currency'
-          }"
-          :disabled="!isTransferAvailable"
-        />
+        <div class="d-flex justify-end">
+          <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" />
+          <transfer-action
+            :all-accounts="allAccounts"
+            :asset="{
+              ...item, balances: accountData.balances, type: 'currency'
+            }"
+            :disabled="!isTransferAvailable"
+          />
+        </div>
       </template>
       <template #item.actionMenu="{ item }">
         <v-menu

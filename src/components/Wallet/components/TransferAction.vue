@@ -1,10 +1,9 @@
 <template>
-  <div class="d-flex justify-end">
+  <div>
     <v-btn
       outlined
       small
       max-height="30"
-      max-width="95"
       class="text-caption"
       color="primary"
       :disabled="disabled"
