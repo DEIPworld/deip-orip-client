@@ -25,9 +25,19 @@
                   {{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
               </d-stack>
-              <div class="ml-4">
+              <div v-if="hasActiveTokenSale || hasInactiveTokenSale" class="ml-4">
                 <v-chip outlined class="caption">
                   {{ tokenSaleTimeLeft | timeLeft }} left
+                </v-chip>
+              </div>
+              <div v-else-if="hasFinishedTokenSale" class="ml-4">
+                <v-chip outlined class="caption" color="success">
+                  Finished
+                </v-chip>
+              </div>
+              <div v-else-if="hasExpiredTokenSale" class="ml-4">
+                <v-chip outlined class="caption" color="error">
+                  Canceled
                 </v-chip>
               </div>
             </div>
@@ -333,6 +343,12 @@
       // todo: transform to constant
       hasInactiveTokenSale() {
         return this.tokenSale && this.tokenSale.status === 4;
+      },
+      hasFinishedTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 2;
+      },
+      hasExpiredTokenSale() {
+        return this.tokenSale && this.tokenSale.status === 3;
       },
       chartData() {
         const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
