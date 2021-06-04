@@ -45,15 +45,27 @@ export const researchAttributeFileUrl = (
 };
 
 export const userAttributeFileUrl = (
-  username = 'initdelegate', width = 48, height, isRound = false, noCache = false
+  username = 'initdelegate',
+  attributeId,
+  filename,
+  isImage = false,
+  download = false,
+  width = 48,
+  height,
+  isRound = false,
+  noCache = false,
 ) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
-    '/api/user/avatar/',
+    '/api/user/',
     username,
+    '/attribute/',
+    attributeId,
+    '/file/',
+    filename,
     '/?authorization=',
     accessService.getAccessToken(),
     '&width=',
@@ -63,23 +75,38 @@ export const userAttributeFileUrl = (
     '&round=',
     isRound,
     '&noCache=',
-    noCache
+    noCache,
+    '&download=',
+    download,
+    '&image=',
+    isImage
   ];
 
   return pathArray.join('');
 };
 
 export const teamAttributeFileUrl = (
-  researchGroupExternalId, width = 48, height, isRound = false, noCache = true
+  teamId,
+  attributeId,
+  filename,
+  isImage = false,
+  download = false,
+  width = 48,
+  height,
+  isRound = false,
+  noCache = true
 ) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
-  const id = researchGroupExternalId || null;
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
-    '/api/groups/logo/',
-    id,
+    '/api/team/',
+    teamId,
+    '/attribute/',
+    attributeId,
+    '/file/',
+    filename,
     '/?authorization=',
     accessService.getAccessToken(),
     '&width=',
@@ -89,7 +116,11 @@ export const teamAttributeFileUrl = (
     '&round=',
     isRound,
     '&noCache=',
-    noCache
+    noCache,
+    '&download=',
+    download,
+    '&image=',
+    isImage
   ];
 
   return pathArray.join('');

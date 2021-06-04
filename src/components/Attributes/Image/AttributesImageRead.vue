@@ -57,7 +57,7 @@
           ) + this.query;
         }
         if (this.username) {
-          return userAttributeFileUrl(this.username, 160) + this.query;
+          return userAttributeFileUrl(this.username, this.attribute.attributeId, this.attribute.value, true, false, 160) + this.query;
         }
 
         return '';
