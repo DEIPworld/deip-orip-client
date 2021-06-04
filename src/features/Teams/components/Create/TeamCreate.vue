@@ -48,7 +48,7 @@
             this.loading = false;
             this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username)
             this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name }));
-            const { model: { entityId: teamId } } = res;
+            const { entityId: teamId } = res;
             // const invitesPromises = invitees.map((username) => researchGroupService.createResearchGroupInvite(
             //   { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
             //   {

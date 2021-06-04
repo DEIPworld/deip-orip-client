@@ -339,8 +339,20 @@
     methods: {
       create(data) {
         return this.$route.name === 'admin.members.add'
-          ? tenantService.postSignUp(data)
-          : authService.signUp(data);
+          ? tenantService.postSignUp({
+          email: data.email,
+          attributes: data.attributes || [],
+          username: data.username,
+          pubKey: data.pubKey,
+          roles: data.role || []
+        })
+          : authService.signUp({
+          email: data.email,
+          attributes: data.attributes || [],
+          username: data.username,
+          pubKey: data.pubKey,
+          roles: data.role || []
+        });
       },
       finishCreateAccount() {
         if (!this.$refs.form.validate()) return;

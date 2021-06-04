@@ -139,13 +139,12 @@
         };
 
         this.isPasswordChanging = true;
-        userService.updateUserAccount(oldPrivateKey, {
-          account: username,
+        userService.updateUser({ privKey: oldPrivateKey }, {
+          ...this.$currentUser.profile,
+          updater: username,
           accountOwnerAuth: ownerAuth,
           accountActiveAuth: ownerAuth,
-          accountMemoPubKey: undefined,
-          accountJsonMetadata: undefined,
-          accountExtensions: []
+          memoKey: undefined
         }).then(() => {
           this.$notifier.showSuccess(this.$t('account.password.succChanged'));
           this.$refs.changePasswordForm.reset();

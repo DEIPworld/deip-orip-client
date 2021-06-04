@@ -138,14 +138,14 @@
           )
         };
 
-        formData.append('profile', JSON.stringify(update));
-
         for (const file of attachedFiles) {
           formData.append(...file);
         }
 
-        userService.updateUserProfile(this.$currentUser.username, formData)
-          .then((res) => {
+        userService.updateUser(this.$currentUser, {
+          ...update, formData, updater: this.$currentUser.username
+        })
+          .then(() => {
             this.$store.dispatch('auth/loadUser');
 
             this.$notifier.showSuccess('Personal info has been saved successfully!');
