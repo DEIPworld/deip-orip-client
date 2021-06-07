@@ -54,7 +54,7 @@
         const { onchainData: { name }, offchainMeta: { attributes } } = parseFormData(formData);
 
         const isProposal = !this.team.isPersonal;
-        teamService.updateTeamAccount(
+        teamService.updateTeam(
           this.$currentUser,
           {
             updater: this.$currentUser.username,

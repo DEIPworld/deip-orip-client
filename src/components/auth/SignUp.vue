@@ -207,12 +207,13 @@
           email,
           attributes: compactAttributes(attributes),
           username,
-          pubKey
+          pubKey,
+          roles: []
         }).then(() => {
           this.isLoading = false;
           this.isServerValidated = true;
-          this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formData.username }));
-          this.$router.push({ name: 'SignIn', query: { username: this.formData.username } });
+          this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formModel.username }));
+          this.$router.push({ name: 'SignIn', query: { username: this.formModel.username } });
         }).catch((err) => {
           this.isLoading = false;
           const message = err.response && err.response.data

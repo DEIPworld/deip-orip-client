@@ -141,10 +141,7 @@
           ]
         };
 
-        const formData = new FormData();
-        formData.append('profile', JSON.stringify(update));
-
-        userService.updateUserProfile(this.$currentUser.username, formData)
+        userService.updateUser(this.$currentUser, { ...update, updater: this.$currentUser.username })
           .then((res) => {
             this.$notifier.showSuccess(
               this.$t('userDetailRouting.detailsEmployment.success', { company: item.company })
