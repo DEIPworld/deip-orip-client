@@ -12,7 +12,7 @@
           outlined
           small
           color="primary"
-          :to="{ name: 'CreateResearchGroup', params: {account_name: $currentUser.username} }"
+          :to="{ name: 'team.create' }"
         >
           {{ $t('userDetailRouting.addGroup') }}
           <v-icon small>

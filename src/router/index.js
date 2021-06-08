@@ -168,11 +168,6 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/:account_name/create-research-group',
-      name: 'CreateResearchGroup',
-      component: CreateResearchGroup
-    },
-    {
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,

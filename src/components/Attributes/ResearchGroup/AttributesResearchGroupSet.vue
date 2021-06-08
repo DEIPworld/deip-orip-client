@@ -28,12 +28,7 @@
               color="primary"
               text
               small
-              :to="{
-                name: 'CreateResearchGroup',
-                params: {
-                  account_name: $currentUser ? $currentUser.username : ''
-                }
-              }"
+              :to="{ name: 'team.create' }"
             >
               Add new team
             </v-btn>
