@@ -1,7 +1,8 @@
 <template>
   <div>
     <users-list namespace="memberDetails" :group="team" class="mb-12">
-      <template #title-append-after>
+      <!-- DISABLED FOR NOW DUE TO NEW PROJECT TEAM MODEL -->
+      <!-- <template #title-append-after>
         <v-btn
           v-if="isTeamMember"
           color="primary"
@@ -35,7 +36,7 @@
         >
           <v-icon>close</v-icon>
         </v-btn>
-      </template>
+      </template> -->
     </users-list>
     <vex-dialog
       v-model="actionDialog.isOpen"

@@ -7,13 +7,11 @@ import { accountStore } from '@/components/Account/store';
 import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
 import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
-import { researchGroupStore } from '../components/research-group-details/store';
 import { rcdStore } from '../components/research-content-details/store';
 import { layoutStore } from '../components/layout/store';
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store';
 import { dashboardStore } from '../components/dashboard/store';
 import { investorPortfolioStore } from '../components/investor-portfolio/store';
-import { researchGroupSettingsStore } from '../components/research-group-settings/store';
 import { participantsStore } from '../components/Participants/store';
 
 import { agencyGrantProgramsStore } from '../components/agency-grant-programs/store';
@@ -34,13 +32,11 @@ export const store = new Vuex.Store({
     auth: authStore,
     account: accountStore,
 
-    researchGroup: researchGroupStore,
     rcd: rcdStore,
     layout: layoutStore,
     votingForBlockProducers: votingForBlockProducersStore,
     dashboard: dashboardStore,
     investorPortfolio: investorPortfolioStore,
-    researchGroupSettings: researchGroupSettingsStore,
     participants: participantsStore,
 
     agencyGrantPrograms: agencyGrantProgramsStore,

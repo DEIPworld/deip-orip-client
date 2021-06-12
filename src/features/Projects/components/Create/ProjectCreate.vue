@@ -25,6 +25,7 @@
         const offchainMeta = JSON.parse(formData.get("offchainMeta"));
 
         return projectService.createProject(this.$currentUser, {
+          isAdmin: this.$currentUser.profile.roles.some(r => r.role === 'admin' && r.teamId === this.$env.TENANT),
           teamId: onchainData.researchGroup,
           creator: this.$currentUser.username,
           domains: onchainData.disciplines,

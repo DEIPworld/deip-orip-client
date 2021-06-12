@@ -1,5 +1,5 @@
 <template>
-  <div v-if="teamsList.length">
+  <div>
     <div class="d-flex">
       <div class="text-h5">
         {{ $t('userDetailRouting.teams') }}
@@ -21,7 +21,7 @@
         </v-btn>
       </div>
     </div>
-    <v-row class="mt-2">
+    <v-row class="mt-2" v-if="teamsList.length">
       <v-col v-for="(team, i) in teamsList" :key="`${i}-team`" cols="4">
         <v-card
           outlined

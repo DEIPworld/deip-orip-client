@@ -21,13 +21,6 @@ import GrantProgramAwardDetails
 import GrantProgramAwardWithdrawalDetails
   from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
 
-import CreateResearchGroup from '@/components/research-group-create/CreateResearchGroup';
-import ResearchGroupDetails from '@/components/research-group-details/ResearchGroupDetails';
-import ResearchGroupSettings from '@/components/research-group-settings/ResearchGroupSettings';
-
-
-import ResearchContentDetails from '@/components/research-content-details/ResearchContentDetails';
-import ResearchContentMetadata from '@/components/research-content-details/ResearchContentMetadata';
 
 import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
@@ -177,24 +170,7 @@ const router = new Router({
         });
         loadPage(loadPagePromise, next);
       }
-    },
-
-    // {
-    //   path: '/:teamId/research/:projectId/:contentId/metadata',
-    //   name: 'ResearchContentMetadata',
-    //   component: preliminaryDataLoader(ResearchContentMetadata, {
-    //     beforeEnter: async (to, from, next) => {
-    //       const loadPagePromise = store.dispatch('rcd/loadResearchContentMetadata', {
-    //         teamId: decodeURIComponent(to.params.teamId),
-    //         projectId: decodeURIComponent(to.params.projectId),
-    //         contentId: decodeURIComponent(to.params.contentId),
-    //         ref: to.query.ref
-    //       });
-    //       loadPage(loadPagePromise, next);
-    //     }
-    //   })
-    // },
-    {
+    }, {
       path: '/research/:projectId/:contentId/references',
       name: 'ResearchContentReferences',
       component: preliminaryDataLoader(ResearchContentReferences, {
@@ -222,12 +198,7 @@ const router = new Router({
     ...projectRouting,
     ...userRouting,
     ...teamRouting,
-
     // {
-    //   path: '/:teamId/group-details',
-    //   name: 'teamDetails',
-    //   component: ResearchGroupDetails
-    // }, {
     //   path: '/:teamId/group-details/group-settings',
     //   name: 'teamSettings',
     //   component: ResearchGroupSettings
