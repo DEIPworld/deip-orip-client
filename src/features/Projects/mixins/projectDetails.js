@@ -101,7 +101,7 @@ export const projectDetails = {
 
     accessAllowedByRole() {
       return (roles) => this.$isUser && this.$currentUser.profile.roles
-        .some(({ role, researchGroupExternalId }) => roles.some((r) => this.project.tenantId == researchGroupExternalId && r == role));
+        .some(({ role, teamId }) => roles.some((r) => this.project.tenantId == teamId && r == role));
     },
 
     contentAssessAllowed() {
