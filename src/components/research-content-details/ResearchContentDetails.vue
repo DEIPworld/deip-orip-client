@@ -63,14 +63,14 @@
                 <div class="mb-2">
                   {{ $t('reviews.noReviews') }}
                 </div>
-                <div v-if="!userHasResearchExpertise || isReseachGroupMember">
+                <div v-if="!userHasResearchExpertise || isResearchGroupMember">
                   {{
                     $hasModule(DEIP_MODULE.APP_ECI)
                       ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
                       : $t('reviews.needNotMembers')
                   }}
                 </div>
-                <div v-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
+                <div v-if="userHasResearchExpertise && !userHasReview && !isResearchGroupMember">
                   {{                
                     $hasModule(DEIP_MODULE.APP_ECI)
                       ? $t('reviews.eciForContribution', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
@@ -79,7 +79,7 @@
                 </div>
               </template>
 
-              <div v-else-if="userHasResearchExpertise && !userHasReview && !isReseachGroupMember">
+              <div v-else-if="userHasResearchExpertise && !userHasReview && !isResearchGroupMember">
                 {{ 
                   $hasModule(DEIP_MODULE.APP_ECI)
                     ? $t('reviews.eciForContribution', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
@@ -91,7 +91,7 @@
                 {{ $t('reviews.reviewedAlready') }}
               </div>
 
-              <div v-else-if="!userHasResearchExpertise || isReseachGroupMember">
+              <div v-else-if="!userHasResearchExpertise || isResearchGroupMember">
                 {{
                   $hasModule(DEIP_MODULE.APP_ECI)
                     ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
@@ -188,7 +188,6 @@
         isPublished: 'rcd/isPublished',
         isCentralizedGroup: 'rcd/isCentralizedGroup',
 
-        isResearchGroupMember: 'rcd/isResearchGroupMember',
         isCreatingReviewAvailable: 'rcd/isCreatingReviewAvailable',
         userHasResearchExpertise: 'rcd/userHasResearchExpertise',
         userHasReview: 'rcd/userHasReview',
@@ -206,7 +205,7 @@
           )
         );
       },
-      isReseachGroupMember() {
+      isResearchGroupMember() {
         return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.research.research_group.external_id);
       },
     },

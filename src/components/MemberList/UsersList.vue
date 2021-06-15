@@ -102,7 +102,6 @@
     created() {
       this.storageViewModelKey = `${this.namespace}__pl-type`;
       this.$ls.on(this.storageViewModelKey, this.changeView, true);
-
       this.update()
         .then(() => this.$setReady());
     },
@@ -110,7 +109,7 @@
     methods: {
       update() {
         const payload = {
-          ...(this.group && this.group.id ? { researchGroupExternalId: this.group.external_id || this.group.externalId } : {})
+          ...(this.group ? { researchGroupExternalId: this.group.external_id || this.group.externalId } : {})
         };
         return this.$store.dispatch(`${this.storeNS}/loadUsers`, payload)
           .then(() => {
