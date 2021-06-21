@@ -15,7 +15,7 @@ const GETTERS = {
 
 const ACTIONS = {
   loadResearchTokenSale({ dispatch, commit }, researchId) {
-    return investmentsService.getCurrentTokenSaleByResearch(researchId)
+    return investmentsService.getCurrentTokenSaleByProject(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (!tokenSale) {
@@ -24,7 +24,7 @@ const ACTIONS = {
       }), (err) => { console.error(err); };
   },
   loadHistoryResearchTokenSale({ commit }, researchId) {
-    return investmentsService.getResearchTokenSalesByResearch(researchId)
+    return investmentsService.getProjectTokenSalesByProject(researchId)
       .then((tokenSales) => {
         commit('setHistoryResearchTokenSale', tokenSales);
       });

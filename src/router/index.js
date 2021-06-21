@@ -26,7 +26,6 @@ import ResearchContentReferences from '@/components/research-content-details/Res
 
 import NoAccessPage from '@/components/NoAccessPage';
 import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
-import InvestorPortfolio from '@/components/investor-portfolio/InvestorPortfolio';
 
 
 import FAQ from '@/components/faq/FAQ';
@@ -230,16 +229,6 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
-      path: '/investor-portfolio',
-      name: 'InvestorPortfolio',
-      component: InvestorPortfolio,
-      beforeEnter: (to, from, next) => {
-        const loadPagePromise = store.dispatch('investorPortfolio/loadInvestmentPortfolioPage', {
-          username: decodeURIComponent(store.getters['auth/user'].username)
-        });
-        loadPage(loadPagePromise, next);
-      }
     }, {
       path: '/create-funding-opportunity-announcement',
       name: 'CreateGrantProgram',

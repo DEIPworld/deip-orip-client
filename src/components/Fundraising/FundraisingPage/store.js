@@ -33,7 +33,7 @@ const ACTIONS = {
   },
   loadResearchTokenSale({ dispatch, commit }, researchId) {
     // TODO: load research token sale by id
-    return investmentsService.getCurrentTokenSaleByResearch(researchId)
+    return investmentsService.getCurrentTokenSaleByProject(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (tokenSale) {
@@ -79,7 +79,7 @@ const ACTIONS = {
   loadTransactionsHistory({ commit }, researchId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return investmentsService.getResearchTokenSaleContributionsByResearch(researchId)
+    return investmentsService.getProjectTokenSaleContributionsByProject(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
         return usersService.getUsers(transactionsList.map((t) => t.op[1].contributor));
@@ -96,7 +96,7 @@ const ACTIONS = {
   },
 
   loadLastResearchTokenSale({ commit }, researchId) {
-    return investmentsService.getResearchTokenSalesByResearch(researchId)
+    return investmentsService.getProjectTokenSalesByProject(researchId)
       .then((tokenSales) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);

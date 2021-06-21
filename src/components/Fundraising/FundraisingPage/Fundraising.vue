@@ -452,11 +452,10 @@
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
 
-        investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
-          tokenSaleExternalId: this.tokenSale.external_id,
+        investmentsService.contributeProjectTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+          tokenSaleId: this.tokenSale.external_id,
           contributor: this.$currentUser.username,
-          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),
-          extensions: []
+          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol)
         })
           .then(() => {
             const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);

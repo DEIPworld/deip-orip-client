@@ -295,16 +295,17 @@
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.username
           },
-          isProposal,
           {
-            researchGroup: this.project.researchGroup.external_id,
-            researchExternalId: this.project.externalId,
+            teamId: this.project.researchGroup.external_id,
+            projectId: this.project.externalId,
             startTime: this.formatDate(this.formData.startDate),
             endTime: this.formatDate(this.formData.endDate),
             securityTokensOnSale,
             softCap: this.$$toAssetUnits(this.formData.softCap, false),
-            hardCap: this.$$toAssetUnits(this.formData.hardCap, false),
-            extensions: []
+            hardCap: this.$$toAssetUnits(this.formData.hardCap, false)
+          },
+          {
+            isProposal
           }
         ];
 
