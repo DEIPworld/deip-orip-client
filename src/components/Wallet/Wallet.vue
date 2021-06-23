@@ -37,11 +37,11 @@
   import GroupsInfoTable from '@/components/Wallet/components/GroupsInfoTable';
   import CurrenciesInfoTable from '@/components/Wallet/components/CurrenciesInfoTable';
   import SharesInfoTable from '@/components/Wallet/components/SharesInfoTable';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'Wallet',
@@ -90,7 +90,7 @@
 
     mounted() {
       Promise.all([
-        usersService.getUsersListing(),
+        userService.getUsersListing(),
         teamService.getTeamsListing()
       ])
         .then(([users, researchGroups]) => {

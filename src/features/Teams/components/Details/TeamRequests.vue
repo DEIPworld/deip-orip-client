@@ -207,9 +207,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
-  import { ResearchGroupService } from '@deip/research-group-service';
-
-  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'TeamRequests',
@@ -264,25 +261,27 @@
       sendProposal() {
         const amount = parseInt(this.tokensAmount) * this.DEIP_1_PERCENT;
         this.isApprovingLoading = true;
-        researchGroupService.createInviteProposal({
-          groupId: this.team.externalId,
-          invitee: this.joinRequest.username,
-          rgtAmount: amount,
-          coverLetter: this.coverLetter,
-          isHead: false
-        })
-          .then(() => {
-            this.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
-            this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
-            this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
-          }, (err) => {
-            this.$notifier.showError(this.$t('researchGroupDetails.joinRequestDialog.errSend'));
-            console.error(err);
-          })
-          .finally(() => {
-            this.isApprovingLoading = false;
-            this.closeHandleJoinRequestDialog();
-          });
+        this.closeHandleJoinRequestDialog();
+        this.isApprovingLoading = false;
+        // researchGroupService.createInviteProposal({
+        //   groupId: this.team.externalId,
+        //   invitee: this.joinRequest.username,
+        //   rgtAmount: amount,
+        //   coverLetter: this.coverLetter,
+        //   isHead: false
+        // })
+        //   .then(() => {
+        //     this.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
+        //     this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
+        //     this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
+        //   }, (err) => {
+        //     this.$notifier.showError(this.$t('researchGroupDetails.joinRequestDialog.errSend'));
+        //     console.error(err);
+        //   })
+        //   .finally(() => {
+        //     this.isApprovingLoading = false;
+        //     this.closeHandleJoinRequestDialog();
+        //   });
       },
 
       denyJoinRequest() {
@@ -292,21 +291,23 @@
           status: 'denied'
         };
         self.isDenyingLoading = true;
+        setTimeout(() => self.closeHandleJoinRequestDialog(), 500);
+        self.isDenyingLoading = false;
 
-        researchGroupService.updateJoinRequest({ request: update })
-          .then((updatedRequest) => {
-                  self.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
-                  this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
+        // researchGroupService.updateJoinRequest({ request: update })
+        //   .then((updatedRequest) => {
+        //           self.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
+        //           this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
 
-                  setTimeout(() => self.closeHandleJoinRequestDialog(), 500);
-                },
-                (err) => {
-                  this.$notifier.showError();
-                  console.error(err);
-                })
-          .finally(() => {
-            self.isDenyingLoading = false;
-          });
+        //           setTimeout(() => self.closeHandleJoinRequestDialog(), 500);
+        //         },
+        //         (err) => {
+        //           this.$notifier.showError();
+        //           console.error(err);
+        //         })
+        //   .finally(() => {
+        //     self.isDenyingLoading = false;
+        //   });
       }
     }
   };

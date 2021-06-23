@@ -89,9 +89,9 @@
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
   import ResearchRequestFormEdit from '@/components/ResearchRequest/ResearchRequestFormEdit';
   import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
 
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
 
   export default {
     name: 'AccountProjectRequests',
@@ -204,7 +204,7 @@
       },
 
       deleteRequest(proposalId) {
-        researchService.deleteResearchApplication(this.$currentUser.privKey, {
+        projectService.deleteProjectApplication(this.$currentUser.privKey, {
           researcher: this.$currentUser.username,
           proposalId
         })

@@ -50,11 +50,11 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'FundingOpportunityReviewCommittee',
@@ -103,7 +103,7 @@
           .then((researchGroups) => {
             this.allGroupList = researchGroups;
             
-            Promise.all(this.allGroupList.map((researchGroup) => usersService.getUsersByResearchGroup(researchGroup.external_id)))
+            Promise.all(this.allGroupList.map((researchGroup) => userService.getUsersByTeam(researchGroup.external_id)))
               .then((allMembers) => {
                 for (let i = 0; i < this.allGroupList.length; i++) {
                   const researchGroup = this.allGroupList[i];

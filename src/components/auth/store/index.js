@@ -4,9 +4,9 @@ import Vue from 'vue';
 import { camelizeObjectKeys } from '@/utils/helpers';
 
 import { AccessService } from '@deip/access-service';
-import { UsersService } from '@deip/users-service';
 import { UserService } from '@deip/user-service';
-import { ResearchGroupService } from '@deip/research-group-service';
+import { NotificationService } from '@deip/notification-service';
+import { BookmarkService } from '@deip/bookmark-service';
 import { TenantService } from '@deip/tenant-service';
 import { AssetsService } from '@deip/assets-service';
 import { BlockchainService } from '@deip/blockchain-service';
@@ -15,9 +15,9 @@ import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
 const accessService = AccessService.getInstance();
-const usersService = UsersService.getInstance();
 const userService = UserService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
+const notificationService = NotificationService.getInstance();
+const bookmarkService = BookmarkService.getInstance();
 const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
 const blockchainService = BlockchainService.getInstance();
@@ -169,7 +169,7 @@ const actions = {
 
   loadResearchBookmarks({ commit, getters }, { notify } = {}) {
     const { user } = getters;
-    return userService.getResearchBookmarks(user.username)
+    return bookmarkService.getProjectBookmarks(user.username)
       .then((researchBookmarks) => {
         commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map((b) => ({
           _id: b._id,
@@ -183,7 +183,7 @@ const actions = {
   loadNotifications({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
     if (user && user.username) {
-      return userService.getNotificationsByUser(user.username)
+      return notificationService.getNotificationsByUser(user.username)
         .then((notifications) => {
           commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
         })
@@ -207,7 +207,7 @@ const actions = {
 
   loadUserData({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
-    return usersService.getUser(user.username)
+    return userService.getUser(user.username)
       .then((result) => {
         commit('SET_USER_PROFILE', result.profile);
         commit('SET_USER_ACCOUNT', result.account);
@@ -246,16 +246,16 @@ const actions = {
   },
 
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
-    const { user } = getters;
-    researchGroupService.getJoinRequestsByUser(user.username)
-      .then((requests) => {
-        commit('SET_USER_JOIN_REQUESTS', requests);
-      }, (err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        if (notify) notify();
-      });
+    // const { user } = getters;
+    // researchGroupService.getJoinRequestsByUser(user.username)
+    //   .then((requests) => {
+    //     commit('SET_USER_JOIN_REQUESTS', requests);
+    //   }, (err) => {
+    //     console.error(err);
+    //   })
+    //   .finally(() => {
+    //     if (notify) notify();
+    //   });
   },
 
   loadTenant({ state, commit, getters }, { tenant, notify } = {}) {

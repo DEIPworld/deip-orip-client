@@ -1,4 +1,4 @@
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { TeamService } from '@deip/team-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import {
@@ -8,7 +8,7 @@ import {
   collectionOne
 } from '@/utils/helpers';
 
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 const teamService = TeamService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
@@ -28,7 +28,7 @@ const GETTERS = {
 const ACTIONS = {
   get({ commit }, username) {
     return Promise.all([
-      usersService.getUser(username),
+      userService.getUser(username),
       teamService.getTeamsByUser(username),
       expertiseContributionsService.getAccountExpertiseTokens(username)
     ])

@@ -1,10 +1,10 @@
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ResearchContentService } from '@deip/research-content-service';
-import { ResearchService } from '@deip/research-service';
-import { UsersService } from '@deip/users-service';
+import { ProjectService } from '@deip/project-service';
+import { UserService } from '@deip/user-service';
 
-const usersService = UsersService.getInstance();
-const researchService = ResearchService.getInstance();
+const userService = UserService.getInstance();
+const projectService = ProjectService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
@@ -28,7 +28,7 @@ const ACTIONS = {
             researchContentService.getResearchContent(r.researchContentExternalId)
               .then((content) => {
                 r.content = content;
-                return researchService.getResearch(content.research_external_id);
+                return projectService.getProject(content.research_external_id);
               }).then((research) => {
                 r.research = research;
               })
@@ -36,7 +36,7 @@ const ACTIONS = {
         });
         return Promise.all(detailsPromises);
       })
-      .then(() => usersService.getUsers(reviewRequests.map((r) => r.requestor)))
+      .then(() => userService.getUsers(reviewRequests.map((r) => r.requestor)))
       .then((users) => {
         const requests = reviewRequests.map((r) => (
           { ...r, requestorProfile: users.find(((u) => u.account.name === r.requestor)) }

@@ -255,9 +255,6 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { ResearchService } from '@deip/research-service';
-
-  const researchService = ResearchService.getInstance();
 
   export default {
     name: 'AgencyGrantProgramDetails',

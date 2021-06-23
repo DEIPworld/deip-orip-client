@@ -33,7 +33,7 @@ import PaymentRequest from '@/components/Payments/PaymentRequest';
 import UserApplicationAccepted from '@/components/user-application-accepted/UserApplicationAccepted';
 
 import { AccessService } from '@deip/access-service';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 
 import { accountRouting } from '@/components/Account/router';
 import { adminRouting } from '@/components/AdminPanel/router';
@@ -46,7 +46,6 @@ import { sandboxRouting } from '@/components/_Sandbox/router';
 import { projectRouting } from '@/features/Projects/router';
 import { userRouting } from '@/features/Users/router';
 import { teamRouting } from '@/features/Teams/router';
-import { groupRouting } from '@/components/Group/router';
 import { landingRouting } from '@/components/Landing/router';
 import { TransactionsRouting } from '@/components/Transactions/router';
 
@@ -54,7 +53,7 @@ import { exploreRouter } from '@/features/Explore/router';
 import { WalletRouting } from '@/components/Wallet/router';
 
 const accessService = AccessService.getInstance();
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 
 Vue.use(Router);
 
@@ -202,7 +201,6 @@ const router = new Router({
     //   name: 'teamSettings',
     //   component: ResearchGroupSettings
     // },
-    ...groupRouting,
 
     ...accountRouting,
     ...adminRouting,
@@ -253,7 +251,7 @@ const router = new Router({
         const user = store.getters['auth/user'];
         const rolePromise = user.profile
           ? Promise.resolve(user.profile.roles || [])
-          : usersService.getUser(user.username)
+          : userService.getUser(user.username)
             .then((u) => u.profile.roles || []);
 
         rolePromise.then((roles) => {

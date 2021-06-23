@@ -12,11 +12,9 @@
   import { extendAttrModules, expandAttributes, parseFormData } from '@/utils/helpers';
   import TeamForm from '@/features/Teams/components/Form/TeamForm';
   import { mapGetters } from 'vuex';
-  import { ResearchGroupService } from '@deip/research-group-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
 
   export default {
     name: 'TeamCreate',

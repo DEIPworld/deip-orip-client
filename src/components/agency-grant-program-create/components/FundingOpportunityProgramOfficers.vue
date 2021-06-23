@@ -52,10 +52,6 @@
   import { mapGetters } from 'vuex';
   import _ from 'lodash';
 
-  import { UsersService } from '@deip/users-service';
-
-  const usersService = UsersService.getInstance();
-
   export default {
     name: 'FundingOpportunityProgramOfficers',
 

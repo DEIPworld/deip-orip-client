@@ -2,7 +2,7 @@ import moment from 'moment';
 import { camelizeObjectKeys } from '@/utils/helpers';
 
 import { AssetsService } from '@deip/assets-service';
-import { ResearchService } from '@deip/research-service';
+import { ProjectService } from '@deip/project-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { TeamService } from '@deip/team-service';
@@ -10,7 +10,7 @@ import { TeamService } from '@deip/team-service';
 const teamService = TeamService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
-const researchService = ResearchService.getInstance();
+const projectService = ProjectService.getInstance();
 const assetsService = AssetsService.getInstance();
 
 const state = {
@@ -55,7 +55,7 @@ const actions = {
           .filter((b) => !!b.tokenizedResearch);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
-          (b) => researchService.getResearch(b.tokenizedResearch)
+          (b) => projectService.getProject(b.tokenizedResearch)
         ));
       })
       .then((researches) => {
@@ -139,7 +139,7 @@ const actions = {
       .then((result) => {
         const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);
-        return Promise.all(groups.map((item) => researchService.getResearchGroupResearchListing(item.external_id)));
+        return Promise.all(groups.map((item) => projectService.getTeamProjectListing(item.external_id)));
       })
       .then((researches) => {
         groupList.forEach((g) => {

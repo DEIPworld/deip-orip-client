@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ResearchService } from '@deip/research-service';
-import { UsersService } from '@deip/users-service';
+import { ProjectService } from '@deip/project-service';
+import { UserService } from '@deip/user-service';
 import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ProposalsService } from '@deip/proposals-service';
@@ -11,8 +11,8 @@ import { DomainsService } from '@deip/domains-service';
 import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 const teamService = TeamService.getInstance();
-const researchService = ResearchService.getInstance();
-const usersService = UsersService.getInstance();
+const projectService = ProjectService.getInstance();
+const userService = UserService.getInstance();
 const researchContentService = ResearchContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -233,7 +233,7 @@ const actions = {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList);
-        return usersService.getUsers(_.uniq(expertsAccountNames));
+        return userService.getUsers(_.uniq(expertsAccountNames));
       }).then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
@@ -246,10 +246,10 @@ const actions = {
   loadResearchDetails({ state, commit, dispatch }, { projectId }) {
     commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
 
-    return researchService.getResearch(projectId)
+    return projectService.getProject(projectId)
       .then((research) => {
         commit('SET_RESEARCH_DETAILS', research);
-        return usersService.getUsersByResearchGroup(research.research_group.external_id);
+        return userService.getUsersByTeam(research.research_group.external_id);
       })
       .then((users) => {
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
@@ -304,7 +304,7 @@ const actions = {
         reviews.push(...items);
         return Promise.all([
           Promise.all(reviews.map((item) => researchContentReviewsService.getReviewVotes(item.external_id))),
-          usersService.getUsers(reviews.map((r) => r.author))
+          userService.getUsers(reviews.map((r) => r.author))
         ]);
       })
       .then(([votes, users]) => {
@@ -324,7 +324,7 @@ const actions = {
           }
         }
 
-        return usersService.getUsers(voters);
+        return userService.getUsers(voters);
       })
       .then((users) => {
         for (let i = 0; i < reviews.length; i++) {

@@ -1,15 +1,15 @@
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { BlockchainService } from '@deip/blockchain-service';
 import { GrantsService } from '@deip/grants-service';
-import { UsersService } from '@deip/users-service';
-import { ResearchService } from '@deip/research-service';
+import { UserService } from '@deip/user-service';
+import { ProjectService } from '@deip/project-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const grantsService = GrantsService.getInstance();
-const usersService = UsersService.getInstance();
-const researchService = ResearchService.getInstance();
+const userService = UserService.getInstance();
+const projectService = ProjectService.getInstance();
 
 const state = {
   isLoadingAwardDetailsPage: false,
@@ -157,7 +157,7 @@ const actions = {
         commit('SET_AWARD', award);
         const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
-        return usersService.getUsers([awardee.source != '' ? awardee.source : awardee.awardee]);
+        return userService.getUsers([awardee.source != '' ? awardee.source : awardee.awardee]);
       })
       .then(([pi]) => {
         commit('SET_AWARD_PI', pi);
@@ -169,7 +169,7 @@ const actions = {
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
-        return researchService.getResearch(state.awardee.research_external_id);
+        return projectService.getProject(state.awardee.research_external_id);
       })
       .then((research) => {
         commit('SET_AWARDEE_RESEARCH', research);
@@ -227,7 +227,7 @@ const actions = {
             trxSigners.push(record.rejector);
           }
         }
-        return usersService.getUsers(trxSigners);
+        return userService.getUsers(trxSigners);
       })
       .then((users) => {
         commit('SET_AWARD_WITHDRAWAL_SIGNERS_LIST', users);

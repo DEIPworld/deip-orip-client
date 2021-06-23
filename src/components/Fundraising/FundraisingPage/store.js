@@ -1,13 +1,11 @@
 import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
-import { UsersService } from '@deip/users-service';
-import { ResearchService } from '@deip/research-service';
+import { UserService } from '@deip/user-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
-const usersService = UsersService.getInstance();
-const researchService = ResearchService.getInstance();
+const userService = UserService.getInstance();
 const assetsService = AssetsService.getInstance();
 
 const STATE = {
@@ -33,7 +31,7 @@ const ACTIONS = {
   },
   loadResearchTokenSale({ dispatch, commit }, researchId) {
     // TODO: load research token sale by id
-    return investmentsService.getCurrentTokenSaleByProject(researchId)
+    return investmentsService.getCurrentTokenSaleByResearch(researchId)
       .then((tokenSale) => {
         commit('setResearchTokenSale', tokenSale);
         if (tokenSale) {
@@ -49,7 +47,7 @@ const ACTIONS = {
     return assetsService.getAccountsAssetBalancesByAsset(securityTokenId)
       .then((securityTokens) => {
         securityTokenHolders.push(...securityTokens);
-        return usersService.getUsers(securityTokens.map((m) => m.owner));
+        return userService.getUsers(securityTokens.map((m) => m.owner));
       })
       .then((users) => {
         // TODO: Fix this for group accounts
@@ -79,10 +77,10 @@ const ACTIONS = {
   loadTransactionsHistory({ commit }, researchId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return investmentsService.getProjectTokenSaleContributionsByProject(researchId)
+    return investmentsService.getResearchTokenSaleContributionsByResearch(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
-        return usersService.getUsers(transactionsList.map((t) => t.op[1].contributor));
+        return userService.getUsers(transactionsList.map((t) => t.op[1].contributor));
       })
       .then((users) => {
         for (let i = 0; i < transactions.length; i++) {
@@ -96,7 +94,7 @@ const ACTIONS = {
   },
 
   loadLastResearchTokenSale({ commit }, researchId) {
-    return investmentsService.getProjectTokenSalesByProject(researchId)
+    return investmentsService.getResearchTokenSalesByResearch(researchId)
       .then((tokenSales) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);

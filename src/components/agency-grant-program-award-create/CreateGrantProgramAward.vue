@@ -357,13 +357,13 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
   import { GrantsService } from '@deip/grants-service';
   import { BlockchainService } from '@deip/blockchain-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
   const grantsService = GrantsService.getInstance();
   const blockchainService = BlockchainService.getInstance();
 
@@ -595,7 +595,7 @@
         return teamService.getTeamsByUser(funding.researcher.user.account.name)
           .then((groups) => {
             funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => researchService.getResearchGroupResearchListing(group.external_id)));
+            return Promise.all(groups.map((group) => projectService.getTeamProjectListing(group.external_id)));
           })
           .finally(() => {
             funding.isResearchGroupsLoading = false;
@@ -606,7 +606,7 @@
         funding.foundResearch = [];
         funding.isResearchLoading = true;
 
-        return researchService.getResearchGroupResearchListing(funding.researchGroup.external_id)
+        return projectService.getTeamProjectListing(funding.researchGroup.external_id)
           .then((groupsResearchList) => {
             const researches = [].concat.apply([], groupsResearchList);
             funding.foundResearch.push(...researches);

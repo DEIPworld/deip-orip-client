@@ -1,8 +1,7 @@
 import _ from 'lodash';
 
-import { ResearchGroupService } from '@deip/research-group-service';
-import { UsersService } from '@deip/users-service';
-import { ResearchService } from '@deip/research-service';
+import { UserService } from '@deip/user-service';
+import { ProjectService } from '@deip/project-service';
 import { BlockchainService } from '@deip/blockchain-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
@@ -11,9 +10,8 @@ import { TeamService } from '@deip/team-service';
 const teamService = TeamService.getInstance();
 const assetsService = AssetsService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
-const usersService = UsersService.getInstance();
-const researchService = ResearchService.getInstance();
+const userService = UserService.getInstance();
+const projectService = ProjectService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 
 import { camelizeObjectKeys } from '@/utils/helpers';
@@ -65,7 +63,7 @@ const ACTIONS = {
   },
 
   loadResearchGroupResearchList({ commit }, externalId) {
-    return researchService.getResearchGroupResearchListing(externalId)
+    return projectService.getTeamProjectListing(externalId)
       .then((researchList) => {
         commit('setResearchList', researchList);
         return Promise.all(researchList.reduce((arr, r) => {
@@ -94,40 +92,40 @@ const ACTIONS = {
   },
 
   loadGroupInvites({ commit, state }, teamId) {
-    const pendingInvites = [];
+    // const pendingInvites = [];
 
-    return researchGroupService.getResearchGroupPendingInvites(teamId)
-      .then((invites) => {
-        pendingInvites.push(...invites);
-        return usersService.getUsers(pendingInvites.map((invite) => invite.invitee));
-      })
-      .then((users) => {
-        for (let i = 0; i < pendingInvites.length; i++) {
-          pendingInvites[i].user = users[i];
-        }
-        commit('setInvites', pendingInvites);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    // return researchGroupService.getResearchGroupPendingInvites(teamId)
+    //   .then((invites) => {
+    //     pendingInvites.push(...invites);
+    //     return userService.getUsers(pendingInvites.map((invite) => invite.invitee));
+    //   })
+    //   .then((users) => {
+    //     for (let i = 0; i < pendingInvites.length; i++) {
+    //       pendingInvites[i].user = users[i];
+    //     }
+    //     commit('setInvites', pendingInvites);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   },
 
   loadJoinRequests({ commit, state }, teamId) {
-    const joinRequests = [];
-    researchGroupService.getJoinRequestsByGroup(teamId)
-      .then((requests) => {
-        joinRequests.push(...requests);
-        return usersService.getUsers(joinRequests.map((request) => request.username));
-      }, (err) => {
-        console.error(err);
-      })
-      .then((users) => {
-        joinRequests.forEach((request, idx) => {
-          const user = users[idx];
-          request.user = user;
-        });
-        commit('setRequests', joinRequests);
-      });
+    // const joinRequests = [];
+    // researchGroupService.getJoinRequestsByGroup(teamId)
+    //   .then((requests) => {
+    //     joinRequests.push(...requests);
+    //     return userService.getUsers(joinRequests.map((request) => request.username));
+    //   }, (err) => {
+    //     console.error(err);
+    //   })
+    //   .then((users) => {
+    //     joinRequests.forEach((request, idx) => {
+    //       const user = users[idx];
+    //       request.user = user;
+    //     });
+    //     commit('setRequests', joinRequests);
+    //   });
   }
 };
 

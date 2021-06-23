@@ -15,10 +15,10 @@
 </template>
 
 <script>
-  import { UserService } from '@deip/user-service';
+  import { BookmarkService } from '@deip/bookmark-service';
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
-  const userService = UserService.getInstance();
+  const bookmarkService = BookmarkService.getInstance();
 
   export default {
     name: 'ResearchDetailsFollowCta',
@@ -44,8 +44,8 @@
     methods: {
       bookmarkService() {
         return !this.bookmarkId
-          ? userService.createResearchBookmark(this.$currentUser.username, this.project.externalId)
-          : userService.removeResearchBookmark(this.$currentUser.username, this.bookmarkId);
+          ? bookmarkService.createProjectBookmark(this.$currentUser.username, this.project.externalId)
+          : bookmarkService.removeProjectBookmark(this.$currentUser.username, this.bookmarkId);
       },
 
       toggleBookmark() {

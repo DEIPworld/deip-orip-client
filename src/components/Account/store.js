@@ -1,6 +1,6 @@
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 
 const state = {
   user: undefined
@@ -18,7 +18,7 @@ const getters = {
 const actions = {
 
   loadUser({ state, commit, dispatch }, { username }) {
-    usersService.getUser(username)
+    userService.getUser(username)
       .then((user) => {
         commit('SET_USER', user);
       });

@@ -12,10 +12,10 @@
 <script>
   import ResearchRequestFormView from '@/components/ResearchRequest/ResearchRequestFormView';
   import { ResearchRequestModelMixin } from '@/components/ResearchRequest/ResearchRequestModelMixin';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
 
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
 
   export default {
     name: 'ResearchRequestFormCreate',
@@ -49,10 +49,10 @@
         formData.append('researchGroupName', `${this.formData.researchTitle} team`);
         formData.append('researchGroupDescription', '');
 
-        researchService.createResearchApplication(researcherPrivKey, formData)
+        projectService.createProjectApplication(researcherPrivKey, formData)
           .then(({ rm }) => {
             this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successReq'));
-            return researchService.getResearch(rm._id);
+            return projectService.getProject(rm._id);
           })
           .then((research) => {
             if (research) { // if proposal

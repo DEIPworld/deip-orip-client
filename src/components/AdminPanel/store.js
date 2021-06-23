@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { TenantService } from '@deip/tenant-service';
 
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 const tenantService = TenantService.getInstance();
 
 const state = {
@@ -23,7 +23,7 @@ const getters = {
 // actions
 const actions = {
   loadRegisteredMembers({ commit }, { notify } = {}) {
-    return usersService.getUsersByTenant(Vue.$env.TENANT)
+    return userService.getUsersByTenant(Vue.$env.TENANT)
       .then((users) => {
         const approvedUsers = users.sort((a, b) => {
           const dateA = new Date(a.profile.created_at);
