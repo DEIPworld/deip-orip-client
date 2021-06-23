@@ -11,7 +11,6 @@ import { rcdStore } from '../components/research-content-details/store';
 import { layoutStore } from '../components/layout/store';
 import { votingForBlockProducersStore } from '../components/voting-for-block-producers/store';
 import { dashboardStore } from '../components/dashboard/store';
-import { investorPortfolioStore } from '../components/investor-portfolio/store';
 import { participantsStore } from '../components/Participants/store';
 
 import { agencyGrantProgramsStore } from '../components/agency-grant-programs/store';
@@ -36,7 +35,6 @@ export const store = new Vuex.Store({
     layout: layoutStore,
     votingForBlockProducers: votingForBlockProducersStore,
     dashboard: dashboardStore,
-    investorPortfolio: investorPortfolioStore,
     participants: participantsStore,
 
     agencyGrantPrograms: agencyGrantProgramsStore,
