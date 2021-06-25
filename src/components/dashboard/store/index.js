@@ -1,13 +1,13 @@
-import { UsersService } from '@deip/users-service';
-import { ResearchService } from '@deip/research-service';
+import { UserService } from '@deip/user-service';
+import { ProjectService } from '@deip/project-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
-const usersService = UsersService.getInstance();
-const researchService = ResearchService.getInstance();
+const userService = UserService.getInstance();
+const projectService = ProjectService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
@@ -199,7 +199,7 @@ const actions = {
       })
       .then((researchGroups) => {
         commit('SET_RESEARCH_GROUPS', researchGroups);
-        return usersService.getUsersByResearchGroup(researchGroups.map(researchGroup => researchGroup.external_id));
+        return userService.getUsersByTeam(researchGroups.map(researchGroup => researchGroup.external_id));
       })
       .then((result) => {
         const flatten1 = [].concat.apply([], result);
@@ -217,16 +217,16 @@ const actions = {
   },
 
   loadMembershipResearches({ commit }, { username, notify } = {}) {
-    return researchService.getUserResearchListing(username)
+    return projectService.getUserProjectListing(username)
       .then((items) => {
         const researches = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
+        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearch(research.external_id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
@@ -241,16 +241,16 @@ const actions = {
     const user = rootGetters['auth/user'];
 
     const externalIds = user.researchBookmarks.map((b) => b.researchId).filter((id) => !excludeIds.some((rId) => rId == id));
-    return Promise.all(externalIds.map((externalId) => researchService.getResearch(externalId)))
+    return Promise.all(externalIds.map((externalId) => projectService.getProject(externalId)))
       .then((items) => {
         const researches = items.filter((r) => !!r);
         commit('SET_BOOKMARKED_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
+        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearch(research.external_id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
@@ -262,7 +262,7 @@ const actions = {
   },
 
   loadExperts({ commit }, { username, notify } = {}) {
-    usersService.getUsersListing()
+    userService.getUsersListing()
       .then((users) => {
         commit('SET_EXPERTS', users.filter(u => u.account.name == username));
         return Promise.all(users.map((user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)));

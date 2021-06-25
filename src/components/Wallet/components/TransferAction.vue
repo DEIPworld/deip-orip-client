@@ -200,7 +200,7 @@
 <script>
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
@@ -208,7 +208,7 @@
   import { assetsChore } from '@/mixins/chores';
   import { mapGetters } from 'vuex';
 
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
   const assetsService = AssetsService.getInstance();
 
   export default {
@@ -328,7 +328,7 @@
         this.exchangeAccounts = [];
         const blackList = [...this.SYSTEM_USERS, this.$currentUser.username];
         assetsService.getAccountsAssetBalancesByAsset($event.stringSymbol)
-          .then((accounts) => usersService.getUsers(
+          .then((accounts) => userService.getUsers(
             accounts.map(({ owner }) => owner).filter((owner) => !blackList.some(u => u == owner))
           ))
           .then((accounts) => {

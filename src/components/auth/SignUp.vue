@@ -113,11 +113,11 @@
   import _ from 'lodash';
 
   import { AuthService } from '@deip/auth-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import { mapGetters } from 'vuex';
 
   const authService = AuthService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'SignUp',
@@ -230,7 +230,7 @@
           if (this.formData.username !== '') {
             this.isUsernameChecking = true;
 
-            return usersService.getUser(this.formData.username)
+            return userService.getUser(this.formData.username)
               .then((user) => {
                 this.isUsernameVerifyed = !user;
               }).catch((error) => {

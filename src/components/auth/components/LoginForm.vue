@@ -61,14 +61,14 @@
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import DForm from '@/components/Deipify/DForm/DForm';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
   import DInputPassword from '@/components/Deipify/DInput/DInputPassword';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
 
@@ -143,7 +143,7 @@
         this.disable = true;
 
         let privateKey;
-        usersService.getUser(this.formData.username)
+        userService.getUser(this.formData.username)
           .then((res) => {
             if (!res || !res.account) {
               throw new Error(this.$t('signIn.form.rules.invalidAccount'));

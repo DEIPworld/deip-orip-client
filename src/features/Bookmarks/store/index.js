@@ -1,6 +1,6 @@
-import { UserService } from '@deip/user-service';
+import { BookmarkService } from '@deip/bookmark-service';
 
-const userService = UserService.getInstance();
+const bookmarkService = BookmarkService.getInstance();
 
 const STATE = {
   data: []
@@ -12,7 +12,7 @@ const GETTERS = {
 
 const ACTIONS = {
   fetch({ commit }, username) {
-    return userService.getResearchBookmarks(username)
+    return bookmarkService.getProjectBookmarks(username)
       .then((bookmarks) => {
         commit('setList', bookmarks);
       })

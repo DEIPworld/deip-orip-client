@@ -14,10 +14,10 @@
 <script>
   import ResearchRequestFormView from '@/components/ResearchRequest/ResearchRequestFormView';
   import { ResearchRequestModelMixin } from '@/components/ResearchRequest/ResearchRequestModelMixin';
-  import { ResearchService } from '@deip/research-service';
+  import { ProjectService } from '@deip/project-service';
   import objectRenameKeys from 'object-rename-keys';
 
-  const researchService = ResearchService.getInstance();
+  const projectService = ProjectService.getInstance();
 
   export default {
     name: 'ResearchRequestFormEdit',
@@ -57,7 +57,7 @@
 
         const formData = this.createFormData(this.formData);
 
-        researchService.editResearchApplication(this.formData._id, formData)
+        projectService.editProjectApplication(this.formData._id, formData)
           .then((result) => {
             this.$notifier.showSuccess(this.$t('defaultNaming.forms.researchRequest.successUpdate', { title: this.formData.researchTitle }));
             this.$emit('done');

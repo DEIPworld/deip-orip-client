@@ -118,16 +118,12 @@
   import { mapGetters } from 'vuex';
   import { researchContentTypes, maxTitleLength } from '@/variables';
 
-  import { AccessService } from '@deip/access-service';
-  import { ResearchGroupService } from '@deip/research-group-service';
   import { ResearchContentService } from '@deip/research-content-service';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
   import DFileInput from '@/components/Deipify/DInput/DFileInput';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
 
-  const accessService = AccessService.getInstance();
-  const researchGroupService = ResearchGroupService.getInstance();
   const researchContentService = ResearchContentService.getInstance();
 
   export default {

@@ -1,16 +1,16 @@
 import Vue from 'vue';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { GrantsService } from '@deip/grants-service';
-import { ResearchService } from '@deip/research-service';
+import { ProjectService } from '@deip/project-service';
 import { TeamService } from '@deip/team-service';
 import { mapAreaToProgram } from '../../common/disciplines/DisciplineTreeService';
 
 const teamService = TeamService.getInstance();
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const grantsService = GrantsService.getInstance();
-const researchService = ResearchService.getInstance();
+const projectService = ProjectService.getInstance();
 
 const state = {
   organization: undefined,
@@ -74,7 +74,7 @@ const actions = {
     return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
       .then((programInfo) => {
         program = programInfo;
-        return usersService.getUsers(program.officers);
+        return userService.getUsers(program.officers);
       })
       .then((profiles) => {
         program.officers = profiles;
@@ -105,7 +105,7 @@ const actions = {
       // }]
     }
 
-    return researchService.getPublicResearchListing(filter)
+    return projectService.getPublicProjectListing(filter)
       .then((result) => {
         commit('SET_RESEARCHES_APPLIED_FOR_GRANT', result);
         return Promise.all(result.map(r => expertiseContributionsService.getResearchExpertiseStats(r.external_id, {})))

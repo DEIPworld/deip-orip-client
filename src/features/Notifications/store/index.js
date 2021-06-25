@@ -1,6 +1,6 @@
-import { UserService } from '@deip/user-service';
+import { NotificationService } from '@deip/notification-service';
 
-const userService = UserService.getInstance();
+const notificationService = NotificationService.getInstance();
 
 const STATE = {
   data: []
@@ -12,7 +12,7 @@ const GETTERS = {
 
 const ACTIONS = {
   fetch({ commit }, username) {
-    return userService.getNotificationsByUser(username)
+    return notificationService.getNotificationsByUser(username)
       .then((notifications) => {
         commit('setList', notifications);
       })
@@ -24,7 +24,7 @@ const ACTIONS = {
   // ////////////////////
 
   markAsRead({ dispatch }, [username, id]) {
-    return userService
+    return notificationService
       .markUserNotificationAsRead(username, id)
       .then(() => {
         dispatch('fetch', username);

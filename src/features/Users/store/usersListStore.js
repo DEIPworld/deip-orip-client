@@ -1,16 +1,10 @@
-import { UsersService } from '@deip/users-service';
-import { wrapInArray } from 'vuetify/lib/util/helpers';
-import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
+import { UserService } from '@deip/user-service';
 import {
-  getActionByPath,
-  camelizeObjectKeys
+  getActionByPath
 } from '@/utils/helpers';
-import { ResearchGroupService } from '@deip/research-group-service';
 
 
-const usersService = UsersService.getInstance();
-const researchGroupService = ResearchGroupService.getInstance();
-const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const userService = UserService.getInstance();
 
 const actionsMap = {
   team: 'getUsersByTeam',
@@ -40,28 +34,28 @@ const ACTIONS = {
   },
 
   getUsers({ commit }, { users }) {
-    return usersService.getUsers(users)
+    return userService.getUsers(users)
       .then((items) => {
         commit('storeUsersProfiles', items);
       });
   },
 
   getUsersByTeam({ commit }, { teamId }) {
-    return usersService.getUsersByResearchGroup(teamId)
+    return userService.getUsersByTeam(teamId)
       .then((users) => {
         commit('storeUsersProfiles', users);
       });
   },
 
   getActiveUsers({ commit }) {
-    return usersService.getUsersListing("approved")
+    return userService.getUsersListing("approved")
       .then((users) => {
         commit('storeUsersProfiles', users);
       });
   },
 
   getTenantUsers({ commit }, { tenantId }) {
-    return usersService.getUsersByTenant(tenantId)
+    return userService.getUsersByTenant(tenantId)
       .then((users) => {
         commit('storeUsersProfiles', users);
       });

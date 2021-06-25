@@ -1,4 +1,4 @@
-import { ResearchService } from '@deip/research-service';
+import { ProjectService } from '@deip/project-service';
 import {
   getActionByPath,
   camelizeObjectKeys
@@ -6,7 +6,7 @@ import {
 
 import where from 'filter-where';
 
-const researchService = ResearchService.getInstance();
+const projectService = ProjectService.getInstance();
 
 const actionsMap = {
   projects: {
@@ -73,7 +73,7 @@ const ACTIONS = {
   // global
 
   getPublicProjects({ commit }, { filter = {} }) {
-    return researchService.getPublicResearchListing(filter)
+    return projectService.getPublicProjectListing(filter)
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -82,28 +82,28 @@ const ACTIONS = {
   // user
 
   getUserProjects({ commit }, { userName }) {
-    return researchService.getUserResearchListing(userName)
+    return projectService.getUserProjectListing(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserPublicProjects({ commit }, { userName }) {
-    return researchService.getUserPublicProjects(userName)
+    return projectService.getUserPublicProjects(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserTeamsProjects({ commit }, { userName }) {
-    return researchService.getUserTeamsProjects(userName)
+    return projectService.getUserTeamsProjects(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserPersonalProjects({ commit }, { userName }) {
-    return researchService.getUserPersonalProjects(userName)
+    return projectService.getUserPersonalProjects(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -116,7 +116,7 @@ const ACTIONS = {
       .filter((b) => b.type === 'research')
       .map((b) => b.ref);
 
-    return ids.length ? researchService.getResearches(ids)
+    return ids.length ? projectService.getProjects(ids)
       .then((result) => {
         context.commit('storeProjectsData', result);
       }) : context.commit('storeProjectsData', []);
@@ -125,7 +125,7 @@ const ACTIONS = {
   // team
 
   getTeamProjects({ commit }, { teamId }) {
-    return researchService.getResearchGroupResearchListing(teamId)
+    return projectService.getTeamProjectListing(teamId)
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -134,7 +134,7 @@ const ACTIONS = {
   // tenant
 
   getTenantProjects({ commit }, { tenantId }) {
-    return researchService.getTenantResearchListing(tenantId)
+    return projectService.getTenantProjectListing(tenantId)
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -145,28 +145,28 @@ const ACTIONS = {
   // global
 
   getPendingApplications({ commit }) {
-    return researchService.getPendingResearchApplications()
+    return projectService.getPendingProjectApplications()
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getApprovedApplications({ commit }) {
-    return researchService.getApprovedResearchApplications()
+    return projectService.getApprovedProjectApplications()
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getRejectedApplications({ commit }) {
-    return researchService.getRejectedResearchApplications()
+    return projectService.getRejectedProjectApplications()
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getDeletedApplications({ commit }) {
-    return researchService.getDeletedResearchApplications()
+    return projectService.getDeletedProjectApplications()
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -175,28 +175,28 @@ const ACTIONS = {
   // by user
 
   getUserPendingApplications({ commit }, { userName }) {
-    return researchService.getPendingResearchApplicationsByResearcher(userName)
+    return projectService.getPendingProjectApplicationsByProject(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserApprovedApplications({ commit }, { userName }) {
-    return researchService.getApprovedResearchApplicationsByResearcher(userName)
+    return projectService.getApprovedProjectApplicationsByProject(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserRejectedApplications({ commit }, { userName }) {
-    return researchService.getRejectedResearchApplicationsByResearcher(userName)
+    return projectService.getRejectedProjectApplicationsByProject(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserDeletedApplications({ commit }, { userName }) {
-    return researchService.getDeletedResearchApplicationsByResearcher(userName)
+    return projectService.getDeletedProjectApplicationsByProject(userName)
       .then((result) => {
         commit('storeProjectsData', result);
       });

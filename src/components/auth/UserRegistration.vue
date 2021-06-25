@@ -240,7 +240,7 @@
 <script>
   import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
   import { AuthService } from '@deip/auth-service';
@@ -250,7 +250,7 @@
 
   const tenantService = TenantService.getInstance();
   const authService = AuthService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   export default {
     name: 'UserRegistration',
@@ -442,7 +442,7 @@
         if (this.formData.username !== '') {
           this.isUsernameChecking = true;
 
-          return usersService.getUser(this.formData.username)
+          return userService.getUser(this.formData.username)
             .then((user) => {
               this.isUsernameVerifyed = !user;
             })

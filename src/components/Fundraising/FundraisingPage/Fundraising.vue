@@ -224,13 +224,11 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
-  import { ResearchService } from '@deip/research-service';
   import { InvestmentsService } from '@deip/investments-service';
   import crypto from '@deip/lib-crypto';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { assetsChore } from '@/mixins/chores';
 
-  const researchService = ResearchService.getInstance();
   const investmentsService = InvestmentsService.getInstance();
 
   const transactionTypes = {
@@ -452,10 +450,11 @@
         const symbol = this.tokenSale.soft_cap.split(' ')[1];
         const asset = this.userAssets.find((a) => a.string_symbol === symbol);
 
-        investmentsService.contributeProjectTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
-          tokenSaleId: this.tokenSale.external_id,
+        investmentsService.contributeResearchTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
+          tokenSaleExternalId: this.tokenSale.external_id,
           contributor: this.$currentUser.username,
-          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol)
+          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),
+          extensions: []
         })
           .then(() => {
             const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);

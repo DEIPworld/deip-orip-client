@@ -67,11 +67,11 @@
 
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
 
   const accessService = AccessService.getInstance();
   const authService = AuthService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
 
   const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
 
@@ -120,7 +120,7 @@
         this.isChecking = true;
 
         let privateKey;
-        return usersService.getUser(this.username)
+        return userService.getUser(this.username)
           .then((res) => {
             const { account } = res;
             if (!account) {

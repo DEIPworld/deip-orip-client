@@ -1,7 +1,7 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const STATE = {
@@ -16,7 +16,7 @@ const ACTIONS = {
   loadUsers({ commit }, payload) {
     const usersList = [];
     if (payload.researchGroupExternalId !== undefined) {
-      return usersService.getUsersByResearchGroup(payload.researchGroupExternalId)
+      return userService.getUsersByTeam(payload.researchGroupExternalId)
         .then((users) => {
           usersList.push(...users);
           return Promise.all(usersList.map(

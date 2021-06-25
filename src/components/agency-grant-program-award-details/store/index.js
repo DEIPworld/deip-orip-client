@@ -1,16 +1,16 @@
 import _ from 'lodash';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { GrantsService } from '@deip/grants-service';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { BlockchainService } from '@deip/blockchain-service';
-import { ResearchService } from '@deip/research-service';
+import { ProjectService } from '@deip/project-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 const grantsService = GrantsService.getInstance();
+const projectService = ProjectService.getInstance();
 const blockchainService = BlockchainService.getInstance();
-const researchService = ResearchService.getInstance();
 
 const state = {
   isLoadingAwardDetailsPage: false,
@@ -312,7 +312,7 @@ const actions = {
       .then((paymentRequests) => {
         commit('SET_AWARD_PAYMENT_REQUESTS_LIST', paymentRequests);
 
-        return usersService.getUsers(state.award.awardees
+        return userService.getUsers(state.award.awardees
           .map((r) => r.awardee)
           .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })
@@ -320,7 +320,7 @@ const actions = {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
         return Promise.all(state.award.awardees.map((r) => r.research_external_id)
           .reduce((acc, researchId) => (acc.some((rId) => rId === researchId) ? acc : [researchId, ...acc]), [])
-          .map((rId) => researchService.getResearch(rId)));
+          .map((rId) => projectService.getProject(rId)));
       })
       .then((researchList) => {
         commit('SET_AWARDEE_RESEARCH_LIST', researchList);

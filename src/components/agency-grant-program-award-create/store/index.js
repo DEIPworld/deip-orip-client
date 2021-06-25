@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import { GrantsService } from '@deip/grants-service';
-import { UsersService } from '@deip/users-service';
+import { UserService } from '@deip/user-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
 const grantsService = GrantsService.getInstance();
-const usersService = UsersService.getInstance();
+const userService = UserService.getInstance();
 
 const state = {
   organization: undefined,
@@ -57,7 +57,7 @@ const actions = {
     return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
       .then((programInfo) => {
         program = programInfo;
-        return usersService.getUsers(program.officers);
+        return userService.getUsers(program.officers);
       })
       .then((profiles) => {
         program.officers = profiles;
@@ -70,7 +70,7 @@ const actions = {
   },
 
   loadUsers({ state, dispatch, commit }) {
-    return usersService.getUsersListing()
+    return userService.getUsersListing()
       .then((users) => {
         commit('SET_ALL_USERS', users);
       })

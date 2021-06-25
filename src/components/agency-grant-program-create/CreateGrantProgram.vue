@@ -189,14 +189,14 @@
   import { mapGetters } from 'vuex';
   import { TenantService } from '@deip/tenant-service';
   import { GrantsService } from '@deip/grants-service';
-  import { UsersService } from '@deip/users-service';
+  import { UserService } from '@deip/user-service';
   import { TeamService } from '@deip/team-service';
 
   const GRANT_TOKEN_SYMBOL = 'NGT';
   const GRANT_TOKEN_PRECISION = 2;
 
   const teamService = TeamService.getInstance();
-  const usersService = UsersService.getInstance();
+  const userService = UserService.getInstance();
   const tenantService = TenantService.getInstance();
   const grantsService = GrantsService.getInstance();
 
@@ -248,7 +248,7 @@
         .then((organization) => {
           const members = [];
 
-           usersService.getUsersByResearchGroup(organization.external_id)
+           userService.getUsersByTeam(organization.external_id)
             .then((members) => {
               this.organization = {
                 ...organization,
