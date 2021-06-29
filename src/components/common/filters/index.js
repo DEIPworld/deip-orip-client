@@ -152,9 +152,9 @@ Vue.filter('accountAvatarSrc', (model, width = 48, height, isRound = false, noCa
 
 Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
 
-Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo/${tenant.account ? tenant.account.name : tenant._id}?width=${width}&height=${height}&noCache=${noCache}`);
+Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo?width=${width}&height=${height}&noCache=${noCache}`);
 
-Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner/${tenant.account ? tenant.account.name : tenant._id}?width=${width}&height=${height}&noCache=${noCache}`);
+Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner?width=${width}&height=${height}&noCache=${noCache}`);
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToLocal
   ? moment(value).format(format)
