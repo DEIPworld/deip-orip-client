@@ -88,10 +88,7 @@
                 :disabled="isDisabled || isLoading"
                 :loading="isLoading"
               >
-                {{ !isCentralizedGroup ?
-                  $t('contents.contentUploadDialog.createProp') :
-                  $t('contents.contentUploadDialog.uploadMat')
-                }}
+                {{ $t('contents.contentUploadDialog.uploadMat') }}
               </v-btn>
             </v-col>
             <v-col class="py-2" cols="12">
@@ -161,10 +158,6 @@
       ...mapGetters({
         research: 'Project/projectDetails'
       }),
-
-      isCentralizedGroup() {
-        return this.research.researchGroup.is_centralized || this.research.researchGroup.is_personal;
-      },
       isDisabled() {
         return !this.formData.title
           || this.formData.title.length > maxTitleLength

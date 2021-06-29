@@ -16,7 +16,7 @@ const config = {
     CHAIN_ID: process.env.CHAIN_ID,
     PROTOCOL: process.env.PROTOCOL ? parseInt(process.env.PROTOCOL) : 0,
     IS_TESTNET: process.env.IS_TESTNET === 'true',
-    FAUCET_ACCOUNT_USERNAME: process.env.FAUCET_ACCOUNT_USERNAME,
+    FAUCET_ACCOUNT_USERNAME: process.env.FAUCET_ACCOUNT_USERNAME || 'regacc',
     ASSET_UNIT: process.env.ASSET_UNIT,
     TENANT: process.env.TENANT,
     DEMO: process.env.DEMO,

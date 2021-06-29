@@ -91,10 +91,6 @@ const getters = {
     return state.research.research_group_id == userPersonalGroup.id;
   },
 
-  isCentralizedGroup(state, getters, rootState, rootGetters) {
-    return getters.group.is_centralized || getters.group.is_personal;
-  },
-
   isResearchGroupMember(state, getters, rootState, rootGetters) {
     const isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.research_group_id);
     return isMember;
