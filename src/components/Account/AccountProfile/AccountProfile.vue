@@ -142,8 +142,13 @@
           formData.append(...file);
         }
 
-        userService.updateUser(this.$currentUser, {
-          ...update, formData, updater: this.$currentUser.username
+        userService.updateUser({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          ...update,
+          formData
         })
           .then(() => {
             this.$store.dispatch('auth/loadUser');

@@ -53,17 +53,18 @@
 
         const isProposal = !this.team.isPersonal;
         teamService.updateTeam(
-          this.$currentUser,
           {
-            updater: this.$currentUser.username,
-            teamId: this.team.externalId,
-            accountOwnerAuth: undefined,
-            accountActiveAuth: undefined,
-            memoKey: undefined,
+            entityId: this.team.externalId,
+            initiator: {
+              username: this.$currentUser.username,
+              privKey: this.$currentUser.privKey
+            },
+            proposalInfo: { isProposal },
+            ownerAuth: undefined,
+            activeAuth: undefined,
             attributes,
             formData
-          },
-          { isProposal }
+          }
         )
           .then(() => {
             this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));

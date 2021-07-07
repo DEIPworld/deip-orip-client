@@ -139,9 +139,12 @@
         };
 
         this.isPasswordChanging = true;
-        userService.updateUser({ privKey: oldPrivateKey }, {
+        userService.updateUser({
+          initiator: {
+            privKey: oldPrivateKey,
+            username
+          },
           ...this.$currentUser.profile,
-          updater: username,
           accountOwnerAuth: ownerAuth,
           accountActiveAuth: ownerAuth,
           memoKey: undefined

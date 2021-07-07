@@ -141,7 +141,13 @@
           ]
         };
 
-        userService.updateUser(this.$currentUser, { ...update, updater: this.$currentUser.username })
+        userService.updateUser({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          ...update
+        })
           .then((res) => {
             this.$notifier.showSuccess(
               this.$t('userDetailRouting.detailsEmployment.success', { company: item.company })
