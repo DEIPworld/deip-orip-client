@@ -221,12 +221,12 @@ const actions = {
       .then((items) => {
         const researches = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearch(research.external_id)));
+        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
@@ -245,12 +245,12 @@ const actions = {
       .then((items) => {
         const researches = items.filter((r) => !!r);
         commit('SET_BOOKMARKED_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByResearch(research.external_id)));
+        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getResearchTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);

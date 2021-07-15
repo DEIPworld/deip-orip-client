@@ -392,13 +392,15 @@
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
             },
-            isProposal,
             {
               from: this.dialog.form.fromAccount.owner,
               to: this.dialog.form.receiver.account.name,
               amount: fromAmount,
               memo: this.dialog.form.memo,
               extensions: []
+            },
+            {
+              isProposal
             }
           )
             .then(() => {
@@ -451,7 +453,7 @@
             asset2: toAmount,
             memo: this.dialog.form.memo,
             extensions: []
-          })
+          }, {})
             .then(() => {
               this.$notifier.showSuccess(this.$t('wallet.transferAction.succExcSent'));
             })

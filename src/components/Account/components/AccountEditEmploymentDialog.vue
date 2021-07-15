@@ -277,7 +277,13 @@
           });
         }
 
-        userService.updateUser(this.$currentUser, { ...update, updater: this.$currentUser.username })
+        userService.updateUser({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          ...update
+        })
           .then((res) => {
             this.$notifier.showSuccess(this.$t('userDetailRouting.employmentDialog.emplSaveSucc', { company: this.formData.company }));
             return this.$store.dispatch('Auth/getCurrentUser');

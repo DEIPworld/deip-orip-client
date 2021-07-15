@@ -418,13 +418,15 @@
         this.withdrawDialog.isWithdrawing = true;
         return assetsService.transferAssets(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-          false,
           {
             from: this.depositDialog.owner,
             to: 'kim',
             amount: this.toAssetUnits(this.withdrawDialog.amount, this.withdrawDialog.precision, this.withdrawDialog.selectedCurrency),
             memo: this.$t('wallet.depositDialog.withdrawFor', { owner: this.depositDialog.owner }),
             extensions: []
+          },
+          {
+            isProposal: false
           }
         )
           .then(() => {
@@ -444,13 +446,15 @@
         this.depositDialog.isDepositing = true;
         return assetsService.transferAssets(
           { privKey: '5JBUoX9L6fjHmfwtK2S8ksEevmM3q6LzYncsdeoax5V662PehFa', username: 'kim' },
-          false,
           {
             from: 'kim',
             to: this.depositDialog.owner,
             amount: this.toAssetUnits(this.depositDialog.amount, this.depositDialog.precision, this.depositDialog.selectedCurrency),
             memo: this.$t('wallet.depositDialog.depositFor', { owner: this.depositDialog.owner }),
             extensions: []
+          },
+          {
+            isProposal: false
           }
         )
           .then(() => {

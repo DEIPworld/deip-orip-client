@@ -34,12 +34,13 @@
         this.loading = true;
 
         const { onchainData: { name }, offchainMeta: { attributes } } = parseFormData(formData);
-
         teamService.createTeam(
-          this.$currentUser,
           {
-            creator: this.$currentUser.username,
-            memoKey: this.$currentUser.account.memo_key,
+            initiator: {
+              username: this.$currentUser.username,
+              privKey: this.$currentUser.privKey,
+              memoKey: this.$currentUser.account.memo_key
+            },
             formData,
             attributes
           }
