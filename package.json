@@ -15,7 +15,7 @@
   "dependencies": {
     "@deip/access-service": "1.128.0",
     "@deip/app-config-service": "1.128.0",
-    "@deip/assets-service": "1.128.0",
+    "@deip/assets-service": "1.128.1",
     "@deip/attributes-service": "1.128.0",
     "@deip/auth-service": "1.128.0",
     "@deip/blockchain-service": "1.128.0",

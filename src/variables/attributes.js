@@ -1,4 +1,4 @@
-import { ATTR_TYPES, ATTR_SCOPES } from '@deip/attributes-service';
+import { ATTR_TYPES, ATTR_SCOPES } from '@deip/constants';
 
 const SYSTEM_ATTRS = {
   [ATTR_TYPES.USER]: true,
