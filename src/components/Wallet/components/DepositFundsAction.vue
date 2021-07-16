@@ -108,6 +108,7 @@
         const sigHex = crypto.hexify(sigBuff);
         axios.post(`${this.$env.DEIP_SERVER_URL}/webhook/assets/deposit?authorization=${accessService.getAccessToken()}`, {
           ...payload,
+          redirectUrl: `${this.$env.DEIP_CLIENT_URL}/#/payment-request?requestToken=${sigHex}`,
           sigHex
         })
         .then(({ data }) => {
