@@ -387,19 +387,25 @@
       createAsset() {
         this.loading = true;
         const DEFAULT_PRECISION = 0;
-
+        
         const data = [
           {
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.username
           },
           {
-            researchExternalId: this.project.externalId,
-            researchGroup: this.project.researchGroup.external_id,
+            issuer: this.project.researchGroup.external_id,
             symbol: this.formModel.symbol,
             precision: DEFAULT_PRECISION,
-            description: '',
             maxSupply: parseInt(this.formModel.maxSupply + '0'.repeat(DEFAULT_PRECISION)),
+            description: '',
+            projectTokenOption: {
+              projectId: this.project.externalId,
+              teamId: this.project.researchGroup.external_id,
+              licenseRevenue : {
+                holdersShare: '100.00 %'
+              }
+            },
             holders: [
               this.teamTokens,
               ...this.formModel.holders
