@@ -77,7 +77,7 @@ const ACTIONS = {
   loadTransactionsHistory({ commit }, researchId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return investmentsService.getProjectTokenSaleContributionsByProject(researchId)
+    return investmentsService.getProjectTokenSaleInvestmentsByProject(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
         return userService.getUsers(transactionsList.map((t) => t.op[1].contributor));

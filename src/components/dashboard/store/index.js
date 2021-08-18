@@ -226,7 +226,7 @@ const actions = {
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleInvestments(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
@@ -250,7 +250,7 @@ const actions = {
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleContributions(ts.external_id)));
+        return Promise.all(sales.map((ts) => investmentsService.getProjectTokenSaleInvestments(ts.external_id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
