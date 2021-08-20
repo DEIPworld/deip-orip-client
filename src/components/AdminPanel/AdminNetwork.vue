@@ -79,8 +79,7 @@
     },
 
     created() {
-      // temp
-      this.formData.globalNetworkIsVisible = this.$tenant.profile.network.scope.some(id => id === 'all');
+      this.formData.globalNetworkIsVisible = this.$tenant.profile.network.isGlobalScopeVisible;
     },
   };
 </script>

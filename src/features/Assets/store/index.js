@@ -88,7 +88,7 @@ const ACTIONS = {
   // /////////////////////////
 
   create(context, payload) {
-    return assetsService.createSecurityTokenAsset(...payload)
+    return assetsService.createAsset(...payload)
       .then((res) => res);
   },
 
