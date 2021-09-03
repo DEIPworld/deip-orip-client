@@ -1,11 +1,11 @@
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-import { ResearchContentService } from '@deip/research-content-service';
 import { ProjectService } from '@deip/project-service';
 import { UserService } from '@deip/user-service';
+import { ProjectContentService } from '@deip/project-content-service';
 
+const projectContentService = ProjectContentService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
-const researchContentService = ResearchContentService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const STATE = {
@@ -25,7 +25,7 @@ const ACTIONS = {
         reviewRequests.push(...results);
         reviewRequests.forEach((r) => {
           detailsPromises.push(
-            researchContentService.getResearchContent(r.researchContentExternalId)
+            projectContentService.getProjectContent(r.researchContentExternalId)
               .then((content) => {
                 r.content = content;
                 return projectService.getProject(content.research_external_id);

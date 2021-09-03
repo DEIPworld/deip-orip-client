@@ -20,7 +20,7 @@ export const contentRoutingFabric = (parent) => {
         component: ContentDraft,
         props(route) {
           return {
-            draftId: `draft-${route.params.draftId}`
+            draftId: route.params.draftId
           };
         },
       },

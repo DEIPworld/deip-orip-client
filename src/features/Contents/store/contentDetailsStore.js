@@ -1,7 +1,7 @@
 import { camelizeObjectKeys } from '@/utils/helpers';
-import { ResearchContentService } from '@deip/research-content-service';
+import { ProjectContentService } from '@deip/project-content-service';
 
-const researchContentService = ResearchContentService.getInstance();
+const projectContentService = ProjectContentService.getInstance();
 
 const STATE = {
   contentDetails: {}
@@ -13,7 +13,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getContentDetails({ commit }, contentId) {
-    return researchContentService.getResearchContent(contentId)
+    return projectContentService.getProjectContent(contentId)
       .then((content) => {
         commit('storeContentDetails', content);
       });

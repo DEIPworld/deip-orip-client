@@ -9,10 +9,10 @@
 </template>
 
 <script>
-  import { extendAttrModules, expandAttributes, parseFormData } from '@/utils/helpers';
-  import TeamForm from '@/features/Teams/components/Form/TeamForm';
   import { mapGetters } from 'vuex';
   import { TeamService } from '@deip/team-service';
+  import { extendAttrModules, expandAttributes, parseFormData } from '@/utils/helpers';
+  import TeamForm from '@/features/Teams/components/Form/TeamForm';
 
   const teamService = TeamService.getInstance();
 
@@ -22,7 +22,7 @@
     data() {
       return {
         loading: false
-      }
+      };
     },
     computed: {
       ...mapGetters({
@@ -49,7 +49,17 @@
       editTeam(formData) {
         this.loading = true;
 
-        const { onchainData: { name }, offchainMeta: { attributes } } = parseFormData(formData);
+        const { onchainData: { name }, offchainMeta: { attributes }, ...filesMap } = parseFormData(formData);
+        const filesData = {};
+
+        for (const attrId in filesMap) {
+          if (Object.prototype.hasOwnProperty.call(filesMap, attrId)) {
+            filesData[attrId] = {
+              attributeId: attrId,
+              [attrId]: filesMap[attrId]
+            };
+          }
+        }
 
         const isProposal = !this.team.isPersonal;
         teamService.updateTeam(
@@ -63,7 +73,7 @@
             ownerAuth: undefined,
             activeAuth: undefined,
             attributes,
-            formData
+            ...filesData
           }
         )
           .then(() => {
@@ -85,7 +95,7 @@
           name: 'team.details',
           params: {
             teamId: this.team.externalId
-          },
+          }
           // hash: proposal ? '#proposals' : ''
         });
       }

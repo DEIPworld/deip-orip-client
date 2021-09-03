@@ -23,6 +23,10 @@
         type: String,
         default: null
       },
+      projectId: {
+        type: String,
+        default: null
+      },
       readonly: {
         type: Boolean,
         default: false
@@ -54,12 +58,13 @@
 
         const archiveId = this.darId;
         const storageType = 'fs';
-        const storageUrl = `${this.fileStorageBaseUrl}/api/research-content/texture`;
+        const storageUrl = `${this.fileStorageBaseUrl}/api/v2/project-content/texture`;
 
         return new Promise((resolve) => {
           const headers = {
             Authorization: `Bearer ${accessService.getAccessToken()}`,
-            DarRef: archiveId
+            DarRef: archiveId,
+            'project-id': this.projectId
           };
 
           const editable = !this.readonly;

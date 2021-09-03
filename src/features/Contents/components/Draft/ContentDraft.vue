@@ -10,6 +10,7 @@
       <content-dar
         ref="contentDar"
         :dar-id="draftId"
+        :project-id="project.externalId"
         class="fill-height"
         @change="onDraftChange"
       />
@@ -125,12 +126,12 @@
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import { mapGetters } from 'vuex';
   import { arrayDiff } from 'vuetify/lib/util/helpers';
-  import { researchContentTypes } from '@/variables';
+  import { projectContentTypes } from '@/variables';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
   import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ContentDraft',
@@ -157,7 +158,7 @@
 
     data() {
       return {
-        contentTypes: researchContentTypes,
+        contentTypes: projectContentTypes,
 
         internalUsers: [],
         internalReferences: [],
@@ -272,7 +273,7 @@
       saveDraft() {
         this.loadingDraft = true;
 
-        researchContentService.getResearchContentRef(this.draftId)
+        projectContentService.getDraft(this.draftId)
           .then((res) => {
             if (res.status === 'in-progress') {
               this.$refs.contentDar.saveDocument(() => {
@@ -294,25 +295,24 @@
         return new Promise((resolve) => {
           this.$refs.contentDar.saveDocument(resolve);
         })
-          .then(() => researchContentService.getResearchContentRef(this.draftId)) // double check
-          .then((contentRef) => {
+          .then(() => projectContentService.getDraft(this.draftId)) // double check
+          .then((draft) => {
             const isProposal = !this.project.researchGroup.is_personal;
 
-            researchContentService.createResearchContent(
+            projectContentService.createProjectContent(
               {
-                privKey: this.$currentUser.privKey,
-                username: this.$currentUser.username
-              },
-              isProposal,
-              {
-                researchExternalId: this.project.externalId,
-                researchGroup: this.project.researchGroup.external_id,
+                initiator: {
+                  privKey: this.$currentUser.privKey,
+                  username: this.$currentUser.username
+                },
+                proposalInfo: { isProposal },
+                projectId: this.project.externalId,
+                teamId: this.project.researchGroup.external_id,
                 type: parseInt(this.formModel.contentType),
-                title: this.formModel.title || contentRef.title,
-                content: contentRef.hash,
+                title: this.formModel.title || draft.title,
+                content: draft._id,
                 authors: this.formModel.authors.map((a) => a.account.name),
-                references: [...this.formModel.references].map((ref) => ref.externalId),
-                extensions: []
+                references: [...this.formModel.references].map((ref) => ref.externalId)
               }
             )
               .then(() => {

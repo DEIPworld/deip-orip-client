@@ -188,7 +188,7 @@
         formData.append('offchainMeta', JSON.stringify(offchainMeta));
 
         for (const file of this.attachedFiles) {
-          formData.append(...file);
+          formData.append(file[0], file[1]);
         }
 
         return formData;

@@ -1,6 +1,6 @@
 import { PROPOSAL_TYPES, PROPOSAL_STATUS } from '@deip/proposals-service';
 import { EXPERTISE_CONTRIBUTION_TYPE, ECI_STAT_PERIOD_STEP_TYPE } from '@deip/constants';
-import { researchContentTypes } from '@deip/research-content-service';
+import { projectContentTypes } from '@deip/project-content-service';
 import { RESEARCH_CONTENT_TYPES } from '@deip/constants';
 import { AWARD_STATUS, AWARD_RECIPIENT_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@deip/constants';
 import { ASSESSMENT_CRITERIA_TYPE } from '@deip/constants';
@@ -34,7 +34,7 @@ const LOC_PROPOSAL_TYPES = createEnum({
 export {
   PROPOSAL_TYPES,
   proposalTypesLabels,
-  researchContentTypes,
+  projectContentTypes,
   EXPERTISE_CONTRIBUTION_TYPE,
   AWARD_STATUS,
   AWARD_RECIPIENT_STATUS,

@@ -49,7 +49,7 @@
                 <template v-if="review.contentData">
                   <div class="text-caption text--secondary">
                     <span class="font-weight-medium">Review to:</span>
-                    {{ getResearchContentType(review.contentData.contentType).text }}
+                    {{ getProjectContentType(review.contentData.contentType).text }}
                   </div>
                   <div>
 
@@ -196,7 +196,8 @@
 
   import { mapGetters, mapState } from 'vuex';
 
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
+
   import UsersList from '@/features/Users/components/List/UsersList';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
@@ -205,7 +206,7 @@
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ReviewsList',
@@ -298,8 +299,8 @@
           });
       },
 
-      getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+      getProjectContentType(type) {
+        return projectContentService.getProjectContentType(type);
       },
 
       check(target) {

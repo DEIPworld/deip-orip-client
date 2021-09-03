@@ -13,9 +13,9 @@
 
 <script>
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ContentDraftCta',
@@ -32,17 +32,18 @@
       createDarDraft() {
         this.loading = true;
 
-        researchContentService
-          .createResearchContentDraftDar(this.projectId)
-          .then((draft) => {
-
-            this.$router.push({
-              name: 'project.content.draft',
-              params: {
-                draftId: draft._id.replace('draft-', ''),
-                projectId: draft.researchExternalId
-              }
-            });
+        projectContentService
+          .createProjectContentDraft({ projectId: this.projectId, draftType: 'dar' })
+          .then(({ _id: draftId }) => {
+            setTimeout(() => {
+              this.$router.push({
+                name: 'project.content.draft',
+                params: {
+                  draftId,
+                  projectId: this.projectId
+                }
+              });
+            }, 5000);
           })
           .catch((err) => {
             console.error(err);

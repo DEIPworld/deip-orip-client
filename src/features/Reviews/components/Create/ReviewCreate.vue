@@ -155,11 +155,12 @@
   import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
+
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
+  const projectContentService = ProjectContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
-  const researchContentService = ResearchContentService.getInstance();
 
   export default {
     name: 'ReviewCreate',
@@ -251,7 +252,7 @@
     methods: {
 
       getProjectContentType(type) {
-        return researchContentService.getResearchContentType(type);
+        return projectContentService.getProjectContentType(type);
       },
 
       acceptReviewRequest() {

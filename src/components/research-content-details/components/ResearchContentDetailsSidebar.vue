@@ -150,15 +150,16 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { proposalTypesLabels, PROPOSAL_TYPES, researchContentTypes } from '@/variables';
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { proposalTypesLabels, PROPOSAL_TYPES, projectContentTypes } from '@/variables';
+  import { ProjectContentService } from '@deip/project-content-service';
+
   import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewRequest from '@/features/Reviews/components/Request/ReviewRequest';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
   const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
@@ -243,7 +244,7 @@
 
       researchTableOfContent() {
         return this.contentList.reduce((arr, content) => {
-          const typeObj = researchContentTypes.find((c) => c.type === content.content_type);
+          const typeObj = projectContentTypes.find((c) => c.type === content.content_type);
           return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
@@ -288,7 +289,7 @@
       },
 
       unlockDraft() {
-        researchContentService.unlockResearchContentDraft(this.contentRef._id)
+        projectContentService.unlockDraft({ ...this.contentRef, status: 'in-progress' })
           .then(() => {
             location.reload();
           }, (err) => {
@@ -321,7 +322,7 @@
         });
       },
 
-      getResearchContentEciPercentile() {
+      getProjectContentEciPercentile() {
         return 10;
       }
 

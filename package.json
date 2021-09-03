@@ -32,7 +32,7 @@
     "@deip/project-service": "1.336.0",
     "@deip/proposals-service": "1.336.0",
     "@deip/research-content-reviews-service": "1.336.0",
-    "@deip/research-content-service": "1.336.0",
+    "@deip/project-content-service": "1.336.0",
     "@deip/research-nda-service": "1.336.0",
     "@deip/review-service": "1.336.0",
     "@deip/rpc-client": "1.336.0",

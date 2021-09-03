@@ -1,9 +1,10 @@
-import { ResearchContentService } from '@deip/research-content-service';
+import { ProjectContentService } from '@deip/project-content-service';
+
 import {
   camelizeObjectKeys
 } from '@/utils/helpers';
 
-const researchContentService = ResearchContentService.getInstance();
+const projectContentService = ProjectContentService.getInstance();
 
 const STATE = {
   referencesList: []
@@ -15,7 +16,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getReferences({ commit }) {
-    return researchContentService.getPublicResearchContentListing()
+    return projectContentService.getPublicProjectContentListing()
       .then((contents) => {
         commit('storeReferences', contents);
       });

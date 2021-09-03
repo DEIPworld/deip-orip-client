@@ -83,7 +83,7 @@
                       </span>
                     </v-col>
                     <v-col cols="8">
-                      <span>{{ getResearchContentType(researchContent.content_type).text }}</span>
+                      <span>{{ getProjectContentType(researchContent.content_type).text }}</span>
                     </v-col>
                   </v-row>
 
@@ -321,11 +321,12 @@
 
   import crypto from '@deip/lib-crypto';
 
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
+
   import LayoutSection from '@/components/layout/components/LayoutSection';
   import DChartPie from '@/components/Deipify/DChart/DChartPie';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ResearchContentReferences',
@@ -476,7 +477,7 @@
       mockSignature(id) {
         return crypto.hexify(crypto.sha256(new TextEncoder('utf-8').encode(`${id}`).buffer));
       },
-      getResearchContentType(type) { return researchContentService.getResearchContentType(type); }
+      getProjectContentType(type) { return projectContentService.getProjectContentType(type); }
     }
   };
 </script>

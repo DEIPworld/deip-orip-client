@@ -4,10 +4,11 @@ import {
   camelizeObjectKeys,
 } from '@/utils/helpers';
 
-import { ResearchContentService } from '@deip/research-content-service';
+import { ProjectContentService } from '@deip/project-content-service';
+
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
-const researchContentService = ResearchContentService.getInstance();
+const projectContentService = ProjectContentService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const actionsMap = {
@@ -34,7 +35,7 @@ const ACTIONS = {
   getContentsByProject({ commit }, { projectId }) {
     const researchContents = [];
 
-    return researchContentService.getResearchContentAndDraftsByResearch(projectId)
+    return projectContentService.getProjectContentsByProject(projectId)
       .then((list) => {
         researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
         return Promise.all(
