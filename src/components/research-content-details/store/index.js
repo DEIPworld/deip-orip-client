@@ -2,9 +2,8 @@ import _ from 'lodash';
 import { ProjectService } from '@deip/project-service';
 import { UserService } from '@deip/user-service';
 import { ProjectContentService } from '@deip/project-content-service';
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ReviewService } from '@deip/review-service';
 import { ProposalsService } from '@deip/proposals-service';
-import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
 import { DomainsService } from '@deip/domains-service';
@@ -14,10 +13,9 @@ const teamService = TeamService.getInstance();
 const projectService = ProjectService.getInstance();
 const userService = UserService.getInstance();
 const projectContentService = ProjectContentService.getInstance();
-const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+const reviewService = ReviewService.getInstance();
 const domainsService = DomainsService.getInstance();
 
 const state = {
@@ -295,11 +293,11 @@ const actions = {
   loadContentReviews({ state, dispatch, commit }, { contentId, notify }) {
     const reviews = [];
     commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
-    researchContentReviewsService.getReviewsByResearchContent(contentId)
+    reviewService.getReviewsByProjectContent(contentId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
-          Promise.all(reviews.map((item) => researchContentReviewsService.getReviewVotes(item.external_id))),
+          Promise.all(reviews.map((item) => reviewService.getReviewUpvotes(item.external_id))),
           userService.getUsers(reviews.map((r) => r.author))
         ]);
       })
@@ -338,9 +336,9 @@ const actions = {
       });
   },
 
-  loadResearchContentReferences({ state, dispatch, commit }, researchContentId) {
+  loadResearchContentReferences({ state, dispatch, commit }, projectContentId) {
     let graph = {};
-    return projectContentService.getProjectContentReferencesGraph(researchContentId)
+    return projectContentService.getProjectContentReferencesGraph(projectContentId)
       .then((graphData) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(

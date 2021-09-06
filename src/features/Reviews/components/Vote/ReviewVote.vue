@@ -44,9 +44,9 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+  import { ReviewService } from '@deip/review-service';
 
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const reviewService = ReviewService.getInstance();
 
   export default {
     name: 'ReviewVote',
@@ -101,12 +101,14 @@
           .map((exp) => exp.discipline_external_id);
 
         const votesPromises = disciplinesExternalIds
-          .map((disciplineExternalId) => researchContentReviewsService.voteForReview(this.$currentUser.privKey, {
-            voter: this.$currentUser.username,
-            reviewExternalId: review.externalId,
-            disciplineExternalId,
-            weight: '100.00 %',
-            extensions: []
+          .map((disciplineId) => reviewService.upvoteReview({
+            initiator: {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            },
+            reviewId: review.externalId,
+            disciplineId,
+            weight: '100.00 %'
           }));
 
         Promise.all(votesPromises)

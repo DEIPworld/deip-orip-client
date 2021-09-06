@@ -1,4 +1,4 @@
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ReviewService } from '@deip/review-service';
 import { ProjectService } from '@deip/project-service';
 import { UserService } from '@deip/user-service';
 import { ProjectContentService } from '@deip/project-content-service';
@@ -6,7 +6,7 @@ import { ProjectContentService } from '@deip/project-content-service';
 const projectContentService = ProjectContentService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+const reviewService = ReviewService.getInstance();
 
 const STATE = {
   data: []
@@ -19,13 +19,13 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }, username) {
     const reviewRequests = [];
-    return researchContentReviewsService.getReviewRequestsByExpert(username, 'pending')
+    return reviewService.getReviewRequestsByExpert(username, 'pending')
       .then((results) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
         reviewRequests.forEach((r) => {
           detailsPromises.push(
-            projectContentService.getProjectContent(r.researchContentExternalId)
+            projectContentService.getProjectContent(r.projectContentId)
               .then((content) => {
                 r.content = content;
                 return projectService.getProject(content.research_external_id);

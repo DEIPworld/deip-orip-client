@@ -1,12 +1,12 @@
-import { camelizeObjectKeys } from '@/utils/helpers';
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ProjectContentService } from '@deip/project-content-service';
+import { ReviewService } from '@deip/review-service';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
+const reviewService = ReviewService.getInstance();
 const projectContentService = ProjectContentService.getInstance();
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 export const getAdditionalDataOne = (item) => Promise.all([
-  researchContentReviewsService.getReviewVotes(item.external_id),
+  reviewService.getReviewUpvotes(item.external_id),
   projectContentService.getProjectContent(item.research_content_external_id)
 ]).then(([votes, contentData]) => ({
   ...item,

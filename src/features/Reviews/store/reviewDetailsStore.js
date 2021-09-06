@@ -1,10 +1,10 @@
+import { ReviewService } from '@deip/review-service';
 import { camelizeObjectKeys } from '@/utils/helpers';
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import {
   getAdditionalDataOne
 } from '@/features/Reviews/utils/getAdditionalData';
 
-const researchContentReviewsService = new ResearchContentReviewsService();
+const reviewService = ReviewService.getInstance();
 
 const STATE = {
   reviewDetails: []
@@ -16,7 +16,7 @@ const GETTERS = {
 
 const ACTIONS = {
   getReviewDetails({ commit }, reviewId) {
-    return researchContentReviewsService.getReview(reviewId)
+    return reviewService.getReview(reviewId)
       .then((item) => {
         return getAdditionalDataOne(item)
           .then((res) => {

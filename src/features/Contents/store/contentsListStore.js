@@ -1,15 +1,12 @@
-
+import { ProjectContentService } from '@deip/project-content-service';
+import { ReviewService } from '@deip/review-service';
 import {
   getActionByPath,
-  camelizeObjectKeys,
+  camelizeObjectKeys
 } from '@/utils/helpers';
 
-import { ProjectContentService } from '@deip/project-content-service';
-
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
-
+const reviewService = ReviewService.getInstance();
 const projectContentService = ProjectContentService.getInstance();
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const actionsMap = {
   project: 'getContentsByProject'
@@ -40,7 +37,7 @@ const ACTIONS = {
         researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
         return Promise.all(
           researchContents.map(
-            (content) => researchContentReviewsService.getReviewsByResearchContent(content.external_id)
+            (content) => reviewService.getReviewsByProjectContent(content.external_id)
           )
         );
       })
