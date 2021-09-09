@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { ProjectService } from '@deip/project-service';
 import { UserService } from '@deip/user-service';
-import { ResearchContentService } from '@deip/research-content-service';
+import { ProjectContentService } from '@deip/project-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 import { ProposalsService } from '@deip/proposals-service';
 import { BlockchainService } from '@deip/blockchain-service';
@@ -13,7 +13,7 @@ import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 const teamService = TeamService.getInstance();
 const projectService = ProjectService.getInstance();
 const userService = UserService.getInstance();
-const researchContentService = ResearchContentService.getInstance();
+const projectContentService = ProjectContentService.getInstance();
 const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const proposalsService = ProposalsService.getInstance();
@@ -164,7 +164,7 @@ const actions = {
         }
 
         commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
-        return researchContentService.getResearchContent(contentId)
+        return projectContentService.getProjectContent(contentId)
           .then((contentObj) => {
             commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
             const contentRefLoad = new Promise((resolve, reject) => {
@@ -249,7 +249,7 @@ const actions = {
       })
       .then((users) => {
         commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
-        return researchContentService.getResearchContentAndDraftsByResearch(projectId);
+        return projectContentService.getProjectContentsByProject(projectId);
       })
       .then((list) => {
         commit('SET_RESEARCH_CONTENT_LIST', list);
@@ -274,7 +274,7 @@ const actions = {
   },
 
   loadResearchContentRef({ state, commit, dispatch }, { refId, projectId, notify }) {
-    return researchContentService.getResearchContentRef(refId)
+    return projectContentService.getProjectContentRef(refId)
       .then((contentRef) => {
         commit('SET_RESEARCH_CONTENT_REF', contentRef);
         return dispatch('loadResearchGroupDetails', { teamId: contentRef.researchGroupExternalId });
@@ -340,7 +340,7 @@ const actions = {
 
   loadResearchContentReferences({ state, dispatch, commit }, researchContentId) {
     let graph = {};
-    return researchContentService.getResearchContentReferencesGraph(researchContentId)
+    return projectContentService.getProjectContentReferencesGraph(researchContentId)
       .then((graphData) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(

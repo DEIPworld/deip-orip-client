@@ -1,5 +1,4 @@
 import { contentListStore } from '@/features/Contents/store';
-import { ResearchContentService } from '@deip/research-content-service';
 import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
 import {
@@ -9,7 +8,6 @@ import {
 
 import { getAdditionalData } from '@/features/Reviews/utils/getAdditionalData';
 
-const researchContentService = ResearchContentService.getInstance();
 const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
 const actionsMap = {

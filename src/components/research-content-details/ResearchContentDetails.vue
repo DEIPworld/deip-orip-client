@@ -41,7 +41,7 @@
               </div>
               <div class="text-h3">
                 <span class="font-weight-regular">
-                  {{ getResearchContentType(content.content_type).text }}:
+                  {{ getProjectContentType(content.content_type).text }}:
                   {{ content.title }}
                 </span>
               </div>
@@ -125,9 +125,9 @@
   import { mapGetters } from 'vuex';
   import { bus } from '@/main';
 
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
 
-  import { researchContentTypes, maxTitleLength } from '@/variables';
+  import { projectContentTypes, maxTitleLength } from '@/variables';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSectionSidebar from '@/components/Deipify/DLayout/DLayoutSectionSidebar';
@@ -135,7 +135,7 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import ContentDar from '@/features/Contents/components/Dar/ContentDar';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ResearchContentDetails',
@@ -165,7 +165,7 @@
           title: '',
           type: null,
           authors: [],
-          researchContentTypes,
+          projectContentTypes,
           isOpen: false,
           isLoading: false
         }
@@ -223,8 +223,8 @@
     },
 
     methods: {
-      getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+      getProjectContentType(type) {
+        return projectContentService.getProjectContentType(type);
       }
     }
   };

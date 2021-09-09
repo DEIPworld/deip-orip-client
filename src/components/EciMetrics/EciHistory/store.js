@@ -1,8 +1,8 @@
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
-import { ResearchContentService } from '@deip/research-content-service';
+import { ProjectContentService } from '@deip/project-content-service';
 
-const researchContentService = ResearchContentService.getInstance();
+const projectContentService = ProjectContentService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 
 const historyMethod = (payload) => {
@@ -41,7 +41,7 @@ const ACTIONS = {
             || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT
           ) {
             return [
-              ...arr, researchContentService.getResearchContent(e.research_content.external_id)
+              ...arr, projectContentService.getProjectContent(e.research_content.external_id)
             ];
           }
           return arr;
@@ -76,8 +76,8 @@ const GETTERS = {
 
     return [...records].map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
-        const typeInfo = researchContentService
-          .getResearchContentType(record.research_content.content_type);
+        const typeInfo = projectContentService
+          .getProjectContentType(record.research_content.content_type);
 
         const link = {
           name: 'project.content.review.details',
@@ -122,8 +122,8 @@ const GETTERS = {
       }
 
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-        const typeInfo = researchContentService
-          .getResearchContentType(record.research_content.content_type);
+        const typeInfo = projectContentService
+          .getProjectContentType(record.research_content.content_type);
 
         const link = {
           name: 'project.content.details',

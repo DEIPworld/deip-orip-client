@@ -30,7 +30,7 @@
               </div>
               <div class="text-h3">
                 Review on
-                {{ getResearchContentType(content.contentType).text }}:
+                {{ getProjectContentType(content.contentType).text }}:
                 <router-link
                   v-if="isLicensingAccessLimited"
                   :to="{
@@ -149,12 +149,13 @@
   import ReviewVote from '@/features/Reviews/components/Vote/ReviewVote';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
   import { isJsonString, tenantAttributesToObject } from '@/utils/helpers';
-  import { ResearchContentService } from '@deip/research-content-service';
+  import { ProjectContentService } from '@deip/project-content-service';
+
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
-  const researchContentService = ResearchContentService.getInstance();
+  const projectContentService = ProjectContentService.getInstance();
 
   export default {
     name: 'ReviewDetails',
@@ -228,8 +229,8 @@
     },
 
     methods: {
-      getResearchContentType(type) {
-        return researchContentService.getResearchContentType(type);
+      getProjectContentType(type) {
+        return projectContentService.getProjectContentType(type);
       },
 
       onVote() {
