@@ -57,14 +57,14 @@
 </template>
 
 <script>
+  import { ReviewService } from '@deip/review-service';
   import DStack from '@/components/Deipify/DStack/DStack';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import ContentSelector from '@/features/Contents/components/Selector/ContentSelector';
 
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
 
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const reviewService = ReviewService.getInstance();
 
   export default {
     name: 'ReviewRequest',
@@ -111,8 +111,8 @@
       createRequest() {
         this.loading = true;
 
-        return researchContentReviewsService.createReviewRequest({
-          researchContentExternalId: this.formModel.contentId,
+        return reviewService.createReviewRequest({
+          projectContentId: this.formModel.contentId,
           expert: this.formModel.reviewer
         })
           .then(() => {

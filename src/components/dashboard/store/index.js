@@ -1,7 +1,7 @@
 import { UserService } from '@deip/user-service';
 import { ProjectService } from '@deip/project-service';
 import { InvestmentsService } from '@deip/investments-service';
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
+import { ReviewService } from '@deip/review-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
 
@@ -9,8 +9,8 @@ const teamService = TeamService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const reviewService = ReviewService.getInstance();
 
 const state = {
   isLoadingDashboardPage: false,
@@ -182,7 +182,6 @@ const actions = {
         ]);
       })
       .then(() => {
-
         const researchGroupIds = [
           ...state.investedResearches,
           ...state.investingResearches,
@@ -194,12 +193,11 @@ const actions = {
             return [research.research_group.external_id, ...unique];
           }, []);
 
-
         return teamService.getTeams(researchGroupIds);
       })
       .then((researchGroups) => {
         commit('SET_RESEARCH_GROUPS', researchGroups);
-        return userService.getUsersByTeam(researchGroups.map(researchGroup => researchGroup.external_id));
+        return userService.getUsersByTeam(researchGroups.map((researchGroup) => researchGroup.external_id));
       })
       .then((result) => {
         const flatten1 = [].concat.apply([], result);
@@ -264,7 +262,7 @@ const actions = {
   loadExperts({ commit }, { username, notify } = {}) {
     userService.getUsersListing()
       .then((users) => {
-        commit('SET_EXPERTS', users.filter(u => u.account.name == username));
+        commit('SET_EXPERTS', users.filter((u) => u.account.name == username));
         return Promise.all(users.map((user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)));
       })
       .then((tokens) => {
@@ -277,7 +275,7 @@ const actions = {
   },
 
   loadMyReviewRequests({ commit }, { username, notify } = {}) {
-    return researchContentReviewsService.getReviewRequestsByRequestor(username)
+    return reviewService.getReviewRequestsByRequestor(username)
       .then((reviews) => {
         commit('SET_MY_REVIEW_REQUESTS', reviews);
       })
@@ -287,8 +285,7 @@ const actions = {
   },
 
   loadMyReviews({ commit }, { username, notify } = {}) {
-
-    return researchContentReviewsService.getReviewsByAuthor(username)
+    return reviewService.getReviewsByAuthor(username)
       .then((reviews) => {
         commit('SET_MY_REVIEWS', reviews);
       }).finally(() => {

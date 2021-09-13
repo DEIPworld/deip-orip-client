@@ -79,7 +79,8 @@
             <d-block
               v-if="$hasModule(DEIP_MODULE.APP_ECI)"
               title="Reward"
-              title-margin="16">
+              title-margin="16"
+            >
               <div class="text-body-2">
                 ECI in
                 {{
@@ -148,23 +149,22 @@
 </template>
 
 <script>
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { ValidationObserver, ValidationProvider } from 'vee-validate';
-  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
+  import { ReviewService } from '@deip/review-service';
+  import { ProjectContentService } from '@deip/project-content-service';
   import { mapGetters } from 'vuex';
+  import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DStack from '@/components/Deipify/DStack/DStack';
-  import { ProjectContentService } from '@deip/project-content-service';
 
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
   const projectContentService = ProjectContentService.getInstance();
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const reviewService = ReviewService.getInstance();
 
   export default {
     name: 'ReviewCreate',
-    mixins: [reviewsChore],
     components: {
       ReviewAssessment,
       DStack,
@@ -174,6 +174,7 @@
       ValidationObserver,
       ValidationProvider
     },
+    mixins: [reviewsChore],
 
     props: {
       projectId: {
@@ -187,7 +188,6 @@
     },
 
     data() {
-
       return {
         formModel: {
           reviewData: [],
@@ -234,13 +234,13 @@
 
     created() {
       // TODO: rethink
-      const questions = this.$tenantSettings.reviewQuestions.map(q => q.question);
+      const questions = this.$tenantSettings.reviewQuestions.map((q) => q.question);
       this.questions.push(...questions);
       this.formModel.reviewData.push(...questions.map(() => []));
 
-      return researchContentReviewsService.getReviewRequestsByExpert(this.$currentUser.username, 'pending')
+      return reviewService.getReviewRequestsByExpert(this.$currentUser.username, 'pending')
         .then((res) => {
-          const request = res.find((r) => r.researchContentExternalId === this.content.externalId);
+          const request = res.find((r) => r.projectContentId === this.content.externalId);
           if (request) {
             this.requestAccepted = false;
             this.requestData = request;
@@ -266,7 +266,7 @@
       rejectReviewRequest() {
         this.loading = true;
 
-        return researchContentReviewsService.denyReviewRequest(this.requestData._id)
+        return reviewService.denyReviewRequest(this.requestData._id)
           .then(() => {
             this.$router.push({
               name: 'project.content.details',
@@ -300,16 +300,16 @@
           }
         ];
 
-        const extensions = [];
-
-        return researchContentReviewsService.createReview(this.$currentUser.privKey, {
-          author: this.$currentUser.username,
-          researchContentExternalId: this.content.externalId,
+        return reviewService.createReview({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          projectContentId: this.content.externalId,
           content: JSON.stringify(this.reviewData),
           weight,
           assessment,
-          disciplines,
-          extensions
+          disciplines
         })
           .then(() => {
             this.$notifier.showSuccess('Your review has been published successfully !');

@@ -153,14 +153,12 @@
   import { proposalTypesLabels, PROPOSAL_TYPES, projectContentTypes } from '@/variables';
   import { ProjectContentService } from '@deip/project-content-service';
 
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewRequest from '@/features/Reviews/components/Request/ReviewRequest';
 
   const projectContentService = ProjectContentService.getInstance();
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
 
   export default {
     name: 'ResearchContentDetailsSidebar',
