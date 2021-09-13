@@ -1,5 +1,5 @@
+import { ReviewService } from '@deip/review-service';
 import { contentListStore } from '@/features/Contents/store';
-import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
 
 import {
   getActionByPath,
@@ -8,7 +8,7 @@ import {
 
 import { getAdditionalData } from '@/features/Reviews/utils/getAdditionalData';
 
-const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+const reviewService = ReviewService.getInstance();
 
 const actionsMap = {
   project: 'getReviewsByProject',
@@ -35,7 +35,7 @@ const ACTIONS = {
   },
 
   getReviewsByProject({ dispatch, commit }, { projectId }) {
-    return researchContentReviewsService.getReviewsByResearch(projectId)
+    return reviewService.getReviewsByProject(projectId)
       .then((items) => Promise.all(
         getAdditionalData(items)
       )
@@ -48,7 +48,7 @@ const ACTIONS = {
   },
 
   getReviewsByContent({ commit }, { contentId }) {
-    return researchContentReviewsService.getReviewsByResearchContent(contentId)
+    return reviewService.getReviewsByProjectContent(contentId)
       .then((items) => Promise.all(
         getAdditionalData(items)
       )

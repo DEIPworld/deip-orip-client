@@ -32,7 +32,7 @@
                 Review on
                 {{ getProjectContentType(content.contentType).text }}:
                 <router-link
-                  v-if="isLicensingAccessLimited"
+                  v-if="contentAssessAllowed"
                   :to="{
                     name: 'project.content.details',
                     params: $route.params
@@ -153,7 +153,8 @@
 
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
-  import { projectDetails } from '@/features/Projects/mixins/projectDetails';
+  import { projectDetails, projectContext } from '@/features/Projects/mixins/projectDetails';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
 
   const projectContentService = ProjectContentService.getInstance();
 
@@ -172,6 +173,7 @@
       DLayoutSection,
       DLayout
     },
+    mixins: [attributesChore],
     computed: {
       ...mapGetters({
         review: 'Review/reviewDetails',
@@ -237,7 +239,8 @@
         this.$store.dispatch('Review/getReviewDetails', this.review.externalId);
       },
 
-      ...projectDetails.methods
+      ...projectDetails.methods,
+      ...projectContext.methods
     }
   };
 </script>

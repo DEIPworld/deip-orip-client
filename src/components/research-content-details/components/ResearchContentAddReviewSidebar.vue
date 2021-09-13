@@ -45,14 +45,14 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { ReviewService } from '@deip/review-service';
   import { bus } from '@/main';
-  import { ResearchContentReviewsService } from '@deip/research-content-reviews-service';
   import { reviewsChore } from '@/mixins/chores';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
 
-  const researchContentReviewsService = ResearchContentReviewsService.getInstance();
+  const reviewService = ReviewService.getInstance();
 
   export default {
     name: 'ResearchContentAddReviewSidebar',
@@ -86,7 +86,7 @@
         bus.$emit('reviewEditor:exportHtml', (html) => {
           this.isLoading = true;
           const reviewData = html;
-          const researchContentExternalId = this.content.external_id;
+          const projectContentId = this.content.external_id;
           const weight = '100.00 %';
           const scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {
             const val = this.assessmentCriteria[key];
@@ -103,16 +103,16 @@
             }
           ];
 
-          const extensions = [];
-
-          return researchContentReviewsService.createReview(this.user.privKey, {
-            author: this.user.username,
-            researchContentExternalId,
+          return reviewService.createReview({
+            initiator: {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            },
+            projectContentId,
             content: reviewData,
             weight,
             assessment,
-            disciplines,
-            extensions
+            disciplines
           })
             .then((data) => {
               this.$notifier.showSuccess(this.$t('researchContentDetails.addRev.pubSucc'));
