@@ -78,6 +78,7 @@
 </template>
 
 <script>
+  import { ProjectNdaService } from '@deip/project-nda-service';
   import DStack from '@/components/Deipify/DStack/DStack';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
 
@@ -85,10 +86,9 @@
   import { attributeRead } from '@/components/Attributes/_mixins';
   import { ATTR_TYPES } from '@/variables';
 
-  import { ResearchNdaService } from '@deip/research-nda-service';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
 
-  const researchNdaService = ResearchNdaService.getInstance();
+  const projectNdaService = ProjectNdaService.getInstance();
 
   const dialogModel = () => ({
     endTime: '',
@@ -164,17 +164,16 @@
           ];
 
         const creator = this.$currentUser.username;
-        return researchNdaService.createResearchNda({
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUser.username
-        }, {
-          creator,
+        return projectNdaService.createProjectNda({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
           parties,
           description: '7559a289fa49afe62e4f37fe1c9097d3cb7834c98a2f42da5443242e8929a5d3',
-          researchExternalId: this.project.externalId,
+          projectId: this.project.externalId,
           startTime: undefined,
           endTime: new Date(new Date().getTime() + 86400000 * 365 * 50).toISOString().split('.')[0], // 50 years
-          extensions: [],
           requestEndTime: this.dialogModel.endTime,
           approvers: this.$tenant.id === this.project.tenantId
             ? [creator]

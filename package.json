@@ -33,7 +33,7 @@
     "@deip/proposals-service": "1.339.0",
     "@deip/research-content-reviews-service": "1.337.1",
     "@deip/project-content-service": "1.339.0",
-    "@deip/research-nda-service": "1.339.0",
+    "@deip/project-nda-service": "1.339.0",
     "@deip/review-service": "1.339.0",
     "@deip/rpc-client": "1.339.0",
     "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.7",
