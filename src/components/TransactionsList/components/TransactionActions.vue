@@ -78,7 +78,11 @@
 
         const activeApprovalsToAdd = [this.$currentUser.username];
         if (type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
-          const { tenantId: researchTenantId } = this.transaction.extendedDetails.research;
+          const {
+            tenantId: researchTenantId,
+            researchRef: { researchGroupExternalId }
+          } = this.transaction.extendedDetails.research;
+          activeApprovalsToAdd.push(researchGroupExternalId);
           if (researchTenantId != currentTenantId) {
             if (!approvals.some((approval) => approval == researchTenantId)) {
               activeApprovalsToAdd.push(researchTenantId);
@@ -94,6 +98,7 @@
           || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP
           || type === this.LOC_PROPOSAL_TYPES.TRANSFER_ASSET
           || type === this.LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST
+          || type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
           ? proposalsService.updateProposal(this.$currentUser, {
             proposalId: external_id,
             activeApprovalsToAdd
@@ -141,6 +146,7 @@
 
         const promise = type === this.LOC_PROPOSAL_TYPES.INVITE_MEMBER
           || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH
+          || type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
           ? proposalsService.declineProposal(this.$currentUser, {
             proposalId: external_id,
             account,
