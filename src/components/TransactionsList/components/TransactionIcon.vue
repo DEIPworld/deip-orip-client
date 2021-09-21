@@ -53,7 +53,7 @@
             icon: 'mdi-arrow-right-circle',
             text: this.$t('transactionsList.transactionTypes.transfer')
           },
-          [LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST]: {
+          [LOC_PROPOSAL_TYPES.CONTRACT_AGREEMENT_PROPOSAL]: {
             icon: 'work',
             text: this.$t('transactionsList.transactionTypes.licensing')
           },
