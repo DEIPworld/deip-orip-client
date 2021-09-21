@@ -359,13 +359,11 @@
   import { mapGetters } from 'vuex';
   import { ProjectService } from '@deip/project-service';
   import { GrantsService } from '@deip/grants-service';
-  import { BlockchainService } from '@deip/blockchain-service';
   import { TeamService } from '@deip/team-service';
 
   const teamService = TeamService.getInstance();
   const projectService = ProjectService.getInstance();
   const grantsService = GrantsService.getInstance();
-  const blockchainService = BlockchainService.getInstance();
 
   export default {
     name: 'CreateFoaAgencyAward',
@@ -637,8 +635,8 @@
         let total_amount = 0;
         const subawardees = [];
 
-        const granAssetSymbol = blockchainService.getAssetSymbol(this.program.amount);
-        const grantAssetPrecision = blockchainService.getAssetPrecision(this.program.amount);
+        const granAssetSymbol = grantsService.getAssetSymbol(this.program.amount);
+        const grantAssetPrecision = grantsService.getAssetPrecision(this.program.amount);
 
         this.isSaving = true;
         for (let i = 1; i < this.fundings.length; i++) {

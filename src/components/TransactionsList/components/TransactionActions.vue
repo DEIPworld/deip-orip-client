@@ -92,19 +92,8 @@
           }
         }
 
-        const promise = type === this.LOC_PROPOSAL_TYPES.INVITE_MEMBER
-          || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH
-          || type === this.LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE
-          || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP
-          || type === this.LOC_PROPOSAL_TYPES.TRANSFER_ASSET
-          || type === this.LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST
-          || type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
-          ? proposalsService.updateProposal(this.$currentUser, {
+        const promise = proposalsService.updateProposal(this.$currentUser, {
             proposalId: external_id,
-            activeApprovalsToAdd
-          })
-          : proposalsService.updateProposalLegacy(this.$currentUser, {
-            externalId: external_id,
             activeApprovalsToAdd
           });
 
@@ -144,19 +133,10 @@
               : this.$currentUser.username
             : this.$currentUser.username;
 
-        const promise = type === this.LOC_PROPOSAL_TYPES.INVITE_MEMBER
-          || type === this.LOC_PROPOSAL_TYPES.UPDATE_RESEARCH
-          || type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
-          ? proposalsService.declineProposal(this.$currentUser, {
+        const promise = proposalsService.declineProposal(this.$currentUser, {
             proposalId: external_id,
             account,
             authorityType: 2
-          })
-          : proposalsService.deleteProposalLegacy(this.$currentUser, {
-            externalId: external_id,
-            account,
-            authority: 2, // active auth
-            extensions: []
           });
 
         promise

@@ -4,14 +4,14 @@ import { camelizeObjectKeys } from '@/utils/helpers';
 import { AssetsService } from '@deip/assets-service';
 import { ProjectService } from '@deip/project-service';
 import { InvestmentsService } from '@deip/investments-service';
-import { BlockchainService } from '@deip/blockchain-service';
 import { TeamService } from '@deip/team-service';
+import { GrantsService } from '@deip/grants-service';
 
 const teamService = TeamService.getInstance();
-const blockchainService = BlockchainService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const projectService = ProjectService.getInstance();
 const assetsService = AssetsService.getInstance();
+const grantsService = GrantsService.getInstance();
 
 const state = {
   researches: [],
@@ -38,7 +38,7 @@ const getters = {
         const dateA = new Date(a.timestamp);
         const dateB = new Date(b.timestamp);
         return dateA - dateB;
-      }).map((i) => [moment(i.timestamp).format('DD MMM YY'), blockchainService.fromAssetsToFloat(i.revenue)])
+      }).map((i) => [moment(i.timestamp).format('DD MMM YY'), grantsService.fromAssetsToFloat(i.revenue)])
     };
   }),
   groupData: (state) => state.groupData

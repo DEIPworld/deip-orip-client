@@ -127,11 +127,9 @@
 <script>
   import { mapGetters } from 'vuex';
   import moment from 'moment';
-  import { BlockchainService } from '@deip/blockchain-service';
   import { GrantsService } from '@deip/grants-service';
   import DFileInput from '@/components/Deipify/DInput/DFileInput';
 
-  const blockchainService = BlockchainService.getInstance();
   const grantsService = GrantsService.getInstance();
 
   const PAYMENT_NUMBER_MIN_LENGTH = 3;
@@ -201,7 +199,7 @@
 
       amountHint() {
         return this.$options.filters.currency(
-          blockchainService.fromAssetsToFloat(this.awardee.total_amount) - blockchainService.fromAssetsToFloat(this.awardee.total_expenses)
+          grantsService.fromAssetsToFloat(this.awardee.total_amount) - grantsService.fromAssetsToFloat(this.awardee.total_expenses)
         );
       }
     },
@@ -245,8 +243,8 @@
 
 
       onSubmit() {
-        const granAssetSymbol = blockchainService.getAssetSymbol(this.foa.amount);
-        const grantAssetPrecision = blockchainService.getAssetPrecision(this.foa.amount);
+        const granAssetSymbol = grantsService.getAssetSymbol(this.foa.amount);
+        const grantAssetPrecision = grantsService.getAssetPrecision(this.foa.amount);
 
         const formData = new FormData();
         

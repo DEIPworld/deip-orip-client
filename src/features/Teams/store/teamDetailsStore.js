@@ -2,19 +2,19 @@ import _ from 'lodash';
 
 import { UserService } from '@deip/user-service';
 import { ProjectService } from '@deip/project-service';
-import { BlockchainService } from '@deip/blockchain-service';
 import { InvestmentsService } from '@deip/investments-service';
 import { AssetsService } from '@deip/assets-service';
 import { TeamService } from '@deip/team-service';
+import { GrantsService } from '@deip/grants-service';
+import { camelizeObjectKeys } from '@/utils/helpers';
 
 const teamService = TeamService.getInstance();
 const assetsService = AssetsService.getInstance();
 const investmentsService = InvestmentsService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
-const blockchainService = BlockchainService.getInstance();
+const grantsService = GrantsService.getInstance();
 
-import { camelizeObjectKeys } from '@/utils/helpers';
 
 const STATE = {
   teamDetails: undefined,
@@ -29,7 +29,7 @@ const GETTERS = {
   teamDetails: (state) => {
     const researchGroup = state.teamDetails;
     const balances = researchGroup.account.balances.reduce((acc, b) => {
-      acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
+      acc[b.split(' ')[1]] = grantsService.fromAssetsToFloat(b);
       return acc;
     }, {});
 
@@ -91,6 +91,7 @@ const ACTIONS = {
       });
   },
 
+  // [OBSOLETE]
   loadGroupInvites({ commit, state }, teamId) {
     // const pendingInvites = [];
 
@@ -110,6 +111,7 @@ const ACTIONS = {
     //   });
   },
 
+  // [OBSOLETE]
   loadJoinRequests({ commit, state }, teamId) {
     // const joinRequests = [];
     // researchGroupService.getJoinRequestsByGroup(teamId)

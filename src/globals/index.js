@@ -2,10 +2,11 @@
 
 import Vue from 'vue';
 import moment from 'moment';
-import { BlockchainService } from '@deip/blockchain-service';
 import { DEIP_MODULE } from '@/variables';
+import { GrantsService } from '@deip/grants-service';
 
-const blockchainService = BlockchainService.getInstance();
+const grantsService = GrantsService.getInstance();
+
 // regarding with DEIP PERCENTS
 Vue.prototype.PERCENT_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,2})?$/;
 Vue.prototype.DEIP_100_PERCENT = 10000;
@@ -15,8 +16,8 @@ Vue.prototype.toDeipPercent = (amount) => parseFloat(amount) * 100;
 
 // regarding with ASSETS
 Vue.prototype.ASSET_QUANTITY_REGEX = /^(?:0|(?:[1-9]\d*))(?:\.\d{1,3})?$/;
-Vue.prototype.toAssetUnits = (amount, precision = 3, asset = window.env.ASSET_UNIT) => blockchainService.toAssetUnits(amount, precision, asset);
-Vue.prototype.fromAssetsToFloat = (assets) => blockchainService.fromAssetsToFloat(assets);
+Vue.prototype.toAssetUnits = (amount, precision = 3, asset = window.env.ASSET_UNIT) => grantsService.toAssetUnits(amount, precision, asset);
+Vue.prototype.fromAssetsToFloat = (assets) => grantsService.fromAssetsToFloat(assets);
 
 Vue.prototype.deipTokenValidator = (value) => {
   if (!value || value.match(Vue.prototype.ASSET_QUANTITY_REGEX) === null) {

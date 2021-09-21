@@ -9,9 +9,10 @@ import { NotificationService } from '@deip/notification-service';
 import { BookmarkService } from '@deip/bookmark-service';
 import { TenantService } from '@deip/tenant-service';
 import { AssetsService } from '@deip/assets-service';
-import { BlockchainService } from '@deip/blockchain-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
+import { GrantsService } from '@deip/grants-service';
+
 
 const teamService = TeamService.getInstance();
 const accessService = AccessService.getInstance();
@@ -20,8 +21,8 @@ const notificationService = NotificationService.getInstance();
 const bookmarkService = BookmarkService.getInstance();
 const tenantService = TenantService.getInstance();
 const assetsService = AssetsService.getInstance();
-const blockchainService = BlockchainService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
+const grantsService = GrantsService.getInstance();
 
 const state = {
   loaded: false,
@@ -82,7 +83,7 @@ const getters = {
         is_centralized: group.is_centralized,
         account: group.account,
         balances: group.account.balances.reduce((acc, b) => {
-          acc[b.split(' ')[1]] = blockchainService.fromAssetsToFloat(b);
+          acc[b.split(' ')[1]] = grantsService.fromAssetsToFloat(b);
           return acc;
         }, {})
       });

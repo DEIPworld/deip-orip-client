@@ -1,12 +1,10 @@
-import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
-import { BlockchainService } from '@deip/blockchain-service';
+import { AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { GrantsService } from '@deip/grants-service';
 import { UserService } from '@deip/user-service';
 import { ProjectService } from '@deip/project-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
-const blockchainService = BlockchainService.getInstance();
 const grantsService = GrantsService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
@@ -63,7 +61,7 @@ const getters = {
       paymentNumber: withdrawal.payment_number,
       awardNumber: state.awardee.award_number,
       subawardNumber: state.awardee.subaward_number,
-      amount: blockchainService.fromAssetsToFloat(withdrawal.amount),
+      amount: grantsService.fromAssetsToFloat(withdrawal.amount),
       status: withdrawal.status,
       description: withdrawal.description,
       pi,
@@ -199,15 +197,15 @@ const actions = {
     return grantsService.getWithdrawalRequestHistoryByAwardAndPaymentNumber(awardNumber, paymentNumber)
       .then((withdrawalHistoryRecords) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST', withdrawalHistoryRecords);
-        return Promise.all(state.withdrawalHistoryRecords.map((r) => blockchainService.getBlock(r.block)));
+        return Promise.all(state.withdrawalHistoryRecords.map((r) => grantsService.getBlock(r.block)));
       })
       .then((blocks) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST', blocks);
-        return Promise.all(state.withdrawalHistoryRecords.map((r) => blockchainService.getTransaction(r.trx_id)));
+        return Promise.all(state.withdrawalHistoryRecords.map((r) => grantsService.getTransaction(r.trx_id)));
       })
       .then((items) => {
         transactions.push(...items);
-        return Promise.all(transactions.map((tx) => blockchainService.getTransactionHex(tx)));
+        return Promise.all(transactions.map((tx) => grantsService.getTransactionHex(tx)));
       })
       .then((trxHashes) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST', transactions.map((tx, i) => ({ ...tx, trxHash: trxHashes[i] })));

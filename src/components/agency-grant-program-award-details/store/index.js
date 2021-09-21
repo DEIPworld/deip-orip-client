@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { AWARD_STATUS, AWARD_WITHDRAWAL_REQUEST_STATUS } from '@/variables';
 import { GrantsService } from '@deip/grants-service';
 import { UserService } from '@deip/user-service';
-import { BlockchainService } from '@deip/blockchain-service';
 import { ProjectService } from '@deip/project-service';
 import { TeamService } from '@deip/team-service';
 
@@ -10,7 +9,6 @@ const teamService = TeamService.getInstance();
 const userService = UserService.getInstance();
 const grantsService = GrantsService.getInstance();
 const projectService = ProjectService.getInstance();
-const blockchainService = BlockchainService.getInstance();
 
 const state = {
   isLoadingAwardDetailsPage: false,
@@ -47,51 +45,51 @@ const getters = {
       return [...acc, ...withdrawals];
     }, []);
 
-    const piAmount = blockchainService.fromAssetsToFloat(awardee.total_amount);
+    const piAmount = grantsService.fromAssetsToFloat(awardee.total_amount);
 
     const requestedPiAmount = withdrawals
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const pendingPiAmount = withdrawals
       .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
         || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
         || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const withdrawnPiAmount = withdrawals
       .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
-    const remainingPiAmount = blockchainService.fromAssetsToFloat(awardee.total_amount) - blockchainService.fromAssetsToFloat(awardee.total_expenses);
+    const remainingPiAmount = grantsService.fromAssetsToFloat(awardee.total_amount) - grantsService.fromAssetsToFloat(awardee.total_expenses);
 
     const subawardeesAmount = subawardees
-      .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
+      .map((sa) => grantsService.fromAssetsToFloat(sa.total_amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const requestedSubawardeesAmount = subWithdrawals
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const pendingSubawardeesAmount = subWithdrawals
       .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
         || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
         || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const withdrawnSubawardeesAmount = subWithdrawals
       .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-      .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+      .map((w) => grantsService.fromAssetsToFloat(w.amount))
       .reduce((sum, amount) => sum + amount, 0);
 
     const remainingSubawardeesAmount = subawardees
-      .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
+      .map((sa) => grantsService.fromAssetsToFloat(sa.total_amount) - grantsService.fromAssetsToFloat(sa.total_expenses))
       .reduce((sum, amount) => sum + amount, 0);
 
-    const universityOverheadAmount = awardee.isSubawardee ? 0 : blockchainService.fromAssetsToFloat(award.university_fee);
+    const universityOverheadAmount = awardee.isSubawardee ? 0 : grantsService.fromAssetsToFloat(award.university_fee);
 
     const totalAmount = awardee.isSubawarde
       ? piAmount + subawardeesAmount
@@ -154,48 +152,48 @@ const getters = {
         return [...acc, ...withdrawals];
       }, []);
 
-      const subawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount);
+      const subawardeeAmount = grantsService.fromAssetsToFloat(subawardee.total_amount);
 
       const requestedSubawardeeAmount = subawardeeWithdrawals
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const pendingSubawardeeAmount = subawardeeWithdrawals
         .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
           || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
           || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const withdrawnSubawardeeAmount = subawardeeWithdrawals
         .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
-      const remainingSubawardeeAmount = blockchainService.fromAssetsToFloat(subawardee.total_amount) - blockchainService.fromAssetsToFloat(subawardee.total_expenses);
+      const remainingSubawardeeAmount = grantsService.fromAssetsToFloat(subawardee.total_amount) - grantsService.fromAssetsToFloat(subawardee.total_expenses);
 
       const nextSubawardeesAmount = nextSubawardees
-        .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount))
+        .map((sa) => grantsService.fromAssetsToFloat(sa.total_amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const requestedNextSubawardeesAmount = nextSubawardeesWithdrawals
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const pendingNextSubawardeesAmount = nextSubawardeesWithdrawals
         .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PENDING
           || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.CERTIFIED
           || w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.APPROVED)
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const withdrawnNextSubawardeesAmount = nextSubawardeesWithdrawals
         .filter((w) => w.status == AWARD_WITHDRAWAL_REQUEST_STATUS.PAID)
-        .map((w) => blockchainService.fromAssetsToFloat(w.amount))
+        .map((w) => grantsService.fromAssetsToFloat(w.amount))
         .reduce((sum, amount) => sum + amount, 0);
 
       const remainingNextSubawardeesAmount = nextSubawardees
-        .map((sa) => blockchainService.fromAssetsToFloat(sa.total_amount) - blockchainService.fromAssetsToFloat(sa.total_expenses))
+        .map((sa) => grantsService.fromAssetsToFloat(sa.total_amount) - grantsService.fromAssetsToFloat(sa.total_expenses))
         .reduce((sum, amount) => sum + amount, 0);
 
       const totalSubawardeeAmount = subawardeeAmount + nextSubawardeesAmount;
@@ -251,7 +249,7 @@ const getters = {
           paymentNumber: withdrawal.payment_number,
           awardNumber: withdrawal.award_number,
           subawardNumber: withdrawalAwardee.isSubawardee ? withdrawal.subaward_number : undefined, // do not send subaward number for top award
-          amount: blockchainService.fromAssetsToFloat(withdrawal.amount),
+          amount: grantsService.fromAssetsToFloat(withdrawal.amount),
           status: withdrawal.status,
           awardee: { ...withdrawalAwardee, isNextSubawardee: awardee.subaward_number != withdrawalAwardee.subaward_number },
           attachment: withdrawal.attachment,
@@ -268,8 +266,8 @@ const getters = {
   isAwardCanceled: (state, getters) => state.award.status == AWARD_STATUS.REJECTED,
 
   isAwardAvailableToApprove: (state, getters) => {
-    const foaSupplyAmount = blockchainService.fromAssetsToFloat(state.foa.current_supply);
-    const awardAmount = blockchainService.fromAssetsToFloat(state.award.amount);
+    const foaSupplyAmount = grantsService.fromAssetsToFloat(state.foa.current_supply);
+    const awardAmount = grantsService.fromAssetsToFloat(state.award.amount);
     return foaSupplyAmount >= awardAmount && getters.isAwardPending;
   }
 };
