@@ -51,11 +51,6 @@
               //   title: this.$t('account.sidebar.projectsBlock.follPr'),
               //   route: { name: 'account.following.projects' }
               // }
-              // {
-              //   icon: 'mdi-file-replace',
-              //   title: this.$t('account.sidebar.projectsBlock.prReq'),
-              //   route: { name: 'account.projectRequests' }
-              // }
             ]
           },
           {

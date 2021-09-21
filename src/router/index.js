@@ -25,7 +25,6 @@ import GrantProgramAwardWithdrawalDetails
 import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import NoAccessPage from '@/components/NoAccessPage';
-import VotingForBlockProducers from '@/components/voting-for-block-producers/VotingForBlockProducers';
 
 
 import FAQ from '@/components/faq/FAQ';
@@ -38,7 +37,6 @@ import { UserService } from '@deip/user-service';
 import { accountRouting } from '@/components/Account/router';
 import { adminRouting } from '@/components/AdminPanel/router';
 import { ParticipantstRouting } from '@/components/Participants/router';
-import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import { awaitStore } from '@/utils/helpers';
 import { overviewRouting } from '@/components/Overview/router';
 import { preliminaryDataLoader } from './utils/preliminaryDataLoader';
@@ -182,13 +180,6 @@ const router = new Router({
           loadPage(loadPagePromise, next);
         }
       })
-    }, {
-      path: '/propose-research',
-      name: 'CreateResearchProposal',
-      component: ResearchRequestFormCreate,
-      meta: {
-        withoutHeader: true
-      }
     },
 
     ...sandboxRouting,
@@ -196,12 +187,6 @@ const router = new Router({
     ...projectRouting,
     ...userRouting,
     ...teamRouting,
-    // {
-    //   path: '/:teamId/group-details/group-settings',
-    //   name: 'teamSettings',
-    //   component: ResearchGroupSettings
-    // },
-
     ...accountRouting,
     ...adminRouting,
     ...ParticipantstRouting,
@@ -218,15 +203,6 @@ const router = new Router({
       meta: {
         withoutHeader: true
       }
-    }, {
-      path: '/voting-for-block-producers',
-      name: 'VotingForBlockProducers',
-      component: preliminaryDataLoader(VotingForBlockProducers, {
-        beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('votingForBlockProducers/loadProducers', {});
-          loadPage(loadPagePromise, next);
-        }
-      })
     }, {
       path: '/create-funding-opportunity-announcement',
       name: 'CreateGrantProgram',

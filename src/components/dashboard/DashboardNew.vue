@@ -18,7 +18,7 @@
         <v-tab-item key="my-projects">
           <div v-if="myResearches.length" class="mb-12">
             <v-btn
-              :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'project.create' } : { name: 'CreateResearchProposal' }"
+              :to="{ name: 'project.create' }"
               color="primary"
             >
               Start a project
@@ -42,7 +42,7 @@
               </div>
               <div>
                 <v-btn
-                  :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'project.create' } : { name: 'CreateResearchProposal' }"
+                  :to="{ name: 'project.create' }"
                   color="primary"
                 >
                   Create your first project

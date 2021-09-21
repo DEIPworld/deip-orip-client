@@ -23,7 +23,7 @@
               </v-col>
               <v-col>
                 <v-btn
-                  :to="tenant.profile.settings.newResearchPolicy === 'free' ? { name: 'project.create' } : { name: 'CreateResearchProposal' }"
+                  :to=" { name: 'project.create' }"
                   color="primary"
                   small
                   class="ma-0"

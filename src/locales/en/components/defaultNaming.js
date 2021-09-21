@@ -30,38 +30,6 @@ export default {
     secs: 'secs'
   },
   forms: {
-    researchRequest: {
-      start: `Start a ${project(false)}`,
-      successReq: `${project(true)} request has been applied successfully. We will notify you as soon as your ${project(false)} form will be approved.`,
-      errReq: `An error occurred while creating ${project(false)}, please try again later`,
-      successUpdate: `${project(true)} "{title}" has been updated successfully`,
-      basicBlock: {
-        title: 'Basics',
-        nameField: `${project(true)} name`,
-        ideaField: 'What is your idea?',
-        domainField: 'Domain',
-        locationField: `${project(true)} location`,
-        areaField: 'What area are you trying to impact?',
-        solveField: 'How will this solve a current problem?'
-      },
-      readinesBlock: {
-        title: `${project(true)} readines level`
-      },
-      fundingBlock: {
-        title: 'Funding',
-        fundingField: 'How much funding are you expecting?',
-        estimateField: `What is your ${project(true)} estimate?`
-      },
-      addInfBlock: {
-        title: 'Additional information',
-        budgetInfField: 'Budget information',
-        planField: 'Business plan',
-        cvField: 'Resume/CV',
-        documentField: 'Market research document'
-      },
-      cancel: 'Cancel',
-      submitBtn: 'Apply request'
-    }
   },
   filters: {
     domainField: 'Domain',

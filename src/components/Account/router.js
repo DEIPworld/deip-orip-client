@@ -5,7 +5,6 @@ import AccountPrivateKey from '@/components/Account/AccountPrivateKey';
 import UserDetails from '@/features/Users/components/User/Details/UserDetails';
 import UserDetailsExpertise from '@/features/Users/components/User/Details/UserDetailsExpertise';
 import { store } from '@/store';
-import AccountProjectRequests from '@/components/Account/AccountProjectRequests';
 import AccountEditEducationDialog from '@/components/Account/components/AccountEditEducationDialog';
 import AccountEditEmploymentDialog from '@/components/Account/components/AccountEditEmploymentDialog';
 import AccountTeamsProjects from '@/components/Account/AccountTeamsProjects';
@@ -83,11 +82,6 @@ export const accountRouting = [{
       path: 'groups',
       name: 'account.groups',
       component: AccountGroups
-    },
-    {
-      path: 'project-requests',
-      name: 'account.projectRequests',
-      component: AccountProjectRequests
     },
     {
       path: 'change-password',

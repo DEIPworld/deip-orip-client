@@ -51,16 +51,12 @@
 <script>
   import { mapGetters } from 'vuex';
   import CrudActions from '@/components/layout/CrudActions';
-  import ResearchRequestFormRead from '@/components/ResearchRequest/ResearchRequestRead/ResearchRequestRead';
-
-  import { TenantService } from '@deip/tenant-service';
   import { ProjectService } from '@deip/project-service';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import ProjectsList from '@/features/Projects/components/List/ProjectsList';
   import { VIEW_TYPES } from '@/variables';
 
-  const tenantService = TenantService.getInstance();
   const projectService = ProjectService.getInstance();
 
 
@@ -70,8 +66,7 @@
       CrudActions,
       ProjectsList,
       DLayoutSection,
-      DLayoutSectionMain,
-      ResearchRequestFormRead
+      DLayoutSectionMain
     },
     data() {
       return {

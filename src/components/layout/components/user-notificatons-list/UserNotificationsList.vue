@@ -91,31 +91,6 @@
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-application-user-notification
-            v-else-if="notification.type === RESEARCH_APPLICATION_CREATED"
-            :notification="notification"
-            @markAsRead="markNotificationAsRead"
-          />
-          <research-application-approved-user-notification
-            v-else-if="notification.type === RESEARCH_APPLICATION_APPROVED"
-            :notification="notification"
-            @markAsRead="markNotificationAsRead"
-          />
-          <research-application-rejected-user-notification
-            v-else-if="notification.type === RESEARCH_APPLICATION_REJECTED"
-            :notification="notification"
-            @markAsRead="markNotificationAsRead"
-          />
-          <research-application-edited-user-notification
-            v-else-if="notification.type === RESEARCH_APPLICATION_EDITED"
-            :notification="notification"
-            @markAsRead="markNotificationAsRead"
-          />
-          <research-application-deleted-user-notification
-            v-else-if="notification.type === RESEARCH_APPLICATION_DELETED"
-            :notification="notification"
-            @markAsRead="markNotificationAsRead"
-          />
           <research-nda-proposed-notification
             v-else-if="notification.type === RESEARCH_NDA_PROPOSED"
             :notification="notification"
@@ -143,7 +118,6 @@
 <script>
 
   import { PROPOSAL_TYPES } from '@/variables';
-  import { UserService } from '@deip/user-service';
   import ResearchProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchProposalUserNotification';
   import TokenSaleProposalUserNotification
@@ -170,16 +144,6 @@
     from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
   import ExclusionProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ExclusionProposalUserNotification';
-  import ResearchApplicationUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationUserNotification';
-  import ResearchApplicationApprovedUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationApprovedUserNotification';
-  import ResearchApplicationRejectedUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationRejectedUserNotification';
-  import ResearchApplicationEditedUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationEditedUserNotification';
-  import ResearchApplicationDeletedUserNotification
-    from '@/components/layout/components/user-notificatons-list/components/ResearchApplicationDeletedUserNotification';
   import ResearchNdaProposedNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchNdaProposedNotification';
   import ResearchNdaSignedNotification
@@ -190,7 +154,6 @@
   import { AccessService } from '@deip/access-service';
 
   const accessService = AccessService.getInstance();
-  const userService = UserService.getInstance();
 
   export default {
     name: 'UserNotificationsList',
@@ -208,11 +171,6 @@
       ResearchContentProposalUserNotification,
       ExclusionUserNotification,
       ExclusionProposalUserNotification,
-      ResearchApplicationUserNotification,
-      ResearchApplicationApprovedUserNotification,
-      ResearchApplicationRejectedUserNotification,
-      ResearchApplicationEditedUserNotification,
-      ResearchApplicationDeletedUserNotification,
       ResearchNdaProposedNotification,
       ResearchNdaSignedNotification,
       ResearchNdaRejectedNotification
@@ -233,11 +191,6 @@
         RESEARCH_CONTENT_EXPERT_REVIEW: 'research-content-expert-review',
         RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: 'research-content-expert-review-request',
         EXPERTISE_ALLOCATED: 'expertise-allocated',
-        RESEARCH_APPLICATION_CREATED: 'research-application-created',
-        RESEARCH_APPLICATION_APPROVED: 'research-application-approved',
-        RESEARCH_APPLICATION_REJECTED: 'research-application-rejected',
-        RESEARCH_APPLICATION_EDITED: 'research-application-edited',
-        RESEARCH_APPLICATION_DELETED: 'research-application-deleted',
         RESEARCH_NDA_PROPOSED: 'research-nda-request',
         RESEARCH_NDA_SIGNED: 'research-nda-signed',
         RESEARCH_NDA_REJECTED: 'research-nda-rejected'

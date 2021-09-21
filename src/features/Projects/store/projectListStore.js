@@ -4,7 +4,6 @@ import {
   camelizeObjectKeys
 } from '@/utils/helpers';
 
-import where from 'filter-where';
 
 const projectService = ProjectService.getInstance();
 
@@ -25,20 +24,6 @@ const actionsMap = {
     },
     tenant: {
       all: 'getTenantProjects'
-    }
-  },
-  applications: {
-    public: {
-      approved: 'getPendingApplications',
-      pending: 'getApprovedApplications',
-      rejected: 'getRejectedApplications',
-      deleted: 'getDeletedApplications'
-    },
-    user: {
-      approved: 'getUserPendingApplications',
-      pending: 'getUserApprovedApplications',
-      rejected: 'getUserRejectedApplications',
-      deleted: 'getUserDeletedApplications'
     }
   }
 };
@@ -138,69 +123,8 @@ const ACTIONS = {
       .then((result) => {
         commit('storeProjectsData', result);
       });
-  },
-
-  // APPLICATIONS
-
-  // global
-
-  getPendingApplications({ commit }) {
-    return projectService.getPendingProjectApplications()
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getApprovedApplications({ commit }) {
-    return projectService.getApprovedProjectApplications()
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getRejectedApplications({ commit }) {
-    return projectService.getRejectedProjectApplications()
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getDeletedApplications({ commit }) {
-    return projectService.getDeletedProjectApplications()
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  // by user
-
-  getUserPendingApplications({ commit }, { userName }) {
-    return projectService.getPendingProjectApplicationsByProject(userName)
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getUserApprovedApplications({ commit }, { userName }) {
-    return projectService.getApprovedProjectApplicationsByProject(userName)
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getUserRejectedApplications({ commit }, { userName }) {
-    return projectService.getRejectedProjectApplicationsByProject(userName)
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
-  },
-
-  getUserDeletedApplications({ commit }, { userName }) {
-    return projectService.getDeletedProjectApplicationsByProject(userName)
-      .then((result) => {
-        commit('storeProjectsData', result);
-      });
   }
+  
 };
 
 const MUTATIONS = {

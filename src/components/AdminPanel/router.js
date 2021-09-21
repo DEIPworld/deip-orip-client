@@ -13,7 +13,6 @@ import AdminNetwork from '@/components/AdminPanel/AdminNetwork';
 import AdminCategories from '@/components/AdminPanel/AdminCategories';
 import AdminCategoryEdit from '@/components/AdminPanel/AdminCategoryEdit';
 import SignIn from '@/components/auth/SignIn';
-import ResearchRequestFormCreate from '@/components/ResearchRequest/ResearchRequestFormCreate';
 import ReviewSetup from '@/components/review-setup/ReviewSetup';
 import AdminLayouts from '@/components/AdminPanel/Layouts/AdminLayouts';
 import AdminLayoutsEdit from '@/components/AdminPanel/Layouts/Edit/AdminLayoutsEdit';
