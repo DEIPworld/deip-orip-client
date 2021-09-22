@@ -99,7 +99,7 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height,
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
-    '/api/groups/logo/',
+    '/api/team/logo/',
     id,
     '/?authorization=',
     accessService.getAccessToken(),
@@ -150,7 +150,7 @@ Vue.filter('accountAvatarSrc', (model, width = 48, height, isRound = false, noCa
   return path;
 });
 
-Vue.filter('researchBackgroundSrc', (researchExternalId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/research/${researchExternalId}/attribute/${researchExternalId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
+Vue.filter('researchBackgroundSrc', (projectId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/project/${projectId}/attribute/${projectId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
 
 Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo?width=${width}&height=${height}&noCache=${noCache}`);
 

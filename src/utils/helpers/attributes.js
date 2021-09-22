@@ -21,7 +21,7 @@ export const expandAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res
 export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId || attr._id]: attr } }), {});
 
 export const researchAttributeFileUrl = (
-  researchExternalId,
+  projectId,
   attributeId,
   filename,
   isImage = false,
@@ -30,8 +30,8 @@ export const researchAttributeFileUrl = (
   const parts = [
     window.env.DEIP_SERVER_URL,
     '/api',
-    '/research/',
-    researchExternalId,
+    '/project/',
+    projectId,
     '/attribute/',
     attributeId,
     '/file/',
