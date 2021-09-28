@@ -1,9 +1,9 @@
 <template>
   <div class="py-4 text--secondary text-caption">
     <div class="mb-6">
-      <div v-if="LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST === transaction.type">
+      <div v-if="LOC_PROPOSAL_TYPES.CONTRACT_AGREEMENT_PROPOSAL === transaction.type">
         <span class="font-weight-medium"> {{ $t('transactionsList.licType') }}: </span>
-        {{ transaction.details.licensePlan.name }}
+        {{ transaction.details.terms.name }}
       </div>
       <div>
         <span class="font-weight-medium"> Receipt: </span>

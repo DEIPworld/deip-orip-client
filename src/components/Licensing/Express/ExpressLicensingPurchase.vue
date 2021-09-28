@@ -8,7 +8,6 @@
         mandatory
       >
         <v-list v-if="licenses.length" nav class="pa-0">
-
           <v-list-item
             v-for="(item, index) of licenses"
             :key="`lic-${index}`"
@@ -103,13 +102,15 @@
 </template>
 
 <script>
+  import { ContractAgreementService } from '@deip/contract-agreement-service';
+  import { genSha256Hash } from '@deip/toolbox';
   import DStack from '@/components/Deipify/DStack/DStack';
   import { assetsChore } from '@/mixins/chores';
+  import { CONTRACT_AGREEMENT_TYPE } from '@/variables';
   import { researchAttributeFileUrl } from '@/utils/helpers';
-  import { ExpressLicensingService } from '@deip/express-licensing-service';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
 
-  const expressLicensingService = ExpressLicensingService.getInstance();
+  const contractAgreementService = ContractAgreementService.getInstance();
 
   const dialogModel = () => ({
     confirm: false,
@@ -157,8 +158,7 @@
         const balance = this.$currentUser.balances
           .find((b) => (
             b.asset_id === this.selected.fee.assetId
-            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId)
-          );
+            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId));
 
         if (!balance) return false;
 
@@ -173,8 +173,7 @@
         const balance = this.$currentUser.balances
           .find((b) => (
             b.asset_id === this.selected.fee.assetId
-            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId)
-          );
+            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId));
 
         if (!balance) return this.$t('licensing.dialog.noSource');
 
@@ -199,18 +198,23 @@
       },
 
       sendExpressLicensingRequest() {
-        return expressLicensingService.createExpressLicensingRequest({
-          privKey: this.$currentUser.privKey,
-          username: this.$currentUser.username
-        }, {
-          researchExternalId: this.project.externalId,
-          licensee: this.$currentUser.username,
-          licenser: this.project.researchGroup.external_id,
-          terms: this.selected.name,
-          fee: this.$$toAssetUnits(this.selected.fee, false),
-          expirationDate: this.dialogModel.date
-        }, {
-          licensePlan: this.selected
+        const parties = [this.project.researchGroup.external_id, this.$currentUser.username];
+        const hash = genSha256Hash(this.selected.file);
+
+        return contractAgreementService.proposeContractAgreement({
+          initiator: {
+            privKey: this.$currentUser.privKey,
+            username: this.$currentUser.username
+          },
+          hash,
+          terms: {
+            projectId: this.project.externalId,
+            ...this.selected
+          },
+          startTime: undefined,
+          endTime: this.dialogModel.date,
+          type: CONTRACT_AGREEMENT_TYPE.PROJECT_LICENSE,
+          parties
         })
           .then((result) => {
             this.$notifier.showSuccess(this.$t('licensing.dialog.reqSentSucc'));

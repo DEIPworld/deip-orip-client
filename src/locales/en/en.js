@@ -42,7 +42,7 @@ export default {
       totalECI: 'Total ECI',
       percentileRank: 'Percentile rank',
       growthRate: 'Growth rate',
-      contributionsNumber: 'Сontributions number',
+      contributionsNumber: 'Contributions number',
       projectsNumber: `${project(true, true)} number`
     }
   },

@@ -35,10 +35,10 @@ export const transactionTitle = {
       if (this.transaction.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH) {
         return this.transaction.extendedDetails.research.title;
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST) {
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.CONTRACT_AGREEMENT_PROPOSAL) {
         return this.$t('transactionsList.licenseRequest',
           {
-            fee: this.$$toAssetUnits(this.transaction.details.licensePlan.fee),
+            fee: this.$$toAssetUnits(this.transaction.details.terms.fee),
             project: this.transaction.extendedDetails.research.title
           });
       }

@@ -14,7 +14,9 @@
       "
       @click="handleAction(actions.sign)"
     >
-      <v-icon left> done </v-icon>
+      <v-icon left>
+        done
+      </v-icon>
       {{ $t('transactionsList.confirm') }}
     </v-btn>
     <v-btn
@@ -27,15 +29,17 @@
       "
       @click="handleAction(actions.reject)"
     >
-      <v-icon left> clear </v-icon>
+      <v-icon left>
+        clear
+      </v-icon>
       {{ $t('transactionsList.decline') }}
     </v-btn>
   </div>
 </template>
 
 <script>
-  import { transactionData } from '@/components/TransactionsList/transactionsListMixins';
   import { ProposalsService } from '@deip/proposals-service';
+  import { transactionData } from '@/components/TransactionsList/transactionsListMixins';
 
   const proposalsService = ProposalsService.getInstance();
   const actions = {
@@ -93,9 +97,9 @@
         }
 
         const promise = proposalsService.updateProposal(this.$currentUser, {
-            proposalId: external_id,
-            activeApprovalsToAdd
-          });
+          proposalId: external_id,
+          activeApprovalsToAdd
+        });
 
         promise
           .then(() => {
@@ -119,25 +123,25 @@
         this.disableButtons.status = true;
         this.disableButtons.btnType = actions.reject;
 
-        const account = type == this.LOC_PROPOSAL_TYPES.EXPRESS_LICENSE_REQUEST
+        const account = type == this.LOC_PROPOSAL_TYPES.CONTRACT_AGREEMENT_PROPOSAL
           ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
             ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
             : this.$currentUser.username
           : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
             ? // this.transaction?.extendedDetails?.research?.research_group?.external_id
-            this.transaction
+              this.transaction
               && this.transaction.extendedDetails
               && this.transaction.extendedDetails.research
               && this.transaction.extendedDetails.research.research_group
-              ? this.transaction.extendedDetails.research.research_group.external_id
-              : this.$currentUser.username
+                ? this.transaction.extendedDetails.research.research_group.external_id
+                : this.$currentUser.username
             : this.$currentUser.username;
 
         const promise = proposalsService.declineProposal(this.$currentUser, {
-            proposalId: external_id,
-            account,
-            authorityType: 2
-          });
+          proposalId: external_id,
+          account,
+          authorityType: 2
+        });
 
         promise
           .then(() => {

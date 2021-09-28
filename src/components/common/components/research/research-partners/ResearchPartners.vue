@@ -76,7 +76,7 @@
     </v-row>
   </div>
   <div v-else>
-    <div v-for="(item, i) in partnersСollectedData" :key="`${item.typeInfo.type}${i}`" class="mb-2">
+    <div v-for="(item, i) in partnersCollectedData" :key="`${item.typeInfo.type}${i}`" class="mb-2">
       <div class="font-weight-medium text-subtitle-1 mr-2 display-inline-block">
         <v-icon class="mr-2" small color="black">
           {{ item.typeInfo.icon }}
@@ -110,7 +110,7 @@
       };
     },
     computed: {
-      partnersСollectedData() {
+      partnersCollectedData() {
         return this.partners.reduce((res, item) => {
           const el = res.find(({ typeInfo: { type } }) => type == item.type);
           if (el) {
