@@ -20,73 +20,9 @@ export const expandAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res
 // TODO: switch to expand
 export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId || attr._id]: attr } }), {});
 
-export const researchAttributeFileUrl = (
-  projectId,
-  attributeId,
-  filename,
-  isImage = false,
-  download = false
-) => {
-  const parts = [
-    window.env.DEIP_SERVER_URL,
-    '/api',
-    '/project/',
-    projectId,
-    '/attribute/',
-    attributeId,
-    '/file/',
-    filename,
-    '?download=',
-    download,
-    '&image=',
-    isImage
-  ];
-  return parts.join('');
-};
-
-export const userAttributeFileUrl = (
-  username = 'initdelegate',
-  attributeId,
-  filename,
-  isImage = false,
-  download = false,
-  width = 48,
-  height,
-  isRound = false,
-  noCache = false,
-) => {
-  const internalWidth = width * 2;
-  const internalHeight = height ? height * 2 : internalWidth;
-
-  const pathArray = [
-    window.env.DEIP_SERVER_URL,
-    '/api/user/',
-    username,
-    '/attribute/',
-    attributeId,
-    '/file/',
-    filename,
-    '/?authorization=',
-    accessService.getAccessToken(),
-    '&width=',
-    internalWidth,
-    '&height=',
-    internalHeight,
-    '&round=',
-    isRound,
-    '&noCache=',
-    noCache,
-    '&download=',
-    download,
-    '&image=',
-    isImage
-  ];
-
-  return pathArray.join('');
-};
-
-export const teamAttributeFileUrl = (
-  teamId,
+export const attributeFileUrl = (
+  scope,
+  entityId,
   attributeId,
   filename,
   isImage = false,
@@ -101,12 +37,11 @@ export const teamAttributeFileUrl = (
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
-    '/api/team/',
-    teamId,
-    '/attribute/',
-    attributeId,
-    '/file/',
-    filename,
+    '/api/attribute/file/',
+    `${scope}/`,
+    `${entityId}/`,
+    `${attributeId}/`,
+    `${filename}`,
     '/?authorization=',
     accessService.getAccessToken(),
     '&width=',
@@ -122,7 +57,6 @@ export const teamAttributeFileUrl = (
     '&image=',
     isImage
   ];
-
   return pathArray.join('');
 };
 

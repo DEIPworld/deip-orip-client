@@ -283,7 +283,7 @@
       createFundraising() {
         this.loading = true;
         const isProposal = !this.project.researchGroup.is_personal;
-        const securityTokensOnSale = [
+        const shares = [
           this.$$toAssetUnits({
             ...this.issuedTokens,
             ...{ amount: this.formData.amount }
@@ -300,7 +300,7 @@
             projectId: this.project.externalId,
             startTime: this.formatDate(this.formData.startDate),
             endTime: this.formatDate(this.formData.endDate),
-            securityTokensOnSale,
+            shares,
             softCap: this.$$toAssetUnits(this.formData.softCap, false),
             hardCap: this.$$toAssetUnits(this.formData.hardCap, false)
           },

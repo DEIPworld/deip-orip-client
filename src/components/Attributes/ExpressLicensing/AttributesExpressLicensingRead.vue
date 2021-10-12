@@ -65,7 +65,7 @@
 
     computed: {
       userLicenses() {
-        return this.$where(this.project.researchRef.expressLicenses, { owner: this.$currentUser.username });
+        return this.$where(this.project.researchRef.expressLicenses, { creator: this.$currentUser.username });
       }
     }
   };

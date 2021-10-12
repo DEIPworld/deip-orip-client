@@ -2,7 +2,8 @@ import { componentsRenderer } from '@/mixins/renderer';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
 
-import { researchAttributeFileUrl } from '@/utils/helpers';
+import { attributesChore } from '@/mixins/chores/attributesChore';
+import { attributeFileUrl } from '@/utils/helpers';
 
 import EciStats from '@/components/EciMetrics/EciStats/EciStats';
 import FundraisingStats from '@/components/Fundraising/FundraisingWidget/FundraisingStats';
@@ -45,6 +46,7 @@ export default {
   },
   mixins: [
     componentsRenderer,
+    attributesChore,
     projectDetails // TODO: replace 'research' with 'project'
   ],
   props: {
@@ -67,9 +69,10 @@ export default {
   methods: {
     getImageUrl(id) {
       const attr = this.getAttribute(id);
-
+      const attrInfo = this.$$getAttributeInfo(attr.attributeId);
       return attr
-        ? researchAttributeFileUrl(
+        ? attributeFileUrl(
+          attrInfo.scope,
           this.research.externalId,
           attr.attributeId,
           attr.value,

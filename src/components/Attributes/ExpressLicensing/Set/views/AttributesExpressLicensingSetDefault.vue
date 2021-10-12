@@ -70,7 +70,8 @@
   import { attributeSet } from '@/components/Attributes/_mixins';
   import { activatableArrayModelFactory } from '@/mixins/extendModel';
 
-  import { researchAttributeFileUrl } from '@/utils/helpers';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
+  import { attributeFileUrl } from '@/utils/helpers';
 
   import DStack from '@/components/Deipify/DStack/DStack';
   import DTimeline from '@/components/Deipify/DTimeline/DTimeline';
@@ -105,7 +106,7 @@
 
       ValidationProvider
     },
-    mixins: [attributeSet, activatableArrayModelFactory(licenseModelFactory)],
+    mixins: [attributeSet, activatableArrayModelFactory(licenseModelFactory), attributesChore],
     props: {
       project: {
         type: Object,
@@ -116,8 +117,9 @@
     methods: {
       getFileUrl(file) {
         if (!file) return false;
-
-        return researchAttributeFileUrl(
+        const attrInfo = this.$$getAttributeInfo(this.attribute._id);
+        return attributeFileUrl(
+          attrInfo.scope,
           this.project.externalId,
           this.attribute._id,
           file,

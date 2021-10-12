@@ -8,10 +8,10 @@
 </template>
 
 <script>
+  import { TeamService } from '@deip/team-service';
   import { parseFormData, extendAttrModules } from '@/utils/helpers';
   import TeamForm from '@/features/Teams/components/Form/TeamForm';
-  import { TeamService } from '@deip/team-service';
-  
+
   const teamService = TeamService.getInstance();
 
   export default {
@@ -20,54 +20,39 @@
     data() {
       return {
         loading: false
-      }
+      };
     },
     computed: {
       layoutSchema() {
-        return extendAttrModules(
-          this.$tenantSettings.layouts.teamCreateForm.layout
-        );
+        return extendAttrModules(this.$tenantSettings.layouts.teamCreateForm.layout);
       }
     },
     methods: {
       createTeam(formData) {
         this.loading = true;
-
-        const { onchainData: { name }, offchainMeta: { attributes } } = parseFormData(formData);
-        teamService.createTeam(
-          {
+        const {
+          onchainData: { name, members },
+          offchainMeta: { attributes }
+        } = parseFormData(formData);
+        teamService
+          .createTeam({
             initiator: {
               username: this.$currentUser.username,
               privKey: this.$currentUser.privKey,
               memoKey: this.$currentUser.account.memo_key
             },
             formData,
+            members: members.filter((m) => m !== this.$currentUser.username),
             attributes
-          }
-        )
+          })
           .then((res) => {
             this.loading = false;
-            this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username)
+            this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username);
             this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name }));
             const { entityId: teamId } = res;
-            // const invitesPromises = invitees.map((username) => researchGroupService.createResearchGroupInvite(
-            //   { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-            //   {
-            //     researchGroup: researchGroupExternalId,
-            //     member: username,
-            //     rewardShare: '0.00 %',
-            //     researches: [],
-            //     extensions: []
-            //   },
-            //   {
-            //     notes: this.$t('createResearchGroup.note', { name }),
-            //   }
-            // ));
 
             return Promise.all([
-              // Promise.all(invitesPromises),
-              teamService.getTeam(teamId),
-              // this.$store.dispatch('auth/loadGroups')
+              teamService.getTeam(teamId)
             ]);
           })
           .then(([researchGroup]) => {

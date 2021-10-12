@@ -10,11 +10,12 @@
 
 <script>
   import { attributeRead } from '@/components/Attributes/_mixins';
-  import { researchAttributeFileUrl, userAttributeFileUrl } from '@/utils/helpers';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
+  import { attributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageRead',
-    mixins: [attributeRead],
+    mixins: [attributeRead, attributesChore],
     props: {
       project: {
         type: Object,
@@ -48,8 +49,10 @@
         return q;
       },
       imageUrl() {
+        const attrInfo = this.$$getAttributeInfo(this.attribute.attributeId);
         if (this.project.externalId) {
-          return researchAttributeFileUrl(
+          return attributeFileUrl(
+            attrInfo.scope,
             this.project.externalId,
             this.attribute.attributeId,
             this.attribute.value,
@@ -57,7 +60,15 @@
           ) + this.query;
         }
         if (this.username) {
-          return userAttributeFileUrl(this.username, this.attribute.attributeId, this.attribute.value, true, false, 160) + this.query;
+          return attributeFileUrl(
+            attrInfo.scope,
+            this.username,
+            this.attribute.attributeId,
+            this.attribute.value,
+            true,
+            false,
+            160
+          ) + this.query;
         }
 
         return '';

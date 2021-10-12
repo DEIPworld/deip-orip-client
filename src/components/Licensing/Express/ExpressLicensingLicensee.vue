@@ -29,11 +29,11 @@
     },
     computed: {
       users() {
-        return this.licenses.map((lic) => lic.owner);
+        return this.licenses.map((lic) => lic.creator);
       },
       totalFee() {
         return this.licenses
-          .map((lic) => lic.licensePlan.fee.amount)
+          .map((lic) => lic.terms.fee.amount)
           .reduce((a, b) => a + parseInt(b), 0);
       },
       list() {
