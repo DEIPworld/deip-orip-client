@@ -95,7 +95,7 @@ export const projectDetails = {
       }
 
       return this.$isUser && this.project.researchRef.expressLicenses
-        .map((lic) => lic.owner)
+        .map((lic) => lic.creator)
         .includes(this.$currentUser.username);
     },
 

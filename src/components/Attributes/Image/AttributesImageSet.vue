@@ -14,13 +14,14 @@
 
 <script>
   import { attributeSet } from '@/components/Attributes/_mixins';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
   import DInputImage from '@/components/Deipify/DInput/DInputImage';
-  import { isString, researchAttributeFileUrl, userAttributeFileUrl, teamAttributeFileUrl } from '@/utils/helpers';
+  import { isString, attributeFileUrl } from '@/utils/helpers';
 
   export default {
     name: 'AttributesImageSet',
     components: { DInputImage },
-    mixins: [attributeSet],
+    mixins: [attributeSet, attributesChore],
     props: {
       aspectRatio: {
         type: [Number, String],
@@ -59,27 +60,30 @@
     },
     methods: {
       imageUrl() {
+        const attrInfo = this.$$getAttributeInfo(this.attribute.attributeId);
+        let entityId = this.$currentUser.username;
+        if (this.$route.params.teamId) {
+          entityId = this.$route.params.teamId;
+        }
         if (this.$route.params.projectId) {
-          return researchAttributeFileUrl(
-            this.$route.params.projectId,
+          entityId = this.$route.params.projectId;
+          return attributeFileUrl(
+            attrInfo.scope,
+            entityId,
             this.attribute._id,
             this.internalValue
           );
         }
-        if (this.$route.name.includes('account')) {
-          return userAttributeFileUrl(
-            this.$currentUser.username,
-            this.attribute._id,
-            this.internalValue,
-            true,
-            false,
-            182
-          );
-        }
-        if (this.$route.params.teamId) {
-          return teamAttributeFileUrl(this.$route.params.teamId, this.attribute._id, this.internalValue, true, false, 182);
-        }
-        return null;
+
+        return attributeFileUrl(
+          attrInfo.scope,
+          entityId,
+          this.attribute._id,
+          this.internalValue,
+          true,
+          false,
+          182
+        );
       }
     }
   };

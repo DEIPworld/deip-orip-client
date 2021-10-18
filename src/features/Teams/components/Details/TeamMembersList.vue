@@ -76,9 +76,12 @@
 </template>
 
 <script>
+  import { TeamService } from '@deip/team-service';
   import { mapGetters } from 'vuex';
   import UsersList from '@/components/MemberList/UsersList';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
+
+  const teamService = TeamService.getInstance();
 
   export default {
     name: 'TeamMembersList',
@@ -130,34 +133,29 @@
         this.actionDialog.loading = true;
         this.actionDialog.loading = false;
         this.actionDialog.isOpen = false;
-        // researchGroupService.leaveResearchGroup(
-        //   {
-        //     privKey: this.$currentUser.privKey,
-        //     username: this.$currentUser.username
-        //   },
-        //   {
-        //     member: member.username,
-        //     researchGroup: this.team.externalId,
-        //     isExclusion: true,
-        //     extensions: []
-        //   },
-        //   {
-        //     notes: ''
-        //   }
-        // )
-        //   .then(() => {
-        //     this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
-        //     this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
-        //   })
-        //   .catch((err) => {
-        //     this.$notifier.showError(this.$t('memberList.dropPropFail'));
-        //     console.error(err);
-        //   })
-        //   .finally(() => {
-        //     this.actionDialog.loading = false;
-        //     this.actionDialog.isOpen = false;
-        //     this.$vuetify.goTo('#proposals');
-        //   });
+        teamService.leaveTeam(
+          {
+            initiator: {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            },
+            teamId: this.team.externalId,
+            member: member.username
+          }
+        )
+          .then(() => {
+            this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
+            this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
+          })
+          .catch((err) => {
+            this.$notifier.showError(this.$t('memberList.dropPropFail'));
+            console.error(err);
+          })
+          .finally(() => {
+            this.actionDialog.loading = false;
+            this.actionDialog.isOpen = false;
+            this.$vuetify.goTo('#proposals');
+          });
       },
       showConfirmAction(user) {
         this.actionDialog = {
@@ -173,29 +171,27 @@
         this.addMemberDialog.isLoading = true;
         this.addMemberDialog.isOpen = false;
         this.addMemberDialog.isLoading = false;
-        // researchGroupService.createResearchGroupInvite(
-        //   { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
-        //   {
-        //     researchGroup: this.team.externalId,
-        //     member: this.addMemberDialog.selectedUser,
-        //     rewardShare: '0.00 %',
-        //     researches: [],
-        //     extensions: []
-        //   },
-        //   {
-        //     notes: this.addMemberDialog.coverLetter
-        //   }
-        // )
-        //   .then(() => {
-        //     this.$notifier.showSuccess(this.$t('researchGroupDetails.addMemberDialog.success'));
-        //     this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
-        //   }).catch((err) => {
-        //     this.$notifier.showError(this.$t('researchGroupDetails.addMemberDialog.err'));
-        //     console.error(err);
-        //   }).finally(() => {
-        //     this.addMemberDialog.isLoading = false;
-        //     this.addMemberDialog.isOpen = false;
-        //   });
+        teamService.joinTeam(
+          {
+            initiator: {
+              privKey: this.$currentUser.privKey,
+              username: this.$currentUser.username
+            },
+            teamId: this.team.externalId,
+            member: this.addMemberDialog.selectedUser,
+            notes: this.addMemberDialog.coverLetter
+          }
+        )
+          .then(() => {
+            this.$notifier.showSuccess(this.$t('researchGroupDetails.addMemberDialog.success'));
+            this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
+          }).catch((err) => {
+            this.$notifier.showError(this.$t('researchGroupDetails.addMemberDialog.err'));
+            console.error(err);
+          }).finally(() => {
+            this.addMemberDialog.isLoading = false;
+            this.addMemberDialog.isOpen = false;
+          });
       }
     }
   }

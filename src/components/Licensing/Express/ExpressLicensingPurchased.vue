@@ -3,8 +3,8 @@
     <d-dot-list-item
       v-for="(item, index) of licenses"
       :key="`ls-${index}`"
-      :label="item.licensePlan.name"
-      :value="$$toAssetUnits(item.licensePlan.fee)"
+      :label="item.terms.name"
+      :value="$$toAssetUnits(item.terms.fee)"
     >
       <template #secondRow>
         <div class="text-caption">

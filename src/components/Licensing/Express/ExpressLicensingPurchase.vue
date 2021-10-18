@@ -107,8 +107,9 @@
   import DStack from '@/components/Deipify/DStack/DStack';
   import { assetsChore } from '@/mixins/chores';
   import { CONTRACT_AGREEMENT_TYPE } from '@/variables';
-  import { researchAttributeFileUrl } from '@/utils/helpers';
   import DDateTimeInput from '@/components/Deipify/DInput/DDateTimeInput';
+  import { attributesChore } from '@/mixins/chores/attributesChore';
+  import { attributeFileUrl } from '@/utils/helpers';
 
   const contractAgreementService = ContractAgreementService.getInstance();
 
@@ -123,7 +124,7 @@
       DDateTimeInput,
       DStack
     },
-    mixins: [assetsChore],
+    mixins: [assetsChore, attributesChore],
 
     props: {
       licenses: {
@@ -187,8 +188,9 @@
     methods: {
       getFileUrl(file) {
         if (!file) return false;
-
-        return researchAttributeFileUrl(
+        const attrInfo = this.$$getAttributeInfo(this.attributeId);
+        return attributeFileUrl(
+          attrInfo,
           this.project.externalId,
           this.attributeId,
           file,
@@ -206,6 +208,7 @@
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.username
           },
+          creator: this.$currentUser.username,
           hash,
           terms: {
             projectId: this.project.externalId,
