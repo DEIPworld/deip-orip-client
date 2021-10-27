@@ -24,7 +24,7 @@ export const transactionTitle = {
       if (this.transaction.type === LOC_PROPOSAL_TYPES.TRANSFER_ASSET) {
         return this.$t('transactionsList.transfer',
           {
-            asset: this.$$toAssetUnits(this.$$fromAssetUnits(this.transaction.details.asset)),
+            asset: this.$$toAssetUnits(this.transaction.details.asset),
             account: this.transaction.extendedDetails.party2.name
           || this.$options.filters.fullname(this.transaction.extendedDetails.party2)
           });
@@ -45,8 +45,8 @@ export const transactionTitle = {
       if (this.transaction.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
         return this.$t('transactionsList.exchangeRequest',
           {
-            asset1: this.$$toAssetUnits(this.$$fromAssetUnits(this.transaction.details.asset1)),
-            asset2: this.$$toAssetUnits(this.$$fromAssetUnits(this.transaction.details.asset2))
+            asset1: this.$$toAssetUnits(this.transaction.details.asset1),
+            asset2: this.$$toAssetUnits(this.transaction.details.asset2)
           });
       }
       if (this.transaction.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
@@ -73,12 +73,8 @@ export const transactionTitle = {
       }
       if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE) {
         return this.$t('transactionsList.createTokenSale', {
-          min: this.$$toAssetUnits(this.$$fromAssetUnits(
-            this.transaction.extendedDetails.researchTokenSale.soft_cap
-          )),
-          max: this.$$toAssetUnits(this.$$fromAssetUnits(
-            this.transaction.extendedDetails.researchTokenSale.hard_cap
-          )),
+          min: this.$$toAssetUnits(this.transaction.extendedDetails.researchTokenSale.soft_cap),
+          max: this.$$toAssetUnits(this.transaction.extendedDetails.researchTokenSale.hard_cap),
           project: this.transaction.extendedDetails.research.title
         });
       }

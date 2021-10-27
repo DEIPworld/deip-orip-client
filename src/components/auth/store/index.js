@@ -83,7 +83,7 @@ const getters = {
         is_centralized: group.is_centralized,
         account: group.account,
         balances: group.account.balances.reduce((acc, b) => {
-          acc[b.split(' ')[1]] = grantsService.fromAssetsToFloat(b);
+          acc[b.symbol] = b.amount;
           return acc;
         }, {})
       });
@@ -104,8 +104,8 @@ const getters = {
   userBalances: (state) => {
     const userBalances = {};
     state.user.balances.forEach((item) => {
-      const { amount } = item;
-      userBalances[amount.split(' ')[1]] = amount;
+      const { amount, symbol } = item;
+      userBalances[symbol] = amount;
     });
     return userBalances;
   },

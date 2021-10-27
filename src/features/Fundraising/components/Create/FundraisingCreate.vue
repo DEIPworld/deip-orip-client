@@ -26,7 +26,7 @@
                     outlined
                     persistent-hint
                     :error-messages="errors"
-                    :suffix="issuedTokens.assetId"
+                    :suffix="issuedTokens.symbol"
                     :hint="amountHint(formData.amount)"
                   >
                     <template #message="{ message }">
@@ -249,7 +249,7 @@
 
       issuedTokens() {
         if (hasValue(this.project.securityTokens)) {
-          return this.$$fromAssetUnits(this.project.securityTokens[0]);
+          return this.project.securityTokens[0];
         }
 
         return null;
@@ -257,13 +257,13 @@
     },
 
     created() {
-      this.availableTokens = this.issuedTokens.amount;
+      this.availableTokens = this.issuedTokens;
 
       this.$store.dispatch('Assets/getTeamBalances', [
         this.project.researchGroup.external_id,
-        this.issuedTokens.assetId
+        this.issuedTokens.symbol
       ]).then((res) => {
-        this.availableTokens = this.$$fromAssetUnits(res.amount);
+        this.availableTokens = res;
       });
     },
 
@@ -276,19 +276,47 @@
       },
 
       formatDate(val) {
-        return new Date(val).toISOString()
-          .split('.')[0];
+        return new Date(new Date(val).toISOString()
+          .split('.')[0]).getTime();
       },
 
       createFundraising() {
         this.loading = true;
         const isProposal = !this.project.researchGroup.is_personal;
+
+        const issuedTokensInfo = this.$$assetInfo(this.issuedTokens.symbol);
+
         const shares = [
-          this.$$toAssetUnits({
-            ...this.issuedTokens,
-            ...{ amount: this.formData.amount }
-          }, false)
+          {
+            id: issuedTokensInfo.id,
+            symbol: this.issuedTokens.symbol,
+            precision: this.issuedTokens.precision,
+            amount: this.formData.amount
+          }
         ];
+
+        const {
+          id,
+          symbol,
+          precision
+        } = this.$$assetInfo(this.formData.softCap.assetId);
+
+        const softCap = {
+          id,
+          symbol,
+          precision,
+          amount: this.formData.softCap.amount
+        };
+
+        const hardCap = {
+          id,
+          symbol,
+          precision,
+          amount: this.formData.hardCap.amount
+        };
+
+        const startTime = this.formatDate(this.formData.startDate);
+        const endTime = this.formatDate(this.formData.endDate);
 
         const data = [
           {
@@ -298,11 +326,11 @@
           {
             teamId: this.project.researchGroup.external_id,
             projectId: this.project.externalId,
-            startTime: this.formatDate(this.formData.startDate),
-            endTime: this.formatDate(this.formData.endDate),
+            startTime,
+            endTime,
             shares,
-            softCap: this.$$toAssetUnits(this.formData.softCap, false),
-            hardCap: this.$$toAssetUnits(this.formData.hardCap, false)
+            softCap,
+            hardCap
           },
           {
             isProposal
@@ -329,7 +357,7 @@
         const messages = [
           `${this.toPercent(val)} of ${this.$$toAssetUnits(this.issuedTokens)} issued tokens`
         ];
-        if (this.issuedTokens.amount > this.availableTokens.amount) {
+        if (Number(this.issuedTokens.amount) > Number(this.availableTokens.amount)) {
           messages.push(
             `${this.toPercent(val, this.availableTokens)} of ${this.$$toAssetUnits(this.availableTokens)} team's tokens`
           );

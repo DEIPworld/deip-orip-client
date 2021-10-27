@@ -157,8 +157,8 @@ Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, 
 Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner?width=${width}&height=${height}&noCache=${noCache}`);
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToLocal
-  ? moment(value).format(format)
-  : moment.utc(value).local().format(format)));
+  ? moment(moment(value).format('YYYY-MM-DD[T]HH:mm:ss')).format(format)
+  : moment.utc(moment(value).format('YYYY-MM-DD[T]HH:mm:ss')).local().format(format)));
 
 Vue.filter('shortHash', (value) => (value ? value.substring(0, 8) : ''));
 
@@ -199,8 +199,9 @@ Vue.filter('numDirClass', (value, type = 'foreground') => {
 });
 
 Vue.filter('timeLeft', (value) => {
+  const date = moment(value).format('YYYY-MM-DD[T]HH:mm:ss');
   const now = moment.utc().local();
-  const start = moment.utc(value).local();
+  const start = moment.utc(date).local();
 
   const months = Math.floor(moment.duration(start.diff(now)).asMonths());
   if (months > 1) return `${months} months`;

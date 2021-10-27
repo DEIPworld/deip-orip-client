@@ -38,17 +38,16 @@ const ACTIONS = {
           balances: []
         }));
         const balancesPromises = assets
-          .filter((asset) => asset.tokenized_research)
-          .map((asset) => assetsService.getAccountsAssetBalancesByAsset(asset.string_symbol))
+          .filter((asset) => asset.tokenizedProject)
+          .map((asset) => assetsService.getAccountsAssetBalancesByAsset(asset.symbol))
 
         return Promise.all(balancesPromises)
           .then((balances) => {
             for (const balance of balances.flat(1)) {
               const idx = assets
-                .findIndex((asset) => asset.string_symbol === balance.asset_symbol);
+                .findIndex((asset) => asset.symbol === balance.symbol);
               assets[idx].balances.push(balance);
             }
-
             commit('setList', assets);
           });
       });
@@ -64,9 +63,9 @@ const ACTIONS = {
   getBySymbol({ commit }, assetSymbol) {
     return assetsService.getAssetBySymbol(assetSymbol)
       .then((asset) => {
-        if (asset.tokenized_research) {
+        if (asset.tokenizedProject) {
           return assetsService
-            .getAccountsAssetBalancesByAsset(asset.string_symbol)
+            .getAccountsAssetBalancesByAsset(asset.symbol)
             .then((balances) => {
               commit('setOne', {
                 ...asset,
@@ -105,7 +104,7 @@ const ACTIONS = {
       .then((balances) => {
         commit(
           'setCurrentUserBalance',
-          balances.filter((balance) => !balance.tokenized_research)
+          balances.filter((balance) => !balance.tokenizedProject)
         );
       })
       .catch((err) => {

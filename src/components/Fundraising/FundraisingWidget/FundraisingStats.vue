@@ -135,40 +135,40 @@
         if (this.tokenSaleData && this.tokenSaleData.status === 4) {
           return {
             color: 'info',
-            date: this.tokenSaleData.start_time
+            date: this.tokenSaleData.startTime
           };
         }
         return {
           color: 'warning',
-          date: this.tokenSaleData.end_time
+          date: this.tokenSaleData.endTime
         };
       },
       token() {
-        return this.tokenSaleData.soft_cap ? this.tokenSaleData.soft_cap.split(' ')[1] : '';
+        return this.tokenSaleData.softCap ? this.tokenSaleData.softCap.symbol : '';
       },
       saleInfo() {
         if (!this.tokenSaleData) return [];
         return [
           {
             label: this.$t('fundraising.start'),
-            value: this.$options.filters.dateFormat(this.tokenSaleData.start_time, 'D MMM YYYY, HH:mm', true)
+            value: this.$options.filters.dateFormat(this.tokenSaleData.startTime, 'D MMM YYYY, HH:mm', true)
           },
           {
             label: this.$t('fundraising.end'),
-            value: this.$options.filters.dateFormat(this.tokenSaleData.end_time, 'D MMM YYYY, HH:mm', true)
+            value: this.$options.filters.dateFormat(this.tokenSaleData.endTime, 'D MMM YYYY, HH:mm', true)
           },
           {
             label: this.$t('fundraising.totalInvestment'),
-            value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.total_amount))} ${this.token}`,
-            hide: !this.fromAssetsToFloat(this.tokenSaleData.total_amount)
+            value: `${this.$options.filters.commaNumber(this.tokenSaleData.totalInvested.amount)} ${this.token}`,
+            hide: !Number(this.tokenSaleData.totalInvested.amount)
           },
           {
             label: this.$t('fundraising.minGoal'),
-            value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.soft_cap))} ${this.token}`
+            value: `${this.$options.filters.commaNumber(this.tokenSaleData.softCap.amount)} ${this.token}`
           },
           {
             label: this.$t('fundraising.maxGoal'),
-            value: `${this.$options.filters.commaNumber(this.fromAssetsToFloat(this.tokenSaleData.hard_cap))} ${this.token}`
+            value: `${this.$options.filters.commaNumber(this.tokenSaleData.hardCap.amount)} ${this.token}`
           }
         ];
       },

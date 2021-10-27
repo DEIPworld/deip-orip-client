@@ -16,13 +16,13 @@
                   <span class="font-weight-bold">
                     {{$t('fundraising.fundraisingStatsSection.startTime')}}
                   </span>
-                  {{ tokenSale.start_time | dateFormat('MMM D, YYYY HH:mm', true) }}
+                  {{ tokenSale.startTime | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
                 <div>
                   <span class="font-weight-bold">
                     {{$t('fundraising.fundraisingStatsSection.endTime')}}
                   </span>
-                  {{ tokenSale.end_time | dateFormat('MMM D, YYYY HH:mm', true) }}
+                  {{ tokenSale.endTime | dateFormat('MMM D, YYYY HH:mm', true) }}
                 </div>
               </d-stack>
               <div v-if="hasActiveTokenSale || hasInactiveTokenSale" class="ml-4">
@@ -75,13 +75,13 @@
                   class="mr-1"
                 />
                 <fundraising-progress-needle
-                  :tooltip="`${fromAssetsToFloat(tokenSale.soft_cap)}`"
+                  :tooltip="tokenSale.softCap.amount"
                   :text="$t('fundraising.fundraisingControlSection.softCap')"
                   class="mr-6"
                   :style="marginMinCapPercent"
                 />
                 <fundraising-progress-needle
-                  :tooltip="`${fromAssetsToFloat(tokenSale.hard_cap)}`"
+                  :tooltip="tokenSale.hardCap.amount"
                   :text="$t('fundraising.fundraisingControlSection.hardCap')"
                   class="ml-auto mr-6"
                 />
@@ -93,12 +93,26 @@
               <span class="font-weight-bold">
                 {{$t('fundraising.fundraisingControlSection.collected')}}
               </span>
-              <span>{{ toAsset(tokenSale.total_amount) }}</span>
+              <span>
+                {{
+                  $$toAssetUnits({
+                    amount: tokenSale.totalInvested.amount,
+                    assetId: tokenSale.totalInvested.symbol
+                  })
+                }}
+              </span>
             </d-stack>
             <div class="d-flex align-center">
               <d-stack horizontal gap="6" class="text--secondary mr-3">
                 <span class="font-weight-bold">{{$t('fundraising.fundraisingControlSection.softCap')}}</span>
-                <span>{{ toAsset(tokenSale.soft_cap) }}</span>
+                <span>
+                  {{
+                    $$toAssetUnits({
+                      amount: tokenSale.softCap.amount,
+                      assetId: tokenSale.softCap.symbol
+                    })
+                  }}
+                </span>
               </d-stack>
               <v-chip
                 outlined
@@ -113,7 +127,14 @@
             </div>
             <d-stack horizontal gap="6" class="text--secondary">
               <span class="font-weight-bold">{{$t('fundraising.fundraisingControlSection.hardCap')}}</span>
-              <span>{{ toAsset(tokenSale.hard_cap) }}</span>
+              <span>
+                {{
+                  $$toAssetUnits({
+                    amount: tokenSale.hardCap.amount,
+                    assetId: tokenSale.hardCap.symbol
+                  })
+                }}
+              </span>
             </d-stack>
           </d-stack>
           <d-form @submit="openFundraisingDialog">
@@ -123,7 +144,7 @@
               :label="$t('fundraising.amountOfInvest')"
               outlined
               hide-details
-              :suffix="tokenSale.soft_cap.split(' ')[1]"
+              :suffix="tokenSale.softCap.symbol"
               :rules="[rules.required, deipTokenValidator]"
               :disabled="isInvesting || !hasActiveTokenSale"
             />
@@ -191,11 +212,16 @@
           <template #item.timestamp="{item}">
             {{ item.timestamp | dateFormat('MMMM DD YYYY', true) }}
           </template>
-          <template #item.op[1].research_token_sale_id="{item}">
-            {{ mockSignature(item.op[1].research_token_sale_id) }}
+          <template #item.investmentOpportunityId="{item}">
+            {{ mockSignature(item.investmentOpportunityId) }}
           </template>
-          <template #item.op[1].amount="{ item }">
-            {{ toAsset(item.op[1].amount) }}
+          <template #item.token.amount="{ item }">
+            {{
+              $$toAssetUnits({
+                amount: item.token.amount,
+                assetId: item.token.symbol
+              })
+            }}
           </template>
         </v-data-table>
       </d-block>
@@ -283,13 +309,13 @@
           },
           {
             text: this.$t('fundraising.table.fundPhase'),
-            value: 'op[1].research_token_sale_id',
+            value: 'investmentOpportunityId',
             align: 'center',
             sortable: false
           },
           {
             text: this.$t('fundraising.table.amount'),
-            value: 'op[1].amount',
+            value: 'token.amount',
             align: 'end',
             sortable: false
           },
@@ -316,7 +342,7 @@
         let iconClass = 'text--secondary';
         let icon = 'cancel';
         let text = this.$t('fundraising.goalNotAchiev');
-        if (this.currentCap >= this.fromAssetsToFloat(this.tokenSale.soft_cap)) {
+        if (this.currentCap >= Number(this.tokenSale.softCap.amount)) {
           color = 'success';
           iconClass = '';
           icon = 'check_circle';
@@ -332,7 +358,7 @@
       tokenSaleTimeLeft() {
         if (!this.tokenSale) return null;
 
-        return this.hasInactiveTokenSale ? this.tokenSale.start_time : this.tokenSale.end_time;
+        return this.hasInactiveTokenSale ? this.tokenSale.startTime : this.tokenSale.endTime;
       },
       // todo: transform to constant
       hasActiveTokenSale() {
@@ -350,8 +376,7 @@
       },
       chartData() {
         const securityTokenHolders = this.securityTokenBalances.reduce((arr, item) => {
-          const { amount } = this.$$fromAssetUnits(item.amount);
-          arr.push([this.$options.filters.accountFullname(item.user), amount]);
+          arr.push([this.$options.filters.accountFullname(item.user), Number(item.amount)]);
           return arr;
         }, []);
 
@@ -361,19 +386,17 @@
         ];
 
         if (this.hasActiveTokenSale || this.hasInactiveTokenSale) {
-          const { amount } = this.$$fromAssetUnits(this.tokenSale.security_tokens_on_sale[0]);
-          data.push(['On Sale', amount]);
+          data.push(['On Sale', Number(this.tokenSale.shares[0].amount)]);
         }
-
         return data;
       },
       currentCap() {
         if (!this.tokenSale) return 0;
-        return this.fromAssetsToFloat(this.tokenSale.total_amount);
+        return this.tokenSale.totalInvested.totalAmount;
       },
       isContributionToTokenSaleDisabled() {
-        if (!this.userBalances[this.tokenSale.soft_cap.split(' ')[1]]) return true;
-        const balance = this.fromAssetsToFloat(this.userBalances[this.tokenSale.soft_cap.split(' ')[1]]);
+        if (!this.userBalances[this.tokenSale.softCap.symbol]) return true;
+        const balance = Number(this.userBalances[this.tokenSale.softCap.symbol]);
         const isBalanceNotEnough = (this.formData.amountToContribute || 0) > balance;
         const isInvestmentNotSpecified = (this.formData.amountToContribute || 0) <= 0;
         return isBalanceNotEnough
@@ -383,9 +406,7 @@
       },
       currentCapPercent() {
         let percent = this.tokenSale
-          ? (this.currentCap * 100)
-            / this.fromAssetsToFloat(this.tokenSale.hard_cap)
-          : 0;
+          ? (this.currentCap * 100) / this.tokenSale.hardCap.amount : 0;
         if (percent <= 0.7) {
           percent = 0.7;
         }
@@ -405,9 +426,7 @@
       },
       marginMinCapPercent() {
         let percent = this.tokenSale
-          ? (this.fromAssetsToFloat(this.tokenSale.soft_cap) * 100)
-            / this.fromAssetsToFloat(this.tokenSale.hard_cap)
-          : 0;
+          ? (this.tokenSale.softCap.amount * 100) / this.tokenSale.hardCap.amount : 0;
         let mr6 = '0px';
         if (percent >= 88) {
           percent = 88;
@@ -417,9 +436,8 @@
       }
     },
     created() {
-      const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
       Promise.all([
-        this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', assetId),
+        this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.research.securityTokens[0].symbol),
         this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
         this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
         this.$store.dispatch('FundraisingDetails/loadResearchGroup', this.research.researchGroup.external_id)
@@ -447,21 +465,32 @@
       },
       contributeToTokenSale() {
         this.isInvesting = true;
-        const symbol = this.tokenSale.soft_cap.split(' ')[1];
-        const asset = this.userAssets.find((a) => a.string_symbol === symbol);
+        const tokenSaleSymbol = this.tokenSale.softCap.symbol;
+        const {
+          id,
+          symbol,
+          precision
+        } = this.$$assetInfo(tokenSaleSymbol);
 
-        investmentsService.investProjectTokenSale({ privKey: this.$currentUser.privKey, username: this.$currentUser.username }, {
-          tokenSaleId: this.tokenSale.external_id,
-          investor: this.$currentUser.username,
-          amount: this.toAssetUnits(this.formData.amountToContribute, asset.precision, asset.string_symbol),
-          extensions: []
-        })
+        investmentsService.investProjectTokenSale(
+          { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
+          {
+            investmentOpportunityId: this.tokenSale._id,
+            investor: this.$currentUser.username,
+            asset: {
+              id,
+              symbol,
+              precision,
+              amount: this.formData.amountToContribute
+            },
+            extensions: []
+          }
+        )
           .then(() => {
-            const { assetId } = this.$$fromAssetUnits(this.research.securityTokens[0]);
             Promise.all(
               [
                 this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
-                this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', assetId),
+                this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.research.securityTokens[0].symbol),
                 this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
                 this.$store.dispatch('auth/loadUserData'),
                 this.$store.dispatch('auth/loadBalances')
@@ -479,12 +508,6 @@
             this.isInvesting = false;
             this.$notifier.showError(this.$t('fundraising.contributedFail'));
           });
-      },
-      toAsset(val) {
-        return this.$$toAssetUnits({
-          amount: this.fromAssetsToFloat(val),
-          assetId: val.split(' ')[1]
-        });
       }
     }
   };

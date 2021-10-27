@@ -28,8 +28,8 @@ const STATE = {
 const GETTERS = {
   teamDetails: (state) => {
     const researchGroup = state.teamDetails;
-    const balances = researchGroup.account.balances.reduce((acc, b) => {
-      acc[b.split(' ')[1]] = grantsService.fromAssetsToFloat(b);
+    const balances = researchGroup.balances.reduce((acc, b) => {
+      acc[b.symbol] = b.amount;
       return acc;
     }, {});
 
@@ -67,8 +67,8 @@ const ACTIONS = {
       .then((researchList) => {
         commit('setResearchList', researchList);
         return Promise.all(researchList.reduce((arr, r) => {
-          r.security_tokens.forEach((rst) => arr.push(
-            assetsService.getAccountAssetBalance(externalId, rst.split(' ')[1])
+          r.securityTokens.forEach((rst) => arr.push(
+            assetsService.getAccountAssetBalance(externalId, rst.symbol)
           ));
           return arr;
         }, []));

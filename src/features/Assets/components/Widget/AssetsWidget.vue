@@ -36,7 +36,6 @@
           </div>
         </teams-data-provider>
 
-
         <d-dot-list :items="listData" />
         <v-btn
           v-if="$isUser"
@@ -92,8 +91,6 @@
                     </tr>
                   </thead>
                   <tbody>
-
-
                     <tr>
                       <td>
                         <v-sheet color="transparent" class="d-flex align-center">
@@ -117,7 +114,6 @@
                       </td>
                     </tr>
 
-
                     <tr
                       v-for="user in users"
                       :key="user.account.name"
@@ -132,8 +128,12 @@
                             :max-lines="2"
                             class="text-body-2 font-weight-medium"
                           >
-                            <template v-if="user.teamRef">{{ user.teamRef.name }}</template>
-                            <template v-else>{{ user | accountFullname }}</template>
+                            <template v-if="user.teamRef">
+                              {{ user.teamRef.name }}
+                            </template>
+                            <template v-else>
+                              {{ user | accountFullname }}
+                            </template>
                           </v-clamp>
                         </v-sheet>
                       </td>
@@ -150,7 +150,6 @@
             </template>
           </users-list>
         </d-stack>
-
       </vex-dialog>
     </template>
   </div>
@@ -175,7 +174,7 @@
     mixins: [assetsChore],
     props: {
       asset: {
-        type: String,
+        type: Object,
         default: null
       }
     },
@@ -189,9 +188,7 @@
     computed: {
       internalAsset() {
         if (this.asset) {
-          return this.$store.getters['Assets/one'](
-            this.$$fromAssetUnits(this.asset).assetId
-          );
+          return this.$store.getters['Assets/one'](this.asset.symbol);
         }
 
         return null;
@@ -204,7 +201,10 @@
       currentUserBalance() {
         const balance = this.getBalance(this.$currentUser.username);
 
-        return balance ? balance.amount : this.toAssetUnits(0);
+        return balance || {
+          amount: 0,
+          symbol: this.internalAsset.stringSymbol
+        };
       },
 
       listData() {
@@ -225,7 +225,7 @@
       listDataUserBalance() {
         return {
           label: 'Your tokens',
-          value: this.currentUserBalance
+          value: this.toAssetUnits(this.currentUserBalance.amount)
         };
       },
 
@@ -246,9 +246,7 @@
         this.$store
           .dispatch(
             'Assets/get',
-            {
-              symbol: this.$$fromAssetUnits(this.asset).assetId
-            }
+            { symbol: this.asset.symbol }
           )
           .then(() => {
             this.$setReady();
@@ -268,9 +266,7 @@
         );
       },
 
-      toPercent(accetString) {
-        const asset = this.$$fromAssetUnits(accetString);
-
+      toPercent(asset) {
         return this.$options.filters
           .currency(
             (asset.amount / this.internalAsset.maxSupply) * 100,

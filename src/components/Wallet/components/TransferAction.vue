@@ -69,7 +69,7 @@
               <div class="text--secondary">
                 {{
                   $$toAssetUnits(item.amount, true, {
-                    symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                    symbol: '', fractionCount: item.precision
                   })
                 }} {{ $t('wallet.transferAction.available') }}
               </div>
@@ -83,7 +83,7 @@
               <div>
                 {{
                   $$toAssetUnits(item.amount, true, {
-                    symbol: '', fractionCount: $$fromAssetUnits(item.amount).precision
+                    symbol: '', fractionCount: item.precision
                   })
                 }}
               </div>
@@ -315,7 +315,7 @@
       },
       isDisabled() {
         if (this.dialog.form.fromAccount.amount) {
-          const { amount } = this.$$fromAssetUnits(this.dialog.form.fromAccount.amount);
+          const amount = Number(this.dialog.form.fromAccount.amount);
           return !amount || amount < this.dialog.form.fromAmount;
         }
         return true;
@@ -375,15 +375,7 @@
         if (this.dialog.form.valid) {
           this.dialog.isSending = true;
 
-          let fromAmount = '0';
-
           const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.assetSymbol);
-
-          fromAmount = this.$$toAssetUnits(
-            this.dialog.form.fromAmount,
-            false,
-            { symbol: fromAccountData.stringSymbol, fractionCount: fromAccountData.precision }
-          );
 
           const isProposal = this.$currentUser.username !== this.dialog.form.fromAccount.owner;
 
@@ -395,7 +387,12 @@
             {
               from: this.dialog.form.fromAccount.owner,
               to: this.dialog.form.receiver.account.name,
-              amount: fromAmount,
+              asset: {
+                id: fromAccountData.id,
+                symbol: fromAccountData.symbol,
+                precision: fromAccountData.precision,
+                amount: this.dialog.form.fromAmount
+              },
               memo: this.dialog.form.memo,
               extensions: []
             },
@@ -427,21 +424,8 @@
         if (this.dialog.form.valid) {
           this.dialog.isSending = true;
 
-          let fromAmount = '0';
-          let toAmount = '0';
-
           const fromAccountData = this.$$assetInfo(this.dialog.form.fromAccount.assetSymbol);
           const toAccountData = this.$$assetInfo(this.dialog.form.toAccount.stringSymbol);
-          fromAmount = this.$$toAssetUnits(
-            this.dialog.form.fromAmount,
-            false,
-            { symbol: fromAccountData.stringSymbol, fractionCount: fromAccountData.precision }
-          );
-          toAmount = this.$$toAssetUnits(
-            this.dialog.form.toAmount,
-            false,
-            { symbol: toAccountData.stringSymbol, fractionCount: toAccountData.precision }
-          );
 
           assetsService.createAssetsExchangeProposal({
             privKey: this.$currentUser.privKey,
@@ -449,8 +433,18 @@
           }, {
             party1: this.dialog.form.fromAccount.owner,
             party2: this.dialog.form.receiver.account.name,
-            asset1: fromAmount,
-            asset2: toAmount,
+            asset1: {
+              id: fromAccountData.id,
+              symbol: fromAccountData.symbol,
+              precision: fromAccountData.precision,
+              amount: this.dialog.form.fromAmount
+            },
+            asset2: {
+              id: toAccountData.id,
+              symbol: toAccountData.symbol,
+              precision: toAccountData.precision,
+              amount: this.dialog.form.toAmount
+            },
             memo: this.dialog.form.memo,
             extensions: []
           }, {})
