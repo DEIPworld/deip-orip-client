@@ -110,33 +110,31 @@
       },
       totalRevenue(arr) {
         return arr.reduce((val, { revenue }) => (
-          val + this.$$fromAssetUnits(revenue).amount
+          val + Number(revenue.amount)
         ), 0);
       },
       tokensPrice(item) {
         const valuationFactor = 1.5;
-
-        const totalAmount = item.accountSecurityTokenBalances.reduce((v, i) => {
-          const { amount } = this.$$fromAssetUnits(i.amount);
-          return v + amount;
-        }, 0);
+        const totalAmount = item.accountSecurityTokenBalances.reduce(
+          (v, i) => v + Number(i.amount), 0
+        );
 
         const revHisTotalRevenue = item.revenueHistory ? item.revenueHistory.reduce((v, i) => {
-          const val = this.$$fromAssetUnits(i.revenue).amount;
+          const val = Number(i.revenue.amount);
 
           const research = item.researchList ? item.researchList.find(
             (r) => r.external_id === i.security_token.tokenized_research
           ) : false;
 
-          const securityTokenAmount = research ? research.security_tokens.find(
-            (st) => {
-              const { assetId } = this.$$fromAssetUnits(st);
-              return assetId === i.security_token.string_symbol;
-            }
-          ) : '1 TOKEN';
+          const securityTokenAmount = research ? research.securityTokens.find(
+            (st) => st.symbol === i.security_token.string_symbol
+          ) : {
+            amount: '1',
+            symbol: 'TOKEN',
+            precision: 0
+          };
 
-          const { amount } = this.$$fromAssetUnits(securityTokenAmount);
-          v += val / amount;
+          v += val / Number(securityTokenAmount.amount);
           return v;
         }, 0) : 0;
         return totalAmount * revHisTotalRevenue * valuationFactor;

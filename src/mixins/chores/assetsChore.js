@@ -73,11 +73,11 @@ export const assetsChore = {
       }
 
       if (isObject(val)) {
-        const { amount, assetId, precision } = val;
+        const { amount, assetId, precision, symbol } = val;
 
         if (!amount && amount !== 0) return null;
 
-        const asset = this.$$assetInfo(assetId || this.$env.ASSET_UNIT);
+        const asset = this.$$assetInfo(symbol || assetId || this.$env.ASSET_UNIT);
 
         return asset
           ? this.$options.filters
@@ -88,7 +88,7 @@ export const assetsChore = {
           : this.$options.filters
             .currency(amount, this.$$formatOpts({
               fractionCount: precision,
-              symbol: assetId
+              symbol: symbol || assetId || this.$env.ASSET_UNIT
             }, options, formatted));
       }
 

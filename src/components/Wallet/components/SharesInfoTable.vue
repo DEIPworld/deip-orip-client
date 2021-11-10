@@ -19,7 +19,7 @@
       </template> -->
       <template #item.myShare.amount="{ item }">
         <div class="text-body-2 white-space-nowrap">
-          {{ toAsset(item.amount) }}
+          {{ toAsset(item) }}
         </div>
         <div class="text-caption text--secondary">
           {{ sharePercent(item) }} %
@@ -73,7 +73,7 @@
   import { mapGetters } from 'vuex';
   import DChartColumn from '@/components/Deipify/DChart/DChartColumn';
   import TransferAction from '@/components/Wallet/components/TransferAction';
-  import { isString } from '@/utils/helpers';
+  import { isObject } from '@/utils/helpers';
   import { assetsChore } from '@/mixins/chores';
 
   export default {
@@ -126,7 +126,7 @@
             value: 'data-table-expand',
             align: 'start elevetion-0'
           }
-        ],
+        ]
       };
     },
     computed: {
@@ -142,50 +142,36 @@
 
     methods: {
       sharePercent(item) {
-        const token = item.research.security_tokens.find(
-          (rst) => { 
-            const { assetId } = this.$$fromAssetUnits(rst);
-            return assetId === item.assetSymbol;
-          }
+        const token = item.research.securityTokens.find(
+          (rst) => rst.symbol === item.assetSymbol
         );
-        const { amount: tokenValue } = this.$$fromAssetUnits(token);
-        const { amount } = this.$$fromAssetUnits(item.amount);
-        return (amount * 100 / tokenValue).toFixed(2);
+        return (item.amount * 100 / token.amount).toFixed(2);
       },
 
       mockPriceChange(rtId) {
         return rtId * 0.3;
       },
       totalRevenue(arr) {
-        return arr.reduce((val, { revenue }) => {
-          const { amount } = this.$$fromAssetUnits(revenue);
-          return val + amount;
-        }, 0);
+        return arr.reduce((val, { revenue }) => val + Number(revenue.amount), 0);
       },
       revenuePerToken(item) {
-        const securityToken = item.research.security_tokens.find(
-          (securityToken) => {
-            const { assetId } = this.$$fromAssetUnits(securityToken);
-            return item.assetSymbol === assetId;
-          }
+        const securityToken = item.research.securityTokens.find(
+          (st) => item.assetSymbol === st.symbol
         );
-        const { amount: totalTokenAmount } = this.$$fromAssetUnits(securityToken);
-        return totalTokenAmount ? this.totalRevenue(item.securityTokenHistory) / totalTokenAmount : 0;
+        return securityToken
+          ? this.totalRevenue(item.securityTokenHistory) / securityToken.amount : 0;
       },
       tokensPrice(item) {
         const valuationFactor = 1.5;
-        const { amount } = this.$$fromAssetUnits(item.amount);
-        return this.revenuePerToken(item) * amount * valuationFactor;
+        return this.revenuePerToken(item) * item.amount * valuationFactor;
       },
 
       toAsset(val) {
-        if (isString(val)) {
-          const assetData = this.$$fromAssetUnits(`${val}`);
-
+        if (isObject(val)) {
           return this.$$toAssetUnits(
-            assetData.stringAmount,
+            val.amount,
             true,
-            { symbol: assetData.assetId, fractionCount: assetData.precision }
+            { symbol: val.symbol, fractionCount: val.precision }
           );
         }
         return this.$$toAssetUnits({

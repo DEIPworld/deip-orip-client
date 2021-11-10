@@ -10,17 +10,17 @@
         <v-chip
           outlined
         >
-          {{ $$fromAssetUnits(item.amount).assetId }}
+          {{ item.symbol }}
         </v-chip>
       </template>
 
       <template #item.amountValue="{ item }">
-        {{ $$toAssetUnits($$fromAssetUnits(item.amount), true, {symbol: ''}) }}
+        {{ $$toAssetUnits(item, true, {symbol: ''}) }}
       </template>
 
       <template #item.actions="{ item }">
         <div class="d-flex justify-end">
-          <deposit-funds-action :account="item.owner" :assetId="item.assetSymbol" class="mr-4" v-if="isDepositAvailable(item.assetSymbol)" />
+          <deposit-funds-action :account="item.owner" :assetId="item.symbol" class="mr-4" v-if="isDepositAvailable(item.symbol)" />
           <transfer-action
             :all-accounts="allAccounts"
             :asset="{
@@ -32,8 +32,8 @@
       </template>
       <template #item.actionMenu="{ item }">
         <v-menu
-          v-if="isDepositAvailable(item.assetSymbol)
-            || isWithdrawAvailable(item.assetSymbol)"
+          v-if="isDepositAvailable(item.symbol)
+            || isWithdrawAvailable(item.symbol)"
           bottom
           left
           offset-y
@@ -53,13 +53,13 @@
 
           <v-list nav dense>
             <!-- <v-list-item
-              v-if="isDepositAvailable(item.assetSymbol)"
+              v-if="isDepositAvailable(item.symbol)"
               @click="openDepositDialog(item)"
             >
               <v-list-item-title>{{ $t('wallet.deposit') }}</v-list-item-title>
             </v-list-item> -->
             <v-list-item
-              v-if="isWithdrawAvailable(item.assetSymbol)"
+              v-if="isWithdrawAvailable(item.symbol)"
               @click="openWithdrawDialog(item)"
             >
               <v-list-item-title>{{ $t('wallet.withdraw') }}</v-list-item-title>
@@ -340,7 +340,7 @@
         if (formatValidationResult !== true) {
           return true;
         }
-        if (this.withdrawDialog.amount > this.$$fromAssetUnits(this.withdrawDialog.stringAmount).amount) {
+        if (Number(this.withdrawDialog.amount) > Number(this.withdrawDialog.stringAmount)) {
           return true;
         }
         if (!this.withdrawDialog.termsConfirmed) {
@@ -380,8 +380,8 @@
       openDepositDialog(item) {
         this.depositDialog.owner = item.owner;
         this.depositDialog.amount = 0;
-        this.depositDialog.precision = this.$$assetInfo(item.assetSymbol).precision;
-        this.depositDialog.selectedCurrency = item.assetSymbol;
+        this.depositDialog.precision = this.$$assetInfo(item.symbol).precision;
+        this.depositDialog.selectedCurrency = item.symbol;
         this.depositDialog.cardData.name = '';
         this.depositDialog.cardData.cardNumber = '';
         this.depositDialog.cardData.expiration = '';
@@ -405,8 +405,8 @@
         this.depositDialog.owner = item.owner;
         this.withdrawDialog.amount = 0;
         this.withdrawDialog.stringAmount = item.amount;
-        this.withdrawDialog.precision = this.$$assetInfo(item.assetSymbol).precision;
-        this.withdrawDialog.selectedCurrency = item.assetSymbol;
+        this.withdrawDialog.precision = this.$$assetInfo(item.symbol).precision;
+        this.withdrawDialog.selectedCurrency = item.symbol;
         this.withdrawDialog.name = '';
         this.withdrawDialog.iban = '';
         this.withdrawDialog.refNum = '';

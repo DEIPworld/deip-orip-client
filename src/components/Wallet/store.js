@@ -38,7 +38,7 @@ const getters = {
         const dateA = new Date(a.timestamp);
         const dateB = new Date(b.timestamp);
         return dateA - dateB;
-      }).map((i) => [moment(i.timestamp).format('DD MMM YY'), grantsService.fromAssetsToFloat(i.revenue)])
+      }).map((i) => [moment(i.timestamp).format('DD MMM YY'), Number(i.revenue.amount)])
     };
   }),
   groupData: (state) => state.groupData
@@ -52,22 +52,22 @@ const actions = {
       .then((assetsBalances) => {
         const securityTokens = assetsBalances
           .map((b) => camelizeObjectKeys(b))
-          .filter((b) => !!b.tokenizedResearch);
+          .filter((b) => !!b.tokenizedProject);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
-          (b) => projectService.getProject(b.tokenizedResearch)
+          (b) => projectService.getProject(b.tokenizedProject)
         ));
       })
       .then((researches) => {
         balances = balances.map((b) => ({
           ...b,
-          research: researches.find((r) => r.external_id === b.tokenizedResearch)
+          research: researches.find((r) => r.external_id === b.tokenizedProject)
         }));
 
         return Promise.all(
           balances.map((b) => investmentsService.getAccountRevenueHistoryByAsset(
             b.owner,
-            b.assetSymbol,
+            b.symbol,
             1
           ))
         );
@@ -76,13 +76,13 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
-            (r) => r[0] && r[0].security_token.string_symbol === b.assetSymbol
+            (r) => r[0] && r[0].security_token.string_symbol === b.symbol
           ) || []
         }));
 
         return Promise.all(
           balances.map((b) => investmentsService.getAssetRevenueHistory(
-            b.assetSymbol
+            b.symbol
           ))
         );
       })
@@ -90,7 +90,7 @@ const actions = {
         balances = balances.map((b) => ({
           ...b,
           securityTokenHistory: securityTokenHistory.find(
-            (s) => s[0] && s[0].security_token.string_symbol === b.assetSymbol
+            (s) => s[0] && s[0].security_token.string_symbol === b.symbol
           ) || []
         }));
 
@@ -101,7 +101,7 @@ const actions = {
 
   loadAssetsInfo({ commit }, account) {
     return Promise.all(account.balances.map(
-      ({ assetSymbol }) => assetsService.getAssetBySymbol(assetSymbol)
+      ({ symbol }) => assetsService.getAssetBySymbol(symbol)
     ))
       .then((data) => {
         const assetsInfo = data.map((a) => camelizeObjectKeys(a)).reduce(
@@ -125,7 +125,7 @@ const actions = {
       .then((assetsBalances) => {
         const currencies = assetsBalances
           .map((b) => camelizeObjectKeys(b))
-          .filter((b) => !b.tokenizedResearch);
+          .filter((b) => !b.tokenizedProject);
         groupData.balances = currencies;
         commit('setGroupData', groupData);
         return dispatch('loadAssetsInfo', groupData);
@@ -165,7 +165,7 @@ const actions = {
           (finalArr, item) => {
             if (item.researchList) {
               item.researchList.reduce((arr, r) => {
-                r.security_tokens.forEach((rst) => arr.push(rst.split(' ')[1]));
+                r.securityTokens.forEach((rst) => arr.push(rst.symbol));
                 return arr;
               }, []).forEach((symbol) => {
                 finalArr.push(assetsService.getAccountAssetBalance(item.external_id, symbol));

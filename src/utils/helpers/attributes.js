@@ -2,6 +2,7 @@ import { AccessService } from '@deip/access-service';
 import RecursiveIterator from 'recursive-iterator';
 import { mergeDeep } from 'vuetify/lib/util/helpers';
 import { isFile, isObject } from './verification';
+import { ATTR_SCOPES } from '@/variables';
 
 const accessService = AccessService.getInstance();
 
@@ -27,13 +28,21 @@ export const attributeFileUrl = (
   filename,
   isImage = false,
   download = false,
-  width = 48,
+  width,
   height,
   isRound = false,
   noCache = true
 ) => {
-  const internalWidth = width * 2;
-  const internalHeight = height ? height * 2 : internalWidth;
+  const sizeQuery = [];
+  if (width) {
+    const internalWidth = width * 2;
+    const internalHeight = height ? height * 2 : internalWidth;
+    sizeQuery.push(`&width=${internalWidth}`, `&height=${internalHeight}`);
+  } else if (scope === ATTR_SCOPES.USER || scope === ATTR_SCOPES.TEAM) {
+    const internalWidth = width ? width * 2 : 96;
+    const internalHeight = height ? height * 2 : internalWidth;
+    sizeQuery.push(`&width=${internalWidth}`, `&height=${internalHeight}`);
+  }
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
@@ -44,10 +53,6 @@ export const attributeFileUrl = (
     `${filename}`,
     '/?authorization=',
     accessService.getAccessToken(),
-    '&width=',
-    internalWidth,
-    '&height=',
-    internalHeight,
     '&round=',
     isRound,
     '&noCache=',
@@ -55,7 +60,8 @@ export const attributeFileUrl = (
     '&download=',
     download,
     '&image=',
-    isImage
+    isImage,
+    ...sizeQuery
   ];
   return pathArray.join('');
 };

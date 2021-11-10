@@ -216,7 +216,7 @@
       } else {
         this.formModel = {
           ...this.formModel,
-          members: [this.$currentUser]
+          members: [this.$currentUser.username]
         };
       }
 

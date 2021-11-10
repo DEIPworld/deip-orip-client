@@ -155,18 +155,16 @@
     computed: {
       hasPaymentSourceBalance() {
         if (!this.selected) return false;
-
         const balance = this.$currentUser.balances
           .find((b) => (
             b.asset_id === this.selected.fee.assetId
-            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId));
+            || b.symbol === this.selected.fee.assetId));
 
         if (!balance) return false;
 
-        const { amount } = this.$$fromAssetUnits(balance.amount);
-        const feeAmount = parseInt(this.selected.fee.amount);
+        const feeAmount = Number(this.selected.fee.amount);
 
-        return amount >= feeAmount;
+        return Number(balance.amount) >= feeAmount;
       },
       paymentSourceInfo() {
         if (!this.selected) return false;
@@ -174,14 +172,13 @@
         const balance = this.$currentUser.balances
           .find((b) => (
             b.asset_id === this.selected.fee.assetId
-            || this.$$fromAssetUnits(b.amount).assetId === this.selected.fee.assetId));
+            || b.symbol === this.selected.fee.assetId));
 
         if (!balance) return this.$t('licensing.dialog.noSource');
 
-        const { amount } = balance;
         const asset = this.$$assetInfo(this.selected.fee.assetId);
 
-        return [asset.stringSymbol, this.$$formatAssetUnits(amount)].join(' / ');
+        return [asset.symbol, this.$$toAssetUnits(balance)].join(' / ');
       }
     },
 

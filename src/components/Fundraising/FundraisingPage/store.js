@@ -80,13 +80,13 @@ const ACTIONS = {
     return investmentsService.getProjectTokenSaleInvestmentsByProject(researchId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
-        return userService.getUsers(transactionsList.map((t) => t.op[1].contributor));
+        return userService.getUsers(transactionsList.map((t) => t.investor));
       })
       .then((users) => {
         for (let i = 0; i < transactions.length; i++) {
           const transaction = transactions[i];
           transaction.sender = users.find(
-            (user) => transaction.op[1].contributor === user.account.name
+            (user) => transaction.investor === user.account.name
           );
         }
         commit('setTransactionsHistory', transactions);

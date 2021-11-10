@@ -50,28 +50,15 @@
       },
       imageUrl() {
         const attrInfo = this.$$getAttributeInfo(this.attribute.attributeId);
-        if (this.project.externalId) {
-          return attributeFileUrl(
-            attrInfo.scope,
-            this.project.externalId,
-            this.attribute.attributeId,
-            this.attribute.value,
-            true
-          ) + this.query;
-        }
-        if (this.username) {
-          return attributeFileUrl(
-            attrInfo.scope,
-            this.username,
-            this.attribute.attributeId,
-            this.attribute.value,
-            true,
-            false,
-            160
-          ) + this.query;
-        }
-
-        return '';
+        return attributeFileUrl(
+          attrInfo.scope,
+          this.username || this.project.externalId,
+          this.attribute.attributeId,
+          this.attribute.value,
+          true,
+          false,
+          160
+        ) + this.query;
       }
     }
   };
