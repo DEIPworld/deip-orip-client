@@ -96,20 +96,14 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import UserRegistration from '@/components/auth/UserRegistration';
   import RegistrationFormRenderer from '@/components/auth/renderer';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import DStack from '@/components/Deipify/DStack/DStack';
-
   import {
-    camelizeObjectKeys,
     compactAttributes,
     extendAttrModules,
-    extractFilesFromAttributes,
-    isArray, replaceFileWithName, hasValue, expandAttributes
   } from '@/utils/helpers';
-
   import _ from 'lodash';
 
   import { AuthService } from '@deip/auth-service';
@@ -153,8 +147,8 @@
             || this.$t('signUp.free.form.rules.nameChars')
           ),
           usernameFormat: (value) => {
-            const result = deipRpc.utils.validateAccountName(value);
-            return result === null || result;
+            const letterNumber = /^[0-9a-zA-Z]+$/;
+            return letterNumber.test(value);
           },
           email: (value) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -197,31 +191,33 @@
           masterPassword
         } = this.formModel;
 
-        const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
-          username,
-          masterPassword,
-          ['owner']
-        );
+        return authService.generateSeedAccount(username, masterPassword)
+          .then((seedAccount) => {
+            return authService.signUp({ 
+              privKey: seedAccount.getPrivKey(), 
+              isAuthorizedCreatorRequired: seedAccount.isAuthorizedCreatorRequired() 
+            }, {
+              email,
+              attributes: compactAttributes(attributes),
+              username,
+              pubKey: seedAccount.getPubKey(),
+              roles: []
+            })
+            .then(() => {
+              this.isLoading = false;
+              this.isServerValidated = true;
+              this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formModel.username }));
+              this.$router.push({ name: 'SignIn', query: { username: this.formModel.username } });
+            })
+            .catch((err) => {
+              this.isLoading = false;
+              const message = err.response && err.response.data
+                || this.$t('signUp.free.form.err');
 
-        return authService.signUp({
-          email,
-          attributes: compactAttributes(attributes),
-          username,
-          pubKey,
-          roles: []
-        }).then(() => {
-          this.isLoading = false;
-          this.isServerValidated = true;
-          this.$notifier.showSuccess(this.$t('signUp.free.form.success', { account: this.formModel.username }));
-          this.$router.push({ name: 'SignIn', query: { username: this.formModel.username } });
-        }).catch((err) => {
-          this.isLoading = false;
-          const message = err.response && err.response.data
-            || this.$t('signUp.free.form.err');
-
-          this.$notifier.showError(message);
-          console.error(err);
-        });
+              this.$notifier.showError(message);
+              console.error(err);
+            });
+          });
       },
       usernameChanged: _.debounce(
         function () {

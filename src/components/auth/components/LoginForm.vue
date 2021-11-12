@@ -56,9 +56,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
-  import crypto from '@deip/lib-crypto';
-
   import { AccessService } from '@deip/access-service';
   import { AuthService } from '@deip/auth-service';
   import { UserService } from '@deip/user-service';
@@ -70,19 +67,6 @@
   const authService = AuthService.getInstance();
   const userService = UserService.getInstance();
 
-  const encodeUint8Arr = (inputString) => new TextEncoder('utf-8').encode(inputString);
-
-  const getPrivateKeyRole = (privateKey, account) => {
-    const publicKey = deipRpc.auth.wifToPublic(privateKey);
-
-    for (const role of ['owner', 'active']) {
-      if (account[role].key_auths[0].includes(publicKey)) {
-        return role;
-      }
-    }
-
-    return null;
-  };
 
   export default {
     name: 'LoginForm',
@@ -140,63 +124,36 @@
       login(formValid) {
         if (!formValid) return;
 
-        this.disable = true;
-
         let privateKey;
+        let publicKey;
+        this.disable = true;
         userService.getUser(this.formData.username)
           .then((res) => {
-            if (!res || !res.account) {
+            if (!res) {
               throw new Error(this.$t('signIn.form.rules.invalidAccount'));
             }
-
-            const { account } = res;
-            if (
-              deipRpc.auth.isWif(this.formData.password)
-              && getPrivateKeyRole(this.formData.password, account)
-            ) {
-              privateKey = this.formData.password;
-            } else {
-              privateKey = deipRpc.auth.toWif(
-                this.formData.username,
-                this.formData.password,
-                'owner'
-              );
-            }
-
-            let secretKey;
-            try {
-              secretKey = crypto.PrivateKey.from(privateKey);
-            } catch (err) {
-              accessService.clearAccessToken();
-              this.disable = false;
-              this.$notifier.showError(this.$t('signIn.form.rules.invalidKey'));
-              return;
-            }
-
-            // sig-seed should be uint8 array with length = 32
-            const secretSig = secretKey.sign(encodeUint8Arr(window.env.SIG_SEED).buffer);
+            return authService.generateSeedAccount(this.formData.username, this.formData.password)
+          })
+          .then((seedAccount) => {
+            privateKey = seedAccount.getPrivKey();
+            publicKey = seedAccount.getPubKey();
             return authService[`${this.isAdmin ? 'adminSignIn' : 'signIn'}`]({
               username: this.formData.username,
-              secretSigHex: crypto.hexify(secretSig)
+              secretSigHex: seedAccount.signString(window.env.SIG_SEED)
             });
-          }).then(async (response) => {
+          })
+          .then((response) => {
             if (!response.success) {
               accessService.clearAccessToken();
               this.disable = false;
               this.$notifier.showError(response.error);
-              return;
+            } else {
+              accessService.setAccessToken(response.jwtToken, privateKey, publicKey);
+              this.disable = false;
+              this.$router.go(0);
             }
-
-            // The jwt is being used by Vue router and File uploader api
-            // to verify that user has logged successfully and entered his private key.
-            // TODO: We should make decision on how to store private keys at UI.
-            // For now we can use local storage but it's not secure enough due to XSS attacks
-            // and compromised thirdparty sources.
-            accessService.setAccessToken(response.jwtToken, privateKey);
-
-            this.disable = false;
-            this.$router.go(0);
-          }).catch((err) => {
+          })
+          .catch((err) => {
             accessService.clearAccessToken();
             this.disable = false;
             this.$notifier.showError(err.message);

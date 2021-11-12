@@ -58,16 +58,15 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
-  import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
   import { UserService } from '@deip/user-service';
-
+  import { AuthService } from '@deip/auth-service';
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
 
   const accessService = AccessService.getInstance();
   const userService = UserService.getInstance();
+  const authService = AuthService.getInstance();
 
   export default {
     name: 'AccountPassword',
@@ -102,64 +101,61 @@
     },
 
     methods: {
+
       updateMasterPassword() {
-        const { username } = this.$currentUser;
-
-        let oldPrivateKey;
-        if (
-          deipRpc.auth.isWif(this.oldPassword)
-          && deipRpc.auth.wifToPublic(this.oldPassword) === this.$currentUser.pubKey
-        ) { // if old private key is entered
-          oldPrivateKey = this.oldPassword;
-        } else { // if old password is entered or old password is in private key format
-          oldPrivateKey = deipRpc.auth.toWif(
-            username,
-            this.oldPassword,
-            'owner'
-          );
-          const oldPublicKey = deipRpc.auth.wifToPublic(oldPrivateKey);
-          if (this.$currentUser.pubKey !== oldPublicKey) {
-            this.$notifier.showError(this.$t('account.password.oldInvalid'));
-            return;
-          }
-        }
-
-        const {
-          owner: newPrivateKey,
-          ownerPubkey: newPublicKey
-        } = deipRpc.auth.getPrivateKeys(
-          username,
-          this.newPassword,
-          ['owner']
-        );
-        const ownerAuth = {
-          weight_threshold: 1,
-          account_auths: [],
-          key_auths: [[newPublicKey, 1]]
-        };
-
+        const { username, pubKey } = this.$currentUser;
         this.isPasswordChanging = true;
-        userService.updateUser({
-          initiator: {
-            privKey: oldPrivateKey,
-            username
-          },
-          ...this.$currentUser.profile,
-          accountOwnerAuth: ownerAuth,
-          accountActiveAuth: ownerAuth,
-          memoKey: undefined
-        }).then(() => {
-          this.$notifier.showSuccess(this.$t('account.password.succChanged'));
-          this.$refs.changePasswordForm.reset();
 
-          accessService.setOwnerWif(newPrivateKey);
-          return this.$store.dispatch('Users/get', this.$currentUser.username, { root: true });
-        }).catch((err) => {
-          this.$notifier.showError(this.$t('account.password.errChaged'));
-          console.error(err.message);
-        }).finally(() => {
-          this.isPasswordChanging = false;
-        });
+        let oldPublicKey;
+        let oldPrivateKey;
+
+        let newPublicKey;
+        let newPrivateKey;
+
+        return authService.generateSeedAccount(username, this.oldPassword)
+          .then((oldSeedAccount) => {
+            oldPublicKey = oldSeedAccount.getPubKey();
+            oldPrivateKey = oldSeedAccount.getPrivKey();
+
+            if (pubKey !== oldPublicKey) 
+              throw new Error('Old password is invalid');
+
+            return authService.generateSeedAccount(username, this.newPassword);
+          })
+          .then((newSeedAccount) => {
+            newPublicKey = newSeedAccount.getPubKey();
+            newPrivateKey = newSeedAccount.getPrivKey();
+
+            const ownerAuth = {
+              weight_threshold: 1,
+              account_auths: [],
+              key_auths: [[newPublicKey, 1]]
+            };
+
+            return userService.updateUser({
+              initiator: {
+                privKey: oldPrivateKey,
+                username
+              },
+              ...this.$currentUser.profile,
+              accountOwnerAuth: ownerAuth,
+              memoKey: undefined
+            })
+          })
+          .then(() => {
+            this.$notifier.showSuccess(this.$t('account.password.succChanged'));
+            this.$refs.changePasswordForm.reset();
+
+            accessService.setOwnerKeysPair(newPrivateKey, newPublicKey);
+            return this.$store.dispatch('Users/get', username, { root: true });
+          })
+          .catch((err) => {
+            this.$notifier.showError(this.$t('account.password.errChaged'));
+            console.error(err.message);
+          })
+          .finally(() => {
+            this.isPasswordChanging = false;
+          });
       }
     }
   };

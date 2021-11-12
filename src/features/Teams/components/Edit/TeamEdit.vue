@@ -71,7 +71,6 @@
             },
             proposalInfo: { isProposal },
             ownerAuth: undefined,
-            activeAuth: undefined,
             attributes,
             ...filesData
           }

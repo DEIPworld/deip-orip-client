@@ -34,7 +34,6 @@
     "@deip/project-service": "1.348.1",
     "@deip/proposals-service": "1.348.1",
     "@deip/review-service": "1.348.1",
-    "@deip/rpc-client": "1.348.1",
     "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.7",
     "@deip/team-service": "1.348.1",
     "@deip/tenant-service": "1.348.1",
