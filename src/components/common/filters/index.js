@@ -199,7 +199,7 @@ Vue.filter('numDirClass', (value, type = 'foreground') => {
 });
 
 Vue.filter('timeLeft', (value) => {
-  const date = moment(value).format('YYYY-MM-DD[T]HH:mm:ss');
+  const date = moment(value);
   const now = moment.utc().local();
   const start = moment.utc(date).local();
 

@@ -275,11 +275,6 @@
         });
       },
 
-      formatDate(val) {
-        return new Date(new Date(val).toISOString()
-          .split('.')[0]).getTime();
-      },
-
       createFundraising() {
         this.loading = true;
         const isProposal = !this.project.researchGroup.is_personal;
@@ -315,9 +310,6 @@
           amount: this.formData.hardCap.amount
         };
 
-        const startTime = this.formatDate(this.formData.startDate);
-        const endTime = this.formatDate(this.formData.endDate);
-
         const data = [
           {
             privKey: this.$currentUser.privKey,
@@ -326,8 +318,8 @@
           {
             teamId: this.project.researchGroup.external_id,
             projectId: this.project.externalId,
-            startTime,
-            endTime,
+            startTime: new Date(this.formData.startDate).getTime(),
+            endTime: new Date(this.formData.endDate).getTime(),
             shares,
             softCap,
             hardCap
