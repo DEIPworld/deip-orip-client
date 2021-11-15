@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import deipRpc from '@deip/rpc-client';
 import Vue from 'vue';
 import { camelizeObjectKeys } from '@/utils/helpers';
 
@@ -51,12 +50,11 @@ const getters = {
   allAssets: (state) => state.allAssets, // TODO: temp
 
   user: (state, getters) => {
-    const privKey = accessService.isLoggedIn() ? accessService.getOwnerWif() : null;
     return {
       ...state.user,
       username: accessService.isLoggedIn() ? accessService.getDecodedToken().username : null,
-      privKey,
-      pubKey: accessService.isLoggedIn() ? deipRpc.auth.wifToPublic(privKey) : null
+      privKey: accessService.isLoggedIn() ? accessService.getOwnerPrivKey() : null,
+      pubKey: accessService.isLoggedIn() ? accessService.getOwnerPubKey() : null
     };
   },
 

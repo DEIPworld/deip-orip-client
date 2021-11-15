@@ -411,11 +411,11 @@
               ...this.formModel.holders
             ].map((holder) => ({
               account: holder.account,
-              amount: this.$$toAssetUnits({
-                amount: holder.amount,
-                assetId: this.formModel.symbol,
+              asset: {
+                amount: `${holder.amount}`,
+                symbol: this.formModel.symbol,
                 precision: DEFAULT_PRECISION
-              }, false)
+              }
             }))
           }
         ];

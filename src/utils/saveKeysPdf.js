@@ -24,12 +24,11 @@ const renderText = (
 const saveKeysPdf = (
   username,
   {
-    ownerPrivateKey,
-    ownerPublicKey
+    ownerPrivKey, ownerPubKey
   },
   filename = 'oa_keys.pdf'
 ) => {
-  if (!username || !ownerPrivateKey || !ownerPublicKey) {
+  if (!username || !ownerPrivKey || !ownerPubKey) {
     throw new Error('Not all agruments are specified');
   }
 
@@ -73,7 +72,7 @@ const saveKeysPdf = (
     maxWidth: TITLE_MAX_WIDTH
   });
 
-  offset += renderText(doc, ownerPrivateKey, {
+  offset += renderText(doc, ownerPrivKey, {
     x: TEXT_MARGIN,
     y: offset,
     color: TEXT_COLOR,
@@ -89,7 +88,7 @@ const saveKeysPdf = (
     maxWidth: TITLE_MAX_WIDTH
   });
 
-  renderText(doc, ownerPublicKey, {
+  renderText(doc, ownerPubKey, {
     x: TEXT_MARGIN,
     y: offset,
     color: TEXT_COLOR,

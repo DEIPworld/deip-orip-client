@@ -238,7 +238,6 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
   import { TenantService } from '@deip/tenant-service';
   import { UserService } from '@deip/user-service';
   import _ from 'lodash';
@@ -277,8 +276,8 @@
             || 'Username should be unique in system',
           nameChars: (value) => value.match(/^[a-z][a-z ,.'-]*$/i) !== null || 'Incorrect value',
           usernameFormat: (value) => {
-            const result = deipRpc.utils.validateAccountName(value);
-            return result === null || result;
+            const letterNumber = /^[0-9a-zA-Z]+$/;
+            return letterNumber.test(value);
           },
           email: (value) => {
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -337,7 +336,8 @@
       }
     },
     methods: {
-      create(data) {
+      create({ privKey, isAuthorizedCreatorRequired }, data) {
+
         return this.$route.name === 'admin.members.add'
           ? tenantService.postSignUp({
           email: data.email,
@@ -346,13 +346,14 @@
           pubKey: data.pubKey,
           roles: data.role || []
         })
-          : authService.signUp({
+          : authService.signUp({ privKey, isAuthorizedCreatorRequired }, {
           email: data.email,
           attributes: data.attributes || [],
           username: data.username,
           pubKey: data.pubKey,
           roles: data.role || []
         });
+
       },
       finishCreateAccount() {
         if (!this.$refs.form.validate()) return;
@@ -376,64 +377,64 @@
           role
         } = this.formData;
 
-        const { ownerPubkey: pubKey } = deipRpc.auth.getPrivateKeys(
-          username,
-          masterPassword,
-          ['owner']
-        );
+        authService.generateSeedAccount(username, masterPassword)
+          .then((seedAccount) => {
+            this.create({ 
+              privKey: seedAccount.getPrivKey(), 
+              isAuthorizedCreatorRequired: seedAccount.isAuthorizedCreatorRequired() 
+            }, {
+              username,
+              email,
+              firstName,
+              birthdate,
+              lastName,
+              pubKey,
+              phoneNumbers: [
+                ...(
+                  phoneNumber
+                    ? [{
+                      label: 'default',
+                      ext: '', // optional
+                      number: phoneNumber
+                    }]
+                    : []
+                )
+              ],
+              webPages: [
+                ...(
+                  website
+                    ? [{
+                      type: 'webpage',
+                      label: 'default',
+                      link: website
+                    }]
+                    : []
+                )
+              ],
+              location: {
+                city,
+                country,
+                address
+              },
+              category,
+              occupation,
+              foreignIds: [],
+              role
+            })
+              .then(() => {
+                this.isSaving = false;
+                this.isServerValidated = true;
+                this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`);
+                this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
+              })
+              .catch((err) => {
+                this.isSaving = false;
+                const message = (err.response && err.response.data)
+                  || 'Sorry, the service is temporarily unavailable, please try again later';
 
-        this.create({
-          username,
-          email,
-          firstName,
-          birthdate,
-          lastName,
-          pubKey,
-          phoneNumbers: [
-            ...(
-              phoneNumber
-                ? [{
-                  label: 'default',
-                  ext: '', // optional
-                  number: phoneNumber
-                }]
-                : []
-            )
-          ],
-          webPages: [
-            ...(
-              website
-                ? [{
-                  type: 'webpage',
-                  label: 'default',
-                  link: website
-                }]
-                : []
-            )
-          ],
-          location: {
-            city,
-            country,
-            address
-          },
-          category,
-          occupation,
-          foreignIds: [],
-          role
-        })
-          .then(() => {
-            this.isSaving = false;
-            this.isServerValidated = true;
-            this.$notifier.showSuccess(`Account '${this.formData.username}' successfully created`);
-            this.$router.push({ name: this.$route.name === 'admin.members.add' ? 'admin.members' : 'UserApplicationAccepted' });
-          })
-          .catch((err) => {
-            this.isSaving = false;
-            const message = (err.response && err.response.data)
-              || 'Sorry, the service is temporarily unavailable, please try again later';
-
-            this.$notifier.showError(message);
-            console.error(err);
+                this.$notifier.showError(message);
+                console.error(err);
+              });
           });
       },
       usernameChanged: _.debounce(function () {
