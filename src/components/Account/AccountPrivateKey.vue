@@ -34,11 +34,13 @@
 </template>
 
 <script>
-  import deipRpc from '@deip/rpc-client';
-  import { mapGetters } from 'vuex';
   import { saveKeysPdf } from '@/utils/saveKeysPdf';
   import ContentBlock from '@/components/layout/components/ContentBlock';
   import LayoutSection from '@/components/layout/components/LayoutSection';
+  import { AuthService } from '@deip/auth-service';
+
+  const authService = AuthService.getInstance();
+
 
   export default {
     name: 'AccountPrivateKey',
@@ -68,25 +70,20 @@
 
     methods: {
       downloadPrivateKey() {
-        const { username } = this.$currentUser;
-        let ownerPrivateKey;
-        if (deipRpc.auth.isWif(this.masterPassword)) {
-          ownerPrivateKey = this.masterPassword;
-        } else {
-          ownerPrivateKey = deipRpc.auth.toWif(
-            username,
-            this.masterPassword,
-            'owner'
-          );
-        }
+        const { username, pubKey } = this.$currentUser;
+        let ownerPrivKey;
+        let ownerPubKey;
 
-        const ownerPublicKey = deipRpc.auth.wifToPublic(ownerPrivateKey);
-        if (this.$currentUser.pubKey !== ownerPublicKey) {
-          this.$notifier.showError('Password is invalid');
-          return;
-        }
-
-        saveKeysPdf(username, { ownerPrivateKey, ownerPublicKey });
+        return authService.generateSeedAccount(username, this.masterPassword)
+          .then((seedAccount) => {
+            ownerPubKey = seedAccount.getPubKey();
+            ownerPrivKey = seedAccount.getPrivKey();
+            if (pubKey !== ownerPubKey) {
+              this.$notifier.showError('Password is invalid');
+              return;
+            }
+            saveKeysPdf(username, { ownerPrivKey, ownerPubKey });
+          });
       }
     }
   };
