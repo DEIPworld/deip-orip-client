@@ -111,23 +111,26 @@
     methods: {
 
       onSubmit() {
-        const formData = new FormData();
+        const formData = {
+          title: this.formData.title,
+          banner: '',
+          logo: ''
+        };
 
-        if (this.formData.title) {
-          formData.append('title', this.formData.title);
-        }
         if (this.formData.banner) {
-          formData.append('banner', this.formData.banner);
+          formData.banner = this.formData.banner.name;
+          formData.bannerFile = this.formData.banner;
         }
         if (this.formData.logo) {
-          formData.append('logo', this.formData.logo);
+          formData.logo = this.formData.logo.name;
+          formData.logoFile = this.formData.logo;
         }
 
         this.isSubmitting = true;
         this.updateTenantSettings(formData)
           .finally(() => {
             this.isSubmitting = false;
-          })
+          });
       },
 
       updateTenantSettings(form) {
