@@ -211,8 +211,8 @@
             projectId: this.project.externalId,
             ...this.selected
           },
-          startTime: undefined,
-          endTime: this.dialogModel.date,
+          activationTime: undefined,
+          expirationTime: new Date(this.dialogModel.date).getTime(),
           type: CONTRACT_AGREEMENT_TYPE.PROJECT_LICENSE,
           parties
         })

@@ -15,7 +15,7 @@ const config = {
     SIG_SEED: process.env.SIG_SEED,
     CHAIN_ID: process.env.CHAIN_ID,
     PROTOCOL: process.env.PROTOCOL ? parseInt(process.env.PROTOCOL) : 0,
-    IS_TESTNET: process.env.IS_TESTNET === 'true',
+    CORE_ASSET: JSON.parse(process.env.CORE_ASSET),
     FAUCET_ACCOUNT_USERNAME: process.env.FAUCET_ACCOUNT_USERNAME || 'regacc',
     ASSET_UNIT: process.env.ASSET_UNIT,
     TENANT: process.env.TENANT,
