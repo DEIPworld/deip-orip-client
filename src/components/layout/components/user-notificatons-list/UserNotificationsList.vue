@@ -27,82 +27,96 @@
       <template v-for="(notification, i) in notifications">
         <div :key="'user-notification-' + i">
           <research-proposal-user-notification
-            v-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
+            v-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-content-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <token-sale-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED) && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <invite-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.INVITE_MEMBER"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.INVITE_MEMBER"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <exclusion-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.EXCLUDE_MEMBER"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-update-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-group-update-proposal-user-notification
-            v-else-if="(notification.type === PROPOSAL || notification.type === PROPOSAL_ACCEPTED)&& notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
+            v-else-if="(notification.type === notificationTypes.PROPOSAL
+              || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
+              && notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <invitation-user-notification
-            v-else-if="notification.type === INVITATION"
+            v-else-if="notification.type === notificationTypes.INVITATION"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <invitation-approved-user-notification
-            v-else-if="notification.type === INVITATION_APPROVED"
+            v-else-if="notification.type === notificationTypes.INVITATION_APPROVED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <invitation-rejected-user-notification
-            v-else-if="notification.type === INVITATION_REJECTED"
+            v-else-if="notification.type === notificationTypes.INVITATION_REJECTED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <expert-review-user-notification
-            v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW"
+            v-else-if="notification.type === notificationTypes.RESEARCH_CONTENT_EXPERT_REVIEW"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <expert-review-request-user-notification
-            v-else-if="notification.type === RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
+            v-else-if="notification.type === notificationTypes.RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <exclusion-user-notification
-            v-else-if="notification.type === EXCLUSION_APPROVED"
+            v-else-if="notification.type === notificationTypes.EXCLUSION_APPROVED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-proposed-notification
-            v-else-if="notification.type === RESEARCH_NDA_PROPOSED"
+            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_PROPOSED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-signed-notification
-            v-else-if="notification.type === RESEARCH_NDA_SIGNED"
+            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_SIGNED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-rejected-notification
-            v-else-if="notification.type === RESEARCH_NDA_REJECTED"
+            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_REJECTED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
@@ -117,7 +131,7 @@
 </template>
 <script>
 
-  import { PROPOSAL_TYPES } from '@/variables';
+  import { PROPOSAL_TYPES, USER_NOTIFICATION_TYPE } from '@/variables';
   import ResearchProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchProposalUserNotification';
   import TokenSaleProposalUserNotification
@@ -181,27 +195,11 @@
     data() {
       return {
         TYPES: PROPOSAL_TYPES,
-
-        PROPOSAL: 'proposal',
-        PROPOSAL_ACCEPTED: 'proposal-accepted',
-        INVITATION: 'invitation',
-        INVITATION_APPROVED: 'invitation-approved',
-        INVITATION_REJECTED: 'invitation-rejected',
-        EXCLUSION_APPROVED: 'exclusion-approved',
-        RESEARCH_CONTENT_EXPERT_REVIEW: 'research-content-expert-review',
-        RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST: 'research-content-expert-review-request',
-        EXPERTISE_ALLOCATED: 'expertise-allocated',
-        RESEARCH_NDA_PROPOSED: 'research-nda-request',
-        RESEARCH_NDA_SIGNED: 'research-nda-signed',
-        RESEARCH_NDA_REJECTED: 'research-nda-rejected'
+        notificationTypes: USER_NOTIFICATION_TYPE
       };
     },
     computed: {
-      notifications() { return this.$currentUser.notifications; },
-
-      notificationType(notification) {
-        return 'a';
-      }
+      notifications() { return this.$currentUser.notifications; }
     },
 
     watch: {},

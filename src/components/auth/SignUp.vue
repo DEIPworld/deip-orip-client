@@ -1,6 +1,6 @@
 <template>
   <full-screen-view
-    v-if="tenant.profile.settings.signUpPolicy === 'free'"
+    v-if="tenant.profile.settings.signUpPolicy === signUpPolicy.FREE"
     max-width="100%"
     height="100%"
     toolbar-overlap
@@ -92,7 +92,7 @@
       </v-col>
     </v-row>
   </full-screen-view>
-  <userRegistration v-else-if="tenant.profile.settings.signUpPolicy === 'admin-approval'" />
+  <userRegistration v-else-if="tenant.profile.settings.signUpPolicy === signUpPolicy.ADMIN_APPROVAL" />
 </template>
 
 <script>
@@ -100,6 +100,7 @@
   import RegistrationFormRenderer from '@/components/auth/renderer';
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import DStack from '@/components/Deipify/DStack/DStack';
+  import { SIGN_UP_POLICY } from '@/variables';
   import {
     compactAttributes,
     extendAttrModules,
@@ -124,7 +125,7 @@
 
     data() {
       return {
-
+        signUpPolicy: SIGN_UP_POLICY,
         formModel: {
           email: '',
           attributes: {},

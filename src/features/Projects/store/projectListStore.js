@@ -3,7 +3,7 @@ import {
   getActionByPath,
   camelizeObjectKeys
 } from '@/utils/helpers';
-
+import { USER_BOOKMARK_TYPE } from '@/variables';
 
 const projectService = ProjectService.getInstance();
 
@@ -98,7 +98,7 @@ const ACTIONS = {
     const ids = context
       .rootGetters['Auth/currentUser']
       .bookmarks
-      .filter((b) => b.type === 'research')
+      .filter((b) => b.type === USER_BOOKMARK_TYPE.PROJECT)
       .map((b) => b.ref);
 
     return ids.length ? projectService.getProjects(ids)

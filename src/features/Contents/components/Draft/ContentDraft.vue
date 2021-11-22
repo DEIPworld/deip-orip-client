@@ -126,7 +126,7 @@
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import { mapGetters } from 'vuex';
   import { arrayDiff } from 'vuetify/lib/util/helpers';
-  import { projectContentTypes } from '@/variables';
+  import { projectContentTypes, PROJECT_CONTENT_STATUS } from '@/variables';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
   import { ProjectContentService } from '@deip/project-content-service';
   import { ValidationObserver, ValidationProvider } from 'vee-validate';
@@ -275,7 +275,7 @@
 
         projectContentService.getDraft(this.draftId)
           .then((res) => {
-            if (res.status === 'in-progress') {
+            if (res.status === PROJECT_CONTENT_STATUS.IN_PROGRESS) {
               this.$refs.contentDar.saveDocument(() => {
                 this.$notifier.showSuccess('Document draft has been saved !');
               });

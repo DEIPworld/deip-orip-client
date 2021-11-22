@@ -115,7 +115,7 @@
   import { mapGetters } from 'vuex';
 
   import { ProjectContentService } from '@deip/project-content-service';
-  import { projectContentTypes, maxTitleLength } from '@/variables';
+  import { projectContentTypes, maxTitleLength, PROJECT_CONTENT_DATA_TYPES } from '@/variables';
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
   import ReferencesSelector from '@/features/References/components/Selector/ReferencesSelector';
   import DFileInput from '@/components/Deipify/DInput/DFileInput';
@@ -205,7 +205,7 @@
           type: parseInt(this.formData.type),
           authors: this.formData.authors,
           references: this.formData.references,
-          draftType: 'package',
+          draftType: PROJECT_CONTENT_DATA_TYPES.PACKAGE,
           ...filesData // files
         })
           .then(({ _id: draftId }) => {
