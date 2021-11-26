@@ -39,16 +39,16 @@
 </template>
 
 <script>
+  import { LayoutService } from '@deip/layout-service';
+  import { find as deepFind } from 'find-keypath';
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
 
   import AdminLayoutsModules from '@/components/AdminPanel/Layouts/Composer/ModulesList/AdminLayoutsModulesList';
   import AdminLayoutsComposer from '@/components/AdminPanel/Layouts/Composer/AdminLayoutsComposer';
 
   import { baseLayouts } from '@/components/AdminPanel/Layouts/layouts';
-  import { TenantService } from '@deip/tenant-service';
-  import { find as deepFind } from 'find-keypath';
 
-  const tenantService = TenantService.getInstance();
+  const layoutService = LayoutService.getInstance();
 
   export default {
     name: 'AdminLayoutsEdit',
@@ -91,9 +91,9 @@
       saveSettings() {
         this.processing = true;
 
-        const clonedProfile = _.cloneDeep(this.$tenant.profile);
+        const clonedLayouts = _.cloneDeep(this.$tenant.profile.settings.layouts);
 
-        clonedProfile.settings.layouts[this.layoutKey] = {
+        clonedLayouts[this.layoutKey] = {
           ...this.layoutData,
           ...{
             layout: this.schema
@@ -102,7 +102,7 @@
 
         // clonedProfile.settings.layouts = baseLayouts();
 
-        tenantService.updateTenantProfile(clonedProfile)
+        layoutService.updateLayouts(clonedLayouts)
           .then(() => {
             this.$notifier.showSuccess();
             const tenant = this.$env.TENANT;
