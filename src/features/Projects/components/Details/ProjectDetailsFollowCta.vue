@@ -17,6 +17,7 @@
 <script>
   import { BookmarkService } from '@deip/bookmark-service';
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
+  import { USER_BOOKMARK_TYPE } from '@/variables';
 
   const bookmarkService = BookmarkService.getInstance();
 
@@ -34,7 +35,7 @@
     computed: {
       bookmarkId() {
         const bookmark = this.$currentUser.bookmarks.find(
-          (b) => b.ref === this.project.externalId && b.type === 'research'
+          (b) => b.ref === this.project.externalId && b.type === USER_BOOKMARK_TYPE.PROJECT
         );
 
         return bookmark ? bookmark._id : false;

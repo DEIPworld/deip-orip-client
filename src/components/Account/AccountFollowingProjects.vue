@@ -4,7 +4,7 @@
       <d-layout-section-main>
 
         <projects-list
-          v-if="$currentUser.bookmarks.filter((b) => b.type === 'research').length"
+          v-if="$currentUser.bookmarks.filter((b) => b.type === bookmarkTypes.PROJECT).length"
           :user-name="$currentUser.username"
           type="following"
         />
@@ -41,11 +41,18 @@
   import DLayout from '@/components/Deipify/DLayout/DLayout';
   import DLayoutSection from '@/components/Deipify/DLayout/DLayoutSection';
   import DLayoutSectionMain from '@/components/Deipify/DLayout/DLayoutSectionMain';
+  import { USER_BOOKMARK_TYPE } from '@/variables';
 
   export default {
     name: 'AccountFollowingProjects',
 
     components: { DLayoutSectionMain, DLayoutSection, DLayout, ProjectsList, LayoutSection },
+
+    data() {
+      return {
+        bookmarkTypes: USER_BOOKMARK_TYPE
+      };
+    },
     computed: {
       ...mapGetters({
         researches: 'account/followingProjects'

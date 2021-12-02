@@ -150,9 +150,8 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { proposalTypesLabels, PROPOSAL_TYPES, projectContentTypes } from '@/variables';
+  import { proposalTypesLabels, PROPOSAL_TYPES, projectContentTypes, PROJECT_CONTENT_STATUS } from '@/variables';
   import { ProjectContentService } from '@deip/project-content-service';
-
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import EciStats from '@/components/EciMetrics/EciStats/EciStats';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
@@ -287,7 +286,7 @@
       },
 
       unlockDraft() {
-        projectContentService.unlockDraft({ ...this.contentRef, status: 'in-progress' })
+        projectContentService.unlockDraft({ ...this.contentRef, status: PROJECT_CONTENT_STATUS.IN_PROGRESS })
           .then(() => {
             location.reload();
           }, (err) => {

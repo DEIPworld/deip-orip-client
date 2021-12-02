@@ -7,7 +7,7 @@ import { ProposalsService } from '@deip/proposals-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
 import { DomainsService } from '@deip/domains-service';
-import { PROPOSAL_TYPES, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
+import { PROPOSAL_TYPES, PROJECT_CONTENT_STATUS, PROJECT_CONTENT_DATA_TYPES } from '@/variables';
 
 const teamService = TeamService.getInstance();
 const projectService = ProjectService.getInstance();
@@ -65,15 +65,16 @@ const getters = {
   researchContentEciStatsRecords: (state) => state.researchContentEciStatsRecords,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && (state.contentRef.type === 'package' || state.contentRef.type === 'file' /* legacy */);
+    return state.contentRef && (state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.PACKAGE
+        || state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.FILE /* legacy */);
   },
 
   isDarContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && state.contentRef.type === 'dar';
+    return state.contentRef && state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.DAR;
   },
 
   isInProgress(state, getters, rootState, rootGetters) {
-    return state.contentRef && state.contentRef.status === 'in-progress';
+    return state.contentRef && state.contentRef.status === PROJECT_CONTENT_STATUS.IN_PROGRESS;
   },
 
   isPublished(state, getters, rootState, rootGetters) {
@@ -81,7 +82,7 @@ const getters = {
   },
 
   isProposed(state, getters, rootState, rootGetters) {
-    return state.contentRef && state.contentRef.status === 'proposed';
+    return state.contentRef && state.contentRef.status === PROJECT_CONTENT_STATUS.PROPOSED;
   },
 
   isPersonalGroup(state, getters, rootState, rootGetters) {

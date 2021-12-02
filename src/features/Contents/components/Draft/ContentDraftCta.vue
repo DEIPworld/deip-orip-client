@@ -14,6 +14,7 @@
 <script>
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import { ProjectContentService } from '@deip/project-content-service';
+  import { PROJECT_CONTENT_DATA_TYPES } from '@/variables';
 
   const projectContentService = ProjectContentService.getInstance();
 
@@ -33,7 +34,9 @@
         this.loading = true;
 
         projectContentService
-          .createProjectContentDraft({ projectId: this.projectId, draftType: 'dar' })
+          .createProjectContentDraft({
+            projectId: this.projectId, draftType: PROJECT_CONTENT_DATA_TYPES.DAR
+          })
           .then(({ _id: draftId }) => {
             setTimeout(() => {
               this.$router.push({

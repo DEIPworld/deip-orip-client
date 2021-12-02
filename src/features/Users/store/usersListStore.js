@@ -48,7 +48,7 @@ const ACTIONS = {
   },
 
   getActiveUsers({ commit }) {
-    return userService.getUsersListing("approved")
+    return userService.getUsersListing()
       .then((users) => {
         commit('storeUsersProfiles', users);
       });
