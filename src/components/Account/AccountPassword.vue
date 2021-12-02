@@ -132,15 +132,14 @@
               key_auths: [[newPublicKey, 1]]
             };
 
-            return userService.updateUser({
+            return userService.changePassword({
               initiator: {
                 privKey: oldPrivateKey,
                 username
               },
-              ...this.$currentUser.profile,
-              accountOwnerAuth: ownerAuth,
+              ownerAuth,
               memoKey: undefined
-            })
+            });
           })
           .then(() => {
             this.$notifier.showSuccess(this.$t('account.password.succChanged'));
