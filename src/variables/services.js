@@ -1,4 +1,3 @@
-import { PROPOSAL_TYPES, PROPOSAL_STATUS } from '@deip/proposals-service';
 import {
   EXPERTISE_CONTRIBUTION_TYPE,
   ECI_STAT_PERIOD_STEP_TYPE,
@@ -13,10 +12,25 @@ import {
   ASSESSMENT_CRITERIA_TYPE,
   USER_BOOKMARK_TYPE,
   PROJECT_CONTENT_DATA_TYPES,
-  SIGN_UP_POLICY
+  SIGN_UP_POLICY,
+  PROPOSAL_STATUS
 } from '@deip/constants';
 import { projectContentTypes } from '@deip/project-content-service';
 import { createEnum } from '@deip/toolbox';
+
+
+// TODO: remove after migration
+
+const PROPOSAL_TYPES = createEnum({
+  CREATE_RESEARCH: 14,
+  INVITE_MEMBER: 12,
+  EXCLUDE_MEMBER: 13,
+  TRANSFER: 2,
+  CREATE_RESEARCH_TOKEN_SALE: 19,
+  CREATE_RESEARCH_MATERIAL: 16,
+  UPDATE_RESEARCH_GROUP: 1,
+  UPDATE_RESEARCH: 15
+});
 
 const proposalTypesLabels = {
   [PROPOSAL_TYPES.CREATE_RESEARCH]: 'Start new research project',

@@ -143,12 +143,12 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.updateProposal({
+        proposalsService.acceptProposal({
           privKey: this.$currentUser.privKey,
           username: this.$currentUser.username
         }, {
           proposalId: proposalId,
-          activeApprovalsToAdd: [this.$currentUser.username]
+          account: this.$currentUser.username
         })
           .then(() => {
             this.$store.dispatch('Invites/fetch', this.$currentUser.username);
@@ -173,8 +173,7 @@
           username: this.$currentUser.username
         }, {
           proposalId: proposalId,
-          account: this.$currentUser.username,
-          authorityType: 2 // active auth
+          account: this.$currentUser.username
         })
           .then(() => {
             this.$store.dispatch('Invites/fetch', this.$currentUser.username, { root: true });

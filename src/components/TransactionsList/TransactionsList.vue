@@ -153,13 +153,11 @@
             {
               ...signer, 
               hasSignature: !!txInfo, 
-              // isResearchGroup: signer?.account?.is_research_group,
               isResearchGroup: signer.account 
                 ? signer.account.is_research_group 
                 : false
             }
           )),
-          // isResearchGroup: proposer?.account?.account?.is_research_group
           isResearchGroup: proposer.account && proposer.account.account 
             ? proposer.account.account.is_research_group
             : false
@@ -183,13 +181,11 @@
               {
                 ...signer,
                 hasSignature: !!txInfo,
-                // isResearchGroup: signer?.account?.is_research_group,
                 isResearchGroup: signer.account 
                   ? signer.account.is_research_group 
                   : false
               }
             )),
-            // isResearchGroup: party?.account?.account?.is_research_group
             isResearchGroup: party.account && party.account.account 
               ? party.account.account.is_research_group
               : false

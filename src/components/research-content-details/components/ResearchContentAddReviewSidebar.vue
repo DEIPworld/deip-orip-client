@@ -87,21 +87,16 @@
           this.isLoading = true;
           const reviewData = html;
           const projectContentId = this.content.external_id;
-          const weight = '100.00 %';
-          const scores = Object.keys(this.assessmentCriteria).reduce((scores, key) => {
-            const val = this.assessmentCriteria[key];
-            return [...scores, [parseInt(key), parseInt(val)]];
-          }, []);
+
+          const scores = Object.keys(assessmentCriteria)
+            .reduce((sc, key) => {
+              const val = assessmentCriteria[key];
+              sc[parseInt(key)] = parseInt(val);
+              return sc;
+            }, {});
 
           const disciplines = this.userRelatedExpertise.map((exp) => exp.discipline_external_id);
-
-          const assessment = [
-            'multicriteria_scoring_assessment_model',
-            {
-              scores,
-              extensions: []
-            }
-          ];
+          const assessment = { type: 1, scores };
 
           return reviewService.createReview({
             initiator: {
@@ -110,9 +105,8 @@
             },
             projectContentId,
             content: reviewData,
-            weight,
             assessment,
-            disciplines
+            domains: disciplines
           })
             .then((data) => {
               this.$notifier.showSuccess(this.$t('researchContentDetails.addRev.pubSucc'));

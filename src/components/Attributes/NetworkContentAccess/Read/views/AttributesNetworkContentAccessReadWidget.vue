@@ -163,6 +163,7 @@
             this.project.tenantId
           ];
 
+        // TODO: Use ContractAgreement instead of NDA
         const creator = this.$currentUser.username;
         return projectNdaService.createProjectNda({
           initiator: {

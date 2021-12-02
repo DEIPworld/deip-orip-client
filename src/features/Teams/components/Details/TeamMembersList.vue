@@ -133,7 +133,7 @@
         this.actionDialog.loading = true;
         this.actionDialog.loading = false;
         this.actionDialog.isOpen = false;
-        teamService.leaveTeam(
+        teamService.removeTeamMember(
           {
             initiator: {
               privKey: this.$currentUser.privKey,
@@ -171,7 +171,7 @@
         this.addMemberDialog.isLoading = true;
         this.addMemberDialog.isOpen = false;
         this.addMemberDialog.isLoading = false;
-        teamService.joinTeam(
+        teamService.addTeamMember(
           {
             initiator: {
               privKey: this.$currentUser.privKey,

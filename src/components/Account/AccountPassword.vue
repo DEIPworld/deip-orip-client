@@ -126,10 +126,11 @@
             newPublicKey = newSeedAccount.getPubKey();
             newPrivateKey = newSeedAccount.getPrivKey();
 
-            const ownerAuth = {
-              weight_threshold: 1,
-              account_auths: [],
-              key_auths: [[newPublicKey, 1]]
+            const authority = {
+              owner: {
+                auths: [{ key: newPublicKey, weight: 1 }],
+                weight: 1
+              }
             };
 
             return userService.changePassword({
@@ -137,8 +138,7 @@
                 privKey: oldPrivateKey,
                 username
               },
-              ownerAuth,
-              memoKey: undefined
+              authority
             });
           })
           .then(() => {
