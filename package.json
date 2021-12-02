@@ -27,6 +27,7 @@
     "@deip/grants-service": "1.352.0",
     "@deip/http-service": "1.352.0",
     "@deip/investments-service": "1.352.0",
+    "@deip/layout-service": "1.352.0",
     "@deip/lib-crypto": "1.352.0",
     "@deip/notification-service": "1.352.0",
     "@deip/project-content-service": "1.352.0",
