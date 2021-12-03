@@ -238,7 +238,7 @@
       this.questions.push(...questions);
       this.formModel.reviewData.push(...questions.map(() => []));
 
-      return reviewService.getReviewRequestsByExpert(this.$currentUser.username, 'pending')
+      return reviewService.getReviewRequestsByExpert(this.$currentUser.username, 1)
         .then((res) => {
           const request = res.find((r) => r.projectContentId === this.content.externalId);
           if (request) {

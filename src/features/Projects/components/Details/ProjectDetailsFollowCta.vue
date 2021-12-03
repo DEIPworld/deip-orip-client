@@ -46,7 +46,7 @@
       bookmarkService() {
         return !this.bookmarkId
           ? bookmarkService.createProjectBookmark(this.$currentUser.username, this.project.externalId)
-          : bookmarkService.removeProjectBookmark(this.$currentUser.username, this.bookmarkId);
+          : bookmarkService.deleteProjectBookmark(this.$currentUser.username, this.bookmarkId);
       },
 
       toggleBookmark() {

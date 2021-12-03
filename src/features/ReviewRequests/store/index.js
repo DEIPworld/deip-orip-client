@@ -19,7 +19,7 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }, username) {
     const reviewRequests = [];
-    return reviewService.getReviewRequestsByExpert(username, 'pending')
+    return reviewService.getReviewRequestsByExpert(username, 1)
       .then((results) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
