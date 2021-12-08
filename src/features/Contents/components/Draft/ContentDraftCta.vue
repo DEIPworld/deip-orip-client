@@ -35,7 +35,7 @@
 
         projectContentService
           .createProjectContentDraft({
-            projectId: this.projectId, draftType: PROJECT_CONTENT_DATA_TYPES.DAR
+            projectId: this.projectId, formatType: PROJECT_CONTENT_DATA_TYPES.DAR
           })
           .then(({ _id: draftId }) => {
             setTimeout(() => {

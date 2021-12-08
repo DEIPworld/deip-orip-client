@@ -65,12 +65,12 @@ const getters = {
   researchContentEciStatsRecords: (state) => state.researchContentEciStatsRecords,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && (state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.PACKAGE
-        || state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.FILE /* legacy */);
+    return state.contentRef && (state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.PACKAGE
+        || state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.FILE /* legacy */);
   },
 
   isDarContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && state.contentRef.type === PROJECT_CONTENT_DATA_TYPES.DAR;
+    return state.contentRef && state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.DAR;
   },
 
   isInProgress(state, getters, rootState, rootGetters) {

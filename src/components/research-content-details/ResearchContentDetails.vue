@@ -41,7 +41,7 @@
               </div>
               <div class="text-h3">
                 <span class="font-weight-regular">
-                  {{ getProjectContentType(content.content_type).text }}:
+                  {{ getProjectContentType(content.contentType).text }}:
                   {{ content.title }}
                 </span>
               </div>
