@@ -282,9 +282,9 @@
         const proposalId = invite._id;
         this.inviteDetailsDialog.proccess = true;
 
-        proposalsService.updateProposal(this.$currentUser, {
+        proposalsService.acceptProposal(this.$currentUser, {
           proposalId: proposalId,
-          activeApprovalsToAdd: [this.$currentUser.username]
+          account: this.$currentUser.username
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });
@@ -307,8 +307,7 @@
 
         proposalsService.declineProposal(this.$currentUser, {
           proposalId: proposalId,
-          account: this.$currentUser.username,
-          authority: 2 // active auth
+          account: this.$currentUser.username
         })
           .then(() => {
             this.$store.dispatch('userDetails/loadUserInvites', { username: this.currentUser.username });

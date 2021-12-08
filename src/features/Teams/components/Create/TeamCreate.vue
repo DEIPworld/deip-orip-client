@@ -38,8 +38,7 @@
           .createTeam({
             initiator: {
               username: this.$currentUser.username,
-              privKey: this.$currentUser.privKey,
-              memoKey: this.$currentUser.account.memo_key
+              privKey: this.$currentUser.privKey
             },
             formData,
             members: members.filter((m) => m !== this.$currentUser.username),

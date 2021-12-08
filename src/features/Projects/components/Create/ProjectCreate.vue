@@ -32,7 +32,6 @@
           isPrivate: !!onchainData.isPrivate,
           members: onchainData.members,
           attributes: offchainMeta.attributes,
-          memoKey: this.$currentUser.account.memo_key,
           formData: formData // files
         }, {
           isProposal: onchainData.researchGroup != this.$currentUser.username

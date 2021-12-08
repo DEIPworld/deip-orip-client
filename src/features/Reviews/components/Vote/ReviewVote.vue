@@ -107,7 +107,7 @@
               username: this.$currentUser.username
             },
             reviewId: review.externalId,
-            disciplineId,
+            domainId: disciplineId,
             weight: '100.00 %'
           }));
 

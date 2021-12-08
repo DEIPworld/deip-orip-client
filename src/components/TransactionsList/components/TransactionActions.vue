@@ -96,12 +96,16 @@
           }
         }
 
-        const promise = proposalsService.updateProposal(this.$currentUser, {
-          proposalId: external_id,
-          activeApprovalsToAdd
-        });
+        const promises = [];
+        for (let i = 0; i < activeApprovalsToAdd.length; i++) {
+          const approver = activeApprovalsToAdd[i];
+          promises.push(proposalsService.acceptProposal(this.$currentUser, {
+            proposalId: external_id,
+            account: approver
+          }));
+        }
 
-        promise
+        Promise.all(promises)
           .then(() => {
             this.$emit('update-data');
             this.$notifier.showSuccess(this.$t('transactionsList.voteSucc'));
@@ -139,8 +143,7 @@
 
         const promise = proposalsService.declineProposal(this.$currentUser, {
           proposalId: external_id,
-          account,
-          authorityType: 2
+          account
         });
 
         promise
