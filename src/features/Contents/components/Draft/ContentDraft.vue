@@ -295,51 +295,58 @@
         return new Promise((resolve) => {
           this.$refs.contentDar.saveDocument(resolve);
         })
-          .then(() => projectContentService.getDraft(this.draftId)) // double check
-          .then((draft) => {
-            const isProposal = !this.project.researchGroup.is_personal;
+          .then(() => {
+            setTimeout(() => {
+              projectContentService.getDraft(this.draftId)
+                .then((draft) => {
+                  if (draft) {
+                    const isProposal = false;
+                    projectContentService.createProjectContent(
+                      {
+                        initiator: {
+                          privKey: this.$currentUser.privKey,
+                          username: this.$currentUser.username
+                        },
+                        proposalInfo: { isProposal },
+                        projectId: this.project.externalId,
+                        teamId: this.project.researchGroup.external_id,
+                        contentType: parseInt(this.formModel.contentType),
+                        title: this.formModel.title || draft.title,
+                        content: draft.hash,
+                        authors: this.formModel.authors.map((a) => a.account.name),
+                        references: [...this.formModel.references].map((ref) => ref.externalId)
+                      }
+                    )
+                      .then(() => {
+                        this.$notifier.showSuccess('New material has been uploaded successfully');
+                        this.creteContentFinalize();
+                      })
+                      .catch((err) => {
+                        console.error(err);
 
-            projectContentService.createProjectContent(
-              {
-                initiator: {
-                  privKey: this.$currentUser.privKey,
-                  username: this.$currentUser.username
-                },
-                proposalInfo: { isProposal },
-                projectId: this.project.externalId,
-                teamId: this.project.researchGroup.external_id,
-                type: parseInt(this.formModel.contentType),
-                title: this.formModel.title || draft.title,
-                content: draft._id,
-                authors: this.formModel.authors.map((a) => a.account.name),
-                references: [...this.formModel.references].map((ref) => ref.externalId)
-              }
-            )
-              .then(() => {
-                this.$notifier.showSuccess('New material has been uploaded successfully');
-                this.creteContentFinalize();
-              })
-              .catch((err) => {
-                console.error(err);
-
-                if (err.response && err.response.status === 409) {
-                  this.$confirm(
-                    'Please vote for existing proposal or propose file again if its existing proposal has expired.',
-                    {
-                      title: 'This file was already uploaded',
-                      buttonFalseText: false
-                    }
-                  )
-                    .then(() => {
-                      this.creteContentFinalize();
-                    });
-                } else {
-                  this.$notifier.showError('An error occurred while creating proposal, please try again later');
-                }
-              })
-              .finally(() => {
-                this.loadingPublish = false;
-              });
+                        if (err.response && err.response.status === 409) {
+                          this.$confirm(
+                            'Please vote for existing proposal or propose file again if its existing proposal has expired.',
+                            {
+                              title: 'This file was already uploaded',
+                              buttonFalseText: false
+                            }
+                          )
+                            .then(() => {
+                              this.creteContentFinalize();
+                            });
+                        } else {
+                          this.$notifier.showError('An error occurred while creating proposal, please try again later');
+                        }
+                      })
+                      .finally(() => {
+                        this.loadingPublish = false;
+                      });
+                  } else {
+                    this.loadingPublish = false;
+                  }
+                });
+            }, 10000);
           });
       },
 

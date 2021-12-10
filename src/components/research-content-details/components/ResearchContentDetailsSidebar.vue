@@ -241,7 +241,7 @@
 
       researchTableOfContent() {
         return this.contentList.reduce((arr, content) => {
-          const typeObj = projectContentTypes.find((c) => c.type === content.content_type);
+          const typeObj = projectContentTypes.find((c) => c.type === content.contentType);
           return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,

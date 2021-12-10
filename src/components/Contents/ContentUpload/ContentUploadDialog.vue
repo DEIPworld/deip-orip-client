@@ -202,10 +202,10 @@
         return projectContentService.createProjectContentDraft({
           projectId: this.research.externalId,
           title: this.formData.title,
-          type: parseInt(this.formData.type),
+          contentType: parseInt(this.formData.type),
           authors: this.formData.authors,
           references: this.formData.references,
-          draftType: PROJECT_CONTENT_DATA_TYPES.PACKAGE,
+          formatType: PROJECT_CONTENT_DATA_TYPES.PACKAGE,
           ...filesData // files
         })
           .then(({ _id: draftId }) => {
@@ -213,7 +213,7 @@
               projectContentService.getDraft(draftId)
                 .then((draft) => {
                   if (draft) {
-                    const isProposal = !this.research.researchGroup.is_personal;
+                    const isProposal = false;
                     projectContentService.createProjectContent(
                       {
                         initiator: {
@@ -223,9 +223,9 @@
                         proposalInfo: { isProposal },
                         projectId: this.research.externalId,
                         teamId: this.research.researchGroup.external_id,
-                        type: parseInt(this.formData.type),
+                        contentType: parseInt(this.formData.type),
                         title: this.formData.title,
-                        content: draft._id,
+                        content: draft.hash,
                         authors: this.formData.authors,
                         references: this.formData.references
                       }

@@ -102,8 +102,7 @@
           });
       },
       openDarDraft(draft) {
-        if (draft.type === PROJECT_CONTENT_DATA_TYPES.DAR) {
-
+        if (draft.formatType === PROJECT_CONTENT_DATA_TYPES.DAR) {
           this.$router.push({
             name: 'project.content.draft',
             params: {
@@ -111,14 +110,13 @@
               projectId: this.research.externalId
             }
           });
-
         } else {
           // TODO: need check
           this.$router.push({
             name: 'project.content.details',
             params: {
               projectId: this.research.externalId,
-              contentId: draft.externalId
+              contentId: draft._id
             },
             query: {
               ref: draft._id, draft: true

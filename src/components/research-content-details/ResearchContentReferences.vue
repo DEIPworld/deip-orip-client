@@ -79,11 +79,11 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.dataType') }}:
+                        {{ $t('researchContentDetails.references.formatType') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
-                      <span>{{ getProjectContentType(researchContent.content_type).text }}</span>
+                      <span>{{ getProjectContentType(researchContent.contentType).text }}</span>
                     </v-col>
                   </v-row>
 
