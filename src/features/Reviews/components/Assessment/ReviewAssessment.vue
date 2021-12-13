@@ -37,7 +37,7 @@
         required: true
       },
       contentType: {
-        type: String,
+        type: Number,
         required: true
       },
       readonly: {

@@ -12,7 +12,7 @@ export const getAdditionalDataOne = (item) => Promise.all([
   ...item,
   contentData: camelizeObjectKeys(contentData),
   votes,
-  supporters: [...new Set(votes.map((v) => v.voter))]
+  supporters: [...new Set(votes.map((v) => v.upvoter))]
 }));
 
 export const getAdditionalData = (items) => items.map((item) => getAdditionalDataOne(item));

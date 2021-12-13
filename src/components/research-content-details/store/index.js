@@ -87,11 +87,11 @@ const getters = {
 
   isPersonalGroup(state, getters, rootState, rootGetters) {
     const userPersonalGroup = rootGetters['auth/userPersonalGroup'];
-    return state.research.research_group_id == userPersonalGroup.id;
+    return state.research.teamId == userPersonalGroup.id;
   },
 
   isResearchGroupMember(state, getters, rootState, rootGetters) {
-    const isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.research_group_id);
+    const isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.teamId);
     return isMember;
   },
 
@@ -103,7 +103,7 @@ const getters = {
 
   userHasResearchExpertise(state, getters, rootState, rootGetters) {
     const userExperiseList = rootGetters['auth/userExperise'];
-    return userExperiseList.some((exp) => exp.amount > 0 && state.research.disciplines.some((d) => d.id == exp.discipline_id));
+    return userExperiseList.some((exp) => exp.amount > 0 && state.research.disciplines.some((id) => id == exp.discipline_external_id));
   },
 
   isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
@@ -308,13 +308,13 @@ const actions = {
           const review = reviews[i];
           review.author = users.find((u) => u.account.name == review.author);
 
-          const reviewVotes = votes[i].reduce((arr, vote) => (arr.some(({ voter }) => voter === vote.voter) ? arr : [...arr, vote]), []);
+          const reviewVotes = votes[i].reduce((arr, vote) => (arr.some(({ upvoter }) => upvoter === vote.upvoter) ? arr : [...arr, vote]), []);
           review.votes = reviewVotes;
 
           for (let j = 0; j < reviewVotes.length; j++) {
             const vote = reviewVotes[j];
-            if (!voters.some((v) => v == vote.voter)) {
-              voters.push(vote.voter);
+            if (!voters.some((v) => v == vote.upvoter)) {
+              voters.push(vote.upvoter);
             }
           }
         }
@@ -326,7 +326,7 @@ const actions = {
           const review = reviews[i];
           for (let j = 0; j < review.votes.length; j++) {
             const vote = review.votes[j];
-            vote.voterProfile = users.find((u) => vote.voter == u.account.name);
+            vote.voterProfile = users.find((u) => vote.upvoter == u.account.name);
           }
         }
         commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);

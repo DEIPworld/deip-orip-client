@@ -215,16 +215,13 @@
         const disciplines = this.review.disciplines.map((d) => d.name);
 
         return {
-          scores: this.review.scores.reduce((res, score) => ({
-            ...res,
-            ...{ [score[0]]: score[1] }
-          }), {}),
+          scores: this.review.assessment.model.scores,
           disciplines
         };
       },
 
       reviewSupporters() {
-        return [...new Set(this.review.votes.map((v) => v.voter))];
+        return [...new Set(this.review.votes.map((v) => v.upvoter))];
       },
 
       ...projectDetails.computed
