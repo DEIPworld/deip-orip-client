@@ -1,26 +1,34 @@
+/* eslint-disable */
 const path = require('path');
 const fs = require('fs-extra');
 const glob = require('glob');
 const symlinkDir = require('symlink-dir');
 const rimraf = require('rimraf');
 const inquirer = require('inquirer');
+/* eslint-enable */
 
 const prompt = inquirer.createPromptModule();
 
-const globModules = glob.sync(
-  path.join(__dirname, '..', '..', 'deip-modules', 'packages', '*', '*')
-);
+const monorepoPath = path.join(__dirname, '..', '..', 'deip-modules');
+
+// eslint-disable-next-line import/no-dynamic-require
+const packages = require(
+  path.join(monorepoPath, 'lerna.json')
+)
+  .packages
+  .reduce((acc, pkgDir) => {
+    const pkgs = glob
+      .sync((path.join(monorepoPath, pkgDir)))
+      .map((pkg) => ({
+        // eslint-disable-next-line global-require,import/no-dynamic-require
+        name: require(path.join(pkg, 'package.json')).name,
+        path: pkg
+      }));
+    return [...acc, ...pkgs];
+  }, []);
 
 const modulesToRemove = ['vue', 'vuetify'];
 const modulesToRemoveNamesGlob = `+(${modulesToRemove.join('|')})`;
-
-const promptModules = globModules.reduce((a, pth) => {
-  a.push({
-    value: pth,
-    name: pth.split(path.sep).slice(-2).join('/')
-  });
-  return a;
-}, []);
 
 prompt([{
   type: 'list',
@@ -40,39 +48,37 @@ prompt([{
 }])
   .then((answer) => {
     if (answer.select === 'all') {
-      return { modules: [...globModules] };
+      return { packages };
     }
 
     return inquirer.prompt([{
       type: 'checkbox',
-      name: 'modules',
+      name: 'packages',
       message: 'Select modules for linking',
       default: ['all'],
       pageSize: 10,
-      choices: [
-        ...promptModules
-      ]
+      choices: packages.map((pkg) => ({ name: pkg.name, value: pkg }))
     }]);
   })
   .then((answer) => {
-    const linkModulesPromises = answer.modules.map((module) => {
-      const name = JSON.parse(fs.readFileSync(path.join(module, 'package.json'), 'utf8'))
-        .name
-        .split('/')[1];
-      const dest = path.join(__dirname, '..', 'node_modules', '@deip', name);
+    const linkModulesPromises = answer.packages.map((pkg) => {
+      const dest = path.join(__dirname, '..', 'node_modules', pkg.name);
 
-      return symlinkDir(module, dest)
+      return symlinkDir(pkg.path, dest)
         .then(() => {
-          rimraf(path.join(__dirname, '..', 'node_modules', '@deip', `.ignored_${name}`), {}, () => {
-            console.info(`@deip/${name} linked`);
+          console.info(`${pkg.name} linked`);
 
-            const modulesToRemoveGlob = path.join(__dirname, '..', 'node_modules', '@deip', name, 'node_modules', modulesToRemoveNamesGlob);
-            if (glob.sync(modulesToRemoveGlob).length) {
-              rimraf(modulesToRemoveGlob, {}, () => {
-                console.info(`${modulesToRemove} removed from @deip/${name}`);
-              });
-            }
-          });
+          const modulesToRemoveGlob = path.join(
+            dest,
+            'node_modules',
+            modulesToRemoveNamesGlob
+          );
+
+          if (glob.sync(modulesToRemoveGlob).length) {
+            rimraf(modulesToRemoveGlob, {}, () => {
+              console.info(`${modulesToRemove} removed from ${pkg.name}`);
+            });
+          }
         });
     });
 

@@ -14,7 +14,7 @@
 <script>
   import { dataContextSwitch } from '@/mixins/dataContextSwitch';
   import { ProjectContentService } from '@deip/project-content-service';
-  import { PROJECT_CONTENT_DATA_TYPES } from '@/variables';
+  import { PROJECT_CONTENT_FORMAT } from '@/variables';
 
   const projectContentService = ProjectContentService.getInstance();
 
@@ -35,7 +35,7 @@
 
         projectContentService
           .createProjectContentDraft({
-            projectId: this.projectId, formatType: PROJECT_CONTENT_DATA_TYPES.DAR
+            projectId: this.projectId, formatType: PROJECT_CONTENT_FORMAT.DAR
           })
           .then(({ _id: draftId }) => {
             setTimeout(() => {
