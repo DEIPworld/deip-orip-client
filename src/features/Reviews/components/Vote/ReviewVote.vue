@@ -75,13 +75,13 @@
       }),
 
       userHasResearchExpertise() {
-        return this.userExperise.some((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id === exp.discipline_id));
+        return this.userExperise.some((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.discipline_external_id));
       },
       userHasVoted() {
-        return this.review.votes.some((vote) => vote.voter === this.$currentUser.username);
+        return this.review.votes.some((vote) => vote.upvoter === this.$currentUser.username);
       },
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => exp.amount > 0 && this.review.disciplines.some((d) => d.id === exp.discipline_id));
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.discipline_external_id));
       },
       isGroupMember() {
         return this.members.some((user) => user.account.name === this.$currentUser.username);
@@ -106,7 +106,7 @@
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
             },
-            reviewId: review.externalId,
+            reviewId: review.id,
             domainId: disciplineId,
             weight: '100.00 %'
           }));

@@ -3,7 +3,7 @@
   <reviews-list
     :project-id="project.externalId"
     :content-id="null"
-    :discipline-id="project.disciplines.map(({external_id}) => external_id)"
+    :discipline-id="project.disciplines.map((external_id) => external_id)"
     :exclude-users="project.members"
 
     :disable-content-route="!contentAssessAllowed"

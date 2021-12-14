@@ -167,7 +167,7 @@
           <div v-else-if="!userRelatedExpertise.length || isReseachGroupMember">
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
-                ? $t('reviews.needExpertiseAndNotMembers', { disciplines: project.disciplines.map(d => d.name).join(', ') })
+                ? $t('reviews.needExpertiseAndNotMembers', { disciplines: projectDisciplines.map(d => d.name).join(', ') })
                 : $t('reviews.needNotMembers')
             }}
           </div>
@@ -252,29 +252,32 @@
         userExperise: 'auth/userExperise'
       }),
 
+      disciplines() {
+        return this.$store.getters['Disciplines/list']();
+      },
+
+      projectDisciplines() {
+        return this.project.disciplines.map((id) => this.disciplines.find((d) => d.id == id));
+      },
+
       internalReviews() {
         const transformed = this.reviews.map((review) => {
-          const disciplines = review.disciplines.map((d) => d.name);
-
+          const disciplines = review.domains.map((id) => this.disciplines.find((d) => d.id == id).name);
           const model = {
             ...review,
 
-            scores: review.scores.reduce((res, score) => ({
-              ...res,
-              ...{ [score[0]]: score[1] }
-            }), {}),
+            scores: review.assessment.model.scores,
             disciplines
           };
 
           return model;
         });
-
         return transformed;
       },
       userRelatedExpertise() {
         return this.userExperise.filter(
           (exp) => exp.amount > 0 && this.project.disciplines.some(
-            (d) => d.id === exp.discipline_id
+            (d) => d === exp.discipline_external_id
           )
         );
       },

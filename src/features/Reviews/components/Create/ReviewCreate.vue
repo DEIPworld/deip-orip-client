@@ -212,7 +212,7 @@
 
       userRelatedExpertise() {
         return this.userExperise
-          .filter((exp) => exp.amount > 0 && this.project.disciplines.some((d) => d.id === exp.discipline_id));
+          .filter((exp) => exp.amount > 0 && this.project.disciplines.some((id) => id === exp.discipline_external_id));
       },
 
       isReviewPublishingDisabled() {

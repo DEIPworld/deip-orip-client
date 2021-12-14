@@ -91,12 +91,12 @@
             @markAsRead="markNotificationAsRead"
           />
           <expert-review-user-notification
-            v-else-if="notification.type === notificationTypes.RESEARCH_CONTENT_EXPERT_REVIEW"
+            v-else-if="notification.type === notificationTypes.PROJECT_CONTENT_EXPERT_REVIEW"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <expert-review-request-user-notification
-            v-else-if="notification.type === notificationTypes.RESEARCH_CONTENT_EXPERT_REVIEW_REQUEST"
+            v-else-if="notification.type === notificationTypes.PROJECT_CONTENT_EXPERT_REVIEW_REQUEST"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
@@ -106,17 +106,17 @@
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-proposed-notification
-            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_PROPOSED"
+            v-else-if="notification.type === notificationTypes.PROJECT_NDA_PROPOSED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-signed-notification
-            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_SIGNED"
+            v-else-if="notification.type === notificationTypes.PROJECT_NDA_SIGNED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <research-nda-rejected-notification
-            v-else-if="notification.type === notificationTypes.RESEARCH_NDA_REJECTED"
+            v-else-if="notification.type === notificationTypes.PROJECT_NDA_REJECTED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
