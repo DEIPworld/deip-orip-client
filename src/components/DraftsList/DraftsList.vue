@@ -40,7 +40,7 @@
   import { mapGetters } from 'vuex';
   import DSimpleTooltip from '@/components/Deipify/DSimpleTooltip/DSimpleTooltip';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import { PROJECT_CONTENT_STATUS, PROJECT_CONTENT_DATA_TYPES } from '@/variables';
+  import { PROJECT_CONTENT_STATUS, PROJECT_CONTENT_FORMAT } from '@/variables';
 
   export default {
     name: 'DraftsList',
@@ -102,7 +102,7 @@
           });
       },
       openDarDraft(draft) {
-        if (draft.formatType === PROJECT_CONTENT_DATA_TYPES.DAR) {
+        if (draft.formatType === PROJECT_CONTENT_FORMAT.DAR) {
           this.$router.push({
             name: 'project.content.draft',
             params: {

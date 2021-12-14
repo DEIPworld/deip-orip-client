@@ -7,7 +7,7 @@ import { ProposalsService } from '@deip/proposals-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
 import { DomainsService } from '@deip/domains-service';
-import { PROPOSAL_TYPES, PROJECT_CONTENT_STATUS, PROJECT_CONTENT_DATA_TYPES } from '@/variables';
+import { PROPOSAL_TYPES, PROJECT_CONTENT_STATUS, PROJECT_CONTENT_FORMAT } from '@/variables';
 
 const teamService = TeamService.getInstance();
 const projectService = ProjectService.getInstance();
@@ -65,12 +65,12 @@ const getters = {
   researchContentEciStatsRecords: (state) => state.researchContentEciStatsRecords,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && (state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.PACKAGE
-        || state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.FILE /* legacy */);
+    return state.contentRef && (state.contentRef.formatType === PROJECT_CONTENT_FORMAT.PACKAGE
+        || state.contentRef.formatType === PROJECT_CONTENT_FORMAT.FILE /* legacy */);
   },
 
   isDarContent(state, getters, rootState, rootGetters) {
-    return state.contentRef && state.contentRef.formatType === PROJECT_CONTENT_DATA_TYPES.DAR;
+    return state.contentRef && state.contentRef.formatType === PROJECT_CONTENT_FORMAT.DAR;
   },
 
   isInProgress(state, getters, rootState, rootGetters) {
