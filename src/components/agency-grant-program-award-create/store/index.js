@@ -41,7 +41,7 @@ const actions = {
         commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
         const usersLoad = dispatch('loadUsers');
-        const universityLoad = dispatch('loadUniversity', { universityExternalId: universityOrg });
+        const universityLoad = dispatch('loadUniversity', { universityId: universityOrg });
         const awardeeLoad = dispatch('loadAwardee', { awardee: awardee });
         
         return Promise.all([organizationProgramDetailsLoad, usersLoad, universityLoad, awardeeLoad]);
@@ -77,8 +77,8 @@ const actions = {
       .catch((err) => { console.error(err); });
   },
 
-  loadUniversity({ state, dispatch, commit }, { universityExternalId }) {
-    return teamService.getTeam(universityExternalId)
+  loadUniversity({ state, dispatch, commit }, { universityId }) {
+    return teamService.getTeam(universityId)
       .then((university) => {
         commit('SET_UNIVERSITY', university);
       }, (err) => { console.error(err); });

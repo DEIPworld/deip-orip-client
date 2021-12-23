@@ -15,7 +15,7 @@
         >
           <div class="mr-auto d-flex">
             <span class="text-h6 text-none">
-              {{ $t('researchGroupDetails.groupReqs.joinReqs') }}
+              {{ $t('teamDetails.groupReqs.joinReqs') }}
             </span>
             <v-badge
               color="warning"
@@ -32,7 +32,7 @@
         >
           <div class="mr-auto d-flex">
             <span class="text-h6 text-none">
-              {{ $t('researchGroupDetails.groupReqs.invites') }}
+              {{ $t('teamDetails.groupReqs.invites') }}
             </span>
             <v-badge
               color="warning"
@@ -76,7 +76,7 @@
                     {{ join.user | fullname }}
                   </v-clamp>
                   <div class="text-caption text--secondary">
-                    {{ $t('researchGroupDetails.groupReqs.wantJoin') }}
+                    {{ $t('teamDetails.groupReqs.wantJoin') }}
                   </div>
                 </d-box-item>
               </v-carousel-item>
@@ -94,7 +94,7 @@
               color="primary"
               @click="openJoinRequestDetails(team.pendingJoinRequests[joinRequestsSlider])"
             >
-              {{ $t('researchGroupDetails.groupReqs.view') }}
+              {{ $t('teamDetails.groupReqs.view') }}
             </v-btn>
           </div>
         </v-tab-item>
@@ -161,7 +161,7 @@
               color="primary"
               :to="{ name: 'UserDetails', params: { account_name: team.invites[invitesSlider].user.account.name } }"
             >
-              {{ $t('researchGroupDetails.groupReqs.view') }}
+              {{ $t('teamDetails.groupReqs.view') }}
             </v-btn>
           </div>
         </v-tab-item>
@@ -171,12 +171,12 @@
     <vex-dialog
       v-if="selectedJoinRequest"
       v-model="isOpenDialog"
-      :title="$t('researchGroupDetails.joinRequestDialog.join')"
+      :title="$t('teamDetails.joinRequestDialog.join')"
       max-width="600px"
       :true-disabled="isApprovingDisabled || isApprovingLoading"
       :false-disabled="isDenyingLoading || isApprovingLoading"
-      :button-false-text="$t('researchGroupDetails.joinRequestDialog.reject')"
-      :button-true-text="$t('researchGroupDetails.joinRequestDialog.submitBtn')"
+      :button-false-text="$t('teamDetails.joinRequestDialog.reject')"
+      :button-true-text="$t('teamDetails.joinRequestDialog.submitBtn')"
       :loading="isApprovingLoading || isDenyingLoading"
       @click:confirm="sendProposal"
       @click:cancel="denyJoinRequest"
@@ -196,7 +196,7 @@
       <v-text-field
         v-model="tokensAmount"
         v-mask="'##'"
-        :label="$t('researchGroupDetails.joinRequestDialog.tokensLabel')"
+        :label="$t('teamDetails.joinRequestDialog.tokensLabel')"
         outlined
         suffix="%"
       />
@@ -238,8 +238,8 @@
     },
     created() {
       Promise.all([
-        this.$store.dispatch('Team/loadJoinRequests', this.team.externalId),
-        this.$store.dispatch('Team/loadGroupInvites', this.team.externalId)
+        this.$store.dispatch('Team/loadJoinRequests', this.team._id),
+        this.$store.dispatch('Team/loadGroupInvites', this.team._id)
       ])
         .then(() => this.$setReady());
     },
@@ -263,19 +263,19 @@
         this.isApprovingLoading = true;
         this.closeHandleJoinRequestDialog();
         this.isApprovingLoading = false;
-        // researchGroupService.createInviteProposal({
-        //   groupId: this.team.externalId,
+        // teamService.createInviteProposal({
+        //   groupId: this.team._id,
         //   invitee: this.joinRequest.username,
         //   rgtAmount: amount,
         //   coverLetter: this.coverLetter,
         //   isHead: false
         // })
         //   .then(() => {
-        //     this.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
-        //     this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
-        //     this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
+        //     this.$store.dispatch('Team/loadJoinRequests', this.team._id);
+        //     this.$store.dispatch('TransactionsList/loadTransactions', this.team._id);
+        //     this.$notifier.showSuccess(this.$t('teamDetails.joinRequestDialog.successSend', { username: this.joinRequest.username }));
         //   }, (err) => {
-        //     this.$notifier.showError(this.$t('researchGroupDetails.joinRequestDialog.errSend'));
+        //     this.$notifier.showError(this.$t('teamDetails.joinRequestDialog.errSend'));
         //     console.error(err);
         //   })
         //   .finally(() => {
@@ -294,10 +294,10 @@
         setTimeout(() => self.closeHandleJoinRequestDialog(), 500);
         self.isDenyingLoading = false;
 
-        // researchGroupService.updateJoinRequest({ request: update })
+        // teamService.updateJoinRequest({ request: update })
         //   .then((updatedRequest) => {
-        //           self.$store.dispatch('Team/loadJoinRequests', this.team.externalId);
-        //           this.$notifier.showSuccess(this.$t('researchGroupDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
+        //           self.$store.dispatch('Team/loadJoinRequests', this.team._id);
+        //           this.$notifier.showSuccess(this.$t('teamDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
 
         //           setTimeout(() => self.closeHandleJoinRequestDialog(), 500);
         //         },

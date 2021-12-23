@@ -31,7 +31,7 @@ const propsForSet = {};
 const extenders = {
   [LAYOUT_TYPES.SET]: (attr) => ({
     component: 'AttributesSet',
-    model: `researchRef.attributes.${attr._id}`,
+    model: `attributes.${attr._id}`,
     ...(propsForSet[attr.type] ? _.cloneDeep(propsForSet[attr.type]) : {}),
     props: {
       attribute: `@attributes.${attr._id}`
@@ -43,8 +43,8 @@ const extenders = {
     ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
     ...{
       props: {
-        attribute: `@research.researchRef.attributes.${attr._id}`,
-        project: '@research'
+        attribute: `@project.attributes.${attr._id}`,
+        project: '@project'
       }
     }
   })
@@ -55,17 +55,17 @@ export const modulesAttributes = (ctx) => {
     {
       list: [
         {
-          component: 'TenantBadge',
-          name: 'Tenant',
+          component: 'PortalBadge',
+          name: 'Portal',
           icon: 'mdi-account-network-outline',
           props: {
-            tenantId: '@research.tenantId'
+            portalId: '@project.portalId'
           }
         },
         {
           component: 'span',
           name: 'Creation date',
-          text: '@research.researchRef.created_at',
+          text: '@project.createdAt',
           icon: 'mdi-calendar-text'
         },
         ...ctx.$$projectAttributes

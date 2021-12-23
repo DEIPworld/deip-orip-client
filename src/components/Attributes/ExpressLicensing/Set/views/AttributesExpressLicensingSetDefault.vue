@@ -120,7 +120,7 @@
         const attrInfo = this.$$getAttributeInfo(this.attribute._id);
         return attributeFileUrl(
           attrInfo.scope,
-          this.project.externalId,
+          this.project._id,
           this.attribute._id,
           file,
           false,

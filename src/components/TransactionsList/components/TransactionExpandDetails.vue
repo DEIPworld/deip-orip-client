@@ -23,8 +23,8 @@
           v-if="!signer.isHidden"
           :key="`${i}-otherPartiesSigner`"
           class="mb-4"
-          :avatar="signer.account.external_id ?
-            $options.filters.researchGroupLogoSrc(signer.account.external_id, 80, 80)
+          :avatar="signer.account._id ?
+            $options.filters.teamLogoSrc(signer.account._id, 80, 80)
             : $options.filters.accountAvatarSrc(signer.account, 80, 80)
           "
           :size="40"
@@ -33,10 +33,10 @@
           <router-link
             tag="div"
             class="text-decoration-none text--primary cursor-pointer"
-            :to="signer.account.account.is_research_group
+            :to="signer.account.account.isTeam
               ? {
                 name: 'team.details',
-                params: { teamId: signer.account.external_id }
+                params: { teamId: signer.account._id }
               }
               : { name: 'UserDetails', params: { account_name: signer.account.account.name } }"
           >
@@ -81,7 +81,7 @@
               >
                 <div class="d-flex" :class="{ 'mb-2': transaction.expand.length }">
                   <v-avatar
-                    v-if="!signer.is_research_group && party.account.account.is_research_group"
+                    v-if="!signer.isTeam && party.account.account.isTeam"
                     class="mr-n2"
                     :size="40"
                   >
@@ -94,11 +94,11 @@
                     <router-link
                       tag="div"
                       class="text-decoration-none cursor-pointer"
-                      :to="signer.account.is_research_group
+                      :to="signer.account.isTeam
                         ? {
                           name: 'team.details',
                           params:
-                            { teamId: signer.external_id}
+                            { teamId: signer._id}
                         }
                         : {
                           name: 'UserDetails',

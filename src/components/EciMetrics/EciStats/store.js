@@ -6,18 +6,18 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 const statsMethod = (payload) => {
   let serviceMethod;
 
-  if (payload.researchId) {
+  if (payload.projectId) {
     serviceMethod = expertiseContributionsService
-      .getResearchExpertiseStats(payload.researchId, payload.filter);
+      .getProjectExpertiseStats(payload.projectId, payload.filter);
   } else if (payload.contentId) {
     serviceMethod = expertiseContributionsService
-      .getResearchContentExpertiseStats(payload.contentId, payload.filter);
+      .getProjectContentExpertiseStats(payload.contentId, payload.filter);
   } else if (payload.accountName) {
     serviceMethod = expertiseContributionsService
       .getAccountExpertiseStats(payload.accountName, payload.filter);
   } else {
     // serviceMethod = expertiseContributionsService
-    //   .getDisciplineExpertiseStats(payload.filter);
+    //   .getDomainExpertiseStats(payload.filter);
   }
 
   return serviceMethod;
@@ -25,12 +25,12 @@ const statsMethod = (payload) => {
 
 const STATE = {
   expertiseStats: {},
-  expertiseStatsByDisciplines: []
+  expertiseStatsByDomains: []
 };
 
 const GETTERS = {
   expertiseStats: (state) => state.expertiseStats,
-  expertiseStatsByDisciplines: (state) => state.expertiseStatsByDisciplines
+  expertiseStatsByDomains: (state) => state.expertiseStatsByDomains
 };
 
 const ACTIONS = {
@@ -43,12 +43,12 @@ const ACTIONS = {
       });
   },
 
-  getExpertiseStatsByDisciplines({ commit }, payload) {
-    const promises = payload.disciplines.map((d) => {
+  getExpertiseStatsByDomains({ commit }, payload) {
+    const promises = payload.domains.map((d) => {
       const newPayload = deepmerge(
         payload,
         {
-          filter: { discipline: d.external_id || d.externalId }
+          filter: { domain: d._id }
         }
       );
 
@@ -58,11 +58,11 @@ const ACTIONS = {
     return Promise.all(promises)
       .then((res) => {
         const result = res.map((item, index) => ({
-          discipline: payload.disciplines[index],
+          domain: payload.domains[index],
           ...item
         }));
 
-        commit('storeExpertiseStatsByDisciplines', result);
+        commit('storeExpertiseStatsByDomains', result);
       }, (err) => {
         console.error(err);
       });
@@ -74,8 +74,8 @@ const MUTATIONS = {
     state.expertiseStats = payload;
   },
 
-  storeExpertiseStatsByDisciplines(state, payload) {
-    state.expertiseStatsByDisciplines = payload;
+  storeExpertiseStatsByDomains(state, payload) {
+    state.expertiseStatsByDomains = payload;
   }
 };
 

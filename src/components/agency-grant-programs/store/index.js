@@ -36,8 +36,8 @@ const actions = {
   loadGrantProgramsPage({ state, dispatch, commit }, { areaCode, subAreaCode }) {
     commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
     return teamService.getTeam(Vue.$env.TENANT)
-      .then((researchGroup) => {
-        commit('SET_ORGANIZATION_PROFILE', researchGroup);
+      .then((team) => {
+        commit('SET_ORGANIZATION_PROFILE', team);
         const organizationProgramsLoad = new Promise((resolve, reject) => {
           dispatch('loadOrganizationPrograms', { organization: state.organization, notify: resolve });
         });
@@ -45,13 +45,13 @@ const actions = {
       })
       .then(() => {
         if (areaCode && subAreaCode) {
-          const area = state.organization.researchGroupRef.researchAreas.find((a) => a.abbreviation == areaCode);
+          const area = state.organization.areas.find((a) => a.abbreviation == areaCode);
           const subArea = area.subAreas.find((a) => a.abbreviation == subAreaCode);
-          commit('SET_RESEARCH_AREA', { area, subArea });
+          commit('SET_PROJECT_AREA', { area, subArea });
         } else {
-          const area = state.organization.researchGroupRef.researchAreas[0];
+          const area = state.organization.areas[0];
           const subArea = area.subAreas[0];
-          commit('SET_RESEARCH_AREA', { area, subArea });
+          commit('SET_PROJECT_AREA', { area, subArea });
         }
       })
       .catch((err) => {
@@ -68,13 +68,13 @@ const actions = {
       .then((programs) => {
         const corePrograms = programs.map((item) => ({
           ...item,
-          organizationExternalId: organization.external_id,
-          abbreviation: organization.external_id,
-          subAreaAbbreviation: organization.external_id
+          organizationId: organization._id,
+          abbreviation: organization._id,
+          subAreaAbbreviation: organization._id
         }));
 
         corePrograms.forEach((p) => {
-          mapAreaToProgram(p, state.organization.researchGroupRef.researchAreas);
+          mapAreaToProgram(p, state.organization.areas);
         });
 
         commit('SET_ORGANIZATION_PROGRAMS', { corePrograms, additionalPrograms: [] });
@@ -88,8 +88,8 @@ const actions = {
       });
   },
 
-  setResearchArea({ state, dispatch, commit }, { area, subArea }) {
-    commit('SET_RESEARCH_AREA', { area, subArea });
+  setProjectArea({ state, dispatch, commit }, { area, subArea }) {
+    commit('SET_PROJECT_AREA', { area, subArea });
   }
 };
 
@@ -100,13 +100,13 @@ const mutations = {
     state.organization = organization;
   },
 
-  SET_RESEARCH_AREA(state, { area, subArea }) {
+  SET_PROJECT_AREA(state, { area, subArea }) {
     state.selectedArea = {
       title: area.title,
       abbreviation: area.abbreviation,
       subAreaTitle: subArea.title,
       subAreaAbbreviation: subArea.abbreviation,
-      disciplines: subArea.disciplines
+      domains: subArea.domains
     };
   },
 

@@ -24,7 +24,7 @@
               :disabled="isDisabled || invalid"
               :loading="isLoading"
             >
-              {{ formModel.externalId ? 'Update' : 'Create' }}
+              {{ formModel._id ? 'Update' : 'Create' }}
             </v-btn>
           </d-stack>
         </div>
@@ -105,7 +105,7 @@
     data() {
       return {
         lazyFormModel: {
-          researchGroupRef: { attributes: {} }
+          attributes: {}
         },
 
         storeDraftDebounce: undefined
@@ -136,14 +136,14 @@
       },
 
       attachedFiles() {
-        return extractFilesFromAttributes(this.formModel.researchGroupRef.attributes);
+        return extractFilesFromAttributes(this.formModel.attributes);
       },
 
       onchainData() {
         const onchainFields = this.$$teamAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
-            const value = this.formModel.researchGroupRef.attributes[attr._id];
+            const value = this.formModel.attributes[attr._id];
 
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
@@ -167,7 +167,7 @@
       offchainMeta() {
         return {
           attributes: compactAttributes(
-            replaceFileWithName(this.formModel.researchGroupRef.attributes)
+            replaceFileWithName(this.formModel.attributes)
           )
         };
       },
@@ -178,7 +178,7 @@
         const offchainMeta = _.cloneDeep(this.offchainMeta);
         const onchainData = _.cloneDeep(this.onchainData);
 
-        if (!onchainData.researchGroup) {
+        if (!onchainData.team) {
           onchainData.creator = this.$currentUser.username;
           onchainData.memo = this.$currentUser.pubKey;
           onchainData.fee = this.toAssetUnits(0);

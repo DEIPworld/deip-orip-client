@@ -17,7 +17,7 @@
   import { userDetails } from '@/features/Users/mixins/userDetails';
 
   export default {
-    name: 'ResearchDetailsEditCta',
+    name: 'ProjectDetailsEditCta',
     mixins: [userDetails]
   };
 </script>

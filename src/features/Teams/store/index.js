@@ -17,8 +17,8 @@ const STATE = {
 const GETTERS = {
   list: (state) => (query = {}) => collectionList(state.data, query),
 
-  one: (state) => (externalId, query = {}) => collectionOne(state.data, {
-    externalId,
+  one: (state) => (_id, query = {}) => collectionOne(state.data, {
+    _id,
     ...query
   })
 };
@@ -54,8 +54,9 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      payload.map((asset) => camelizeObjectKeys(asset)),
-      { key: 'externalId' }
+      // payload.map((asset) => camelizeObjectKeys(asset)),
+      payload,
+      { key: '_id' }
     );
   },
 
@@ -64,8 +65,9 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      camelizeObjectKeys(payload),
-      { key: 'externalId' }
+      // camelizeObjectKeys(payload),
+      payload,
+      { key: '_id' }
     );
   }
 };

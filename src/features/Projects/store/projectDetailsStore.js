@@ -21,8 +21,9 @@ const ACTIONS = {
 };
 
 const MUTATIONS = {
-  storeProjectDetails(state, research) {
-    state.projectDetails = camelizeObjectKeys(research);
+  storeProjectDetails(state, project) {
+    // state.projectDetails = camelizeObjectKeys(project);
+    state.projectDetails = project;
   }
 };
 

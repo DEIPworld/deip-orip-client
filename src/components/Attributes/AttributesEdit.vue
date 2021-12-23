@@ -13,9 +13,9 @@
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
-  import { AttributesDisciplineEdit } from '@/components/Attributes/Discipline';
+  import { AttributesDomainEdit } from '@/components/Attributes/Discipline';
   import { AttributesPartnersEdit } from '@/components/Attributes/Partners';
-  import { AttributesResearchGroupEdit } from '@/components/Attributes/ResearchGroup';
+  import { AttributesTeamEdit } from '@/components/Attributes/ResearchGroup';
   import { AttributesRoadmapEdit } from '@/components/Attributes/Roadmap';
   import { AttributesSelectEdit } from '@/components/Attributes/Select';
   import { AttributesStepperEdit } from '@/components/Attributes/Stepper';
@@ -37,9 +37,9 @@
     name: 'AttributesEdit',
     components: {
       AttributesCheckboxEdit,
-      AttributesDisciplineEdit,
+      AttributesDomainEdit,
       AttributesPartnersEdit,
-      AttributesResearchGroupEdit,
+      AttributesTeamEdit,
       AttributesRoadmapEdit,
       AttributesSelectEdit,
       AttributesStepperEdit,

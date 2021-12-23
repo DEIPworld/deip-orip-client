@@ -19,7 +19,7 @@
     <d-layout-section>
       <d-layout-section-main>
         <eci-history-and-stats
-          :content-id="content.externalId"
+          :content-id="content._id"
         />
       </d-layout-section-main>
     </d-layout-section>

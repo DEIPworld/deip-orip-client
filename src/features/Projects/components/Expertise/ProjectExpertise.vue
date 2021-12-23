@@ -1,16 +1,16 @@
 <template>
-  <d-layout v-if="research">
+  <d-layout v-if="project">
     <d-layout-section>
       <d-layout-section-main>
         <v-sheet :max-width="800">
           <div class="text-h4">
-            {{ research.title }}
+            {{ project.title }}
           </div>
           <div class="pt-2">
             <v-icon small>
               today
             </v-icon>
-            Created {{ research.researchRef.created_at | dateFormat('D MMM YYYY', true) }}
+            Created {{ project.createdAt | dateFormat('D MMM YYYY', true) }}
           </div>
         </v-sheet>
       </d-layout-section-main>
@@ -19,7 +19,7 @@
     <d-layout-section>
       <d-layout-section-main>
         <eci-history-and-stats
-          :research-id="research.externalId"
+          :project-id="project._id"
         />
       </d-layout-section-main>
     </d-layout-section>
@@ -39,14 +39,14 @@
       DLayoutSection, DLayoutSectionMain, DLayout, EciHistoryAndStats
     },
     props: {
-      researchId: {
+      projectId: {
         type: String,
         default: null
       }
     },
     computed: {
       ...mapGetters({
-        research: 'Project/projectDetails'
+        project: 'Project/projectDetails'
       })
     }
   };

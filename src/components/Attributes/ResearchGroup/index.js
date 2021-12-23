@@ -1,3 +1,3 @@
-export { default as AttributesResearchGroupEdit } from './AttributesResearchGroupEdit';
-export { default as AttributesResearchGroupRead } from './AttributesResearchGroupRead';
-export { default as AttributesResearchGroupSet } from './AttributesResearchGroupSet';
+export { default as AttributesTeamEdit } from './AttributesResearchGroupEdit';
+export { default as AttributesTeamRead } from './AttributesResearchGroupRead';
+export { default as AttributesTeamSet } from './AttributesResearchGroupSet';

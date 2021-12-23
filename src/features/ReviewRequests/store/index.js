@@ -28,9 +28,9 @@ const ACTIONS = {
             projectContentService.getProjectContent(r.projectContentId)
               .then((content) => {
                 r.content = content;
-                return projectService.getProject(content.research_external_id);
-              }).then((research) => {
-                r.research = research;
+                return projectService.getProject(content.projectId);
+              }).then((project) => {
+                r.project = project;
               })
           );
         });

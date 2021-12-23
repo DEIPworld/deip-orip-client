@@ -20,23 +20,23 @@ const domainsService = DomainsService.getInstance();
 
 const state = {
   content: {},
-  research: {},
+  project: {},
   group: {},
-  disciplinesList: [],
+  domainsList: [],
   membersList: [],
   contentList: [],
   contentReviewsList: [],
   expertsList: [],
-  researchContentReferencesGraph: [],
+  projectContentReferencesGraph: [],
   contentProposal: undefined,
   contentRef: null,
-  researchContentEciStatsRecords: null,
+  projectContentEciStatsRecords: null,
 
-  isLoadingResearchContentVotes: undefined,
-  isLoadingResearchDetails: undefined,
-  isLoadingResearchContentDetails: undefined,
-  isLoadingResearchContentReviews: undefined,
-  isLoadingResearchGroupDetails: undefined,
+  isLoadingProjectContentVotes: undefined,
+  isLoadingProjectDetails: undefined,
+  isLoadingProjectContentDetails: undefined,
+  isLoadingProjectContentReviews: undefined,
+  isLoadingTeamDetails: undefined,
 
   contentMetadata: null
 };
@@ -46,13 +46,13 @@ const getters = {
 
   content: (state, getters) => state.content,
 
-  research: (state, getters) => state.research,
+  project: (state, getters) => state.project,
 
   group: (state, getters) => state.group,
 
   contentProposal: (state) => state.contentProposal,
 
-  disciplinesList: (state, getters) => state.disciplinesList,
+  domainsList: (state, getters) => state.domainsList,
 
   contentList: (state, getters) => state.contentList,
 
@@ -62,7 +62,7 @@ const getters = {
 
   contentRef: (state, getters) => state.contentRef,
 
-  researchContentEciStatsRecords: (state) => state.researchContentEciStatsRecords,
+  projectContentEciStatsRecords: (state) => state.projectContentEciStatsRecords,
 
   isFilePackageContent(state, getters, rootState, rootGetters) {
     return state.contentRef && (state.contentRef.formatType === PROJECT_CONTENT_FORMAT.PACKAGE
@@ -87,11 +87,11 @@ const getters = {
 
   isPersonalGroup(state, getters, rootState, rootGetters) {
     const userPersonalGroup = rootGetters['auth/userPersonalGroup'];
-    return state.research.teamId == userPersonalGroup.id;
+    return state.project.teamId == userPersonalGroup.id;
   },
 
-  isResearchGroupMember(state, getters, rootState, rootGetters) {
-    const isMember = rootGetters['auth/userIsResearchGroupMember'](state.research.teamId);
+  isTeamMember(state, getters, rootState, rootGetters) {
+    const isMember = rootGetters['auth/userIsTeamMember'](state.project.teamId);
     return isMember;
   },
 
@@ -101,36 +101,36 @@ const getters = {
     return userHasReview;
   },
 
-  userHasResearchExpertise(state, getters, rootState, rootGetters) {
+  userHasProjectExpertise(state, getters, rootState, rootGetters) {
     const userExperiseList = rootGetters['auth/userExperise'];
-    return userExperiseList.some((exp) => exp.amount > 0 && state.research.disciplines.some((id) => id == exp.discipline_external_id));
+    return userExperiseList.some((exp) => exp.amount > 0 && state.project.domains.some((id) => id == exp.domainId));
   },
 
   isCreatingReviewAvailable(state, getters, rootState, rootGetters) {
-    return !getters.isResearchGroupMember && !getters.userHasReview && getters.userHasResearchExpertise && getters.isPublished;
+    return !getters.isTeamMember && !getters.userHasReview && getters.userHasProjectExpertise && getters.isPublished;
   },
 
   isSavingDraftAvailable(state, getters, rootState, rootGetters) {
-    return getters.isResearchGroupMember && getters.isDarContent && getters.isInProgress;
+    return getters.isTeamMember && getters.isDarContent && getters.isInProgress;
   },
 
   membersList: (state, getters) => state.membersList,
 
-  researchMembersList: (state, getters) => state.membersList
-    .filter((member) => state.research.members.some((m) => m == member.account.name)),
+  projectMembersList: (state, getters) => state.membersList
+    .filter((member) => state.project.members.some((m) => m == member.account.name)),
 
   contentMetadata: (state, getters) => state.contentMetadata,
 
-  researchContentReferencesGraph: (state, getters) => {
+  projectContentReferencesGraph: (state, getters) => {
     const nodes = [];
-    for (let i = 0; i < state.researchContentReferencesGraph.nodes.length; i++) {
-      const node = state.researchContentReferencesGraph.nodes[i];
+    for (let i = 0; i < state.projectContentReferencesGraph.nodes.length; i++) {
+      const node = state.projectContentReferencesGraph.nodes[i];
       nodes.push({ ...node });
     }
 
     const links = [];
-    for (let i = 0; i < state.researchContentReferencesGraph.links.length; i++) {
-      const link = state.researchContentReferencesGraph.links[i];
+    for (let i = 0; i < state.projectContentReferencesGraph.links.length; i++) {
+      const link = state.projectContentReferencesGraph.links[i];
       links.push({ ...link });
     }
 
@@ -141,15 +141,15 @@ const getters = {
 // actions
 const actions = {
 
-  loadResearchContentDetails({ state, commit, dispatch }, { projectId, contentId, ref, isReferencesPage }) {
+  loadProjectContentDetails({ state, commit, dispatch }, { projectId, contentId, ref, isReferencesPage }) {
     commit('RESET_STATE');
-    return dispatch('loadResearchDetails', { projectId })
+    return dispatch('loadProjectDetails', { projectId })
       .then(() => {
         if (!contentId || contentId === '!draft') { // this is a draft that is not published yet
-          commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+          commit('SET_PROJECT_CONTENT_DETAILS_LOADING_STATE', true);
           const contentRefLoad = new Promise((resolve, reject) => {
-            dispatch('loadResearchContentRef', {
-              projectId: state.research.external_id,
+            dispatch('loadProjectContentRef', {
+              projectId: state.project._id,
               refId: ref,
               notify: resolve,
               isReferencesPage: false
@@ -158,28 +158,28 @@ const actions = {
 
           return Promise.all([contentRefLoad])
             .finally(() => {
-              commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
+              commit('SET_PROJECT_CONTENT_DETAILS_LOADING_STATE', false);
             });
         }
 
-        commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', true);
+        commit('SET_PROJECT_CONTENT_DETAILS_LOADING_STATE', true);
         return projectContentService.getProjectContent(contentId)
           .then((contentObj) => {
-            commit('SET_RESEARCH_CONTENT_DETAILS', contentObj);
+            commit('SET_PROJECT_CONTENT_DETAILS', contentObj);
             const contentRefLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentRef', {
-                projectId: state.research.external_id,
+              dispatch('loadProjectContentRef', {
+                projectId: state.project._id,
                 refId: contentId,
                 notify: resolve
               });
             });
 
             const contentReviewsLoad = new Promise((resolve, reject) => {
-              dispatch('loadContentReviews', { contentId: contentObj.external_id, notify: resolve });
+              dispatch('loadContentReviews', { contentId: contentObj._id, notify: resolve });
             });
 
             const contentVotesLoad = new Promise((resolve, reject) => {
-              dispatch('loadResearchContentVotes', { researchId: contentObj.research_external_id, notify: resolve });
+              dispatch('loadProjectContentVotes', { projectId: contentObj.projectId, notify: resolve });
             });
             isReferencesPage
 
@@ -187,11 +187,11 @@ const actions = {
               contentRefLoad,
               contentReviewsLoad,
               contentVotesLoad,
-              dispatch('loadResearchContentEciStatsRecords', { research_content_external_id: contentObj.external_id })
+              dispatch('loadProjectContentEciStatsRecords', { projectContentId: contentObj._id })
             ];
 
             if (isReferencesPage) {
-              loading.push(dispatch('loadResearchContentReferences', contentObj.external_id));
+              loading.push(dispatch('loadProjectContentReferences', contentObj._id));
             }
 
             return Promise.all(loading);
@@ -199,106 +199,106 @@ const actions = {
             console.error(err);
           })
           .finally(() => {
-            commit('SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE', false);
+            commit('SET_PROJECT_CONTENT_DETAILS_LOADING_STATE', false);
           });
       });
   },
 
-  loadResearchContentVotes({ state, commit }, { researchId, notify }) {
-    commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', true);
-    const disciplinesList = [];
+  loadProjectContentVotes({ state, commit }, { projectId, notify }) {
+    commit('SET_PROJECT_CONTENT_VOTES_LOADING_STATE', true);
+    const domainsList = [];
 
-    domainsService.getDomainsByProject(researchId)
+    domainsService.getDomainsByProject(projectId)
       .then((data) => {
         const expertsPromises = [];
 
         for (let i = 0; i < data.length; i++) {
-          const discipline = data[i];
-          disciplinesList.push(discipline);
-          expertsPromises.push(expertiseContributionsService.getDisciplineExpertiseTokens(discipline.externalId));
+          const domain = data[i];
+          domainsList.push(domain);
+          expertsPromises.push(expertiseContributionsService.getDomainExpertiseTokens(domain._id));
         }
 
         return Promise.all([
           Promise.all(expertsPromises)
         ]);
       })
-      .then(([expertTokensPerDiscipline]) => {
+      .then(([expertTokensPerDomain]) => {
         const expertsAccountNames = [];
-        expertTokensPerDiscipline.forEach((e) => {
+        expertTokensPerDomain.forEach((e) => {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
-        commit('SET_RESEARCH_CONTENT_DISCIPLINES_LIST', disciplinesList);
+        commit('SET_PROJECT_CONTENT_DOMAINS_LIST', domainsList);
         return userService.getUsers(_.uniq(expertsAccountNames));
       }).then((expertsList) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
       .finally(() => {
-        commit('SET_RESEARCH_CONTENT_VOTES_LOADING_STATE', false);
+        commit('SET_PROJECT_CONTENT_VOTES_LOADING_STATE', false);
         if (notify) notify();
       });
   },
 
-  loadResearchDetails({ state, commit, dispatch }, { projectId }) {
-    commit('SET_RESEARCH_DETAILS_LOADING_STATE', true);
+  loadProjectDetails({ state, commit, dispatch }, { projectId }) {
+    commit('SET_PROJECT_DETAILS_LOADING_STATE', true);
 
     return projectService.getProject(projectId)
-      .then((research) => {
-        commit('SET_RESEARCH_DETAILS', research);
-        return userService.getUsersByTeam(research.research_group.external_id);
+      .then((project) => {
+        commit('SET_PROJECT_DETAILS', project);
+        return userService.getUsersByTeam(project.teamId);
       })
       .then((users) => {
-        commit('SET_RESEARCH_GROUP_MEMBERS_LIST', users);
+        commit('SET_TEAM_MEMBERS_LIST', users);
         return projectContentService.getProjectContentsByProject(projectId);
       })
       .then((list) => {
-        commit('SET_RESEARCH_CONTENT_LIST', list);
+        commit('SET_PROJECT_CONTENT_LIST', list);
       })
       .finally(() => {
-        commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
+        commit('SET_PROJECT_DETAILS_LOADING_STATE', false);
       });
   },
 
-  loadResearchGroupDetails({ state, commit, dispatch }, { teamId }) {
-    commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', true);
+  loadTeamDetails({ state, commit, dispatch }, { teamId }) {
+    commit('SET_TEAM_DETAILS_LOADING_STATE', true);
     return teamService.getTeam(teamId)
       .then((team) => {
-        commit('SET_RESEARCH_GROUP_DETAILS', team);
+        commit('SET_TEAM_DETAILS', team);
         return team;
       }, (err) => {
         console.error(err);
       })
       .finally(() => {
-        commit('SET_RESEARCH_GROUP_DETAILS_LOADING_STATE', false);
+        commit('SET_TEAM_DETAILS_LOADING_STATE', false);
       });
   },
 
-  loadResearchContentRef({ state, commit, dispatch }, { refId, projectId, notify }) {
+  loadProjectContentRef({ state, commit, dispatch }, { refId, projectId, notify }) {
     return projectContentService.getProjectContentRef(refId)
       .then((contentRef) => {
-        commit('SET_RESEARCH_CONTENT_REF', contentRef);
-        return dispatch('loadResearchGroupDetails', { teamId: contentRef.researchGroupExternalId });
+        commit('SET_PROJECT_CONTENT_REF', contentRef);
+        return dispatch('loadTeamDetails', { teamId: contentRef.teamId });
       })
-      .then((team) => proposalsService.getProposalsByCreator(team.external_id))
+      .then((team) => proposalsService.getProposalsByCreator(team._id))
       .then((proposals) => {
         const { contentRef } = state;
-        const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.research_external_id == projectId);
+        const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_PROJECT_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.projectId == projectId);
         commit('SET_CONTENT_PROPOSAL', contentProposal || null);
       })
       .catch((err) => { console.error(err); })
       .finally(() => {
-        commit('SET_RESEARCH_DETAILS_LOADING_STATE', false);
+        commit('SET_PROJECT_DETAILS_LOADING_STATE', false);
         if (notify) notify();
       });
   },
 
   loadContentReviews({ state, dispatch, commit }, { contentId, notify }) {
     const reviews = [];
-    commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', true);
+    commit('SET_PROJECT_CONTENT_REVIEWS_LOADING_STATE', true);
     reviewService.getReviewsByProjectContent(contentId)
       .then((items) => {
         reviews.push(...items);
         return Promise.all([
-          Promise.all(reviews.map((item) => reviewService.getReviewUpvotes(item.external_id))),
+          Promise.all(reviews.map((item) => reviewService.getReviewUpvotes(item._id))),
           userService.getUsers(reviews.map((r) => r.author))
         ]);
       })
@@ -329,31 +329,31 @@ const actions = {
             vote.voterProfile = users.find((u) => vote.upvoter == u.account.name);
           }
         }
-        commit('SET_RESEARCH_CONTENT_REVIEWS_LIST', reviews);
+        commit('SET_PROJECT_CONTENT_REVIEWS_LIST', reviews);
       })
       .finally(() => {
-        commit('SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE', false);
+        commit('SET_PROJECT_CONTENT_REVIEWS_LOADING_STATE', false);
         if (notify) notify();
       });
   },
 
-  loadResearchContentReferences({ state, dispatch, commit }, projectContentId) {
+  loadProjectContentReferences({ state, dispatch, commit }, projectContentId) {
     let graph = {};
     return projectContentService.getProjectContentReferencesGraph(projectContentId)
       .then((graphData) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(
-          ({ researchGroup }) => teamService.getTeam(researchGroup.external_id)
+          ({ team }) => teamService.getTeam(team._id)
         ));
       })
-      .then((researchGroups) => {
+      .then((teams) => {
         graph.nodes = graph.nodes.map((n) => ({
           ...n,
-          researchGroup: researchGroups.find(
-            (rg) => rg.external_id === n.researchGroup.external_id
-          ) || n.researchGroup.external_id
+          team: teams.find(
+            (rg) => rg._id === n.teamId
+          ) || n.teamId
         }));
-        commit('SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA', graph);
+        commit('SET_PROJECT_CONTENT_REFERENCES_GRAPH_DATA', graph);
       });
   },
 
@@ -365,16 +365,16 @@ const actions = {
     commit('SET_DRAFT_REFERENCES_LIST', references);
   },
 
-  async loadResearchContentMetadata({ state, commit, dispatch }, { notify }) {
+  async loadProjectContentMetadata({ state, commit, dispatch }, { notify }) {
     // TODO: use plugin
     commit('RESET_STATE');
     if (notify) notify();
   },
 
-  loadResearchContentEciStatsRecords({ commit }, filter) {
-    return expertiseContributionsService.getResearchContentExpertiseStats(filter.research_content_external_id, filter)
+  loadProjectContentEciStatsRecords({ commit }, filter) {
+    return expertiseContributionsService.getProjectContentExpertiseStats(filter.projectContentId, filter)
       .then((stats) => {
-        commit('SET_RESEARCH_CONTENT_ECI_STATS', stats);
+        commit('SET_PROJECT_CONTENT_ECI_STATS', stats);
       });
   }
 };
@@ -382,19 +382,19 @@ const actions = {
 // mutations
 const mutations = {
 
-  SET_RESEARCH_CONTENT_DETAILS(state, content) {
+  SET_PROJECT_CONTENT_DETAILS(state, content) {
     state.content = content;
   },
 
-  SET_RESEARCH_CONTENT_DISCIPLINES_LIST(state, list) {
-    state.disciplinesList = list;
+  SET_PROJECT_CONTENT_DOMAINS_LIST(state, list) {
+    state.domainsList = list;
   },
 
-  SET_RESEARCH_CONTENT_REVIEWS_LIST(state, list) {
+  SET_PROJECT_CONTENT_REVIEWS_LIST(state, list) {
     state.contentReviewsList = list;
   },
 
-  SET_RESEARCH_CONTENT_LIST(state, list) {
+  SET_PROJECT_CONTENT_LIST(state, list) {
     state.contentList = list;
   },
 
@@ -402,39 +402,39 @@ const mutations = {
     state.expertsList = list;
   },
 
-  SET_RESEARCH_DETAILS(state, research) {
-    state.research = research;
+  SET_PROJECT_DETAILS(state, project) {
+    state.project = project;
   },
 
   SET_CONTENT_PROPOSAL(state, contentProposal) {
     state.contentProposal = contentProposal;
   },
 
-  SET_RESEARCH_CONTENT_REF(state, contentRef) {
+  SET_PROJECT_CONTENT_REF(state, contentRef) {
     state.contentRef = contentRef;
   },
 
-  SET_RESEARCH_DETAILS_LOADING_STATE(state, value) {
-    state.isLoadingResearchDetails = value;
+  SET_PROJECT_DETAILS_LOADING_STATE(state, value) {
+    state.isLoadingProjectDetails = value;
   },
 
-  SET_RESEARCH_CONTENT_DETAILS_LOADING_STATE(state, value) {
-    state.isLoadingResearchContentDetails = value;
+  SET_PROJECT_CONTENT_DETAILS_LOADING_STATE(state, value) {
+    state.isLoadingProjectContentDetails = value;
   },
 
-  SET_RESEARCH_CONTENT_VOTES_LOADING_STATE(state, value) {
-    state.isLoadingResearchContentVotes = value;
+  SET_PROJECT_CONTENT_VOTES_LOADING_STATE(state, value) {
+    state.isLoadingProjectContentVotes = value;
   },
 
-  SET_RESEARCH_CONTENT_REVIEWS_LOADING_STATE(state, value) {
-    state.isLoadingResearchContentReviews = value;
+  SET_PROJECT_CONTENT_REVIEWS_LOADING_STATE(state, value) {
+    state.isLoadingProjectContentReviews = value;
   },
 
-  SET_RESEARCH_GROUP_DETAILS_LOADING_STATE(state, value) {
-    state.isLoadingResearchGroupDetails = value;
+  SET_TEAM_DETAILS_LOADING_STATE(state, value) {
+    state.isLoadingTeamDetails = value;
   },
 
-  SET_RESEARCH_GROUP_MEMBERS_LIST(state, list) {
+  SET_TEAM_MEMBERS_LIST(state, list) {
     state.membersList = list;
   },
 
@@ -446,20 +446,20 @@ const mutations = {
     state.contentRef.references = list;
   },
 
-  SET_RESEARCH_CONTENT_METADATA(state, value) {
+  SET_PROJECT_CONTENT_METADATA(state, value) {
     state.contentMetadata = value;
   },
 
-  SET_RESEARCH_GROUP_DETAILS(state, value) {
+  SET_TEAM_DETAILS(state, value) {
     state.group = value;
   },
 
-  SET_RESEARCH_CONTENT_REFERENCES_GRAPH_DATA(state, graph) {
-    state.researchContentReferencesGraph = graph;
+  SET_PROJECT_CONTENT_REFERENCES_GRAPH_DATA(state, graph) {
+    state.projectContentReferencesGraph = graph;
   },
 
-  SET_RESEARCH_CONTENT_ECI_STATS(state, value) {
-    state.researchContentEciStatsRecords = value;
+  SET_PROJECT_CONTENT_ECI_STATS(state, value) {
+    state.projectContentEciStatsRecords = value;
   },
 
   RESET_STATE(state) {

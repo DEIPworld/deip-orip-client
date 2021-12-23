@@ -13,7 +13,7 @@ export default {
     contentTable: `${project(true)} table of content`,
     draft: 'Draft is',
     proposed: 'proposed',
-    locked: 'as research content and locked for editing'
+    locked: 'as project content and locked for editing'
   },
   metadata: {
     blockNum: 'Block #{blockNum}',

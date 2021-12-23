@@ -13,7 +13,7 @@
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="logo-image" :src="tenant | tenantLogoSrc(80, 80, false)">
+        <img height="40px" class="logo-image" :src="portal | portalLogoSrc(80, 80, false)">
       </router-link>
 
       <v-spacer />
@@ -94,7 +94,7 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
+        portal: 'auth/portal',
         themeSettings: 'layout/themeSettings'
       }),
       isLoggedIn() { return accessService.isLoggedIn(); }

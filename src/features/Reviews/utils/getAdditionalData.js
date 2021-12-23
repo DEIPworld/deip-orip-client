@@ -6,8 +6,8 @@ const reviewService = ReviewService.getInstance();
 const projectContentService = ProjectContentService.getInstance();
 
 export const getAdditionalDataOne = (item) => Promise.all([
-  reviewService.getReviewUpvotes(item.external_id),
-  projectContentService.getProjectContent(item.research_content_external_id)
+  reviewService.getReviewUpvotes(item._id),
+  projectContentService.getProjectContent(item.projectContentId)
 ]).then(([votes, contentData]) => ({
   ...item,
   contentData: camelizeObjectKeys(contentData),

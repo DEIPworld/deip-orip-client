@@ -17,10 +17,10 @@
   import Proxyable from 'vuetify/lib/mixins/proxyable';
 
   import { AttributesCheckboxSet } from '@/components/Attributes/Checkbox';
-  import { AttributesDisciplineSet } from '@/components/Attributes/Discipline';
+  import { AttributesDomainSet } from '@/components/Attributes/Discipline';
   import { AttributesPartnersSet } from '@/components/Attributes/Partners';
   import { AttributesRoadmapSet } from '@/components/Attributes/Roadmap';
-  import { AttributesResearchGroupSet } from '@/components/Attributes/ResearchGroup';
+  import { AttributesTeamSet } from '@/components/Attributes/ResearchGroup';
   import { AttributesSelectSet } from '@/components/Attributes/Select';
   import { AttributesStepperSet } from '@/components/Attributes/Stepper';
   import { AttributesSwitchSet } from '@/components/Attributes/Switch';
@@ -38,9 +38,9 @@
     name: 'AttributesSet',
     components: {
       AttributesCheckboxSet,
-      AttributesDisciplineSet,
+      AttributesDomainSet,
       AttributesPartnersSet,
-      AttributesResearchGroupSet,
+      AttributesTeamSet,
       AttributesRoadmapSet,
       AttributesSelectSet,
       AttributesStepperSet,

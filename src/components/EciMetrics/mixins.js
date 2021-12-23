@@ -2,7 +2,7 @@ import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 import { ASSESSMENT_CRITERIA_TYPE, EXPERTISE_CONTRIBUTION_TYPE } from '@/variables';
 
 export const defaultFilterModel = () => ({
-  discipline: '',
+  domain: '',
   date: [],
   contribution: '',
   criteria: ''
@@ -16,7 +16,7 @@ export const metricsMixin = {
       default: undefined
     },
 
-    researchId: {
+    projectId: {
       type: String,
       default: undefined
     },
@@ -26,7 +26,7 @@ export const metricsMixin = {
       default: undefined
     },
 
-    disciplines: {
+    domains: {
       type: Array,
       default: () => ([])
     }
@@ -36,9 +36,9 @@ export const metricsMixin = {
       return {
         filter: this.filterModel || {},
         ...(this.contentId ? { contentId: this.contentId } : {}),
-        ...(this.researchId ? { researchId: this.researchId } : {}),
+        ...(this.projectId ? { projectId: this.projectId } : {}),
         ...(this.accountName ? { accountName: this.accountName } : {}),
-        ...(this.disciplines ? { disciplines: this.disciplines } : {})
+        ...(this.domains ? { domains: this.domains } : {})
       };
     }
   }
@@ -46,9 +46,9 @@ export const metricsMixin = {
 
 export const filterableMetrics = {
   props: {
-    filterDisciplines: {
+    filterDomains: {
       type: [Array, Boolean],
-      default() { return this.$store.getters['Disciplines/topLevelList'](); }
+      default() { return this.$store.getters['Domains/topLevelList'](); }
     },
     filterCriterias: {
       type: [Array, Boolean],
@@ -77,10 +77,10 @@ export const filterableMetrics = {
     };
   },
   computed: {
-    internalDisciplines() {
-      return this.filterDisciplines
+    internalDomains() {
+      return this.filterDomains
         .map((d) => ({
-          external_id: d.externalId || d.id,
+          _id: d._id,
           label: d.label || d.name
         }));
     },

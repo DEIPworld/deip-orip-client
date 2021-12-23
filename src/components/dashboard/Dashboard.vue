@@ -19,7 +19,7 @@
             <v-row justify="space-between" class="column-header">
               <v-col class="text-h6 bold">
                 Projects
-                <span class="primary--text pl-2">{{ researches.length }}</span>
+                <span class="primary--text pl-2">{{ projects.length }}</span>
               </v-col>
               <v-col>
                 <v-btn
@@ -36,16 +36,16 @@
               </v-col>
             </v-row>
 
-            <research-project-tile
-              v-for="({research, authors, tokenSale, tokenSaleContributions, group }, i) in researches"
-              :key="'research-tile-' + research.id"
+            <project-project-tile
+              v-for="({project, authors, tokenSale, tokenSaleContributions, group }, i) in projects"
+              :key="'project-tile-' + project.id"
               row
-              :research="research"
+              :project="project"
               :members="authors"
               :token-sale="tokenSale"
               :token-sale-contributions="tokenSaleContributions"
               :group="group"
-              :class="{'pb-5': i != researches.length - 1}"
+              :class="{'pb-5': i != projects.length - 1}"
             />
           </v-col>
 
@@ -105,7 +105,7 @@
                   </v-row>
                 </div>
 
-                <v-row v-if="hasResearchShares" column>
+                <v-row v-if="hasProjectShares" column>
                   <v-col class="text-h6 bold">
                     Distribution
                   </v-col>
@@ -152,9 +152,9 @@
                     </v-col>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
-                    <v-col>Reviews on my research</v-col>
+                    <v-col>Reviews on my project</v-col>
                     <v-col class="primary--text text-body-2">
-                      {{ reviewsOnMyResearchCount }}
+                      {{ reviewsOnMyProjectCount }}
                     </v-col>
                   </v-row>
                   <v-row justify="space-between" class="column-text-item py-1">
@@ -219,7 +219,7 @@
               </v-col>
             </v-row>
 
-            <v-row v-if="hasResearchShares" align="end">
+            <v-row v-if="hasProjectShares" align="end">
               <v-col
                 xl="12"
                 lg="12"
@@ -303,7 +303,7 @@
       return {
         activeTab: 'tab-summary',
 
-        selectedResearchToReview: null,
+        selectedProjectToReview: null,
         isRequestingReview: false,
 
         blackList: [...this.SYSTEM_USERS],
@@ -317,26 +317,26 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        tenant: 'auth/tenant',
+        portal: 'auth/portal',
         themeSettings: 'layout/themeSettings',
-        researches: 'dashboard/researches',
+        projects: 'dashboard/projects',
         experts: 'dashboard/experts',
         currentShares: 'dashboard/currentShares',
         investments: 'dashboard/investments',
-        reviewsOnMyResearchCount: 'dashboard/reviewsOnMyResearchCount',
+        reviewsOnMyProjectCount: 'dashboard/reviewsOnMyProjectCount',
         reviewsOnMyRequestsCount: 'dashboard/reviewsOnMyRequestsCount',
         myInvitesCount: 'dashboard/myInvitesCount',
         myReviewsCount: 'dashboard/myReviewsCount'
       }),
 
-      hasResearchShares() {
+      hasProjectShares() {
         return this.currentShares.length;
       },
 
       isRequestReviewDisabled() {
         return !this.selectedExpert
-          || !this.selectedResearchToReview
-          || !this.selectedExpert.expertiseTokens.some((exp) => this.selectedResearchToReview.disciplines.some((d) => d.id == exp.discipline_id));
+          || !this.selectedProjectToReview
+          || !this.selectedExpert.expertiseTokens.some((exp) => this.selectedProjectToReview.domains.some((d) => d.id == exp.domainId));
       },
 
       sharesDistributionChart() {
@@ -344,7 +344,7 @@
         return {
           data: [
             ['Distribution', ''],
-            ...this.currentShares.map(({ research, share }) => [research.title, this.convertToPercent(share.amount) / totalShares * 100])
+            ...this.currentShares.map(({ project, share }) => [project.title, this.convertToPercent(share.amount) / totalShares * 100])
             // ['Project title', 10]
           ],
 
@@ -370,7 +370,7 @@
       totalAssetsPriceChart() {
         return {
           data: [
-            ['Date', ...this.currentShares.map(({ research }) => `Asset ${research.id}`)],
+            ['Date', ...this.currentShares.map(({ project }) => `Asset ${project.id}`)],
             [moment()
               .day(-10)
               .toDate(), ...this.currentShares.map((s, i) => this.mockPreviousTokenPrice(s, 10))],
@@ -515,7 +515,7 @@
       overflow: scroll;
     }
 
-    .research-tiles-container {
+    .project-tiles-container {
       height: 100vh;
     }
   }

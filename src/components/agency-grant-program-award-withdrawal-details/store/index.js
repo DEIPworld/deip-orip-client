@@ -15,7 +15,7 @@ const state = {
   award: undefined,
   awardPI: undefined,
   awardee: undefined,
-  research: undefined,
+  project: undefined,
   awardeeOrganization: undefined,
   foa: undefined,
   foaOrganization: undefined,
@@ -43,7 +43,7 @@ const getters = {
     isSubawardee: state.awardee.source != '',
     organization: state.awardeeOrganization,
     university: state.universityOrganization,
-    research: state.research
+    project: state.project
   }),
 
   treasury: (state) => ({
@@ -163,26 +163,26 @@ const actions = {
       })
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
-        return teamService.getTeam(state.foa.organization_external_id);
+        return teamService.getTeam(state.foa.organizationId);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
-        return projectService.getProject(state.awardee.research_external_id);
+        return projectService.getProject(state.awardee.projectId);
       })
-      .then((research) => {
-        commit('SET_AWARDEE_RESEARCH', research);
-        return teamService.getTeam(state.research.research_group.external_id);
+      .then((project) => {
+        commit('SET_AWARDEE_PROJECT', project);
+        return teamService.getTeam(state.project.teamId);
       })
-      .then((researchGroup) => {
-        commit('SET_AWARDEE_ORGANIZATION', researchGroup);
-        return teamService.getTeam(state.award.university_external_id);
+      .then((team) => {
+        commit('SET_AWARDEE_ORGANIZATION', team);
+        return teamService.getTeam(state.award.universityId);
       })
-      .then((researchGroup) => {
-        commit('SET_UNIVERSITY_ORGANIZATION', researchGroup);
-        return teamService.getTeam(state.foa.treasury_external_id);
+      .then((team) => {
+        commit('SET_UNIVERSITY_ORGANIZATION', team);
+        return teamService.getTeam(state.foa.treasuryId);
       })
-      .then((researchGroup) => {
-        commit('SET_TREASURY_ORGANIZATION', researchGroup);
+      .then((team) => {
+        commit('SET_TREASURY_ORGANIZATION', team);
       })
       .catch((err) => { console.error(err); })
       .finally(() => {
@@ -257,8 +257,8 @@ const mutations = {
     state.awardee = awardee;
   },
 
-  SET_AWARDEE_RESEARCH(state, research) {
-    state.research = research;
+  SET_AWARDEE_PROJECT(state, project) {
+    state.project = project;
   },
 
   SET_AWARDEE_ORGANIZATION(state, organization) {

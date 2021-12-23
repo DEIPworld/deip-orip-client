@@ -24,7 +24,7 @@
         />
         <span>
           <span v-if="log.metadata.proposal.action == 1">
-            approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" research start
+            approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" project start
           </span>
           <span v-else-if="log.metadata.proposal.action == 10">
             approved "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for "<router-link
@@ -32,10 +32,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
           <span v-else-if="log.metadata.proposal.action == 5">
             approved fundraising campaign for "<router-link
@@ -43,10 +43,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
           <span v-else-if="log.metadata.proposal.action == 2">
             approved invitation for <platform-avatar

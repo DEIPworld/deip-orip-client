@@ -166,7 +166,7 @@
       //   const extenders = {
       //     [LAYOUT_TYPES.SET]: (attr) => ({
       //       component: 'AttributesSet',
-      //       model: `researchRef.attributes.${attr._id}`,
+      //       model: `attributes.${attr._id}`,
       //       props: {
       //         attribute: `@attributes.${attr._id}`
       //       }
@@ -177,7 +177,7 @@
       //       ...(propsForRead[attr.type] ? _.cloneDeep(propsForRead[attr.type]) : {}),
       //       ...{
       //         props: {
-      //           attribute: `@research.researchRef.attributes.${attr._id}`
+      //           attribute: `@project.attributes.${attr._id}`
       //         }
       //       }
       //     })
@@ -187,7 +187,7 @@
       //     {
       //       component: 'span',
       //       name: 'Creation date',
-      //       text: '@research.createdAt',
+      //       text: '@project.createdAt',
       //       icon: 'mdi-calendar-text'
       //     },
       //     ...this.$$projectAttributes

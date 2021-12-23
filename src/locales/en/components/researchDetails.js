@@ -33,7 +33,7 @@ export default {
     waitApproval: 'You have sent a join request on {date}, please wait for approval',
     acceptInv: 'Please accept invite on',
     yourProfile: 'your profile page',
-    joinResGroup: 'to join the research group',
+    joinResGroup: 'to join the team',
     eciBlock: 'Expertise Contribution Index',
     private: `Private ${project()}`,
     public: `Public ${project()}`,

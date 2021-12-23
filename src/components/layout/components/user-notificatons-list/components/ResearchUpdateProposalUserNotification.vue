@@ -7,21 +7,21 @@
     <template v-if="isAutoAccepted">
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
       {{ $t('notifications.updated') }}
-      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      "<span class="primary--text half-bold">{{ notification.metadata.project.title }}</span>"
       {{ $t('notifications.project') }}
     </template>
     <template v-else-if="isAcceptedByQuorum">
-      "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+      "<span class="primary--text half-bold">{{ notification.metadata.team.name }}</span>"
       {{ $t('notifications.updated') }}
-      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      "<span class="primary--text half-bold">{{ notification.metadata.project.title }}</span>"
       {{ $t('notifications.projectMeta') }}
     </template>
     <template v-else>
       <span class="primary--text half-bold">{{ proposalCreator | fullname }}</span>
       {{ $t('notifications.propUpdate') }}
-      "<span class="primary--text half-bold">{{ notification.metadata.research.title }}</span>"
+      "<span class="primary--text half-bold">{{ notification.metadata.project.title }}</span>"
       {{ $t('notifications.projectMetaIn') }}
-      <!-- "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>" -->
+      <!-- "<span class="primary--text half-bold">{{ notification.metadata.team.name }}</span>" -->
     </template>
   </user-notifications-list-item>
 </template>
@@ -32,7 +32,7 @@
     from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
 
   export default {
-    name: 'ResearchUpdateProposalUserNotification',
+    name: 'ProjectUpdateProposalUserNotification',
     components: { UserNotificationsListItem },
     props: {
       notification: {
@@ -45,10 +45,10 @@
     },
     computed: {
       isAcceptedByQuorum() {
-        return this.notification.metadata.researchGroup.is_dao && this.notification.metadata.proposal.is_completed;
+        return this.notification.metadata.team.is_dao && this.notification.metadata.proposal.is_completed;
       },
       isAutoAccepted() {
-        return !this.notification.metadata.researchGroup.is_dao && this.notification.metadata.isProposalAutoAccepted;
+        return !this.notification.metadata.team.is_dao && this.notification.metadata.isProposalAutoAccepted;
       },
       proposalCreator() {
         return this.notification.metadata.emitter;
@@ -61,14 +61,14 @@
           this.$router.push({
             name: 'project.details',
             params: {
-              projectId: this.notification.metadata.research.external_id
+              projectId: this.notification.metadata.project._id
             }
           });
         } else {
           this.$router.push({
             name: 'team.details',
             params: {
-              teamId: this.notification.metadata.researchGroup.external_id
+              teamId: this.notification.metadata.team._id
             },
             hash: '#proposals'
           });

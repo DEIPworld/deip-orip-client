@@ -128,15 +128,15 @@
       },
 
       accessGranted() {
-        return this.project.researchRef.grantedAccess
+        return this.project.grantedAccess
           .some((entry) => [
             this.$currentUser.username,
-            ...this.$currentUser.teams.map((g) => g.external_id)
+            ...this.$currentUser.teams.map((g) => g._id)
           ].includes(entry));
       },
 
       hideForInternals() {
-        return this.$$isProjectMember || (this.$$isTenantUser && !this.projectHasLicense);
+        return this.$$isProjectMember || (this.$$isPortalUser && !this.projectHasLicense);
       }
     },
 
@@ -151,16 +151,16 @@
       sendRequest() {
         this.processing = true;
 
-        const parties = this.$tenant.id === this.project.tenantId
+        const parties = this.$portal.id === this.project.portalId
           ? [
             this.$currentUser.username,
-            this.project.researchGroup.external_id
+            this.project.teamId
           ]
           : [
             this.$currentUser.username,
-            this.project.researchGroup.external_id,
-            this.$tenant.id,
-            this.project.tenantId
+            this.project.teamId,
+            this.$portal.id,
+            this.project.portalId
           ];
 
         // TODO: Use ContractAgreement instead of NDA
@@ -172,13 +172,13 @@
           },
           parties,
           description: '7559a289fa49afe62e4f37fe1c9097d3cb7834c98a2f42da5443242e8929a5d3',
-          projectId: this.project.externalId,
+          projectId: this.project._id,
           startTime: undefined,
           endTime: new Date(new Date().getTime() + 86400000 * 365 * 50).toISOString().split('.')[0], // 50 years
           requestEndTime: this.dialogModel.endTime,
-          approvers: this.$tenant.id === this.project.tenantId
+          approvers: this.$portal.id === this.project.portalId
             ? [creator]
-            : [creator, this.$tenant.id]
+            : [creator, this.$portal.id]
         })
           .then(() => {
             this.closeDialog();

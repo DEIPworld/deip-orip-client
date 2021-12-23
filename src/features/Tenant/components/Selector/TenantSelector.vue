@@ -3,7 +3,7 @@
     v-model="internalValue"
 
     :label="label"
-    :items="tenantsList"
+    :items="portalsList"
 
     item-text="profile.shortName"
     item-value="id"
@@ -21,7 +21,7 @@
 <!--    v-model="internalValue"-->
 
 <!--    :label="label"-->
-<!--    :items="tenantsList"-->
+<!--    :items="portalsList"-->
 
 <!--    item-text="name"-->
 <!--    item-value="id"-->
@@ -43,7 +43,7 @@
 <!--  >-->
 <!--    <template #item="{ item }">-->
 <!--      <v-list-item-avatar :size="24">-->
-<!--        <v-img :src="item | tenantLogoSrc(24)" />-->
+<!--        <v-img :src="item | portalLogoSrc(24)" />-->
 <!--      </v-list-item-avatar>-->
 <!--      <v-list-item-content class="text-body-2">-->
 <!--        {{ item.profile.shortName }}-->
@@ -57,7 +57,7 @@
 <!--        outlined-->
 <!--      >-->
 <!--        <v-avatar left class="mr-2 ml-n2">-->
-<!--          <v-img :src="item | tenantLogoSrc(24)" />-->
+<!--          <v-img :src="item | portalLogoSrc(24)" />-->
 <!--        </v-avatar>-->
 
 <!--        <div class="text-truncate spacer">-->
@@ -77,7 +77,7 @@
 
 <!--      <div v-else class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">-->
 <!--        <v-avatar size="24" class="mr-2">-->
-<!--          <img :src="item | tenantLogoSrc(24)" alt="">-->
+<!--          <img :src="item | portalLogoSrc(24)" alt="">-->
 <!--        </v-avatar>-->
 <!--        <div class="text-truncate">-->
 <!--          {{ item.profile.shortName }}-->
@@ -98,14 +98,14 @@
   import { hasValue } from '@/utils/helpers';
 
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
-  import { tenantsListStore } from '@/features/Tenant/store/tenantsListStore';
+  import { portalsListStore } from '@/features/Tenant/store/tenantsListStore';
 
   export default {
-    name: 'TenantSelector',
+    name: 'PortalSelector',
     components: { DAutocomplete },
     mixins: [
       Proxyable,
-      componentStoreFactoryOnce(tenantsListStore, 'Tenants')
+      componentStoreFactoryOnce(portalsListStore, 'Portals')
     ],
 
     props: {
@@ -136,14 +136,14 @@
 
     computed: {
       ...mapState({
-        rawTenantsList(state, getters) { return getters['Tenants/list'](); }
+        rawPortalsList(state, getters) { return getters['Portals/list'](); }
       }),
 
-      tenantsList() {
+      portalsList() {
         if (hasValue(this.filter)) {
-          return this.$where(this.rawTenantsList, this.filter);
+          return this.$where(this.rawPortalsList, this.filter);
         }
-        return this.rawTenantsList;
+        return this.rawPortalsList;
       },
 
       isMultipleProps() {
@@ -167,14 +167,14 @@
     },
 
     created() {
-      this.loadTenants();
+      this.loadPortals();
     },
 
     methods: {
-      loadTenants() {
+      loadPortals() {
         this.$setReady(false);
 
-        this.$store.dispatch('Tenants/fetch')
+        this.$store.dispatch('Portals/fetch')
           .then(() => {
             this.$setReady();
             this.$emit('ready', this.usersList);
@@ -201,7 +201,7 @@
       //   return this.$options.filters.accountFullname(user);
       // },
       //
-      // userExternalId(wrap) {
+      // userId(wrap) {
       //   const user = this.unwrapUser(wrap);
       //   return user.account.name;
       // }

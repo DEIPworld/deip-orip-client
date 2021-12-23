@@ -102,7 +102,7 @@
               <router-link
                 class="a text-body-2"
                 :to="{ name: 'team.details', params: {
-                  teamId: awardee.organization.external_id
+                  teamId: awardee.organization._id
                 }}"
               >
                 {{ awardee.organization.name }}
@@ -133,7 +133,7 @@
               <router-link
                 class="a text-body-2"
                 :to="{ name: 'team.details', params: {
-                  teamId: foa.organization.external_id,
+                  teamId: foa.organization._id,
                 }}"
               >
                 {{ foa.organization.name }}
@@ -236,7 +236,7 @@
                   </router-link>
                 </td>
                 <td>
-                  <router-link class="a text-body-2" :to="{ name: 'team.details', params: { teamId: item.organization.external_id } }">
+                  <router-link class="a text-body-2" :to="{ name: 'team.details', params: { teamId: item.organization._id } }">
                     {{ item.organization.name }}
                   </router-link>
                 </td>
@@ -715,8 +715,8 @@
 
     methods: {
 
-      isReseachGroupMember(researchGroupId) {
-        return this.$store.getters['auth/userIsResearchGroupMember'](researchGroupId);
+      isReseachGroupMember(teamId) {
+        return this.$store.getters['auth/userIsTeamMember'](teamId);
       },
 
       certifySelectedPaymentRequests() {

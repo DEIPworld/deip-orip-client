@@ -24,13 +24,13 @@
           :key="'invite-request-' + index"
         >
           <d-box-item
-            :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
+            :avatar="invite.group._id | teamLogoSrc(64, 64)"
             :size="40"
           >
             <router-link
               class="a full-width break-word font-weight-medium"
               :to="{ name: 'teamDetails', params: {
-                teamId: invite.group.external_id,
+                teamId: invite.group._id,
               }}"
             >
               <v-clamp
@@ -130,7 +130,7 @@
             </router-link>
             <div class="text-caption text--secondary">
               {{ $t('userDetailRouting.sidebar.reqYouReview',
-                    { title: reviewRequest.research.title }) }}
+                    { title: reviewRequest.project.title }) }}
             </div>
           </d-box-item>
         </v-carousel-item>
@@ -163,14 +163,14 @@
       </div>
     </d-block-widget>
 
-    <!--  TODO: need user disciplines  -->
+    <!--  TODO: need user domains  -->
     <d-block-widget
       v-if="$hasModule(DEIP_MODULE.APP_ECI)"
       :title="$t('userDetailRouting.sidebar.eci')"
     >
       <eci-stats
         :account-name="userInfo.account.name"
-        :disciplines="expertise.map((e) => ({ name: e.discipline_name, external_id: e.discipline_external_id }))"
+        :domains="expertise.map((e) => ({ name: e.domainName, _id: e.domainId }))"
       />
     </d-block-widget>
 
@@ -216,7 +216,7 @@
         currentUser: 'auth/user',
         userInfo: 'userDetails/userInfo',
         expertise: 'userDetails/expertise',
-        eciStatsByDiscipline: 'userDetails/eciStatsByDiscipline',
+        eciStatsByDomain: 'userDetails/eciStatsByDomain',
         invites: 'userDetails/invites',
         reviewRequests: 'userDetails/reviewRequests'
       }),
@@ -263,8 +263,8 @@
           {
             name: 'project.content.details',
             params: {
-              projectId: review.research.external_id,
-              contentId: review.content.external_id
+              projectId: review.project._id,
+              contentId: review.content._id
             }
           }
         );

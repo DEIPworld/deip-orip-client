@@ -16,15 +16,15 @@
           <template v-for="(organization, i) in organizations">
             <v-chip
               v-if="expanded || i < 4"
-              :key="`organization-filter-${organization.external_id}`"
-              :value="organization.external_id"
+              :key="`organization-filter-${organization._id}`"
+              :value="organization._id"
               class="d-block mt-2 mx-0 mb-0"
-              :class="internalValue.includes(organization.external_id) ? 'transparent' : 'grey lighten-4'"
+              :class="internalValue.includes(organization._id) ? 'transparent' : 'grey lighten-4'"
               style="width:100%"
             >
               <v-avatar left>
                 <img
-                  :src="organization.external_id | researchGroupLogoSrc(24, 24)"
+                  :src="organization._id | teamLogoSrc(24, 24)"
                 >
               </v-avatar>
               <div class="text-truncate">

@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import ResearchContentDetails from './ResearchContentDetails';
-import ResearchContentDetailsSidebar from './components/ResearchContentDetailsSidebar';
-import ResearchContentDetailsPackage from './components/ResearchContentDetailsPackage';
+import ProjectContentDetails from './ResearchContentDetails';
+import ProjectContentDetailsSidebar from './components/ResearchContentDetailsSidebar';
+import ProjectContentDetailsPackage from './components/ResearchContentDetailsPackage';
 import ReferencesDependencyGraph from './components/ReferencesDependencyGraph';
 
-Vue.component('research-content-details', ResearchContentDetails);
-Vue.component('research-content-details-package', ResearchContentDetailsPackage);
-Vue.component('research-content-details-sidebar', ResearchContentDetailsSidebar);
+Vue.component('project-content-details', ProjectContentDetails);
+Vue.component('project-content-details-package', ProjectContentDetailsPackage);
+Vue.component('project-content-details-sidebar', ProjectContentDetailsSidebar);
 Vue.component('references-dependency-graph', ReferencesDependencyGraph);

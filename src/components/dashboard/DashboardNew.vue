@@ -16,7 +16,7 @@
     <layout-section>
       <v-tabs-items v-model="activeTab">
         <v-tab-item key="my-projects">
-          <div v-if="myResearches.length" class="mb-12">
+          <div v-if="myProjects.length" class="mb-12">
             <v-btn
               :to="{ name: 'project.create' }"
               color="primary"
@@ -113,21 +113,21 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        tenant: 'auth/tenant',
+        portal: 'auth/portal',
         themeSettings: 'layout/themeSettings',
-        researches: 'dashboard/myMembershipAndBookmarkedResearches'
+        projects: 'dashboard/myMembershipAndBookmarkedProjects'
       }),
 
-      myResearches() {
-        return this.researches.reduce(
-          (arr, research) => (research.research.is_following === false ? [...arr, research.research] : arr),
+      myProjects() {
+        return this.projects.reduce(
+          (arr, project) => (project.project.is_following === false ? [...arr, project.project] : arr),
           []
         );
       },
 
-      followingResearches() {
-        return this.researches.reduce(
-          (arr, research) => (research.research.is_following === true ? [...arr, research.research] : arr),
+      followingProjects() {
+        return this.projects.reduce(
+          (arr, project) => (project.project.is_following === true ? [...arr, project.project] : arr),
           []
         );
       }

@@ -2,7 +2,7 @@
   <d-layout-full-screen :title="title">
     <validation-observer v-slot="{ invalid, handleSubmit }" ref="observer">
       <v-form v-if="$ready" :disabled="isLoading" @submit.prevent="handleSubmit(onSubmit)">
-        <research-form-renderer
+        <project-form-renderer
           v-model="formModel"
           :schema="layoutSchema"
         />
@@ -24,7 +24,7 @@
               :disabled="isDisabled || invalid"
               :loading="isLoading"
             >
-              {{ formModel.externalId ? 'Update' : 'Create' }}
+              {{ formModel._id ? 'Update' : 'Create' }}
             </v-btn>
           </d-stack>
         </div>
@@ -39,7 +39,7 @@
   import DLayoutFullScreen from '@/components/Deipify/DLayout/DLayoutFullScreen';
   import DStack from '@/components/Deipify/DStack/DStack';
 
-  import ResearchFormRenderer from '@/features/Projects/components/Form/renderer';
+  import ProjectFormRenderer from '@/features/Projects/components/Form/renderer';
 
   import { changeable } from '@/mixins/changeable';
 
@@ -67,7 +67,7 @@
       DStack,
       DLayoutFullScreen,
 
-      ResearchFormRenderer
+      ProjectFormRenderer
     },
 
     mixins: [changeable, attributesChore],
@@ -104,7 +104,7 @@
     data() {
       return {
         lazyFormModel: {
-          researchRef: { attributes: {} }
+          attributes: {}
         },
 
         storeDraftDebounce: undefined
@@ -128,7 +128,7 @@
 
       layoutSchema() {
         return extendAttrModules(
-          this.$tenantSettings.layouts.projectEditForm.layout,
+          this.$portalSettings.layouts.projectEditForm.layout,
           { attrs: { project: this.formModel } }
         );
       },
@@ -144,8 +144,8 @@
       },
 
       isProposal() {
-        return this.onchainData.researchGroup !== null
-          && this.onchainData.researchGroup !== this.userGroup.external_id;
+        return this.onchainData.team !== null
+          && this.onchainData.team !== this.userGroup._id;
       },
 
       // FORMDATA
@@ -161,14 +161,14 @@
       },
 
       attachedFiles() {
-        return extractFilesFromAttributes(this.formModel.researchRef.attributes);
+        return extractFilesFromAttributes(this.formModel.attributes);
       },
 
       onchainData() {
         const onchainFields = this.$$projectAttributes
           .filter((attr) => !!attr.blockchainFieldMeta)
           .reduce((acc, attr) => {
-            const value = this.formModel.researchRef.attributes[attr._id];
+            const value = this.formModel.attributes[attr._id];
 
             if (attr.blockchainFieldMeta.isPartial) {
               if (!value) return acc;
@@ -192,7 +192,7 @@
       offchainMeta() {
         return {
           attributes: compactAttributes(
-            replaceFileWithName(this.formModel.researchRef.attributes)
+            replaceFileWithName(this.formModel.attributes)
           )
         };
       },
@@ -203,7 +203,7 @@
         const offchainMeta = _.cloneDeep(this.offchainMeta);
         const onchainData = _.cloneDeep(this.onchainData);
 
-        if (!onchainData.researchGroup) {
+        if (!onchainData.team) {
           onchainData.creator = this.$currentUser.username;
           onchainData.memo = this.$currentUser.pubKey;
           onchainData.fee = this.toAssetUnits(0);
@@ -253,7 +253,7 @@
       // DRAFTS
 
       storeDraft() {
-        this.$ls.set('researchDraft', this.formModel, 1000 * 60 * 60);
+        this.$ls.set('projectDraft', this.formModel, 1000 * 60 * 60);
       },
       readDraft() {},
       clearDraft() {},

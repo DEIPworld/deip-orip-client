@@ -22,7 +22,7 @@ import ExpressLicensingLicensee from '@/components/Licensing/Express/ExpressLice
 import ExpressLicensingPurchase from '@/components/Licensing/Express/ExpressLicensingPurchase';
 import ExpressLicensingPurchased from '@/components/Licensing/Express/ExpressLicensingPurchased';
 import { projectDetails } from '@/features/Projects/mixins/projectDetails';
-import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
+import PortalBadge from '@/features/Tenant/components/Badge/TenantBadge';
 
 export default {
   name: 'ProjectDetailsRenderer',
@@ -37,7 +37,7 @@ export default {
     AttributesRead,
 
     FundraisingStats,
-    TenantBadge,
+    PortalBadge,
 
     // Licensing
     ExpressLicensingLicensee,
@@ -47,10 +47,10 @@ export default {
   mixins: [
     componentsRenderer,
     attributesChore,
-    projectDetails // TODO: replace 'research' with 'project'
+    projectDetails // TODO: replace 'project' with 'project'
   ],
   props: {
-    research: {
+    project: {
       type: Object,
       default: () => ({})
     }
@@ -58,11 +58,11 @@ export default {
 
   computed: {
     hasMaterials() {
-      return !!this.research.numberOfResearchContents || this.isMember;
+      return !!this.project.numberOfProjectContents || this.isMember;
     },
 
     hasReviews() {
-      return !!(this.research.numberOfPositiveReviews + this.research.numberOfNegativeReviews);
+      return !!(this.project.numberOfPositiveReviews + this.project.numberOfNegativeReviews);
     },
   },
 
@@ -73,7 +73,7 @@ export default {
       return attr
         ? attributeFileUrl(
           attrInfo.scope,
-          this.research.externalId,
+          this.project._id,
           attr.attributeId,
           attr.value,
           true

@@ -2,7 +2,7 @@
   import { attributeRead } from '@/components/Attributes/_mixins';
 
   export default {
-    name: 'AttributesResearchGroupRead',
+    name: 'AttributesTeamRead',
     mixins: [attributeRead]
   };
 </script>

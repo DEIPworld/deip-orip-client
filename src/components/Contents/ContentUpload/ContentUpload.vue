@@ -11,14 +11,14 @@
     name: 'ContentUpload',
     components: { ContentUploadDialog },
     props: {
-      researchId: {
+      projectId: {
         type: String,
         default: null
       }
     },
     computed: {
       ...mapGetters({
-        research: 'Project/projectDetails'
+        project: 'Project/projectDetails'
       })
     },
     methods: {
@@ -28,7 +28,7 @@
 
         Promise.all([
           // this.$store.dispatch('ProjectContents/getContents', this.$route.params.projectId),
-          this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.projectId)
+          this.$store.dispatch('ProjectDrafts/getDrafts', this.$route.params.projectId)
         ]);
       }
     }

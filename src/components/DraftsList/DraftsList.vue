@@ -48,9 +48,9 @@
       DMetaItem,
       DSimpleTooltip,
     },
-    mixins: [componentStoreFactoryOnce(draftsListStore, 'ResearchDrafts')],
+    mixins: [componentStoreFactoryOnce(draftsListStore, 'ProjectDrafts')],
     props: {
-      researchId: {
+      projectId: {
         type: String,
         default: null
       }
@@ -83,8 +83,8 @@
     },
     computed: {
       ...mapGetters({
-        drafts: 'ResearchDrafts/list',
-        research: 'Project/projectDetails'
+        drafts: 'ProjectDrafts/list',
+        project: 'Project/projectDetails'
       })
     },
     created() {
@@ -95,7 +95,7 @@
         this.$setReady(false);
 
         return Promise.all([
-          this.$store.dispatch('ResearchDrafts/getDrafts', this.$route.params.projectId)
+          this.$store.dispatch('ProjectDrafts/getDrafts', this.$route.params.projectId)
         ])
           .then(() => {
             this.$setReady(true);
@@ -107,7 +107,7 @@
             name: 'project.content.draft',
             params: {
               draftId: draft._id.replace('draft-', ''),
-              projectId: this.research.externalId
+              projectId: this.project._id
             }
           });
         } else {
@@ -115,7 +115,7 @@
           this.$router.push({
             name: 'project.content.details',
             params: {
-              projectId: this.research.externalId,
+              projectId: this.project._id,
               contentId: draft._id
             },
             query: {
@@ -132,7 +132,7 @@
       },
       deleteDraft(draft) {
         this.isDeletingDraft = true;
-        this.$store.dispatch('ResearchDrafts/deleteDraft', draft._id)
+        this.$store.dispatch('ProjectDrafts/deleteDraft', draft._id)
           .finally(() => {
             this.isDeletingDraft = false;
           });

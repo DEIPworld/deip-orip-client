@@ -39,7 +39,7 @@
     methods: {
       goToAttribute(id) {
         const q = {
-          researchAttributes: {
+          projectAttributes: {
             [this.attribute.attributeId]: [id]
           }
         };

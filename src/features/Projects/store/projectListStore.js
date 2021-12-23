@@ -22,8 +22,8 @@ const actionsMap = {
     team: {
       all: 'getTeamProjects'
     },
-    tenant: {
-      all: 'getTenantProjects'
+    portal: {
+      all: 'getPortalProjects'
     }
   }
 };
@@ -45,7 +45,7 @@ const ACTIONS = {
 
     if (payload.userName) target.push('user');
     else if (payload.teamId) target.push('team');
-    else if (payload.tenantId) target.push('tenant');
+    else if (payload.portalId) target.push('portal');
     else target.push('public');
 
     target.push(payload.type || 'all');
@@ -116,10 +116,10 @@ const ACTIONS = {
       });
   },
 
-  // tenant
+  // portal
 
-  getTenantProjects({ commit }, { tenantId }) {
-    return projectService.getTenantProjectListing(tenantId)
+  getPortalProjects({ commit }, { portalId }) {
+    return projectService.getPortalProjectListing(portalId)
       .then((result) => {
         commit('storeProjectsData', result);
       });
@@ -129,8 +129,11 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeProjectsData(state, payload) {
-    state.projectsList = payload.map((item) => (camelizeObjectKeys(item))).sort(
-      (p1, p2) => new Date(p1.researchRef.createdAt) - new Date(p2.researchRef.createdAt)
+    // state.projectsList = payload.map((item) => (camelizeObjectKeys(item))).sort(
+    //   (p1, p2) => new Date(p1.createdAt) - new Date(p2.createdAt)
+    // );
+    state.projectsList = payload.sort(
+      (p1, p2) => new Date(p1.createdAt) - new Date(p2.createdAt)
     );
   }
 };

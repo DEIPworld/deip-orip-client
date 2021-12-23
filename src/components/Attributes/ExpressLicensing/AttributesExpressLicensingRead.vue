@@ -7,7 +7,7 @@
         title="Licensee"
       >
         <express-licensing-licensee
-          :licenses="project.researchRef.expressLicenses"
+          :licenses="project.expressLicenses"
         />
       </d-block-widget>
     </template>
@@ -65,7 +65,7 @@
 
     computed: {
       userLicenses() {
-        return this.$where(this.project.researchRef.expressLicenses, { creator: this.$currentUser.username });
+        return this.$where(this.project.expressLicenses, { creator: this.$currentUser.username });
       }
     }
   };

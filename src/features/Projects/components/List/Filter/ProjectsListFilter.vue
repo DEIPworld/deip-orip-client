@@ -16,15 +16,15 @@
         autocomplete="off"
       />
 
-      <tenant-selector
+      <portal-selector
         v-if="isGlobalNetwork"
-        v-model="filterModel.tenantIds"
+        v-model="filterModel.portalIds"
         class="mt-2"
         multiple
       />
     </d-block-widget>
 
-    <d-filter-term-components v-model="filterModel.researchAttributes" class="mb-6" />
+    <d-filter-term-components v-model="filterModel.projectAttributes" class="mb-6" />
   </d-filter-sidebar>
 </template>
 
@@ -33,21 +33,21 @@
   import DFilterTermComponents from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermComponents';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
-  import TenantSelector from '@/features/Tenant/components/Selector/TenantSelector';
+  import PortalSelector from '@/features/Tenant/components/Selector/TenantSelector';
 
   const defaultFilter = () => ({
     searchTerm: '',
-    tenantIds: [],
-    disciplines: [],
+    portalIds: [],
+    domains: [],
     organizations: [],
-    researchAttributes: {}
+    projectAttributes: {}
   });
 
   export default {
     name: 'ProjectsListFilter',
 
     components: {
-      TenantSelector,
+      PortalSelector,
       DBlockWidget,
       DFilterTermComponents,
       DFilterSidebar
@@ -70,7 +70,7 @@
     computed: {
       isGlobalNetwork() {
         // temp solution
-        return this.$tenant.profile.network.scope.some((id) => id === 'all');
+        return this.$portal.profile.network.scope.some((id) => id === 'all');
       }
     },
 

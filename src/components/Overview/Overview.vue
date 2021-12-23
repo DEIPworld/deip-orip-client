@@ -64,7 +64,7 @@
         </v-col>
       </v-row>
 
-      <disciplines-growth-rate class="mt-12" />
+      <domains-growth-rate class="mt-12" />
 
       <d-block
         class="mt-12"
@@ -72,17 +72,17 @@
         :subtitle="$t('overviewRouting.subtitle')"
       >
         <d-filter-block
-          v-model="distributionDiscipline"
-          :reset-model="resetDistributionDiscipline"
+          v-model="distributionDomain"
+          :reset-model="resetDistributionDomain"
           @apply="updateDistributionChartData()"
           @reset="updateDistributionChartData()"
         >
           <v-select
-            v-model="distributionDiscipline"
+            v-model="distributionDomain"
             outlined
-            :items="[{name: $t('defaultNaming.all'), externalId: ''}, ...disciplinesList]"
+            :items="[{name: $t('defaultNaming.all'), _id: ''}, ...domainsList]"
             item-text="name"
-            item-value="externalId"
+            item-value="_id"
             :label="$t('overviewRouting.distributionImpact.domainField')"
           />
         </d-filter-block>
@@ -131,7 +131,7 @@
   import { mapSelectListFromEnum } from '@/utils/mapSelectListFromEnum';
 
   import moment from 'moment';
-  import DisciplinesGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
+  import DomainsGrowthRate from '@/components/DisciplinesGrowthRate/DisciplinesGrowthRate';
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
   import EciHistory from '@/components/EciMetrics/EciHistory/EciHistory';
 
@@ -140,7 +140,7 @@
     components: {
       EciHistory,
       DFilterBlock,
-      DisciplinesGrowthRate,
+      DomainsGrowthRate,
       DBlock,
       DChartArea,
       DChartPie,
@@ -149,8 +149,8 @@
     },
     data() {
       return {
-        resetDistributionDiscipline: false,
-        distributionDiscipline: false,
+        resetDistributionDomain: false,
+        distributionDomain: false,
 
         criterias: mapSelectListFromEnum(ASSESSMENT_CRITERIA_TYPE, {
           blackList: [ASSESSMENT_CRITERIA_TYPE.UNKNOWN],
@@ -164,20 +164,20 @@
 
     computed: {
       ...mapGetters({
-        disciplinesExpertiseStats: 'overview/disciplinesExpertiseStats',
-        disciplinesExpertiseStatsHistory: 'overview/disciplinesExpertiseStatsHistory',
+        domainsExpertiseStats: 'overview/domainsExpertiseStats',
+        domainsExpertiseStatsHistory: 'overview/domainsExpertiseStatsHistory',
         criteriaTypes: 'overview/criteriaTypes'
       }),
 
-      disciplinesList() { return this.$store.getters['Disciplines/topLevelList'](); },
+      domainsList() { return this.$store.getters['Domains/topLevelList'](); },
 
       //= ====================
 
       eciValueDataTable() {
         return [
-          ...[['Discipline', 'Value']],
-          ...this.disciplinesExpertiseStats.map((item) => [
-            item.discipline_name,
+          ...[['Domain', 'Value']],
+          ...this.domainsExpertiseStats.map((item) => [
+            item.domainName,
             item.eci
           ])
         ];
@@ -187,8 +187,8 @@
 
       eciOverviewData() {
         const stamps = {};
-        for (const discipline of this.disciplinesExpertiseStatsHistory) {
-          for (const change of discipline.history) {
+        for (const domain of this.domainsExpertiseStatsHistory) {
+          for (const change of domain.history) {
             const date = change.timestamp;
             const data = {
               v: parseFloat(change.percentage) / 100,
@@ -217,8 +217,8 @@
           ...[
             [
               'Date',
-              ...this.disciplinesExpertiseStats.map(
-                (item) => item.discipline_name
+              ...this.domainsExpertiseStats.map(
+                (item) => item.domainName
               )
             ]
           ],
@@ -259,8 +259,8 @@
 
     created() {
       Promise.all([
-        this.$store.dispatch('overview/getDisciplinesExpertiseLastStats'),
-        this.$store.dispatch('overview/getDisciplinesExpertiseStatsHistory')
+        this.$store.dispatch('overview/getDomainsExpertiseLastStats'),
+        this.$store.dispatch('overview/getDomainsExpertiseStatsHistory')
       ])
         .then(() => {
           this.$setReady();
@@ -273,15 +273,15 @@
         this.$router.push({
           name: 'participants',
           query: {
-            discipline: this.disciplinesExpertiseStats[e[0].row]
-              .discipline_external_id
+            domain: this.domainsExpertiseStats[e[0].row]
+              .domainId
           }
         });
       },
       updateDistributionChartData() {
         let dataTable = [];
-        if (!this.distributionDiscipline) {
-          this.disciplinesExpertiseStats.forEach((item) => {
+        if (!this.distributionDomain) {
+          this.domainsExpertiseStats.forEach((item) => {
             item.assessment_criterias.forEach((val, i) => {
               dataTable[i] = [
                 this.criteriaTypes[val[0]],
@@ -290,9 +290,9 @@
             });
           });
         } else {
-          const stats = this.disciplinesExpertiseStats
+          const stats = this.domainsExpertiseStats
             .find(
-              (item) => item.discipline_external_id === this.distributionDiscipline
+              (item) => item.domainId === this.distributionDomain
             );
           if (stats) {
             dataTable = stats

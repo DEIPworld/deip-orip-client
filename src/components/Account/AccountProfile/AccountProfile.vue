@@ -97,7 +97,7 @@
       },
 
       layoutSchema() {
-        const schema = this.$tenantSettings.layouts.accountProfile.layout;
+        const schema = this.$portalSettings.layouts.accountProfile.layout;
         return extendAttrModules(
           schema
         );
@@ -151,7 +151,7 @@
           formData
         })
           .then(() => {
-            this.$store.dispatch('auth/loadUser');
+            this.$store.dispatch('Users/get', this.$currentUser.username, { root: true });
 
             this.$notifier.showSuccess('Personal info has been saved successfully!');
           })

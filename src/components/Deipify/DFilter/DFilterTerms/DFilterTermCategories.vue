@@ -39,7 +39,7 @@
     mixins: [Proxyable],
     computed: {
       categories() {
-        return this.$store.getters['auth/tenant'].profile.settings.researchCategories;
+        return this.$store.getters['auth/portal'].profile.settings.projectCategories;
       }
     }
   };

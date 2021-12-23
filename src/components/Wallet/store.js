@@ -14,10 +14,10 @@ const assetsService = AssetsService.getInstance();
 const grantsService = GrantsService.getInstance();
 
 const state = {
-  researches: [],
-  researchTokens: [],
-  researchTokensHolders: [],
-  researchGroups: [],
+  projects: [],
+  projectTokens: [],
+  projectTokensHolders: [],
+  teams: [],
   assetsInfo: [],
   groupData: {},
   balances: [],
@@ -50,18 +50,20 @@ const actions = {
     let balances = [];
     return assetsService.getAccountAssetsBalancesByOwner(account)
       .then((assetsBalances) => {
+        // const securityTokens = assetsBalances
+        //   .map((b) => camelizeObjectKeys(b))
+        //   .filter((b) => !!b.tokenizedProject);
         const securityTokens = assetsBalances
-          .map((b) => camelizeObjectKeys(b))
           .filter((b) => !!b.tokenizedProject);
         balances.push(...securityTokens);
         return Promise.all(balances.map(
           (b) => projectService.getProject(b.tokenizedProject)
         ));
       })
-      .then((researches) => {
+      .then((projects) => {
         balances = balances.map((b) => ({
           ...b,
-          research: researches.find((r) => r.external_id === b.tokenizedProject)
+          project: projects.find((r) => r._id === b.tokenizedProject)
         }));
 
         return Promise.all(
@@ -104,10 +106,16 @@ const actions = {
       ({ symbol }) => assetsService.getAssetBySymbol(symbol)
     ))
       .then((data) => {
-        const assetsInfo = data.map((a) => camelizeObjectKeys(a)).reduce(
+        // const assetsInfo = data.map((a) => camelizeObjectKeys(a)).reduce(
+        //   (result, item) => ({
+        //     ...result,
+        //     [item.stringSymbol]: item
+        //   }), {}
+        // );
+        const assetsInfo = data.reduce(
           (result, item) => ({
             ...result,
-            [item.stringSymbol]: item
+            [item.symbol]: item
           }), {}
         );
         commit('SET_ASSETS_INFO', assetsInfo);
@@ -120,11 +128,13 @@ const actions = {
     return teamService.getTeam(account)
       .then((group) => {
         groupData = group;
-        return assetsService.getAccountAssetsBalancesByOwner(groupData.external_id);
+        return assetsService.getAccountAssetsBalancesByOwner(groupData._id);
       })
       .then((assetsBalances) => {
+        // const currencies = assetsBalances
+        //   .map((b) => camelizeObjectKeys(b))
+        //   .filter((b) => !b.tokenizedProject);
         const currencies = assetsBalances
-          .map((b) => camelizeObjectKeys(b))
           .filter((b) => !b.tokenizedProject);
         groupData.balances = currencies;
         commit('setGroupData', groupData);
@@ -139,36 +149,36 @@ const actions = {
       .then((result) => {
         const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);
-        return Promise.all(groups.map((item) => projectService.getTeamProjectListing(item.external_id)));
+        return Promise.all(groups.map((item) => projectService.getTeamProjectListing(item._id)));
       })
-      .then((researches) => {
+      .then((projects) => {
         groupList.forEach((g) => {
-          const researchList = researches.filter(
-            (r) => r[0] && r[0].research_group.external_id === g.external_id
+          const projectList = projects.filter(
+            (r) => r[0] && r[0].teamId === g._id
           )[0];
-          g.researchList = researchList;
+          g.projectList = projectList;
         });
         return Promise.all(
           groupList.map(
-            (item) => investmentsService.getAccountRevenueHistory(item.external_id)
+            (item) => investmentsService.getAccountRevenueHistory(item._id)
           )
         );
       })
       .then((revenueHistory) => {
         groupList.forEach((g) => {
           const revenueHistoryList = revenueHistory.find(
-            (r) => r[0] && r[0].account === g.external_id
+            (r) => r[0] && r[0].account === g._id
           );
           g.revenueHistory = revenueHistoryList;
         });
         return Promise.all(groupList.reduce(
           (finalArr, item) => {
-            if (item.researchList) {
-              item.researchList.reduce((arr, r) => {
+            if (item.projectList) {
+              item.projectList.reduce((arr, r) => {
                 r.securityTokens.forEach((rst) => arr.push(rst.symbol));
                 return arr;
               }, []).forEach((symbol) => {
-                finalArr.push(assetsService.getAccountAssetBalance(item.external_id, symbol));
+                finalArr.push(assetsService.getAccountAssetBalance(item._id, symbol));
               });
             }
             return finalArr;
@@ -178,11 +188,11 @@ const actions = {
       .then((result) => {
         groupList.forEach((g) => {
           const accountSecurityTokenBalances = result.filter(
-            (r) => g.external_id === r.owner
+            (r) => g._id === r.owner
           );
           g.accountSecurityTokenBalances = accountSecurityTokenBalances;
         });
-        commit('SET_ALL_RESEARCH_GROUPS', groupList);
+        commit('SET_ALL_TEAMS', groupList);
       })
       .catch((err) => console.error(err));
   }
@@ -190,23 +200,23 @@ const actions = {
 
 // mutations
 const mutations = {
-  SET_RESEARCHES(state, list) {
-    state.researches = list;
+  SET_PROJECTS(state, list) {
+    state.projects = list;
   },
 
-  SET_RESEARCH_TOKENS(state, list) {
-    state.researchTokens = list;
+  SET_PROJECT_TOKENS(state, list) {
+    state.projectTokens = list;
   },
 
-  SET_RESEARCH_TOKENS_HOLDERS(state, list) {
-    state.researchTokensHolders = list;
+  SET_PROJECT_TOKENS_HOLDERS(state, list) {
+    state.projectTokensHolders = list;
   },
 
-  SET_RESEARCH_GROUPS(state, list) {
-    state.researchGroups = list;
+  SET_TEAMS(state, list) {
+    state.teams = list;
   },
 
-  SET_ALL_RESEARCH_GROUPS(state, allGroups) {
+  SET_ALL_TEAMS(state, allGroups) {
     state.allGroups = allGroups;
   },
 

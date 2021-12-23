@@ -34,12 +34,12 @@
 </template>
 
 <script>
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
 
   import { mapGetters } from 'vuex';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminCategoryEdit',
@@ -68,13 +68,13 @@
 
         this.isSaving = true;
 
-        const updatedProfile = _.cloneDeep(this.$tenant.profile);
-        updatedProfile.settings.researchCategories = [{ text: this.categoryTitle }, ...this.$tenant.profile.settings.researchCategories];
-        tenantService.updateTenantProfile(updatedProfile)
+        const updatedProfile = _.cloneDeep(this.$portal.profile);
+        updatedProfile.settings.projectCategories = [{ text: this.categoryTitle }, ...this.$portal.profile.settings.projectCategories];
+        portalService.updatePortalProfile(updatedProfile)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = window.env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
           })
           .catch((err) => {
             console.error(err);

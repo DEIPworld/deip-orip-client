@@ -93,8 +93,8 @@
         userService.getUsersListing(),
         teamService.getTeamsListing()
       ])
-        .then(([users, researchGroups]) => {
-          return [...users.filter(u => u.account.name != this.$currentUser.username), ...researchGroups];
+        .then(([users, teams]) => {
+          return [...users.filter(u => u.account.name != this.$currentUser.username), ...teams];
         })
         .then((accounts) => {
           this.allAccounts = accounts.flat().map((a) => {

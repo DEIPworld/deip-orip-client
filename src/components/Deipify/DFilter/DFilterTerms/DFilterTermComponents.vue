@@ -1,10 +1,10 @@
 <template>
   <d-stack :gap="24" class="px-6">
     <!--    <pre>{{JSON.stringify($$projectAttributes, null, 2)}}</pre>-->
-    <!--    <pre>{{JSON.stringify(researchAttributes, null, 2)}}</pre>-->
+    <!--    <pre>{{JSON.stringify(projectAttributes, null, 2)}}</pre>-->
 
     <attributes-set
-      v-for="(attribute, index) of researchAttributes"
+      v-for="(attribute, index) of projectAttributes"
       :key="`${index}-attr`"
       v-model="internalValue[attribute._id]"
       :attribute="attribute"
@@ -32,12 +32,12 @@
 
     data() {
       return {
-        researchAttributes: []
+        projectAttributes: []
       };
     },
 
     created() {
-      this.researchAttributes = this.$where(
+      this.projectAttributes = this.$where(
         this.$$projectAttributes,
         (attr) => attr.isFilterable
       );

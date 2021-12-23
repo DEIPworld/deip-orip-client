@@ -1,6 +1,6 @@
 export default {
   title: 'Create team',
-  successCreate: '"{name}" research group has been created successfully !',
+  successCreate: '"{name}" team has been created successfully !',
   errCreate: 'An error occurred while creating team, please try again later',
   note: '{name} invites you to join them',
   nameBlock: {

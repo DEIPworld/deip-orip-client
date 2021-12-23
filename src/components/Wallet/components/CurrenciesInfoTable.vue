@@ -353,7 +353,7 @@
           return true;
         }
         if (this.$route.name === 'groupWallet') {
-          return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.groupData.account.name);
+          return this.$store.getters['auth/userIsTeamMemberExId'](this.groupData.account.name);
         }
         return false;
       }

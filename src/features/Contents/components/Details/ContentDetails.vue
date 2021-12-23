@@ -1,5 +1,5 @@
 <template>
-  <research-content-details
+  <project-content-details
     v-if="contentAssessAllowed"
     :perm-data="permData"
   />
@@ -23,8 +23,8 @@
 
       permData() {
         return {
-          projectId: this.project.externalId,
-          contentId: this.content.externalId
+          projectId: this.project._id,
+          contentId: this.content._id
         };
       },
       // temp solution
@@ -36,7 +36,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.project.externalId
+            projectId: this.project._id
           }
         });
       }

@@ -2,7 +2,7 @@
   <d-block :title="$t('defaultNaming.eciDetailed')">
     <eci-filter
       v-model="filterModel"
-      :disciplines="internalDisciplines"
+      :domains="internalDomains"
       :contributions="internalContributions"
       :criterias="internalCriterias"
       :loading="!$ready"

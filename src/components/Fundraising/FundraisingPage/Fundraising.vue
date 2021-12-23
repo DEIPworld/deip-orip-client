@@ -8,7 +8,7 @@
         <v-col cols="12" md="7">
           <d-stack gap="32">
             <div class="text-h6">
-              {{research.title}}
+              {{project.title}}
             </div>
             <div class="d-flex align-center">
               <d-stack gap="6" class="caption">
@@ -275,7 +275,7 @@
     },
     mixins: [componentStoreFactoryOnce(fundraisingStore, 'FundraisingDetails'), assetsChore],
     props: {
-      research: {
+      project: {
         type: Object,
         default: () => ({})
       }
@@ -329,7 +329,7 @@
         tokenSale: 'FundraisingDetails/tokenSale',
         securityTokenBalances: 'FundraisingDetails/securityTokenBalances',
         transactionsHistory: 'FundraisingDetails/transactionsHistory',
-        researchGroup: 'FundraisingDetails/researchGroup'
+        team: 'FundraisingDetails/team'
       }),
       chipColors() {
         return chartGradient(Object.keys(transactionTypes).length + 1).map((color) => ({
@@ -381,7 +381,7 @@
         }, []);
 
         const data = [
-          ['Researcher', 'AmountMoney'],
+          ['Account', 'AmountMoney'],
           ...securityTokenHolders,
         ];
 
@@ -437,10 +437,10 @@
     },
     created() {
       Promise.all([
-        this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.research.securityTokens[0].symbol),
-        this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
-        this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
-        this.$store.dispatch('FundraisingDetails/loadResearchGroup', this.research.researchGroup.external_id)
+        this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.project.securityTokens[0].symbol),
+        this.$store.dispatch('FundraisingDetails/loadProjectTokenSale', this.project._id),
+        this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.project._id),
+        this.$store.dispatch('FundraisingDetails/loadTeam', this.project.teamId)
       ])
         .then(() => {
           if (!this.tokenSale) {
@@ -489,9 +489,9 @@
           .then(() => {
             Promise.all(
               [
-                this.$store.dispatch('FundraisingDetails/loadResearchTokenSale', this.research.externalId),
-                this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.research.securityTokens[0].symbol),
-                this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.research.externalId),
+                this.$store.dispatch('FundraisingDetails/loadProjectTokenSale', this.project._id),
+                this.$store.dispatch('FundraisingDetails/loadSecurityTokenHolders', this.project.securityTokens[0].symbol),
+                this.$store.dispatch('FundraisingDetails/loadTransactionsHistory', this.project._id),
                 this.$store.dispatch('auth/loadUserData'),
                 this.$store.dispatch('auth/loadBalances')
               ]
@@ -501,7 +501,7 @@
             this.formData.amountToContribute = '';
             this.isOpenFundraisingDialog = false;
 
-            this.$notifier.showSuccess(this.$t('fundraising.contributedSucc', { project: this.research.title }));
+            this.$notifier.showSuccess(this.$t('fundraising.contributedSucc', { project: this.project.title }));
           })
           .catch((err) => {
             console.error(err);

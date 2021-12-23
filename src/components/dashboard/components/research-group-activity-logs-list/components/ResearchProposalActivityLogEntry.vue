@@ -9,7 +9,7 @@
           text-color="white"
         >
           <div class="log-label-chip-text">
-            New Research
+            New Project
           </div>
         </v-chip>
       </div>
@@ -23,10 +23,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research was accepted by quorum
+            >{{ log.metadata.project.title }}</router-link>" project was accepted by quorum
           </span>
         </span>
         <span v-else>
@@ -42,13 +42,13 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
           <span v-else>
-            proposed to start "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" research
+            proposed to start "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" project
           </span>
         </span>
       </div>
@@ -65,7 +65,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchProposalActivityLogEntry',
+    name: 'ProjectProposalActivityLogEntry',
     props: {
       log: { type: Object, required: true }
     },
@@ -75,10 +75,10 @@
     },
     computed: {
       isAcceptedByQuorum() {
-        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+        return this.log.metadata.team.is_dao && this.log.metadata.proposal.is_completed;
       },
       isAutoAccepted() {
-        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+        return !this.log.metadata.team.is_dao && this.log.metadata.isProposalAutoAccepted;
       }
     },
 

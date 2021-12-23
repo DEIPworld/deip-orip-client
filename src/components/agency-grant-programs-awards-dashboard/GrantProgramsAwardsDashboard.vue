@@ -91,7 +91,7 @@
                     </td>
                     <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer">
                       <div>
-                        <router-link class="a text-body-1" :to="{ name: 'team.details', params: { teamId: item.organization.external_id }}">
+                        <router-link class="a text-body-1" :to="{ name: 'team.details', params: { teamId: item.organization._id }}">
                           {{ item.organization.name }}
                         </router-link>
                       </div>
@@ -335,7 +335,7 @@
                     </router-link>
                   </td>
                   <td v-if="isGrantProgramOfficer || isGrantFinanceOfficer || isTreasuryCertifier">
-                    <router-link class="a text-body-2" :to="{ name: 'team.details', params: { teamId: item.organization.external_id }}">
+                    <router-link class="a text-body-2" :to="{ name: 'team.details', params: { teamId: item.organization._id }}">
                       {{ item.organization.name }}
                     </router-link>
                   </td>
@@ -526,7 +526,7 @@
           filtered.push(...this.awards.filter((a) => !a.awardee.isSubawardee && this.isMemberOfReseachGroup(a.award.university_id)));
         } else {
           // display all awards allocated for the current PI
-          filtered.push(...this.awards.filter((a) => this.isMemberOfReseachGroup(a.research.research_group_id)));
+          filtered.push(...this.awards.filter((a) => this.isMemberOfReseachGroup(a.project.teamId)));
         }
 
         return filtered
@@ -737,13 +737,13 @@
 
     methods: {
 
-      isMemberOfReseachGroup(researchGroupId) {
-        return this.$store.getters['auth/userIsResearchGroupMember'](researchGroupId);
+      isMemberOfReseachGroup(teamId) {
+        return this.$store.getters['auth/userIsTeamMember'](teamId);
       },
 
-      isMemberOfAnyReseachGroup(researchGroupsIds) {
+      isMemberOfAnyReseachGroup(teamsIds) {
         const userGroups = this.$store.getters['auth/userGroups'];
-        return userGroups.some((rg) => researchGroupsIds.some((id) => id == rg.id));
+        return userGroups.some((rg) => teamsIds.some((id) => id == rg.id));
       },
 
       certifySelectedPaymentRequests() {

@@ -3,16 +3,16 @@
     v-if="$hasModule(DEIP_MODULE.APP_PAGE_MULTISIG_TRANSACTIONS)"
     id="proposals"
     class="mb-12"
-    :title="$t('researchGroupDetails.proposalsTable.title')"
+    :title="$t('teamDetails.proposalsTable.title')"
   >
     <transition v-if="highlightProposalsSection" name="fade">
       <div v-if="proposalsSectionTransitionTrigger" class="pt-2 pb-6">
-        <transactions-list :key="'team-proposals'" :account="team.externalId" />
+        <transactions-list :key="'team-proposals'" :account="team._id" />
       </div>
     </transition>
     <div v-else>
       <div class="pt-2 pb-6">
-        <transactions-list :key="'team-proposals'" :account="team.externalId" />
+        <transactions-list :key="'team-proposals'" :account="team._id" />
       </div>
     </div>
   </d-block>

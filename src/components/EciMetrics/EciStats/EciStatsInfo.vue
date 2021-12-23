@@ -75,18 +75,18 @@
               : []
           ),
           ...(
-            this.data.researches && this.data.researches.length
+            this.data.projects && this.data.projects.length
               ? [{
                 label: this.$t('defaultNaming.citations'),
-                value: this.data.researches.length
+                value: this.data.projects.length
               }]
               : []
           ),
           ...(
-            this.data.researches && this.data.researches.length
+            this.data.projects && this.data.projects.length
               ? [{
                 label: this.$t('defaultNaming.hIndex'),
-                value: this.data.researches.length
+                value: this.data.projects.length
               }]
               : []
           )

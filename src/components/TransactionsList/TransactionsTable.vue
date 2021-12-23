@@ -7,7 +7,7 @@
       :items="dataTable"
       :expanded.sync="expanded"
       show-expand
-      item-key="proposal.external_id"
+      item-key="proposal._id"
       sort-by="updated_at"
       class="text--primary"
       sort-desc

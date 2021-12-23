@@ -124,7 +124,7 @@
       internalData() {
         return [...this.data.map((r, i) => ({
           ...r,
-          id: `${i}-${r.discipline_external_id}`
+          id: `${i}-${r.domainId}`
         }))].reverse();
       }
     }

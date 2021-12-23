@@ -25,7 +25,8 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeReferences(state, payload) {
-    state.referencesList = payload.map((item) => camelizeObjectKeys(item));
+    // state.referencesList = payload.map((item) => camelizeObjectKeys(item));
+    state.referencesList = payload;
   }
 };
 

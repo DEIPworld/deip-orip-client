@@ -64,7 +64,7 @@
         return !this.$isGuest && [
           ...this.attribute.value,
           ...this.project.members,
-          ...this.project.researchRef.expressLicenses.map((lic) => lic.creator)
+          ...this.project.expressLicenses.map((lic) => lic.creator)
         ].includes(this.$currentUser.username);
       }
     },

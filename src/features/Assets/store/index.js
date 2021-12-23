@@ -119,8 +119,9 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      payload.map((asset) => camelizeObjectKeys(asset)),
-      { key: 'stringSymbol' }
+      // payload.map((asset) => camelizeObjectKeys(asset)),
+      payload,
+      { key: 'symbol' }
     );
   },
 
@@ -129,13 +130,15 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      camelizeObjectKeys(payload),
-      { key: 'stringSymbol' }
+      // camelizeObjectKeys(payload),
+      payload,
+      { key: 'symbol' }
     );
   },
 
   setCurrentUserBalance(state, payload) {
-    state.currentUserBalances = payload.map((balance) => camelizeObjectKeys(balance));
+    // state.currentUserBalances = payload.map((balance) => camelizeObjectKeys(balance));
+    state.currentUserBalances = payload;
   }
 };
 

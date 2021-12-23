@@ -23,20 +23,20 @@
               :to="{
                 name: 'project.content.details',
                 params: {
-                  projectId: log.metadata.research.external_id,
-                  contentId: log.metadata.researchContent.external_id
+                  projectId: log.metadata.project._id,
+                  contentId: log.metadata.projectContent._id
                 }
               }"
-            >{{ log.metadata.researchContent.title }}</router-link>"
+            >{{ log.metadata.projectContent.title }}</router-link>"
             material was accepted for the "<router-link
               class="a"
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research by quorum
+            >{{ log.metadata.project.title }}</router-link>" project by quorum
           </span>
         </span>
 
@@ -53,20 +53,20 @@
               :to="{
                 name: 'project.content.details',
                 params: {
-                  projectId: log.metadata.research.external_id,
-                  contentId: log.metadata.researchContent.external_id
+                  projectId: log.metadata.project._id,
+                  contentId: log.metadata.projectContent._id
                 }
               }"
-            >{{ log.metadata.researchContent.title }}</router-link>"
+            >{{ log.metadata.projectContent.title }}</router-link>"
             material for the "<router-link
               class="a"
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
           <span v-else>
             proposed a new "<span class="text-body-2">{{ log.metadata.proposal.data.title }}</span>" material for the "<router-link
@@ -74,10 +74,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" research
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
         </span>
       </div>
@@ -94,7 +94,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchContentProposalActivityLogEntry',
+    name: 'ProjectContentProposalActivityLogEntry',
     props: {
       log: { type: Object, required: true }
     },
@@ -104,10 +104,10 @@
     },
     computed: {
       isAcceptedByQuorum() {
-        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+        return this.log.metadata.team.is_dao && this.log.metadata.proposal.is_completed;
       },
       isAutoAccepted() {
-        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+        return !this.log.metadata.team.is_dao && this.log.metadata.isProposalAutoAccepted;
       }
     },
 

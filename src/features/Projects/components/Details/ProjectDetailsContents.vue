@@ -3,7 +3,7 @@
     <contents-list
       ref="ContentsList"
 
-      :project-id="project.externalId"
+      :project-id="project._id"
 
       :disable-all-routes="!contentAssessAllowed"
       v-bind="accessContainerProps"
@@ -12,19 +12,19 @@
     <drafts-list
       v-if="isMember"
       ref="DraftList"
-      :research-id="project.externalId"
+      :project-id="project._id"
     />
 
     <d-stack gap="8">
       <content-upload
         v-if="isMember"
         ref="ContentUpload"
-        :research-id="project.externalId"
+        :project-id="project._id"
         @content-uploaded="onContentUploaded"
       />
       <content-draft-cta
         v-if="isMember"
-        :project-id="project.externalId"
+        :project-id="project._id"
       />
     </d-stack>
 

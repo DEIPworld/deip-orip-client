@@ -11,7 +11,7 @@
         <v-row no-gutters>
           <v-col cols="3" class="text-center">
             <v-avatar size="160px">
-              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 320, 320, true)">
+              <img :src="$options.filters.teamLogoSrc(organizationProfile._id, 320, 320, true)">
             </v-avatar>
           </v-col>
           <v-col cols="9">
@@ -41,10 +41,10 @@
       <v-col cols="3">
         <v-card class="full-height elevation-0">
           <div class="text-subtitle-1 pa-6 bold">
-            Research Areas
+            Project Areas
           </div>
           <v-expansion-panels flat class="elevation-0" :value="selectedAreas">
-            <v-expansion-panel v-for="(area,i) in organizationProfile.researchGroupRef.researchAreas" :key="i">
+            <v-expansion-panel v-for="(area,i) in organizationProfile.areas" :key="i">
               <v-expansion-panel-header>
                 <b>{{ area.title }}</b>
               </v-expansion-panel-header>
@@ -186,7 +186,7 @@
           {
             text: this.organizationProfile.name,
             disabled: false,
-            href: `/#/g/${this.organizationProfile.external_id}`
+            href: `/#/g/${this.organizationProfile._id}`
           },
           {
             text: 'Programs',
@@ -203,7 +203,7 @@
         return this.filterPrograms(this.additionalPrograms);
       },
       selectedAreas() {
-        return this.organizationProfile.researchGroupRef.researchAreas.map((area) => (area.title == this.selectedArea.title ? 1 : 0));
+        return this.organizationProfile.areas.map((area) => (area.title == this.selectedArea.title ? 1 : 0));
       }
     },
 
@@ -216,7 +216,7 @@
       },
 
       selectArea(area, subArea) {
-        this.$store.dispatch('agencyGrantPrograms/setResearchArea', {
+        this.$store.dispatch('agencyGrantPrograms/setProjectArea', {
           area,
           subArea
         });
@@ -251,7 +251,7 @@
             .includes(this.filter.searchTerm.toLowerCase());
         });
 
-        filtered = filtered.filter((p) => p.target_disciplines.some((d) => this.selectedArea.disciplines.includes(d)));
+        filtered = filtered.filter((p) => p.target_domains.some((d) => this.selectedArea.domains.includes(d)));
 
         const { filter } = this;
         filtered.sort((a, b) => {

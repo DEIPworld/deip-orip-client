@@ -10,7 +10,7 @@
     <v-icon left>
       {{ bookmarkId ? 'mdi-bookmark-minus' : 'mdi-bookmark-plus-outline' }}
     </v-icon>
-    {{ bookmarkId ? $t('researchDetails.removeBookmark') : $t('researchDetails.addBookmark') }}
+    {{ bookmarkId ? $t('projectDetails.removeBookmark') : $t('projectDetails.addBookmark') }}
   </v-btn>
 </template>
 
@@ -22,7 +22,7 @@
   const bookmarkService = BookmarkService.getInstance();
 
   export default {
-    name: 'ResearchDetailsFollowCta',
+    name: 'ProjectDetailsFollowCta',
 
     mixins: [projectDetails],
 
@@ -35,7 +35,7 @@
     computed: {
       bookmarkId() {
         const bookmark = this.$currentUser.bookmarks.find(
-          (b) => b.ref === this.project.externalId && b.type === USER_BOOKMARK_TYPE.PROJECT
+          (b) => b.ref === this.project._id && b.type === USER_BOOKMARK_TYPE.PROJECT
         );
 
         return bookmark ? bookmark._id : false;
@@ -45,7 +45,7 @@
     methods: {
       bookmarkService() {
         return !this.bookmarkId
-          ? bookmarkService.createProjectBookmark(this.$currentUser.username, this.project.externalId)
+          ? bookmarkService.createProjectBookmark(this.$currentUser.username, this.project._id)
           : bookmarkService.deleteProjectBookmark(this.$currentUser.username, this.bookmarkId);
       },
 

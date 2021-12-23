@@ -28,10 +28,10 @@
             :to="{
               name: 'team.details',
               params: {
-                teamId: log.metadata.researchGroup.external_id,
+                teamId: log.metadata.team._id,
               }
             }"
-          >{{ log.metadata.researchGroup.name }}</router-link>"
+          >{{ log.metadata.team.name }}</router-link>"
         </span>
       </div>
     </v-col>

@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import { UserService } from '@deip/user-service';
-import { TenantService } from '@deip/tenant-service';
+import { PortalService } from '@deip/portal-service';
 
 const userService = UserService.getInstance();
-const tenantService = TenantService.getInstance();
+const portalService = PortalService.getInstance();
 
 const state = {
   registeredMembers: [],
@@ -15,15 +15,15 @@ const getters = {
   registeredMembers: (state) => state.registeredMembers,
   waitingMembers: (state) => state.waitingMembers,
 
-  faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.faq,
+  faqs: (state, getters, rootState, rootGetters) => rootGetters['auth/portal'].profile.settings.faq,
 
-  categories: (state, getters, rootState, rootGetters) => rootGetters['auth/tenant'].profile.settings.researchCategories
+  categories: (state, getters, rootState, rootGetters) => rootGetters['auth/portal'].profile.settings.projectCategories
 };
 
 // actions
 const actions = {
   loadRegisteredMembers({ commit }, { notify } = {}) {
-    return userService.getUsersByTenant(Vue.$env.TENANT)
+    return userService.getUsersByPortal(Vue.$env.TENANT)
       .then((users) => {
         const approvedUsers = users.sort((a, b) => {
           const dateA = new Date(a.profile.created_at);
@@ -39,7 +39,7 @@ const actions = {
   },
 
   loadWaitingMembers({ commit }, { notify } = {}) {
-    return tenantService.getSignUpRequests()
+    return portalService.getSignUpRequests()
       .then((users) => {
         commit('SET_WAITING_MEMBERS', users);
       })

@@ -260,7 +260,7 @@
       this.availableTokens = this.issuedTokens;
 
       this.$store.dispatch('Assets/getTeamBalances', [
-        this.project.researchGroup.external_id,
+        this.project.teamId,
         this.issuedTokens.symbol
       ]).then((res) => {
         this.availableTokens = res;
@@ -277,7 +277,7 @@
 
       createFundraising() {
         this.loading = true;
-        const isProposal = !this.project.researchGroup.is_personal;
+        const isProposal = !this.project.team.is_personal;
 
         const issuedTokensInfo = this.$$assetInfo(this.issuedTokens.symbol);
 
@@ -316,8 +316,8 @@
             username: this.$currentUser.username
           },
           {
-            teamId: this.project.researchGroup.external_id,
-            projectId: this.project.externalId,
+            teamId: this.project.teamId,
+            projectId: this.project._id,
             startTime: new Date(this.formData.startDate).getTime(),
             endTime: new Date(this.formData.endDate).getTime(),
             shares,

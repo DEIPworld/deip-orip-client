@@ -11,7 +11,7 @@
 
 <script>
   export default {
-    name: 'TopResearchLabel',
+    name: 'TopProjectLabel',
     props: {
       width: { required: false, type: Number, default: 21 },
       height: { required: false, type: Number, default: 21 },

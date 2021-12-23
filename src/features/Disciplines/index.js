@@ -1,20 +1,20 @@
 import { store } from '@/store';
-import { disciplinesStore } from '@/features/Disciplines/store';
+import { domainsStore } from '@/features/Disciplines/store';
 
 const install = (Vue, options = {}) => {
   if (install.installed) return;
 
   install.installed = true;
 
-  store.registerModule('Disciplines', disciplinesStore);
+  store.registerModule('Domains', domainsStore);
 };
 
-const DisciplinesFeature = {
+const DomainsFeature = {
   install
 };
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(DisciplinesFeature);
+  window.Vue.use(DomainsFeature);
 }
 
-export default DisciplinesFeature;
+export default DomainsFeature;

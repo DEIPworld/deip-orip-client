@@ -26,8 +26,8 @@ export const attributeRead = {
   },
   computed: {
     attributeInfo() {
-      const { tenantId } = this.project.researchRef || this.user.profile;
-      const attributes = this.$store.getters['Attributes/list']({ tenantId: [tenantId, null] });
+      const { portalId } = this.project || this.user;
+      const attributes = this.$store.getters['Attributes/list']({ portalId: [portalId, null] });
 
       const id = this.attribute._id || this.attribute.attributeId;
       return this.$$getAttributeInfo(id, attributes);

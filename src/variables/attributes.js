@@ -2,10 +2,10 @@ import { ATTR_TYPES, ATTR_SCOPES } from '@deip/constants';
 
 const SYSTEM_ATTRS = {
   [ATTR_TYPES.USER]: true,
-  [ATTR_TYPES.DISCIPLINE]: true,
-  [ATTR_TYPES.DISCIPLINES_LIST]: true,
-  [ATTR_TYPES.RESEARCH_GROUP]: true,
-  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: true,
+  [ATTR_TYPES.DOMAIN]: true,
+  [ATTR_TYPES.DOMAINS_LIST]: true,
+  [ATTR_TYPES.TEAM]: true,
+  [ATTR_TYPES.TEAMS_LIST]: true,
   [ATTR_TYPES.EXPRESS_LICENSING]: true,
   [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: true
 };
@@ -28,11 +28,11 @@ const ATTR_LABELS = {
 
   [ATTR_TYPES.USER]: 'User select',
 
-  [ATTR_TYPES.DISCIPLINE]: 'Discipline',
-  [ATTR_TYPES.DISCIPLINES_LIST]: 'Disciplines List',
+  [ATTR_TYPES.DOMAIN]: 'Domain',
+  [ATTR_TYPES.DOMAINS_LIST]: 'Domains List',
 
-  [ATTR_TYPES.RESEARCH_GROUP]: 'Research group',
-  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: 'research-groups-list',
+  [ATTR_TYPES.TEAM]: 'Team',
+  [ATTR_TYPES.TEAMS_LIST]: 'teams-list',
 
   [ATTR_TYPES.ROADMAP]: 'Roadmap',
   [ATTR_TYPES.PARTNERS]: 'Partners',
@@ -61,11 +61,11 @@ const ATTR_ICONS = {
 
   [ATTR_TYPES.USER]: 'mdi-account-outline',
 
-  [ATTR_TYPES.DISCIPLINE]: 'mdi-flask-empty-outline',
-  [ATTR_TYPES.DISCIPLINES_LIST]: 'mdi-flask-empty-plus-outline',
+  [ATTR_TYPES.DOMAIN]: 'mdi-flask-empty-outline',
+  [ATTR_TYPES.DOMAINS_LIST]: 'mdi-flask-empty-plus-outline',
 
-  [ATTR_TYPES.RESEARCH_GROUP]: 'mdi-account-box-outline',
-  [ATTR_TYPES.RESEARCH_GROUPS_LIST]: 'mdi-account-box-multiple-outline',
+  [ATTR_TYPES.TEAM]: 'mdi-account-box-outline',
+  [ATTR_TYPES.TEAMS_LIST]: 'mdi-account-box-multiple-outline',
 
   [ATTR_TYPES.ROADMAP]: 'mdi-timeline-clock-outline',
   [ATTR_TYPES.PARTNERS]: 'mdi-account-tie-outline',

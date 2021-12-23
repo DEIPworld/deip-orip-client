@@ -15,8 +15,8 @@ const GETTERS = {
 const ACTIONS = {
   loadUsers({ commit }, payload) {
     const usersList = [];
-    if (payload.researchGroupExternalId !== undefined) {
-      return userService.getUsersByTeam(payload.researchGroupExternalId)
+    if (payload.teamId !== undefined) {
+      return userService.getUsersByTeam(payload.teamId)
         .then((users) => {
           usersList.push(...users);
           return Promise.all(usersList.map(

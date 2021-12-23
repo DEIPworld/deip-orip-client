@@ -9,33 +9,33 @@ const STATE = {
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
-  research: (state) => state.research,
+  project: (state) => state.project,
   hasHistory: (state) => !!state.tokenSales.length
 };
 
 const ACTIONS = {
-  loadResearchTokenSale({ dispatch, commit }, researchId) {
-    return investmentsService.getCurrentTokenSaleByProject(researchId)
+  loadProjectTokenSale({ dispatch, commit }, projectId) {
+    return investmentsService.getCurrentTokenSaleByProject(projectId)
       .then((tokenSale) => {
-        commit('setResearchTokenSale', tokenSale);
+        commit('setProjectTokenSale', tokenSale);
         if (!tokenSale) {
-          return dispatch('loadHistoryResearchTokenSale', researchId);
+          return dispatch('loadHistoryProjectTokenSale', projectId);
         }
       }), (err) => { console.error(err); };
   },
-  loadHistoryResearchTokenSale({ commit }, researchId) {
-    return investmentsService.getProjectTokenSalesByProject(researchId)
+  loadHistoryProjectTokenSale({ commit }, projectId) {
+    return investmentsService.getProjectTokenSalesByProject(projectId)
       .then((tokenSales) => {
-        commit('setHistoryResearchTokenSale', tokenSales);
+        commit('setHistoryProjectTokenSale', tokenSales);
       });
   }
 };
 
 const MUTATIONS = {
-  setResearchTokenSale(state, tokenSale) {
+  setProjectTokenSale(state, tokenSale) {
     state.tokenSale = tokenSale;
   },
-  setHistoryResearchTokenSale(state, tokenSales) {
+  setHistoryProjectTokenSale(state, tokenSales) {
     state.tokenSales = tokenSales;
   }
 };

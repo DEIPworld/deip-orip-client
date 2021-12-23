@@ -87,7 +87,7 @@
     },
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       }),
 
       attrsList() {

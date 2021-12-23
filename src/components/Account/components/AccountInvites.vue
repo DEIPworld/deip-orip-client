@@ -22,13 +22,13 @@
         :key="'invite-request-' + index"
       >
         <d-box-item
-          :avatar="invite.group.external_id | researchGroupLogoSrc(64, 64)"
+          :avatar="invite.group._id | teamLogoSrc(64, 64)"
           :size="40"
         >
           <router-link
             class="a full-width break-word font-weight-medium"
             :to="{ name: 'teamDetails', params: {
-              teamId: invite.group.external_id,
+              teamId: invite.group._id,
             }}"
           >
             <v-clamp

@@ -28,7 +28,7 @@
     <eci-history-and-stats
       v-if="$hasModule(DEIP_MODULE.APP_ECI)"
       :account-name="user.account.name"
-      :filter-disciplines="user.disciplines"
+      :filter-domains="user.domains"
     />
   </layout-section>
 </template>
@@ -47,8 +47,8 @@
 
         return {
           ...user,
-          disciplines: user.expertise.map((e) => ({
-            name: e.disciplineName, externalId: e.disciplineExternalId
+          domains: user.expertise.map((e) => ({
+            name: e.domainName, _id: e.domainId
           }))
         };
       }

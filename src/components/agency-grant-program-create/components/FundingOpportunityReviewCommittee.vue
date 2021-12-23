@@ -8,7 +8,7 @@
       <v-card class="py-4 elevation-0">
         <v-autocomplete
           v-model="foa.reveiwCommittee"
-          :items="allGroupList"
+          :items="allTeamList"
           :filter="committeesFilter"
           outlined
           item-text="name"
@@ -64,7 +64,7 @@
     },
     data() {
       return {
-        allGroupList: []
+        allTeamList: []
       };
     },
     computed: {
@@ -100,14 +100,14 @@
       },
       getReviewCommittes(ids) {
         teamService.getTeams(ids)
-          .then((researchGroups) => {
-            this.allGroupList = researchGroups;
+          .then((teams) => {
+            this.allTeamList = teams;
             
-            Promise.all(this.allGroupList.map((researchGroup) => userService.getUsersByTeam(researchGroup.external_id)))
+            Promise.all(this.allTeamList.map((team) => userService.getUsersByTeam(team._id)))
               .then((allMembers) => {
-                for (let i = 0; i < this.allGroupList.length; i++) {
-                  const researchGroup = this.allGroupList[i];
-                  researchGroup.enrichedMembers = allMembers[i];
+                for (let i = 0; i < this.allTeamList.length; i++) {
+                  const team = this.allTeamList[i];
+                  team.enrichedMembers = allMembers[i];
                 }
               });
           });

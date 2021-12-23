@@ -92,10 +92,10 @@ Vue.filter('avatarSrc', (profile, width = 48, height, isRound = false, noCache =
   return pathArray.join('');
 });
 
-Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height, isRound = false, noCache = true) => {
+Vue.filter('teamLogoSrc', (teamId, width = 48, height, isRound = false, noCache = true) => {
   const internalWidth = width * 2;
   const internalHeight = height ? height * 2 : internalWidth;
-  const id = researchGroupExternalId || null;
+  const id = teamId || null;
 
   const pathArray = [
     window.env.DEIP_SERVER_URL,
@@ -118,19 +118,19 @@ Vue.filter('researchGroupLogoSrc', (researchGroupExternalId, width = 48, height,
 
 Vue.filter('accountFullname', (model) => {
   const { account, profile } = model;
-  const { is_research_group: isResearchGroup } = account;
-  let researchGroupTitle = '';
-  if (isResearchGroup) {
-    const teamAttrName = model.researchGroupRef.attributes.find(
+  const { isTeam } = account;
+  let teamTitle = '';
+  if (isTeam) {
+    const teamAttrName = model.attributes.find(
       ({ attributeId }) => attributeId === teamNameAttrId
     );
-    researchGroupTitle = teamAttrName ? teamAttrName.value : '';
+    teamTitle = teamAttrName ? teamAttrName.value : '';
   }
-  const isUser = !isResearchGroup;
+  const isUser = !isTeam;
 
   const path = isUser
     ? Vue.filter('fullname')({ profile, account })
-    : researchGroupTitle;
+    : teamTitle;
 
   return path;
 });
@@ -140,21 +140,21 @@ Vue.filter('accountAvatarSrc', (model, width = 48, height, isRound = false, noCa
   const internalHeight = height ? height * 2 : internalWidth;
 
   const { account, profile } = model;
-  const { name: id, is_research_group: isResearchGroup } = account;
-  const isUser = !isResearchGroup;
+  const { name: id, isTeam } = account;
+  const isUser = !isTeam;
 
   const path = isUser
     ? Vue.filter('avatarSrc')({ _id: id }, internalWidth, internalHeight, isRound, noCache)
-    : Vue.filter('researchGroupLogoSrc')(id, internalWidth, internalHeight, isRound, noCache);
+    : Vue.filter('teamLogoSrc')(id, internalWidth, internalHeight, isRound, noCache);
 
   return path;
 });
 
-Vue.filter('researchBackgroundSrc', (projectId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/project/${projectId}/attribute/${projectId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
+Vue.filter('projectBackgroundSrc', (projectId, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/api/project/${projectId}/attribute/${projectId}/file/background.png?authorization=${accessService.getAccessToken()}&image=true&width=${width}&height=${height}&round=${isRound}&noCache=${noCache}`);
 
-Vue.filter('tenantLogoSrc', (tenant, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/logo?width=${width}&height=${height}&noCache=${noCache}`);
+Vue.filter('portalLogoSrc', (portal, width = 120, height = 40, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/portal/logo?width=${width}&height=${height}&noCache=${noCache}`);
 
-Vue.filter('tenantBackgroundSrc', (tenant, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/tenant/banner?width=${width}&height=${height}&noCache=${noCache}`);
+Vue.filter('portalBackgroundSrc', (portal, width = 1440, height = 430, isRound = false, noCache = true) => `${window.env.DEIP_SERVER_URL}/portal/banner?width=${width}&height=${height}&noCache=${noCache}`);
 
 Vue.filter('dateFormat', (value, format, fromUtcToLocal = false) => (!fromUtcToLocal
   ? moment(moment(value).format('YYYY-MM-DD[T]HH:mm:ss')).format(format)

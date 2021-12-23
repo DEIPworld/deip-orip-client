@@ -7,7 +7,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import TeamDetailsRenderer from '@/features/Teams/components/Details/renderer';
-  import { extendAttrModules, tenantAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, portalAttributesToObject } from '@/utils/helpers';
   import { collectionMerge } from '@deip/toolbox';
   import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -22,7 +22,7 @@
 
       layoutSchema() {
         return extendAttrModules(
-          this.$tenantSettings.layouts.teamDetails.layout
+          this.$portalSettings.layouts.teamDetails.layout
         );
       },
 
@@ -35,17 +35,12 @@
 
         const constructedAttrs = collectionMerge(
           allAttrs,
-          this.team.researchGroupRef.attributes,
+          this.team.attributes,
           { key: 'attributeId' }
         );
         return {
           ...this.team,
-          ...{
-            researchGroupRef: {
-              ...this.team.researchGroupRef,
-              attributes: tenantAttributesToObject(constructedAttrs)
-            }
-          }
+          attributes: portalAttributesToObject(constructedAttrs)
         };
       }
     }

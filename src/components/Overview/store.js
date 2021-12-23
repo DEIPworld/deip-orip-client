@@ -14,41 +14,41 @@ const criteriaTypes = {
 
 const state = {
   criteriaTypes,
-  disciplinesExpertiseStats: [],
-  disciplinesExpertiseStatsHistory: []
+  domainsExpertiseStats: [],
+  domainsExpertiseStatsHistory: []
 };
 
 const getters = {
   criteriaTypes: () => state.criteriaTypes,
-  disciplinesExpertiseStats: () => state.disciplinesExpertiseStats,
-  disciplinesExpertiseStatsHistory: () => state.disciplinesExpertiseStatsHistory
+  domainsExpertiseStats: () => state.domainsExpertiseStats,
+  domainsExpertiseStatsHistory: () => state.domainsExpertiseStatsHistory
 
 };
 
 const actions = {
-  getDisciplinesExpertiseLastStats(context) {
-    return expertiseContributionsService.getDisciplinesExpertiseLastStats()
+  getDomainsExpertiseLastStats(context) {
+    return expertiseContributionsService.getDomainsExpertiseLastStats()
       .then((res) => {
-        context.commit('getDisciplinesExpertiseLastStats', res);
+        context.commit('getDomainsExpertiseLastStats', res);
       });
   },
 
-  getDisciplinesExpertiseStatsHistory(context) {
-    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory({})
+  getDomainsExpertiseStatsHistory(context) {
+    return expertiseContributionsService.getDomainsExpertiseStatsHistory({})
       .then((res) => {
-        context.commit('getDisciplinesExpertiseStatsHistory', res);
+        context.commit('getDomainsExpertiseStatsHistory', res);
       });
   }
 
 };
 
 const mutations = {
-  getDisciplinesExpertiseLastStats(state, payload) {
-    state.disciplinesExpertiseStats = payload.map((a) => a[1]);
+  getDomainsExpertiseLastStats(state, payload) {
+    state.domainsExpertiseStats = payload.map((a) => a[1]);
   },
-  getDisciplinesExpertiseStatsHistory(state, payload) {
-    state.disciplinesExpertiseStatsHistory = payload.map((a) => ({
-      external_id: a[0],
+  getDomainsExpertiseStatsHistory(state, payload) {
+    state.domainsExpertiseStatsHistory = payload.map((a) => ({
+      _id: a[0],
       history: a[1]
     }));
   }

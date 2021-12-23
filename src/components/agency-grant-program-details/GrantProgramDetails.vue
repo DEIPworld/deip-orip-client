@@ -183,9 +183,9 @@
 
             <v-card>
               <v-data-table
-                :headers="researchesAppliedForGrantTableHeader"
-                :items="researchesAppliedForGrant"
-                :hide-default-footer="researchesAppliedForGrant.length < 50"
+                :headers="projectsAppliedForGrantTableHeader"
+                :items="projectsAppliedForGrant"
+                :hide-default-footer="projectsAppliedForGrant.length < 50"
                 :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
                 :items-per-page="50"
               >
@@ -217,7 +217,7 @@
           <v-card class="fill-height">
             <div class="pt-4 pb-4 text-center">
               <v-avatar size="120px">
-                <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 240, 240, true)">
+                <img :src="$options.filters.teamLogoSrc(organizationProfile._id, 240, 240, true)">
               </v-avatar>
             </div>
             <v-divider />
@@ -271,7 +271,7 @@
 
         applicationDialogMeta: { isOpen: false },
 
-        researchesAppliedForGrantTableHeader: [
+        projectsAppliedForGrantTableHeader: [
           {
             text: 'Title',
             value: 'title'
@@ -293,7 +293,7 @@
         organizationProfile: 'agencyGrantProgramDetails/organization',
         program: 'agencyGrantProgramDetails/program',
         applications: 'agencyGrantProgramDetails/applications',
-        researchesAppliedForGrant: 'agencyGrantProgramDetails/researchesAppliedForGrant',        
+        projectsAppliedForGrant: 'agencyGrantProgramDetails/projectsAppliedForGrant',        
         user: 'auth/user',
         isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
         isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
@@ -304,8 +304,8 @@
 
       breadcrumbs() {
         return [
-          { text: this.organizationProfile.name, disabled: false, href: `/#/g/${this.organizationProfile.external_id}` },
-          { text: 'Programs', disabled: false, href: `/#/${this.organizationProfile.external_id}/programs` },
+          { text: this.organizationProfile.name, disabled: false, href: `/#/g/${this.organizationProfile._id}` },
+          { text: 'Programs', disabled: false, href: `/#/${this.organizationProfile._id}/programs` },
           // { text: this.program.area.abbreviation, disabled: true },
           // { text: this.program.subArea.abbreviation, disabled: true },
           { text: this.program.additional_info.funding_opportunity_title, disabled: true }

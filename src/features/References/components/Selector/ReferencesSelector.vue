@@ -3,7 +3,7 @@
     v-model="internalValue"
     :items="referencesList"
     item-text="title"
-    item-value="externalId"
+    item-value="_id"
     v-bind="$$fieldProps"
     :filter="filterSelector"
 

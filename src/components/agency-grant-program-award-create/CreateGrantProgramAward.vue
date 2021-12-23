@@ -57,27 +57,27 @@
               <v-row no-gutters>
                 <v-col cols="8">
                   <div class="text-subtitle-1 font-weight-bold">
-                    Researcher Name
+                    User Name
                   </div>
                   <v-autocomplete
-                    v-model="funding.researcher"
+                    v-model="funding.account"
                     label="Full Name"
-                    :loading="funding.isResearchersLoading"
-                    :items="funding.foundResearchers"
+                    :loading="funding.isAccountsLoading"
+                    :items="funding.foundAccounts"
                     item-text="name"
                     outlined
                     return-object
-                    :rules="[() => funding.researcher && funding.researcher.name.length > 0 || 'Researcher name is required']"
-                    :search-input.sync="funding.researcherSearch"
-                    @keyup="queryResearchers(funding)"
-                    @input="setResearchGroupsList(funding); setAwardSourcesList(funding);"
+                    :rules="[() => funding.account && funding.account.name.length > 0 || 'Account name is required']"
+                    :search-input.sync="funding.accountSearch"
+                    @keyup="queryAccounts(funding)"
+                    @input="setTeamsList(funding); setAwardSourcesList(funding);"
                   />
                 </v-col>
                 <v-col v-if="fundingIdx != 0" cols="3" offset="1">
                   <!-- <div class="text-subtitle-1 font-weight-bold">Organization</div>
                   <div class="v-input v-text-field theme--light">
                     <div class="v-input__control">
-                      <div><label>{{funding.researchGroup ? funding.researchGroup.name : ""}}</label></div>
+                      <div><label>{{funding.team ? funding.team.name : ""}}</label></div>
                     </div>
                   </div> -->
                   <div class="text-subtitle-1 font-weight-bold">
@@ -99,18 +99,18 @@
               <v-row no-gutters class="pt-2">
                 <v-col cols="12">
                   <div class="text-subtitle-1 font-weight-bold">
-                    Research Group
+                    Team
                   </div>
                   <v-select
-                    v-model="funding.researchGroup"
+                    v-model="funding.team"
                     outlined
-                    :items="funding.foundResearchGroups"
-                    :disabled="!funding.researcher"
+                    :items="funding.foundTeams"
+                    :disabled="!funding.account"
                     item-text="name"
                     return-object
-                    :loading="funding.isResearchGroupsLoading"
+                    :loading="funding.isTeamsLoading"
                     label="Group name"
-                    @input="setResearchList(funding)"
+                    @input="setProjectList(funding)"
                   />
                 </v-col>
               </v-row>
@@ -118,16 +118,16 @@
               <v-row no-gutters class="pt-2">
                 <v-col cols="12">
                   <div class="text-subtitle-1 font-weight-bold">
-                    Research
+                    Project
                   </div>
                   <v-select
-                    v-model="funding.research"
-                    :items="funding.foundResearch"
+                    v-model="funding.project"
+                    :items="funding.foundProject"
                     outlined
-                    :disabled="!funding.researchGroup"
+                    :disabled="!funding.team"
                     item-text="title"
                     return-object
-                    :loading="funding.isResearchLoading"
+                    :loading="funding.isProjectLoading"
                     label="Title"
                   />
                 </v-col>
@@ -314,7 +314,7 @@
         <v-card class="full-height">
           <div class="py-4 text-center">
             <v-avatar size="120px">
-              <img :src="$options.filters.researchGroupLogoSrc(organizationProfile.external_id, 120, 120, true)">
+              <img :src="$options.filters.teamLogoSrc(organizationProfile._id, 120, 120, true)">
             </v-avatar>
           </div>
           <v-divider />
@@ -432,19 +432,19 @@
           {
             text: this.organizationProfile.name,
             disabled: false,
-            href: `/#/g/${this.organizationProfile.external_id}`
+            href: `/#/g/${this.organizationProfile._id}`
           },
           {
             text: 'Programs',
             disabled: false,
-            href: `/#/${this.organizationProfile.external_id}/programs`
+            href: `/#/${this.organizationProfile._id}/programs`
           },
           // { text: this.program.area.abbreviation, disabled: true },
           // { text: this.program.subArea.abbreviation, disabled: true },
           {
             text: this.program.additional_info.funding_opportunity_title,
             disabled: false,
-            href: `/#/${this.organizationProfile.external_id}/programs/${this.program.funding_opportunity_number}`
+            href: `/#/${this.organizationProfile._id}/programs/${this.program.funding_opportunity_number}`
           },
           {
             text: 'Award Receivers',
@@ -468,7 +468,7 @@
         if (!this.fundings.length) return true;
         const totalAward = this.fundings[0].purpose.awardAmount;
         return this.fundings.some((f, i) => {
-          const isInvalid = !f.researcher || !f.research || (i == 0 ? f.overhead == null : false)
+          const isInvalid = !f.account || !f.project || (i == 0 ? f.overhead == null : false)
             || f.purpose.awardAmount == null || !this.awardIsValid || !f.awardNumber
             || f.awardNumber.length < this.MIN_FOA_NUMBER_LENGTH || f.awardNumber.length > this.MAX_FOA_NUMBER_LENGTH
             || (i != 0 && !f.awardSource);
@@ -488,19 +488,19 @@
       if (this.awardee) {
         const funding = this.fundings[0];
 
-        this.queryResearchers(funding);
-        const researcher = funding.foundResearchers.find(({ user }) => user.account.name == this.awardee.research_group.creator);
-        funding.researcher = researcher;
+        this.queryAccounts(funding);
+        const account = funding.foundAccounts.find(({ user }) => user.account.name == this.awardee.team.creator);
+        funding.account = account;
 
-        this.setResearchGroupsList(funding)
+        this.setTeamsList(funding)
           .then(() => {
-            const researchGroup = funding.foundResearchGroups.find((rg) => rg.external_id == this.awardee.research_group.external_id);
-            funding.researchGroup = researchGroup;
-            return this.setResearchList(funding);
+            const team = funding.foundTeams.find((rg) => rg._id == this.awardee.teamId);
+            funding.team = team;
+            return this.setProjectList(funding);
           })
           .then(() => {
-            const research = funding.foundResearch.find((r) => r.external_id == this.awardee.external_id);
-            funding.research = research;
+            const project = funding.foundProject.find((r) => r._id == this.awardee._id);
+            funding.project = project;
           });
       }
     },
@@ -521,14 +521,14 @@
         // + (equipment || 0) + (businessTravel || 0);
       },
 
-      queryResearchers(funding) {
-        funding.isResearchersLoading = true;
-        funding.foundResearchers = this.allUsers.filter((user) => {
+      queryAccounts(funding) {
+        funding.isAccountsLoading = true;
+        funding.foundAccounts = this.allUsers.filter((user) => {
           const name = this.$options.filters.fullname(user);
           return name.toLowerCase()
-            .indexOf((funding.researcherSearch || '').toLowerCase()) > -1
+            .indexOf((funding.accountSearch || '').toLowerCase()) > -1
             || user.account.name.toLowerCase()
-              .indexOf((funding.researcherSearch || '').toLowerCase()) > -1;
+              .indexOf((funding.accountSearch || '').toLowerCase()) > -1;
         })
           .map(((user) => {
             const name = this.$options.filters.fullname(user);
@@ -537,25 +537,25 @@
               user
             };
           }));
-        funding.isResearchersLoading = false;
+        funding.isAccountsLoading = false;
       },
 
       addReceiver() {
         const funding = {
-          isResearchersLoading: false,
-          isResearchGroupsLoading: false,
-          isResearchLoading: false,
+          isAccountsLoading: false,
+          isTeamsLoading: false,
+          isProjectLoading: false,
 
           awardNumber: '',
-          researcherSearch: '',
-          researcher: null,
-          foundResearchers: [],
-          foundResearch: [],
-          foundResearchGroups: [],
+          accountSearch: '',
+          account: null,
+          foundAccounts: [],
+          foundProject: [],
+          foundTeams: [],
           foundAwardSources: [],
 
-          researchGroup: null,
-          research: null,
+          team: null,
+          project: null,
           overhead: "10.00 %",
           purpose: {
             // businessTravel: null,
@@ -585,45 +585,45 @@
       //   funding.milestones.splice(idx, 1);
       // },
 
-      setResearchGroupsList(funding) {
-        funding.foundResearchGroups = [];
-        funding.foundResearch = [];
-        funding.isResearchGroupsLoading = true;
+      setTeamsList(funding) {
+        funding.foundTeams = [];
+        funding.foundProject = [];
+        funding.isTeamsLoading = true;
 
-        return teamService.getTeamsByUser(funding.researcher.user.account.name)
+        return teamService.getTeamsByUser(funding.account.user.account.name)
           .then((groups) => {
-            funding.foundResearchGroups.push(...groups);
-            return Promise.all(groups.map((group) => projectService.getTeamProjectListing(group.external_id)));
+            funding.foundTeams.push(...groups);
+            return Promise.all(groups.map((group) => projectService.getTeamProjectListing(group._id)));
           })
           .finally(() => {
-            funding.isResearchGroupsLoading = false;
+            funding.isTeamsLoading = false;
           });
       },
 
-      setResearchList(funding) {
-        funding.foundResearch = [];
-        funding.isResearchLoading = true;
+      setProjectList(funding) {
+        funding.foundProject = [];
+        funding.isProjectLoading = true;
 
-        return projectService.getTeamProjectListing(funding.researchGroup.external_id)
-          .then((groupsResearchList) => {
-            const researches = [].concat.apply([], groupsResearchList);
-            funding.foundResearch.push(...researches);
+        return projectService.getTeamProjectListing(funding.team._id)
+          .then((groupsProjectList) => {
+            const projects = [].concat.apply([], groupsProjectList);
+            funding.foundProject.push(...projects);
           })
           .finally(() => {
-            funding.isResearchLoading = false;
+            funding.isProjectLoading = false;
           });
       },
 
       setAwardSourcesList(funding) {
         this.isAwardSourceLoading = true;
         const foundAwardSources = this.fundings
-          .filter((f) => f.researcher.user.account.name != funding.researcher.user.account.name)
-          .filter((f) => !f.awardSource || f.awardSource != funding.researcher.user.account.name)
+          .filter((f) => f.account.user.account.name != funding.account.user.account.name)
+          .filter((f) => !f.awardSource || f.awardSource != funding.account.user.account.name)
           .map(((f) => {
-            const name = this.$options.filters.fullname(f.researcher.user);
+            const name = this.$options.filters.fullname(f.account.user);
             return {
               name,
-              user: f.researcher.user
+              user: f.account.user
             };
           }));
 
@@ -652,9 +652,9 @@
           const awardInfo = {
             subaward_number: funding.awardNumber,
             subaward: this.toAssetUnits(funding.purpose.awardAmount, grantAssetPrecision, granAssetSymbol),
-            subawardee: funding.researcher.user.account.name,
+            subawardee: funding.account.user.account.name,
             source,
-            research_external_id: funding.research.external_id
+            projectId: funding.project._id
 
             // milestones: funding.milestones
             //   .map((milestone) => {
@@ -674,9 +674,9 @@
             awardNumber: this.fundings[0].awardNumber,
             fundingOpportunityNumber: this.program.funding_opportunity_number,
             award: this.toAssetUnits(this.fundings[0].purpose.awardAmount, grantAssetPrecision, granAssetSymbol),
-            awardee: this.fundings[0].researcher.user.account.name,
-            researchExternalId: this.fundings[0].research.external_id,
-            universityExternalId: this.universityProfile.external_id,
+            awardee: this.fundings[0].account.user.account.name,
+            projectId: this.fundings[0].project._id,
+            universityId: this.universityProfile._id,
             universityOverhead: `10.00 %`, //`${this.fundings[0].overhead}.00 %`,
             subawardees,
             creator: this.$currentUser.username,

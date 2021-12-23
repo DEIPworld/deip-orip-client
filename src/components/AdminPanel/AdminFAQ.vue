@@ -56,9 +56,9 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import SideActionsCard from '@/components/layout/SideActionsCard';
   import { mapGetters } from 'vuex';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminFAQ',
@@ -103,13 +103,13 @@
       // },
 
       updateFAQ(FAQsArr) {
-        const updatedProfile = _.cloneDeep(this.$tenant.profile);
+        const updatedProfile = _.cloneDeep(this.$portal.profile);
         updatedProfile.settings.faq = FAQsArr;
-        tenantService.updateTenantProfile(updatedProfile)
+        portalService.updatePortalProfile(updatedProfile)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = window.env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
           })
           .catch((err) => {
             console.error(err);

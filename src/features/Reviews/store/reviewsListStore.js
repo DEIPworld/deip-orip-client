@@ -63,7 +63,8 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeReviews(state, payload) {
-    state.reviewsList = payload.map((item) => (camelizeObjectKeys(item)));
+    // state.reviewsList = payload.map((item) => (camelizeObjectKeys(item)));
+    state.reviewsList = payload;
   },
 
   storeContents: contentListStore.mutations.storeContents

@@ -1,9 +1,9 @@
 <template>
-  <research-list-item-renderer
+  <project-list-item-renderer
     :schema="layoutSchema"
-    :research="researchExtended"
+    :project="projectExtended"
     tag="tr"
-    @click.native="goToResearch()"
+    @click.native="goToProject()"
   />
 </template>
 
@@ -15,7 +15,7 @@
     mixins: [projectItem],
     computed: {
       layoutSchema() {
-        const { layout } = this.$tenantSettings.layouts.AdminProjectListRow;
+        const { layout } = this.$portalSettings.layouts.AdminProjectListRow;
 
         const row = _.cloneDeep(layout[0]);
 
@@ -46,11 +46,11 @@
       }
     },
     methods: {
-      goToResearch() {
+      goToProject() {
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.researchExtended.external_id
+            projectId: this.projectExtended._id
           }
         });
       },
@@ -66,7 +66,7 @@
           on: {
             click(e) {
               e.stopPropagation();
-              self.$emit(event, self.researchExtended.external_id);
+              self.$emit(event, self.projectExtended._id);
             }
           },
           children: [

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <d-block-widget v-if="research">
+    <d-block-widget v-if="project">
       <router-link
         class="a title"
         :to="{
           name: 'project.content.details',
           params: {
-            projectId: research.external_id,
-            contentId: content.external_id
+            projectId: project._id,
+            contentId: content._id
           }
         }"
       >
@@ -15,7 +15,7 @@
       </router-link>
     </d-block-widget>
 
-    <d-block-widget v-if="!!research">
+    <d-block-widget v-if="!!project">
       <review-assessment
         v-model="assessmentCriteria"
         :content-type="content.content_type"
@@ -35,7 +35,7 @@
 <!--      </v-btn>-->
 <!--      <div class="pt-4 text-caption">-->
 <!--        <div>-->
-<!--          You will get <span class="font-weight-bold">ECI reward in {{ userRelatedExpertise.map(exp => exp.discipline_name).join(', ') }}</span>-->
+<!--          You will get <span class="font-weight-bold">ECI reward in {{ userRelatedExpertise.map(exp => exp.domainName).join(', ') }}</span>-->
 <!--          for your contribution to this project-->
 <!--        </div>-->
 <!--      </div>-->
@@ -55,7 +55,7 @@
   const reviewService = ReviewService.getInstance();
 
   export default {
-    name: 'ResearchContentAddReviewSidebar',
+    name: 'ProjectContentAddReviewSidebar',
     mixins: [reviewsChore],
     components: { ReviewAssessment, DBlockWidget, DBlock },
     data() {
@@ -69,10 +69,10 @@
         user: 'auth/user',
         userExperise: 'auth/userExperise',
         content: 'rcd/content',
-        research: 'rcd/research'
+        project: 'rcd/project'
       }),
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => exp.amount > 0 && this.research.disciplines.some((d) => d.id == exp.discipline_id));
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.project.domains.some((d) => d.id == exp.domainId));
       },
 
       isReviewPublishingDisabled() {
@@ -86,7 +86,7 @@
         bus.$emit('reviewEditor:exportHtml', (html) => {
           this.isLoading = true;
           const reviewData = html;
-          const projectContentId = this.content.external_id;
+          const projectContentId = this.content._id;
 
           const scores = Object.keys(assessmentCriteria)
             .reduce((sc, key) => {
@@ -95,7 +95,7 @@
               return sc;
             }, {});
 
-          const disciplines = this.userRelatedExpertise.map((exp) => exp.discipline_external_id);
+          const domains = this.userRelatedExpertise.map((exp) => exp.domainId);
           const assessment = { type: 1, scores };
 
           return reviewService.createReview({
@@ -106,22 +106,22 @@
             projectContentId,
             content: reviewData,
             assessment,
-            domains: disciplines
+            domains: domains
           })
             .then((data) => {
-              this.$notifier.showSuccess(this.$t('researchContentDetails.addRev.pubSucc'));
+              this.$notifier.showSuccess(this.$t('projectContentDetails.addRev.pubSucc'));
               this.$router.push({
                 name: 'project.content.details',
                 params: {
-                  projectId: this.research.external_id,
-                  contentId: this.content.external_id
+                  projectId: this.project._id,
+                  contentId: this.content._id
                 },
                 hash: '#reviews'
               });
             })
             .catch((err) => {
               console.error(err);
-              this.$notifier.showError(this.$t('researchContentDetails.addRev.pubFail'));
+              this.$notifier.showError(this.$t('projectContentDetails.addRev.pubFail'));
             })
             .finally(() => {
               this.isLoading = false;

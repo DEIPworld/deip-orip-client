@@ -1,13 +1,13 @@
 <template>
   <!-- TODO: make review request condition props or move to slot -->
   <reviews-list
-    :project-id="project.externalId"
+    :project-id="project._id"
     :content-id="null"
-    :discipline-id="project.disciplines.map((external_id) => external_id)"
+    :domain-id="project.domains.map((_id) => _id)"
     :exclude-users="project.members"
 
     :disable-content-route="!contentAssessAllowed"
-    :disable-review-request-route="!contentAssessAllowed || project.numberOfResearchContents === 0 || $isGuest"
+    :disable-review-request-route="!contentAssessAllowed || project.numberOfProjectContents === 0 || $isGuest"
     :disable-create-route="true"
   />
 </template>

@@ -6,7 +6,7 @@ import { AccessService } from '@deip/access-service';
 import { UserService } from '@deip/user-service';
 import { NotificationService } from '@deip/notification-service';
 import { BookmarkService } from '@deip/bookmark-service';
-import { TenantService } from '@deip/tenant-service';
+import { PortalService } from '@deip/portal-service';
 import { AssetsService } from '@deip/assets-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
@@ -18,7 +18,7 @@ const accessService = AccessService.getInstance();
 const userService = UserService.getInstance();
 const notificationService = NotificationService.getInstance();
 const bookmarkService = BookmarkService.getInstance();
-const tenantService = TenantService.getInstance();
+const portalService = PortalService.getInstance();
 const assetsService = AssetsService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const grantsService = GrantsService.getInstance();
@@ -33,12 +33,12 @@ const state = {
     coworkers: [],
     joinRequests: [],
     notifications: [],
-    researchBookmarks: [],
+    projectBookmarks: [],
     balances: [],
     assets: []
   },
-  tenant: undefined,
-  networkTenants: [],
+  portal: undefined,
+  networkPortals: [],
   allAssets: [], // TODO: temp
   assets: [] // TODO: temp
 };
@@ -73,7 +73,7 @@ const getters = {
       const group = state.user.groups[i];
       groups.push({
         id: group.id,
-        external_id: group.external_id,
+        _id: group._id,
         name: group.name,
         quorum_percent: group.quorum_percent,
         is_personal: group.is_personal,
@@ -89,11 +89,11 @@ const getters = {
     return groups;
   },
 
-  userPersonalGroup: (state, getters) => getters.userGroups.find((g) => g.external_id === getters.user.username),
+  userPersonalGroup: (state, getters) => getters.userGroups.find((g) => g._id === getters.user.username),
 
-  userIsResearchGroupMember: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.id),
+  userIsTeamMember: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.id),
 
-  userIsResearchGroupMemberExId: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group.external_id),
+  userIsTeamMemberExId: (state, getters) => (groupId) => getters.userGroups.some((group) => groupId === group._id),
 
   userCoworkers: (state, getters) => state.user.coworkers,
 
@@ -110,27 +110,27 @@ const getters = {
 
   userAssets: (state) => state.user.assets,
 
-  tenant: (state) => state.tenant,
+  portal: (state) => state.portal,
 
   isUniversityCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'university-certifier'
-    && getters.tenant
-    && r.researchGroupExternalId == getters.tenant.account.name),
+    && getters.portal
+    && r.teamId == getters.portal.account.name),
 
   isGrantProgramOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-program-officer'
-      && getters.tenant
-      && r.researchGroupExternalId == getters.tenant.account.name),
+      && getters.portal
+      && r.teamId == getters.portal.account.name),
 
   isGrantChiefOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-chief-officer'
-    && getters.tenant
-    && r.researchGroupExternalId == getters.tenant.account.name),
+    && getters.portal
+    && r.teamId == getters.portal.account.name),
 
   isGrantFinanceOfficer: (state, getters) => state.user.profile.roles.some((r) => r.role === 'grant-finance-officer'
-      && getters.tenant
-    && r.researchGroupExternalId == getters.tenant.account.name),
+      && getters.portal
+    && r.teamId == getters.portal.account.name),
 
   isTreasuryCertifier: (state, getters) => state.user.profile.roles.some((r) => r.role === 'treasury-certifier'
-    && getters.tenant
-    && r.researchGroupExternalId == getters.tenant.account.name)
+    && getters.portal
+    && r.teamId == getters.portal.account.name)
 };
 
 // actions
@@ -141,7 +141,7 @@ const actions = {
       dispatch('loadUserData'),
       dispatch('loadExpertTokens'),
       dispatch('loadJoinRequests'),
-      dispatch('loadResearchBookmarks'),
+      dispatch('loadProjectBookmarks'),
       dispatch('loadBalances'),
       dispatch('loadGroups'),
       dispatch('loadAssets'), // TODO: temp
@@ -154,7 +154,8 @@ const actions = {
   loadAllAssets({ commit }) { // TODO: temp
     return assetsService.lookupAssets("", 10000)
       .then((allAssets) => {
-        commit('storeAllAssets', allAssets.map((b) => camelizeObjectKeys(b)));
+        // commit('storeAllAssets', allAssets.map((b) => camelizeObjectKeys(b)));
+        commit('storeAllAssets', allAssets);
       });
   },
 
@@ -166,13 +167,13 @@ const actions = {
       });
   },
 
-  loadResearchBookmarks({ commit, getters }, { notify } = {}) {
+  loadProjectBookmarks({ commit, getters }, { notify } = {}) {
     const { user } = getters;
     return bookmarkService.getProjectBookmarks(user.username)
-      .then((researchBookmarks) => {
-        commit('SET_USER_RESEARCH_BOOKMARKS', researchBookmarks.map((b) => ({
+      .then((projectBookmarks) => {
+        commit('SET_USER_PROJECT_BOOKMARKS', projectBookmarks.map((b) => ({
           _id: b._id,
-          researchId: b.ref
+          projectId: b.ref
         })));
       }).finally(() => {
         if (notify) notify();
@@ -222,7 +223,7 @@ const actions = {
     const { user } = getters;
     return assetsService.getAccountAssetsBalancesByOwner(user.username)
       .then((balances) => {
-        const currencies = balances.filter(b => !b.tokenized_research);
+        const currencies = balances.filter(b => !b.tokenizedProject);
         commit('SET_USER_BALANCES', currencies);
         return Promise.all(currencies.map((b) => assetsService.getAssetBySymbol(b.asset_symbol)));
       })
@@ -246,7 +247,7 @@ const actions = {
 
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
     // const { user } = getters;
-    // researchGroupService.getJoinRequestsByUser(user.username)
+    // teamService.getJoinRequestsByUser(user.username)
     //   .then((requests) => {
     //     commit('SET_USER_JOIN_REQUESTS', requests);
     //   }, (err) => {
@@ -257,10 +258,10 @@ const actions = {
     //   });
   },
 
-  loadTenant({ state, commit, getters }, { tenant, notify } = {}) {
-    return tenantService.getTenant(tenant)
-      .then((tenant) => {
-        commit('SET_TENANT', tenant);
+  loadPortal({ state, commit, getters }, { portal, notify } = {}) {
+    return portalService.getPortal(portal)
+      .then((portal) => {
+        commit('SET_PORTAL', portal);
       })
       .catch((err) => {
         console.error(err);
@@ -271,9 +272,9 @@ const actions = {
   },
 
   loadNetworkInfo({ state, commit, getters }) {
-    return tenantService.getNetworkTenants()
+    return portalService.getNetworkPortals()
       .then((network) => {
-        commit('SET_NETWORK_TENANTS', network);
+        commit('SET_NETWORK_PORTALS', network);
       })
       .catch((err) => {
         console.error(err);
@@ -292,8 +293,8 @@ const mutations = {
     state.user.groups = list;
   },
 
-  SET_USER_RESEARCH_BOOKMARKS(state, list) {
-    state.user.researchBookmarks = list;
+  SET_USER_PROJECT_BOOKMARKS(state, list) {
+    state.user.projectBookmarks = list;
   },
 
   SET_USER_NOTIFICATION_PROPOSALS(state, list) {
@@ -316,8 +317,8 @@ const mutations = {
     state.user.account = account;
   },
 
-  SET_TENANT(state, tenant) {
-    state.tenant = tenant;
+  SET_PORTAL(state, portal) {
+    state.portal = portal;
   },
 
   SET_USER_BALANCES(state, balances) {
@@ -332,8 +333,8 @@ const mutations = {
     state.loaded = payload;
   },
 
-  SET_NETWORK_TENANTS(state, payload) {
-    state.networkTenants = payload;
+  SET_NETWORK_PORTALS(state, payload) {
+    state.networkPortals = payload;
   },
 
   storeAssets(state, payload) { // TODO: temp

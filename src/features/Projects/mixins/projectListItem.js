@@ -1,8 +1,8 @@
 import { componentsRenderer } from '@/mixins/renderer';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
-import TenantBadge from '@/features/Tenant/components/Badge/TenantBadge';
-import { extendAttrModules, hasValue, tenantAttributesToObject } from '@/utils/helpers';
+import PortalBadge from '@/features/Tenant/components/Badge/TenantBadge';
+import { extendAttrModules, hasValue, portalAttributesToObject } from '@/utils/helpers';
 import { collectionMerge } from '@deip/toolbox';
 import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -11,7 +11,7 @@ export const ProjectListItemRenderer = {
   components: {
     AttributesRead,
 
-    TenantBadge
+    PortalBadge
   },
   mixins: [componentsRenderer],
   props: {
@@ -21,11 +21,11 @@ export const ProjectListItemRenderer = {
     }
   },
   computed: {
-    research() { return this.project; } // temp
+    // project() { return this.project; } // temp
   },
   methods: {
     ifAttribute(id) {
-      const attr = this.research.researchRef.attributes[id];
+      const attr = this.project.attributes[id];
 
       if (!attr || !attr.value) return false;
 
@@ -48,7 +48,7 @@ export const projectListItem = {
 
   computed: {
     layoutSchema() {
-      const { layout } = this.$tenantSettings.layouts[this.layoutKey];
+      const { layout } = this.$portalSettings.layouts[this.layoutKey];
 
       return extendAttrModules(
         layout,
@@ -65,20 +65,15 @@ export const projectListItem = {
 
       const constructedAttrs = collectionMerge(
         allAttrs,
-        this.project.researchRef.attributes,
+        this.project.attributes,
         { key: 'attributeId' }
       );
 
 
       return {
         ...this.project,
-        ...{
-          researchRef: {
-            ...this.project.researchRef,
-            attributes: tenantAttributesToObject(constructedAttrs),
-            created_at: this.$options.filters.dateFormat(this.project.researchRef.created_at, 'D MMM YYYY', true)
-          }
-        }
+        attributes: portalAttributesToObject(constructedAttrs),
+        created_at: this.$options.filters.dateFormat(this.project.createdAt, 'D MMM YYYY', true)
       };
     }
   }

@@ -9,15 +9,15 @@
         xl="8"
       >
         <div class="text-h6">
-          {{ $t('researchContentDetails.references.dataOver') }}
+          {{ $t('projectContentDetails.references.dataOver') }}
         </div>
         <div class="py-6 text-subtitle-1 font-weight-medium">
-          {{ $t('researchContentDetails.references.refNumber', { referencesCount }) }}
+          {{ $t('projectContentDetails.references.refNumber', { referencesCount }) }}
         </div>
         <div ref="graphContainer" style="height: 400px">
           <references-dependency-graph
             v-if="isMounted"
-            :data="researchContentReferencesGraph"
+            :data="projectContentReferencesGraph"
             :width="graphWidth"
             :height="graphHeight"
           />
@@ -36,12 +36,12 @@
             <v-tabs-slider />
             <v-tab href="#tab-file">
               <span class="text-subtitle-1 capitalize">
-                {{ $t('researchContentDetails.references.fileInfo') }}
+                {{ $t('projectContentDetails.references.fileInfo') }}
               </span>
             </v-tab>
             <v-tab href="#tab-references">
               <span class="text-subtitle-1 capitalize">
-                {{ $t('researchContentDetails.references.dataUsers') }}
+                {{ $t('projectContentDetails.references.dataUsers') }}
                 <span v-if="outerReferences.length">({{ outerReferences.length }})</span>
               </span>
             </v-tab>
@@ -53,7 +53,7 @@
                   <v-row justify="space-between" align="center">
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.title') }}:
+                        {{ $t('projectContentDetails.references.title') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
@@ -62,12 +62,12 @@
                         :to="{
                           name: 'project.content.details',
                           params: {
-                            contentId: researchContent.external_id,
-                            projectId: research.external_id,
+                            contentId: projectContent._id,
+                            projectId: project._id,
                           }
                         }"
                       >
-                        {{ researchContent.title }}
+                        {{ projectContent.title }}
                       </router-link>
                     </v-col>
                   </v-row>
@@ -79,11 +79,11 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.formatType') }}:
+                        {{ $t('projectContentDetails.references.formatType') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
-                      <span>{{ getProjectContentType(researchContent.contentType).text }}</span>
+                      <span>{{ getProjectContentType(projectContent.contentType).text }}</span>
                     </v-col>
                   </v-row>
 
@@ -94,12 +94,12 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.authors') }}:
+                        {{ $t('projectContentDetails.references.authors') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
                       <v-row align="center" no-gutters>
-                        <div v-for="(author, i) in researchContentAuthorsList" :key="`author-${i}`">
+                        <div v-for="(author, i) in projectContentAuthorsList" :key="`author-${i}`">
                           <platform-avatar
                             :user="author"
                             :size="20"
@@ -118,7 +118,7 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.organization') }}:
+                        {{ $t('projectContentDetails.references.organization') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
@@ -128,11 +128,11 @@
                             width="20px"
                             height="20px"
                             class="align-self-center"
-                            :src="$options.filters.researchGroupLogoSrc(researchGroup.external_id, 50, 50, true)"
+                            :src="$options.filters.teamLogoSrc(team._id, 50, 50, true)"
                           >
                         </v-col>
                         <v-col>
-                          <span class="pl-2">{{ researchGroup.name }}</span>
+                          <span class="pl-2">{{ team.name }}</span>
                         </v-col>
                       </v-row>
                     </v-col>
@@ -145,7 +145,7 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.releaseDate') }}:
+                        {{ $t('projectContentDetails.references.releaseDate') }}:
                       </span>
                     </v-col>
                     <v-col cols="8">
@@ -153,7 +153,7 @@
                         <v-icon small class="align-self-center">
                           event
                         </v-icon>
-                        <span class="pl-2">{{ moment(researchContent.created_at).format('D MMM YYYY') }}</span>
+                        <span class="pl-2">{{ moment(projectContent.createdAt).format('D MMM YYYY') }}</span>
                       </v-row>
                     </v-col>
                   </v-row>
@@ -166,7 +166,7 @@
                   >
                     <v-col cols="4">
                       <span class="text-body-2">
-                        {{ $t('researchContentDetails.references.verifiedBy') }}:
+                        {{ $t('projectContentDetails.references.verifiedBy') }}:
                       </span>
                     </v-col>
                     <v-col cols="8" class="my-n1">
@@ -215,12 +215,12 @@
                         :to="{
                           name: 'project.content.details',
                           params: {
-                            contentId: ref.researchContent.external_id,
-                            projectId: ref.research.external_id,
+                            contentId: ref.projectContent._id,
+                            projectId: ref.project._id,
                           }
                         }"
                       >
-                        {{ ref.researchContent.title }}
+                        {{ ref.projectContent.title }}
                       </router-link>
                     </div>
                   </v-col>
@@ -231,7 +231,7 @@
                   align="center"
                 >
                   <div class="py-6">
-                    {{ $t('researchContentDetails.references.sharedMat') }}
+                    {{ $t('projectContentDetails.references.sharedMat') }}
                   </div>
                 </v-row>
               </v-tab-item>
@@ -252,7 +252,7 @@
       >
         <v-row column class="outer-references-by-org px-4">
           <div class="text-h6">
-            {{ $t('researchContentDetails.references.usageOrg') }}
+            {{ $t('projectContentDetails.references.usageOrg') }}
           </div>
           <div class="py-12">
             <d-chart-pie
@@ -276,7 +276,7 @@
       >
         <v-row column class="outer-references-by-content-type px-4">
           <div class="text-h6">
-            {{ $t('researchContentDetails.references.usageType') }}
+            {{ $t('projectContentDetails.references.usageType') }}
           </div>
           <div class="py-12">
             <d-chart-pie
@@ -297,13 +297,13 @@
         lg="4"
         xl="4"
       >
-        <v-row column class="outer-references-by-discipline px-4">
+        <v-row column class="outer-references-by-domain px-4">
           <div class="text-h6">
-            {{ $t('researchContentDetails.references.usageDomain') }}
+            {{ $t('projectContentDetails.references.usageDomain') }}
           </div>
           <div class="py-12">
             <d-chart-pie
-              :data="referencesByDisciplinesChart.data"
+              :data="referencesByDomainsChart.data"
               donut
               :options="{
                 legend: { position: 'left' }
@@ -329,7 +329,7 @@
   const projectContentService = ProjectContentService.getInstance();
 
   export default {
-    name: 'ResearchContentReferences',
+    name: 'ProjectContentReferences',
     components: { LayoutSection, DChartPie },
     data() {
       return {
@@ -342,32 +342,32 @@
     computed: {
       ...mapGetters({
         user: 'auth/user',
-        researchContent: 'rcd/content',
-        research: 'rcd/research',
-        researchGroup: 'rcd/group',
+        projectContent: 'rcd/content',
+        project: 'rcd/project',
+        team: 'rcd/group',
         contentRef: 'rcd/contentRef',
-        researchContentReferencesGraph: 'rcd/researchContentReferencesGraph',
-        researchGroupMembers: 'rcd/membersList',
+        projectContentReferencesGraph: 'rcd/projectContentReferencesGraph',
+        teamMembers: 'rcd/membersList',
         contentReviewsList: 'rcd/contentReviewsList'
       }),
       referencesCount() {
-        return this.researchContentReferencesGraph.nodes.length;
+        return this.projectContentReferencesGraph.nodes.length;
       },
       outerReferences() {
-        return this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter);
+        return this.projectContentReferencesGraph.nodes.filter((node) => node.isOuter);
       },
       hasOuterReferences() {
         return this.outerReferences.length != 0;
       },
-      researchContentAuthorsList() {
-        return this.researchContent ? this.researchGroupMembers.filter((m) => this.researchContent.authors.some((a) => a === m.account.name)) : [];
+      projectContentAuthorsList() {
+        return this.projectContent ? this.teamMembers.filter((m) => this.projectContent.authors.some((a) => a === m.account.name)) : [];
       },
 
-      referencesByDisciplinesChart() {
-        const referencesByDiscipline = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-          const { disciplines } = node.research;
-          for (let i = 0; i < disciplines.length; i++) {
-            const { name } = disciplines[i];
+      referencesByDomainsChart() {
+        const referencesByDomain = this.projectContentReferencesGraph.nodes.reduce((acc, node) => {
+          const { domains } = node.project;
+          for (let i = 0; i < domains.length; i++) {
+            const { name } = domains[i];
             const item = acc[name];
             if (!item) {
               acc[name] = {
@@ -381,19 +381,19 @@
           return acc;
         }, {});
 
-        const totalDisciplinesCount = Object.keys(referencesByDiscipline).length;
+        const totalDomainsCount = Object.keys(referencesByDomain).length;
 
         return {
           data: [
             ['Distribution', ''],
-            ...Object.values(referencesByDiscipline)
-              .map(({ text, count }) => [text, count / totalDisciplinesCount * 100])
+            ...Object.values(referencesByDomain)
+              .map(({ text, count }) => [text, count / totalDomainsCount * 100])
           ]
         };
       },
 
       outerReferencesByContentTypeChart() {
-        const outerReferencesByContentType = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
+        const outerReferencesByContentType = this.projectContentReferencesGraph.nodes.reduce((acc, node) => {
           const { contentType: { text } } = node;
           if (node.isOuter) {
             const item = acc[text];
@@ -409,7 +409,7 @@
           return acc;
         }, {});
 
-        const totalInnerReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
+        const totalInnerReferencesCount = this.projectContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
 
         return {
           data: [
@@ -421,14 +421,14 @@
       },
 
       outerReferencesByOrgChart() {
-        const outerReferencesByOrg = this.researchContentReferencesGraph.nodes.reduce((acc, node) => {
-          const { researchGroup: { external_id: org } } = node;
+        const outerReferencesByOrg = this.projectContentReferencesGraph.nodes.reduce((acc, node) => {
+          const { team: { _id: org } } = node;
           if (node.isOuter) {
             const item = acc[org];
             if (!item) {
               acc[org] = {
-                org: node.researchGroup.external_id,
-                text: node.researchGroup.name,
+                org: node.teamId,
+                text: node.team.name,
                 count: 1
               };
             } else {
@@ -438,7 +438,7 @@
           return acc;
         }, {});
 
-        const totalOuterReferencesCount = this.researchContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
+        const totalOuterReferencesCount = this.projectContentReferencesGraph.nodes.filter((node) => node.isOuter).length;
 
         return {
           data: [
@@ -493,7 +493,7 @@
     border-right: 1px solid #efefef;
   }
 
-  .outer-references-by-discipline {
+  .outer-references-by-domain {
     border-left: 1px solid #efefef;
   }
 </style>

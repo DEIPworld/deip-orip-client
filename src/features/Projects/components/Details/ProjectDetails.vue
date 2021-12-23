@@ -1,11 +1,10 @@
 <template>
-  <!-- TODO: switch research -> project  -->
+  <!-- TODO: switch project -> project  -->
   <div>
     <project-details-renderer
       :schema="layoutSchema"
 
-      :research="researchExtended"
-      :project="researchExtended"
+      :project="projectExtended"
     />
   </div>
 
@@ -14,7 +13,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import ProjectDetailsRenderer from '@/features/Projects/components/Details/renderer';
-  import { extendAttrModules, tenantAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, portalAttributesToObject } from '@/utils/helpers';
   import { collectionMerge } from '@deip/toolbox';
   import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -24,23 +23,23 @@
     mixins: [attributesChore],
     computed: {
       ...mapGetters({
-        research: 'Project/projectDetails'
+        project: 'Project/projectDetails'
       }),
 
       layoutSchema() {
-        const schema = this.$tenantSettings.layouts.projectDetails.layout;
+        const schema = this.$portalSettings.layouts.projectDetails.layout;
         return extendAttrModules(
           schema,
           {
             attrs: {
-              projectId: this.researchExtended.externalId,
-              project: _.cloneDeep(this.researchExtended) // global
+              projectId: this.projectExtended._id,
+              project: _.cloneDeep(this.projectExtended) // global
             }
           }
         );
       },
 
-      researchExtended() {
+      projectExtended() {
         const allAttrs = this.$$projectAttributes
           .map((attr) => ({
             attributeId: attr._id,
@@ -49,19 +48,13 @@
 
         const constructedAttrs = collectionMerge(
           allAttrs,
-          this.research.researchRef.attributes,
+          this.project.attributes,
           { key: 'attributeId' }
         );
         return {
-          ...this.research,
-          ...{
-
-            researchRef: {
-              ...this.research.researchRef,
-              attributes: tenantAttributesToObject(constructedAttrs),
-              created_at: this.$options.filters.dateFormat(this.research.researchRef.created_at, 'D MMM YYYY', true)
-            }
-          }
+          ...this.project,
+          attributes: portalAttributesToObject(constructedAttrs),
+          created_at: this.$options.filters.dateFormat(this.project.createdAt, 'D MMM YYYY', true)
         };
       }
     }

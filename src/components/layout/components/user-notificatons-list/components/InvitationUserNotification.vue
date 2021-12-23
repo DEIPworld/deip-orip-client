@@ -4,7 +4,7 @@
     @mark-as-read="markAsRead($event)"
     @click="clickNotification(notification)"
   >
-    "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+    "<span class="primary--text half-bold">{{ notification.metadata.team.name }}</span>"
     {{ $t('notifications.invitedToJoin') }}
   </user-notifications-list-item>
 </template>

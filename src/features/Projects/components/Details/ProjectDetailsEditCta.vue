@@ -4,7 +4,7 @@
     :to="{
       name: 'project.edit',
       params: {
-        projectId: project.externalId
+        projectId: project._id
       }
     }"
     small
@@ -21,7 +21,7 @@
   import { projectDetails } from '@/features/Projects/mixins/projectDetails';
 
   export default {
-    name: 'ResearchDetailsEditCta',
+    name: 'ProjectDetailsEditCta',
     mixins: [projectDetails]
   };
 </script>

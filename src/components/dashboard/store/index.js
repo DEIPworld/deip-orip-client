@@ -15,23 +15,23 @@ const reviewService = ReviewService.getInstance();
 const state = {
   isLoadingDashboardPage: false,
 
-  investedResearches: [],
-  investedResearchShares: [],
+  investedProjects: [],
+  investedProjectShares: [],
 
-  investingResearches: [],
-  investingResearchesOngoingTokenSales: [],
-  investingResearchesOngoingTokenSalesContributions: [],
+  investingProjects: [],
+  investingProjectsOngoingTokenSales: [],
+  investingProjectsOngoingTokenSalesContributions: [],
 
-  myMembershipResearches: [],
-  myMembershipResearchesOngoingTokenSales: [],
-  myMembershipResearchesOngoingTokenSalesContributions: [],
+  myMembershipProjects: [],
+  myMembershipProjectsOngoingTokenSales: [],
+  myMembershipProjectsOngoingTokenSalesContributions: [],
 
-  bookmarkedResearches: [],
-  bookmarkedResearchesOngoingTokenSales: [],
-  bookmarkedResearchesOngoingTokenSalesContributions: [],
+  bookmarkedProjects: [],
+  bookmarkedProjectsOngoingTokenSales: [],
+  bookmarkedProjectsOngoingTokenSalesContributions: [],
 
-  researchGroups: [],
-  researchGroupsMembers: [],
+  teams: [],
+  teamsMembers: [],
 
   expertsList: [],
   expertsExpertiseTokensList: [],
@@ -46,80 +46,80 @@ const state = {
 const getters = {
   isLoadingDashboardPage: (state) => state.isLoadingDashboardPage,
 
-  researches: (state) => {
+  projects: (state) => {
     const unique = [
-      ...state.investedResearches,
-      ...state.investingResearches,
-      ...state.myMembershipResearches,
-      ...state.bookmarkedResearches
+      ...state.investedProjects,
+      ...state.investingProjects,
+      ...state.myMembershipProjects,
+      ...state.bookmarkedProjects
     ]
-      .reduce((acc, research) => {
-        if (acc.some((a) => a.research.id == research.id)) return acc;
+      .reduce((acc, project) => {
+        if (acc.some((a) => a.project.id == project.id)) return acc;
 
-        const researchMembers = state.researchGroupsMembers
-          .filter((member) => research.members.some((name) => name == member.account.name));
+        const projectMembers = state.teamsMembers
+          .filter((member) => project.members.some((name) => name == member.account.name));
 
         const tokenSale = [
-          ...state.investingResearchesOngoingTokenSales,
-          ...state.myMembershipResearchesOngoingTokenSales,
-          ...state.bookmarkedResearchesOngoingTokenSales
+          ...state.investingProjectsOngoingTokenSales,
+          ...state.myMembershipProjectsOngoingTokenSales,
+          ...state.bookmarkedProjectsOngoingTokenSales
         ]
-          .find((s) => s.research_id == research.id);
+          .find((s) => s.projectId == project.id);
 
-        const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
+        const group = state.teams.find((rg) => rg.id === project.teamId);
         const isTop = false;
 
         if (tokenSale) {
           const tokenSaleContributions = [
-            ...state.investingResearchesOngoingTokenSalesContributions,
-            ...state.myMembershipResearchesOngoingTokenSalesContributions,
-            ...state.bookmarkedResearchesOngoingTokenSalesContributions
+            ...state.investingProjectsOngoingTokenSalesContributions,
+            ...state.myMembershipProjectsOngoingTokenSalesContributions,
+            ...state.bookmarkedProjectsOngoingTokenSalesContributions
           ]
             .reduce((acc, tokenSale) => {
               if (acc.some((ts) => ts.id.id == tokenSale.id)) return acc;
               return [tokenSale, ...acc];
             }, [])
-            .filter((c) => c.research_token_sale_id == tokenSale.id);
+            .filter((c) => c.projectTokenSaleId == tokenSale.id);
 
           return [...acc, {
-            research: { ...research, isTop },
-            authors: researchMembers,
+            project: { ...project, isTop },
+            authors: projectMembers,
             group,
             tokenSale,
             tokenSaleContributions
           }];
         }
-        return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
+        return [...acc, { project: { ...project, isTop }, authors: projectMembers, group }];
       }, []);
 
-    unique.sort((a, b) => ((a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title) ? -1 : 0)));
+    unique.sort((a, b) => ((a.project.title > b.project.title) ? 1 : ((b.project.title > a.project.title) ? -1 : 0)));
     return unique;
   },
 
-  myMembershipAndBookmarkedResearches: (state) => {
+  myMembershipAndBookmarkedProjects: (state) => {
     const unique = [
-      ...state.myMembershipResearches.map((item) => ({ ...item, is_following: false })),
-      ...state.bookmarkedResearches.map((item) => ({ ...item, is_following: true }))
+      ...state.myMembershipProjects.map((item) => ({ ...item, is_following: false })),
+      ...state.bookmarkedProjects.map((item) => ({ ...item, is_following: true }))
     ]
-      .reduce((acc, research) => {
-        if (acc.some((a) => a.research.id == research.id)) return acc;
+      .reduce((acc, project) => {
+        if (acc.some((a) => a.project.id == project.id)) return acc;
 
-        const researchMembers = state.researchGroupsMembers
-          .filter((member) => research.members.some((name) => name == member.account.name));
+        const projectMembers = state.teamsMembers
+          .filter((member) => project.members.some((name) => name == member.account.name));
 
-        const group = state.researchGroups.find((rg) => rg.id === research.research_group_id);
+        const group = state.teams.find((rg) => rg.id === project.teamId);
         const isTop = false;
 
-        return [...acc, { research: { ...research, isTop }, authors: researchMembers, group }];
+        return [...acc, { project: { ...project, isTop }, authors: projectMembers, group }];
       }, []);
 
-    unique.sort((a, b) => ((a.research.title > b.research.title) ? 1 : ((b.research.title > a.research.title) ? -1 : 0)));
+    unique.sort((a, b) => ((a.project.title > b.project.title) ? 1 : ((b.project.title > a.project.title) ? -1 : 0)));
     return unique;
   },
 
-  investments: (state) => state.investedResearches,
+  investments: (state) => state.investedProjects,
 
-  reviewsOnMyResearchCount: (state, getters) => getters.researches.reduce((acc, { research }) => acc + research.number_of_negative_reviews + research.number_of_positive_reviews, 0),
+  reviewsOnMyProjectCount: (state, getters) => getters.projects.reduce((acc, { project }) => acc + project.number_of_negative_reviews + project.number_of_positive_reviews, 0),
 
   reviewsOnMyRequestsCount: (state, getters) => {
     const approvedReviews = state.myReviewRequests.filter((req) => req.status == 'approved');
@@ -130,12 +130,12 @@ const getters = {
 
   myReviewsCount: (state) => state.myReviews.length,
 
-  currentShares: (state) => state.investedResearchShares
+  currentShares: (state) => state.investedProjectShares
     .map((share) => {
-      const research = state.investedResearches.find((r) => r.id == share.research_id);
-      return { share, research };
+      const project = state.investedProjects.find((r) => r.id == share.projectId);
+      return { share, project };
     })
-    .filter((share) => !!share.research),
+    .filter((share) => !!share.project),
 
   experts: (state) => state.expertsList.map((expert) => {
     const expertiseTokens = state.expertsExpertiseTokensList.filter((exp) => exp.account_name == expert.account.name);
@@ -148,8 +148,8 @@ const actions = {
   loadDashboardPage({ commit, dispatch, state }, { username }) {
     commit('SET_DASHBOARD_PAGE_LOADING_STATE', true);
 
-    const membershipResearchesLoad = new Promise((resolve, reject) => {
-      dispatch('loadMembershipResearches', { username, notify: resolve });
+    const membershipProjectsLoad = new Promise((resolve, reject) => {
+      dispatch('loadMembershipProjects', { username, notify: resolve });
     });
     const expertsLoad = new Promise((resolve, reject) => {
       dispatch('loadExperts', { username, notify: resolve });
@@ -162,97 +162,97 @@ const actions = {
     });
 
     return Promise.all([
-      membershipResearchesLoad,
+      membershipProjectsLoad,
       expertsLoad,
       myReviewRequestsLoad,
       myReviewsLoad
     ])
       .then(() => {
         const pulled = [
-          ...state.investedResearches,
-          ...state.investingResearches,
-          ...state.myMembershipResearches
-        ].map((research) => research.external_id);
+          ...state.investedProjects,
+          ...state.investingProjects,
+          ...state.myMembershipProjects
+        ].map((project) => project._id);
 
-        const bookmarkedResearchesLoad = new Promise((resolve, reject) => {
-          dispatch('loadBookmarkedResearches', { username, excludeIds: pulled, notify: resolve });
+        const bookmarkedProjectsLoad = new Promise((resolve, reject) => {
+          dispatch('loadBookmarkedProjects', { username, excludeIds: pulled, notify: resolve });
         });
         return Promise.all([
-          bookmarkedResearchesLoad
+          bookmarkedProjectsLoad
         ]);
       })
       .then(() => {
-        const researchGroupIds = [
-          ...state.investedResearches,
-          ...state.investingResearches,
-          ...state.myMembershipResearches,
-          ...state.bookmarkedResearches
+        const teamIds = [
+          ...state.investedProjects,
+          ...state.investingProjects,
+          ...state.myMembershipProjects,
+          ...state.bookmarkedProjects
         ]
-          .reduce((unique, research) => {
-            if (unique.some((rgId) => rgId == research.research_group.external_id)) return unique;
-            return [research.research_group.external_id, ...unique];
+          .reduce((unique, project) => {
+            if (unique.some((rgId) => rgId == project.teamId)) return unique;
+            return [project.teamId, ...unique];
           }, []);
 
-        return teamService.getTeams(researchGroupIds);
+        return teamService.getTeams(teamIds);
       })
-      .then((researchGroups) => {
-        commit('SET_RESEARCH_GROUPS', researchGroups);
-        return userService.getUsersByTeam(researchGroups.map((researchGroup) => researchGroup.external_id));
+      .then((teams) => {
+        commit('SET_TEAMS', teams);
+        return userService.getUsersByTeam(teams.map((team) => team._id));
       })
       .then((result) => {
         const flatten1 = [].concat.apply([], result);
         const flatten2 = [].concat.apply([], flatten1);
-        const researchGroupsMembers = flatten2.reduce((unique, user) => {
+        const teamsMembers = flatten2.reduce((unique, user) => {
           if (unique.some((name) => name == user.account.name)) return unique;
           return [user.account.name, ...unique];
         }, []);
 
-        commit('SET_RESEARCH_GROUPS_MEMBERS', researchGroupsMembers);
+        commit('SET_TEAMS_MEMBERS', teamsMembers);
       })
       .finally(() => {
         commit('SET_DASHBOARD_PAGE_LOADING_STATE', false);
       });
   },
 
-  loadMembershipResearches({ commit }, { username, notify } = {}) {
+  loadMembershipProjects({ commit }, { username, notify } = {}) {
     return projectService.getUserProjectListing(username)
       .then((items) => {
-        const researches = [].concat.apply([], items);
-        commit('SET_MY_MEMBERSHIP_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
+        const projects = [].concat.apply([], items);
+        commit('SET_MY_MEMBERSHIP_PROJECTS', projects);
+        return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
-        commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts.external_id)));
+        commit('SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES', sales);
+        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
-        commit('SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
+        commit('SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
       })
       .finally(() => {
         if (notify) notify();
       });
   },
 
-  loadBookmarkedResearches({ commit, rootGetters }, { excludeIds, notify } = { excludeIds: [] }) {
+  loadBookmarkedProjects({ commit, rootGetters }, { excludeIds, notify } = { excludeIds: [] }) {
     const user = rootGetters['auth/user'];
 
-    const externalIds = user.researchBookmarks.map((b) => b.researchId).filter((id) => !excludeIds.some((rId) => rId == id));
-    return Promise.all(externalIds.map((externalId) => projectService.getProject(externalId)))
+    const ids = user.projectBookmarks.map((b) => b.projectId).filter((id) => !excludeIds.some((rId) => rId == id));
+    return Promise.all(ids.map((_id) => projectService.getProject(_id)))
       .then((items) => {
-        const researches = items.filter((r) => !!r);
-        commit('SET_BOOKMARKED_RESEARCHES', researches);
-        return Promise.all(researches.map((research) => investmentsService.getCurrentTokenSaleByProject(research.external_id)));
+        const projects = items.filter((r) => !!r);
+        commit('SET_BOOKMARKED_PROJECTS', projects);
+        return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
       })
       .then((response) => {
         const sales = response.filter((ts) => ts !== undefined);
-        commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts.external_id)));
+        commit('SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES', sales);
+        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
       })
       .then((response) => {
         const contributions = [].concat.apply([], response);
-        commit('SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
+        commit('SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
       })
       .finally(() => {
         if (notify) notify();
@@ -301,44 +301,44 @@ const mutations = {
     state.isLoadingDashboardPage = value;
   },
 
-  SET_INVESTED_RESEARCH_SHARES(state, list) {
-    state.investedResearchShares = list;
+  SET_INVESTED_PROJECT_SHARES(state, list) {
+    state.investedProjectShares = list;
   },
 
-  SET_INVESTED_RESEARCHES(state, list) {
-    state.investedResearches = list;
+  SET_INVESTED_PROJECTS(state, list) {
+    state.investedProjects = list;
   },
 
-  SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    state.investingResearchesOngoingTokenSalesContributions = list;
+  SET_INVESTING_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
+    state.investingProjectsOngoingTokenSalesContributions = list;
   },
 
-  SET_INVESTING_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    state.investingResearchesOngoingTokenSales = list;
+  SET_INVESTING_PROJECTS_ONGOING_TOKEN_SALES(state, list) {
+    state.investingProjectsOngoingTokenSales = list;
   },
 
-  SET_INVESTING_RESEARCHES_TOKEN_SALES(state, list) {
-    state.investingResearches = list;
+  SET_INVESTING_PROJECTS_TOKEN_SALES(state, list) {
+    state.investingProjects = list;
   },
 
-  SET_MY_MEMBERSHIP_RESEARCHES(state, list) {
-    state.myMembershipResearches = list;
+  SET_MY_MEMBERSHIP_PROJECTS(state, list) {
+    state.myMembershipProjects = list;
   },
 
-  SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    state.myMembershipResearchesOngoingTokenSales = list;
+  SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES(state, list) {
+    state.myMembershipProjectsOngoingTokenSales = list;
   },
 
-  SET_MY_MEMBERSHIP_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    state.myMembershipResearchesOngoingTokenSalesContributions = list;
+  SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
+    state.myMembershipProjectsOngoingTokenSalesContributions = list;
   },
 
-  SET_RESEARCH_GROUPS(state, list) {
-    state.researchGroups = list;
+  SET_TEAMS(state, list) {
+    state.teams = list;
   },
 
-  SET_RESEARCH_GROUPS_MEMBERS(state, list) {
-    state.researchGroupsMembers = list;
+  SET_TEAMS_MEMBERS(state, list) {
+    state.teamsMembers = list;
   },
 
   SET_EXPERTS(state, list) {
@@ -349,16 +349,16 @@ const mutations = {
     state.expertsExpertiseTokensList = list;
   },
 
-  SET_BOOKMARKED_RESEARCHES(state, list) {
-    state.bookmarkedResearches = list;
+  SET_BOOKMARKED_PROJECTS(state, list) {
+    state.bookmarkedProjects = list;
   },
 
-  SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES(state, list) {
-    state.bookmarkedResearchesOngoingTokenSales = list;
+  SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES(state, list) {
+    state.bookmarkedProjectsOngoingTokenSales = list;
   },
 
-  SET_BOOKMARKED_RESEARCHES_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
-    state.bookmarkedResearchesOngoingTokenSalesContributions = list;
+  SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS(state, list) {
+    state.bookmarkedProjectsOngoingTokenSalesContributions = list;
   },
 
   SET_MY_INVITES(state, list) {

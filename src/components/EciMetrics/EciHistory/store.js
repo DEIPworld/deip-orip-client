@@ -8,18 +8,18 @@ const expertiseContributionsService = ExpertiseContributionsService.getInstance(
 const historyMethod = (payload) => {
   let serviceMethod;
 
-  if (payload.researchId) {
+  if (payload.projectId) {
     serviceMethod = expertiseContributionsService
-      .getResearchExpertiseHistory(payload.researchId, payload.filter);
+      .getProjectExpertiseHistory(payload.projectId, payload.filter);
   } else if (payload.contentId) {
     serviceMethod = expertiseContributionsService
-      .getResearchContentExpertiseHistory(payload.contentId, payload.filter);
+      .getProjectContentExpertiseHistory(payload.contentId, payload.filter);
   } else if (payload.accountName) {
     serviceMethod = expertiseContributionsService
       .getAccountExpertiseHistory(payload.accountName, payload.filter);
   } else {
     serviceMethod = expertiseContributionsService
-      .getDisciplineExpertiseHistory(payload.filter);
+      .getDomainExpertiseHistory(payload.filter);
   }
 
   return serviceMethod;
@@ -41,7 +41,7 @@ const ACTIONS = {
             || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT
           ) {
             return [
-              ...arr, projectContentService.getProjectContent(e.research_content.external_id)
+              ...arr, projectContentService.getProjectContent(e.projectContent._id)
             ];
           }
           return arr;
@@ -50,13 +50,13 @@ const ACTIONS = {
       .then((res) => {
         expertises = expertises.map((e) => {
           if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
-            const exp = res.find((r) => r.external_id === e.research_content.external_id);
-            e.research_content.title = exp ? exp.title : '';
+            const exp = res.find((r) => r._id === e.projectContent._id);
+            e.projectContent.title = exp ? exp.title : '';
             return e;
           }
           if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW
             || e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW_SUPPORT) {
-            const exp = res.find((r) => r.external_id === e.research_content.external_id);
+            const exp = res.find((r) => r._id === e.projectContent._id);
             e.review.contentRef = exp ? exp.title : '';
             return e;
           }
@@ -77,14 +77,14 @@ const GETTERS = {
     return [...records].map((record) => {
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.REVIEW) {
         const typeInfo = projectContentService
-          .getProjectContentType(record.research_content.content_type);
+          .getProjectContentType(record.projectContent.content_type);
 
         const link = {
           name: 'project.content.review.details',
           params: {
-            projectId: record.research.external_id,
-            contentId: record.research_content.external_id,
-            reviewId: record.review.external_id
+            projectId: record.project._id,
+            contentId: record.projectContent._id,
+            reviewId: record.review._id
           }
         };
 
@@ -103,9 +103,9 @@ const GETTERS = {
         const link = {
           name: 'project.content.review.details',
           params: {
-            projectId: record.research.external_id,
-            contentId: record.research_content.external_id,
-            reviewId: record.review.external_id
+            projectId: record.project._id,
+            contentId: record.projectContent._id,
+            reviewId: record.review._id
           }
         };
 
@@ -123,13 +123,13 @@ const GETTERS = {
 
       if (record.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
         const typeInfo = projectContentService
-          .getProjectContentType(record.research_content.content_type);
+          .getProjectContentType(record.projectContent.content_type);
 
         const link = {
           name: 'project.content.details',
           params: {
-            projectId: record.research.external_id,
-            contentId: record.research_content.external_id
+            projectId: record.project._id,
+            contentId: record.projectContent._id
           }
         };
 
@@ -137,8 +137,8 @@ const GETTERS = {
           ...record,
           actionText: `${typeInfo ? typeInfo.text : 'Publication'} uploaded`,
           meta: {
-            title: record.research_content.title,
-            researchContent: record.research_content,
+            title: record.projectContent.title,
+            projectContent: record.projectContent,
             link
           }
         };

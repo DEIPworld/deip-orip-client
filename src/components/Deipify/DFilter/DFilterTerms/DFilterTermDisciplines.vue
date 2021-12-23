@@ -1,14 +1,14 @@
 <template>
-  <div v-if="disciplines.length">
+  <div v-if="domains.length">
     <v-select
       v-if="singleChoice"
       v-model="internalValue"
-      :items="[{ name: $t('defaultNaming.all'), externalId: '' }, ...disciplines]"
+      :items="[{ name: $t('defaultNaming.all'), _id: '' }, ...domains]"
       outlined
       hide-details
       :label="$t('defaultNaming.filters.domainField')"
       item-text="name"
-      item-value="externalId"
+      item-value="_id"
     />
 
     <d-block
@@ -16,16 +16,16 @@
       :title="$t('defaultNaming.filters.domainField')"
       widget="compact"
     >
-      <d-list-expand :active="disciplines.length > 4">
+      <d-list-expand :active="domains.length > 4">
         <template #default="{expanded}">
           <div class="mt-n2">
-            <template v-for="(discipline, i) in disciplines">
+            <template v-for="(domain, i) in domains">
               <v-checkbox
                 v-if="expanded || i < 4"
-                :key="'discipline-filter-' + i"
+                :key="'domain-filter-' + i"
                 v-model="internalValue"
-                :label="discipline.name"
-                :value="discipline.externalId"
+                :label="domain.name"
+                :value="domain._id"
                 hide-details
                 class="mt-2 mb-0"
               />
@@ -43,7 +43,7 @@
   import DListExpand from '@/components/Deipify/DListExpand/DListExpand';
 
   export default {
-    name: 'DFilterTermDisciplines',
+    name: 'DFilterTermDomains',
     components: {
       DBlock,
       DListExpand
@@ -59,8 +59,8 @@
     },
 
     computed: {
-      disciplines() {
-        return [...this.$store.getters['Disciplines/topLevelList']().sort(
+      domains() {
+        return [...this.$store.getters['Domains/topLevelList']().sort(
           (a, b) => a.name.localeCompare(b.name)
         )];
       }

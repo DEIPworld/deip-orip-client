@@ -17,7 +17,7 @@
                 Project
               </div>
               <router-link
-                :to="{ name: 'project.details', params: { projectId: project.externalId } }"
+                :to="{ name: 'project.details', params: { projectId: project._id } }"
                 class="link text--primary text-decoration-none"
               >
                 {{ project.title }}
@@ -84,7 +84,7 @@
               <div class="text-body-2">
                 ECI in
                 {{
-                  userRelatedExpertise.map(exp => exp.discipline_name)
+                  userRelatedExpertise.map(exp => exp.domainName)
                     .join(', ')
                 }}
                 for your contribution to this project.
@@ -212,7 +212,7 @@
 
       userRelatedExpertise() {
         return this.userExperise
-          .filter((exp) => exp.amount > 0 && this.project.disciplines.some((id) => id === exp.discipline_external_id));
+          .filter((exp) => exp.amount > 0 && this.project.domains.some((id) => id === exp.domainId));
       },
 
       isReviewPublishingDisabled() {
@@ -234,13 +234,13 @@
 
     created() {
       // TODO: rethink
-      const questions = this.$tenantSettings.reviewQuestions.map((q) => q.question);
+      const questions = this.$portalSettings.reviewQuestions.map((q) => q.question);
       this.questions.push(...questions);
       this.formModel.reviewData.push(...questions.map(() => []));
 
       return reviewService.getReviewRequestsByExpert(this.$currentUser.username, 1)
         .then((res) => {
-          const request = res.find((r) => r.projectContentId === this.content.externalId);
+          const request = res.find((r) => r.projectContentId === this.content._id);
           if (request) {
             this.requestAccepted = false;
             this.requestData = request;
@@ -289,7 +289,7 @@
             return sc;
           }, {});
 
-        const disciplines = this.userRelatedExpertise.map((exp) => exp.discipline_external_id);
+        const domains = this.userRelatedExpertise.map((exp) => exp.domainId);
         const assessment = { type: 1, scores };
 
         return reviewService.createReview({
@@ -297,10 +297,10 @@
             privKey: this.$currentUser.privKey,
             username: this.$currentUser.username
           },
-          projectContentId: this.content.externalId,
+          projectContentId: this.content._id,
           content: JSON.stringify(this.reviewData),
           assessment,
-          domains: disciplines
+          domains
         })
           .then(() => {
             this.$notifier.showSuccess('Your review has been published successfully !');
@@ -308,7 +308,7 @@
             this.$router.push({
               name: 'project.details',
               params: {
-                projectId: this.project.externalId
+                projectId: this.project._id
               },
               hash: '#reviews'
             });
