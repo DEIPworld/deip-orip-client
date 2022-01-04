@@ -5,7 +5,7 @@
     :to="{
       name: 'team.edit',
       params: {
-        teamId: team.externalId
+        teamId: team._id
       }
     }"
   >
@@ -19,7 +19,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchDetailsEditCta',
+    name: 'ProjectDetailsEditCta',
     computed: {
       ...mapGetters({
         team: 'Team/teamDetails'

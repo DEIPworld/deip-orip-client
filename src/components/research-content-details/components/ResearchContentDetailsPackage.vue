@@ -43,7 +43,7 @@
   const accessService = AccessService.getInstance();
 
   export default {
-    name: 'ResearchContentDetailsPackage',
+    name: 'ProjectContentDetailsPackage',
 
     data() {
       return {};

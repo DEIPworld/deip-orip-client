@@ -55,12 +55,12 @@
 </template>
 
 <script>
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
 
   import { mapGetters } from 'vuex';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminFAQEdit',
@@ -110,17 +110,17 @@
 
         const { _id } = this.formData;
 
-        const updatedProfile = _.cloneDeep(this.$tenant.profile);
+        const updatedProfile = _.cloneDeep(this.$portal.profile);
         if (_id) {
           updatedProfile.settings.faq = updatedProfile.settings.faq.map((item) => (item._id === _id ? this.formData : item));
         } else {
           updatedProfile.settings.faq.push(this.formData);
         }
-        tenantService.updateTenantProfile(updatedProfile)
+        portalService.updatePortalProfile(updatedProfile)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = window.env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
           })
           .catch((err) => {
             console.error(err);

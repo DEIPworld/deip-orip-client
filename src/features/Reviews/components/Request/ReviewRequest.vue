@@ -21,7 +21,6 @@
           @click:confirm="handleSubmit(createRequest)"
         >
           <d-stack>
-            <!-- TODO: replace conditions after switch to externalId -->
             <div v-if="contentId === null">
               <validation-provider
                 v-slot="{ errors }"
@@ -43,7 +42,7 @@
             >
               <user-selector
                 v-model="formModel.reviewer"
-                :tenant-id="$env.TENANT"
+                :portal-id="$env.TENANT"
                 v-bind="reviewerConditions"
                 :label="$t('reviews.selectExpert')"
                 :error-messages="errors"

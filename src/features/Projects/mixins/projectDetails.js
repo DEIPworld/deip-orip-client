@@ -15,13 +15,13 @@ export const projectContext = {
       return this.$isUser && this.project.members.includes(this.$currentUser.username);
     },
 
-    $$isTenantUser() {
-      return this.$isUser && this.project.tenantId === this.$currentUser.profile.tenantId;
+    $$isPortalUser() {
+      return this.$isUser && this.project.portalId === this.$currentUser.profile.portalId;
     }
   },
   methods: {
     $$getAttribute(id) {
-      const attr = this.project.researchRef.attributes[id];
+      const attr = this.project.attributes[id];
 
       if (!attr || !hasValue(attr.value)) return false;
 
@@ -82,26 +82,26 @@ export const projectDetails = {
     },
 
     accessAllowedByRequest() {
-      return this.$isUser && this.project.researchRef.grantedAccess
+      return this.$isUser && this.project.grantedAccess
         .some((entry) => [
           this.$currentUser.username,
-          ...this.$currentUser.teams.map((g) => g.external_id)
+          ...this.$currentUser.teams.map((g) => g._id)
         ].includes(entry));
     },
 
     accessAllowedByLicense() {
       if (!this.hasLicenseModule) {
-        return this.project.tenantId === this.$env.TENANT;
+        return this.project.portalId === this.$env.TENANT;
       }
 
-      return this.$isUser && this.project.researchRef.expressLicenses
+      return this.$isUser && this.project.expressLicenses
         .map((lic) => lic.creator)
         .includes(this.$currentUser.username);
     },
 
     accessAllowedByRole() {
       return (roles) => this.$isUser && this.$currentUser.profile.roles
-        .some(({ role, teamId }) => roles.some((r) => this.project.tenantId == teamId && r == role));
+        .some(({ role, teamId }) => roles.some((r) => this.project.portalId == teamId && r == role));
     },
 
     contentAssessAllowed() {
@@ -138,7 +138,7 @@ export const projectDetails = {
   },
   methods: {
     getAttribute(id) {
-      const attr = this.project.researchRef.attributes[id];
+      const attr = this.project.attributes[id];
       if (!attr || !hasValue(attr.value)) return false;
       return attr;
     },
@@ -150,7 +150,7 @@ export const projectDetails = {
     },
 
     attributeValue(id) {
-      const attr = this.project.researchRef.attributes[id];
+      const attr = this.project.attributes[id];
 
       return attr ? attr.value : false;
     }

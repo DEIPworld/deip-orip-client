@@ -166,16 +166,16 @@
         return [
           this.$env.DEIP_CLIENT_URL,
           '/#/p/',
-          encodeURIComponent(reference.researchExternalId),
+          encodeURIComponent(reference.projectId),
           '/c/',
-          encodeURIComponent(reference.externalId)
+          encodeURIComponent(reference._id)
         ].join('');
       },
 
       addReferences(references) {
         for (const reference of references) {
           const uri = this.genRefUri(reference);
-          const title = `${reference.title} (${reference.researchTitle})`;
+          const title = `${reference.title} (${reference.projectTitle})`;
           const containerTitle = title;
           this.texture.api.addReference(uri, title, containerTitle);
         }

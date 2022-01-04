@@ -91,10 +91,10 @@
 </template>
 
 <script>
-  import researchPartners from './researchPartners.json';
+  import projectPartners from './researchPartners.json';
 
   export default {
-    name: 'ResearchPartners',
+    name: 'ProjectPartners',
 
     props: {
       partners: { type: Array, required: true },
@@ -102,7 +102,7 @@
     },
     data() {
       return {
-        partnersInfo: researchPartners,
+        partnersInfo: projectPartners,
         rules: {
           required: (value) => !!value || this.$t('defaultNaming.fieldRules.required'),
           partner: (v) => !!v || 'Partner is required'

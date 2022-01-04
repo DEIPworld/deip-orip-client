@@ -4,7 +4,7 @@
       <projects-list
         ref="projectList"
         :view-types="[VIEW_TYPES.TABLE]"
-        :tenant-id="tenant.account.name"
+        :portal-id="portal.account.name"
         row-layout-key="AdminProjectListRow"
         :title="$t('adminRouting.projects.title')"
       >
@@ -30,14 +30,14 @@
 
         <template #itemRowActions="{ project }">
           <crud-actions>
-            <v-btn icon small @click.stop="editProject(project.externalId)">
+            <v-btn icon small @click.stop="editProject(project._id)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <v-btn
               v-if="$hasModule(DEIP_MODULE.ADMIN_PANEL_PROJECTS_REGISTRATION)"
               icon
               small
-              @click.stop="deleteProject(project.externalId)">
+              @click.stop="deleteProject(project._id)">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </crud-actions>
@@ -75,7 +75,7 @@
         tab: null,
         isDisabled: false,
 
-        researchDialog: {
+        projectDialog: {
           isOpen: false,
           data: {}
         },
@@ -93,7 +93,7 @@
     computed: {
       ...mapGetters({
         projects: 'adminPanel/publicProjects',
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       })
     },
 

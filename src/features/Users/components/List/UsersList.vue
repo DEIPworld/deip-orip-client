@@ -55,7 +55,7 @@
         default: () => ([])
       },
 
-      tenantId: {
+      portalId: {
         type: String,
         default: null
       }
@@ -109,7 +109,7 @@
           this.$store.dispatch(`${this.storeNS}/getUsersList`, {
             users: wrapInArray(this.users),
             teamId: this.teamId,
-            tenantId: this.tenantId
+            portalId: this.portalId
           })
             .then(() => {
               this.$setReady();

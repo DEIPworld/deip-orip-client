@@ -37,7 +37,8 @@ const ACTIONS = {
           username,
           account,
           profile,
-          teams: teams.map((t) => camelizeObjectKeys(t)),
+          teams,
+          // teams: teams.map((t) => camelizeObjectKeys(t)),
           expertise: expertise.map((e) => camelizeObjectKeys(e))
         });
       })
@@ -53,7 +54,8 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      camelizeObjectKeys(payload),
+      // camelizeObjectKeys(payload),
+      payload,
       { key: 'username' }
     );
   }

@@ -1,35 +1,35 @@
 <template>
-  <v-row class="mx-0 fill-height discipline-picker overflow-y-auto">
-    <v-col v-if="!withoutUserDisciplines" class="xs4 pa-4 overflow-y-auto">
+  <v-row class="mx-0 fill-height domain-picker overflow-y-auto">
+    <v-col v-if="!withoutUserDomains" class="xs4 pa-4 overflow-y-auto">
       <div class="pb-4 bold uppercase">
         {{ $t('defaultNaming.yourDomain') }}
       </div>
 
       <v-list
-        v-if="userDisciplines.length"
+        v-if="userDomains.length"
         class="pa-0"
         dense
         nav
       >
         <v-list-item-group>
           <v-list-item
-            v-for="(discipline, i) in userDisciplines"
+            v-for="(domain, i) in userDomains"
             :key="i"
-            :input-value="isUserLabelSelected(discipline)"
-            @click="handleUserDiscipline(discipline)"
+            :input-value="isUserLabelSelected(domain)"
+            @click="handleUserDomain(domain)"
           >
-            {{ discipline.name }}
+            {{ domain.name }}
           </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-col>
 
-    <v-col class="pa-4 fill-height overflow-y-auto" :cols="!withoutUserDisciplines ? '8' : '12'">
+    <v-col class="pa-4 fill-height overflow-y-auto" :cols="!withoutUserDomains ? '8' : '12'">
       <div class="pb-4 bold uppercase">
         {{ $t('defaultNaming.allDomain') }}
       </div>
 
-      <discipline-tree-picker
+      <domain-tree-picker
         :is-multiple-select="isMultipleSelect"
         :is-highlighted-parent="isHighlightedParent"
         :preselected="preselected"
@@ -43,7 +43,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'AdvancedDisciplinePicker',
+    name: 'AdvancedDomainPicker',
 
     props: {
       isMultipleSelect: {
@@ -57,7 +57,7 @@
         default: false
       },
 
-      withoutUserDisciplines: {
+      withoutUserDomains: {
         type: Boolean,
         required: false,
         default: false
@@ -76,9 +76,9 @@
         user: 'auth/user'
       }),
 
-      userDisciplines() {
-        return this.$store.getters['Disciplines/list'](
-          { externalId: [this.user.expertTokens.map((token) => token.discipline_external_id)] }
+      userDomains() {
+        return this.$store.getters['Domains/list'](
+          { _id: [this.user.expertTokens.map((token) => token.domainId)] }
         );
       }
     },
@@ -88,34 +88,34 @@
         this.$emit('select', selected);
       },
 
-      handleUserDiscipline(discipline) {
+      handleUserDomain(domain) {
         if (!this.isMultipleSelect) {
-          this.$emit('select', discipline);
+          this.$emit('select', domain);
         } else {
           const preselectedCopy = _.cloneDeep(this.preselected);
 
-          if (!_.find(preselectedCopy, (item) => item.id === discipline.externalId)) {
-            preselectedCopy.push(discipline);
+          if (!_.find(preselectedCopy, (item) => item.id === domain._id)) {
+            preselectedCopy.push(domain);
           } else {
-            _.remove(preselectedCopy, (item) => item.id === discipline.externalId);
+            _.remove(preselectedCopy, (item) => item.id === domain._id);
           }
 
           this.$emit('select', preselectedCopy);
         }
       },
 
-      isUserLabelSelected(discipline) {
+      isUserLabelSelected(domain) {
         if (!this.isMultipleSelect) {
-          return !!this.preselected && this.preselected.id === discipline.externalId;
+          return !!this.preselected && this.preselected.id === domain._id;
         }
-        return !!_.find(this.preselected, (item) => item.id === discipline.externalId);
+        return !!_.find(this.preselected, (item) => item.id === domain._id);
       }
     }
   };
 </script>
 
 <style lang="less" scoped>
-  .discipline-picker {
+  .domain-picker {
     border: 1px solid #E0E0E0;
 
     & > :not(:last-child) {

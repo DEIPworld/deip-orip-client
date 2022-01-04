@@ -1,6 +1,6 @@
 <template>
   <fundraising
-    :research="research"
+    :project="project"
   />
 </template>
 
@@ -13,7 +13,7 @@
     components: { Fundraising },
     computed: {
       ...mapGetters({
-        research: 'Project/projectDetails'
+        project: 'Project/projectDetails'
       })
     }
   };

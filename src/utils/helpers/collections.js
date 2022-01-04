@@ -21,7 +21,8 @@ export const collectionMerge = (
   for (const item of col2) {
     const idx = col1.findIndex((i) => i[key] === item[key]);
     if (idx >= 0) {
-      result[idx] = mergeDeep(result[idx], item);
+      // result[idx] = mergeDeep(result[idx], item);
+      result[idx] = item;
     } else {
       result.push(item);
     }

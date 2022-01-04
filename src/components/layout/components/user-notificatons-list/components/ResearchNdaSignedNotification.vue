@@ -6,17 +6,17 @@
   >
     <template v-if="$currentUser.username !== notification.metadata.creator.username">
       {{ $t('notifications.accessTo') }}
-      <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
+      <span class="primary--text half-bold">'{{ notification.metadata.project.title }}'</span>
       {{ $t('notifications.grantedTo') }}
       <span class="primary--text half-bold">{{ notification.metadata.creator | fullname }}</span>
       {{ $t('notifications.from') }}
       <span class="primary--text half-bold">
-        '{{ notification.metadata.tenant.profile.shortName }}'
+        '{{ notification.metadata.portal.profile.shortName }}'
       </span>
     </template>
     <template v-else>
       {{ $t('notifications.accessTo') }}
-      <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
+      <span class="primary--text half-bold">'{{ notification.metadata.project.title }}'</span>
       {{ $t('notifications.granted') }}
     </template>
   </user-notifications-list-item>
@@ -28,7 +28,7 @@
     from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
 
   export default {
-    name: 'ResearchNdaSignedNotification',
+    name: 'ProjectNdaSignedNotification',
     components: { UserNotificationsListItem },
     props: {
       notification: {
@@ -46,7 +46,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.notification.metadata.research.external_id
+            projectId: this.notification.metadata.project._id
           }
         });
         this.markAsRead();

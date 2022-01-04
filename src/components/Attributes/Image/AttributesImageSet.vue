@@ -60,7 +60,7 @@
     },
     methods: {
       imageUrl() {
-        const attrInfo = this.$$getAttributeInfo(this.attribute.attributeId);
+        const attrInfo = this.$$getAttributeInfo(this.attribute._id);
         let entityId = this.$currentUser.username;
         if (this.$route.params.teamId) {
           entityId = this.$route.params.teamId;

@@ -17,17 +17,17 @@ const STATE = {
 
 const GETTERS = {
   list: (state) => (query = {}) => collectionList(state.data, query),
-  topLevelList: (state) => (query = {}) => collectionList(state.data, { ...query, parentExternalId: '' }),
-  one: (state) => (externalId, query = {}) => collectionOne(state.data, {
-    ...(externalId ? { externalId } : {}),
+  topLevelList: (state) => (query = {}) => collectionList(state.data, { ...query, parentId: '' }),
+  one: (state) => (_id, query = {}) => collectionOne(state.data, {
+    ...(_id ? { _id } : {}),
     ...query
   }),
   tree: (state) => (query = {}) => {
     const array = collectionList(state.data, query);
 
     return arrayToTree(array, {
-      id: 'externalId',
-      parentId: 'parentExternalId',
+      id: '_id',
+      parentId: 'parentId',
       dataField: null
     });
   }
@@ -36,8 +36,8 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }) {
     return domainsService.getAllDomains()
-      .then((disciplines) => {
-        commit('setList', disciplines);
+      .then((domains) => {
+        commit('setList', domains);
       });
   }
 };
@@ -48,13 +48,14 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      payload.map((discipline) => camelizeObjectKeys(discipline)),
-      { key: 'externalId' }
+      payload,
+      // payload.map((domain) => camelizeObjectKeys(domain)),
+      { key: '_id' }
     );
   }
 };
 
-export const disciplinesStore = {
+export const domainsStore = {
   state: STATE,
   getters: GETTERS,
   actions: ACTIONS,

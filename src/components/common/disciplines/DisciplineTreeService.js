@@ -1,20 +1,20 @@
 import _ from 'lodash';
 
-const mapAreaToProgram = (program, researchAreas) => {
+const mapAreaToProgram = (program, projectAreas) => {
   // to do: prepare a better algo for the demo, must be revised in the future
-  program.disciplines = program.target_disciplines;
+  program.domains = program.domains;
   
-  const area = researchAreas.find((a) => a.subAreas.some((sa) => sa.disciplines.some((d) => program.disciplines.includes(d))));
+  const area = projectAreas.find((a) => a.subAreas.some((sa) => sa.domains.some((d) => program.domains.includes(d))));
   if (!area) {
-    program.area = researchAreas[0];
-    program.subArea = researchAreas[0].subAreas[0];
+    program.area = projectAreas[0];
+    program.subArea = projectAreas[0].subAreas[0];
     return;
   }
 
-  const subArea = area.subAreas.find((sa) => sa.disciplines.some((d) => program.disciplines.includes(d)));
+  const subArea = area.subAreas.find((sa) => sa.domains.some((d) => program.domains.includes(d)));
   if (!subArea) {
-    program.area = researchAreas[0];
-    program.subArea = researchAreas[0].subAreas[0];
+    program.area = projectAreas[0];
+    program.subArea = projectAreas[0].subAreas[0];
     return;
   }
 

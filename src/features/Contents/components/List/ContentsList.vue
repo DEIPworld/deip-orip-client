@@ -22,7 +22,7 @@
         :to="{
           name: 'project.content.details',
           params: {
-            contentId: item.externalId,
+            contentId: item._id,
             projectId: $route.params.projectId,
           }
         }"
@@ -42,10 +42,10 @@
           small
           :disabled="disableAllRoutes || disableReferenceRoute"
           :to="{
-            name: 'ResearchContentReferences',
+            name: 'ProjectContentReferences',
             params: {
-              contentId: item.externalId,
-              projectId: item.researchExternalId,
+              contentId: item._id,
+              projectId: item.projectId,
             }
           }"
         >

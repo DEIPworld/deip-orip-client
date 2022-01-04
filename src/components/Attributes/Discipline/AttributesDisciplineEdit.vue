@@ -2,7 +2,7 @@
   import { AttributeEditBase } from '@/components/Attributes/_mixins';
 
   export default {
-    name: 'AttributesDisciplineEdit',
+    name: 'AttributesDomainEdit',
     mixins: [AttributeEditBase]
   };
 </script>

@@ -14,7 +14,7 @@
       v-bind="themeSettings.appBar.bar"
     >
       <router-link :to="{ name: 'Default' }">
-        <img height="40px" class="d-block" :src="tenant | tenantLogoSrc(80, 80, false)" />
+        <img height="40px" class="d-block" :src="portal | portalLogoSrc(80, 80, false)" />
       </router-link>
 
       <v-spacer />
@@ -114,7 +114,7 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant',
+        portal: 'auth/portal',
         themeSettings: 'layout/themeSettings',
         isGrantProgramOfficer: 'auth/isGrantProgramOfficer',
         isGrantFinanceOfficer: 'auth/isGrantFinanceOfficer',
@@ -178,7 +178,7 @@
 
           routes.push(            {
             label: this.$t('topMenu.signIn'),
-            to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'TenantSignIn' : 'SignIn' }
+            to: { name: this.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY' ? 'PortalSignIn' : 'SignIn' }
           });
 
           if (this.$hasModule(this.DEIP_MODULE.APP_PAGE_SIGN_UP)) {

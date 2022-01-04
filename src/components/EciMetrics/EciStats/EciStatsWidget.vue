@@ -25,19 +25,19 @@
       </v-col>
     </v-row>
 
-    <template v-if="Object.keys(data.expertiseStatsByDisciplines).length">
+    <template v-if="Object.keys(data.expertiseStatsByDomains).length">
       <v-list
         class="pa-0 mt-4"
         dense
         outlined
         rounded
       >
-        <template v-for="(item, i) in data.expertiseStatsByDisciplines">
+        <template v-for="(item, i) in data.expertiseStatsByDomains">
           <v-list-item :key="`edi-${i}`" style="min-height: 0">
             <v-list-item-content class="text-caption font-weight-medium py-3">
               <v-row no-gutters class="mb-1">
                 <v-col>
-                  {{ item.discipline.name }}
+                  {{ item.domain.name }}
                 </v-col>
                 <v-col cols="auto">
                   <d-simple-tooltip :tooltip="$t('defaultNaming.eci.eci')">
@@ -61,7 +61,7 @@
               </v-row>
             </v-list-item-content>
           </v-list-item>
-          <v-divider v-if="i + 1 < data.expertiseStatsByDisciplines.length" :key="`edd-${i}`" />
+          <v-divider v-if="i + 1 < data.expertiseStatsByDomains.length" :key="`edd-${i}`" />
         </template>
       </v-list>
     </template>

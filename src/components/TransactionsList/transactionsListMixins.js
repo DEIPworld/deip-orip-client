@@ -29,17 +29,17 @@ export const transactionTitle = {
           || this.$options.filters.fullname(this.transaction.extendedDetails.party2)
           });
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_RESEARCH) {
-        return this.transaction.details.researchTitle;
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_PROJECT) {
+        return this.transaction.details.projectTitle;
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.UPDATE_RESEARCH) {
-        return this.transaction.extendedDetails.research.title;
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.UPDATE_PROJECT) {
+        return this.transaction.extendedDetails.project.title;
       }
       if (this.transaction.type === LOC_PROPOSAL_TYPES.CONTRACT_AGREEMENT_PROPOSAL) {
         return this.$t('transactionsList.licenseRequest',
           {
             fee: this.$$toAssetUnits(this.transaction.details.terms.fee),
-            project: this.transaction.extendedDetails.research.title
+            project: this.transaction.extendedDetails.project.title
           });
       }
       if (this.transaction.type === LOC_PROPOSAL_TYPES.ASSET_EXCHANGE_REQUEST) {
@@ -52,34 +52,34 @@ export const transactionTitle = {
       if (this.transaction.type === LOC_PROPOSAL_TYPES.INVITE_MEMBER) {
         return this.$t('transactionsList.inviteMember', {
           invitee: this.$options.filters.accountFullname(this.transaction.extendedDetails.invitee),
-          researchGroup: this.$options.filters.accountFullname(
-            this.transaction.extendedDetails.researchGroup
+          team: this.$options.filters.accountFullname(
+            this.transaction.extendedDetails.team
           )
         });
       }
       if (this.transaction.type === LOC_PROPOSAL_TYPES.EXCLUDE_MEMBER) {
         return this.$t('transactionsList.excludeMember', {
           member: this.$options.filters.accountFullname(this.transaction.extendedDetails.member),
-          researchGroup: this.$options.filters.accountFullname(
-            this.transaction.extendedDetails.researchGroup
+          team: this.$options.filters.accountFullname(
+            this.transaction.extendedDetails.team
           )
         });
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL) {
-        return this.$t('transactionsList.createResearchMaterial', {
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_PROJECT_MATERIAL) {
+        return this.$t('transactionsList.createProjectMaterial', {
           material: this.transaction.details.source.offchain.title,
-          project: this.transaction.extendedDetails.research.title
+          project: this.transaction.extendedDetails.project.title
         });
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE) {
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.CREATE_PROJECT_TOKEN_SALE) {
         return this.$t('transactionsList.createTokenSale', {
-          min: this.$$toAssetUnits(this.transaction.extendedDetails.researchTokenSale.soft_cap),
-          max: this.$$toAssetUnits(this.transaction.extendedDetails.researchTokenSale.hard_cap),
-          project: this.transaction.extendedDetails.research.title
+          min: this.$$toAssetUnits(this.transaction.extendedDetails.projectTokenSale.soft_cap),
+          max: this.$$toAssetUnits(this.transaction.extendedDetails.projectTokenSale.hard_cap),
+          project: this.transaction.extendedDetails.project.title
         });
       }
-      if (this.transaction.type === LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
-        return this.$t('transactionsList.projectNda', { project: this.transaction.extendedDetails.research.title });
+      if (this.transaction.type === LOC_PROPOSAL_TYPES.PROJECT_NDA) {
+        return this.$t('transactionsList.projectNda', { project: this.transaction.extendedDetails.project.title });
       }
       return this.$t('transactionsList.transaction');
     }

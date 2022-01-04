@@ -13,7 +13,7 @@
       <review-request
         :project-id="projectId"
         :content-id="contentId"
-        :reviewer-conditions="{disciplineId, exclude: excludeUsers}"
+        :reviewer-conditions="{domainId, exclude: excludeUsers}"
       />
     </template>
 
@@ -59,7 +59,7 @@
                       :to="{
                         name: 'project.content.details',
                         params: {
-                          contentId: review.contentData.externalId,
+                          contentId: review.contentData._id,
                           projectId: $route.params.projectId,
                         }
                       }"
@@ -74,7 +74,7 @@
                 </template>
 
                 <div class="text-caption text--secondary">
-                  {{ review.disciplines.join(', ') }}
+                  {{ review.domains.join(', ') }}
                 </div>
 
                 <d-meta-item
@@ -109,8 +109,8 @@
                       name: 'project.content.review.details',
                       params: {
                         projectId: $route.params.projectId,
-                        contentId: review.contentData.externalId,
-                        reviewId: review.externalId,
+                        contentId: review.contentData._id,
+                        reviewId: review._id,
                       }
                     }"
                   >
@@ -160,14 +160,14 @@
           <div v-if="userRelatedExpertise.length && !isReseachGroupMember">
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
-                ? $t('reviews.eciForReview', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                ? $t('reviews.eciForReview', { domains: userRelatedExpertise.map(exp => exp.domainName).join(', ') })
                 : ''
             }}
           </div>
           <div v-else-if="!userRelatedExpertise.length || isReseachGroupMember">
             {{
               $hasModule(DEIP_MODULE.APP_ECI)
-                ? $t('reviews.needExpertiseAndNotMembers', { disciplines: projectDisciplines.map(d => d.name).join(', ') })
+                ? $t('reviews.needExpertiseAndNotMembers', { domains: projectDomains.map(d => d.name).join(', ') })
                 : $t('reviews.needNotMembers')
             }}
           </div>
@@ -252,22 +252,22 @@
         userExperise: 'auth/userExperise'
       }),
 
-      disciplines() {
-        return this.$store.getters['Disciplines/list']();
+      domains() {
+        return this.$store.getters['Domains/list']();
       },
 
-      projectDisciplines() {
-        return this.project.disciplines.map((id) => this.disciplines.find((d) => d.id == id));
+      projectDomains() {
+        return this.project.domains.map((id) => this.domains.find((d) => d._id == id));
       },
 
       internalReviews() {
         const transformed = this.reviews.map((review) => {
-          const disciplines = review.domains.map((id) => this.disciplines.find((d) => d.id == id).name);
+          const domains = review.domains.map((id) => this.domains.find((d) => d._id == id).name);
           const model = {
             ...review,
 
             scores: review.assessment.model.scores,
-            disciplines
+            domains
           };
 
           return model;
@@ -276,13 +276,13 @@
       },
       userRelatedExpertise() {
         return this.userExperise.filter(
-          (exp) => exp.amount > 0 && this.project.disciplines.some(
-            (d) => d === exp.discipline_external_id
+          (exp) => exp.amount > 0 && this.project.domains.some(
+            (d) => d === exp.domainId
           )
         );
       },
       isReseachGroupMember() {
-        return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.project.researchGroup.external_id);
+        return this.$store.getters['auth/userIsTeamMemberExId'](this.project.teamId);
       },
     },
     created() {

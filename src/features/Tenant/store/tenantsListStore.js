@@ -1,4 +1,4 @@
-import { TenantService } from '@deip/tenant-service';
+import { PortalService } from '@deip/portal-service';
 
 import {
   camelizeObjectKeys,
@@ -8,7 +8,7 @@ import {
   isArray
 } from '@deip/toolbox';
 
-const tenantService = TenantService.getInstance();
+const portalService = PortalService.getInstance();
 
 const STATE = {
   data: []
@@ -17,22 +17,22 @@ const STATE = {
 const GETTERS = {
   list: (state) => (query = {}) => collectionList(state.data, query),
 
-  one: (state) => (tenantId, query = {}) => collectionOne(state.data, {
-    ...(tenantId ? { id: tenantId } : {}),
+  one: (state) => (portalId, query = {}) => collectionOne(state.data, {
+    ...(portalId ? { id: portalId } : {}),
     ...query
   })
 };
 
 const ACTIONS = {
   fetch({ commit }) {
-    return tenantService.getNetworkTenants()
+    return portalService.getNetworkPortals()
       .then((res) => {
         commit('setData', res);
       });
   },
 
-  get({ commit }, tenantId) {
-    return tenantService.getNetworkTenant(tenantId)
+  get({ commit }, portalId) {
+    return portalService.getNetworkPortal(portalId)
       .then((res) => {
         commit('setData', res);
       });
@@ -49,13 +49,14 @@ const MUTATIONS = {
 
     state.data = collectionMerge(
       state.data,
-      payloadData,
-      { key: 'id' }
+      // payloadData,
+      payload,
+      { key: '_id' }
     );
   }
 };
 
-export const tenantsListStore = {
+export const portalsListStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

@@ -6,7 +6,7 @@ import { accountStore } from '@/components/Account/store';
 
 import { snackbarStore } from '@/components/Deipify/DSnackbar/store';
 import { overviewStore } from '@/components/Overview/store';
-import { disciplinesGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
+import { domainsGrowthRateStore } from '@/components/DisciplinesGrowthRate/store';
 import { rcdStore } from '../components/research-content-details/store';
 import { layoutStore } from '../components/layout/store';
 import { dashboardStore } from '../components/dashboard/store';
@@ -45,7 +45,7 @@ export const store = new Vuex.Store({
     adminPanel: adminPanelStore,
     overview: overviewStore,
 
-    disciplinesGrowthRate: disciplinesGrowthRateStore
+    domainsGrowthRate: domainsGrowthRateStore
   },
   strict: process.env.NODE_ENV !== 'production'
 });

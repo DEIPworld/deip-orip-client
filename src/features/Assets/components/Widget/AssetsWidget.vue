@@ -25,10 +25,10 @@
           <div class="d-flex">
             <v-sheet class="mr-n2">
               <router-link
-                :to="{ name: 'team.details', params: { teamId: team.externalId } }"
+                :to="{ name: 'team.details', params: { teamId: team._id } }"
               >
                 <v-avatar size="40">
-                  <v-img :src="team.externalId | researchGroupLogoSrc(40)" />
+                  <v-img :src="team._id | teamLogoSrc(40)" />
                 </v-avatar>
               </router-link>
             </v-sheet>
@@ -95,7 +95,7 @@
                       <td>
                         <v-sheet color="transparent" class="d-flex align-center">
                           <v-avatar size="40" class="mr-4 my-2">
-                            <v-img :src="team.externalId | researchGroupLogoSrc(40)" />
+                            <v-img :src="team._id | teamLogoSrc(40)" />
                           </v-avatar>
                           <v-clamp
                             autoresize
@@ -107,10 +107,10 @@
                         </v-sheet>
                       </td>
                       <td class="text-right white-space-nowrap">
-                        {{ toPercent(getBalance(team.externalId).amount) }}
+                        {{ toPercent(getBalance(team._id).amount) }}
                       </td>
                       <td class="text-right white-space-nowrap">
-                        {{ getBalance(team.externalId).amount }}
+                        {{ getBalance(team._id).amount }}
                       </td>
                     </tr>
 

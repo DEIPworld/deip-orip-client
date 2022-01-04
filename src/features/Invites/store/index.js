@@ -21,7 +21,7 @@ const ACTIONS = {
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
           invites.push(invite);
-          promises.push(teamService.getTeam(invite.researchGroupExternalId));
+          promises.push(teamService.getTeam(invite.teamId));
         }
         return Promise.all(promises);
       })

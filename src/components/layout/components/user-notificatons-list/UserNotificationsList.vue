@@ -26,24 +26,24 @@
     <v-list v-show="notifications.length" class="py-0">
       <template v-for="(notification, i) in notifications">
         <div :key="'user-notification-' + i">
-          <research-proposal-user-notification
+          <project-proposal-user-notification
             v-if="(notification.type === notificationTypes.PROPOSAL
               || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
-              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH"
+              && notification.metadata.proposal.action === TYPES.CREATE_PROJECT"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-content-proposal-user-notification
+          <project-content-proposal-user-notification
             v-else-if="(notification.type === notificationTypes.PROPOSAL
               || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
-              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_MATERIAL"
+              && notification.metadata.proposal.action === TYPES.CREATE_PROJECT_MATERIAL"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
           <token-sale-proposal-user-notification
             v-else-if="(notification.type === notificationTypes.PROPOSAL
               || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
-              && notification.metadata.proposal.action === TYPES.CREATE_RESEARCH_TOKEN_SALE"
+              && notification.metadata.proposal.action === TYPES.CREATE_PROJECT_TOKEN_SALE"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
@@ -61,17 +61,17 @@
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-update-proposal-user-notification
+          <project-update-proposal-user-notification
             v-else-if="(notification.type === notificationTypes.PROPOSAL
               || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
-              && notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH"
+              && notification.metadata.proposal.action === TYPES.UPDATE_PROJECT"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-group-update-proposal-user-notification
+          <team-update-proposal-user-notification
             v-else-if="(notification.type === notificationTypes.PROPOSAL
               || notification.type === notificationTypes.PROPOSAL_ACCEPTED)
-              && notification.metadata.proposal.action === TYPES.UPDATE_RESEARCH_GROUP"
+              && notification.metadata.proposal.action === TYPES.UPDATE_TEAM"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
@@ -105,17 +105,17 @@
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-nda-proposed-notification
+          <project-nda-proposed-notification
             v-else-if="notification.type === notificationTypes.PROJECT_NDA_PROPOSED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-nda-signed-notification
+          <project-nda-signed-notification
             v-else-if="notification.type === notificationTypes.PROJECT_NDA_SIGNED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
           />
-          <research-nda-rejected-notification
+          <project-nda-rejected-notification
             v-else-if="notification.type === notificationTypes.PROJECT_NDA_REJECTED"
             :notification="notification"
             @markAsRead="markNotificationAsRead"
@@ -132,15 +132,15 @@
 <script>
 
   import { PROPOSAL_TYPES, USER_NOTIFICATION_TYPE } from '@/variables';
-  import ResearchProposalUserNotification
+  import ProjectProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchProposalUserNotification';
   import TokenSaleProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/TokenSaleProposalUserNotification';
   import InviteProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/InviteProposalUserNotification';
-  import ResearchUpdateProposalUserNotification
+  import ProjectUpdateProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchUpdateProposalUserNotification';
-  import ResearchGroupUpdateProposalUserNotification
+  import TeamUpdateProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchGroupUpdateProposalUserNotification';
   import InvitationUserNotification
     from '@/components/layout/components/user-notificatons-list/components/InvitationUserNotification';
@@ -152,17 +152,17 @@
     from '@/components/layout/components/user-notificatons-list/components/ExpertReviewUserNotification';
   import ExpertReviewRequestUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ExpertReviewRequestUserNotification';
-  import ResearchContentProposalUserNotification
+  import ProjectContentProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchContentProposalUserNotification';
   import ExclusionUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ExclusionUserNotification';
   import ExclusionProposalUserNotification
     from '@/components/layout/components/user-notificatons-list/components/ExclusionProposalUserNotification';
-  import ResearchNdaProposedNotification
+  import ProjectNdaProposedNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchNdaProposedNotification';
-  import ResearchNdaSignedNotification
+  import ProjectNdaSignedNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchNdaSignedNotification';
-  import ResearchNdaRejectedNotification
+  import ProjectNdaRejectedNotification
     from '@/components/layout/components/user-notificatons-list/components/ResearchNdaRejectedNotification';
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
@@ -177,17 +177,17 @@
       InvitationRejectedUserNotification,
       InvitationApprovedUserNotification,
       InvitationUserNotification,
-      ResearchGroupUpdateProposalUserNotification,
-      ResearchUpdateProposalUserNotification,
+      TeamUpdateProposalUserNotification,
+      ProjectUpdateProposalUserNotification,
       InviteProposalUserNotification,
       TokenSaleProposalUserNotification,
-      ResearchProposalUserNotification,
-      ResearchContentProposalUserNotification,
+      ProjectProposalUserNotification,
+      ProjectContentProposalUserNotification,
       ExclusionUserNotification,
       ExclusionProposalUserNotification,
-      ResearchNdaProposedNotification,
-      ResearchNdaSignedNotification,
-      ResearchNdaRejectedNotification
+      ProjectNdaProposedNotification,
+      ProjectNdaSignedNotification,
+      ProjectNdaRejectedNotification
     },
     // props: {
     //   notifications: { type: Array, required: true, default: () => [] }

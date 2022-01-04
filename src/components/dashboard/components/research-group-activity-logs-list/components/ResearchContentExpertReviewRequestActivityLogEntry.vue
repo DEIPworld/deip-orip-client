@@ -28,11 +28,11 @@
             :to="{
               name: 'project.content.details',
               params: {
-                projectId: log.metadata.research.external_id,
-                contentId: log.metadata.researchContent.external_id
+                projectId: log.metadata.project._id,
+                contentId: log.metadata.projectContent._id
               }
             }"
-          >{{ log.metadata.researchContent.title }}</router-link>" material from <platform-avatar
+          >{{ log.metadata.projectContent.title }}</router-link>" material from <platform-avatar
             :user="{ profile: log.metadata.expertProfile, account: { name: log.metadata.expertProfile._id} }"
             :size="20"
             link-to-profile
@@ -53,7 +53,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchContentExpertReviewRequestActivityLogEntry',
+    name: 'ProjectContentExpertReviewRequestActivityLogEntry',
     props: {
       log: { type: Object, required: true }
     },

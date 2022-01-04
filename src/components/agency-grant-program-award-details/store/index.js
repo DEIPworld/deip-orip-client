@@ -103,8 +103,8 @@ const getters = {
     const reciever = state.awardeeUsersList.find((user) => user.account.name == awardee.awardee);
     const pi = reciever; // PI is the user whose award we are browsing currently
 
-    const research = state.awardeeResearchList.find((r) => r.id == awardee.research_id);
-    const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
+    const project = state.awardeeProjectList.find((r) => r.id == awardee.projectId);
+    const organization = state.awardeeTeamsList.find((rg) => rg.id == project.teamId);
 
     return {
       ...awardee,
@@ -202,8 +202,8 @@ const getters = {
       const totalSubawardeeWithdrawnAmount = withdrawnSubawardeeAmount + withdrawnNextSubawardeesAmount;
       const totalSubawardeeRemainingAmount = remainingSubawardeeAmount + remainingNextSubawardeesAmount;
 
-      const research = state.awardeeResearchList.find((r) => r.id == subawardee.research_id);
-      const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
+      const project = state.awardeeProjectList.find((r) => r.id == subawardee.projectId);
+      const organization = state.awardeeTeamsList.find((rg) => rg.id == project.teamId);
 
       const reciever = state.awardeeUsersList.find((user) => user.account.name == subawardee.awardee);
 
@@ -221,7 +221,7 @@ const getters = {
         to: foa.close_date,
 
         organization,
-        research,
+        project,
         reciever
       };
     });
@@ -241,8 +241,8 @@ const getters = {
         const requester = state.awardeeUsersList.find((user) => user.account.name == withdrawal.requester);
         const pi = state.awardeeUsersList.find((user) => user.account.name == awardee.awardee); // PI is the user whose award we are browsing currently
 
-        const research = state.awardeeResearchList.find((r) => r.id == withdrawalAwardee.research_id);
-        const organization = state.awardeeResearchGroupsList.find((rg) => rg.id == research.research_group_id);
+        const project = state.awardeeProjectList.find((r) => r.id == withdrawalAwardee.projectId);
+        const organization = state.awardeeTeamsList.find((rg) => rg.id == project.teamId);
 
         return {
           id: withdrawal.id,
@@ -300,7 +300,7 @@ const actions = {
       .then((foa) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
 
-        return teamService.getTeam(foa.organization_external_id);
+        return teamService.getTeam(foa.organizationId);
       })
       .then((foaOrganization) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
@@ -316,18 +316,18 @@ const actions = {
       })
       .then((awardeeUsers) => {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
-        return Promise.all(state.award.awardees.map((r) => r.research_external_id)
-          .reduce((acc, researchId) => (acc.some((rId) => rId === researchId) ? acc : [researchId, ...acc]), [])
+        return Promise.all(state.award.awardees.map((r) => r.projectId)
+          .reduce((acc, projectId) => (acc.some((rId) => rId === projectId) ? acc : [projectId, ...acc]), [])
           .map((rId) => projectService.getProject(rId)));
       })
-      .then((researchList) => {
-        commit('SET_AWARDEE_RESEARCH_LIST', researchList);
-        return Promise.all(researchList.map((r) => r.research_group.external_id)
-          .reduce((acc, researchGroupId) => (acc.some((rgId) => rgId === researchGroupId) ? acc : [researchGroupId, ...acc]), [])
+      .then((projectList) => {
+        commit('SET_AWARDEE_PROJECT_LIST', projectList);
+        return Promise.all(projectList.map((r) => r.teamId)
+          .reduce((acc, teamId) => (acc.some((rgId) => rgId === teamId) ? acc : [teamId, ...acc]), [])
           .map((rgId) => teamService.getTeam(rgId)));
       })
-      .then((researchGroups) => {
-        commit('SET_AWARDEE_RESEARCH_GROUPS_LIST', researchGroups);
+      .then((teams) => {
+        commit('SET_AWARDEE_TEAMS_LIST', teams);
       })
       .catch((err) => { console.error(err); })
       .finally(() => {
@@ -368,12 +368,12 @@ const mutations = {
     state.awardeeUsersList = awardeeUsers;
   },
 
-  SET_AWARDEE_RESEARCH_LIST(state, researches) {
-    state.awardeeResearchList = researches;
+  SET_AWARDEE_PROJECT_LIST(state, projects) {
+    state.awardeeProjectList = projects;
   },
 
-  SET_AWARDEE_RESEARCH_GROUPS_LIST(state, researchGroups) {
-    state.awardeeResearchGroupsList = researchGroups;
+  SET_AWARDEE_TEAMS_LIST(state, teams) {
+    state.awardeeTeamsList = teams;
   }
 };
 

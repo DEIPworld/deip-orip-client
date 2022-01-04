@@ -50,20 +50,20 @@ const mockTokenPrice = (rtId, amount) => {
   const pricePerToken = Math.pow(rtId || 2, 2);
   return amount * pricePerToken;
 };
-const mockPreviousTokenPrice = ({ research }, offset) => {
-  const currentPricePerToken = mockTokenPrice(research.id, 1);
+const mockPreviousTokenPrice = ({ project }, offset) => {
+  const currentPricePerToken = mockTokenPrice(project.id, 1);
   if (offset <= 0) return currentPricePerToken;
 
   const factor1 = (offset) % 2 == 0;
-  const factor2 = (research.id || 1) % 2 == 0;
+  const factor2 = (project.id || 1) % 2 == 0;
   const previousPricePerToken = currentPricePerToken - (factor1 ? currentPricePerToken * (factor2 ? 0.2 : 0.1) : currentPricePerToken * (factor2 ? 0.1 : 0.2)) - offset * 0.9;
   return previousPricePerToken > 0 ? previousPricePerToken : 1;
 };
-const mockSharePriceWithAvg = ({ research, share }, offset) => {
-  const pricePerToken = mockTokenPrice(research.id, 1);
+const mockSharePriceWithAvg = ({ project, share }, offset) => {
+  const pricePerToken = mockTokenPrice(project.id, 1);
   const currentSharePrice = pricePerToken * share.amount;
   if (offset <= 0) return [currentSharePrice, currentSharePrice / 2];
-  const previousSharePrice = mockPreviousTokenPrice({ research }, offset) * share.amount;
+  const previousSharePrice = mockPreviousTokenPrice({ project }, offset) * share.amount;
   return [previousSharePrice, (currentSharePrice - (currentSharePrice - previousSharePrice)) / 2];
 };
 

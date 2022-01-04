@@ -1,15 +1,15 @@
 <template>
   <div v-if="attribute && attribute.value" class="d-flex flex-wrap align-center text-caption text--secondary">
-    <template v-for="(item, index) of disciplines">
+    <template v-for="(item, index) of domains">
       <router-link
         :key="`link-${index}`"
         class="link text--secondary"
-        :to="goToDiscipline(item.externalId)"
+        :to="goToDomain(item._id)"
       >
         {{ item.name }}
       </router-link>
       <div
-        v-if="index + 1 < disciplines.length"
+        v-if="index + 1 < domains.length"
         :key="`dot-${index}`"
         class="mx-2"
       >
@@ -25,29 +25,29 @@
   import { find as deepFind } from 'find-keypath';
 
   export default {
-    name: 'AttributesDisciplineRead',
+    name: 'AttributesDomainRead',
     mixins: [attributeRead],
     computed: {
-      disciplinesTree() { return this.$store.getters['Disciplines/tree'](); },
-      disciplines() {
+      domainsTree() { return this.$store.getters['Domains/tree'](); },
+      domains() {
         return this.attribute.value.map((d) => this.getItemObject(d));
       }
     },
     methods: {
       getItemPath(id) {
-        const path = deepFind(this.disciplinesTree, id);
+        const path = deepFind(this.domainsTree, id);
         path.pop();
         return path;
       },
       getItemObject(id) {
         return getNestedValue(
-          this.disciplinesTree,
+          this.domainsTree,
           this.getItemPath(id)
         );
       },
-      goToDiscipline(id) {
+      goToDomain(id) {
         const q = {
-          researchAttributes: {
+          projectAttributes: {
             [this.attribute.attributeId]: [id]
           }
         };

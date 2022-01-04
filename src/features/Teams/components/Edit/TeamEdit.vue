@@ -30,18 +30,13 @@
       }),
       layoutSchema() {
         return extendAttrModules(
-          this.$tenantSettings.layouts.teamEditForm.layout
+          this.$portalSettings.layouts.teamEditForm.layout
         );
       },
       teamExtended() {
         return {
           ...this.team,
-          ...{
-            researchGroupRef: {
-              ...this.team.researchGroupRef,
-              ...{ attributes: expandAttributes(this.team.researchGroupRef.attributes) }
-            }
-          }
+          ...{ attributes: expandAttributes(this.team.attributes) }
         };
       }
     },
@@ -64,7 +59,7 @@
         const isProposal = !this.team.isPersonal;
         teamService.updateTeam(
           {
-            entityId: this.team.externalId,
+            entityId: this.team._id,
             initiator: {
               username: this.$currentUser.username,
               privKey: this.$currentUser.privKey
@@ -76,13 +71,13 @@
           }
         )
           .then(() => {
-            this.$notifier.showSuccess(this.$t('researchGroupSettings.dataForm.successProposal'));
+            this.$notifier.showSuccess(this.$t('teamSettings.dataForm.successProposal'));
             this.cancel(isProposal);
           })
           .catch((err) => {
             console.error(err);
 
-            this.$notifier.showError(this.$t('researchGroupSettings.dataForm.errProposal'));
+            this.$notifier.showError(this.$t('teamSettings.dataForm.errProposal'));
           })
           .finally(() => {
             this.loading = false;
@@ -93,7 +88,7 @@
         this.$router.push({
           name: 'team.details',
           params: {
-            teamId: this.team.externalId
+            teamId: this.team._id
           }
           // hash: proposal ? '#proposals' : ''
         });

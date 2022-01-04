@@ -4,7 +4,7 @@ export const ifEnabled = {
   install(_Vue) {
     const ifEnableFn = (q) => {
       const checkingMap = {
-        module: () => store.getters['auth/tenant'].profile.settings.modules[q.module] === true
+        module: () => store.getters['auth/portal'].profile.settings.modules[q.module] === true
       };
 
       const checkingResult = [];

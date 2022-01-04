@@ -8,11 +8,11 @@
     </v-radio-group>
 
     <d-autocomplete
-      v-model="researchGroup"
+      v-model="team"
       label="Team"
       :items="groups"
       item-text="name"
-      item-value="external_id"
+      item-value="_id"
       :disabled="isPersonal || !$$isEditable"
       outlined
       v-bind="isMultipleProps"
@@ -48,12 +48,12 @@
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
-    name: 'AttributesResearchGroupSet',
+    name: 'AttributesTeamSet',
     components: { DAutocomplete, DStack, DBlock },
     mixins: [attributeSet, nulledModel],
     data() {
       return {
-        researchGroup: undefined,
+        team: undefined,
         isPersonal: true
       };
     },
@@ -83,16 +83,16 @@
       isPersonal: {
         handler(val) {
           if (val) {
-            this.internalValue = [this.personalGroup.external_id];
-            this.researchGroup = this.personalGroup.external_id;
+            this.internalValue = [this.personalGroup._id];
+            this.team = this.personalGroup._id;
           } else {
-            this.internalValue = this.groups.length ? [this.groups[0].external_id] : undefined;
-            this.researchGroup = this.groups.length ? this.groups[0].external_id : undefined;
+            this.internalValue = this.groups.length ? [this.groups[0]._id] : undefined;
+            this.team = this.groups.length ? this.groups[0]._id : undefined;
           }
         }
       },
 
-      researchGroup: {
+      team: {
         handler(val) {
           if (val) {
             this.internalValue = [val]
@@ -116,15 +116,15 @@
               ? this.internalValue 
               : [this.internalValue]
             : null;
-          this.researchGroup = this.internalValue 
+          this.team = this.internalValue 
             ? Array.isArray(this.internalValue) 
               ? this.internalValue[0]
               : this.internalValue
             : null;
 
         } else if (this.isPersonal) {
-          this.internalValue = [this.personalGroup.external_id];
-          this.researchGroup = this.personalGroup.external_id;
+          this.internalValue = [this.personalGroup._id];
+          this.team = this.personalGroup._id;
         }
 
       }

@@ -1,7 +1,7 @@
 <template>
   <project-form
     :project="projectExtended"
-    :title="$t('researchEdit.title')"
+    :title="$t('projectEdit.title')"
     :loading="loading"
     @submit="updateProject"
   />
@@ -30,12 +30,7 @@
       projectExtended() {
         return {
           ...this.project,
-          ...{
-            researchRef: {
-              ...this.project.researchRef,
-              ...{ attributes: expandAttributes(this.project.researchRef.attributes) }
-            }
-          }
+          attributes: expandAttributes(this.project.attributes)
         };
       }
     },
@@ -48,8 +43,8 @@
         const offchainMeta = JSON.parse(formData.get("offchainMeta"));
 
         return projectService.updateProject(this.$currentUser, {
-          projectId: onchainData.externalId,
-          teamId: onchainData.researchGroup,
+          projectId: onchainData._id,
+          teamId: onchainData.team,
           isPrivate: !!onchainData.isPrivate,
           members: onchainData.members,
           reviewShare: onchainData.reviewShare,
@@ -58,7 +53,7 @@
           attributes: offchainMeta.attributes,
           formData: formData // files
         }, {
-          isProposal: onchainData.researchGroup != this.$currentUser.username
+          isProposal: onchainData.team != this.$currentUser.username
         })
           .then(() => {
             this.$notifier.showSuccess(this.$t('notifier.prUpSuccess'));

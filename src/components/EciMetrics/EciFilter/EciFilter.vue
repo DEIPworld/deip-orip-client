@@ -7,12 +7,12 @@
     @reset="reset()"
   >
     <v-select
-      v-model="filterModel.discipline"
+      v-model="filterModel.domain"
       :label="$t('defaultNaming.filters.domainField')"
       outlined
-      :items="[{label: $t('defaultNaming.all'), external_id: ''}, ...disciplines]"
+      :items="[{label: $t('defaultNaming.all'), _id: ''}, ...domains]"
       item-text="label"
-      item-value="external_id"
+      item-value="_id"
       hide-details="auto"
     />
     <v-select
@@ -51,7 +51,7 @@
   import DFilterBlock from '@/components/Deipify/DFilter/DFilterBlock';
 
   export const defaultFilterModel = () => ({
-    discipline: '',
+    domain: '',
     date: [],
     contribution: '',
     criteria: ''
@@ -70,7 +70,7 @@
         default: false
       },
 
-      disciplines: {
+      domains: {
         type: [Array, Boolean],
         default: () => ([])
       },

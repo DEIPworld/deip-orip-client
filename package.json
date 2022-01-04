@@ -38,7 +38,7 @@
     "@deip/rpc-client": "1.360.0",
     "@deip/substance-texture": "1.0.0-9d8c0dc6a3ba961c42cd5b494857baf783025cf3.patch.7",
     "@deip/team-service": "1.360.0",
-    "@deip/tenant-service": "1.360.0",
+    "@deip/portal-service": "1.360.0",
     "@deip/toolbox": "1.360.0",
     "@deip/user-service": "1.360.0",
     "@editorjs/editorjs": "^2.19.0",

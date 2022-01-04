@@ -52,7 +52,7 @@
         const attrInfo = this.$$getAttributeInfo(this.attribute.attributeId);
         return attributeFileUrl(
           attrInfo.scope,
-          this.username || this.project.externalId,
+          this.username || this.project._id,
           this.attribute.attributeId,
           this.attribute.value,
           true,

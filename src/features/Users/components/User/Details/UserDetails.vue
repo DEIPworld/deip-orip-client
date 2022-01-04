@@ -8,7 +8,7 @@
 
 <script>
   import UserDetailsRenderer from '@/features/Users/components/User/Details/renderer';
-  import { extendAttrModules, tenantAttributesToObject } from '@/utils/helpers';
+  import { extendAttrModules, portalAttributesToObject } from '@/utils/helpers';
   import { collectionMerge } from '@deip/toolbox';
   import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -18,7 +18,7 @@
     mixins: [attributesChore],
     computed: {
       layoutSchema() {
-        const schema = this.$tenantSettings.layouts.userDetails.layout;
+        const schema = this.$portalSettings.layouts.userDetails.layout;
         return extendAttrModules(
           schema,
           {
@@ -49,13 +49,13 @@
           ...{
             profile: {
               ...user.profile,
-            attributes: tenantAttributesToObject(constructedAttrs),
+            attributes: portalAttributesToObject(constructedAttrs),
             createdAt: this.$options.filters.dateFormat(user.profile.created_at, 'D MMM YYYY', true)
             }
           },
           bracketUsername: `(${user.username})`,
-          disciplines: user.expertise.map((e) => ({
-            name: e.disciplineName, externalId: e.disciplineExternalId
+          domains: user.expertise.map((e) => ({
+            name: e.domainName, _id: e.domainId
           }))
         };
       }

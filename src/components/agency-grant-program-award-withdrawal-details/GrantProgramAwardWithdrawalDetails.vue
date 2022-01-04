@@ -59,7 +59,7 @@
               :to="{
                 name: 'team.details',
                 params: {
-                  teamId: awardee.organization.external_id
+                  teamId: awardee.organization._id
                 }
               }"
             >
@@ -93,7 +93,7 @@
               :to="{
                 name: 'team.details',
                 params: {
-                  teamId: foa.organization.external_id
+                  teamId: foa.organization._id
                 }
               }"
             >

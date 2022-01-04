@@ -53,8 +53,8 @@
           activatable
           multiple-active
 
-          :items="disciplinesTree"
-          item-key="externalId"
+          :items="domainsTree"
+          item-key="_id"
           item-text="name"
 
           :search="search"
@@ -71,20 +71,20 @@
       class="pt-2 ma-n1"
     >
       <v-chip
-        v-for="externalId in sortedLabels"
-        :key="externalId"
+        v-for="_id in sortedLabels"
+        :key="_id"
         outlined
         class="ma-1"
         :disabled="!$$isEditable"
       >
         <div class="text-truncate">
-          {{ getItemObject(externalId).name }}
+          {{ getItemObject(_id).name }}
         </div>
         <v-btn
           icon
           x-small
           class="mr-n2 ml-2"
-          @click="removeItem(externalId)"
+          @click="removeItem(_id)"
         >
           <v-icon>clear</v-icon>
         </v-btn>
@@ -108,7 +108,7 @@
   });
 
   export default {
-    name: 'AttributesDisciplineSetDefault',
+    name: 'AttributesDomainSetDefault',
     mixins: [attributeSet, attributeSetForceArray],
     data() {
       return {
@@ -122,26 +122,26 @@
       };
     },
     computed: {
-      disciplinesTree() {
-        return this.$store.getters['Disciplines/tree']();
+      domainsTree() {
+        return this.$store.getters['Domains/tree']();
       },
 
-      disciplinesList() {
-        return this.$store.getters['Disciplines/list']();
+      domainsList() {
+        return this.$store.getters['Domains/list']();
       },
 
-      disciplinesListIds() {
-        return this.disciplinesList.map((d) => d.externalId);
+      domainsListIds() {
+        return this.domainsList.map((d) => d._id);
       },
 
       withoutAnyChildren() {
-        return !this.disciplinesTree
+        return !this.domainsTree
           .filter((node) => (node.children && node.children.length))
           .length;
       },
 
       sortedLabels() {
-        const base = [...this.disciplinesListIds];
+        const base = [...this.domainsListIds];
         const unsorted = [...this.internalValue];
 
         const sorted = unsorted.sort((lhs, rhs) => {
@@ -193,31 +193,31 @@
       },
 
       getItemPath(id) {
-        const path = deepFind(this.disciplinesTree, id);
+        const path = deepFind(this.domainsTree, id);
         path.pop();
         return path;
       },
       getItemObject(id) {
-        return getNestedValue(this.disciplinesTree, this.getItemPath(id));
+        return getNestedValue(this.domainsTree, this.getItemPath(id));
       },
 
       removeChilds(id) {
         const target = this.getItemObject(id);
-        this.removeItem(target.externalId);
+        this.removeItem(target._id);
         if (target.children && target.children.length) {
           for (const child of target.children) {
-            this.removeChilds(child.externalId);
+            this.removeChilds(child._id);
           }
         }
       },
       addParents(id) {
         const path = this.getItemPath(id);
-        let target = this.disciplinesTree;
+        let target = this.domainsTree;
 
         for (const value of path) {
           target = target[value];
-          if (target.externalId) {
-            this.addItem(target.externalId);
+          if (target._id) {
+            this.addItem(target._id);
           }
         }
       },

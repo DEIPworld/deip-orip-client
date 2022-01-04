@@ -2,16 +2,16 @@
   <div>
     <v-list-item
       :input-value="isSelected || isHighlighted"
-      @click="select(discipline)"
+      @click="select(domain)"
     >
-      {{ discipline.name }}
+      {{ domain.name }}
     </v-list-item>
 
-    <div v-if="discipline.children" v-show="isExpanded" class="pl-6">
-      <discipline-tree-item
-        v-for="(val, key) in discipline.children"
+    <div v-if="domain.children" v-show="isExpanded" class="pl-6">
+      <domain-tree-item
+        v-for="(val, key) in domain.children"
         :key="key"
-        :discipline="val"
+        :domain="val"
         :selected="selected"
         :is-multiple-select="isMultipleSelect"
         :is-highlighted-parent="isHighlightedParent"
@@ -26,10 +26,10 @@
 
   // todo: make single and multiselect handled by arrays bc it will be easier and more readable
   export default {
-    name: 'DisciplineTreeItem',
+    name: 'DomainTreeItem',
 
     props: {
-      discipline: {
+      domain: {
         type: [Array, Object],
         required: true
       },
@@ -55,24 +55,24 @@
     computed: {
       isSelected() {
         return this.isMultipleSelect
-          ? this.selected.some((d) => d.externalId == this.discipline.externalId)
-          : this.selected && this.selected.externalId === this.discipline.externalId;
+          ? this.selected.some((d) => d._id == this.domain._id)
+          : this.selected && this.selected._id === this.domain._id;
       },
       isExpanded() {
         return this.isSelected
-          || !this.isMultipleSelect && this.selected && this.discipline.children;
+          || !this.isMultipleSelect && this.selected && this.domain.children;
       },
       isHighlighted() {
         return !this.isMultipleSelect
           && this.isHighlightedParent
           && this.selected
-          && _.startsWith(this.selected.parentExternalId, this.discipline.externalId);
+          && _.startsWith(this.selected.parentId, this.domain._id);
       }
     },
 
     methods: {
-      select(discipline) {
-        this.$emit('update', discipline);
+      select(domain) {
+        this.$emit('update', domain);
       }
     }
   };

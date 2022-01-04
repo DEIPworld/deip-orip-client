@@ -5,7 +5,7 @@
     hide-details="auto"
     :items="contents"
     item-text="title"
-    item-value="externalId"
+    item-value="_id"
     v-bind="validatableProps"
 
     :loading="!$ready"

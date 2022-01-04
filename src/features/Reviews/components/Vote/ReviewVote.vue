@@ -4,10 +4,10 @@
       {{ $t('reviews.notMembers') }}
     </div>
 
-    <div v-else-if="!userHasResearchExpertise">
+    <div v-else-if="!userHasProjectExpertise">
       {{
         $hasModule(DEIP_MODULE.APP_ECI)
-          ? $t('reviews.canSupport', { disciplines: review.disciplines.map(d => d.name).join(', ') })
+          ? $t('reviews.canSupport', { domains: review.domains.map(d => d.name).join(', ') })
           : ''
       }}
     </div>
@@ -19,7 +19,7 @@
     <div v-else-if="!userHasVoted">
       {{
         $hasModule(DEIP_MODULE.APP_ECI)
-          ? $t('reviews.eciForContribution', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+          ? $t('reviews.eciForContribution', { domains: userRelatedExpertise.map(exp => exp.domainName).join(', ') })
           : ''
       }}
     </div>
@@ -28,7 +28,7 @@
       {{ $t('reviews.once') }}
     </div>
     <v-btn
-      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasResearchExpertise || isAuthor)"
+      v-if="!(loading || disabled || userHasVoted || isGroupMember || !userHasProjectExpertise || isAuthor)"
       block
       color="primary"
       small
@@ -74,14 +74,14 @@
         userExperise: 'auth/userExperise'
       }),
 
-      userHasResearchExpertise() {
-        return this.userExperise.some((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.discipline_external_id));
+      userHasProjectExpertise() {
+        return this.userExperise.some((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.domainId));
       },
       userHasVoted() {
         return this.review.votes.some((vote) => vote.upvoter === this.$currentUser.username);
       },
       userRelatedExpertise() {
-        return this.userExperise.filter((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.discipline_external_id));
+        return this.userExperise.filter((exp) => exp.amount > 0 && this.review.domains.some((d) => d === exp.domainId));
       },
       isGroupMember() {
         return this.members.some((user) => user.account.name === this.$currentUser.username);
@@ -96,18 +96,18 @@
         const { review } = this;
         this.loading = true;
 
-        // vote for all disciplines for now
-        const disciplinesExternalIds = this.userRelatedExpertise
-          .map((exp) => exp.discipline_external_id);
+        // vote for all domains for now
+        const domainsIds = this.userRelatedExpertise
+          .map((exp) => exp.domainId);
 
-        const votesPromises = disciplinesExternalIds
-          .map((disciplineId) => reviewService.upvoteReview({
+        const votesPromises = domainsIds
+          .map((domainId) => reviewService.upvoteReview({
             initiator: {
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
             },
             reviewId: review.id,
-            domainId: disciplineId,
+            domainId,
             weight: '100.00 %'
           }));
 

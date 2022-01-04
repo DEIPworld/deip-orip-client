@@ -2,7 +2,7 @@ import { componentsRenderer } from '@/mixins/renderer';
 import { AccessService } from '@deip/access-service';
 
 import AttributesRead from '@/components/Attributes/AttributesRead';
-import { extendAttrModules, hasValue, tenantAttributesToObject } from '@/utils/helpers';
+import { extendAttrModules, hasValue, portalAttributesToObject } from '@/utils/helpers';
 import { collectionMerge } from '@deip/toolbox';
 import { attributesChore } from '@/mixins/chores/attributesChore';
 
@@ -98,7 +98,7 @@ export const usersListItem = {
 
   computed: {
     layoutSchema() {
-      const { layout } = this.$tenantSettings.layouts[this.layoutKey];
+      const { layout } = this.$portalSettings.layouts[this.layoutKey];
 
       return extendAttrModules(
         layout,
@@ -123,11 +123,11 @@ export const usersListItem = {
         ...{
           profile: {
             ...this.user.profile,
-            attributes: tenantAttributesToObject(constructedAttrs),
+            attributes: portalAttributesToObject(constructedAttrs),
             createdAt: this.$options.filters.dateFormat(this.user.profile.created_at, 'D MMM YYYY', true)
           }
         },
-        stringExpertise: this.user.expertise.map((d) => d.discipline_name).join(' · ')
+        stringExpertise: this.user.expertise.map((d) => d.domainName).join(' · ')
       };
     }
   },

@@ -3,15 +3,15 @@
     <v-row class="fill-height align-space-around justify-center text-center">
       <v-col cols="5">
         <div class="text-center">
-          <div v-if="tenant">
-            <span class="text-h5">{{ tenant.profile.shortName }}</span>
-            <!-- <img width="100px" height="100px" :src="tenant | tenantLogoSrc(160, 160, false)"> -->
+          <div v-if="portal">
+            <span class="text-h5">{{ portal.profile.shortName }}</span>
+            <!-- <img width="100px" height="100px" :src="portal | portalLogoSrc(160, 160, false)"> -->
           </div>
           <!-- <div class="text-h6 c-pb-4 bold">Welcome to</div>
           <div class="deip-emblem">
             <div class="emblem-logo">Deip.world</div>
-              <div class="emblem-caption">Decentralized research platform</div>
-              <div v-if="tenant" class="c-pt-5 text-subtitle-1" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
+              <div class="emblem-caption">Decentralized project platform</div>
+              <div v-if="portal" class="c-pt-5 text-subtitle-1" style="text-decoration: underline">Use credentials from Grants Community Blockchain</div>
           </div> -->
           <div>
             <v-form
@@ -24,7 +24,7 @@
                 v-model="username"
                 name="username"
                 outlined
-                :label="$t('tenantSignIn.form.usernameField')"
+                :label="$t('portalSignIn.form.usernameField')"
                 :disabled="isChecking"
                 :rules="[rules.required]"
               />
@@ -33,7 +33,7 @@
                 v-model="password"
                 name="password"
                 outlined
-                :label="$t('tenantSignIn.form.passwordField')"
+                :label="$t('portalSignIn.form.passwordField')"
                 :rules="[rules.required]"
                 :append-icon="isHiddenPassword ? 'visibility_off' : 'visibility'"
                 :type="isHiddenPassword ? 'password' : 'text'"
@@ -50,7 +50,7 @@
                 :disabled="isChecking"
                 @click="login()"
               >
-                {{ $t('tenantSignIn.form.submitBtn') }}
+                {{ $t('portalSignIn.form.submitBtn') }}
               </v-btn>
             </v-form>
           </div>
@@ -71,7 +71,7 @@
   const userService = UserService.getInstance();
 
   export default {
-    name: 'TenantSignIn',
+    name: 'PortalSignIn',
 
     data() {
       return {
@@ -88,7 +88,7 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       })
     },
 
@@ -107,7 +107,7 @@
         return userService.getUser(this.username)
           .then((res) => {
             if (!res) {
-              throw new Error(this.$t('tenantSignIn.form.rules.invalidOrg'));
+              throw new Error(this.$t('portalSignIn.form.rules.invalidOrg'));
             }
             return authService.generateSeedAccount(this.username, this.password);
           })

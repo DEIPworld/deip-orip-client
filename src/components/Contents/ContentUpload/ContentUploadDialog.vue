@@ -9,7 +9,7 @@
       Upload content
     </v-btn>
     <v-dialog
-      v-if="research"
+      v-if="project"
       v-model="isOpen"
       persistent
       transition="scale-transition"
@@ -55,7 +55,7 @@
               <v-col cols="12">
                 <user-selector
                   v-model="formData.authors"
-                  :users="research.members"
+                  :users="project.members"
                   :label="$t('contents.contentUploadDialog.authorsAttribute')"
                   multiple
                 />
@@ -156,7 +156,7 @@
     },
     computed: {
       ...mapGetters({
-        research: 'Project/projectDetails'
+        project: 'Project/projectDetails'
       }),
       isDisabled() {
         return !this.formData.title
@@ -189,10 +189,10 @@
       },
 
       onSubmit() {
-        this.publishResearchContentPackage();
+        this.publishProjectContentPackage();
       },
 
-      publishResearchContentPackage() {
+      publishProjectContentPackage() {
         const filesData = {};
         for (let i = 0; i < this.formData.files.length; i++) {
           filesData[`file-${i + 1}`] = this.formData.files[i];
@@ -200,7 +200,7 @@
 
         this.isLoading = true;
         return projectContentService.createProjectContentDraft({
-          projectId: this.research.externalId,
+          projectId: this.project._id,
           title: this.formData.title,
           contentType: parseInt(this.formData.type),
           authors: this.formData.authors,
@@ -221,8 +221,8 @@
                           username: this.$currentUser.username
                         },
                         proposalInfo: { isProposal },
-                        projectId: this.research.externalId,
-                        teamId: this.research.researchGroup.external_id,
+                        projectId: this.project._id,
+                        teamId: this.project.teamId,
                         contentType: parseInt(this.formData.type),
                         title: this.formData.title,
                         content: draft.hash,

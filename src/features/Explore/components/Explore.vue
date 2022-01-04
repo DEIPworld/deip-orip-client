@@ -1,22 +1,22 @@
 <template>
   <d-layout>
     <d-layout-section
-      :background="$options.filters.tenantBackgroundSrc($tenant)"
+      :background="$options.filters.portalBackgroundSrc($portal)"
       :min-height="300"
       align-content="end"
     >
       <d-layout-section-main>
         <d-stack>
           <div class="text-h3 uppercase">
-            {{ $t('researchFeed.title') }}
+            {{ $t('projectFeed.title') }}
           </div>
 
           <div v-if="$isGuest">
             <v-btn :to="{ name: 'SignIn' }" color="primary" class="ma-0 px-12">
-              {{ $t('researchFeed.signInBtn') }}
+              {{ $t('projectFeed.signInBtn') }}
             </v-btn>
             <div class="white--text text-body-1 mt-2">
-              {{ $t('researchFeed.signInText') }}
+              {{ $t('projectFeed.signInText') }}
             </div>
           </div>
         </d-stack>

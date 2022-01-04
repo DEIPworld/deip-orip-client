@@ -44,10 +44,10 @@
               :to="{
                 name: 'team.details',
                 params: {
-                  teamId: log.metadata.researchGroup.external_id
+                  teamId: log.metadata.team._id
                 }
               }"
-            >{{ log.metadata.researchGroup.name }}</router-link>"
+            >{{ log.metadata.team.name }}</router-link>"
           </span>
           <span v-else>
             proposed to invite <platform-avatar
@@ -61,10 +61,10 @@
               :to="{
                 name: 'team.details',
                 params: {
-                  teamId: log.metadata.researchGroup.external_id,
+                  teamId: log.metadata.team._id,
                 }
               }"
-            >{{ log.metadata.researchGroup.name }}</router-link>"
+            >{{ log.metadata.team.name }}</router-link>"
           </span>
         </span>
       </div>
@@ -91,10 +91,10 @@
     },
     computed: {
       isAcceptedByQuorum() {
-        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+        return this.log.metadata.team.is_dao && this.log.metadata.proposal.is_completed;
       },
       isAutoAccepted() {
-        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+        return !this.log.metadata.team.is_dao && this.log.metadata.isProposalAutoAccepted;
       }
     },
 

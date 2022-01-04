@@ -32,10 +32,10 @@ export default {
 
   computed: {
     isTeamMember() {
-      return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.team.externalId);
+      return this.$store.getters['auth/userIsTeamMemberExId'](this.team._id);
     },
     isPersonalTeam() {
-      return this.team.externalId === this.$currentUser.username;
+      return this.team._id === this.$currentUser.username;
     }
   }
 };

@@ -22,7 +22,7 @@
             <template v-for="(contribution, i) in internalContributions">
               <v-checkbox
                 v-if="expanded || i < 4"
-                :key="'discipline-filter-' + i"
+                :key="'domain-filter-' + i"
                 v-model="internalValue"
                 :label="contribution.text"
                 :value="contribution.value"

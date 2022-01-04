@@ -121,9 +121,9 @@
         };
 
         const innerReferencesTreeModels = [root, ...this.data.nodes.filter((ref) => ref.isInner)].map((ref) => ({
-          id: ref.researchContent.external_id,
+          id: ref.projectContent._id,
           parent: ref.to,
-          name: ref.researchContent.title,
+          name: ref.projectContent.title,
           children: []
         }));
         const innerReferencesTreeData = buildTree(innerReferencesTreeModels[0], innerReferencesTreeModels);
@@ -132,9 +132,9 @@
         const innerReferencesTreeRoot = innerReferencesTreemap(innerReferencesTreeNodes);
 
         const outerReferencesTreeModels = [root, ...this.data.nodes.filter((ref) => ref.isOuter)].map((ref) => ({
-          id: ref.researchContent.external_id,
+          id: ref.projectContent._id,
           parent: ref.to,
-          name: ref.researchContent.title,
+          name: ref.projectContent.title,
           children: []
         }));
         const outerReferencesTreeData = buildTree(outerReferencesTreeModels[0], outerReferencesTreeModels);
@@ -158,7 +158,7 @@
 
         const nodes = this.data.nodes.map((node, i) => {
           if (node.isInner) {
-            const { x, y } = getCoords(node.researchContent.external_id, innerReferencesTreeRoot);
+            const { x, y } = getCoords(node.projectContent._id, innerReferencesTreeRoot);
             return { ...node, x, y: -y };
           }
           if (node.isRoot) {
@@ -166,7 +166,7 @@
             return { ...node, x, y };
           }
           if (node.isOuter) {
-            const { x, y } = getCoords(node.researchContent.external_id, outerReferencesTreeRoot);
+            const { x, y } = getCoords(node.projectContent._id, outerReferencesTreeRoot);
             return { ...node, x, y };
           }
         });
@@ -335,7 +335,7 @@
           .data(this.nodes)
           .enter().append('g')
           .attr('class', 'ref-node')
-          .attr('id', (d) => `ref-node-${d.researchContent.external_id}`);
+          .attr('id', (d) => `ref-node-${d.projectContent._id}`);
 
         node.append('circle')
           .attr('r', 30)
@@ -365,7 +365,7 @@
           .attr('class', 'ref-org-logo')
           .attr('x', -15)
           .attr('y', -25)
-          .attr('xlink:href', (d) => filters.researchGroupLogoSrc(d.researchGroup.external_id, 50, 50, true))
+          .attr('xlink:href', (d) => filters.teamLogoSrc(d.teamId, 50, 50, true))
           .attr('height', 30)
           .attr('width', 30)
           .call(d3.drag()
@@ -386,7 +386,7 @@
           .attr('width', this.refInfoWidth)
           .attr('height', this.refInfoHeight)
           .attr('visibility', 'hidden')
-          .attr('id', (d) => `ref-info-${d.researchContent.external_id}`)
+          .attr('id', (d) => `ref-info-${d.projectContent._id}`)
           .attr('class', 'ref-info')
           .on('mousedown', () => {
             d3.event.stopPropagation();
@@ -414,19 +414,19 @@
 
         hashTextBox.append('xhtml:span')
           .attr('class', 'ref-info-hash-value')
-          .text((d) => d.researchContent.content);
+          .text((d) => d.projectContent.content);
 
         const titleLinkBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-title-box');
 
         titleLinkBox.append('xhtml:a')
           .attr('href', (d) => (true
-            ? `/#/p/${d.research.external_id}/c/${d.researchContent.external_id}`
-            : `/#/p/${d.research.external_id}?accessRequestTo=${d.researchContent.external_id}`) // redirect to Project page to request access
+            ? `/#/p/${d.project._id}/c/${d.projectContent._id}`
+            : `/#/p/${d.project._id}?accessRequestTo=${d.projectContent._id}`) // redirect to Project page to request access
           )
           .attr('target', '_blank')
           .attr('class', 'a ref-info-title-link')
-          .text((d) => d.researchContent.title);
+          .text((d) => d.projectContent.title);
 
         const organizationBox = refInfoBox.append('xhtml:div')
           .attr('class', 'ref-info-org-box');
@@ -443,10 +443,10 @@
 
         const organizationName = organizationItem.append('xhtml:span')
           .attr('class', 'ref-info-org-name')
-          .text((d) => d.researchGroup.name);
+          .text((d) => d.team.name);
 
         const organizationLogo = organizationItem.append('xhtml:img')
-          .attr('src', (d) => filters.researchGroupLogoSrc(d.researchGroup.external_id, 50, 50, true))
+          .attr('src', (d) => filters.teamLogoSrc(d.teamId, 50, 50, true))
           .attr('target', '_blank')
           .attr('class', 'ref-info-org-logo');
 
@@ -461,7 +461,7 @@
           .attr('class', 'ref-info-authors-content');
 
         const authorItem = authorsContent.selectAll('.ref-info-author')
-          .data((d) => d.researchContent.authorsProfiles)
+          .data((d) => d.projectContent.authorsProfiles)
           .enter().append('xhtml:a')
           .attr('class', 'a ref-info-author')
           .attr('href', (a) => `/#/user-details/${a.profile._id}`)
@@ -513,7 +513,7 @@
 
         const datetimeText = datetimeItem.append('xhtml:span')
           .attr('class', 'ref-info-datetime-text')
-          .text((d) => moment(d.researchContent.created_at).format('D MMM YYYY'));
+          .text((d) => moment(d.projectContent.created_at).format('D MMM YYYY'));
 
         refInfoBox.on('wheel', (e) => {
           d3.event.stopPropagation();
@@ -712,8 +712,8 @@
         this.simulation.restart();
       },
       nodeClick(d) {
-        const refNode = this.selections.graph.select(`#ref-node-${d.researchContent.external_id}`);
-        const refInfoDialog = this.selections.graph.select(`#ref-info-${d.researchContent.external_id}`);
+        const refNode = this.selections.graph.select(`#ref-node-${d.projectContent._id}`);
+        const refInfoDialog = this.selections.graph.select(`#ref-info-${d.projectContent._id}`);
         const isHidden = refInfoDialog.attr('visibility') === 'hidden';
         this.selections.graph.selectAll('.ref-info').attr('visibility', 'hidden');
 

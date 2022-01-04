@@ -173,11 +173,11 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import CrudActions from '@/components/layout/CrudActions';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
   import { mapGetters } from 'vuex';
   import DInfoBlock from '@/components/Deipify/DInfoBlock/DInfoBlock';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminMembers',
@@ -322,7 +322,7 @@
 
       approveRequest(name) {
         this.isDisabled = true;
-        return tenantService.approveSignUpRequest(name)
+        return portalService.approveSignUpRequest(name)
           .then(() => {
             this.$notifier.showSuccess(this.$t('adminRouting.members.approveRequest'));
             this.$store.dispatch('adminPanel/loadAllMembers', {});
@@ -338,7 +338,7 @@
       },
       rejectRequest(name) {
         this.isDisabled = true;
-        return tenantService.rejectSignUpRequest(name)
+        return portalService.rejectSignUpRequest(name)
           .then(() => {
             this.$notifier.showSuccess();
             this.$store.dispatch('adminPanel/loadAllMembers', {});

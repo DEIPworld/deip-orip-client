@@ -12,32 +12,32 @@ const STATE = {
   tokenSale: undefined,
   securityTokenBalances: [],
   transactionsHistory: [],
-  researchGroup: {}
+  team: {}
 };
 
 const GETTERS = {
   tokenSale: (state) => state.tokenSale,
   securityTokenBalances: (state) => state.securityTokenBalances,
   transactionsHistory: (state) => state.transactionsHistory,
-  researchGroup: (state) => state.researchGroup
+  team: (state) => state.team
 };
 
 const ACTIONS = {
-  loadResearchGroup({ commit }, accountExternalId) {
-    return teamService.getTeam(accountExternalId)
-      .then((researchGroup) => {
-        commit('setResearchGroup', researchGroup);
+  loadTeam({ commit }, accountId) {
+    return teamService.getTeam(accountId)
+      .then((team) => {
+        commit('setTeam', team);
       });
   },
-  loadResearchTokenSale({ dispatch, commit }, researchId) {
-    // TODO: load research token sale by id
-    return investmentsService.getCurrentTokenSaleByProject(researchId)
+  loadProjectTokenSale({ dispatch, commit }, projectId) {
+    // TODO: load project token sale by id
+    return investmentsService.getCurrentTokenSaleByProject(projectId)
       .then((tokenSale) => {
-        commit('setResearchTokenSale', tokenSale);
+        commit('setProjectTokenSale', tokenSale);
         if (tokenSale) {
           // return dispatch('loadCurrentTokenSaleContributors');
         } else {
-          return dispatch('loadLastResearchTokenSale', researchId);
+          return dispatch('loadLastProjectTokenSale', projectId);
         }
       }, (err) => { console.error(err); });
   },
@@ -66,7 +66,7 @@ const ACTIONS = {
         securityTokenHolders.forEach((s) => {
           if (!s.user.account) {
             s.user = groups.find(
-              (g) => g.external_id === s.owner
+              (g) => g._id === s.owner
             );
           }
         });
@@ -74,10 +74,10 @@ const ACTIONS = {
       });
   },
 
-  loadTransactionsHistory({ commit }, researchId) {
+  loadTransactionsHistory({ commit }, projectId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return investmentsService.getProjectTokenSaleInvestmentsByProject(researchId)
+    return investmentsService.getProjectTokenSaleInvestmentsByProject(projectId)
       .then((transactionsList) => {
         transactions.push(...transactionsList);
         return userService.getUsers(transactionsList.map((t) => t.investor));
@@ -93,21 +93,21 @@ const ACTIONS = {
       });
   },
 
-  loadLastResearchTokenSale({ commit }, researchId) {
-    return investmentsService.getProjectTokenSalesByProject(researchId)
+  loadLastProjectTokenSale({ commit }, projectId) {
+    return investmentsService.getProjectTokenSalesByProject(projectId)
       .then((tokenSales) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);
           const dateB = new Date(b.end_time);
           return dateB - dateA;
         })[0];
-        commit('setResearchTokenSale', lastTokenSale);
+        commit('setProjectTokenSale', lastTokenSale);
       });
   }
 };
 
 const MUTATIONS = {
-  setResearchTokenSale(state, tokenSale) {
+  setProjectTokenSale(state, tokenSale) {
     state.tokenSale = tokenSale;
   },
   setSecurityTokenBalancesList(state, securityTokenBalances) {
@@ -116,8 +116,8 @@ const MUTATIONS = {
   setTransactionsHistory(state, transactionsHistory) {
     state.transactionsHistory = transactionsHistory;
   },
-  setResearchGroup(state, researchGroup) {
-    state.researchGroup = researchGroup;
+  setTeam(state, team) {
+    state.team = team;
   }
 };
 

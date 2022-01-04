@@ -55,7 +55,7 @@
     },
     computed: {
       ...mapGetters({
-        researches: 'account/followingProjects'
+        projects: 'account/followingProjects'
       })
     },
   };

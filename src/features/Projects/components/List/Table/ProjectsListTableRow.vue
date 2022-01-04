@@ -51,7 +51,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.$$projectExtended.externalId
+            projectId: this.$$projectExtended._id
           }
         });
       }

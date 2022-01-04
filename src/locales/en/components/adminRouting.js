@@ -158,7 +158,7 @@ export default {
       created: 'Created',
       innovator: `${project(true)} innovator`
     },
-    researchDialog: {
+    projectDialog: {
       reject: 'Reject',
       submitBtn: 'Approve'
     },

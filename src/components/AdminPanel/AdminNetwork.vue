@@ -37,10 +37,10 @@
 <script>
   import AdminView from '@/components/AdminPanel/AdminView';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
   import { mapGetters } from 'vuex';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminNetwork',
@@ -65,11 +65,11 @@
       },
 
       updateNetworkSettings(form) {
-        return tenantService.updateNetworkSettings(form)
+        return portalService.updateNetworkSettings(form)
           .then(() => {
             this.$notifier.showSuccess(this.$t('adminRouting.network.success'));
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = window.env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
           })
           .catch((err) => {
             console.error(err);
@@ -79,7 +79,7 @@
     },
 
     created() {
-      this.formData.globalNetworkIsVisible = this.$tenant.profile.network.isGlobalScopeVisible;
+      this.formData.globalNetworkIsVisible = this.$portal.profile.network.isGlobalScopeVisible;
     },
   };
 </script>

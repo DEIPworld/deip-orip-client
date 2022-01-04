@@ -1,7 +1,7 @@
 <template>
   <eci-stats-widget
     :loading="!$ready"
-    :data="{ expertiseStats, expertiseStatsByDisciplines }"
+    :data="{ expertiseStats, expertiseStatsByDomains }"
   />
 </template>
 
@@ -19,7 +19,7 @@
     computed: {
       ...mapState({
         expertiseStats(state, getters) { return getters[`${this.storeNS}/expertiseStats`]; },
-        expertiseStatsByDisciplines(state, getters) { return getters[`${this.storeNS}/expertiseStatsByDisciplines`]; }
+        expertiseStatsByDomains(state, getters) { return getters[`${this.storeNS}/expertiseStatsByDomains`]; }
       })
     },
     created() {
@@ -32,7 +32,7 @@
       updateData() {
         return Promise.all([
           this.$store.dispatch(`${this.storeNS}/getExpertiseStats`, this.payload),
-          this.$store.dispatch(`${this.storeNS}/getExpertiseStatsByDisciplines`, this.payload)
+          this.$store.dispatch(`${this.storeNS}/getExpertiseStatsByDomains`, this.payload)
         ]);
       }
     }

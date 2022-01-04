@@ -18,8 +18,8 @@
                 :label="$t('participantstRouting.searchNamesField')"
               />
 
-              <d-filter-term-disciplines
-                v-model="filterModel.discipline"
+              <d-filter-term-domains
+                v-model="filterModel.domain"
                 class="mb-6"
                 single-choice
               />
@@ -105,13 +105,13 @@
   import AppLayout from '@/components/layout/components/Layout';
   import DBlock from '@/components/Deipify/DBlock/DBlock';
   import DFilterSidebar from '@/components/Deipify/DFilter/DFilterSidebar';
-  import DFilterTermDisciplines from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
+  import DFilterTermDomains from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermDisciplines';
   import DFilterTermContributions from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermContributions';
   import DFilterTermAssessmentCriterias from '@/components/Deipify/DFilter/DFilterTerms/DFilterTermAssessmentCriterias';
 
   const defaultFilter = () => ({
     searchTerm: '',
-    discipline: '',
+    domain: '',
     contribution: '',
     criteria: ''
   });
@@ -121,7 +121,7 @@
     components: {
       DFilterTermAssessmentCriterias,
       DFilterTermContributions,
-      DFilterTermDisciplines,
+      DFilterTermDomains,
       DFilterSidebar,
       DBlock,
       LayoutSection,
@@ -167,7 +167,7 @@
           },
           {
             text: this.$t('participantstRouting.tableHeader.projectsNumber'),
-            value: 'researches.length',
+            value: 'projects.length',
             align: 'center',
             width: '15%'
           }
@@ -181,7 +181,7 @@
     },
 
     created() {
-      for (const key of ['discipline', 'contribution', 'criteria', 'searchTerm']) {
+      for (const key of ['domain', 'contribution', 'criteria', 'searchTerm']) {
         if (this.$route.query[key]) {
           this.filterModel[key] = this.$route.query[key];
         }

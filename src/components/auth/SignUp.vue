@@ -1,6 +1,6 @@
 <template>
   <full-screen-view
-    v-if="tenant.profile.settings.signUpPolicy === signUpPolicy.FREE"
+    v-if="portal.profile.settings.signUpPolicy === signUpPolicy.FREE"
     max-width="100%"
     height="100%"
     toolbar-overlap
@@ -92,7 +92,7 @@
       </v-col>
     </v-row>
   </full-screen-view>
-  <userRegistration v-else-if="tenant.profile.settings.signUpPolicy === signUpPolicy.ADMIN_APPROVAL" />
+  <userRegistration v-else-if="portal.profile.settings.signUpPolicy === signUpPolicy.ADMIN_APPROVAL" />
 </template>
 
 <script>
@@ -171,10 +171,10 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       }),
       layoutSchema() {
-        const schema = this.$tenantSettings.layouts.signUp.layout;
+        const schema = this.$portalSettings.layouts.signUp.layout;
         return extendAttrModules(
           schema
         );

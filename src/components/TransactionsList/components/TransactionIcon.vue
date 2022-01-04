@@ -21,23 +21,23 @@
     data() {
       return {
         transactionTypes: {
-          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH]: {
+          [LOC_PROPOSAL_TYPES.CREATE_PROJECT]: {
             icon: 'add_box',
             text: this.$t('transactionsList.transactionTypes.createProject')
           },
-          [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH]: {
+          [LOC_PROPOSAL_TYPES.UPDATE_PROJECT]: {
             icon: 'update',
             text: this.$t('transactionsList.transactionTypes.projectUpdate')
           },
-          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_MATERIAL]: {
+          [LOC_PROPOSAL_TYPES.CREATE_PROJECT_MATERIAL]: {
             icon: 'note_add',
             text: this.$t('transactionsList.transactionTypes.contentUpload')
           },
-          [LOC_PROPOSAL_TYPES.CREATE_RESEARCH_TOKEN_SALE]: {
+          [LOC_PROPOSAL_TYPES.CREATE_PROJECT_TOKEN_SALE]: {
             icon: 'payments',
             text: this.$t('transactionsList.transactionTypes.fundraising')
           },
-          [LOC_PROPOSAL_TYPES.UPDATE_RESEARCH_GROUP]: {
+          [LOC_PROPOSAL_TYPES.UPDATE_TEAM]: {
             icon: 'groups',
             text: this.$t('transactionsList.transactionTypes.teamUpdate')
           },
@@ -61,7 +61,7 @@
             icon: 'swap_horizontal_circle',
             text: this.$t('transactionsList.transactionTypes.exchange')
           },
-          [LOC_PROPOSAL_TYPES.RESEARCH_NDA]: {
+          [LOC_PROPOSAL_TYPES.PROJECT_NDA]: {
             icon: 'work',
             text: this.$t('transactionsList.transactionTypes.projectNda')
           }

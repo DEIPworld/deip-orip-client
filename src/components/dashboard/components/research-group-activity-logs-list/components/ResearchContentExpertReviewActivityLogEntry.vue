@@ -28,11 +28,11 @@
             :to="{
               name: 'project.content.details',
               params: {
-                projectId: log.metadata.research.external_id,
-                contentId: log.metadata.researchContent.external_id
+                projectId: log.metadata.project._id,
+                contentId: log.metadata.projectContent._id
               }
             }"
-          >{{ log.metadata.researchContent.title }}</router-link>" material
+          >{{ log.metadata.projectContent.title }}</router-link>" material
         </span>
       </div>
     </v-col>
@@ -48,7 +48,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'ResearchContentExpertReviewActivityLogEntry',
+    name: 'ProjectContentExpertReviewActivityLogEntry',
     props: {
       log: { type: Object, required: true }
     },

@@ -30,23 +30,23 @@ const ACTIONS = {
   },
 
   getContentsByProject({ commit }, { projectId }) {
-    const researchContents = [];
+    const projectContents = [];
 
     return projectContentService.getProjectContentsByProject(projectId)
       .then((list) => {
-        researchContents.push(...list.filter((researchContent) => !researchContent.isDraft));
+        projectContents.push(...list.filter((projectContent) => !projectContent.isDraft));
         return Promise.all(
-          researchContents.map(
-            (content) => reviewService.getReviewsByProjectContent(content.external_id)
+          projectContents.map(
+            (content) => reviewService.getReviewsByProjectContent(content._id)
           )
         );
       })
       .then((reviews) => {
-        researchContents.forEach((content, index) => {
+        projectContents.forEach((content, index) => {
           content.reviews = reviews[index];
         });
 
-        commit('storeContents', researchContents);
+        commit('storeContents', projectContents);
       })
       .catch((err) => { console.error(err); });
   },
@@ -54,7 +54,8 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeContents(state, payload) {
-    state.contentsList = payload.map((item) => camelizeObjectKeys(item));
+    // state.contentsList = payload.map((item) => camelizeObjectKeys(item));
+    state.contentsList = payload;
   }
 };
 

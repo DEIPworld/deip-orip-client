@@ -14,13 +14,13 @@
       @click:row="(item) => $router.push({
         name: 'groupWallet',
         params: {
-          account: item.external_id
+          account: item._id
         }
       })"
     >
       <template #item.name="{ item }">
         <d-box-item
-          :avatar="item.external_id | researchGroupLogoSrc(80, 80)"
+          :avatar="item._id | teamLogoSrc(80, 80)"
           :size="40"
           class="my-3"
         >
@@ -34,7 +34,7 @@
         </d-box-item>
       </template>
       <template #item.tokenizedActives="{ item }">
-        {{ item.researchList ? countTokenizedResearches(item.researchList) : 0 }}
+        {{ item.projectList ? countTokenizedProjects(item.projectList) : 0 }}
       </template>
       <template #item.account.balances="{ item }">
         {{ toAsset(tokensPrice(item)) }}
@@ -103,7 +103,7 @@
         .then(() => { this.$setReady(); });
     },
     methods: {
-      countTokenizedResearches(arr) {
+      countTokenizedProjects(arr) {
         return arr.reduce(
           (val, p) => (val + p.security_tokens ? p.security_tokens.length : 0), 0
         );
@@ -122,11 +122,11 @@
         const revHisTotalRevenue = item.revenueHistory ? item.revenueHistory.reduce((v, i) => {
           const val = Number(i.revenue.amount);
 
-          const research = item.researchList ? item.researchList.find(
-            (r) => r.external_id === i.security_token.tokenized_research
+          const project = item.projectList ? item.projectList.find(
+            (r) => r._id === i.security_token.tokenized_project
           ) : false;
 
-          const securityTokenAmount = research ? research.securityTokens.find(
+          const securityTokenAmount = project ? project.securityTokens.find(
             (st) => st.symbol === i.security_token.string_symbol
           ) : {
             amount: '1',

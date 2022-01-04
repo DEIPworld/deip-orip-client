@@ -6,7 +6,7 @@
   >
     <span class="primary--text half-bold">{{ inviteeProfile | fullname }}</span>
     {{ $t('notifications.declinedInv') }}
-    "<span class="primary--text half-bold">{{ notification.metadata.researchGroup.name }}</span>"
+    "<span class="primary--text half-bold">{{ notification.metadata.team.name }}</span>"
   </user-notifications-list-item>
 </template>
 

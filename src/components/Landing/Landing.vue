@@ -37,11 +37,11 @@
 
         <div class="text-center ma-n2">
           <v-chip
-            v-for="(item, i) in disciplines"
-            :key="`${i}-discipline`"
+            v-for="(item, i) in domains"
+            :key="`${i}-domain`"
             class="ma-2"
             outlined
-            @click="goToDiscipline(item.externalId)"
+            @click="goToDomain(item._id)"
           >
             {{ item.name }}
           </v-chip>
@@ -72,7 +72,7 @@
       };
     },
     computed: {
-      disciplines() { return this.$store.getters['Disciplines/topLevelList'](); }
+      domains() { return this.$store.getters['Domains/topLevelList'](); }
     },
     methods: {
       goToSearch() {
@@ -88,18 +88,18 @@
         this.$router.push(route);
       },
 
-      goToDiscipline(id) {
+      goToDomain(id) {
         const dAttr = this.$where(
           this.$$projectAttributes,
           {
             blockchainFieldMeta: {
-              field: 'disciplines'
+              field: 'domains'
             }
           }
         )[0];
 
         const q = {
-          researchAttributes: {
+          projectAttributes: {
             [dAttr._id]: [id]
           }
         };

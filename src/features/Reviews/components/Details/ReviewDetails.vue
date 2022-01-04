@@ -103,7 +103,7 @@
           <d-block-widget>
             <users-list
               v-slot="{ users }"
-              :team-id="project.researchGroup.external_id"
+              :team-id="project.teamId"
               view-type="dataProvider"
             >
               <review-vote
@@ -148,7 +148,7 @@
   import DBlockWidget from '@/components/Deipify/DBlock/DBlockWidget';
   import ReviewVote from '@/features/Reviews/components/Vote/ReviewVote';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
-  import { isJsonString, tenantAttributesToObject } from '@/utils/helpers';
+  import { isJsonString, portalAttributesToObject } from '@/utils/helpers';
   import { ProjectContentService } from '@deip/project-content-service';
 
   import ReviewAssessment from '@/features/Reviews/components/Assessment/ReviewAssessment';
@@ -184,13 +184,8 @@
       project() {
         return {
           ...this.projectRaw,
-          ...{
-            createdAt: this.$options.filters.dateFormat(this.projectRaw.createdAt, 'D MMM YYYY', true),
-            researchRef: {
-              ...this.projectRaw.researchRef,
-              attributes: tenantAttributesToObject(this.projectRaw.researchRef.attributes)
-            }
-          }
+          createdAt: this.$options.filters.dateFormat(this.projectRaw.createdAt, 'D MMM YYYY', true),
+          attributes: portalAttributesToObject(this.projectRaw.attributes)
         };
       },
 
@@ -212,11 +207,11 @@
 
 
       reviewAssessment() {
-        const disciplines = this.review.disciplines.map((d) => d.name);
+        const domains = this.review.domains.map((d) => d.name);
 
         return {
           scores: this.review.assessment.model.scores,
-          disciplines
+          domains
         };
       },
 
@@ -233,7 +228,7 @@
       },
 
       onVote() {
-        this.$store.dispatch('Review/getReviewDetails', this.review.externalId);
+        this.$store.dispatch('Review/getReviewDetails', this.review._id);
       },
 
       ...projectDetails.methods,

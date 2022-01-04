@@ -11,7 +11,7 @@
           small
           @click="addMemberDialog.isOpen = true"
         >
-          {{ $t('researchGroupDetails.invite') }}
+          {{ $t('teamDetails.invite') }}
         </v-btn>
       </template>
       <template #itemRowActions="{ user }">
@@ -49,8 +49,8 @@
     </vex-dialog>
     <vex-dialog
       v-model="addMemberDialog.isOpen"
-      :title="$t('researchGroupDetails.addMemberDialog.title')"
-      :button-true-text="$t('researchGroupDetails.addMemberDialog.create')"
+      :title="$t('teamDetails.addMemberDialog.title')"
+      :button-true-text="$t('teamDetails.addMemberDialog.create')"
       :loading="addMemberDialog.isLoading"
       :disabled="addMemberDialogIsDisabled || addMemberDialog.isLoading"
       @click:confirm="sendProposal()"
@@ -58,15 +58,15 @@
     >
       <user-selector
         v-model="addMemberDialog.selectedUser"
-        :tenant-id="$env.TENANT"
+        :portal-id="$env.TENANT"
         class="mb-4"
-        :label="$t('researchGroupDetails.addMemberDialog.findPlaceholder')"
+        :label="$t('teamDetails.addMemberDialog.findPlaceholder')"
         :multiple="false"
       />
 
       <v-textarea
         v-model="addMemberDialog.coverLetter"
-        :label="$t('researchGroupDetails.addMemberDialog.letterLabel')"
+        :label="$t('teamDetails.addMemberDialog.letterLabel')"
         auto-grow
         outlined
         rows="6"
@@ -112,10 +112,10 @@
         team: 'Team/teamDetails'
       }),
       isTeamMember() {
-        return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.team.externalId);
+        return this.$store.getters['auth/userIsTeamMemberExId'](this.team._id);
       },
       isGroupMembersActionsColumnAvailable() {
-        return this.team.externalId !== this.$currentUser.username
+        return this.team._id !== this.$currentUser.username
           && this.isTeamMember
           && (
             this.team.isDao || (!this.team.isDao && this.$currentUser.username == this.team.creator)
@@ -139,13 +139,13 @@
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
             },
-            teamId: this.team.externalId,
+            teamId: this.team._id,
             member: member.username
           }
         )
           .then(() => {
             this.$notifier.showSuccess(this.$t('memberList.dropPropSucc'));
-            this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
+            this.$store.dispatch('TransactionsList/loadTransactions', this.team._id);
           })
           .catch((err) => {
             this.$notifier.showError(this.$t('memberList.dropPropFail'));
@@ -177,16 +177,16 @@
               privKey: this.$currentUser.privKey,
               username: this.$currentUser.username
             },
-            teamId: this.team.externalId,
+            teamId: this.team._id,
             member: this.addMemberDialog.selectedUser,
             notes: this.addMemberDialog.coverLetter
           }
         )
           .then(() => {
-            this.$notifier.showSuccess(this.$t('researchGroupDetails.addMemberDialog.success'));
-            this.$store.dispatch('TransactionsList/loadTransactions', this.team.externalId);
+            this.$notifier.showSuccess(this.$t('teamDetails.addMemberDialog.success'));
+            this.$store.dispatch('TransactionsList/loadTransactions', this.team._id);
           }).catch((err) => {
-            this.$notifier.showError(this.$t('researchGroupDetails.addMemberDialog.err'));
+            this.$notifier.showError(this.$t('teamDetails.addMemberDialog.err'));
             console.error(err);
           }).finally(() => {
             this.addMemberDialog.isLoading = false;

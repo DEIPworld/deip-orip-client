@@ -5,12 +5,12 @@ const accessService = AccessService.getInstance();
 export const contextHelpersMixin = {
   computed: {
 
-    $tenant() { return this.$store.getters['auth/tenant']; },
-    $tenantSettings() { return this.$tenant.profile.settings; },
+    $portal() { return this.$store.getters['auth/portal']; },
+    $portalSettings() { return this.$portal.profile.settings; },
 
     $hasModule() { return (module) => this.$isUser 
       ? this.$currentUser.profile.modules[module] 
-      : this.$tenant.profile.settings.modules[module];
+      : this.$portal.profile.settings.modules[module];
     }
   },
   methods: {

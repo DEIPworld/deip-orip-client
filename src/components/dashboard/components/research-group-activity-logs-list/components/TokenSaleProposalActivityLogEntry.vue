@@ -22,10 +22,10 @@
             :to="{
               name: 'project.details',
               params: {
-                projectId: log.metadata.research.external_id
+                projectId: log.metadata.project._id
               }
             }"
-          >{{ log.metadata.research.title }}</router-link>" project was accepted by quorum
+          >{{ log.metadata.project.title }}</router-link>" project was accepted by quorum
         </span>
         <span v-else>
           <platform-avatar
@@ -40,10 +40,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" project
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
           <span v-else>
             proposed to schedule fundraising campaign for the "<router-link
@@ -51,10 +51,10 @@
               :to="{
                 name: 'project.details',
                 params: {
-                  projectId: log.metadata.research.external_id
+                  projectId: log.metadata.project._id
                 }
               }"
-            >{{ log.metadata.research.title }}</router-link>" project
+            >{{ log.metadata.project.title }}</router-link>" project
           </span>
         </span>
       </div>
@@ -81,10 +81,10 @@
     },
     computed: {
       isAcceptedByQuorum() {
-        return this.log.metadata.researchGroup.is_dao && this.log.metadata.proposal.is_completed;
+        return this.log.metadata.team.is_dao && this.log.metadata.proposal.is_completed;
       },
       isAutoAccepted() {
-        return !this.log.metadata.researchGroup.is_dao && this.log.metadata.isProposalAutoAccepted;
+        return !this.log.metadata.team.is_dao && this.log.metadata.isProposalAutoAccepted;
       }
     },
 

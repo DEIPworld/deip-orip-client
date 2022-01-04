@@ -1,5 +1,5 @@
 <template>
-  <d-block :title="$t('researchGroupDetails.assetsBlock.title')">
+  <d-block :title="$t('teamDetails.assetsBlock.title')">
     <div>
       <v-data-table
         v-custom="'hover-row'"
@@ -10,13 +10,13 @@
         @click:row="(item) => $router.push({
           name: 'groupWallet',
           params: {
-            account: item.externalId
+            account: item._id
           }
         })"
       >
         <template #item.name="{ item }">
           <d-box-item
-            :avatar="item.externalId | researchGroupLogoSrc(80, 80)"
+            :avatar="item._id | teamLogoSrc(80, 80)"
             :size="40"
             class="my-3"
           >
@@ -31,7 +31,7 @@
         </template>
         <template #item.tokenizedActives="{ item }">
           <span class="text-body-2">
-            {{ countTokenizedResearches }}
+            {{ countTokenizedProjects }}
           </span>
         </template>
         <template #item.account.balances="{ item }">
@@ -62,7 +62,7 @@
   import DBlock from '@/components/Deipify/DBlock/DBlock';
 
   export default {
-    name: 'ResearchGroupAsset',
+    name: 'TeamAsset',
 
     components: {
       DBoxItem,
@@ -78,17 +78,17 @@
             value: 'name'
           },
           {
-            text: this.$t('researchGroupDetails.assetsBlock.table.assets'),
+            text: this.$t('teamDetails.assetsBlock.table.assets'),
             value: 'tokenizedActives',
             align: 'end'
           },
           {
-            text: this.$t('researchGroupDetails.assetsBlock.table.tokensPrice'),
+            text: this.$t('teamDetails.assetsBlock.table.tokensPrice'),
             value: 'account.balances',
             align: 'end'
           },
           {
-            text: this.$t('researchGroupDetails.assetsBlock.table.totalRevenue'),
+            text: this.$t('teamDetails.assetsBlock.table.totalRevenue'),
             value: 'revenueHistory',
             align: 'end'
           },
@@ -103,9 +103,9 @@
       ...mapGetters({
         team: 'Team/teamDetails'
       }),
-      countTokenizedResearches() {
-        if (!this.team.researchList) return 0;
-        return this.team.researchList.reduce(
+      countTokenizedProjects() {
+        if (!this.team.projectList) return 0;
+        return this.team.projectList.reduce(
           (val, p) => (val + p.security_tokens ? p.security_tokens.length : 0), 0
         );
       },
@@ -117,11 +117,11 @@
         );
         const revHisTotalRevenue = this.team.revenueHistory.reduce((v, i) => {
           const val = Number(i.revenue.amount);
-          const research = this.team.researchList ? this.team.researchList.find(
-            (r) => r.externalId === i.security_token.tokenized_research
+          const project = this.team.projectList ? this.team.projectList.find(
+            (r) => r._id === i.security_token.tokenized_project
           ) : false;
 
-          const securityTokenAmount = research ? research.security_tokens.find(
+          const securityTokenAmount = project ? project.security_tokens.find(
             (st) => st.symbol === i.security_token.string_symbol
           ) : {
             amount: '1',

@@ -22,7 +22,8 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeContentDetails(state, payload) {
-    state.contentDetails = camelizeObjectKeys(payload);
+    // state.contentDetails = camelizeObjectKeys(payload);
+    state.contentDetails = payload;
   }
 };
 

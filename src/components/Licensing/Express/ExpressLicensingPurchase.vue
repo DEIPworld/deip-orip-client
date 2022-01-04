@@ -188,7 +188,7 @@
         const attrInfo = this.$$getAttributeInfo(this.attributeId);
         return attributeFileUrl(
           attrInfo,
-          this.project.externalId,
+          this.project._id,
           this.attributeId,
           file,
           false,
@@ -197,7 +197,7 @@
       },
 
       sendExpressLicensingRequest() {
-        const parties = [this.project.researchGroup.external_id, this.$currentUser.username];
+        const parties = [this.project.teamId, this.$currentUser.username];
         const hash = genSha256Hash(this.selected.file);
 
         return contractAgreementService.proposeContractAgreement({
@@ -208,7 +208,7 @@
           creator: this.$currentUser.username,
           hash,
           terms: {
-            projectId: this.project.externalId,
+            projectId: this.project._id,
             ...this.selected
           },
           activationTime: undefined,

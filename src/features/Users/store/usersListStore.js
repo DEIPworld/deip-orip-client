@@ -9,7 +9,7 @@ const userService = UserService.getInstance();
 const actionsMap = {
   team: 'getUsersByTeam',
   list: 'getUsers',
-  tenant: 'getTenantUsers',
+  portal: 'getPortalUsers',
   all: 'getActiveUsers'
 };
 
@@ -28,7 +28,7 @@ const ACTIONS = {
     let target = 'all';
     if (payload.users && payload.users.length) target = 'list';
     if (payload.teamId) target = 'team';
-    if (payload.tenantId) target = 'tenant';
+    if (payload.portalId) target = 'portal';
 
     return dispatch(getAction(target), payload);
   },
@@ -54,8 +54,8 @@ const ACTIONS = {
       });
   },
 
-  getTenantUsers({ commit }, { tenantId }) {
-    return userService.getUsersByTenant(tenantId)
+  getPortalUsers({ commit }, { portalId }) {
+    return userService.getUsersByPortal(portalId)
       .then((users) => {
         commit('storeUsersProfiles', users);
       });

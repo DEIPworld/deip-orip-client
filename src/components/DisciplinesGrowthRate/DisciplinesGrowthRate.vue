@@ -8,12 +8,12 @@
       @reset="updateChartData()"
     >
       <v-select
-        v-model="filterModel.discipline"
+        v-model="filterModel.domain"
         outlined
         hide-details
-        :items="[{name: $t('defaultNaming.all'), externalId: ''}, ...disciplines]"
+        :items="[{name: $t('defaultNaming.all'), _id: ''}, ...domains]"
         item-text="name"
-        item-value="externalId"
+        item-value="_id"
         :label="$t('defaultNaming.filters.domainField')"
       />
 
@@ -62,11 +62,11 @@
   const defaultFilterModel = () => ({
     date: [],
     step: ECI_STAT_PERIOD_STEP_TYPE.UNKNOWN,
-    discipline: ''
+    domain: ''
   });
 
   export default {
-    name: 'DisciplinesGrowthRate',
+    name: 'DomainsGrowthRate',
     components: {
       DFilterBlock,
       DChartColumn,
@@ -85,7 +85,7 @@
     },
 
     computed: {
-      disciplines() { return this.$store.getters['Disciplines/topLevelList'](); }
+      domains() { return this.$store.getters['Domains/topLevelList'](); }
     },
 
     created() {
@@ -111,20 +111,20 @@
         const fromDate = this.dateISO(this.filterModel.date[0]);
         const toDate = this.dateISO(this.filterModel.date[1]);
 
-        const { step, discipline } = this.filterModel;
+        const { step, domain } = this.filterModel;
 
-        return this.$store.dispatch('disciplinesGrowthRate/get', {
+        return this.$store.dispatch('domainsGrowthRate/get', {
           from: fromDate,
           to: toDate,
-          discipline: discipline || '',
+          domain: domain || '',
           step
         })
           .then(() => {
             const dataTable = [];
 
-            this.$store.getters['disciplinesGrowthRate/list']
-              .filter((it) => (this.filterModel.discipline
-                ? it.external_id === this.filterModel.discipline
+            this.$store.getters['domainsGrowthRate/list']
+              .filter((it) => (this.filterModel.domain
+                ? it._id === this.filterModel.domain
                 : true))
               .forEach((item, i) => {
                 item.history.forEach((h, j) => {
@@ -145,9 +145,9 @@
               this.chartData = [
                 [
                   'Date',
-                  ...this.disciplines
-                    .filter((item) => (this.filterModel.discipline
-                      ? item.externalId === this.filterModel.discipline
+                  ...this.domains
+                    .filter((item) => (this.filterModel.domain
+                      ? item._id === this.filterModel.domain
                       : true))
                     .map((item) => item.name)
                 ],

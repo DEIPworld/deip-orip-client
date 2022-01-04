@@ -43,7 +43,7 @@
           </router-link>
           <div class="text-caption text--secondary">
             {{ $t('userDetailRouting.sidebar.reqYouReview',
-                  { title: reviewRequest.research.title }) }}
+                  { title: reviewRequest.project.title }) }}
           </div>
         </d-box-item>
       </v-carousel-item>
@@ -112,8 +112,8 @@
           {
             name: 'project.content.details',
             params: {
-              projectId: review.research.external_id,
-              contentId: review.content.external_id
+              projectId: review.projectId,
+              contentId: review.projectContentId
             }
           }
         );

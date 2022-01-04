@@ -73,7 +73,7 @@
       layoutData() {
         return {
           ...baseLayouts()[this.layoutKey],
-          ..._.cloneDeep(this.$tenantSettings.layouts[this.layoutKey])
+          ..._.cloneDeep(this.$portalSettings.layouts[this.layoutKey])
         };
       },
 
@@ -91,7 +91,7 @@
       saveSettings() {
         this.processing = true;
 
-        const clonedLayouts = _.cloneDeep(this.$tenant.profile.settings.layouts);
+        const clonedLayouts = _.cloneDeep(this.$portal.profile.settings.layouts);
 
         clonedLayouts[this.layoutKey] = {
           ...this.layoutData,
@@ -105,8 +105,8 @@
         layoutService.updateLayouts(clonedLayouts)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = this.$env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = this.$env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
             // this.$router.push({
             //   name: 'admin.layouts'
             // });

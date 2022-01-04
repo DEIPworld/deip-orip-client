@@ -14,7 +14,7 @@
         <d-grid>
           <projects-list-grid-card
             v-for="item of items"
-            :key="item.externalId"
+            :key="item._id"
             :project="item"
             :layout-key="cardLayoutKey"
           >

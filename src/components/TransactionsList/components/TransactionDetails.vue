@@ -70,7 +70,7 @@
     methods: {
       isAccountsBlockVisible(item) {
         return this.expanded.some(
-          ({ proposal }) => proposal.external_id === item.proposal.external_id
+          ({ proposal }) => proposal._id === item.proposal._id
         );
       }
     }

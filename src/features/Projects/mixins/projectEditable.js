@@ -7,11 +7,11 @@ export const projectEditable = {
 
   methods: {
     $$goToProject(project) {
-      if (project && (project.external_id || project.externalId)) { // if not proposal
+      if (project && (project._id)) { // if not proposal
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: project.external_id || project.externalId
+            projectId: project._id
           }
         });
       } else {

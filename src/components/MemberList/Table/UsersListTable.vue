@@ -45,7 +45,7 @@
     },
     computed: {
       headers() {
-        const { layout } = this.$tenantSettings.layouts[this.rowLayoutKey];
+        const { layout } = this.$portalSettings.layouts[this.rowLayoutKey];
 
         const row = _.cloneDeep(layout[0]);
 

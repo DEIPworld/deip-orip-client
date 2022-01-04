@@ -139,7 +139,7 @@
     },
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       })
     },
     methods: {
@@ -181,9 +181,9 @@
         }, 300);
       },
       publishAttribute(id) {
-        const researchAttribute = this.$$projectAttributes.find((step) => step._id === id);
+        const projectAttribute = this.$$projectAttributes.find((step) => step._id === id);
         attributesService.deleteAttribute({
-          ...researchAttribute,
+          ...projectAttribute,
           isPublished: true
         })
           .then(() => {
@@ -197,9 +197,9 @@
           .finally(() => this.closeActionDialog());
       },
       unpublishAttribute(id) {
-        const researchAttribute = this.$$projectAttributes.find((step) => step._id === id);
+        const projectAttribute = this.$$projectAttributes.find((step) => step._id === id);
         attributesService.deleteAttribute({
-          ...researchAttribute,
+          ...projectAttribute,
           isPublished: false
         })
           .then(() => {

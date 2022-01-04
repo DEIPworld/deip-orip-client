@@ -19,7 +19,7 @@ export const compactAttributes = (
 export const expandAttributes = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId]: attr.value } }), {});
 
 // TODO: switch to expand
-export const tenantAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId || attr._id]: attr } }), {});
+export const portalAttributesToObject = (attrs) => attrs.reduce((res, attr) => ({ ...res, ...{ [attr.attributeId || attr._id]: attr } }), {});
 
 export const attributeFileUrl = (
   scope,

@@ -16,7 +16,7 @@ export default {
     private: `Private ${project()}`,
     public: `Public ${project()}`
   },
-  updateResearch: `Update ${project(true)}`,
+  updateProject: `Update ${project(true)}`,
   updateInfo: 'Update Info',
   updateImg: 'Update image',
   back: `Back to ${project()}`,

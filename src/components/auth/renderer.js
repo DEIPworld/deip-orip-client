@@ -5,7 +5,7 @@ import AttributesSet from '@/components/Attributes/AttributesSet';
 
 import ContentsList from '@/features/Contents/components/List/ContentsList';
 import DraftsList from '@/components/DraftsList/DraftsList';
-import { tenantAttributesToObject } from '@/utils/helpers';
+import { portalAttributesToObject } from '@/utils/helpers';
 import { attributesChore } from '@/mixins/chores/attributesChore';
 import { VFileInput, VChip, VTextField, VCheckbox } from 'vuetify/lib/components';
 import { extend, ValidationProvider } from 'vee-validate';
@@ -30,7 +30,7 @@ export default {
   mixins: [componentsRenderer, Proxyable, attributesChore],
   computed: {
     attributes() {
-      return tenantAttributesToObject(this.$$userAttributes);
+      return portalAttributesToObject(this.$$userAttributes);
     }
   }
 };

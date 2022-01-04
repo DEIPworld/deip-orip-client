@@ -6,7 +6,7 @@
   >
     <span class="primary--text half-bold">{{ reviewerProfile | fullname }}</span>
     {{ $t('notifications.leftReview') }}
-    "<span class="primary--text half-bold">{{ notification.metadata.researchContent.title }}</span>"
+    "<span class="primary--text half-bold">{{ notification.metadata.projectContent.title }}</span>"
     {{ $t('notifications.material') }}
   </user-notifications-list-item>
 </template>
@@ -39,8 +39,8 @@
         this.$router.push({
           name: 'project.content.details',
           params: {
-            projectId: this.notification.metadata.research.external_id,
-            contentId: this.notification.metadata.researchContent.external_id
+            projectId: this.notification.metadata.project._id,
+            contentId: this.notification.metadata.projectContent._id
           },
           hash: '#reviews'
         });

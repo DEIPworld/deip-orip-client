@@ -10,13 +10,13 @@
                 contain
                 height="80%"
                 width="100%"
-                :src="$options.filters.tenantLogoSrc($tenant)"
+                :src="$options.filters.portalLogoSrc($portal)"
               />
               <d-file-input
                 id="title"
                 class="mt-4"
                 v-model="formData.logo"
-                :label="$tenant.profile.logo"
+                :label="$portal.profile.logo"
                 :disabled="isSubmitting"
                 hint="Logo image should be at least 80 x 80 px in dimension"
                 hide-details="auto"
@@ -34,13 +34,13 @@
                 contain
                 height="80%"
                 width="100%"
-                :src="$options.filters.tenantBackgroundSrc($tenant)"
+                :src="$options.filters.portalBackgroundSrc($portal)"
               />
               <d-file-input
                 id="banner"
                 class="mt-4"
                 v-model="formData.banner"
-                :label="$tenant.profile.banner"
+                :label="$portal.profile.banner"
                 :disabled="isSubmitting"
                 hint="Background image should be at least 1440 x 430 px in dimension"
                 hide-details="auto"
@@ -56,7 +56,7 @@
               <v-text-field
                 v-model="formData.title"
                 outlined
-                :label="$tenant.profile.name"
+                :label="$portal.profile.name"
                 :disabled="isSubmitting"
                 hide-details="auto"
               />
@@ -88,10 +88,10 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import DFileInput from '@/components/Deipify/DInput/DFileInput';
   import DFormBlock from '@/components/Deipify/DFormBlock/DFormBlock';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
   import { mapGetters } from 'vuex';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminSettings',
@@ -127,21 +127,21 @@
         }
 
         this.isSubmitting = true;
-        this.updateTenantSettings(formData)
+        this.updatePortalSettings(formData)
           .finally(() => {
             this.isSubmitting = false;
           });
       },
 
-      updateTenantSettings(form) {
-        return tenantService.updateTenantSettings(form)
+      updatePortalSettings(form) {
+        return portalService.updatePortalSettings(form)
           .then(() => {
             this.$notifier.showSuccess(this.$t('adminRouting.settings.success'));
-            const tenant = window.env.TENANT;
-            return this.$store.dispatch('auth/loadTenant', { tenant })
+            const portal = window.env.TENANT;
+            return this.$store.dispatch('auth/loadPortal', { portal })
           })
           .then(() => {
-            document.title = this.$tenant.profile.name;
+            document.title = this.$portal.profile.name;
           })
           .catch((err) => {
             console.error(err);

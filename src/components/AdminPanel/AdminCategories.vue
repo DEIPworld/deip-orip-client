@@ -42,9 +42,9 @@
   import AdminView from '@/components/AdminPanel/AdminView';
   import CrudActions from '@/components/layout/CrudActions';
   import { mapGetters } from 'vuex';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
 
   export default {
     name: 'AdminCategories',
@@ -61,7 +61,7 @@
           },
           {
             text: this.$t('adminRouting.categories.categoriesTable.projects'),
-            value: 'researchCount',
+            value: 'projectCount',
             align: 'center',
             sortable: false
           },
@@ -111,13 +111,13 @@
       deleteCategory(categoryId) {
         const updatedCategories = this.categories.filter(({ _id }) => _id !== categoryId);
 
-        const updatedProfile = _.cloneDeep(this.$tenant.profile);
-        updatedProfile.settings.researchCategories = updatedCategories;
-        tenantService.updateTenantProfile(updatedProfile)
+        const updatedProfile = _.cloneDeep(this.$portal.profile);
+        updatedProfile.settings.projectCategories = updatedCategories;
+        portalService.updatePortalProfile(updatedProfile)
           .then(() => {
             this.$notifier.showSuccess();
-            const tenant = window.env.TENANT;
-            this.$store.dispatch('auth/loadTenant', { tenant });
+            const portal = window.env.TENANT;
+            this.$store.dispatch('auth/loadPortal', { portal });
           })
           .catch((err) => {
             console.error(err);

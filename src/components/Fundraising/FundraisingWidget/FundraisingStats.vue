@@ -20,7 +20,7 @@
 
       <div v-if="disabled" class="text-body-2">
         {{ $t('fundraising.neverFund') }}
-        <template v-if="isResearchMember">
+        <template v-if="isProjectMember">
           {{ $t('fundraising.please') }}
           <router-link
             :to="{
@@ -64,7 +64,7 @@
           {{ $t('fundraising.neverFund') }}
         </div>
         <v-btn
-          v-if="!tokenSaleData && isResearchMember && $isUser"
+          v-if="!tokenSaleData && isProjectMember && $isUser"
           block
           small
           outlined
@@ -76,7 +76,7 @@
         >
           {{ $t('fundraising.startNew') }}
         </v-btn>
-        <div v-else-if="!tokenSaleData && !isResearchMember && hasHistory" class="text-caption">
+        <div v-else-if="!tokenSaleData && !isProjectMember && hasHistory" class="text-caption">
           {{ $t('fundraising.finished') }}
         </div>
         <v-btn
@@ -115,7 +115,7 @@
     mixins: [componentStoreFactoryOnce(fundraisingWidgetStore)],
 
     props: {
-      researchId: {
+      projectId: {
         type: [String, Number],
         default: ''
       },
@@ -172,7 +172,7 @@
           }
         ];
       },
-      isResearchMember() {
+      isProjectMember() {
         return this.project ? this.project.members.includes(this.$currentUser.username) : false;
       },
 
@@ -184,7 +184,7 @@
       }
     },
     created() {
-      this.$store.dispatch('FundraisingStats/loadResearchTokenSale', this.researchId)
+      this.$store.dispatch('FundraisingStats/loadProjectTokenSale', this.projectId)
         .then(() => {
           this.$setReady();
         });

@@ -11,7 +11,7 @@ export const modules = [
         component: 'ProjectDetailsEditCta',
         icon: 'mdi-circle-edit-outline',
         props: {
-          project: '@research'
+          project: '@project'
         }
       },
       {
@@ -19,7 +19,7 @@ export const modules = [
         component: 'ProjectDetailsFollowCta',
         icon: 'mdi-bookmark-multiple-outline',
         props: {
-          project: '@research'
+          project: '@project'
         }
       },
       {
@@ -27,7 +27,7 @@ export const modules = [
         component: 'ProjectDetailsContents',
         icon: 'mdi-file-document-multiple-outline',
         props: {
-          project: '@research'
+          project: '@project'
         }
       },
       {
@@ -35,7 +35,7 @@ export const modules = [
         component: 'ProjectDetailsReviews',
         icon: 'mdi-comment-processing-outline',
         props: {
-          project: '@research'
+          project: '@project'
         }
       },
       {
@@ -43,7 +43,7 @@ export const modules = [
         component: 'ProjectDetailsAssets',
         icon: 'mdi-currency-sign',
         props: {
-          project: '@research'
+          project: '@project'
         }
       }
     ]
@@ -57,8 +57,8 @@ export const modules = [
         name: 'ECI stats',
         icon: 'mdi-chart-areaspline',
         props: {
-          researchId: '@research.externalId',
-          disciplines: '@research.disciplines'
+          projectId: '@project._id',
+          domains: '@project.domains'
         }
       },
       {
@@ -66,8 +66,8 @@ export const modules = [
         name: 'Fund stats',
         icon: 'mdi-cash-refund',
         props: {
-          researchId: '@research.externalId',
-          project: '@research' // temp
+          projectId: '@project._id',
+          project: '@project' // temp
         }
       },
     ]
@@ -82,8 +82,8 @@ export const modules = [
   //     //   ...setComponentProps({
   //     //     attribute: setAs(String)
   //     //   }, {
-  //     //     projectId: '@research.externalId',
-  //     //     groupId: '@research.researchGroup.external_id'
+  //     //     projectId: '@project._id',
+  //     //     teamId: '@project.teamId'
   //     //   })
   //     // },
   //     {
@@ -91,7 +91,7 @@ export const modules = [
   //       component: 'ExpressLicensingPurchased',
   //       icon: 'mdi-certificate-outline',
   //       props: {
-  //         licenses: '@research.researchRef.expressLicenses'
+  //         licenses: '@project.expressLicenses'
   //       }
   //     },
   //     {
@@ -99,7 +99,7 @@ export const modules = [
   //       component: 'ExpressLicensingLicensee',
   //       icon: 'mdi-certificate',
   //       props: {
-  //         licenses: '@research.researchRef.expressLicenses'
+  //         licenses: '@project.expressLicenses'
   //       }
   //     }
   //   ]

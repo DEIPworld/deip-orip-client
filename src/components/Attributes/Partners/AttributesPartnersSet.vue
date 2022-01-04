@@ -73,7 +73,7 @@
   import DTimelineItem from '@/components/Deipify/DTimeline/DTimelineItem';
   import DTimelineAdd from '@/components/Deipify/DTimeline/DTimelineAdd';
 
-  import researchPartners from './researchPartners.json';
+  import projectPartners from './researchPartners.json';
 
   const partnerModelFactory = () => ({
     type: undefined,
@@ -86,7 +86,7 @@
     mixins: [attributeSet, arrayModelAddFactory(partnerModelFactory)],
     data() {
       return {
-        partnersInfo: researchPartners
+        partnersInfo: projectPartners
       };
     },
     created() {

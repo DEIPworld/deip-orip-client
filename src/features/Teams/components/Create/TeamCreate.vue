@@ -24,7 +24,7 @@
     },
     computed: {
       layoutSchema() {
-        return extendAttrModules(this.$tenantSettings.layouts.teamCreateForm.layout);
+        return extendAttrModules(this.$portalSettings.layouts.teamCreateForm.layout);
       }
     },
     methods: {
@@ -47,25 +47,25 @@
           .then((res) => {
             this.loading = false;
             this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username);
-            this.$notifier.showSuccess(this.$t('createResearchGroup.successCreate', { name }));
+            this.$notifier.showSuccess(this.$t('createTeam.successCreate', { name }));
             const { entityId: teamId } = res;
 
             return Promise.all([
               teamService.getTeam(teamId)
             ]);
           })
-          .then(([researchGroup]) => {
+          .then(([team]) => {
             this.$router.push({
               name: 'team.details',
               params: {
-                teamId: researchGroup.external_id
+                teamId: team._id
               }
             });
           })
           .catch((err) => {
             console.error(err);
             this.loading = false;
-            this.$notifier.showError(this.$t('createResearchGroup.errCreate'));
+            this.$notifier.showError(this.$t('createTeam.errCreate'));
           });
       }
     }

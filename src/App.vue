@@ -48,7 +48,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { AccessService } from '@deip/access-service';
-  import { tenantsListStore } from '@/features/Tenant/store/tenantsListStore';
+  import { portalsListStore } from '@/features/Tenant/store/tenantsListStore';
   import DSnackbar from '@/components/Deipify/DSnackbar/DSnackbar';
   import deepmerge from 'deepmerge';
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
@@ -62,7 +62,7 @@
       DSnackbar
     },
     mixins: [
-      componentStoreFactoryOnce(tenantsListStore, 'Tenants')
+      componentStoreFactoryOnce(portalsListStore, 'Portals')
     ],
     data() {
       return {
@@ -72,7 +72,7 @@
 
     computed: {
       ...mapGetters({
-        tenant: 'auth/tenant'
+        portal: 'auth/portal'
       })
     },
 
@@ -81,9 +81,9 @@
         this.$store.dispatch('auth/loadAssets'),
 
         this.$store.dispatch('Assets/fetch'),
-        this.$store.dispatch('Tenants/fetch'),
+        this.$store.dispatch('Portals/fetch'),
         this.$store.dispatch('Attributes/fetch'),
-        this.$store.dispatch('Disciplines/fetch'),
+        this.$store.dispatch('Domains/fetch'),
         this.$store.dispatch('Auth/getCurrentUser'),
       ];
 
@@ -91,14 +91,14 @@
         preload.push(this.$store.dispatch('auth/loadUser'));
       }
 
-      const tenant = this.$env.TENANT;
-      preload.push(this.$store.dispatch('auth/loadTenant', { tenant }));
+      const portal = this.$env.TENANT;
+      preload.push(this.$store.dispatch('auth/loadPortal', { portal }));
       preload.push(this.$store.dispatch('auth/loadNetworkInfo'));
 
       Promise.all(preload)
         .then(() => {
           this.setTheme();
-          document.title = this.tenant.profile.name;
+          document.title = this.portal.profile.name;
           this.$setReady();
         });
 
@@ -108,7 +108,7 @@
 
     methods: {
       setTheme() {
-        // TODO: add setTheme from tenant
+        // TODO: add setTheme from portal
 
         this.$vuetify.theme.themes.light = deepmerge(
           this.$vuetify.theme.themes.light,

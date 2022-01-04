@@ -19,8 +19,8 @@ const state = {
 
   corePrograms: [],
   additionalPrograms: [],
-  appliedForGrantResearches: [],
-  appliedForGrantResearchesEciStats: [],
+  appliedForGrantProjects: [],
+  appliedForGrantProjectsEciStats: [],
 
   isLoadingOrganizationProgramDetailsPage: undefined,
   isLoadingOrganizationProgramDetails: undefined,
@@ -38,10 +38,10 @@ const getters = {
 
   isLoadingOrganizationProgramDetailsPage: (state, getters) => state.isLoadingOrganizationProgramDetailsPage !== false,
 
-  researchesAppliedForGrant: (state, getters) => {
-     const list = state.appliedForGrantResearches.map((research, i) => {
-      const eciStats = state.appliedForGrantResearchesEciStats.find((stats) => stats.research_external_id == research.external_id);
-      return { ...research, eciStats: eciStats ? eciStats : { eci: 0, research_external_id: research.external_id } };
+  projectsAppliedForGrant: (state, getters) => {
+     const list = state.appliedForGrantProjects.map((project, i) => {
+      const eciStats = state.appliedForGrantProjectsEciStats.find((stats) => stats.projectId == project._id);
+      return { ...project, eciStats: eciStats ? eciStats : { eci: 0, projectId: project._id } };
     })
 
     list.sort((a, b) => b.eciStats.eci - a.eciStats.eci);
@@ -78,12 +78,12 @@ const actions = {
       })
       .then((profiles) => {
         program.officers = profiles;
-        mapAreaToProgram(program, state.organization.researchGroupRef.researchAreas);
+        mapAreaToProgram(program, state.organization.areas);
         commit('SET_ORGANIZATION_PROGRAM', program);
         
         const attrId = Vue.$env.GRANT_DISTRIBUTION_TRANSPARENCY_DEMO_GRANT_ATTR_ID;
         let grantNumber = program.additional_info[attrId];
-        return grantNumber ? dispatch('loadAppliedForGrantResearches', { 
+        return grantNumber ? dispatch('loadAppliedForGrantProjects', { 
           grantAttributeId: attrId,
           grantAttributeValue: grantNumber
          }) : Promise.resolve([]);
@@ -97,9 +97,9 @@ const actions = {
       });
   },
 
-  loadAppliedForGrantResearches({ state, dispatch, commit }, { grantAttributeId, grantAttributeValue }) {
+  loadAppliedForGrantProjects({ state, dispatch, commit }, { grantAttributeId, grantAttributeValue }) {
     const filter = {
-      // researchAttributes: [{
+      // projectAttributes: [{
       //   attributeId: grantAttributeId,
       //   values: [grantAttributeValue]
       // }]
@@ -107,11 +107,11 @@ const actions = {
 
     return projectService.getPublicProjectListing(filter)
       .then((result) => {
-        commit('SET_RESEARCHES_APPLIED_FOR_GRANT', result);
-        return Promise.all(result.map(r => expertiseContributionsService.getResearchExpertiseStats(r.external_id, {})))
+        commit('SET_PROJECTS_APPLIED_FOR_GRANT', result);
+        return Promise.all(result.map(r => expertiseContributionsService.getProjectExpertiseStats(r._id, {})))
       })
       .then((result) => {
-        commit('SET_RESEARCHES_APPLIED_FOR_GRANT_ECI_STATS', result.filter(stats => !!stats.research_external_id));
+        commit('SET_PROJECTS_APPLIED_FOR_GRANT_ECI_STATS', result.filter(stats => !!stats.projectId));
       })
   }
 };
@@ -143,12 +143,12 @@ const mutations = {
     state.isLoadingOrganizationProgramDetailsPage = isLoading;
   },
 
-  SET_RESEARCHES_APPLIED_FOR_GRANT(state, researches) {
-    state.appliedForGrantResearches = researches;
+  SET_PROJECTS_APPLIED_FOR_GRANT(state, projects) {
+    state.appliedForGrantProjects = projects;
   },
 
-  SET_RESEARCHES_APPLIED_FOR_GRANT_ECI_STATS(state, eciStats) {
-    state.appliedForGrantResearchesEciStats = eciStats;
+  SET_PROJECTS_APPLIED_FOR_GRANT_ECI_STATS(state, eciStats) {
+    state.appliedForGrantProjectsEciStats = eciStats;
   }
 };
 

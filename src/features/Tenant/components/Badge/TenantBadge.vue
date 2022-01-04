@@ -1,7 +1,7 @@
 <template>
-  <component :is="tag" v-if="tenant && $ready">
+  <component :is="tag" v-if="portal && $ready">
     <template v-if="asText">
-      {{ tenant.profile.shortName }}
+      {{ portal.profile.shortName }}
     </template>
 
     <template v-else>
@@ -10,12 +10,12 @@
         :to="{
         name: 'explore',
         query: {
-          rFilter: JSON.stringify({tenantIds: [tenant.id]})
+          rFilter: JSON.stringify({portalIds: [portal.id]})
         }
       }"
       >
         <div class="text-truncate spacer">
-          {{ tenant.profile.shortName }}
+          {{ portal.profile.shortName }}
         </div>
       </v-chip>
     </template>
@@ -25,18 +25,18 @@
 
 <script>
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
-  import { tenantsListStore } from '@/features/Tenant/store/tenantsListStore';
+  import { portalsListStore } from '@/features/Tenant/store/tenantsListStore';
   import { mapState } from 'vuex';
   import DMetaItem from '@/components/Deipify/DMeta/DMetaItem';
 
   export default {
-    name: 'TenantBadge',
+    name: 'PortalBadge',
     components: { DMetaItem },
     mixins: [
-      componentStoreFactoryOnce(tenantsListStore, 'Tenants')
+      componentStoreFactoryOnce(portalsListStore, 'Portals')
     ],
     props: {
-      tenantId: {
+      portalId: {
         type: String,
         default: ''
       },
@@ -53,21 +53,21 @@
     },
     computed: {
       ...mapState({
-        tenant(state, getters) { return getters['Tenants/one'](this.tenantId); }
+        portal(state, getters) { return getters['Portals/one'](this.portalId); }
       })
     },
     created() {
-      this.loadTenant();
+      this.loadPortal();
     },
 
     methods: {
-      loadTenant() {
+      loadPortal() {
         this.$setReady(false);
 
-        this.$store.dispatch('Tenants/get', this.tenantId)
+        this.$store.dispatch('Portals/get', this.portalId)
           .then(() => {
             this.$setReady();
-            this.$emit('ready', this.tenant);
+            this.$emit('ready', this.portal);
           });
       }
     }

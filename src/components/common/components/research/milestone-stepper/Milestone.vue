@@ -1,16 +1,16 @@
 <template>
-  <div :class="{ 'main-step': isMain }" class="research-step">
-    <div class="research-step-head">
-      <span class="research-step-icon" />
-      <div v-show="!isLast" class="research-step-line" :style="lineStyle">
-        <div v-if="!isReadOnly" class="research-intermediate-step" :style="intermediateStepStyle">
-          <span class="research-intermediate-step-icon" @click="insertStep()" />
+  <div :class="{ 'main-step': isMain }" class="project-step">
+    <div class="project-step-head">
+      <span class="project-step-icon" />
+      <div v-show="!isLast" class="project-step-line" :style="lineStyle">
+        <div v-if="!isReadOnly" class="project-intermediate-step" :style="intermediateStepStyle">
+          <span class="project-intermediate-step-icon" @click="insertStep()" />
         </div>
       </div>
     </div>
 
-    <div class="research-step-main" :class="{'read-only-main-content': isReadOnly}">
-      <div ref="title" class="research-step-goal">
+    <div class="project-step-main" :class="{'read-only-main-content': isReadOnly}">
+      <div ref="title" class="project-step-goal">
         <div v-if="!isReadOnly">
           <v-row
             class="align-top"
@@ -238,46 +238,46 @@
 
 <style>
 
- .research-step {
+ .project-step {
     position: relative;
     display: inline-block;
     width: 100%
   }
 
- .research-step-head {
+ .project-step-head {
     width: 20%;
     float: left;
     clear: right;
     text-align: center;
  }
 
- .research-step-goal {
+ .project-step-goal {
     margin-bottom: 10px;
  }
 
- .research-step-main {
+ .project-step-main {
     width: 80%;
     float: right;
     clear: right;
  }
 
-  .research-step-main.read-only-main-content {
+  .project-step-main.read-only-main-content {
     text-align: left;
   }
 
- .research-intermediate-step {
+ .project-intermediate-step {
     position: absolute;
     width: 28px;
   }
 
- .research-step-line {
+ .project-step-line {
     position: absolute;
     border-color: inherit;
     width: 2px;
     background-color: #bfcbd9;
 }
 
-.research-step-icon {
+.project-step-icon {
    -moz-border-radius: 55px/55px;
    -webkit-border-radius: 55px 55px;
    border-radius: 55px/55px;
@@ -288,11 +288,11 @@
    display: inline-block
 }
 
-.main-step .research-step-head .research-step-icon {
+.main-step .project-step-head .project-step-icon {
     box-shadow: 0px 0px 10px gold;
 }
 
-.research-intermediate-step-icon {
+.project-intermediate-step-icon {
    -moz-border-radius: 25px/25px;
    -webkit-border-radius: 25px 25px;
    border-radius: 25px/25px;
@@ -304,7 +304,7 @@
    cursor: pointer;
 }
 
-.research-intermediate-step-icon:hover {
+.project-intermediate-step-icon:hover {
    border: dotted 2.5px #2962ff;
 }
 </style>

@@ -7,10 +7,10 @@
     <span class="primary--text half-bold">{{ notification.metadata.emitter | fullname }}</span>
     {{ $t('notifications.from') }}
     <span class="primary--text half-bold">
-      '{{ notification.metadata.tenant.profile.shortName }}'
+      '{{ notification.metadata.portal.profile.shortName }}'
     </span>
     {{ $t('notifications.reqAccess') }}
-    <span class="primary--text half-bold">'{{ notification.metadata.research.title }}'</span>
+    <span class="primary--text half-bold">'{{ notification.metadata.project.title }}'</span>
     {{ $t('notifications.project') }}
   </user-notifications-list-item>
 </template>
@@ -21,7 +21,7 @@
     from '@/components/layout/components/user-notificatons-list/UserNotificationsListItem';
 
   export default {
-    name: 'ResearchNdaProposedNotification',
+    name: 'ProjectNdaProposedNotification',
     components: { UserNotificationsListItem },
     props: {
       notification: {
@@ -39,7 +39,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.notification.metadata.research.external_id
+            projectId: this.notification.metadata.project._id
           }
         });
         this.markAsRead();

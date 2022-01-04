@@ -3,13 +3,13 @@ import { ATTR_SCOPES } from '@/variables';
 export const attributesChore = {
   computed: {
     $$projectAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.PROJECT });
+      return this.$store.getters['Attributes/list']({ portalId: [this.$portal.id, null], scope: ATTR_SCOPES.PROJECT });
     },
     $$userAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.USER });
+      return this.$store.getters['Attributes/list']({ portalId: [this.$portal.id, null], scope: ATTR_SCOPES.USER });
     },
     $$teamAttributes() {
-      return this.$store.getters['Attributes/list']({ tenantId: [this.$tenant.id, null], scope: ATTR_SCOPES.TEAM });
+      return this.$store.getters['Attributes/list']({ portalId: [this.$portal.id, null], scope: ATTR_SCOPES.TEAM });
     },
     $$networkProjectAttributes() {
       return this.$store.getters['Attributes/list']({ scope: ATTR_SCOPES.PROJECT });

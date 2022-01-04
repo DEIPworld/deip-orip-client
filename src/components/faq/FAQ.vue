@@ -56,7 +56,7 @@
     },
     computed: {
       faqs() {
-        return this.$tenant.profile.settings.faq.filter(({ isPublished }) => isPublished);
+        return this.$portal.profile.settings.faq.filter(({ isPublished }) => isPublished);
       }
     }
   };

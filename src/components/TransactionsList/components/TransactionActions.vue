@@ -73,26 +73,26 @@
       },
       [actions.sign]() {
         const {
-          proposal: { external_id, approvals },
+          proposal: { _id, approvals },
           type
         } = this.transaction;
-        const currentTenantId = this.$tenant.id;
+        const currentPortalId = this.$portal.id;
         this.disableButtons.status = true;
         this.disableButtons.btnType = actions.sign;
 
         const activeApprovalsToAdd = [this.$currentUser.username];
-        if (type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA) {
+        if (type === this.LOC_PROPOSAL_TYPES.PROJECT_NDA) {
           const {
-            tenantId: researchTenantId,
-            researchRef: { researchGroupExternalId }
-          } = this.transaction.extendedDetails.research;
-          activeApprovalsToAdd.push(researchGroupExternalId);
-          if (researchTenantId != currentTenantId) {
-            if (!approvals.some((approval) => approval == researchTenantId)) {
-              activeApprovalsToAdd.push(researchTenantId);
+            portalId: projectPortalId,
+            teamId
+          } = this.transaction.extendedDetails.project;
+          activeApprovalsToAdd.push(teamId);
+          if (projectPortalId != currentPortalId) {
+            if (!approvals.some((approval) => approval == projectPortalId)) {
+              activeApprovalsToAdd.push(projectPortalId);
             }
-          } else if (!approvals.some((approval) => approval == currentTenantId)) {
-            activeApprovalsToAdd.push(currentTenantId);
+          } else if (!approvals.some((approval) => approval == currentPortalId)) {
+            activeApprovalsToAdd.push(currentPortalId);
           }
         }
 
@@ -100,7 +100,7 @@
         for (let i = 0; i < activeApprovalsToAdd.length; i++) {
           const approver = activeApprovalsToAdd[i];
           promises.push(proposalsService.acceptProposal(this.$currentUser, {
-            proposalId: external_id,
+            proposalId: _id,
             account: approver
           }));
         }
@@ -121,7 +121,7 @@
 
       [actions.reject]() {
         const {
-          proposal: { external_id, required_approvals },
+          proposal: { _id, required_approvals },
           type
         } = this.transaction;
         this.disableButtons.status = true;
@@ -131,18 +131,16 @@
           ? required_approvals.some((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
             ? required_approvals.find((ra) => this.$currentUser.teams.some((rg) => rg.account.name == ra))
             : this.$currentUser.username
-          : type === this.LOC_PROPOSAL_TYPES.RESEARCH_NDA
-            ? // this.transaction?.extendedDetails?.research?.research_group?.external_id
+          : type === this.LOC_PROPOSAL_TYPES.PROJECT_NDA
+            ? // this.transaction?.extendedDetails?.project?.teamId
               this.transaction
               && this.transaction.extendedDetails
-              && this.transaction.extendedDetails.research
-              && this.transaction.extendedDetails.research.research_group
-                ? this.transaction.extendedDetails.research.research_group.external_id
-                : this.$currentUser.username
+              && this.transaction.extendedDetails.project
+              && (this.transaction.extendedDetails.project.teamId || this.$currentUser.username)
             : this.$currentUser.username;
 
         const promise = proposalsService.declineProposal(this.$currentUser, {
-          proposalId: external_id,
+          proposalId: _id,
           account
         });
 

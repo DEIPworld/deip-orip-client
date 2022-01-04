@@ -10,7 +10,7 @@
       <content-dar
         ref="contentDar"
         :dar-id="draftId"
-        :project-id="project.externalId"
+        :project-id="project._id"
         class="fill-height"
         @change="onDraftChange"
       />
@@ -262,7 +262,7 @@
             references: this.$where(
               this.internalReferences,
               {
-                externalId: data.references.map((ref) => ref.uri.split('/')
+                _id: data.references.map((ref) => ref.uri.split('/')
                   .pop())
               }
             )
@@ -308,13 +308,13 @@
                           username: this.$currentUser.username
                         },
                         proposalInfo: { isProposal },
-                        projectId: this.project.externalId,
-                        teamId: this.project.researchGroup.external_id,
+                        projectId: this.project._id,
+                        teamId: this.project.teamId,
                         contentType: parseInt(this.formModel.contentType),
                         title: this.formModel.title || draft.title,
                         content: draft.hash,
                         authors: this.formModel.authors.map((a) => a.account.name),
-                        references: [...this.formModel.references].map((ref) => ref.externalId)
+                        references: [...this.formModel.references].map((ref) => ref._id)
                       }
                     )
                       .then(() => {
@@ -354,7 +354,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.project.externalId
+            projectId: this.project._id
           }
         });
         this.$ls.remove(this.cache);

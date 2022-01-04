@@ -15,14 +15,14 @@
 
           <d-stack gap="4">
             <div class="text-overline text--secondary">
-              {{ $t('researchContentDetails.project') }}
+              {{ $t('projectContentDetails.project') }}
             </div>
             <div>
               <router-link
-                :to="{ name: 'project.details', params: { projectId: research.external_id } }"
+                :to="{ name: 'project.details', params: { projectId: project._id } }"
                 class="link text--primary text-decoration-none"
               >
-                {{ research.title }}
+                {{ project.title }}
                 <v-icon>
                   mdi-arrow-top-right-thin-circle-outline
                 </v-icon>
@@ -37,7 +37,7 @@
           <template v-if="isFilePackageContent">
             <d-stack gap="4">
               <div class="text-overline text--secondary">
-                {{ $t('researchContentDetails.subject') }}
+                {{ $t('projectContentDetails.subject') }}
               </div>
               <div class="text-h3">
                 <span class="font-weight-regular">
@@ -46,55 +46,55 @@
                 </span>
               </div>
             </d-stack>
-            <research-content-details-package />
+            <project-content-details-package />
           </template>
 
 
           <reviews-list
-            v-if="content && content.external_id"
-            :project-id="content.research_external_id"
-            :content-id="content.external_id"
-            :disable-create-route="!isCreatingReviewAvailable || isResearchGroupMember"
-            :discipline-id="research.disciplines.map(({external_id}) => external_id)"
-            :exclude-users="research.members"
+            v-if="content && content._id"
+            :project-id="content.project__id"
+            :content-id="content._id"
+            :disable-create-route="!isCreatingReviewAvailable || isTeamMember"
+            :domain-id="project.domains.map(({_id}) => _id)"
+            :exclude-users="project.members"
           >
             <template #create-messages>
               <template v-if="!contentReviewsList.length">
                 <div class="mb-2">
                   {{ $t('reviews.noReviews') }}
                 </div>
-                <div v-if="!userHasResearchExpertise || isResearchGroupMember">
+                <div v-if="!userHasProjectExpertise || isTeamMember">
                   {{
                     $hasModule(DEIP_MODULE.APP_ECI)
-                      ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
+                      ? $t('reviews.needExpertiseAndNotMembers', { domains: project.domains.map(d => d.name).join(', ') })
                       : $t('reviews.needNotMembers')
                   }}
                 </div>
-                <div v-if="userHasResearchExpertise && !userHasReview && !isResearchGroupMember">
+                <div v-if="userHasProjectExpertise && !userHasReview && !isTeamMember">
                   {{                
                     $hasModule(DEIP_MODULE.APP_ECI)
-                      ? $t('reviews.eciForContribution', { disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                      ? $t('reviews.eciForContribution', { domains: userRelatedExpertise.map(exp => exp.domainName).join(', ') })
                       : ''
                   }}
                 </div>
               </template>
 
-              <div v-else-if="userHasResearchExpertise && !userHasReview && !isResearchGroupMember">
+              <div v-else-if="userHasProjectExpertise && !userHasReview && !isTeamMember">
                 {{ 
                   $hasModule(DEIP_MODULE.APP_ECI)
-                    ? $t('reviews.eciForContribution', { countEci: 3000, disciplines: userRelatedExpertise.map(exp => exp.discipline_name).join(', ') })
+                    ? $t('reviews.eciForContribution', { countEci: 3000, domains: userRelatedExpertise.map(exp => exp.domainName).join(', ') })
                     : ''
                 }}
               </div>
 
-              <div v-else-if="userHasResearchExpertise && userHasReview">
+              <div v-else-if="userHasProjectExpertise && userHasReview">
                 {{ $t('reviews.reviewedAlready') }}
               </div>
 
-              <div v-else-if="!userHasResearchExpertise || isResearchGroupMember">
+              <div v-else-if="!userHasProjectExpertise || isTeamMember">
                 {{
                   $hasModule(DEIP_MODULE.APP_ECI)
-                    ? $t('reviews.needExpertiseAndNotMembers', { disciplines: research.disciplines.map(d => d.name).join(', ') })
+                    ? $t('reviews.needExpertiseAndNotMembers', { domains: project.domains.map(d => d.name).join(', ') })
                     : $t('reviews.needNotMembers')
                 }}
               </div>
@@ -115,7 +115,7 @@
         width="500"
         type="heading"
       >
-        <research-content-details-sidebar />
+        <project-content-details-sidebar />
       </v-skeleton-loader>
     </d-layout-section-sidebar>
   </d-layout-section>
@@ -138,7 +138,7 @@
   const projectContentService = ProjectContentService.getInstance();
 
   export default {
-    name: 'ResearchContentDetails',
+    name: 'ProjectContentDetails',
     components: {
       ContentDar,
       DStack,
@@ -177,9 +177,9 @@
         user: 'auth/user',
         userExperise: 'auth/userExperise',
         content: 'rcd/content',
-        research: 'rcd/research',
+        project: 'rcd/project',
         membersList: 'rcd/membersList',
-        researchMembersList: 'rcd/researchMembersList',
+        projectMembersList: 'rcd/projectMembersList',
         contentReviewsList: 'rcd/contentReviewsList',
         contentRef: 'rcd/contentRef',
         isInProgress: 'rcd/isInProgress',
@@ -189,7 +189,7 @@
         isCentralizedGroup: 'rcd/isCentralizedGroup',
 
         isCreatingReviewAvailable: 'rcd/isCreatingReviewAvailable',
-        userHasResearchExpertise: 'rcd/userHasResearchExpertise',
+        userHasProjectExpertise: 'rcd/userHasProjectExpertise',
         userHasReview: 'rcd/userHasReview',
         isSavingDraftAvailable: 'rcd/isSavingDraftAvailable'
       }),
@@ -200,18 +200,18 @@
 
       userRelatedExpertise() {
         return this.userExperise.filter(
-          (exp) => exp.amount > 0 && this.research.disciplines.some(
-            (d) => d.id == exp.discipline_id
+          (exp) => exp.amount > 0 && this.project.domains.some(
+            (d) => d.id == exp.domainId
           )
         );
       },
-      isResearchGroupMember() {
-        return this.$store.getters['auth/userIsResearchGroupMemberExId'](this.research.research_group.external_id);
+      isTeamMember() {
+        return this.$store.getters['auth/userIsTeamMemberExId'](this.project.teamId);
       },
     },
 
     created() {
-      this.$store.dispatch('rcd/loadResearchContentDetails', {
+      this.$store.dispatch('rcd/loadProjectContentDetails', {
         projectId: this.permData.projectId || this.$route.params.projectId,
         contentId: this.permData.contentId || this.$route.params.contentId,
         ref: this.$route.query.ref,

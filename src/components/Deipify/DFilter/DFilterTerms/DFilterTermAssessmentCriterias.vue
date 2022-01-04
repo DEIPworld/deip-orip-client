@@ -21,7 +21,7 @@
             <template v-for="(criteria, i) in assessmentCriterias">
               <v-checkbox
                 v-if="expanded || i < 4"
-                :key="'discipline-filter-' + i"
+                :key="'domain-filter-' + i"
                 v-model="internalValue"
                 :label="criteria.label"
                 :value="criteria.value"

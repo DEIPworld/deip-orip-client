@@ -81,7 +81,6 @@
         .then(({ data }) => {
           this.deposit = data;
           this.errorText = this.$route.query.errorText || '';
-          console.log(this.deposit);
         })
         .catch((err) => {
           console.error(err);

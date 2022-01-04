@@ -1,43 +1,43 @@
 <template>
   <div>
-    <d-block-widget v-if="!isPublished && isResearchGroupMember && (isProposed || isUnlockActionAvailable)">
+    <d-block-widget v-if="!isPublished && isTeamMember && (isProposed || isUnlockActionAvailable)">
       <div v-if="isProposed" class="text-body-1">
-        {{ $t('researchContentDetails.sidebar.draft') }}
+        {{ $t('projectContentDetails.sidebar.draft') }}
         <router-link
           class="link orange--text"
           :to="{
             name: 'team.details',
             params: {
-              teamId: research.research_group.external_id
+              teamId: project.teamId
             },
             hash: '#proposals'
           }"
         >
-          {{ $t('researchContentDetails.sidebar.proposed') }}
+          {{ $t('projectContentDetails.sidebar.proposed') }}
         </router-link>
-        {{ $t('researchContentDetails.sidebar.locked') }}
+        {{ $t('projectContentDetails.sidebar.locked') }}
       </div>
       <div v-if="isUnlockActionAvailable" class="mt-6">
         <div class="text-body-1 pb-4">
-          {{ $t('researchContentDetails.sidebar.expiredProposal') }}
+          {{ $t('projectContentDetails.sidebar.expiredProposal') }}
         </div>
         <v-btn color="orange" block @click="unlockDraft()">
-          {{ $t('researchContentDetails.sidebar.unlockDraftBtn') }}
+          {{ $t('projectContentDetails.sidebar.unlockDraftBtn') }}
         </v-btn>
       </div>
     </d-block-widget>
 
     <d-block-widget
       v-if="$hasModule(DEIP_MODULE.APP_ECI) && $route.params.contentId !== '!draft'"
-      :title="$t('researchContentDetails.sidebar.eci')"
+      :title="$t('projectContentDetails.sidebar.eci')"
     >
       <eci-stats
-        :content-id="content.external_id"
-        :disciplines="disciplinesList"
+        :content-id="content._id"
+        :domains="domainsList"
       />
     </d-block-widget>
 
-    <d-block-widget :title="$t('researchContentDetails.sidebar.authors')">
+    <d-block-widget :title="$t('projectContentDetails.sidebar.authors')">
       <template v-if="isPublished">
         <div
           v-for="(author, index) in contentAuthorsList"
@@ -82,14 +82,14 @@
     </d-block-widget>
 
     <d-block-widget
-      v-if="researchTableOfContent.length"
-      :title="$t('researchContentDetails.sidebar.contentTable')"
+      v-if="projectTableOfContent.length"
+      :title="$t('projectContentDetails.sidebar.contentTable')"
     >
       <ol class="text-body-2">
         <li
-          v-for="(item, index) in researchTableOfContent"
+          v-for="(item, index) in projectTableOfContent"
           :key="index"
-          :class="{'pb-2': index + 1 < researchTableOfContent.length}"
+          :class="{'pb-2': index + 1 < projectTableOfContent.length}"
         >
           <div class="font-weight-bold">
             {{ item.type }}
@@ -100,8 +100,8 @@
             :to="{
               name: 'project.content.details',
               params: {
-                contentId: item.externalId,
-                projectId: research.external_id,
+                contentId: item._id,
+                projectId: project._id,
               }
             }"
           >
@@ -114,16 +114,16 @@
         <router-link
           class="a font-weight-regular display-flex"
           :to="{
-            name: 'ResearchContentReferences',
+            name: 'ProjectContentReferences',
             params: {
-              projectId: research.external_id,
-              contentId: content.external_id
+              projectId: project._id,
+              contentId: content._id
             }}"
         >
           <v-icon small class="mr-1">
             device_hub
           </v-icon>
-          {{ $t('researchContentDetails.sidebar.references') }}
+          {{ $t('projectContentDetails.sidebar.references') }}
         </router-link>
       </div>
     </d-block-widget>
@@ -135,14 +135,14 @@
         text
         color="primary"
         :to="{
-          name: 'ResearchContentMetadata',
+          name: 'ProjectContentMetadata',
           params: {
-            projectId: encodeURIComponent(research.external_id),
-            contentId: encodeURIComponent(content.external_id)
+            projectId: encodeURIComponent(project._id),
+            contentId: encodeURIComponent(content._id)
           }
         }"
       >
-        {{ $t('researchContentDetails.sidebar.bchMetadata') }}
+        {{ $t('projectContentDetails.sidebar.bchMetadata') }}
       </v-btn>
     </d-block-widget> -->
   </div>
@@ -160,7 +160,7 @@
   const projectContentService = ProjectContentService.getInstance();
 
   export default {
-    name: 'ResearchContentDetailsSidebar',
+    name: 'ProjectContentDetailsSidebar',
 
     components: {
       ReviewRequest,
@@ -179,27 +179,27 @@
         userExperise: 'auth/userExperise',
         content: 'rcd/content',
         expertsList: 'rcd/expertsList',
-        research: 'rcd/research',
+        project: 'rcd/project',
         group: 'rcd/group',
         membersList: 'rcd/membersList',
-        researchMembersList: 'rcd/researchMembersList',
-        disciplinesList: 'rcd/disciplinesList',
+        projectMembersList: 'rcd/projectMembersList',
+        domainsList: 'rcd/domainsList',
         contentList: 'rcd/contentList',
         contentReviewsList: 'rcd/contentReviewsList',
         contentProposal: 'rcd/contentProposal',
         contentRef: 'rcd/contentRef',
-        isResearchGroupMember: 'rcd/isResearchGroupMember',
+        isTeamMember: 'rcd/isTeamMember',
         isCreatingReviewAvailable: 'rcd/isCreatingReviewAvailable',
         isInProgress: 'rcd/isInProgress',
         isProposed: 'rcd/isProposed',
         isPublished: 'rcd/isPublished',
         isCentralizedGroup: 'rcd/isCentralizedGroup',
-        userHasResearchExpertise: 'rcd/userHasResearchExpertise',
-        researchContentEciStatsRecords: 'rcd/researchContentEciStatsRecords'
+        ProjectExpertise: 'rcd/ProjectExpertise',
+        projectContentEciStatsRecords: 'rcd/projectContentEciStatsRecords'
       }),
 
       isUnlockActionAvailable() {
-        return this.isResearchGroupMember && this.hasNoActiveProposal && this.isProposed;
+        return this.isTeamMember && this.hasNoActiveProposal && this.isProposed;
       },
 
       hasNoActiveProposal() {
@@ -232,29 +232,29 @@
       },
 
       contentAuthorsList() {
-        return this.content ? this.researchMembersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
+        return this.content ? this.projectMembersList.filter((m) => this.content.authors.some((a) => a === m.account.name)) : [];
       },
 
       draftAuthorsList() {
-        return this.isInProgress ? this.researchMembersList : this.researchMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
+        return this.isInProgress ? this.projectMembersList : this.projectMembersList.filter((m) => this.contentRef.authors.some((a) => a === m.account.name));
       },
 
-      researchTableOfContent() {
+      projectTableOfContent() {
         return this.contentList.reduce((arr, content) => {
           const typeObj = projectContentTypes.find((c) => c.type === content.contentType);
           return !content.isDraft ? [...arr, {
             type: typeObj ? typeObj.text : 'Milestone',
             title: content.title,
-            externalId: content.external_id
+            _id: content._id
           }] : arr;
         }, []);
       },
 
       // eciList() {
-      //   return this.disciplinesList.map((discipline) => {
-      //     const eciObj = this.content.eci_per_discipline.find((item) => item[0] === discipline.id);
+      //   return this.domainsList.map((domain) => {
+      //     const eciObj = this.content.eci_per_domain.find((item) => item[0] === domain.id);
       //     return {
-      //       discipline_name: discipline.name,
+      //       domainName: domain.name,
       //       value: eciObj ? eciObj[1] : 0
       //     };
       //   });
@@ -265,7 +265,7 @@
           ...this.SYSTEM_USERS, this.user.username,
           ...this.membersList.map((m) => m.account.name)
         ];
-        const existingReviewsForContent = this.contentReviewsList.filter((r) => r.research_content_id === this.content.id);
+        const existingReviewsForContent = this.contentReviewsList.filter((r) => r.projectContentId === this.content.id);
         blackList.push(...existingReviewsForContent.map((r) => r.author.account.name));
         return this.expertsList.filter((e) => !blackList.includes(e.account.name));
       },
@@ -281,8 +281,8 @@
         this.requestExpertReviewDialog.selectedExpert = expert;
       },
 
-      userHasExpertiseInDiscipline(discipline) {
-        return this.userExperise.some((exp) => exp.discipline_id === discipline.id && exp.amount > 0);
+      userHasExpertiseInDomain(domain) {
+        return this.userExperise.some((exp) => exp.domainId === domain.id && exp.amount > 0);
       },
 
       unlockDraft() {
@@ -309,7 +309,7 @@
         const authors = checked
           ? [...this.contentRef.authors, member.account.name]
           : this.contentRef.authors.filter((a) => a !== member.account.name);
-        this.$emit('setDraftAuthors', this.researchMembersList.filter((m) => authors.some((a) => a === m.account.name)));
+        this.$emit('setDraftAuthors', this.projectMembersList.filter((m) => authors.some((a) => a === m.account.name)));
       },
 
       goAddReview() {

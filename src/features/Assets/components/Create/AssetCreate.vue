@@ -71,8 +71,8 @@
                     <v-select
                       :items="[teamData]"
                       item-text="name"
-                      item-value="external_id"
-                      :value="teamData.external_id"
+                      item-value="_id"
+                      :value="teamData._id"
                       disabled
                       outlined
                       :label="$t('assets.create.shareholder')"
@@ -81,7 +81,7 @@
                       <template #selection="{ item }">
                         <div class="d-inline-flex mr-4 align-center" style="max-width: calc(100% - 80px)">
                           <v-avatar size="24" class="mr-2">
-                            <img :src="item.external_id | researchGroupLogoSrc(24)" alt="">
+                            <img :src="item._id | teamLogoSrc(24)" alt="">
                           </v-avatar>
                           <div class="text-truncate">
                             {{ item.name }}
@@ -309,7 +309,7 @@
           .reduce((a, b) => a + b, 0);
 
         return {
-          account: this.project.researchGroup.external_id,
+          account: this.project.teamId,
           amount: this.formModel.maxSupply - tokensSpend
         };
       },
@@ -323,7 +323,7 @@
       if (this.projectTokenized) {
         this.redirect();
       } else {
-        teamService.getTeam(this.project.researchGroup.external_id)
+        teamService.getTeam(this.project.teamId)
           .then((res) => {
             this.teamData = { ...this.teamData, ...res };
             this.$setReady();
@@ -370,7 +370,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.project.externalId
+            projectId: this.project._id
           }
         });
       },
@@ -379,7 +379,7 @@
         this.$router.push({
           name: 'project.details',
           params: {
-            projectId: this.project.externalId
+            projectId: this.project._id
           }
         });
       },
@@ -394,14 +394,14 @@
             username: this.$currentUser.username
           },
           {
-            issuer: this.project.researchGroup.external_id,
+            issuer: this.project.teamId,
             symbol: this.formModel.symbol,
             precision: DEFAULT_PRECISION,
             maxSupply: parseInt(this.formModel.maxSupply + '0'.repeat(DEFAULT_PRECISION)),
             description: '',
             projectTokenOption: {
-              projectId: this.project.externalId,
-              teamId: this.project.researchGroup.external_id,
+              projectId: this.project._id,
+              teamId: this.project.teamId,
               licenseRevenue : {
                 holdersShare: '100.00 %'
               }

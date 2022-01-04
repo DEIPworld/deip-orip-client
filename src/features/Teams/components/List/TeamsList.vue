@@ -29,11 +29,11 @@
           :to="{
             name: 'team.details',
             params: {
-              teamId: team.externalId }
+              teamId: team._id }
           }"
         >
           <d-box-item
-            :avatar="team.externalId | researchGroupLogoSrc(64, 64)"
+            :avatar="team._id | teamLogoSrc(64, 64)"
             :size="32"
             class="w-100 pa-4"
           >
@@ -55,7 +55,7 @@
                 :max-lines="2"
                 class="text-body-2"
               >
-                {{ team.researchGroupRef.members.length }}
+                {{ team.members.length }}
               </v-clamp>
             </template>
           </d-box-item>
@@ -91,7 +91,7 @@
       teamsList() {
         const teams = this.teams.length
           ? this.teams
-          : this.$store.getters['Teams/list']({ researchGroupRef: { members: (m) => m.includes(this.username) } });
+          : this.$store.getters['Teams/list']({ members: (m) => m.includes(this.username) });
         if (this.common) {
           return teams.filter((t) => !t.isPersonal);
         }

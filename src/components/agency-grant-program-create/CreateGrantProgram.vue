@@ -17,7 +17,7 @@
 
         <v-stepper-step step="2" :complete="currentStep > 2">
           <div class="text-uppercase white-space-nowrap">
-            Discipline
+            Domain
           </div>
         </v-stepper-step>
 
@@ -83,7 +83,7 @@
 
         <v-stepper-content step="2">
           <v-card>
-            <funding-opportunity-discipline
+            <funding-opportunity-domain
               :foa="foa"
               @incStep="incStep"
               @decStep="decStep"
@@ -187,7 +187,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
   import { GrantsService } from '@deip/grants-service';
   import { UserService } from '@deip/user-service';
   import { TeamService } from '@deip/team-service';
@@ -197,7 +197,6 @@
 
   const teamService = TeamService.getInstance();
   const userService = UserService.getInstance();
-  const tenantService = TenantService.getInstance();
   const grantsService = GrantsService.getInstance();
 
   export default {
@@ -219,7 +218,7 @@
           grantNumber: "",
           title: '',
           number: '',
-          disciplines: [],
+          domains: [],
           totalProgramFunding: '',
           awardCeiling: '',
           awardFloor: '',
@@ -248,7 +247,7 @@
         .then((organization) => {
           const members = [];
 
-           userService.getUsersByTeam(organization.external_id)
+           userService.getUsersByTeam(organization._id)
             .then((members) => {
               this.organization = {
                 ...organization,
@@ -283,9 +282,9 @@
         const distributionModel = [
           'funding_opportunity_announcement_contract',
           {
-            organization_id: this.organization.external_id,
-            review_committee_id: this.foa.reveiwCommittee.external_id,
-            treasury_id: this.treasury.external_id,
+            organization_id: this.organization._id,
+            review_committee_id: this.foa.reveiwCommittee._id,
+            treasury_id: this.treasury._id,
             award_ceiling: this.toAssetUnits(this.foa.awardCeiling, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             award_floor: this.toAssetUnits(this.foa.awardFloor, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
             expected_number_of_awards: this.foa.numberOfAwards,
@@ -310,7 +309,7 @@
             foaNumber: this.foa.number.toLowerCase(),
             grantor: this.user.username,
             amount: this.toAssetUnits(this.foa.totalProgramFunding, GRANT_TOKEN_PRECISION, GRANT_TOKEN_SYMBOL),
-            targetDisciplines: this.foa.disciplines.map(({ externalId }) => externalId),
+            targetDomains: this.foa.domains.map(({ _id }) => _id),
             distributionModel,
             extensions: []
           }

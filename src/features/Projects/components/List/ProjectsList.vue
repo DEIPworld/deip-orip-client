@@ -112,7 +112,7 @@
         type: String,
         default: null
       },
-      tenantId: {
+      portalId: {
         type: String,
         default: null
       }
@@ -180,7 +180,7 @@
 
           userName: this.userName,
           teamId: this.teamId,
-          tenantId: this.tenantId,
+          portalId: this.portalId,
 
           ...(this.withFilter ? { filter: this.filterPayload() } : {})
         };
@@ -199,7 +199,7 @@
         const storeFilter = this.$ls.get(this.storageFilterKey);
 
         const attributes = compactAttributes(
-          storeFilter.researchAttributes,
+          storeFilter.projectAttributes,
           'attributeId',
           'values'
         )
@@ -211,8 +211,8 @@
 
         return {
           ...storeFilter,
-          ...(storeFilter.researchAttributes ? {
-            researchAttributes: attributes
+          ...(storeFilter.projectAttributes ? {
+            projectAttributes: attributes
           } : {})
         };
       },

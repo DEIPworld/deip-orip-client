@@ -44,7 +44,7 @@
       @click:confirm="dialog.exchange ? doExchange() : sendTokens()"
     >
       <v-form
-        ref="sendResearchTokensForm"
+        ref="sendprojectTokensForm"
         v-model="dialog.form.valid"
       >
         <v-select
@@ -136,9 +136,9 @@
           <template #selection="{ item }">
             <d-box-item
               :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
+                item.account.isTeam
+                  ? $options.filters.teamLogoSrc(
+                    item._id,
                     48,
                     48
                   ) : $options.filters.avatarSrc(
@@ -158,9 +158,9 @@
           <template #item="{ item }">
             <d-box-item
               :avatar="
-                item.account.is_research_group
-                  ? $options.filters.researchGroupLogoSrc(
-                    item.external_id,
+                item.account.isTeam
+                  ? $options.filters.teamLogoSrc(
+                    item._id,
                     48,
                     48
                   ) : $options.filters.avatarSrc(
@@ -335,7 +335,7 @@
             const usersAccounts = [];
             const groupsAccount = [];
             accounts.forEach((a) => {
-              if (a.account.is_research_group) {
+              if (a.account.isTeam) {
                 groupsAccount.push(a);
               } else {
                 usersAccounts.push(a);
@@ -367,7 +367,7 @@
           this.dialog.title = this.$t('wallet.transferAction.transferAsset');
         }
 
-        if (this.$refs.sendResearchTokensForm) this.$refs.sendResearchTokensForm.reset();
+        if (this.$refs.sendprojectTokensForm) this.$refs.sendprojectTokensForm.reset();
         this.dialog.form.fromAccount = item;
       },
 

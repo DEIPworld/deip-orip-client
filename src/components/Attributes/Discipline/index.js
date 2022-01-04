@@ -1,3 +1,3 @@
-export { default as AttributesDisciplineEdit } from './AttributesDisciplineEdit';
-export { default as AttributesDisciplineRead } from './AttributesDisciplineRead';
-export { default as AttributesDisciplineSet } from './AttributesDisciplineSet';
+export { default as AttributesDomainEdit } from './AttributesDisciplineEdit';
+export { default as AttributesDomainRead } from './AttributesDisciplineRead';
+export { default as AttributesDomainSet } from './AttributesDisciplineSet';

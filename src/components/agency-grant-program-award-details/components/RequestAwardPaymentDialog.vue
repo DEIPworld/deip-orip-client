@@ -248,7 +248,7 @@
 
         const formData = new FormData();
         
-        formData.append('researchExternalId', this.awardee.research_external_id);
+        formData.append('projectId', this.awardee.projectId);
         formData.append('paymentNumber', this.formData.paymentNumber);
         formData.append('awardNumber', this.awardee.award_number);
         formData.append('subawardNumber', this.awardee.subaward_number);

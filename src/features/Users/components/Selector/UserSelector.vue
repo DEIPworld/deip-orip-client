@@ -7,7 +7,7 @@
     :items="usersList"
 
     :item-text="userFullName"
-    :item-value="userExternalId"
+    :item-value="user_id"
 
     hide-details="auto"
 
@@ -117,7 +117,7 @@
         type: [Object, Function],
         default: () => ({})
       },
-      tenantId: {
+      portalId: {
         type: String,
         default: null
       },
@@ -165,7 +165,7 @@
         
         this.$store.dispatch(`${this.storeNS}/getUsersList`, {
           users: wrapInArray(this.users),
-          tenantId: this.tenantId,
+          portalId: this.portalId,
           ...this.$$dataContextProps
         })
           .then(() => {
@@ -194,7 +194,7 @@
         return this.$options.filters.accountFullname(user);
       },
 
-      userExternalId(wrap) {
+      user_id(wrap) {
         const user = this.unwrapUser(wrap);
         return user.account.name;
       }

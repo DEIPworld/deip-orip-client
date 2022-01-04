@@ -19,7 +19,7 @@ const grantsService = GrantsService.getInstance();
 const STATE = {
   teamDetails: undefined,
   revenueHistory: [],
-  researchList: [],
+  projectList: [],
   joinRequests: [],
   invites: []
 };
@@ -27,16 +27,16 @@ const STATE = {
 // getters
 const GETTERS = {
   teamDetails: (state) => {
-    const researchGroup = state.teamDetails;
-    const balances = researchGroup.balances.reduce((acc, b) => {
+    const team = state.teamDetails;
+    const balances = team.balances.reduce((acc, b) => {
       acc[b.symbol] = b.amount;
       return acc;
     }, {});
 
     return {
-      ...researchGroup,
+      ...team,
       balances,
-      researchList: state.researchList,
+      projectList: state.projectList,
       revenueHistory: state.revenueHistory,
       pendingJoinRequests: state.joinRequests.filter((r) => r.status == 'pending'),
       invites: state.invites,
@@ -52,23 +52,23 @@ const ACTIONS = {
       .then((data) => {
         commit('setTeam', data);
 
-        const researchGroupResearchList = dispatch('loadResearchGroupResearchList', state.teamDetails.externalId);
-        const researchGroupRevenueHistory = dispatch('loadResearchGroupRevenueHistory', state.teamDetails.externalId);
+        const teamProjectList = dispatch('loadTeamProjectList', state.teamDetails._id);
+        const teamRevenueHistory = dispatch('loadTeamRevenueHistory', state.teamDetails._id);
 
         return Promise.all([
-          researchGroupResearchList,
-          researchGroupRevenueHistory
+          teamProjectList,
+          teamRevenueHistory
         ]);
       });
   },
 
-  loadResearchGroupResearchList({ commit }, externalId) {
-    return projectService.getTeamProjectListing(externalId)
-      .then((researchList) => {
-        commit('setResearchList', researchList);
-        return Promise.all(researchList.reduce((arr, r) => {
+  loadTeamProjectList({ commit }, id) {
+    return projectService.getTeamProjectListing(id)
+      .then((projectList) => {
+        commit('setProjectList', projectList);
+        return Promise.all(projectList.reduce((arr, r) => {
           r.securityTokens.forEach((rst) => arr.push(
-            assetsService.getAccountAssetBalance(externalId, rst.symbol)
+            assetsService.getAccountAssetBalance(id, rst.symbol)
           ));
           return arr;
         }, []));
@@ -81,8 +81,8 @@ const ACTIONS = {
       });
   },
 
-  loadResearchGroupRevenueHistory({ commit }, externalId) {
-    return investmentsService.getAccountRevenueHistory(externalId)
+  loadTeamRevenueHistory({ commit }, id) {
+    return investmentsService.getAccountRevenueHistory(id)
       .then((revenueHistory) => {
         commit('setRevenueHistory', revenueHistory);
       })
@@ -95,7 +95,7 @@ const ACTIONS = {
   loadGroupInvites({ commit, state }, teamId) {
     // const pendingInvites = [];
 
-    // return researchGroupService.getResearchGroupPendingInvites(teamId)
+    // return teamService.getTeamPendingInvites(teamId)
     //   .then((invites) => {
     //     pendingInvites.push(...invites);
     //     return userService.getUsers(pendingInvites.map((invite) => invite.invitee));
@@ -114,7 +114,7 @@ const ACTIONS = {
   // [OBSOLETE]
   loadJoinRequests({ commit, state }, teamId) {
     // const joinRequests = [];
-    // researchGroupService.getJoinRequestsByGroup(teamId)
+    // teamService.getJoinRequestsByGroup(teamId)
     //   .then((requests) => {
     //     joinRequests.push(...requests);
     //     return userService.getUsers(joinRequests.map((request) => request.username));
@@ -134,7 +134,8 @@ const ACTIONS = {
 // mutations
 const MUTATIONS = {
   setTeam(state, team) {
-    state.teamDetails = camelizeObjectKeys(team);
+    // state.teamDetails = camelizeObjectKeys(team);
+    state.teamDetails = team;
   },
 
   setInvites(state, invites) {
@@ -145,8 +146,8 @@ const MUTATIONS = {
     state.joinRequests = joinRequests;
   },
 
-  setResearchList(state, researchList) {
-    state.researchList = researchList;
+  setProjectList(state, projectList) {
+    state.projectList = projectList;
   },
 
   setRevenueHistory(state, revenueHistory) {

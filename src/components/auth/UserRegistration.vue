@@ -238,7 +238,7 @@
 </template>
 
 <script>
-  import { TenantService } from '@deip/tenant-service';
+  import { PortalService } from '@deip/portal-service';
   import { UserService } from '@deip/user-service';
   import _ from 'lodash';
   import countryList from '@/components/common/country.json';
@@ -247,7 +247,7 @@
   import FullScreenView from '@/components/layout/FullScreen/FullScreenView';
   import FullScreenModal from '@/components/layout/FullScreen/FullScreenModal';
 
-  const tenantService = TenantService.getInstance();
+  const portalService = PortalService.getInstance();
   const authService = AuthService.getInstance();
   const userService = UserService.getInstance();
 
@@ -332,14 +332,14 @@
     },
     computed: {
       roles() {
-        return this.$tenantSettings.roles;
+        return this.$portalSettings.roles;
       }
     },
     methods: {
       create({ privKey, isAuthorizedCreatorRequired }, data) {
 
         return this.$route.name === 'admin.members.add'
-          ? tenantService.postSignUp({
+          ? portalService.postSignUp({
           email: data.email,
           attributes: data.attributes || [],
           username: data.username,

@@ -9,18 +9,18 @@ import account from './components/account';
 import adminRouting from './components/adminRouting';
 import signUp from './components/signUp';
 import wallet from './components/wallet';
-import researchGroupDetails from './components/researchGroupDetails';
+import teamDetails from './components/researchGroupDetails';
 import fundraising from './components/fundraising';
 import transactions from './components/transactions';
-import researchDetails from './components/researchDetails';
-import createResearch from './components/createResearch';
+import projectDetails from './components/researchDetails';
+import createProject from './components/createResearch';
 import signIn from './components/signIn';
-import researchGroupSettings from './components/researchGroupSettings';
-import createResearchGroup from './components/createResearchGroup';
-import researchEdit from './components/researchEdit';
+import teamSettings from './components/researchGroupSettings';
+import createTeam from './components/createResearchGroup';
+import projectEdit from './components/researchEdit';
 import topMenu from './components/topMenu';
 import contents from './components/contents';
-import researchContentDetails from './components/researchContentDetails';
+import projectContentDetails from './components/researchContentDetails';
 import assets from './components/assets';
 import notifier from './components/notifier';
 import votingForBlockProducers from './components/votingForBlockProducers';
@@ -68,7 +68,7 @@ export default {
     thank: 'Thank you for your registration, we will notify you as soon as your request will be approved.',
     browse: `Browse ${project(false, true)}`
   },
-  tenantSignIn: {
+  portalSignIn: {
     form: {
       usernameField: 'Username',
       passwordField: 'Password / Private Key',
@@ -79,13 +79,13 @@ export default {
       submitBtn: 'Login'
     }
   },
-  researchFeed: {
+  projectFeed: {
     title: () => `${project(true, true)}`,
     startProjectBtn: `Start a ${project()}`,
     signInBtn: 'Sign in',
     signInText: `After creating an account/log in you can add new ${project(false, true)} or enjoy shared materials`
   },
-  researchDetailsPublic: {
+  projectDetailsPublic: {
     notLogged: 'You are not logged in',
     afterCreatingAcc: `After creating an account/log in you can add new ${project(false, true)} or enjoy shared materials`,
     signIn: 'Sign in'
@@ -99,11 +99,11 @@ export default {
     noReviews: 'No reviews yet.',
     suppRev: 'Support Review',
     notMembers: `Review can be supported only by members who have no relations with this ${project()} or team that leads this ${project()}.`,
-    canSupport: 'Users with expertise in {disciplines} can support this review',
-    eciForContribution: `You will get ECI reward in {disciplines} for your contribution to this ${project()}`,
-    eciForReview: `You will get ECI reward in {disciplines} for review of the materials associated with this ${project()}.`,
+    canSupport: 'Users with expertise in {domains} can support this review',
+    eciForContribution: `You will get ECI reward in {domains} for your contribution to this ${project()}`,
+    eciForReview: `You will get ECI reward in {domains} for review of the materials associated with this ${project()}.`,
     once: 'Review can be supported once by the user',
-    needExpertiseAndNotMembers: `To add review you need expertise in {disciplines} and have no relations with this ${project()} or team that leads this ${project()}.`,
+    needExpertiseAndNotMembers: `To add review you need expertise in {domains} and have no relations with this ${project()} or team that leads this ${project()}.`,
     reviewedAlready: 'You have reviewed this material already',
     request: 'Request expert review',
     notSuppOwnRev: 'It\'s not allowed to support your own review',
@@ -129,16 +129,16 @@ export default {
   adminRouting,
   signIn,
   signUp,
-  researchGroupDetails,
-  researchGroupSettings,
-  createResearchGroup,
-  researchDetails,
-  researchEdit,
-  createResearch,
+  teamDetails,
+  teamSettings,
+  createTeam,
+  projectDetails,
+  projectEdit,
+  createProject,
   wallet,
   transactions,
   fundraising,
-  researchContentDetails,
+  projectContentDetails,
   assets,
   notifier,
   votingForBlockProducers,

@@ -16,7 +16,7 @@ export const usersList = {
         return { name: 'account.summary' };
       }
 
-      if (user.account.is_research_group) {
+      if (user.account.isTeam) {
         // return { name: 'group.detail' };
         return {
           name: 'teamDetails',

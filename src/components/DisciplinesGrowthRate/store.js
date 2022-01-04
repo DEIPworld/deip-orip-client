@@ -10,14 +10,14 @@ const STATE = {
 const GETTERS = {
   list: (state, getters, rootState, rootGetters) => state.data.filter(
     where({
-      external_id: rootGetters['Disciplines/topLevelList']().map(({ externalId }) => externalId)
+      _id: rootGetters['Domains/topLevelList']().map(({ _id }) => _id)
     })
   )
 };
 
 const ACTIONS = {
   get(context, payload = {}) {
-    return expertiseContributionsService.getDisciplinesExpertiseStatsHistory(payload)
+    return expertiseContributionsService.getDomainsExpertiseStatsHistory(payload)
       .then((res) => {
         context.commit('store', res);
       });
@@ -27,13 +27,13 @@ const ACTIONS = {
 const MUTATIONS = {
   store(state, payload) {
     state.data = payload.map((a) => ({
-      external_id: a[0],
+      _id: a[0],
       history: a[1]
     }));
   }
 };
 
-export const disciplinesGrowthRateStore = {
+export const domainsGrowthRateStore = {
   namespaced: true,
   state: STATE,
   getters: GETTERS,

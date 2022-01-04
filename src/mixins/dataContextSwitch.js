@@ -20,7 +20,7 @@ export const dataContextSwitch = {
       default: null
     },
 
-    disciplineId: {
+    domainId: {
       type: [String, Number, Array],
       default: null
     },
@@ -38,7 +38,7 @@ export const dataContextSwitch = {
         contentId: this.contentId,
         teamId: this.teamId,
         userId: this.userId,
-        disciplineId: this.disciplineId,
+        domainId: this.domainId,
 
         userName: this.userName // deprecated
       };

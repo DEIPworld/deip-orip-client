@@ -9,13 +9,13 @@
       :hide-default-footer="balances.length < 50"
       :footer-props="{ itemsPerPageOptions: [5, 10, 20, 50, -1] }"
       :items-per-page="50"
-      item-key="tokenizedResearch"
+      item-key="tokenizedProject"
       disable-sort
       show-expand
       :expanded.sync="expanded"
     >
-      <!-- <template #item.research.title="{ item }">
-        <span class="text-body-1">{{ item.research.title }}</span>
+      <!-- <template #item.project.title="{ item }">
+        <span class="text-body-1">{{ item.project.title }}</span>
       </template> -->
       <template #item.myShare.amount="{ item }">
         <div class="text-body-2 white-space-nowrap">
@@ -99,7 +99,7 @@
         tableHeader: [
           {
             text: this.$t('wallet.asset'),
-            value: 'research.title'
+            value: 'project.title'
           },
           {
             text: this.$t('wallet.tokensAndShare'),
@@ -142,7 +142,7 @@
 
     methods: {
       sharePercent(item) {
-        const token = item.research.securityTokens.find(
+        const token = item.project.securityTokens.find(
           (rst) => rst.symbol === item.assetSymbol
         );
         return (item.amount * 100 / token.amount).toFixed(2);
@@ -155,7 +155,7 @@
         return arr.reduce((val, { revenue }) => val + Number(revenue.amount), 0);
       },
       revenuePerToken(item) {
-        const securityToken = item.research.securityTokens.find(
+        const securityToken = item.project.securityTokens.find(
           (st) => item.assetSymbol === st.symbol
         );
         return securityToken

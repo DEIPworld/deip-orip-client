@@ -28,7 +28,8 @@ const ACTIONS = {
 
 const MUTATIONS = {
   storeReviewDetails(state, payload) {
-    state.reviewDetails = camelizeObjectKeys(payload);
+    // state.reviewDetails = camelizeObjectKeys(payload);
+    state.reviewDetails = payload;
   }
 };
 

@@ -6,7 +6,7 @@ import { loadPage } from '@/router/utils/loadPage';
 
 import SignIn from '@/components/auth/SignIn';
 import SignUp from '@/components/auth/SignUp';
-import TenantSignIn from '@/components/auth/TenantSignIn';
+import PortalSignIn from '@/components/auth/TenantSignIn';
 import Dashboard from '@/components/dashboard/DashboardNew';
 
 import GrantPrograms from '@/components/agency-grant-programs/GrantPrograms';
@@ -22,7 +22,7 @@ import GrantProgramAwardWithdrawalDetails
   from '@/components/agency-grant-program-award-withdrawal-details/GrantProgramAwardWithdrawalDetails';
 
 
-import ResearchContentReferences from '@/components/research-content-details/ResearchContentReferences';
+import ProjectContentReferences from '@/components/research-content-details/ResearchContentReferences';
 
 import NoAccessPage from '@/components/NoAccessPage';
 
@@ -66,11 +66,11 @@ const router = new Router({
       component: SignIn,
       beforeEnter: (to, from, next) => {
         if (Vue.$env.DEMO === 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-          const tenant = store.getters['auth/tenant'];
-          if (!tenant) {
+          const portal = store.getters['auth/portal'];
+          if (!portal) {
             throw new Error('Granting agency must be specified for the Demo');
           }
-          next({ name: 'TenantSignIn' });
+          next({ name: 'PortalSignIn' });
         } else {
           next();
         }
@@ -81,8 +81,8 @@ const router = new Router({
     },
     {
       path: '/org-sign-in',
-      name: 'TenantSignIn',
-      component: TenantSignIn
+      name: 'PortalSignIn',
+      component: PortalSignIn
     },
     {
       path: '/sign-up',
@@ -167,11 +167,11 @@ const router = new Router({
         loadPage(loadPagePromise, next);
       }
     }, {
-      path: '/research/:projectId/:contentId/references',
-      name: 'ResearchContentReferences',
-      component: preliminaryDataLoader(ResearchContentReferences, {
+      path: '/project/:projectId/:contentId/references',
+      name: 'ProjectContentReferences',
+      component: preliminaryDataLoader(ProjectContentReferences, {
         beforeEnter: (to, from, next) => {
-          const loadPagePromise = store.dispatch('rcd/loadResearchContentDetails', {
+          const loadPagePromise = store.dispatch('rcd/loadProjectContentDetails', {
             projectId: to.params.projectId,
             contentId: to.params.contentId,
             ref: to.query.ref,
@@ -232,8 +232,8 @@ const router = new Router({
 
         rolePromise.then((roles) => {
           if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
-            const tenant = store.getters['auth/tenant'];
-            if (!tenant) {
+            const portal = store.getters['auth/portal'];
+            if (!portal) {
               throw new Error('Granting agency must be specified for the Demo');
             }
             next({ name: 'GrantProgramsAwardsDashboard' });
@@ -272,7 +272,7 @@ const authDataLoad = () => Promise.all([
   // ...[Object.keys(store.state.auth.user).map((key) => awaitStore('auth/user', key))],
   awaitStore('auth/loaded'),
   // awaitStore('auth/user', 'account'),
-  awaitStore('auth/tenant'),
+  awaitStore('auth/portal'),
   awaitStore('auth/assets')
 ]);
 
