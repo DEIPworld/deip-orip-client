@@ -274,7 +274,7 @@
         this.loadingDraft = true;
 
         projectContentService.getDraft(this.draftId)
-          .then((res) => {
+          .then(({ data: res }) => {
             if (res.status === PROJECT_CONTENT_STATUS.IN_PROGRESS) {
               this.$refs.contentDar.saveDocument(() => {
                 this.$notifier.showSuccess('Document draft has been saved !');
@@ -298,7 +298,7 @@
           .then(() => {
             setTimeout(() => {
               projectContentService.getDraft(this.draftId)
-                .then((draft) => {
+                .then(({ data: draft }) => {
                   if (draft) {
                     const isProposal = false;
                     projectContentService.createProjectContent(

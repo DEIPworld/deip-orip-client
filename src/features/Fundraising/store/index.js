@@ -11,7 +11,7 @@ const GETTERS = {};
 const ACTIONS = {
   create({ commit }, payload) {
     return investmentsService.createProjectTokenSale(...payload)
-      .then((res) => res);
+      .then(({ data: res }) => res);
   }
 };
 

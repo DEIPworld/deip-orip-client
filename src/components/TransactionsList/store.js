@@ -19,7 +19,7 @@ const GETTERS = {
 const ACTIONS = {
   loadTransactions({ commit }, account) {
     return proposalsService.getAccountProposals(account)
-      .then((proposals) => {
+      .then(({ data: { items: proposals } }) => {
         commit('setTransactions', proposals.filter((proposal) => !!proposal.type));
       }, (err) => { console.error(err); });
   }

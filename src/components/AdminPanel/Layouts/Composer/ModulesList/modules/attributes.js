@@ -6,21 +6,21 @@ import {
 } from '@/components/AdminPanel/Layouts/Composer/ModulesList/modules/_utils';
 
 const propsForRead = {
-  [ATTR_TYPES.TEXT]: setComponentAttrs({
+  [ATTR_TYPES.TEXT || 'text']: setComponentAttrs({
     clamped: setAs(Number)
   }),
-  [ATTR_TYPES.TEXTAREA]: setComponentAttrs({
+  [ATTR_TYPES.TEXTAREA || 'textarea']: setComponentAttrs({
     clamped: setAs(Number)
   }),
-  [ATTR_TYPES.IMAGE]: setComponentAttrs({
+  [ATTR_TYPES.IMAGE || 'image']: setComponentAttrs({
     width: setAs(Number),
     srcWidth: setAs(Number),
     aspectRatio: setAs(Number)
   }),
-  [ATTR_TYPES.STEPPER]: setComponentAttrs({
+  [ATTR_TYPES.STEPPER || 'stepper']: setComponentAttrs({
     viewType: setAs(Array, ['default', 'small'])
   }),
-  [ATTR_TYPES.NETWORK_CONTENT_ACCESS]: setComponentAttrs({
+  [ATTR_TYPES.NETWORK_CONTENT_ACCESS || 'networkContentAccess']: setComponentAttrs({
     viewType: setAs(Array, ['default', 'widget']),
     title: setAs(String, 'Content access')
   })

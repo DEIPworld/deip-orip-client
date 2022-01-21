@@ -216,7 +216,7 @@
           type: CONTRACT_AGREEMENT_TYPE.PROJECT_LICENSE,
           parties
         })
-          .then((result) => {
+          .then(() => {
             this.$notifier.showSuccess(this.$t('licensing.dialog.reqSentSucc'));
           })
           .catch((err) => {

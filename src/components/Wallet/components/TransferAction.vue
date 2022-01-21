@@ -328,10 +328,10 @@
         this.exchangeAccounts = [];
         const blackList = [...this.SYSTEM_USERS, this.$currentUser.username];
         assetsService.getAccountsAssetBalancesByAsset($event.stringSymbol)
-          .then((accounts) => userService.getUsers(
+          .then(({ data: { items: accounts } }) => userService.getUsers(
             accounts.map(({ owner }) => owner).filter((owner) => !blackList.some(u => u == owner))
           ))
-          .then((accounts) => {
+          .then(({ data: { items: accounts } }) => {
             const usersAccounts = [];
             const groupsAccount = [];
             accounts.forEach((a) => {
@@ -349,7 +349,8 @@
               groupsAccount.map((g) => teamService.getTeam(g.account.name))
             );
           })
-          .then((groupAccounts) => {
+          .then((res) => {
+            const groupAccounts = res.map(({ data }) => data)
             this.exchangeAccounts.push(...groupAccounts.map((g) => ({
               ...g,
               fullName: g.name

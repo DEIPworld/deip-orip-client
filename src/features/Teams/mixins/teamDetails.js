@@ -11,7 +11,7 @@ export const teamDetails = {
   },
   methods: {
     getAttribute(id) {
-      const attr = this.user.profile.attributes[id];
+      const attr = this.team.attributes[id];
       if (!attr || !hasValue(attr.value)) return false;
       return attr;
     },
@@ -23,7 +23,7 @@ export const teamDetails = {
     },
 
     attributeValue(id) {
-      const attr = this.user.profile.attributes[id];
+      const attr = this.team.attributes[id];
 
       return attr ? attr.value : false;
     }

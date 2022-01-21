@@ -50,7 +50,7 @@
   import BindsAttrs from 'vuetify/lib/mixins/binds-attrs';
 
   export default {
-    name: 'AttributesUserRead',
+    name: 'AttributesUserSelectRead',
     components: { UsersList },
     mixins: [BindsAttrs, attributeRead],
     props: {

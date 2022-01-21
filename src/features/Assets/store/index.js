@@ -19,10 +19,10 @@ const GETTERS = {
   list: (state) => (query = {}) => collectionList(state.data, query),
 
   listKeys: (state, getters) => (query = {}) => getters.list(query)
-    .map((ass) => ass.stringSymbol),
+    .map((ass) => ass.symbol),
 
   one: (state) => (assetId, query = {}) => collectionOne(state.data, {
-    ...(assetId ? { stringSymbol: assetId } : {}),
+    ...(assetId ? { symbol: assetId } : {}),
     ...query
   }),
 
@@ -32,7 +32,7 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }) {
     return assetsService.lookupAssets('', 10000)
-      .then((data) => {
+      .then(({ data: { items: data } }) => {
         const assets = data.map((asset) => ({
           ...asset,
           balances: []
@@ -42,7 +42,8 @@ const ACTIONS = {
           .map((asset) => assetsService.getAccountsAssetBalancesByAsset(asset.symbol))
 
         return Promise.all(balancesPromises)
-          .then((balances) => {
+          .then((res) => {
+            const balances = res.map(({ data: { items } }) => items);
             for (const balance of balances.flat(1)) {
               const idx = assets
                 .findIndex((asset) => asset.symbol === balance.symbol);
@@ -62,11 +63,11 @@ const ACTIONS = {
 
   getBySymbol({ commit }, assetSymbol) {
     return assetsService.getAssetBySymbol(assetSymbol)
-      .then((asset) => {
+      .then(({ data: asset }) => {
         if (asset.tokenizedProject) {
           return assetsService
             .getAccountsAssetBalancesByAsset(asset.symbol)
-            .then((balances) => {
+            .then(({ data: { items: balances } }) => {
               commit('setOne', {
                 ...asset,
                 balances
@@ -87,8 +88,8 @@ const ACTIONS = {
   // /////////////////////////
 
   create(context, payload) {
-    return assetsService.createAsset(...payload)
-      .then((res) => res);
+    return assetsService.createFungibleToken(...payload)
+      .then(({ data: res }) => res);
   },
 
   // /////////////////////////
@@ -96,12 +97,12 @@ const ACTIONS = {
   getTeamBalances(context, payload) {
     return assetsService
       .getAccountAssetBalance(...payload)
-      .then((res) => res);
+      .then(({ data: res }) => res);
   },
 
   getCurrentUserBalances({ commit }, username) {
     return assetsService.getAccountAssetsBalancesByOwner(username)
-      .then((balances) => {
+      .then(({ data: { items: balances } }) => {
         commit(
           'setCurrentUserBalance',
           balances.filter((balance) => !balance.tokenizedProject)

@@ -20,14 +20,14 @@
   import { AttributesDomainSet } from '@/components/Attributes/Discipline';
   import { AttributesPartnersSet } from '@/components/Attributes/Partners';
   import { AttributesRoadmapSet } from '@/components/Attributes/Roadmap';
-  import { AttributesTeamSet } from '@/components/Attributes/ResearchGroup';
+  import { AttributesTeamSelectSet } from '@/components/Attributes/ResearchGroup';
   import { AttributesSelectSet } from '@/components/Attributes/Select';
   import { AttributesStepperSet } from '@/components/Attributes/Stepper';
   import { AttributesSwitchSet } from '@/components/Attributes/Switch';
   import { AttributesTextSet } from '@/components/Attributes/Text';
   import { AttributesTextareaSet } from '@/components/Attributes/Textarea';
   import { AttributesUrlSet } from '@/components/Attributes/Url';
-  import { AttributesUserSet } from '@/components/Attributes/User';
+  import { AttributesUserSelectSet } from '@/components/Attributes/User';
   import { AttributesVideoUrlSet } from '@/components/Attributes/VideoUrl';
   import { AttributesImageSet } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingSet } from '@/components/Attributes/ExpressLicensing';
@@ -40,7 +40,7 @@
       AttributesCheckboxSet,
       AttributesDomainSet,
       AttributesPartnersSet,
-      AttributesTeamSet,
+      AttributesTeamSelectSet,
       AttributesRoadmapSet,
       AttributesSelectSet,
       AttributesStepperSet,
@@ -48,7 +48,7 @@
       AttributesTextSet,
       AttributesTextareaSet,
       AttributesUrlSet,
-      AttributesUserSet,
+      AttributesUserSelectSet,
       AttributesVideoUrlSet,
       AttributesImageSet,
       AttributesExpressLicensingSet,

@@ -19,7 +19,7 @@ const actions = {
 
   loadUser({ state, commit, dispatch }, { username }) {
     userService.getUser(username)
-      .then((user) => {
+      .then(({ data: user }) => {
         commit('SET_USER', user);
       });
   }

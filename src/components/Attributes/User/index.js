@@ -1,3 +1,3 @@
-export { default as AttributesUserEdit } from './AttributesUserEdit';
-export { default as AttributesUserRead } from './AttributesUserRead';
-export { default as AttributesUserSet } from './AttributesUserSet';
+export { default as AttributesUserSelectEdit } from './AttributesUserEdit';
+export { default as AttributesUserSelectRead } from './AttributesUserRead';
+export { default as AttributesUserSelectSet } from './AttributesUserSet';

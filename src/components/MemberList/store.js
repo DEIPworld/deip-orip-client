@@ -17,20 +17,22 @@ const ACTIONS = {
     const usersList = [];
     if (payload.teamId !== undefined) {
       return userService.getUsersByTeam(payload.teamId)
-        .then((users) => {
+        .then(({ data: { items: users } }) => {
           usersList.push(...users);
           return Promise.all(usersList.map(
             (user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)
           ));
         })
-        .then((expList) => {
+        .then((res) => {
+          const expList = res.map(({ data: { items } }) => items);
           for (let i = 0; i < usersList.length; i++) {
             const user = usersList[i];
             user.expertise = expList[i];
           }
           return Promise.all(usersList.map(({ account: { name } }) => expertiseContributionsService.getAccountExpertiseStats(name, {})));
         })
-        .then((expertiseStats) => {
+        .then((res) => {
+          const expertiseStats = res.map(({ data }) => data)
           for (let i = 0; i < usersList.length; i++) {
             const user = usersList[i];
             user.expertiseStats = expertiseStats[i];

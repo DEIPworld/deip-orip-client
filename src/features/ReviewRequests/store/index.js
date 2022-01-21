@@ -20,16 +20,16 @@ const ACTIONS = {
   fetch({ commit }, username) {
     const reviewRequests = [];
     return reviewService.getReviewRequestsByExpert(username, 1)
-      .then((results) => {
+      .then(({ data: { items: results } }) => {
         const detailsPromises = [];
         reviewRequests.push(...results);
         reviewRequests.forEach((r) => {
           detailsPromises.push(
             projectContentService.getProjectContent(r.projectContentId)
-              .then((content) => {
+              .then(({ data: content }) => {
                 r.content = content;
                 return projectService.getProject(content.projectId);
-              }).then((project) => {
+              }).then(({ data: project }) => {
                 r.project = project;
               })
           );
@@ -37,7 +37,7 @@ const ACTIONS = {
         return Promise.all(detailsPromises);
       })
       .then(() => userService.getUsers(reviewRequests.map((r) => r.requestor)))
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         const requests = reviewRequests.map((r) => (
           { ...r, requestorProfile: users.find(((u) => u.account.name === r.requestor)) }
         ));

@@ -244,11 +244,11 @@
       const treasuryOrg = '1169d704f8a908016033efe8cce6df93f618a265';
 
       teamService.getTeam(grantingAgencyOrg)
-        .then((organization) => {
+        .then(({ data: organization }) => {
           const members = [];
 
            userService.getUsersByTeam(organization._id)
-            .then((members) => {
+            .then(({ data: { items: members } }) => {
               this.organization = {
                 ...organization,
                 members
@@ -258,7 +258,7 @@
         });
 
       teamService.getTeam(treasuryOrg)
-        .then((organization) => {
+        .then(({ data: organization }) => {
           this.treasury = organization;
         });
     },

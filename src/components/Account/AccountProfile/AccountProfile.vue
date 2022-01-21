@@ -45,19 +45,13 @@
   import { changeable } from '@/mixins/changeable';
 
   import {
-    camelizeObjectKeys,
     compactAttributes,
     extendAttrModules,
     extractFilesFromAttributes,
-    isArray, replaceFileWithName, hasValue, expandAttributes
+    replaceFileWithName, expandAttributes
   } from '@/utils/helpers';
 
   import { attributesChore } from '@/mixins/chores/attributesChore';
-
-  import { debounce } from 'vuetify/lib/util/helpers';
-
-  import { mapGetters } from 'vuex';
-  import { ATTR_TYPES } from '@/variables';
 
   const userService = UserService.getInstance();
 

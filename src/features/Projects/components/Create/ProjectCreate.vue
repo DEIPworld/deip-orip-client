@@ -26,17 +26,17 @@
 
         return projectService.createProject(this.$currentUser, {
           isAdmin: this.$currentUser.profile.roles.some(r => r.role === 'admin' && r.teamId === this.$env.TENANT),
-          teamId: onchainData.team,
+          teamId: onchainData.researchGroup,
           creator: this.$currentUser.username,
-          domains: onchainData.domains,
+          domains: onchainData.disciplines,
           isPrivate: !!onchainData.isPrivate,
           members: onchainData.members,
           attributes: offchainMeta.attributes,
           formData: formData // files
         }, {
-          isProposal: onchainData.team != this.$currentUser.username
+          isProposal: false
         })
-          .then((project) => {
+          .then(({ data: project }) => {
             this.$notifier.showSuccess(this.$t('notifier.prCreatedSuccess', { title: onchainData.title }));
             this.$$goToProject(project);
           })

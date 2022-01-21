@@ -215,11 +215,11 @@
           <template #item.investmentOpportunityId="{item}">
             {{ mockSignature(item.investmentOpportunityId) }}
           </template>
-          <template #item.token.amount="{ item }">
+          <template #item.asset.amount="{ item }">
             {{
               $$toAssetUnits({
-                amount: item.token.amount,
-                assetId: item.token.symbol
+                amount: item.asset.amount,
+                assetId: item.asset.symbol
               })
             }}
           </template>
@@ -315,7 +315,7 @@
           },
           {
             text: this.$t('fundraising.table.amount'),
-            value: 'token.amount',
+            value: 'asset.amount',
             align: 'end',
             sortable: false
           },

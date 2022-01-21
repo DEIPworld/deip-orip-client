@@ -444,7 +444,7 @@
           this.isUsernameChecking = true;
 
           return userService.getUser(this.formData.username)
-            .then((user) => {
+            .then(({ data: user }) => {
               this.isUsernameVerifyed = !user;
             })
             .catch((error) => {

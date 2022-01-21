@@ -33,7 +33,7 @@ const ACTIONS = {
   getExpertiseHistory({ commit }, payload) {
     let expertises = [];
     return historyMethod(payload)
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         expertises = [...res];
         return Promise.all(expertises.reduce((arr, e) => {
           if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION
@@ -47,7 +47,8 @@ const ACTIONS = {
           return arr;
         }, []));
       })
-      .then((res) => {
+      .then((r) => {
+        const res = r.map(({ data }) => data);
         expertises = expertises.map((e) => {
           if (e.contribution_type === EXPERTISE_CONTRIBUTION_TYPE.PUBLICATION) {
             const exp = res.find((r) => r._id === e.projectContent._id);

@@ -37,7 +37,7 @@ const actions = {
 
     commit('SET_FUNDING_CONTACT_PROPOSAL_PAGE_LOADING_STATE', true);
     return teamService.getTeam(Vue.$env.TENANT)
-      .then((organization) => {
+      .then(({ data: organization }) => {
         commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadProgramDetails', { foaId });
         const usersLoad = dispatch('loadUsers');
@@ -55,11 +55,11 @@ const actions = {
   loadProgramDetails({ state, dispatch, commit }, { foaId, notify }) {
     let program;
     return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
-      .then((programInfo) => {
+      .then(({ data: programInfo }) => {
         program = programInfo;
         return userService.getUsers(program.officers);
       })
-      .then((profiles) => {
+      .then(({ data: { items: profiles } }) => {
         program.officers = profiles;
         commit('SET_ORGANIZATION_PROGRAM', program);
       })
@@ -71,7 +71,7 @@ const actions = {
 
   loadUsers({ state, dispatch, commit }) {
     return userService.getUsersListing()
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('SET_ALL_USERS', users);
       })
       .catch((err) => { console.error(err); });
@@ -79,7 +79,7 @@ const actions = {
 
   loadUniversity({ state, dispatch, commit }, { universityId }) {
     return teamService.getTeam(universityId)
-      .then((university) => {
+      .then(({ data: university }) => {
         commit('SET_UNIVERSITY', university);
       }, (err) => { console.error(err); });
   },

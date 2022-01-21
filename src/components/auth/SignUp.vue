@@ -1,6 +1,6 @@
 <template>
   <full-screen-view
-    v-if="portal.profile.settings.signUpPolicy === signUpPolicy.FREE"
+    v-if="portal.profile.settings.signUpPolicy == signUpPolicy.FREE"
     max-width="100%"
     height="100%"
     toolbar-overlap
@@ -92,7 +92,7 @@
       </v-col>
     </v-row>
   </full-screen-view>
-  <userRegistration v-else-if="portal.profile.settings.signUpPolicy === signUpPolicy.ADMIN_APPROVAL" />
+  <userRegistration v-else-if="portal.profile.settings.signUpPolicy == signUpPolicy.ADMIN_APPROVAL" />
 </template>
 
 <script>
@@ -228,7 +228,7 @@
             this.isUsernameChecking = true;
 
             return userService.getUser(this.formData.username)
-              .then((user) => {
+              .then(({ data: user }) => {
                 this.isUsernameVerifyed = !user;
               }).catch((error) => {
                 this.isUsernameVerifyed = false;

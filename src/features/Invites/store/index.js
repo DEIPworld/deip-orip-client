@@ -16,7 +16,7 @@ const ACTIONS = {
   fetch({ commit }, username) {
     const invites = [];
     return userService.getUserInvites(username)
-      .then((list) => {
+      .then(({ data: { items: list } }) => {
         const promises = [];
         for (let i = 0; i < list.length; i++) {
           const invite = list[i];
@@ -25,7 +25,8 @@ const ACTIONS = {
         }
         return Promise.all(promises);
       })
-      .then((groups) => {
+      .then((res) => {
+        const groups = res.map(({ data }) => data)
         for (let i = 0; i < invites.length; i++) {
           const invite = invites[i];
           invite.group = groups[i];

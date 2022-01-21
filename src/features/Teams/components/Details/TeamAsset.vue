@@ -111,7 +111,6 @@
       },
       tokensPrice() {
         const valuationFactor = 1.5;
-
         const totalAmount = this.team.accountSecurityTokenBalance.reduce(
           (v, i) => v + Number(i.amount), 0
         );

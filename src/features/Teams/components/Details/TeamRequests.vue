@@ -295,7 +295,7 @@
         self.isDenyingLoading = false;
 
         // teamService.updateJoinRequest({ request: update })
-        //   .then((updatedRequest) => {
+        //   .then(({ data: updatedRequest }) => {
         //           self.$store.dispatch('Team/loadJoinRequests', this.team._id);
         //           this.$notifier.showSuccess(this.$t('teamDetails.joinRequestDialog.successDeny', { username: self.joinRequest.username }));
 

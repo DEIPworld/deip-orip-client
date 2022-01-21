@@ -267,7 +267,7 @@
           },
           ...update
         })
-          .then((res) => {
+          .then(() => {
             this.$notifier.showSuccess(this.$t('userDetailRouting.educationDialog.instSaveSucc', { institution: this.formData.educationalInstitution }));
             return this.$store.dispatch('Auth/getCurrentUser');
           }, (err) => {

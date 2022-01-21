@@ -16,7 +16,8 @@ const GETTERS = {
 const ACTIONS = {
   loadProjectTokenSale({ dispatch, commit }, projectId) {
     return investmentsService.getCurrentTokenSaleByProject(projectId)
-      .then((tokenSale) => {
+      .then((res) => {
+        const tokenSale = res ? res.data : res;
         commit('setProjectTokenSale', tokenSale);
         if (!tokenSale) {
           return dispatch('loadHistoryProjectTokenSale', projectId);
@@ -25,7 +26,7 @@ const ACTIONS = {
   },
   loadHistoryProjectTokenSale({ commit }, projectId) {
     return investmentsService.getProjectTokenSalesByProject(projectId)
-      .then((tokenSales) => {
+      .then(({ data: { items: tokenSales } }) => {
         commit('setHistoryProjectTokenSale', tokenSales);
       });
   }

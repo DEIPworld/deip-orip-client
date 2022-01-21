@@ -208,10 +208,10 @@
           formatType: PROJECT_CONTENT_FORMAT.PACKAGE,
           ...filesData // files
         })
-          .then(({ _id: draftId }) => {
+          .then(({ data: { _id: draftId } }) => {
             setTimeout(() => {
               projectContentService.getDraft(draftId)
-                .then((draft) => {
+                .then(({ data: draft }) => {
                   if (draft) {
                     const isProposal = false;
                     projectContentService.createProjectContent(

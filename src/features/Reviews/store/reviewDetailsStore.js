@@ -17,7 +17,7 @@ const GETTERS = {
 const ACTIONS = {
   getReviewDetails({ commit }, reviewId) {
     return reviewService.getReview(reviewId)
-      .then((item) => {
+      .then(({ data: item }) => {
         return getAdditionalDataOne(item)
           .then((res) => {
             commit('storeReviewDetails', res);

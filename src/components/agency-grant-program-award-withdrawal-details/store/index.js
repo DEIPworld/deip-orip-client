@@ -147,41 +147,41 @@ const actions = {
     awardNumber, subawardNumber, paymentNumber, notify
   }) {
     return grantsService.getAwardWithdrawalRequest(awardNumber, paymentNumber)
-      .then((withdrawal) => {
+      .then(({ data: withdrawal }) => {
         commit('SET_AWARD_WITHDRAWAL', withdrawal);
         return grantsService.getAwardByNumber(awardNumber);
       })
-      .then((award) => {
+      .then(({ data: award }) => {
         commit('SET_AWARD', award);
         const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
         return userService.getUsers([awardee.source != '' ? awardee.source : awardee.awardee]);
       })
-      .then(([pi]) => {
+      .then(({ data: { items: [pi] } }) => {
         commit('SET_AWARD_PI', pi);
         return grantsService.getFundingOpportunityAnnouncementByNumber(state.award.funding_opportunity_number);
       })
-      .then((foa) => {
+      .then(({ data: foa }) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
         return teamService.getTeam(state.foa.organizationId);
       })
-      .then((foaOrganization) => {
+      .then(({ data: foaOrganization }) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
         return projectService.getProject(state.awardee.projectId);
       })
-      .then((project) => {
+      .then(({ data: project }) => {
         commit('SET_AWARDEE_PROJECT', project);
         return teamService.getTeam(state.project.teamId);
       })
-      .then((team) => {
+      .then(({ data: team }) => {
         commit('SET_AWARDEE_ORGANIZATION', team);
         return teamService.getTeam(state.award.universityId);
       })
-      .then((team) => {
+      .then(({ data: team }) => {
         commit('SET_UNIVERSITY_ORGANIZATION', team);
         return teamService.getTeam(state.foa.treasuryId);
       })
-      .then((team) => {
+      .then(({ data: team }) => {
         commit('SET_TREASURY_ORGANIZATION', team);
       })
       .catch((err) => { console.error(err); })
@@ -195,19 +195,22 @@ const actions = {
   }) {
     const transactions = [];
     return grantsService.getWithdrawalRequestHistoryByAwardAndPaymentNumber(awardNumber, paymentNumber)
-      .then((withdrawalHistoryRecords) => {
+      .then(({ data: { items: withdrawalHistoryRecords } }) => {
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_LIST', withdrawalHistoryRecords);
         return Promise.all(state.withdrawalHistoryRecords.map((r) => grantsService.getBlock(r.block)));
       })
-      .then((blocks) => {
+      .then((res) => {
+        const blocks = res.map(({ data }) => data)
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_BLOCKS_LIST', blocks);
         return Promise.all(state.withdrawalHistoryRecords.map((r) => grantsService.getTransaction(r.trx_id)));
       })
-      .then((items) => {
+      .then((res) => {
+        const items = res.map(({ data }) => data)
         transactions.push(...items);
         return Promise.all(transactions.map((tx) => grantsService.getTransactionHex(tx)));
       })
-      .then((trxHashes) => {
+      .then((res) => {
+        const trxHashes = res.map(({ data }) => data)
         commit('SET_AWARD_WITHDRAWAL_HISTORY_RECORDS_TRANSACTIONS_LIST', transactions.map((tx, i) => ({ ...tx, trxHash: trxHashes[i] })));
 
         const trxSigners = [];
@@ -227,7 +230,7 @@ const actions = {
         }
         return userService.getUsers(trxSigners);
       })
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('SET_AWARD_WITHDRAWAL_SIGNERS_LIST', users);
       })
       .catch((err) => { console.error(err); })

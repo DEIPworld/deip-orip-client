@@ -36,7 +36,7 @@ const actions = {
   loadGrantProgramsPage({ state, dispatch, commit }, { areaCode, subAreaCode }) {
     commit('SET_ORGANIZATION_PROGRAMS_LISTING_PAGE_LOADING_STATE', true);
     return teamService.getTeam(Vue.$env.TENANT)
-      .then((team) => {
+      .then(({ data: team }) => {
         commit('SET_ORGANIZATION_PROFILE', team);
         const organizationProgramsLoad = new Promise((resolve, reject) => {
           dispatch('loadOrganizationPrograms', { organization: state.organization, notify: resolve });
@@ -65,7 +65,7 @@ const actions = {
   loadOrganizationPrograms({ state, dispatch, commit }, { organization, notify }) {
     commit('SET_ORGANIZATION_PROGRAMS_LOADING_STATE', true);
     grantsService.getFundingOpportunityAnnouncementsByOrganization(organization.id)
-      .then((programs) => {
+      .then(({ data: { items: programs } }) => {
         const corePrograms = programs.map((item) => ({
           ...item,
           organizationId: organization._id,

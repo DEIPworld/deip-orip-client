@@ -49,7 +49,7 @@ const GETTERS = {
 const ACTIONS = {
   getTeamDetails({ commit, dispatch, state }, teamId) {
     return teamService.getTeam(teamId)
-      .then((data) => {
+      .then(({ data }) => {
         commit('setTeam', data);
 
         const teamProjectList = dispatch('loadTeamProjectList', state.teamDetails._id);
@@ -64,7 +64,7 @@ const ACTIONS = {
 
   loadTeamProjectList({ commit }, id) {
     return projectService.getTeamProjectListing(id)
-      .then((projectList) => {
+      .then(({ data: { items: projectList } }) => {
         commit('setProjectList', projectList);
         return Promise.all(projectList.reduce((arr, r) => {
           r.securityTokens.forEach((rst) => arr.push(
@@ -73,7 +73,8 @@ const ACTIONS = {
           return arr;
         }, []));
       })
-      .then((accountSecurityTokenBalance) => {
+      .then((res) => {
+        const accountSecurityTokenBalance = res.map(({ data }) => data)
         commit('setAccountSecurityTokenBalance', accountSecurityTokenBalance);
       })
       .catch((err) => {
@@ -83,7 +84,7 @@ const ACTIONS = {
 
   loadTeamRevenueHistory({ commit }, id) {
     return investmentsService.getAccountRevenueHistory(id)
-      .then((revenueHistory) => {
+      .then(({ data: { items: revenueHistory } }) => {
         commit('setRevenueHistory', revenueHistory);
       })
       .catch((err) => {
@@ -96,11 +97,11 @@ const ACTIONS = {
     // const pendingInvites = [];
 
     // return teamService.getTeamPendingInvites(teamId)
-    //   .then((invites) => {
+    //   .then(({ data: { items: invites } }) => {
     //     pendingInvites.push(...invites);
     //     return userService.getUsers(pendingInvites.map((invite) => invite.invitee));
     //   })
-    //   .then((users) => {
+    //   .then(({ data: { items: users } }) => {
     //     for (let i = 0; i < pendingInvites.length; i++) {
     //       pendingInvites[i].user = users[i];
     //     }
@@ -115,13 +116,13 @@ const ACTIONS = {
   loadJoinRequests({ commit, state }, teamId) {
     // const joinRequests = [];
     // teamService.getJoinRequestsByGroup(teamId)
-    //   .then((requests) => {
+    //   .then(({ data: { items: requests } }) => {
     //     joinRequests.push(...requests);
     //     return userService.getUsers(joinRequests.map((request) => request.username));
     //   }, (err) => {
     //     console.error(err);
     //   })
-    //   .then((users) => {
+    //   .then(({ data: { item: users } }) => {
     //     joinRequests.forEach((request, idx) => {
     //       const user = users[idx];
     //       request.user = user;

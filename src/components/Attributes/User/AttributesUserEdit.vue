@@ -9,7 +9,7 @@
   import { AttributeEditBase } from '@/components/Attributes/_mixins';
 
   export default {
-    name: 'AttributesUserEdit',
+    name: 'AttributesUserSelectEdit',
     mixins: [AttributeEditBase]
   };
 </script>

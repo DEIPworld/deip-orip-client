@@ -37,20 +37,18 @@ export const attributeTypeComponent = {
     attributeComponent() {
       const a = this.$options.name.split(/(?=[A-Z])/);
       let t;
-
       if (this.type) {
-        t = ATTR_TYPES[this.type];
+        t = ATTR_TYPES.find((attr) => attr === this.type);
       } else if (this.attribute.type) {
-        t = ATTR_TYPES[this.attribute.type];
+        t = ATTR_TYPES.find((attr) => attr === this.attribute.type);
       } else if (this.attribute.attributeId) {
         const attr = this.$$networkAttributes.find(({ _id }) => _id === this.attribute.attributeId);
-        t = ATTR_TYPES[attr.type];
+        t = ATTR_TYPES.find((attrT) => attrT === attr.type);
       } else {
         throw new Error('Unknown attribute');
       }
 
       a.splice(1, 0, pascalCase(t));
-
       return a.join('');
     }
   }

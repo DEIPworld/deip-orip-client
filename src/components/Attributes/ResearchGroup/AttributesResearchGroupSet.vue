@@ -48,7 +48,7 @@
   import DAutocomplete from '@/components/Deipify/DAutocomplete/DAutocomplete';
 
   export default {
-    name: 'AttributesTeamSet',
+    name: 'AttributesTeamSelectSet',
     components: { DAutocomplete, DStack, DBlock },
     mixins: [attributeSet, nulledModel],
     data() {

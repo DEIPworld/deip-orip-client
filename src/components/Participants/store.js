@@ -25,7 +25,7 @@ const actions = {
   loadFilterParticipants({ commit }, { filter } = {}) {
     return expertiseContributionsService
       .getAccountsExpertiseStats({ ...filter, to: '', from: '' })
-      .then((list) => {
+      .then(({ data: { items: list } }) => {
         commit('SET_PARTICIPANTS', list);
       });
   }

@@ -14,7 +14,7 @@ const GETTERS = {
 const ACTIONS = {
   getProjectDetails({ commit }, projectId) {
     return projectService.getProject(projectId)
-      .then((res) => {
+      .then(({ data: res }) => {
         commit('storeProjectDetails', res);
       });
   }

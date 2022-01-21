@@ -93,7 +93,7 @@
         userService.getUsersListing(),
         teamService.getTeamsListing()
       ])
-        .then(([users, teams]) => {
+        .then(([{ data: { items: users } }, { data: { items: teams } }]) => {
           return [...users.filter(u => u.account.name != this.$currentUser.username), ...teams];
         })
         .then((accounts) => {

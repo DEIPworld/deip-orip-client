@@ -143,7 +143,7 @@
     methods: {
       sharePercent(item) {
         const token = item.project.securityTokens.find(
-          (rst) => rst.symbol === item.assetSymbol
+          (rst) => rst.symbol === item.symbol
         );
         return (item.amount * 100 / token.amount).toFixed(2);
       },

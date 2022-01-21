@@ -27,7 +27,7 @@ const ACTIONS = {
   fetch({ commit }) {
     return teamService
       .getTeamsListing()
-      .then((teams) => {
+      .then(({ data: { items: teams } }) => {
         commit('setList', teams);
       });
   },
@@ -35,14 +35,14 @@ const ACTIONS = {
   get({ commit }, payload) {
     return teamService
       .getTeams(wrapInArray(payload))
-      .then((teams) => {
+      .then(({ data: { items: teams } }) => {
         commit('setList', teams);
       });
   },
 
   getUserTeams({ commit }, username) {
     return teamService.getTeamsByUser(username)
-      .then((teams) => {
+      .then(({ data: { items: teams } }) => {
         commit('setList', teams);
       });
   }

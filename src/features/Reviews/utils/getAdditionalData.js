@@ -8,7 +8,7 @@ const projectContentService = ProjectContentService.getInstance();
 export const getAdditionalDataOne = (item) => Promise.all([
   reviewService.getReviewUpvotes(item._id),
   projectContentService.getProjectContent(item.projectContentId)
-]).then(([votes, contentData]) => ({
+]).then(([{ data: { items: votes } }, { data: contentData }]) => ({
   ...item,
   contentData: camelizeObjectKeys(contentData),
   votes,

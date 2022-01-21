@@ -16,7 +16,7 @@
   import { AttributesCheckboxRead } from '@/components/Attributes/Checkbox';
   import { AttributesDomainRead } from '@/components/Attributes/Discipline';
   import { AttributesPartnersRead } from '@/components/Attributes/Partners';
-  import { AttributesTeamRead } from '@/components/Attributes/ResearchGroup';
+  import { AttributesTeamSelectRead } from '@/components/Attributes/ResearchGroup';
   import { AttributesRoadmapRead } from '@/components/Attributes/Roadmap';
   import { AttributesSelectRead } from '@/components/Attributes/Select';
   import { AttributesStepperRead } from '@/components/Attributes/Stepper';
@@ -24,7 +24,7 @@
   import { AttributesTextRead } from '@/components/Attributes/Text';
   import { AttributesTextareaRead } from '@/components/Attributes/Textarea';
   import { AttributesUrlRead } from '@/components/Attributes/Url';
-  import { AttributesUserRead } from '@/components/Attributes/User';
+  import { AttributesUserSelectRead } from '@/components/Attributes/User';
   import { AttributesVideoUrlRead } from '@/components/Attributes/VideoUrl';
   import { AttributesImageRead } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingRead } from '@/components/Attributes/ExpressLicensing';
@@ -38,7 +38,7 @@
       AttributesCheckboxRead,
       AttributesDomainRead,
       AttributesPartnersRead,
-      AttributesTeamRead,
+      AttributesTeamSelectRead,
       AttributesRoadmapRead,
       AttributesSelectRead,
       AttributesStepperRead,
@@ -46,7 +46,7 @@
       AttributesTextRead,
       AttributesTextareaRead,
       AttributesUrlRead,
-      AttributesUserRead,
+      AttributesUserSelectRead,
       AttributesVideoUrlRead,
       AttributesImageRead,
       AttributesExpressLicensingRead,
