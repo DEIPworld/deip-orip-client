@@ -54,7 +54,7 @@ const actions = {
   loadGrantProgramDetailsPage({ state, dispatch, commit }, { foaId }) {
     commit('SET_ORGANIZATION_PROGRAM_DETAILS_PAGE_LOADING_STATE', true);
     return teamService.getTeam(Vue.$env.TENANT)
-      .then((organization) => {
+      .then(({ data: organization }) => {
         commit('SET_ORGANIZATION_PROFILE', organization);
         const organizationProgramDetailsLoad = dispatch('loadOrganizationProgramDetails', { foaId });
         return Promise.all([organizationProgramDetailsLoad]);
@@ -72,11 +72,11 @@ const actions = {
 
     let program;
     return grantsService.getFundingOpportunityAnnouncementByNumber(foaId)
-      .then((programInfo) => {
+      .then(({ data: programInfo }) => {
         program = programInfo;
         return userService.getUsers(program.officers);
       })
-      .then((profiles) => {
+      .then(({ data: { items: profiles } }) => {
         program.officers = profiles;
         mapAreaToProgram(program, state.organization.areas);
         commit('SET_ORGANIZATION_PROGRAM', program);
@@ -106,11 +106,12 @@ const actions = {
     }
 
     return projectService.getPublicProjectListing(filter)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('SET_PROJECTS_APPLIED_FOR_GRANT', result);
         return Promise.all(result.map(r => expertiseContributionsService.getProjectExpertiseStats(r._id, {})))
       })
-      .then((result) => {
+      .then((res) => {
+        const result = res.map(({ data: { items } }) => items)
         commit('SET_PROJECTS_APPLIED_FOR_GRANT_ECI_STATS', result.filter(stats => !!stats.projectId));
       })
   }

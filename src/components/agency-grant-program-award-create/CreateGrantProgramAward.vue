@@ -591,7 +591,7 @@
         funding.isTeamsLoading = true;
 
         return teamService.getTeamsByUser(funding.account.user.account.name)
-          .then((groups) => {
+          .then(({ data: { items: groups } }) => {
             funding.foundTeams.push(...groups);
             return Promise.all(groups.map((group) => projectService.getTeamProjectListing(group._id)));
           })
@@ -605,7 +605,7 @@
         funding.isProjectLoading = true;
 
         return projectService.getTeamProjectListing(funding.team._id)
-          .then((groupsProjectList) => {
+          .then(({ data: { items: groupsProjectList } }) => {
             const projects = [].concat.apply([], groupsProjectList);
             funding.foundProject.push(...projects);
           })

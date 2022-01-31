@@ -36,7 +36,7 @@ const GETTERS = {
 const ACTIONS = {
   getExpertiseStats({ commit }, payload) {
     return statsMethod(payload)
-      .then((res) => {
+      .then(({ data: res }) => {
         commit('storeExpertiseStats', res);
       }, (err) => {
         console.error(err);
@@ -56,7 +56,8 @@ const ACTIONS = {
     });
 
     return Promise.all(promises)
-      .then((res) => {
+      .then((r) => {
+        const res = r.map(({ data }) => data);
         const result = res.map((item, index) => ({
           domain: payload.domains[index],
           ...item

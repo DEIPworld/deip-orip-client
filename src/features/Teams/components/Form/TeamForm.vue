@@ -129,7 +129,7 @@
         return this.$where(
           this.$$teamAttributes,
           {
-            type: [ATTR_TYPES.IMAGE]
+            type: [ATTR_TYPES.IMAGE || 'image']
           }
         )
           .map((attr) => attr._id);

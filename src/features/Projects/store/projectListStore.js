@@ -59,7 +59,7 @@ const ACTIONS = {
 
   getPublicProjects({ commit }, { filter = {} }) {
     return projectService.getPublicProjectListing(filter)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
@@ -68,28 +68,28 @@ const ACTIONS = {
 
   getUserProjects({ commit }, { userName }) {
     return projectService.getUserProjectListing(userName)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserPublicProjects({ commit }, { userName }) {
     return projectService.getUserPublicProjects(userName)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserTeamsProjects({ commit }, { userName }) {
     return projectService.getUserTeamsProjects(userName)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
 
   getUserPersonalProjects({ commit }, { userName }) {
     return projectService.getUserPersonalProjects(userName)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
@@ -102,7 +102,7 @@ const ACTIONS = {
       .map((b) => b.ref);
 
     return ids.length ? projectService.getProjects(ids)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         context.commit('storeProjectsData', result);
       }) : context.commit('storeProjectsData', []);
   },
@@ -111,7 +111,7 @@ const ACTIONS = {
 
   getTeamProjects({ commit }, { teamId }) {
     return projectService.getTeamProjectListing(teamId)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   },
@@ -120,7 +120,7 @@ const ACTIONS = {
 
   getPortalProjects({ commit }, { portalId }) {
     return projectService.getPortalProjectListing(portalId)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         commit('storeProjectsData', result);
       });
   }

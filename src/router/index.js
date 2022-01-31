@@ -228,9 +228,9 @@ const router = new Router({
         const rolePromise = user.profile
           ? Promise.resolve(user.profile.roles || [])
           : userService.getUser(user.username)
-            .then((u) => u.profile.roles || []);
+            .then(({ data: u }) => u.profile.roles || []);
 
-        rolePromise.then((roles) => {
+        rolePromise.then(() => {
           if (Vue.$env.DEMO == 'GRANT-DISTRIBUTION-TRANSPARENCY') {
             const portal = store.getters['auth/portal'];
             if (!portal) {

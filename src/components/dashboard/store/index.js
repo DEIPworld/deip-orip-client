@@ -195,11 +195,11 @@ const actions = {
 
         return teamService.getTeams(teamIds);
       })
-      .then((teams) => {
+      .then(({ data: { items: teams } }) => {
         commit('SET_TEAMS', teams);
         return userService.getUsersByTeam(teams.map((team) => team._id));
       })
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         const flatten1 = [].concat.apply([], result);
         const flatten2 = [].concat.apply([], flatten1);
         const teamsMembers = flatten2.reduce((unique, user) => {
@@ -216,17 +216,19 @@ const actions = {
 
   loadMembershipProjects({ commit }, { username, notify } = {}) {
     return projectService.getUserProjectListing(username)
-      .then((items) => {
+      .then(({ data: { items } }) => {
         const projects = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_PROJECTS', projects);
         return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
       })
-      .then((response) => {
+      .then((res) => {
+        const response = res.map((r) => (r ? r.data : r));
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES', sales);
         return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
       })
-      .then((response) => {
+      .then((res) => {
+        const response = res.map(({ data: { items } }) => items)
         const contributions = [].concat.apply([], response);
         commit('SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
       })
@@ -240,17 +242,20 @@ const actions = {
 
     const ids = user.projectBookmarks.map((b) => b.projectId).filter((id) => !excludeIds.some((rId) => rId == id));
     return Promise.all(ids.map((_id) => projectService.getProject(_id)))
-      .then((items) => {
+      .then((res) => {
+        const items = res.map(({ data }) => data)
         const projects = items.filter((r) => !!r);
         commit('SET_BOOKMARKED_PROJECTS', projects);
         return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
       })
-      .then((response) => {
+      .then((res) => {
+        const response = res.map((r) => (r ? r.data : r));
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES', sales);
         return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
       })
-      .then((response) => {
+      .then((res) => {
+        const response = res.map(({ data: { items } }) => items)
         const contributions = [].concat.apply([], response);
         commit('SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES_CONTRIBUTIONS', contributions);
       })
@@ -261,11 +266,12 @@ const actions = {
 
   loadExperts({ commit }, { username, notify } = {}) {
     userService.getUsersListing()
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('SET_EXPERTS', users.filter((u) => u.account.name == username));
         return Promise.all(users.map((user) => expertiseContributionsService.getAccountExpertiseTokens(user.account.name)));
       })
-      .then((tokens) => {
+      .then((res) => {
+        const tokens = res.map(({ data: { items } }) => items)
         const flatten = [].concat.apply([], tokens);
         commit('SET_EXPERTS_EXPERTISE_TOKENS', flatten);
       })
@@ -276,7 +282,7 @@ const actions = {
 
   loadMyReviewRequests({ commit }, { username, notify } = {}) {
     return reviewService.getReviewRequestsByRequestor(username)
-      .then((reviews) => {
+      .then(({ data: { items: reviews } }) => {
         commit('SET_MY_REVIEW_REQUESTS', reviews);
       })
       .finally(() => {
@@ -286,7 +292,7 @@ const actions = {
 
   loadMyReviews({ commit }, { username, notify } = {}) {
     return reviewService.getReviewsByAuthor(username)
-      .then((reviews) => {
+      .then(({ data: { items: reviews } }) => {
         commit('SET_MY_REVIEWS', reviews);
       }).finally(() => {
         if (notify) notify();

@@ -15,7 +15,7 @@
 
   import { AttributesDomainEdit } from '@/components/Attributes/Discipline';
   import { AttributesPartnersEdit } from '@/components/Attributes/Partners';
-  import { AttributesTeamEdit } from '@/components/Attributes/ResearchGroup';
+  import { AttributesTeamSelectEdit } from '@/components/Attributes/ResearchGroup';
   import { AttributesRoadmapEdit } from '@/components/Attributes/Roadmap';
   import { AttributesSelectEdit } from '@/components/Attributes/Select';
   import { AttributesStepperEdit } from '@/components/Attributes/Stepper';
@@ -23,7 +23,7 @@
   import { AttributesTextEdit } from '@/components/Attributes/Text';
   import { AttributesTextareaEdit } from '@/components/Attributes/Textarea';
   import { AttributesUrlEdit } from '@/components/Attributes/Url';
-  import { AttributesUserEdit } from '@/components/Attributes/User';
+  import { AttributesUserSelectEdit } from '@/components/Attributes/User';
   import { AttributesVideoUrlEdit } from '@/components/Attributes/VideoUrl';
   import { AttributesImageEdit } from '@/components/Attributes/Image';
   import { AttributesExpressLicensingEdit } from '@/components/Attributes/ExpressLicensing';
@@ -39,7 +39,7 @@
       AttributesCheckboxEdit,
       AttributesDomainEdit,
       AttributesPartnersEdit,
-      AttributesTeamEdit,
+      AttributesTeamSelectEdit,
       AttributesRoadmapEdit,
       AttributesSelectEdit,
       AttributesStepperEdit,
@@ -47,7 +47,7 @@
       AttributesTextEdit,
       AttributesTextareaEdit,
       AttributesUrlEdit,
-      AttributesUserEdit,
+      AttributesUserSelectEdit,
       AttributesVideoUrlEdit,
       AttributesImageEdit,
       AttributesExpressLicensingEdit,
@@ -59,10 +59,9 @@
     props: {
       type: {
         type: [String, Number],
-        default: ATTR_TYPES.TEXT,
+        default: ATTR_TYPES.TEXT || 'text',
         validator(val) {
-          return Object.values(ATTR_TYPES)
-            .indexOf(ATTR_TYPES[val]) !== -1;
+          return ATTR_TYPES.indexOf(val) !== -1;
         }
       }
     }

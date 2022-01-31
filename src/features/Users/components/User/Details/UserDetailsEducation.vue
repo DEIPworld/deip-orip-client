@@ -146,7 +146,7 @@
           },
           ...update
         })
-          .then((res) => {
+          .then(() => {
             this.$notifier.showSuccess(
               this.$t('userDetailRouting.detailsEducation.success', { educationalInstitution: item.educationalInstitution })
             );

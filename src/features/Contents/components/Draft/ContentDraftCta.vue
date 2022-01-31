@@ -37,7 +37,7 @@
           .createProjectContentDraft({
             projectId: this.projectId, formatType: PROJECT_CONTENT_FORMAT.DAR
           })
-          .then(({ _id: draftId }) => {
+          .then(({ data: { _id: draftId } }) => {
             setTimeout(() => {
               this.$router.push({
                 name: 'project.content.draft',

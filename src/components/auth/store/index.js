@@ -153,7 +153,7 @@ const actions = {
 
   loadAllAssets({ commit }) { // TODO: temp
     return assetsService.lookupAssets("", 10000)
-      .then((allAssets) => {
+      .then(({ data: { items: allAssets } }) => {
         // commit('storeAllAssets', allAssets.map((b) => camelizeObjectKeys(b)));
         commit('storeAllAssets', allAssets);
       });
@@ -161,7 +161,7 @@ const actions = {
 
   loadAssets({ commit }) { // TODO: temp
     return assetsService.getAssetsByType(1)
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         const assets = res.filter(r => r.string_symbol != Vue.$env.ASSET_UNIT); // filter out core asset for now
         commit('storeAssets', assets);
       });
@@ -170,7 +170,7 @@ const actions = {
   loadProjectBookmarks({ commit, getters }, { notify } = {}) {
     const { user } = getters;
     return bookmarkService.getProjectBookmarks(user.username)
-      .then((projectBookmarks) => {
+      .then(({ data: { items: projectBookmarks } }) => {
         commit('SET_USER_PROJECT_BOOKMARKS', projectBookmarks.map((b) => ({
           _id: b._id,
           projectId: b.ref
@@ -184,7 +184,7 @@ const actions = {
     const { user } = getters;
     if (user && user.username) {
       return notificationService.getNotificationsByUser(user.username)
-        .then((notifications) => {
+        .then(({ data: { items: notifications } }) => {
           commit('SET_USER_NOTIFICATION_PROPOSALS', notifications);
         })
         .finally(() => {
@@ -197,7 +197,7 @@ const actions = {
   loadExpertTokens({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
     expertiseContributionsService.getAccountExpertiseTokens(user.username)
-      .then((expertTokens) => {
+      .then(({ data: { items: expertTokens } }) => {
         commit('SET_USER_EXPERT_TOKENS_LIST', expertTokens);
       })
       .finally(() => {
@@ -208,7 +208,7 @@ const actions = {
   loadUserData({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
     return userService.getUser(user.username)
-      .then((result) => {
+      .then(({ data: result }) => {
         commit('SET_USER_PROFILE', result.profile);
         commit('SET_USER_ACCOUNT', result.account);
       }, (err) => {
@@ -222,12 +222,13 @@ const actions = {
   loadBalances({ state, commit, getters }, { notify } = {}) {
     const { user } = getters;
     return assetsService.getAccountAssetsBalancesByOwner(user.username)
-      .then((balances) => {
+      .then(({ data: { items: balances } }) => {
         const currencies = balances.filter(b => !b.tokenizedProject);
         commit('SET_USER_BALANCES', currencies);
         return Promise.all(currencies.map((b) => assetsService.getAssetBySymbol(b.asset_symbol)));
       })
-      .then((assets) => {
+      .then((res) => {
+        const assets = res.map(({ data }) => data)
         commit('SET_USER_ASSETS', assets);
       })
       .catch((err) => { console.error(err); })
@@ -240,7 +241,7 @@ const actions = {
     const { user } = getters;
 
     return teamService.getTeamsByUser(user.username)
-      .then((groups) => {
+      .then(({ data: { items: groups } }) => {
         commit('SET_USER_GROUPS_LIST', groups);
       });
   },
@@ -248,7 +249,7 @@ const actions = {
   loadJoinRequests({ state, commit, getters }, { notify } = {}) {
     // const { user } = getters;
     // teamService.getJoinRequestsByUser(user.username)
-    //   .then((requests) => {
+    //   .then(({ data: { items: requests } }) => {
     //     commit('SET_USER_JOIN_REQUESTS', requests);
     //   }, (err) => {
     //     console.error(err);
@@ -260,7 +261,7 @@ const actions = {
 
   loadPortal({ state, commit, getters }, { portal, notify } = {}) {
     return portalService.getPortal(portal)
-      .then((portal) => {
+      .then(({ data: portal }) => {
         commit('SET_PORTAL', portal);
       })
       .catch((err) => {
@@ -273,7 +274,7 @@ const actions = {
 
   loadNetworkInfo({ state, commit, getters }) {
     return portalService.getNetworkPortals()
-      .then((network) => {
+      .then(({ data: { items: network } }) => {
         commit('SET_NETWORK_PORTALS', network);
       })
       .catch((err) => {

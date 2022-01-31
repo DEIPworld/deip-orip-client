@@ -164,7 +164,7 @@ const actions = {
 
         commit('SET_PROJECT_CONTENT_DETAILS_LOADING_STATE', true);
         return projectContentService.getProjectContent(contentId)
-          .then((contentObj) => {
+          .then(({ data: contentObj }) => {
             commit('SET_PROJECT_CONTENT_DETAILS', contentObj);
             const contentRefLoad = new Promise((resolve, reject) => {
               dispatch('loadProjectContentRef', {
@@ -209,7 +209,7 @@ const actions = {
     const domainsList = [];
 
     domainsService.getDomainsByProject(projectId)
-      .then((data) => {
+      .then(({ data: { items: data } }) => {
         const expertsPromises = [];
 
         for (let i = 0; i < data.length; i++) {
@@ -218,18 +218,17 @@ const actions = {
           expertsPromises.push(expertiseContributionsService.getDomainExpertiseTokens(domain._id));
         }
 
-        return Promise.all([
-          Promise.all(expertsPromises)
-        ]);
+        return Promise.all(expertsPromises);
       })
-      .then(([expertTokensPerDomain]) => {
+      .then((res) => {
+        const expertTokensPerDomain = res.map(({ data: { items } }) => items)
         const expertsAccountNames = [];
         expertTokensPerDomain.forEach((e) => {
           expertsAccountNames.push(...e.map((et) => et.account_name));
         });
         commit('SET_PROJECT_CONTENT_DOMAINS_LIST', domainsList);
         return userService.getUsers(_.uniq(expertsAccountNames));
-      }).then((expertsList) => {
+      }).then(({ data: { items: expertsList } }) => {
         commit('SET_EXPERTS_LIST', expertsList);
       })
       .finally(() => {
@@ -242,15 +241,15 @@ const actions = {
     commit('SET_PROJECT_DETAILS_LOADING_STATE', true);
 
     return projectService.getProject(projectId)
-      .then((project) => {
+      .then(({ data: project }) => {
         commit('SET_PROJECT_DETAILS', project);
         return userService.getUsersByTeam(project.teamId);
       })
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('SET_TEAM_MEMBERS_LIST', users);
         return projectContentService.getProjectContentsByProject(projectId);
       })
-      .then((list) => {
+      .then(({ data: { items: list } }) => {
         commit('SET_PROJECT_CONTENT_LIST', list);
       })
       .finally(() => {
@@ -261,7 +260,7 @@ const actions = {
   loadTeamDetails({ state, commit, dispatch }, { teamId }) {
     commit('SET_TEAM_DETAILS_LOADING_STATE', true);
     return teamService.getTeam(teamId)
-      .then((team) => {
+      .then(({ data: team }) => {
         commit('SET_TEAM_DETAILS', team);
         return team;
       }, (err) => {
@@ -274,12 +273,12 @@ const actions = {
 
   loadProjectContentRef({ state, commit, dispatch }, { refId, projectId, notify }) {
     return projectContentService.getProjectContentRef(refId)
-      .then((contentRef) => {
+      .then(({ data: contentRef }) => {
         commit('SET_PROJECT_CONTENT_REF', contentRef);
         return dispatch('loadTeamDetails', { teamId: contentRef.teamId });
       })
       .then((team) => proposalsService.getProposalsByCreator(team._id))
-      .then((proposals) => {
+      .then(({ data: { items: proposals } }) => {
         const { contentRef } = state;
         const contentProposal = proposals.filter((p) => p.action === PROPOSAL_TYPES.CREATE_PROJECT_MATERIAL).find((p) => p.payload.content == contentRef.hash && p.payload.projectId == projectId);
         commit('SET_CONTENT_PROPOSAL', contentProposal || null);
@@ -295,14 +294,15 @@ const actions = {
     const reviews = [];
     commit('SET_PROJECT_CONTENT_REVIEWS_LOADING_STATE', true);
     reviewService.getReviewsByProjectContent(contentId)
-      .then((items) => {
+      .then(({ data: { items } }) => {
         reviews.push(...items);
         return Promise.all([
           Promise.all(reviews.map((item) => reviewService.getReviewUpvotes(item._id))),
           userService.getUsers(reviews.map((r) => r.author))
         ]);
       })
-      .then(([votes, users]) => {
+      .then(([res, { data: { items: users } }]) => {
+        const votes = res.map(({ data: { items } }) => items)
         const voters = [];
         for (let i = 0; i < reviews.length; i++) {
           const review = reviews[i];
@@ -321,7 +321,7 @@ const actions = {
 
         return userService.getUsers(voters);
       })
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         for (let i = 0; i < reviews.length; i++) {
           const review = reviews[i];
           for (let j = 0; j < review.votes.length; j++) {
@@ -340,13 +340,14 @@ const actions = {
   loadProjectContentReferences({ state, dispatch, commit }, projectContentId) {
     let graph = {};
     return projectContentService.getProjectContentReferencesGraph(projectContentId)
-      .then((graphData) => {
+      .then(({ data: graphData }) => {
         graph = graphData;
         return Promise.all(graphData.nodes.map(
           ({ team }) => teamService.getTeam(team._id)
         ));
       })
-      .then((teams) => {
+      .then((res) => {
+        const teams = res.map(({ data }) => data)
         graph.nodes = graph.nodes.map((n) => ({
           ...n,
           team: teams.find(
@@ -373,7 +374,7 @@ const actions = {
 
   loadProjectContentEciStatsRecords({ commit }, filter) {
     return expertiseContributionsService.getProjectContentExpertiseStats(filter.projectContentId, filter)
-      .then((stats) => {
+      .then(({ data: { items: stats } }) => {
         commit('SET_PROJECT_CONTENT_ECI_STATS', stats);
       });
   }

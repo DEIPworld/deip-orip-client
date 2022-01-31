@@ -49,7 +49,7 @@ const actions = {
   loadBalances({ state, commit }, account) {
     let balances = [];
     return assetsService.getAccountAssetsBalancesByOwner(account)
-      .then((assetsBalances) => {
+      .then(({ data: { items: assetsBalances } }) => {
         // const securityTokens = assetsBalances
         //   .map((b) => camelizeObjectKeys(b))
         //   .filter((b) => !!b.tokenizedProject);
@@ -60,7 +60,8 @@ const actions = {
           (b) => projectService.getProject(b.tokenizedProject)
         ));
       })
-      .then((projects) => {
+      .then((res) => {
+        const projects = res.map(({ data }) => data)
         balances = balances.map((b) => ({
           ...b,
           project: projects.find((r) => r._id === b.tokenizedProject)
@@ -74,7 +75,8 @@ const actions = {
           ))
         );
       })
-      .then((history) => {
+      .then((res) => {
+        const history = res.map(({ data: { items } }) => items)
         balances = balances.map((b) => ({
           ...b,
           revenueHistory: history.find(
@@ -88,14 +90,15 @@ const actions = {
           ))
         );
       })
-      .then((securityTokenHistory) => {
+      .then((res) => {
+        const securityTokenHistory = res.map(({ data: { items } }) => items)
         balances = balances.map((b) => ({
           ...b,
           securityTokenHistory: securityTokenHistory.find(
             (s) => s[0] && s[0].security_token.string_symbol === b.symbol
           ) || []
         }));
-
+        console.log(balances, 'balancesbalances')
         commit('setBalances', balances);
       })
       .catch((err) => console.error(err));
@@ -105,7 +108,8 @@ const actions = {
     return Promise.all(account.balances.map(
       ({ symbol }) => assetsService.getAssetBySymbol(symbol)
     ))
-      .then((data) => {
+      .then((res) => {
+        const data = res.map(({ data: d }) => d)
         // const assetsInfo = data.map((a) => camelizeObjectKeys(a)).reduce(
         //   (result, item) => ({
         //     ...result,
@@ -126,11 +130,11 @@ const actions = {
   loadBalanceData({ commit, dispatch }, account) {
     let groupData = {};
     return teamService.getTeam(account)
-      .then((group) => {
+      .then(({ data: group }) => {
         groupData = group;
         return assetsService.getAccountAssetsBalancesByOwner(groupData._id);
       })
-      .then((assetsBalances) => {
+      .then(({ data: { items: assetsBalances } }) => {
         // const currencies = assetsBalances
         //   .map((b) => camelizeObjectKeys(b))
         //   .filter((b) => !b.tokenizedProject);
@@ -146,12 +150,14 @@ const actions = {
   loadAllGroups({ commit }, user) {
     const groupList = [];
     return teamService.getTeamsByUser(user)
-      .then((result) => {
+      .then(({ data: { items: result } }) => {
         const groups = result.filter((item) => !item.is_personal);
         groupList.push(...groups);
         return Promise.all(groups.map((item) => projectService.getTeamProjectListing(item._id)));
       })
-      .then((projects) => {
+      .then((res) => {
+        console.log(res)
+        const projects = res.map(({ data: { items } }) => items)
         groupList.forEach((g) => {
           const projectList = projects.filter(
             (r) => r[0] && r[0].teamId === g._id
@@ -164,7 +170,8 @@ const actions = {
           )
         );
       })
-      .then((revenueHistory) => {
+      .then((res) => {
+        const revenueHistory = res.map(({ data: { items } }) => items)
         groupList.forEach((g) => {
           const revenueHistoryList = revenueHistory.find(
             (r) => r[0] && r[0].account === g._id
@@ -185,7 +192,8 @@ const actions = {
           }, []
         ));
       })
-      .then((result) => {
+      .then((res) => {
+        const result = res.map(({ data }) => data)
         groupList.forEach((g) => {
           const accountSecurityTokenBalances = result.filter(
             (r) => g._id === r.owner

@@ -23,7 +23,7 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }) {
     return attributesService.getNetworkAttributes()
-      .then((attrs) => {
+      .then(({ data: { items: attrs } }) => {
         commit('setList', attrs);
       });
   }

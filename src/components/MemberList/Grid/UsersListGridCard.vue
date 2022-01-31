@@ -18,7 +18,7 @@
   import { usersListItem } from '@/components/MemberList/mixins/usersListItem';
 
   export default {
-    name: 'ProjectsListGridCard',
+    name: 'UsersListGridCard',
     mixins: [usersListItem],
     props: {
       layoutKey: {

@@ -38,7 +38,7 @@ export const attributeFileUrl = (
     const internalWidth = width * 2;
     const internalHeight = height ? height * 2 : internalWidth;
     sizeQuery.push(`&width=${internalWidth}`, `&height=${internalHeight}`);
-  } else if (scope === ATTR_SCOPES.USER || scope === ATTR_SCOPES.TEAM) {
+  } else if (scope === ATTR_SCOPES.USER || scope === ATTR_SCOPES.TEAM || scope === 'user' || scope === 'team') {
     const internalWidth = width ? width * 2 : 96;
     const internalHeight = height ? height * 2 : internalWidth;
     sizeQuery.push(`&width=${internalWidth}`, `&height=${internalHeight}`);

@@ -100,11 +100,12 @@
       },
       getReviewCommittes(ids) {
         teamService.getTeams(ids)
-          .then((teams) => {
+          .then(({ data: { items: teams } }) => {
             this.allTeamList = teams;
             
             Promise.all(this.allTeamList.map((team) => userService.getUsersByTeam(team._id)))
-              .then((allMembers) => {
+              .then((res) => {
+                const allMembers = res.map(({ data: { items } }) => items)
                 for (let i = 0; i < this.allTeamList.length; i++) {
                   const team = this.allTeamList[i];
                   team.enrichedMembers = allMembers[i];

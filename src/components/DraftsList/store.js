@@ -13,7 +13,7 @@ const GETTERS = {
 const ACTIONS = {
   getDrafts({ commit }, projectId) {
     return projectContentService.getDraftsByProject(projectId)
-      .then((drafts) => {
+      .then(({ data: { items: drafts } }) => {
         commit('storeDrafts', drafts);
       })
       .catch((err) => { console.error(err); });

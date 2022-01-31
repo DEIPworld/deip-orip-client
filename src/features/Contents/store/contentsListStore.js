@@ -33,7 +33,7 @@ const ACTIONS = {
     const projectContents = [];
 
     return projectContentService.getProjectContentsByProject(projectId)
-      .then((list) => {
+      .then(({ data: { items: list } }) => {
         projectContents.push(...list.filter((projectContent) => !projectContent.isDraft));
         return Promise.all(
           projectContents.map(
@@ -41,7 +41,8 @@ const ACTIONS = {
           )
         );
       })
-      .then((reviews) => {
+      .then((res) => {
+        const reviews = res.map(({ data: { items } }) => items)
         projectContents.forEach((content, index) => {
           content.reviews = reviews[index];
         });

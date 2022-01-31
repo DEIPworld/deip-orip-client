@@ -124,7 +124,7 @@
 
     computed: {
       projectHasLicense() {
-        return this.$$ifAttributesByType(ATTR_TYPES.EXPRESS_LICENSING);
+        return this.$$ifAttributesByType(ATTR_TYPES.EXPRESS_LICENSING || 'expressLicensing');
       },
 
       accessGranted() {

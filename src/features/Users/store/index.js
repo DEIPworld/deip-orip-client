@@ -32,7 +32,7 @@ const ACTIONS = {
       teamService.getTeamsByUser(username),
       expertiseContributionsService.getAccountExpertiseTokens(username)
     ])
-      .then(([{ account, profile }, teams, expertise]) => {
+      .then(([{ data: { account, profile } }, { data: { items: teams } }, { data: { items: expertise } }]) => {
         commit('setOne', {
           username,
           account,

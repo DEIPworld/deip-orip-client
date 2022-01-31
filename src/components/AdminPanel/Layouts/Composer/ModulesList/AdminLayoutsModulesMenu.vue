@@ -100,7 +100,7 @@
               action: () => { this.$clipboard(`this.ifAttribute('${this.attrId}')`); }
             }] : []),
 
-          ...(this.attrIsRead && this.attrInfo.type === ATTR_TYPES.IMAGE
+          ...(this.attrIsRead && (this.attrInfo.type === ATTR_TYPES.IMAGE || this.attrInfo.type === 'image')
             ? [{
               icon: 'mdi-image-multiple-outline',
               label: 'Copy image url',

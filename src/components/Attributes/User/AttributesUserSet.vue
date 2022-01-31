@@ -20,7 +20,7 @@
   import UserSelector from '@/features/Users/components/Selector/UserSelector';
 
   export default {
-    name: 'AttributesUsersListSet',
+    name: 'AttributesUserSelectSet',
     components: { UserSelector },
     mixins: [attributeSetForceArray]
   };

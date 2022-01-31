@@ -239,7 +239,7 @@
       this.formModel.reviewData.push(...questions.map(() => []));
 
       return reviewService.getReviewRequestsByExpert(this.$currentUser.username, 1)
-        .then((res) => {
+        .then(({ data: { items: res } }) => {
           const request = res.find((r) => r.projectContentId === this.content._id);
           if (request) {
             this.requestAccepted = false;

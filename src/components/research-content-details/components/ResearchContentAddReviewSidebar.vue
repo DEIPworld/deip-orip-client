@@ -108,7 +108,7 @@
             assessment,
             domains: domains
           })
-            .then((data) => {
+            .then(() => {
               this.$notifier.showSuccess(this.$t('projectContentDetails.addRev.pubSucc'));
               this.$router.push({
                 name: 'project.content.details',

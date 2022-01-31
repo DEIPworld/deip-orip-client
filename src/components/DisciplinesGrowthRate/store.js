@@ -18,7 +18,7 @@ const GETTERS = {
 const ACTIONS = {
   get(context, payload = {}) {
     return expertiseContributionsService.getDomainsExpertiseStatsHistory(payload)
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         context.commit('store', res);
       });
   }

@@ -77,7 +77,7 @@
         rules: { required: (value) => !!value || this.$t('defaultNaming.fieldRules.required') },
 
         formData: {
-          type: ATTR_TYPES.TEXT,
+          type: ATTR_TYPES.TEXT || 'text',
           ...defaultAttributeModel()
         },
 

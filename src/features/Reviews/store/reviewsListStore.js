@@ -36,7 +36,7 @@ const ACTIONS = {
 
   getReviewsByProject({ dispatch, commit }, { projectId }) {
     return reviewService.getReviewsByProject(projectId)
-      .then((items) => Promise.all(
+      .then(({ data: { items } }) => Promise.all(
         getAdditionalData(items)
       )
         .then((res) => {
@@ -49,7 +49,7 @@ const ACTIONS = {
 
   getReviewsByContent({ commit }, { contentId }) {
     return reviewService.getReviewsByProjectContent(contentId)
-      .then((items) => Promise.all(
+      .then(({ data: { items } }) => Promise.all(
         getAdditionalData(items)
       )
         .then((res) => {

@@ -17,6 +17,7 @@ export default {
   mixins: [componentsRenderer, Proxyable, attributesChore],
   computed: {
     attributes() {
+      console.log(this.$$teamAttributes, 'this.$$teamAttributes')
       return portalAttributesToObject(this.$$teamAttributes);
     }
   }

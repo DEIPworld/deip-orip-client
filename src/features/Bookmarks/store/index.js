@@ -13,7 +13,7 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }, username) {
     return bookmarkService.getProjectBookmarks(username)
-      .then((bookmarks) => {
+      .then(({ data: { items: bookmarks } }) => {
         commit('setList', bookmarks);
       })
       .catch((err) => {

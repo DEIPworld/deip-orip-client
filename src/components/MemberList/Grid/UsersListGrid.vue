@@ -36,7 +36,7 @@
   import { usersView } from '@/components/MemberList/mixins/userView';
 
   export default {
-    name: 'ProjectsListGrid',
+    name: 'UsersListGrid',
     components: {
       UsersListGridCard,
       DGrid

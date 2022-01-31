@@ -290,43 +290,45 @@ const actions = {
 
   loadAwardDetails({ commit, dispatch, state }, { awardNumber, subawardNumber, notify }) {
     return grantsService.getAwardByNumber(awardNumber)
-      .then((award) => {
+      .then(({ data: award }) => {
         commit('SET_AWARD', award);
         const awardee = award.awardees.find((a) => a.award_number == awardNumber && a.subaward_number == subawardNumber);
         commit('SET_AWARDEE', awardee);
 
         return grantsService.getFundingOpportunityAnnouncementByNumber(award.funding_opportunity_number);
       })
-      .then((foa) => {
+      .then(({ data: foa }) => {
         commit('SET_FUNDING_OPPORTUNITY', foa);
 
         return teamService.getTeam(foa.organizationId);
       })
-      .then((foaOrganization) => {
+      .then(({ data: foaOrganization }) => {
         commit('SET_FUNDING_OPPORTUNITY_ORGANIZATION', foaOrganization);
 
         return grantsService.getAwardWithdrawalRequestsByAward(awardNumber);
       })
-      .then((paymentRequests) => {
+      .then(({ data: { items: paymentRequests } }) => {
         commit('SET_AWARD_PAYMENT_REQUESTS_LIST', paymentRequests);
 
         return userService.getUsers(state.award.awardees
           .map((r) => r.awardee)
           .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })
-      .then((awardeeUsers) => {
+      .then(({ data: { items: awardeeUsers } }) => {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
         return Promise.all(state.award.awardees.map((r) => r.projectId)
           .reduce((acc, projectId) => (acc.some((rId) => rId === projectId) ? acc : [projectId, ...acc]), [])
           .map((rId) => projectService.getProject(rId)));
       })
-      .then((projectList) => {
+      .then((res) => {
+        const projectList = res.map(({ data }) => data);
         commit('SET_AWARDEE_PROJECT_LIST', projectList);
         return Promise.all(projectList.map((r) => r.teamId)
           .reduce((acc, teamId) => (acc.some((rgId) => rgId === teamId) ? acc : [teamId, ...acc]), [])
           .map((rgId) => teamService.getTeam(rgId)));
       })
-      .then((teams) => {
+      .then((res) => {
+        const teams = res.map(({ data }) => data)
         commit('SET_AWARDEE_TEAMS_LIST', teams);
       })
       .catch((err) => { console.error(err); })

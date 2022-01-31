@@ -17,7 +17,7 @@ const GETTERS = {
 const ACTIONS = {
   getReferences({ commit }) {
     return projectContentService.getPublicProjectContentListing()
-      .then((contents) => {
+      .then(({ data: { items: contents } }) => {
         commit('storeReferences', contents);
       });
   }

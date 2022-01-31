@@ -44,7 +44,7 @@
             members: members.filter((m) => m !== this.$currentUser.username),
             attributes
           })
-          .then((res) => {
+          .then(({ data: res }) => {
             this.loading = false;
             this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username);
             this.$notifier.showSuccess(this.$t('createTeam.successCreate', { name }));
@@ -54,7 +54,7 @@
               teamService.getTeam(teamId)
             ]);
           })
-          .then(([team]) => {
+          .then(([{ data: team }]) => {
             this.$router.push({
               name: 'team.details',
               params: {

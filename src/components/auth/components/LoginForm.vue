@@ -128,7 +128,7 @@
         let publicKey;
         this.disable = true;
         userService.getUser(this.formData.username)
-          .then((res) => {
+          .then(({ data: res }) => {
             if (!res) {
               throw new Error(this.$t('signIn.form.rules.invalidAccount'));
             }
@@ -142,7 +142,7 @@
               secretSigHex: seedAccount.signString(window.env.SIG_SEED)
             });
           })
-          .then((response) => {
+          .then(({ data: response }) => {
             if (!response.success) {
               accessService.clearAccessToken();
               this.disable = false;

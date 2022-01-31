@@ -35,28 +35,28 @@ const ACTIONS = {
 
   getUsers({ commit }, { users }) {
     return userService.getUsers(users)
-      .then((items) => {
+      .then(({ data: { items } }) => {
         commit('storeUsersProfiles', items);
       });
   },
 
   getUsersByTeam({ commit }, { teamId }) {
     return userService.getUsersByTeam(teamId)
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('storeUsersProfiles', users);
       });
   },
 
   getActiveUsers({ commit }) {
     return userService.getUsersListing()
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('storeUsersProfiles', users);
       });
   },
 
   getPortalUsers({ commit }, { portalId }) {
     return userService.getUsersByPortal(portalId)
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('storeUsersProfiles', users);
       });
   }

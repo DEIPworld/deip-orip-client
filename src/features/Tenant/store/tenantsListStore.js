@@ -26,14 +26,14 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }) {
     return portalService.getNetworkPortals()
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         commit('setData', res);
       });
   },
 
   get({ commit }, portalId) {
     return portalService.getNetworkPortal(portalId)
-      .then((res) => {
+      .then(({ data: res }) => {
         commit('setData', res);
       });
   }

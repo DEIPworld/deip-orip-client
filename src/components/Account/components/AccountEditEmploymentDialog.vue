@@ -284,7 +284,7 @@
           },
           ...update
         })
-          .then((res) => {
+          .then(() => {
             this.$notifier.showSuccess(this.$t('userDetailRouting.employmentDialog.emplSaveSucc', { company: this.formData.company }));
             return this.$store.dispatch('Auth/getCurrentUser');
           }, (err) => {

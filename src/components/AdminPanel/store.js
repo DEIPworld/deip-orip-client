@@ -24,7 +24,7 @@ const getters = {
 const actions = {
   loadRegisteredMembers({ commit }, { notify } = {}) {
     return userService.getUsersByPortal(Vue.$env.TENANT)
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         const approvedUsers = users.sort((a, b) => {
           const dateA = new Date(a.profile.created_at);
           const dateB = new Date(b.profile.created_at);
@@ -40,7 +40,7 @@ const actions = {
 
   loadWaitingMembers({ commit }, { notify } = {}) {
     return portalService.getSignUpRequests()
-      .then((users) => {
+      .then(({ data: { items: users } }) => {
         commit('SET_WAITING_MEMBERS', users);
       })
       .catch((err) => console.error(err))

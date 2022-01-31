@@ -324,7 +324,7 @@
         this.redirect();
       } else {
         teamService.getTeam(this.project.teamId)
-          .then((res) => {
+          .then(({ data: res }) => {
             this.teamData = { ...this.teamData, ...res };
             this.$setReady();
           });
@@ -399,7 +399,7 @@
             precision: DEFAULT_PRECISION,
             maxSupply: parseInt(this.formModel.maxSupply + '0'.repeat(DEFAULT_PRECISION)),
             description: '',
-            projectTokenOption: {
+            projectTokenSettings: {
               projectId: this.project._id,
               teamId: this.project.teamId,
               licenseRevenue : {

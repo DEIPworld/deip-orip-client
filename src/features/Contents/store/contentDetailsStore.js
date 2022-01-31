@@ -14,7 +14,7 @@ const GETTERS = {
 const ACTIONS = {
   getContentDetails({ commit }, contentId) {
     return projectContentService.getProjectContent(contentId)
-      .then((content) => {
+      .then(({ data: content }) => {
         commit('storeContentDetails', content);
       });
   }

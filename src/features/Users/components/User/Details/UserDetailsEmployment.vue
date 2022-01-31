@@ -148,7 +148,7 @@
           },
           ...update
         })
-          .then((res) => {
+          .then(() => {
             this.$notifier.showSuccess(
               this.$t('userDetailRouting.detailsEmployment.success', { company: item.company })
             );

@@ -176,7 +176,7 @@ const actions = {
   loadAgencyAwardsDashboardPage({ commit, dispatch, state }) {
     commit('SET_ORGANIZATION_DASHBOARD_LOADING_STATE', true);
     return teamService.getTeam(Vue.$env.TENANT)
-      .then((organization) => {
+      .then(({ data: organization }) => {
         commit('SET_CURRENT_ORGANIZATION', organization);
         return Promise.all([
           dispatch('loadAwards', {})
@@ -195,18 +195,20 @@ const actions = {
   loadAwards({ commit, dispatch, state }, { notify }) {
     // TODO: load awards for the current organization only
     return grantsService.getFundingOpportunityAnnouncementsListing(1, 10000)
-      .then((awardsFoaList) => {
+      .then(({ data: { items: awardsFoaList } }) => {
         commit('SET_AWARDS_FUNDING_OPPORTUNITIES_LIST', awardsFoaList);
 
         return Promise.all(awardsFoaList.map((foa) => grantsService.getAwardsByFundingOpportunity(foa.funding_opportunity_number)));
       })
-      .then((awards) => {
+      .then((res) => {
+        const awards = res.map(({ data: { items } }) => items)
         const flatten = [].concat.apply([], awards);
         commit('SET_AWARDS_LIST', flatten);
 
         return Promise.all(flatten.map((award) => grantsService.getAwardWithdrawalRequestsByAward(award.award_number)));
       })
-      .then((paymentRequests) => {
+      .then((res) => {
+        const paymentRequests = res.map(({ data: { items } }) => items)
         const flatten = [].concat.apply([], paymentRequests);
         commit('SET_PAYMENT_REQUESTS_LIST', flatten);
 
@@ -214,21 +216,23 @@ const actions = {
           .map((r) => r.awardee)
           .reduce((acc, awardee) => (acc.some((a) => a === awardee) ? acc : [awardee, ...acc]), []));
       })
-      .then((awardeeUsers) => {
+      .then(({ data: { items: awardeeUsers } }) => {
         commit('SET_AWARDEE_USERS_LIST', awardeeUsers);
 
         return Promise.all(state.awardeesList.map((r) => r.projectId)
           .reduce((acc, projectId) => (acc.some((rId) => rId === projectId) ? acc : [projectId, ...acc]), [])
           .map((rId) => projectService.getProject(rId)));
       })
-      .then((projectList) => {
+      .then((res) => {
+        const projectList = res.map(({ data }) => data)
         commit('SET_AWARDEE_PROJECT_LIST', projectList);
 
         return Promise.all(projectList.map((r) => r.teamId)
           .reduce((acc, teamId) => (acc.some((rgId) => rgId === teamId) ? acc : [teamId, ...acc]), [])
           .map((rgId) => teamService.getTeam(rgId)));
       })
-      .then((teams) => {
+      .then((res) => {
+        const teams = res.map(({ data }) => data)
         commit('SET_AWARDEE_TEAMS_LIST', teams);
       })
       .catch((err) => { console.error(err); })
@@ -243,7 +247,8 @@ const actions = {
     const allOrganizationFundingOpportunitiesAwards = [];
 
     return Promise.all(allOrganizationFundingOpportunities.map((foa) => grantsService.getAwardsByFundingOpportunity(foa.funding_opportunity_number)))
-      .then((list) => {
+      .then((res) => {
+        const list = res.map(({ data }) => data)
         allOrganizationFundingOpportunitiesAwards.push(...[].concat.apply([], list));
 
         const totalIssuedTokensAmount = allOrganizationFundingOpportunities.reduce((acc, foa) => acc + grantsService.fromAssetsToFloat(foa.amount), 0);

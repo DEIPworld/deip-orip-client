@@ -154,7 +154,7 @@
         return this.$where(
           this.$$projectAttributes,
           {
-            type: [ATTR_TYPES.IMAGE]
+            type: [ATTR_TYPES.IMAGE || 'image']
           }
         )
           .map((attr) => attr._id);

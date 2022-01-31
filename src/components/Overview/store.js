@@ -28,14 +28,14 @@ const getters = {
 const actions = {
   getDomainsExpertiseLastStats(context) {
     return expertiseContributionsService.getDomainsExpertiseLastStats()
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         context.commit('getDomainsExpertiseLastStats', res);
       });
   },
 
   getDomainsExpertiseStatsHistory(context) {
     return expertiseContributionsService.getDomainsExpertiseStatsHistory({})
-      .then((res) => {
+      .then(({ data: { items: res } }) => {
         context.commit('getDomainsExpertiseStatsHistory', res);
       });
   }

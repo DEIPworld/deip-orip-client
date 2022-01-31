@@ -13,7 +13,7 @@ const GETTERS = {
 const ACTIONS = {
   fetch({ commit }, username) {
     return notificationService.getNotificationsByUser(username)
-      .then((notifications) => {
+      .then(({ data: { items: notifications } }) => {
         commit('setList', notifications);
       })
       .catch((err) => {

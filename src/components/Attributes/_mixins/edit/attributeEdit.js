@@ -7,7 +7,7 @@ export const defaultAttributeModel = () => ({
   title: '',
   shortTitle: '',
   description: '',
-  scope: ATTR_SCOPES.PROJECT,
+  scope: ATTR_SCOPES.PROJECT || 'project',
 
   defaultValue: null,
   valueOptions: [],

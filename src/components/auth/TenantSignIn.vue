@@ -105,7 +105,7 @@
         let privateKey;
         let publicKey;
         return userService.getUser(this.username)
-          .then((res) => {
+          .then(({ data: res }) => {
             if (!res) {
               throw new Error(this.$t('portalSignIn.form.rules.invalidOrg'));
             }
@@ -119,7 +119,7 @@
               secretSigHex: seedAccount.signString(window.env.SIG_SEED)
             });
           })
-          .then((response) => {
+          .then(({ data: response }) => {
             if (!response.success) {
               accessService.clearAccessToken();
               this.isChecking = false;
