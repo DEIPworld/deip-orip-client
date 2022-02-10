@@ -250,12 +250,12 @@
   import { componentStoreFactoryOnce } from '@/mixins/registerStore';
   import { fundraisingStore } from '@/components/Fundraising/FundraisingPage/store';
   import { mapGetters } from 'vuex';
-  import { InvestmentsService } from '@deip/investments-service';
+  import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
   import crypto from '@deip/lib-crypto';
   import DBoxItem from '@/components/Deipify/DBoxItem/DBoxItem';
   import { assetsChore } from '@/mixins/chores';
 
-  const investmentsService = InvestmentsService.getInstance();
+  const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 
   const transactionTypes = {
     TRANS: 1
@@ -472,7 +472,7 @@
           precision
         } = this.$$assetInfo(tokenSaleSymbol);
 
-        investmentsService.investProjectTokenSale(
+        investmentOpportunityService.invest(
           { privKey: this.$currentUser.privKey, username: this.$currentUser.username },
           {
             investmentOpportunityId: this.tokenSale._id,

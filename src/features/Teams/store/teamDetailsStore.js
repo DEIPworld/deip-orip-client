@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { UserService } from '@deip/user-service';
 import { ProjectService } from '@deip/project-service';
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 import { AssetsService } from '@deip/assets-service';
 import { TeamService } from '@deip/team-service';
 import { GrantsService } from '@deip/grants-service';
@@ -10,7 +10,7 @@ import { camelizeObjectKeys } from '@/utils/helpers';
 
 const teamService = TeamService.getInstance();
 const assetsService = AssetsService.getInstance();
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
 const grantsService = GrantsService.getInstance();
@@ -83,7 +83,7 @@ const ACTIONS = {
   },
 
   loadTeamRevenueHistory({ commit }, id) {
-    return investmentsService.getAccountRevenueHistory(id)
+    return investmentOpportunityService.getAccountRevenueHistory(id)
       .then(({ data: { items: revenueHistory } }) => {
         commit('setRevenueHistory', revenueHistory);
       })
