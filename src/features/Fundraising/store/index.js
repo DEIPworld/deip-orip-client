@@ -1,6 +1,6 @@
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 
 const STATE = {
   data: []
@@ -10,7 +10,7 @@ const GETTERS = {};
 
 const ACTIONS = {
   create({ commit }, payload) {
-    return investmentsService.createProjectTokenSale(...payload)
+    return investmentOpportunityService.createInvestmentOpportunity(...payload)
       .then(({ data: res }) => res);
   }
 };

@@ -1,6 +1,6 @@
 import { UserService } from '@deip/user-service';
 import { ProjectService } from '@deip/project-service';
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 import { ReviewService } from '@deip/review-service';
 import { ExpertiseContributionsService } from '@deip/expertise-contributions-service';
 import { TeamService } from '@deip/team-service';
@@ -8,7 +8,7 @@ import { TeamService } from '@deip/team-service';
 const teamService = TeamService.getInstance();
 const userService = UserService.getInstance();
 const projectService = ProjectService.getInstance();
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 const expertiseContributionsService = ExpertiseContributionsService.getInstance();
 const reviewService = ReviewService.getInstance();
 
@@ -219,13 +219,13 @@ const actions = {
       .then(({ data: { items } }) => {
         const projects = [].concat.apply([], items);
         commit('SET_MY_MEMBERSHIP_PROJECTS', projects);
-        return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
+        return Promise.all(projects.map((project) => investmentOpportunityService.getCurrentInvestmentOpportunityByProject(project._id)));
       })
       .then((res) => {
         const response = res.map((r) => (r ? r.data : r));
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_MY_MEMBERSHIP_PROJECTS_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
+        return Promise.all(sales.map((ts) => investmentOpportunityService.getInvestmentOpportunityHistoryByTokenSale(ts._id)));
       })
       .then((res) => {
         const response = res.map(({ data: { items } }) => items)
@@ -246,13 +246,13 @@ const actions = {
         const items = res.map(({ data }) => data)
         const projects = items.filter((r) => !!r);
         commit('SET_BOOKMARKED_PROJECTS', projects);
-        return Promise.all(projects.map((project) => investmentsService.getCurrentTokenSaleByProject(project._id)));
+        return Promise.all(projects.map((project) => investmentOpportunityService.getCurrentInvestmentOpportunityByProject(project._id)));
       })
       .then((res) => {
         const response = res.map((r) => (r ? r.data : r));
         const sales = response.filter((ts) => ts !== undefined);
         commit('SET_BOOKMARKED_PROJECTS_ONGOING_TOKEN_SALES', sales);
-        return Promise.all(sales.map((ts) => investmentsService.getInvestmentsHistoryByTokenSale(ts._id)));
+        return Promise.all(sales.map((ts) => investmentOpportunityService.getInvestmentOpportunityHistoryByTokenSale(ts._id)));
       })
       .then((res) => {
         const response = res.map(({ data: { items } }) => items)

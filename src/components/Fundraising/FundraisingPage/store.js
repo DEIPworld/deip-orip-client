@@ -1,10 +1,10 @@
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 import { AssetsService } from '@deip/assets-service';
 import { UserService } from '@deip/user-service';
 import { TeamService } from '@deip/team-service';
 
 const teamService = TeamService.getInstance();
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 const userService = UserService.getInstance();
 const assetsService = AssetsService.getInstance();
 
@@ -31,7 +31,7 @@ const ACTIONS = {
   },
   loadProjectTokenSale({ dispatch, commit }, projectId) {
     // TODO: load project token sale by id
-    return investmentsService.getCurrentTokenSaleByProject(projectId)
+    return investmentOpportunityService.getCurrentInvestmentOpportunityByProject(projectId)
       .then((res) => {
         const tokenSale = res ? res.data : res;
         commit('setProjectTokenSale', tokenSale);
@@ -79,7 +79,7 @@ const ACTIONS = {
   loadTransactionsHistory({ commit }, projectId) {
     // TODO: load history by specific security token
     const transactions = [];
-    return investmentsService.getProjectTokenSaleInvestmentsByProject(projectId)
+    return investmentOpportunityService.getInvestmentsByProject(projectId)
       .then(({ data: { items: transactionsList } }) => {
         transactions.push(...transactionsList);
         return userService.getUsers(transactionsList.map((t) => t.investor));
@@ -96,7 +96,7 @@ const ACTIONS = {
   },
 
   loadLastProjectTokenSale({ commit }, projectId) {
-    return investmentsService.getProjectTokenSalesByProject(projectId)
+    return investmentOpportunityService.getInvestmentOpportunitiesByProject(projectId)
       .then(({ data: { items: tokenSales } }) => {
         const lastTokenSale = tokenSales.sort((a, b) => {
           const dateA = new Date(a.end_time);

@@ -48,7 +48,7 @@
             this.loading = false;
             this.$store.dispatch('Teams/getUserTeams', this.$currentUser.username);
             this.$notifier.showSuccess(this.$t('createTeam.successCreate', { name }));
-            const { entityId: teamId } = res;
+            const { _id: teamId } = res;
 
             return Promise.all([
               teamService.getTeam(teamId)

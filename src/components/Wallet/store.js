@@ -3,12 +3,12 @@ import { camelizeObjectKeys } from '@/utils/helpers';
 
 import { AssetsService } from '@deip/assets-service';
 import { ProjectService } from '@deip/project-service';
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 import { TeamService } from '@deip/team-service';
 import { GrantsService } from '@deip/grants-service';
 
 const teamService = TeamService.getInstance();
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 const projectService = ProjectService.getInstance();
 const assetsService = AssetsService.getInstance();
 const grantsService = GrantsService.getInstance();
@@ -68,7 +68,7 @@ const actions = {
         }));
 
         return Promise.all(
-          balances.map((b) => investmentsService.getAccountRevenueHistoryByAsset(
+          balances.map((b) => investmentOpportunityService.getAccountRevenueHistoryByAsset(
             b.owner,
             b.symbol,
             1
@@ -85,7 +85,7 @@ const actions = {
         }));
 
         return Promise.all(
-          balances.map((b) => investmentsService.getAssetRevenueHistory(
+          balances.map((b) => investmentOpportunityService.getAssetRevenueHistory(
             b.symbol
           ))
         );
@@ -166,7 +166,7 @@ const actions = {
         });
         return Promise.all(
           groupList.map(
-            (item) => investmentsService.getAccountRevenueHistory(item._id)
+            (item) => investmentOpportunityService.getAccountRevenueHistory(item._id)
           )
         );
       })

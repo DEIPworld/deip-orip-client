@@ -1,6 +1,6 @@
-import { InvestmentsService } from '@deip/investments-service';
+import { InvestmentOpportunityService } from '@deip/investment-opportunity-service';
 
-const investmentsService = InvestmentsService.getInstance();
+const investmentOpportunityService = InvestmentOpportunityService.getInstance();
 
 const STATE = {
   tokenSale: undefined,
@@ -15,7 +15,7 @@ const GETTERS = {
 
 const ACTIONS = {
   loadProjectTokenSale({ dispatch, commit }, projectId) {
-    return investmentsService.getCurrentTokenSaleByProject(projectId)
+    return investmentOpportunityService.getCurrentInvestmentOpportunityByProject(projectId)
       .then((res) => {
         const tokenSale = res ? res.data : res;
         commit('setProjectTokenSale', tokenSale);
@@ -25,7 +25,7 @@ const ACTIONS = {
       }), (err) => { console.error(err); };
   },
   loadHistoryProjectTokenSale({ commit }, projectId) {
-    return investmentsService.getProjectTokenSalesByProject(projectId)
+    return investmentOpportunityService.getInvestmentOpportunitiesByProject(projectId)
       .then(({ data: { items: tokenSales } }) => {
         commit('setHistoryProjectTokenSale', tokenSales);
       });
